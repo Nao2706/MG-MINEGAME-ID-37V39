@@ -1,0 +1,17 @@
+version: 1.50.1
+name: MineGame
+main: me.nao.main.game.Main
+api-version: 1.19
+author: NAO2706
+description: SubGames into Minecraft
+softdepend: [NBTAPI]
+
+
+commands: 
+     minegame:
+        description: Comando de op
+        aliases:
+        - minigame
+        - nao-game
+        - mg
+ 

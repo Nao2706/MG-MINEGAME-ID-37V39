@@ -1,0 +1,5 @@
+Format-Example:
+    Material: "STONE"
+    Display-Name: "A Big Adventure"
+    Lore-Item:
+    - "Descripcion: Be carefull"

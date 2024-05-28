@@ -1,0 +1,43 @@
+CountDownPreLobby: 60  
+Mob-Spawn-Range: 10
+Item-Spawn-Range: 10
+Remove-Armor-Stands: 30
+Chest-Particle-Range: 10
+Join-Reward: false
+Time-Reward: 30
+Anti-Void: true
+Plus-Or-Remove: "+"
+Local-Time-Day: 1
+Local-Time-Hour: 1
+Dispenser-Range: 30
+Loot-Table-Limit: 10
+Maintenance: false
+Maps-Created:
+    List:
+    - example
+Arenas-Locked:
+    List:    
+    - example
+HeadShoot-World:
+    List:
+    - example
+Regen-Explosion:
+    List:
+    - example    
+Arena-Points:
+    List:
+    - example  
+Random-Reward:
+    List:
+    - example1
+    - example2    
+Max-Animation: 1    
+Min-Animation: 2    
+Worlds-Animation:
+    List:
+    - example1
+    - example2        
+FallingBlock-Remove-If-Touch-Ground:
+    List:
+    - example1
+    - example2      
