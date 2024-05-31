@@ -2414,6 +2414,9 @@ public class GameConditions {
    		
    		List<ObjetivesMG> l = new ArrayList<>();   		
    		if(HasObjetives(map)) {
+   			
+   			ObjetivesMG ghost = new ObjetivesMG("Mapa Con Objetivos Borrados",1,0,0,"Habilitaron los Objetivos pero no hay ninguno en la Config del Mapa.",ObjetiveType.WAITING);
+   			l.add(ghost);
    			if(game.contains("Game-Objetives")) {
    	   			for (String key : game.getConfigurationSection("Game-Objetives").getKeys(false)) {
    	   				int priority = game.getInt("Game-Objetives."+key+".Priority");
@@ -2424,6 +2427,12 @@ public class GameConditions {
    	   				l.add(gob);
    	   				
    	   		}}
+   			
+   			if(l.size() > 1) {
+   				if(l.stream().filter(o -> o.getNombre().equals("Mapa Con Objetivos Borrados")).findFirst().isPresent()) {
+   					l.remove(ghost);
+   				}
+   		     }
    		}
    		
    		GameObjetivesMG go = new GameObjetivesMG(l);
@@ -2431,6 +2440,56 @@ public class GameConditions {
    		return go;
    	}
  	
+ 	
+	public void LoadObjetivesOfGameDebug(String map) {
+   		FileConfiguration game = getGameConfig(map);
+   		
+   		List<ObjetivesMG> l = new ArrayList<>();
+   		
+   		if(HasObjetives(map)) {
+   			ObjetivesMG ghost = new ObjetivesMG("Mapa Con Objetivos Borrados",1,0,0,"Habilitaron los Objetivos pero no hay ninguno en la Config del Mapa.",ObjetiveType.WAITING);
+   			l.add(ghost);
+	   		if(game.contains("Game-Objetives")) {
+	   			for (String key : game.getConfigurationSection("Game-Objetives").getKeys(false)) {
+	   				int priority = game.getInt("Game-Objetives."+key+".Priority");
+	   				String descripcion = game.getString("Game-Objetives."+key+".Description");
+	   				String status = game.getString("Game-Objetives."+key+".Status");
+	   				int value = game.getInt("Game-Objetives."+key+".Value-Limit");
+	   				
+	   				List<String> objetivesmg = game.getStringList("Game-Objetives."+key+".ObjetiveCompleteMessage");
+	   				List<String> objetivesaction = game.getStringList("Game-Objetives."+key+".ObjetiveCompleteActions");
+	   				List<String> objetives2mg = game.getStringList("Game-Objetives."+key+".ObjetiveIncompleteMessage");
+	   				List<String> objetivesaction2 = game.getStringList("Game-Objetives."+key+".ObjetiveIncompleteActions");
+	   				
+	   				System.out.println(key);
+	   				System.out.println(descripcion);
+	   				System.out.println(priority);
+	   				System.out.println(objetivesmg.toString());
+	   				System.out.println(objetivesaction.toString());
+	   				System.out.println(objetives2mg.toString());
+	   				System.out.println(objetivesaction2.toString());
+	   				
+	   				ObjetivesMG omg = new ObjetivesMG(key,priority,0,value,descripcion,ObjetiveType.valueOf(status.toUpperCase()));
+	   				l.add(omg);
+	   		}}
+	   		
+	   		if(l.size() > 1) {
+   				if(l.stream().filter(o -> o.getNombre().equals("Mapa Con Objetivos Borrados")).findFirst().isPresent()) {
+   					l.remove(ghost);
+   				}
+   		     }
+	   		
+   		}
+   		
+   		
+   		GameObjetivesMG go = new GameObjetivesMG(l);
+   		for(ObjetivesMG o : go.getObjetives()) {
+   			System.out.println(o.getNombre()+" "+o.getPriority()+" "+o.getValueinitial()+" "+o.getValuereferencial()+" "+o.isStatus().toString());
+   		}
+   	
+   		
+   		return;
+   	}
  	
  	public void isCompleteAllPrimaryObjetiveForReward(String map) {
  		GameInfo gi = plugin.getGameInfoPoo().get(map);
@@ -2974,43 +3033,7 @@ public class GameConditions {
 	}
 	
 	
-   	public void LoadObjetivesOfGameDebug(String map) {
-   		FileConfiguration game = getGameConfig(map);
-   		
-   		List<ObjetivesMG> l = new ArrayList<>();
-   		
-   		 
-   		if(game.contains("Game-Objetives")) {
-   			for (String key : game.getConfigurationSection("Game-Objetives").getKeys(false)) {
-   				int priority = game.getInt("Game-Objetives."+key+".Priority");
-   				String descripcion = game.getString("Game-Objetives."+key+".Description");
-   				String status = game.getString("Game-Objetives."+key+".Status");
-   				int value = game.getInt("Game-Objetives."+key+".Value-Limit");
-   				
-   				List<String> objetivesmg = game.getStringList("Game-Objetives."+key+".ObjetiveCompleteMessage");
-   				List<String> objetivesaction = game.getStringList("Game-Objetives."+key+".ObjetiveCompleteActions");
-   				List<String> objetives2mg = game.getStringList("Game-Objetives."+key+".ObjetiveIncompleteMessage");
-   				List<String> objetivesaction2 = game.getStringList("Game-Objetives."+key+".ObjetiveIncompleteActions");
-   				
-   				System.out.println(key);
-   				System.out.println(descripcion);
-   				System.out.println(priority);
-   				System.out.println(objetivesmg.toString());
-   				System.out.println(objetivesaction.toString());
-   				System.out.println(objetives2mg.toString());
-   				System.out.println(objetivesaction2.toString());
-   				
-   				ObjetivesMG omg = new ObjetivesMG(key,priority,0,value,descripcion,ObjetiveType.valueOf(status.toUpperCase()));
-   				l.add(omg);
-   		}}
-   		GameObjetivesMG go = new GameObjetivesMG(l);
-   		for(ObjetivesMG o : go.getObjetives()) {
-   			System.out.println(o.getNombre()+" "+o.getPriority()+" "+o.getValueinitial()+" "+o.getValuereferencial()+" "+o.isStatus().toString());
-   		}
-   	
-   		
-   		return;
-   	}
+   
    	//mg objetive-primary complete 1
     //mg objetive-secondary complete 1
 	//mg objetive-primary incomplete 1
