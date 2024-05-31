@@ -406,7 +406,7 @@ public class GameConditions {
 		
 		
 	
-		int puntaje = pl.getPoinstPlayerMision();
+		int puntaje = pl.getGamePoints().getKills();
 		FileConfiguration mision = getGameConfig(name);
 
 		List<String> winreward = mision.getStringList("Win-Rewards.Commands");
@@ -499,7 +499,7 @@ public class GameConditions {
 		FileConfiguration mision = getGameConfig(name);
 		List<String> lostreward = mision.getStringList("Lost-Rewards.Commands");
 		List<String> lost = mision.getStringList("Lost.Chat-Message-Lost");
-		int puntaje = pl.getPoinstPlayerMision();
+		int puntaje = pl.getGamePoints().getKills();
 		
 		
 		  String[] lostt = mision.getString("Lost.Tittle-Time").split("-");
@@ -614,13 +614,13 @@ public class GameConditions {
 				
 				
 				if(ExistLobbyMg()) {
-					PlayerInfo pl = new PlayerInfo(plugin,false,player, player.getGameMode(), player.isFlying(), GetLocationOfLobby(), true, map,0);
+					PlayerInfo pl = new PlayerInfo(plugin,false,player, player.getGameMode(), player.isFlying(), GetLocationOfLobby(), true, map,new GamePoints(0,0,0,0,0));
 					plugin.getPlayerInfoPoo().put(player, pl);
 					pl.ClearGamemodePlayerMg();
 				
 					
 				}else {
-					PlayerInfo pl = new PlayerInfo(plugin,false,player, player.getGameMode(), player.isFlying(), player.getLocation(), true, map,0);
+					PlayerInfo pl = new PlayerInfo(plugin,false,player, player.getGameMode(), player.isFlying(), player.getLocation(), true, map,new GamePoints(0,0,0,0,0));
 					plugin.getPlayerInfoPoo().put(player, pl);
 					pl.ClearGamemodePlayerMg();
 					
@@ -630,13 +630,13 @@ public class GameConditions {
 				//LO SALVAS
 				
 				if(ExistLobbyMg()) {
-					PlayerInfo pl = new PlayerInfo(plugin,true,player,player.getActivePotionEffects(), player.getInventory().getContents(), player.getGameMode(), player.isFlying(),player.getHealth(), player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), player.getFoodLevel(), player.getLevel(),player.getExp(), GetLocationOfLobby(), true, map,0);
+					PlayerInfo pl = new PlayerInfo(plugin,true,player,player.getActivePotionEffects(), player.getInventory().getContents(), player.getGameMode(), player.isFlying(),player.getHealth(), player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), player.getFoodLevel(), player.getLevel(),player.getExp(), GetLocationOfLobby(), true, map,new GamePoints(0,0,0,0,0));
 					plugin.getPlayerInfoPoo().put(player, pl);
 					pl.ClearAllPlayerMg();
 					
 				}else {
 				
-					PlayerInfo pl = new PlayerInfo(plugin,true,player,player.getActivePotionEffects(), player.getInventory().getContents(), player.getGameMode(), player.isFlying(),player.getHealth(), player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), player.getFoodLevel(), player.getLevel(),player.getExp(), player.getLocation(), true, map,0);
+					PlayerInfo pl = new PlayerInfo(plugin,true,player,player.getActivePotionEffects(), player.getInventory().getContents(), player.getGameMode(), player.isFlying(),player.getHealth(), player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), player.getFoodLevel(), player.getLevel(),player.getExp(), player.getLocation(), true, map,new GamePoints(0,0,0,0,0));
 					plugin.getPlayerInfoPoo().put(player, pl);
 					pl.ClearAllPlayerMg();
 				}
@@ -2229,7 +2229,7 @@ public class GameConditions {
 									PlayerInfo pl = plugin.getPlayerInfoPoo().get(user);
 									
 									if(spectador.contains(user)) continue;
-									 scores.put(user.getName(), pl.getPoinstPlayerMision());	
+									 scores.put(user.getName(), pl.getGamePoints().getKills());	
 								}
 						 }
 					
@@ -2283,7 +2283,8 @@ public class GameConditions {
 								
 										
 										 String time = plugin.getPlayerCronomet().get(e.getKey());
-										 player.sendMessage(ChatColor.translateAlternateColorCodes('&',texto.replaceAll("%player%", e.getKey()).replace("%pointuser%", e.getValue().toString()).replaceAll("%place%", Integer.toString(i)).replaceAll("%reward%", Long.toString(RewardPointsForItems(e.getValue()))).replaceAll("%cronomet%", time) ));
+										 player.sendMessage(ChatColor.translateAlternateColorCodes('&',texto.replaceAll("%player%", e.getKey()).replace("%pointuser%", e.getValue().toString()).replaceAll("%place%", Integer.toString(i)).replaceAll("%reward%", Long.toString(RewardPointsForItems(e.getValue()))).replaceAll("%cronomet%", time)
+												 .replace("%revive%", Integer.toString(getReviveInfo(e.getKey())) .replace("%asisrevive%", Integer.toString(getReviveAsistenceInfo(e.getKey()))) .replace("%deads%", Integer.toString(getDeadsInfo(e.getKey())))  .replace("%damage%", Integer.toString(getDamageInfo(e.getKey()))) )));
 										
 										 
 									
@@ -2311,7 +2312,23 @@ public class GameConditions {
 		
    		
    	}	
-   	   
+   	 
+   	
+   	public int getReviveInfo(String name) {
+   	 return plugin.getPlayerInfoPoo().get(ConvertStringToPlayer(name)).getGamePoints().getRevive();
+   	}
+   	
+ 	public int getDeadsInfo(String name) {
+ 	   	 return plugin.getPlayerInfoPoo().get(ConvertStringToPlayer(name)).getGamePoints().getDeads();
+ 	}
+ 	public int getReviveAsistenceInfo(String name) {
+ 	   	 return plugin.getPlayerInfoPoo().get(ConvertStringToPlayer(name)).getGamePoints().getReviveAsistence();
+ 	}
+ 	
+ 	public int getDamageInfo(String name) {
+	   	 return plugin.getPlayerInfoPoo().get(ConvertStringToPlayer(name)).getGamePoints().getDamage();
+	}
+ 	
    	
 	   //TODO TOP
 	public void TopForReward(Player player ,String arenaName) {
@@ -2334,7 +2351,7 @@ public class GameConditions {
 								PlayerInfo pl = plugin.getPlayerInfoPoo().get(user);
 								
 								if(spectador.contains(user)) continue;
-								 scores.put(user.getName(), pl.getPoinstPlayerMision());	
+								 scores.put(user.getName(), pl.getGamePoints().getKills());	
 							}
 						
 							
@@ -3098,10 +3115,13 @@ public class GameConditions {
 		}
 		player.sendMessage(ChatColor.GREEN+"Obtuviste el Kit "+ChatColor.GOLD+name+ChatColor.GREEN+" para avanzar en tu Aventura.");
 //	player.sendMessage(ChatColor.GREEN+"Obtuviste la clase "+ChatColor.RED+name);
-}
+	}
 	
 	
-	
+	public Player ConvertStringToPlayer(String name) {
+		
+		return Bukkit.getPlayerExact(name);
+	}
 	
 	//TODO NEXO
 	

@@ -2,6 +2,7 @@ package me.nao.events;
 
 
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -9,7 +10,6 @@ import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -56,7 +56,6 @@ import org.bukkit.event.entity.EntityCombustByBlockEvent;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -667,22 +666,36 @@ public class EventRandoms implements Listener{
 		 Entity entidad = e.getDamager();
 		 Entity entidadAtacada = e.getEntity();
 		 
+		 
+		 entidadAtacada.getLastDamageCause().getDamage();
 		  if(entidad instanceof Player) {
-			  if(entidadAtacada instanceof Player || entidadAtacada instanceof Villager) {
-			  		Player player = (Player) entidad;
+				Player player = (Player) entidad;
+		  
+				GameConditions gc = new GameConditions(plugin);
+				PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 				
-					GameConditions gc = new GameConditions(plugin);
-					if(gc.isPlayerinGame(player)) {
-						PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
-						String arenaName = pl.getMapName();
+			  	pl.getGamePoints().setDamage(pl.getGamePoints().getDamage()+ConvertDoubleToInt(entidadAtacada.getLastDamageCause().getDamage()));
+
+				
+				if(gc.isPlayerinGame(player)) {
+					  if(entidadAtacada instanceof Player || entidadAtacada instanceof Villager) {
+						  String arenaName = pl.getMapName();
+							
+				 			if(!gc.isPvPAllowed(arenaName)) {
+				 				e.setCancelled(true);
+				 				player.sendMessage(ChatColor.RED+"El PVP en el Mapa "+ChatColor.GOLD+arenaName+ChatColor.RED+" no esta Habilitado");
+				 			}
+							
+							
+							return;
+					 }
 					
-			 			if(!gc.isPvPAllowed(arenaName)) {
-			 				e.setCancelled(true);
-			 				player.sendMessage(ChatColor.RED+"El PVP en el Mapa "+ChatColor.GOLD+arenaName+ChatColor.RED+" no esta Habilitado");
-			 			}
-					}
-					return;
-			 }
+					
+					
+					
+				}
+				
+			
 			  
 		  }else if(entidad instanceof Monster) {
 			  if(entidadAtacada instanceof Player) {
@@ -1268,27 +1281,7 @@ public class EventRandoms implements Listener{
 		
 		
 
-		//TODO SANGRE
-		@EventHandler  //METODO
-	    public void damage(EntityDamageEvent e){
-			
-			if(e.getEntity().getType() != EntityType.ITEM_FRAME || e.getEntity().getType() != EntityType.GLOW_ITEM_FRAME || e.getEntity().getType() != EntityType.DROPPED_ITEM) {
-			
-				//LINEA DE SANGRE XD
-				
-				e.getEntity().getWorld().playEffect(e.getEntity().getLocation().add(0,1,0), Effect.STEP_SOUND, Material.REDSTONE_BLOCK); 
-				
-				Block block = e.getEntity().getLocation().getBlock();
-				Block b = block.getRelative(0, -1, 0);
-				if(b.getType().equals(Material.BARRIER) && e.getEntity().getType() != EntityType.PLAYER){
-					
-					e.getEntity().remove();
-				
-					
-				}
-		
-			}
-		}
+	
 	
 		
 		//TODO EXPLOSION
@@ -1568,11 +1561,16 @@ public class EventRandoms implements Listener{
 				 
 				  Player player = (Player)projectile.getShooter();
 				  Entity entidadhit = e.getHitEntity();
+				  
+				
 				 
 				  if(entidadhit != null && entidadhit instanceof Player || entidadhit instanceof Villager) {
 						
 					  	PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
-						
+					 
+					  	pl.getGamePoints().setDamage(pl.getGamePoints().getDamage()+ConvertDoubleToInt(entidadhit.getLastDamageCause().getDamage()));
+					  	
+					  	
 						if(gc.isPlayerinGame(player)) {
 								String arenaName = pl.getMapName();
 				
@@ -2730,6 +2728,25 @@ public class EventRandoms implements Listener{
 				//player.sendMessage("" + ChatColor.GREEN + "Has actiavdo el detector");
 
 			//}
+					
+					
+	//TODO DOUBLE TO INT
+					
+					public int ConvertDoubleToInt(double damage) {
+						NumberFormat nf = NumberFormat.getInstance();
+						nf.setMaximumFractionDigits(0);
+						
+						return Integer.parseInt(nf.format(damage));
+					}
+					
+					
+					
+					
+					
+					
+					
+					
+					
 		}
 		
 

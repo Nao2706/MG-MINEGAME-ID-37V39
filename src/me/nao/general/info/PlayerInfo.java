@@ -28,9 +28,9 @@ public class PlayerInfo {
 	private Location l;
 	private boolean isMision;
 	private String namemision;
-	private int puntaje;
+	private GamePoints gp;
 	
-	public PlayerInfo(Main plugin ,boolean isinventorysave,Player player, Collection<PotionEffect> potion, ItemStack[] inv, GameMode gamemode, boolean fly, double vida, double maxvida,int comida, int lvlxp, float xp,Location l,boolean ismision,String nameMision,int puntaje) {
+	public PlayerInfo(Main plugin ,boolean isinventorysave,Player player, Collection<PotionEffect> potion, ItemStack[] inv, GameMode gamemode, boolean fly, double vida, double maxvida,int comida, int lvlxp, float xp,Location l,boolean ismision,String nameMision,GamePoints gp) {
 	
 		this.plugin = plugin;
 		this.isinventorysave = isinventorysave;
@@ -47,11 +47,11 @@ public class PlayerInfo {
 		this.l = l;
 		this.isMision = ismision;
 		this.namemision = nameMision;
-		this.puntaje = puntaje;
+		this.gp = gp;
 		
 	}
 	
-	public PlayerInfo(Main plugin ,boolean isinventorysave,Player player, GameMode gamemode, boolean fly,Location l,boolean ismision,String nameMision,int puntaje) {
+	public PlayerInfo(Main plugin ,boolean isinventorysave,Player player, GameMode gamemode, boolean fly,Location l,boolean ismision,String nameMision,GamePoints gp) {
 		
 		this.plugin = plugin;
 		this.isinventorysave = isinventorysave;
@@ -61,7 +61,7 @@ public class PlayerInfo {
 		this.l = l;
 		this.isMision = ismision;
 		this.namemision = nameMision;
-		this.puntaje = puntaje;
+		this.gp = gp;
 		
 	}
 	
@@ -122,8 +122,8 @@ public class PlayerInfo {
 		return namemision;
 	}
 	
-	public int getPoinstPlayerMision() {
-		return puntaje;
+	public GamePoints getGamePoints() {
+		return gp;
 	}
 
 	public void setPlayerMG(Player player) {
@@ -174,9 +174,7 @@ public class PlayerInfo {
 		this.namemision = nameMision;
 	}
 	
-	public void setPointsOfMission(int puntaje) {
-		this.puntaje = puntaje;
-	}
+	
 	
 	public void ClearAllPlayerMg() {
 		player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20);

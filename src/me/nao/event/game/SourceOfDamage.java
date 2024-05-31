@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -585,6 +586,22 @@ public class SourceOfDamage implements Listener{
 	@EventHandler  //TODO MUERTES METODO
     public void damageInGame(EntityDamageEvent e){
 		
+		if(e.getEntity().getType() != EntityType.ITEM_FRAME || e.getEntity().getType() != EntityType.GLOW_ITEM_FRAME || e.getEntity().getType() != EntityType.DROPPED_ITEM) {
+			
+			//LINEA DE SANGRE XD
+			
+			e.getEntity().getWorld().playEffect(e.getEntity().getLocation().add(0,1,0), Effect.STEP_SOUND, Material.REDSTONE_BLOCK); 
+			
+			Block block = e.getEntity().getLocation().getBlock();
+			Block b = block.getRelative(0, -1, 0);
+			if(b.getType().equals(Material.BARRIER) && e.getEntity().getType() != EntityType.PLAYER){
+				
+				e.getEntity().remove();
+			
+				
+			}
+	
+		}
 		
 		if(e.getEntity() instanceof Player) {
 			Player player = (Player) e.getEntity();

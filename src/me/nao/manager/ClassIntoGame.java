@@ -75,7 +75,8 @@ public class ClassIntoGame {
 			
 		
 				Player target = Bukkit.getServer().getPlayerExact(name);
-			
+				
+				
 					GameConditions cm = new GameConditions(plugin);
 					cm.SetHeartsInGame(player, mapa);
 					cm.RevivePlayerToGame(target, mapa);
@@ -94,6 +95,11 @@ public class ClassIntoGame {
 					cm.SendMessageToUsersOfSameGame(player, ChatColor.GOLD+player.getName()+ChatColor.GREEN+" Revivio a "+ChatColor.WHITE+target.getName());
 					 //BORRAR ICONO DE MUERTE
 					player.getInventory().removeItem(new ItemStack(Material.DIAMOND,35));
+					pl.getGamePoints().setReviveAsistence(pl.getGamePoints().getReviveAsistence()+1);
+					
+					PlayerInfo targetrevive = plugin.getPlayerInfoPoo().get(target);
+					targetrevive.getGamePoints().setRevive(targetrevive.getGamePoints().getRevive()+1);
+					
 					
 					if(!deaths.isEmpty()) {
 						MinigameShop1 ms = new MinigameShop1(plugin);
@@ -495,7 +501,7 @@ public class ClassIntoGame {
 			Fireworks f = new Fireworks(player);
 			f.spawnFireballRedLarge();
 			
-			
+			pl.getGamePoints().setDeads(pl.getGamePoints().getDeads()+1);
 			player.setGameMode(GameMode.SPECTATOR);
 			
 			player.sendMessage(ChatColor.RED+"\nUsa la hotbar para ver a otros jugadores. "+ChatColor.YELLOW+"\n!!!Solo podras ver a los que estan en tu partida");
@@ -532,9 +538,9 @@ public class ClassIntoGame {
 		
 			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		
-			int puntos = pl.getPoinstPlayerMision();
+			int puntos = pl.getGamePoints().getKills();
 			puntos = puntos+1;
-			pl.setPointsOfMission(puntos);
+			pl.getGamePoints().setKills(puntos);
 			player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.GREEN+ChatColor.BOLD+"KILLS: "+ChatColor.RED+puntos));
 
 		
@@ -543,7 +549,7 @@ public class ClassIntoGame {
 	public void getPointsOfPlayerGame(Player player) {
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		
-		int puntos = pl.getPoinstPlayerMision();
+		int puntos = pl.getGamePoints().getKills();
 		player.sendMessage(""+ChatColor.YELLOW+ChatColor.BOLD+"[PUNTUACION ACTUAL]");
 		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"Tientes un Total de : "+ChatColor.YELLOW+ChatColor.BOLD+puntos+ChatColor.GREEN+ChatColor.BOLD+" en el Juego.");
 		
@@ -566,7 +572,7 @@ public class ClassIntoGame {
 		List<String> are = plugin.getConfig().getStringList("Arena-Points.List");
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		//int puntos = plugin.getEspecificPlayerPoints().get(player);
-		int puntos = pl.getPoinstPlayerMision();
+		int puntos = pl.getGamePoints().getKills();
 		
 		if(are.contains(mapa)) {
 			PointsManager pm = new PointsManager(plugin);
