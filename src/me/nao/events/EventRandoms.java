@@ -667,16 +667,18 @@ public class EventRandoms implements Listener{
 		 Entity entidadAtacada = e.getEntity();
 		 
 		 
-		 entidadAtacada.getLastDamageCause().getDamage();
+	
 		  if(entidad instanceof Player) {
 				Player player = (Player) entidad;
 		  
 				GameConditions gc = new GameConditions(plugin);
 				PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 				
-			  	pl.getGamePoints().setDamage(pl.getGamePoints().getDamage()+ConvertDoubleToInt(entidadAtacada.getLastDamageCause().getDamage()));
-
-				
+				 if(entidadAtacada instanceof LivingEntity) {
+					 LivingEntity mob = (LivingEntity) entidadAtacada;
+					  	pl.getGamePoints().setDamage(pl.getGamePoints().getDamage()+ConvertDoubleToInt(mob.getHealth()-mob.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()));
+				 }
+				 
 				if(gc.isPlayerinGame(player)) {
 					  if(entidadAtacada instanceof Player || entidadAtacada instanceof Villager) {
 						  String arenaName = pl.getMapName();
@@ -1564,14 +1566,16 @@ public class EventRandoms implements Listener{
 				  
 				
 				 
-				  if(entidadhit != null && entidadhit instanceof Player || entidadhit instanceof Villager) {
+				  if(entidadhit != null) {
 						
 					  	PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
-					 
-					  	pl.getGamePoints().setDamage(pl.getGamePoints().getDamage()+ConvertDoubleToInt(entidadhit.getLastDamageCause().getDamage()));
+					  	if(entidadhit instanceof LivingEntity) {
+							 LivingEntity mob = (LivingEntity) entidadhit;
+							  	pl.getGamePoints().setDamage(pl.getGamePoints().getDamage()+ConvertDoubleToInt(mob.getHealth()-mob.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()));
+						 }
 					  	
 					  	
-						if(gc.isPlayerinGame(player)) {
+						if(gc.isPlayerinGame(player) && entidadhit instanceof Player || entidadhit instanceof Villager) {
 								String arenaName = pl.getMapName();
 				
 					 			if(!gc.isPvPAllowed(arenaName)) {
@@ -1595,9 +1599,13 @@ public class EventRandoms implements Listener{
 						  }
 				  }
 			
+				  
+				  //si un mob te dispara
 			  }else if (projectile.getShooter() instanceof Monster) {
 				  Entity damager =  (Entity) projectile.getShooter();
 				  Entity entidadhit = e.getHitEntity();
+				  
+				  
 				  if(entidadhit instanceof Player) {
 					  Player player = (Player) entidadhit;
 						if(gc.isPlayerinGame(player)) {

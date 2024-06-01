@@ -2117,11 +2117,12 @@ public class GameConditions {
 		
 	}
 	
+	//TODO CONSOLE AND PLAYER FOR OP OR DEBUG
 	public void SendMessageToUserAndConsole(Player player ,String text) {
 		
-		Bukkit.getConsoleSender().sendMessage(text);
+		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&',text));
 		if(player != null) {
-			player.sendMessage(text);
+			player.sendMessage(ChatColor.translateAlternateColorCodes('&',text));
 		}
 		
 	}
@@ -2281,10 +2282,20 @@ public class GameConditions {
 								for (int j = 0; j < messagep.size(); j++) {
 									String texto = messagep.get(j);
 								
-										
-										 String time = plugin.getPlayerCronomet().get(e.getKey());
-										 player.sendMessage(ChatColor.translateAlternateColorCodes('&',texto.replaceAll("%player%", e.getKey()).replace("%pointuser%", e.getValue().toString()).replaceAll("%place%", Integer.toString(i)).replaceAll("%reward%", Long.toString(RewardPointsForItems(e.getValue()))).replaceAll("%cronomet%", time)
-												 .replace("%revive%", Integer.toString(getReviveInfo(e.getKey())) .replace("%asisrevive%", Integer.toString(getReviveAsistenceInfo(e.getKey()))) .replace("%deads%", Integer.toString(getDeadsInfo(e.getKey())))  .replace("%damage%", Integer.toString(getDamageInfo(e.getKey()))) )));
+								 		
+										// String time = plugin.getPlayerCronomet().get(e.getKey());
+										 player.sendMessage(ChatColor.translateAlternateColorCodes('&',texto
+												 .replace("%player%", e.getKey())
+												 .replace("%place%", Integer.toString(i))
+												 .replace("%pointuser%", Integer.toString(e.getValue()))
+												 .replace("%reward%", Long.toString(RewardPointsForItems(e.getValue())))
+												 .replace("%revive%", Integer.toString(getReviveInfo(e.getKey())))
+												 .replace("%asisrevive%", Integer.toString(getReviveAsistenceInfo(e.getKey())))
+												 .replace("%deads%", Integer.toString(getDeadsInfo(e.getKey())))
+												 .replace("%damage%", Integer.toString(getDamageInfo(e.getKey())))
+												 //.replace("%cronomet%", time)
+												
+												 ));
 										
 										 
 									
@@ -2311,7 +2322,110 @@ public class GameConditions {
 
 		
    		
-   	}	
+   	}
+   	
+   
+   	public void TopConsole(String map) {
+	FileConfiguration message = plugin.getMessage();
+   		
+		
+
+		// PRIMERA PARTE
+					HashMap<String, Integer> scores = new HashMap<>();
+
+						GameInfo ms = plugin.getGameInfoPoo().get(map);
+						 if(ms instanceof GameAdventure) {
+								GameAdventure ga = (GameAdventure) ms;
+								List<Player> joins = ConvertStringToPlayer(ga.getParticipantes());
+								
+								for(Player user : joins) {
+									PlayerInfo pl = plugin.getPlayerInfoPoo().get(user);
+									
+								
+									 scores.put(user.getName(), pl.getGamePoints().getKills());	
+								}
+						 }
+					
+						
+					
+						
+							
+						
+			// SE GUARDAN LOS DATOS EN EL HASH MAP
+			
+
+		
+
+		// SEGUNDA PARTE CALCULO MUESTRA DE MAYOR A MENOR PUNTAJE
+		List<Map.Entry<String, Integer>> list = new ArrayList<>(scores.entrySet());
+
+		
+		Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+			public int compare(Map.Entry<String, Integer> e1, Map.Entry<String, Integer> e2) {
+				return e2.getValue() - e1.getValue();
+			}
+		});
+
+		// TERCERA PARTE IMPRIMIR DATOS DE MAYOR A MENOR
+		
+		
+				System.out.println("-------TOP--------");
+				
+				
+					if (message.getBoolean("Message.message-top")) {
+						List<String> messagep1 = message.getStringList("Message.message-top-decoracion1");
+						for (int j1 = 0; j1 < messagep1.size(); j1++) {
+							String texto2 = messagep1.get(j1);
+							 
+							SendMessageToUserAndConsole(null, texto2);
+					  }}			
+							
+					
+					int i = 0;
+					for (Map.Entry<String, Integer> e : list) {
+
+					
+						if (i <= message.getInt("Top-Amount")) {
+							i++;
+							// player.sendMessage(i+" Nombre:"+e.getKey()+" Puntos:"+e.getValue());
+
+							if (message.getBoolean("Message.message-top")) {
+								List<String> messagep = message.getStringList("Message.message-top-texto");
+								for (int j = 0; j < messagep.size(); j++) {
+									String texto = messagep.get(j);
+								
+								 		
+										// String time = plugin.getPlayerCronomet().get(e.getKey());
+									SendMessageToUserAndConsole(null,texto
+												 .replace("%player%", e.getKey())
+												 .replace("%place%", Integer.toString(i))
+												 .replace("%pointuser%", Integer.toString(e.getValue()))
+												 .replace("%reward%", Long.toString(RewardPointsForItems(e.getValue())))
+												 .replace("%revive%", Integer.toString(getReviveInfo(e.getKey())))
+												 .replace("%asisrevive%", Integer.toString(getReviveAsistenceInfo(e.getKey())))
+												 .replace("%deads%", Integer.toString(getDeadsInfo(e.getKey())))
+												 .replace("%damage%", Integer.toString(getDamageInfo(e.getKey())))
+												 //.replace("%cronomet%", time)
+												
+												 );
+										
+										 
+									
+								}
+
+							}
+
+						}
+					}
+					
+					 if (message.getBoolean("Message.message-top")) {
+							List<String> messagep3 = message.getStringList("Message.message-top-decoracion2");
+							for (int j3 = 0; j3 < messagep3.size(); j3++) {
+								String texto3 = messagep3.get(j3);
+							
+								SendMessageToUserAndConsole(null,texto3);
+					  }}
+   	}
    	 
    	
    	public int getReviveInfo(String name) {
@@ -2326,9 +2440,12 @@ public class GameConditions {
  	}
  	
  	public int getDamageInfo(String name) {
-	   	 return plugin.getPlayerInfoPoo().get(ConvertStringToPlayer(name)).getGamePoints().getDamage();
+	   	 return TransformPosOrNeg(plugin.getPlayerInfoPoo().get(ConvertStringToPlayer(name)).getGamePoints().getDamage());
 	}
  	
+	public int TransformPosOrNeg(int i) {
+		return i =  (~(i -1));
+	}
    	
 	   //TODO TOP
 	public void TopForReward(Player player ,String arenaName) {

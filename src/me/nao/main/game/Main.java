@@ -490,7 +490,7 @@ public class Main extends JavaPlugin{
 	   return checkpoint;
    }
    
-   public HashMap <String,String> getPlayerCronomet(){
+   public HashMap <String,String> getPlayerCronomets(){
 	   return cronomet;
    }
    

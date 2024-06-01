@@ -255,6 +255,13 @@ public class ResistenceTemp {
 //					List<String> arrive1 = plugin.getArrive().get(name);
 					//List<String> ends = ym.getStringList("End.Commands");
 				 
+				  if(segundo == 0 && minuto == 0 && hora == 0) {
+						 gc.TopConsole(name);
+					}else if(motivo == StopMotivo.WIN || motivo == StopMotivo.LOSE || motivo == StopMotivo.ERROR || motivo == StopMotivo.FORCE) {
+						 gc.TopConsole(name);
+					}else if(dead.size() == joins.size()) {
+						 gc.TopConsole(name);
+					}
 					
 					for(String players : joins) {
 						Player target = Bukkit.getServer().getPlayerExact(players);

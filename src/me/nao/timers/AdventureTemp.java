@@ -271,6 +271,16 @@ public class AdventureTemp {
 //					List<String> arrive1 = plugin.getArrive().get(name);
 					//List<String> ends = ym.getStringList("End.Commands");
 					
+					if(segundo == 0 && minuto == 0 && hora == 0) {
+						 gc.TopConsole(name);
+					}else if(motivo == StopMotivo.WIN || motivo == StopMotivo.LOSE || motivo == StopMotivo.ERROR || motivo == StopMotivo.FORCE) {
+						 gc.TopConsole(name);
+					}else if(dead.size() == joins.size()) {
+						 gc.TopConsole(name);
+					}else if(alive.size() == arrive.size()) {
+						 gc.TopConsole(name);
+					}
+				 
 				  	
 				  
 					for(String players : joins) {
@@ -284,6 +294,7 @@ public class AdventureTemp {
 					  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN...");
 				    		 //Bukkit.getScheduler().cancelTask(taskID);	
 					  		 gc.Top(target,name);
+					  		
 					  		   if(!arrive.contains(target.getName()) && alive.contains(target.getName())) {
 									  ClassIntoGame c = new ClassIntoGame(plugin);
 									  c.GamePlayerLost(target);
@@ -357,6 +368,7 @@ public class AdventureTemp {
 						  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"[ FIN ]");
 							//  Bukkit.getScheduler().cancelTask(taskID);
 						  		 gc.Top(target,name);
+						  		
 							  if(arrive.contains(target.getName())) {
 								  target.sendMessage(ChatColor.GREEN+"Todos los jugadores con vida han llegado a la meta "+arrive);
 							  }
