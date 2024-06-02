@@ -3,17 +3,16 @@ package me.nao.general.info;
 public class ObjetivesMG {
 	
 	
-	private String nombre;
-	private int priority;
-	private int valueinitial;
-	private int valuereferencial;
-	private String description;
+	private String nombre ,description;
+	private int priority ,valuestart, valueinitial, valuecomplete,valueincomplete;
 	private ObjetiveType status;
 	
-	public ObjetivesMG(String nombre,  int priority, int valueinitial, int valuereferencial,String description, ObjetiveType status) {
+	public ObjetivesMG(String nombre,  int priority, int valuestart, int valueinitial, int valuecomplete,int valueincomplete,String description, ObjetiveType status) {
 		this.nombre = nombre;
+		this.valuestart = valuestart;
 		this.valueinitial = valueinitial;
-		this.valuereferencial = valuereferencial;
+		this.valuecomplete = valuecomplete;
+		this.valueincomplete = valueincomplete;
 		this.description = description;
 		this.status = status;
 		this.priority = priority;
@@ -27,39 +26,35 @@ public class ObjetivesMG {
 		return priority;
 	}
 	
-	public int getValueinitial() {
+	public int getStartValue() {
+		return valuestart;
+	}
+	
+	public int getValue() {
 		return valueinitial;
 	}
-
-	public int getValuereferencial() {
-		return valuereferencial;
+	
+	public int getCompleteValue() {
+		return valuecomplete;
+	}
+	
+	public int getIncompleteValue() {
+		return valueincomplete;
 	}
 	
 	public String getDescription() {
 		return description;
 	}
 
-	public ObjetiveType isStatus() {
+	public ObjetiveType getObjetiveType() {
 		return status;
 	}
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-	
-	public void setPriority(int priority) {
-		this.priority = priority;
-	}
-
-	public void setValueinitial(int valueinitial) {
+	public void setValue(int valueinitial) {
 		this.valueinitial = valueinitial;
 	}
 
-	public void setValuereferencial(int valuereferencial) {
-		this.valuereferencial = valuereferencial;
-	}
-
-	public void setStatus(ObjetiveType status) {
+	public void setObjetiveType(ObjetiveType status) {
 		this.status = status;
 	}
 	

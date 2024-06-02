@@ -544,7 +544,7 @@ public class GameConditions {
 		
 		List<String> start = mision.getStringList("Start-Console.Commands");
 		if(!start.isEmpty()) {
-			ExecuteMultipleCommandsInConsoleOnly(start);
+			ExecuteMultipleCommandsInConsole(null,start);
 		}
 	
 	}
@@ -556,7 +556,7 @@ public class GameConditions {
 		
 		List<String> end = mision.getStringList("End-Console.Commands");
 		if(!end.isEmpty()) {
-			ExecuteMultipleCommandsInConsoleOnly(end);
+			ExecuteMultipleCommandsInConsole(null,end);
 		}
 		
 	}
@@ -2122,9 +2122,9 @@ public class GameConditions {
 		
 		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&',text));
 		if(player != null) {
-			player.sendMessage(ChatColor.translateAlternateColorCodes('&',text));
+			player.sendMessage(ChatColor.translateAlternateColorCodes('&',text.replace("%player%", player.getName())));
 		}
-		
+		return;
 	}
 	
 	//TODO RESTORE
@@ -2532,15 +2532,19 @@ public class GameConditions {
    		List<ObjetivesMG> l = new ArrayList<>();   		
    		if(HasObjetives(map)) {
    			
-   			ObjetivesMG ghost = new ObjetivesMG("Mapa Con Objetivos Borrados",1,0,0,"Habilitaron los Objetivos pero no hay ninguno en la Config del Mapa.",ObjetiveType.WAITING);
+   			ObjetivesMG ghost = new ObjetivesMG("Mapa Con Objetivos Borrados",1,0,0,0,0,"Habilitaron los Objetivos pero no hay ninguno en la Config del Mapa.",ObjetiveType.WAITING);
    			l.add(ghost);
    			if(game.contains("Game-Objetives")) {
    	   			for (String key : game.getConfigurationSection("Game-Objetives").getKeys(false)) {
    	   				int priority = game.getInt("Game-Objetives."+key+".Priority");
    	   				String status = game.getString("Game-Objetives."+key+".Status");
-   	   				int value = game.getInt("Game-Objetives."+key+".Value-Limit");
+	   	   			int values = game.getInt("Game-Objetives."+key+".Start-Value");
+	   				int valueinit = values;
+	   				int valuec = game.getInt("Game-Objetives."+key+".Complete-Value");
+	   				int valuei = game.getInt("Game-Objetives."+key+".Incomplete-Value");
+   	   				
    	   				String description = game.getString("Game-Objetives."+key+".Description");
-   	   				ObjetivesMG gob = new ObjetivesMG(key,priority,0,value,description,ObjetiveType.valueOf(status));
+   	   				ObjetivesMG gob = new ObjetivesMG(key,priority,values,valueinit,valuec,valuei,description,ObjetiveType.valueOf(status));
    	   				l.add(gob);
    	   				
    	   		}}
@@ -2564,14 +2568,18 @@ public class GameConditions {
    		List<ObjetivesMG> l = new ArrayList<>();
    		
    		if(HasObjetives(map)) {
-   			ObjetivesMG ghost = new ObjetivesMG("Mapa Con Objetivos Borrados",1,0,0,"Habilitaron los Objetivos pero no hay ninguno en la Config del Mapa.",ObjetiveType.WAITING);
+   			ObjetivesMG ghost = new ObjetivesMG("Mapa Con Objetivos Borrados",1,0,0,0,0,"Habilitaron los Objetivos pero no hay ninguno en la Config del Mapa.",ObjetiveType.WAITING);
    			l.add(ghost);
 	   		if(game.contains("Game-Objetives")) {
 	   			for (String key : game.getConfigurationSection("Game-Objetives").getKeys(false)) {
 	   				int priority = game.getInt("Game-Objetives."+key+".Priority");
 	   				String descripcion = game.getString("Game-Objetives."+key+".Description");
 	   				String status = game.getString("Game-Objetives."+key+".Status");
-	   				int value = game.getInt("Game-Objetives."+key+".Value-Limit");
+	   				int values = game.getInt("Game-Objetives."+key+".Start-Value");
+	   				int valueinit = values;
+	   				int valuec = game.getInt("Game-Objetives."+key+".Complete-Value");
+	   				int valuei = game.getInt("Game-Objetives."+key+".Incomplete-Value");
+	   				
 	   				
 	   				List<String> objetivesmg = game.getStringList("Game-Objetives."+key+".ObjetiveCompleteMessage");
 	   				List<String> objetivesaction = game.getStringList("Game-Objetives."+key+".ObjetiveCompleteActions");
@@ -2586,7 +2594,7 @@ public class GameConditions {
 	   				System.out.println(objetives2mg.toString());
 	   				System.out.println(objetivesaction2.toString());
 	   				
-	   				ObjetivesMG omg = new ObjetivesMG(key,priority,0,value,descripcion,ObjetiveType.valueOf(status.toUpperCase()));
+	   				ObjetivesMG omg = new ObjetivesMG(key,priority,values,valueinit,valuec,valuei,descripcion, ObjetiveType.valueOf(status.toUpperCase()));
 	   				l.add(omg);
 	   		}}
 	   		
@@ -2601,13 +2609,16 @@ public class GameConditions {
    		
    		GameObjetivesMG go = new GameObjetivesMG(l);
    		for(ObjetivesMG o : go.getObjetives()) {
-   			System.out.println(o.getNombre()+" "+o.getPriority()+" "+o.getValueinitial()+" "+o.getValuereferencial()+" "+o.isStatus().toString());
+   			System.out.println(o.getNombre()+" "+o.getPriority()+" "+o.getValue()+" "+o.getCompleteValue()+" "+o.getObjetiveType().toString());
    		}
    	
    		
    		return;
    	}
  	
+	
+	
+	
  	public void isCompleteAllPrimaryObjetiveForReward(String map) {
  		GameInfo gi = plugin.getGameInfoPoo().get(map);
    		List<ObjetivesMG> l = gi.getGameObjetivesMg().getObjetives();
@@ -2616,7 +2627,7 @@ public class GameConditions {
    		if(!l.isEmpty()) {
    			for(int i = 0 ; i < l.size();i++) {
    				ObjetivesMG obj = l.get(i);
-   				if(obj.getPriority() == 1 && obj.isStatus() != ObjetiveType.COMPLETE) {
+   				if(obj.getPriority() == 1 && obj.getObjetiveType() != ObjetiveType.COMPLETE) {
    					p.add(obj);
    				}
    				
@@ -2625,15 +2636,19 @@ public class GameConditions {
    		
    		if(!p.isEmpty()) {
    			return;
-   		}
-   		
-			FileConfiguration game = getGameConfig(map);
+   		}else {
+   			if(!l.stream().filter(o -> o.getPriority() == 1).findFirst().isPresent()) {
+   				return;
+   			}
+   			
+   			FileConfiguration game = getGameConfig(map);
 			List<String> rewardpm = game.getStringList("Complete-All-Objetives-Primary.Message");
-		  	List<String> rewardp = game.getStringList("Complete-All-Objetives-Primary.Rewards");
+		 	List<String> rewardp = game.getStringList("Complete-All-Objetives-Primary.Actions");
+		 	List<String> rewardpl = game.getStringList("Complete-All-Objetives-Primary.PlayerActions");
 		  	
 			if(gi instanceof GameAdventure) {
 				GameAdventure ga = (GameAdventure) gi;
-				List<Player> players = ConvertStringToPlayer(ga.getParticipantes());
+				List<Player> players = ConvertStringToPlayer(ga.getVivo());
 				
 				
 				for(Player player : players) {
@@ -2644,7 +2659,11 @@ public class GameConditions {
 	   				
 					ExecuteMultipleCommandsInConsole(player, rewardp);
 				}
-			}
+				ExecuteMultipleCommandsInConsole(null, rewardpl);
+			}	
+   		}
+   		
+			
 			
 		  	
    		
@@ -2659,7 +2678,7 @@ public class GameConditions {
    		if(!l.isEmpty()) {
    			for(int i = 0 ; i < l.size();i++) {
    				ObjetivesMG obj = l.get(i);
-   				if(obj.getPriority() >= 2 && obj.isStatus() != ObjetiveType.COMPLETE) {
+   				if(obj.getPriority() >= 2 && obj.getObjetiveType() != ObjetiveType.COMPLETE) {
    					p.add(obj);
    				}
    				
@@ -2668,12 +2687,15 @@ public class GameConditions {
    		
    		if(!p.isEmpty()) {
    			return;
-   		}
-   		
-   		
-			FileConfiguration game = getGameConfig(map);
+   		}else{
+   			if(!l.stream().filter(o -> o.getPriority() >= 2).findFirst().isPresent()) {
+   				return;
+   			}
+   			
+   			FileConfiguration game = getGameConfig(map);
 			List<String> rewardpm = game.getStringList("Complete-All-Objetives-Secondary.Message");
-		  	List<String> rewardp = game.getStringList("Complete-All-Objetives-Secondary.Rewards");
+			List<String> rewards = game.getStringList("Complete-All-Objetives-Secondary.Actions");
+			List<String> rewardspl = game.getStringList("Complete-All-Objetives-Secondary.PlayerActions");
 		  	
 		  	
 		  	if(gi instanceof GameAdventure) {
@@ -2686,9 +2708,15 @@ public class GameConditions {
 	   	   				player.sendMessage(ChatColor.translateAlternateColorCodes('&',text.replace("%player%", player.getName())));
 					}}
 	   				
-					ExecuteMultipleCommandsInConsole(player, rewardp);
+					ExecuteMultipleCommandsInConsole(player, rewards);
 				}
+				ExecuteMultipleCommandsInConsole(null, rewardspl);
+
 		  	}
+   		}
+   		
+   		
+			
 			
 					
 					
@@ -2706,7 +2734,9 @@ public class GameConditions {
    		if(!l.isEmpty()) {
    			for(int i = 0 ; i < l.size();i++) {
    				ObjetivesMG obj = l.get(i);
-   				if(obj.getPriority() == 1 && obj.isStatus() != ObjetiveType.COMPLETE) {
+   				if(obj.getObjetiveType() == ObjetiveType.WARNING || obj.getObjetiveType() == ObjetiveType.DANGER) continue;
+   				if(obj.getPriority() == 1 && obj.getObjetiveType() != ObjetiveType.COMPLETE) {
+   					
    					p.add(obj);
    				}
    				
@@ -2715,7 +2745,7 @@ public class GameConditions {
    		
    		if(!p.isEmpty()) {
    			for(int i = 0 ; i < p.size();i++) {
-   				player.sendMessage(ChatColor.RED+"El Objetivo Primario "+p.get(i).getNombre()+" no esta Completado "+p.get(i).getValueinitial()+"/"+p.get(i).getValuereferencial());
+   				player.sendMessage(ChatColor.RED+"El Objetivo Primario "+p.get(i).getNombre()+" no esta Completado "+p.get(i).getValue()+"/"+p.get(i).getCompleteValue());
    			}
    			return false;
    		}
@@ -2733,7 +2763,8 @@ public class GameConditions {
    		if(!l.isEmpty()) {
    			for(int i = 0 ; i < l.size();i++) {
    				ObjetivesMG obj = l.get(i);
-   				if(obj.getPriority() >= 2 && obj.isStatus() != ObjetiveType.COMPLETE) {
+   				if(obj.getObjetiveType() == ObjetiveType.WARNING || obj.getObjetiveType() == ObjetiveType.DANGER) continue;
+   				if(obj.getPriority() >= 2 && obj.getObjetiveType() != ObjetiveType.COMPLETE) {
    					p.add(obj);
    				}
    				
@@ -2742,7 +2773,7 @@ public class GameConditions {
    		
    		if(!p.isEmpty()) {
    			for(int i = 0 ; i < p.size();i++) {
-   				player.sendMessage(ChatColor.RED+"El Objetivo Secundario "+p.get(i).getNombre()+" no esta Completado "+p.get(i).getValueinitial()+"/"+p.get(i).getValuereferencial());
+   				player.sendMessage(ChatColor.RED+"El Objetivo Secundario "+p.get(i).getNombre()+" no esta Completado "+p.get(i).getValue()+"/"+p.get(i).getCompleteValue());
    			}
    			return false;
    		}
@@ -2751,403 +2782,217 @@ public class GameConditions {
  		return true;
  	}
    	
-	public void CompletePrimaryObjetive(String map, String name ,int value) {
 	
+	public void ObjetivesValue(String map, String name ,int value) {
+		
 		GameInfo gi = plugin.getGameInfoPoo().get(map);
 		List<ObjetivesMG> l = gi.getGameObjetivesMg().getObjetives();
 		
 		
 		if(!l.stream().filter(o -> o.getNombre().equals(name)).findFirst().isPresent()) {
-			SendMessageToUserAndConsole(null,ChatColor.RED+"El Objetivo Primario "+name+" no Existe");
+			SendMessageToUserAndConsole(null,ChatColor.RED+"El Objetivo  "+name+" no Existe");
 			return;
-		}
-		
-		for(int i = 0; i<l.size();i++) {
+		}else {
 			
-			if(l.get(i).getNombre().equals(name) && l.get(i).getPriority() == 1 && l.get(i).isStatus() == ObjetiveType.COMPLETE) {
-				SendMessageToUserAndConsole(null,ChatColor.GREEN+"El Objetivo Primario "+name+" esta Completo.");
+			ObjetivesMG obj = l.stream().filter(o -> o.getNombre().equals(name)).findFirst().get();
+			
+			if(obj.getObjetiveType() == ObjetiveType.COMPLETE) {
+				SendMessageToUserAndConsole(null,ChatColor.GOLD+map+" "+ChatColor.GREEN+"El Objetivo "+name+" alcanzo el Estado Completo.");
 				return;
-			}
-			
-			if(l.get(i).getNombre().equals(name) && l.get(i).getPriority() == 1 && l.get(i).isStatus() != ObjetiveType.COMPLETE) {
-				int val =  l.get(i).getValueinitial();
-				int valr = l.get(i).getValuereferencial();
-				int total = val + value;
+			}else if(obj.getObjetiveType() == ObjetiveType.INCOMPLETE) {
+				SendMessageToUserAndConsole(null,ChatColor.GOLD+map+" "+ChatColor.GREEN+"El Objetivo "+name+" alcanzo el Estado Incompleto.");
+				return;
+			}else if(obj.getObjetiveType() == ObjetiveType.CONCLUDED) {
+				SendMessageToUserAndConsole(null,ChatColor.GOLD+map+" "+ChatColor.GREEN+"El Objetivo "+name+" alcanzo el Estado Concluido.");
+				return;
+			}else if(obj.getObjetiveType() == ObjetiveType.WAITING || obj.getObjetiveType() == ObjetiveType.WARNING || obj.getObjetiveType() == ObjetiveType.DANGER) {
+				int vals = obj.getStartValue();
+				int val =  obj.getValue();
+				int valc = obj.getCompleteValue();
+				int vali = obj.getIncompleteValue();
+					val = val + value;
 				
-				if(total >= valr) {
-					
-					SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+l.get(i).getNombre()+ChatColor.GREEN+" a sido Completado "+ChatColor.GOLD+valr+"/"+valr);
-
-					
-					FileConfiguration game = getGameConfig(map);
-					l.get(i).setStatus(ObjetiveType.COMPLETE);
-					l.get(i).setValueinitial(valr);
-					
-			   		List<String> objetivesmg = game.getStringList("Game-Objetives."+name+".ObjetiveCompleteMessage");
-			   		List<String> objetivesaction = game.getStringList("Game-Objetives."+name+".ObjetiveCompleteActions");
-			   		
-			   		
-			   		if(gi instanceof GameAdventure) {
-						GameAdventure ga = (GameAdventure) gi;
-						List<Player> players = ConvertStringToPlayer(ga.getParticipantes());
-						for(Player p : players) {
-				   			if(!objetivesmg.isEmpty()) {
-				   				p.sendMessage(ChatColor.GREEN+"Objetivo Primario "+ChatColor.GOLD+name+ChatColor.GREEN+" fue Completado.");
-				   				for(String text : objetivesmg) {
-				   	   				p.sendMessage(ChatColor.translateAlternateColorCodes('&',text));
-				   				}
-				   			}
-				   			
-				   			ExecuteMultipleCommandsInConsole(p,objetivesaction);
-				   			
-				   		}
+				
+					// VALOR START: 10  VALOR COMPLETE: 0
+				if(vals > valc) {
+					if(val <= valc) {
 						
-			   		}
-					
-					isCompleteAllPrimaryObjetiveForReward(map);
-				
-					return ;
-				}else {
-					
-					l.get(i).setValueinitial(total);
-					SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+l.get(i).getNombre()+ChatColor.GREEN+" a Aumentado "+ChatColor.GOLD+total+"/"+l.get(i).getValuereferencial());
+						if(obj.getObjetiveType() == ObjetiveType.WAITING) {
+							obj.setObjetiveType(ObjetiveType.COMPLETE);
+						}else {
+							obj.setObjetiveType(ObjetiveType.CONCLUDED);
+						}
+						obj.setValue(obj.getCompleteValue());
+						ObjetiveGeneralActionsComplete(map,obj,gi);
+					}else if(val >= vali) {
+						if(obj.getObjetiveType() == ObjetiveType.WAITING) {
+							obj.setObjetiveType(ObjetiveType.INCOMPLETE);
+						}else {
+							obj.setObjetiveType(ObjetiveType.CONCLUDED);
+						}
+						obj.setValue(obj.getIncompleteValue());
+						ObjetiveGeneralActionsIncomplete(map,obj,gi);
+					}else {
+						obj.setValue(val);
+						SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
 
-					return ;
+					}
+				
+					
+					//VALOR START: 0  VALOR COMPLETE: 10
+				}else if(vals < valc) {
+					if(val >= valc) {
+						if(obj.getObjetiveType() == ObjetiveType.WAITING) {
+							obj.setObjetiveType(ObjetiveType.COMPLETE);
+						}else {
+							obj.setObjetiveType(ObjetiveType.CONCLUDED);
+						}
+						obj.setValue(obj.getCompleteValue()); 
+						ObjetiveGeneralActionsComplete(map,obj,gi);
+					}else if(val <= vali) {
+						if(obj.getObjetiveType() == ObjetiveType.WAITING) {
+							obj.setObjetiveType(ObjetiveType.INCOMPLETE);
+						}else {
+							obj.setObjetiveType(ObjetiveType.CONCLUDED);
+						}
+						obj.setValue(obj.getIncompleteValue());
+						ObjetiveGeneralActionsIncomplete(map,obj,gi);
+					}else {
+						obj.setValue(val);
+						SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+
+					}
 				}
 				
+			   		isCompleteAllPrimaryObjetiveForReward(map);
+					isCompleteAllSecondaryObjetiveForReward(map);
+				
 			}
+			
 		}
+	
+		
 	
 		return ;	
 	}
 	
-	
-	public void CompleteSecondaryObjetive(String map, String name ,int value) {
-		
-		GameInfo gi = plugin.getGameInfoPoo().get(map);
-		List<ObjetivesMG> l = gi.getGameObjetivesMg().getObjetives();
-		
-		
-		if(!l.stream().filter(o -> o.getNombre().equals(name)).findFirst().isPresent()) {
-			SendMessageToUserAndConsole(null,ChatColor.RED+"El Objetivo Secundario "+name+" no Existe");
-			return;
-		}
-		
-		for(int i = 0; i<l.size();i++) {
-			
-			if(l.get(i).getNombre().equals(name) && l.get(i).getPriority() >= 2 && l.get(i).isStatus() == ObjetiveType.COMPLETE) {
-				SendMessageToUserAndConsole(null,ChatColor.GREEN+"El Objetivo Secundario "+name+" esta Completo.");
-				return;
-			}
-			
-			
-			if(l.get(i).getNombre().equals(name) && l.get(i).getPriority() >= 2 && l.get(i).isStatus() != ObjetiveType.COMPLETE) {
-				int val =  l.get(i).getValueinitial();
-				int valr = l.get(i).getValuereferencial();
-				int total = val + value;
-				
-				if(total >= valr) {
-					
-					SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+l.get(i).getNombre()+ChatColor.GREEN+" a sido Completado "+ChatColor.GOLD+valr+"/"+valr);
 
-					FileConfiguration game = getGameConfig(map);
-					l.get(i).setStatus(ObjetiveType.COMPLETE);
-					l.get(i).setValueinitial(valr);
-					
-			   		List<String> objetivesmg = game.getStringList("Game-Objetives."+name+".ObjetiveCompleteMessage");
-			   		List<String> objetivesaction = game.getStringList("Game-Objetives."+name+".ObjetiveCompleteActions");
-			   		
-			   		
-			   		if(gi instanceof GameAdventure) {
-						GameAdventure ga = (GameAdventure) gi;
-						List<Player> players = ConvertStringToPlayer(ga.getParticipantes());
-						
-						for(Player p : players) {
-				   			if(!objetivesmg.isEmpty()) {
-				   				p.sendMessage(ChatColor.GREEN+"Objetivo Secundario "+ChatColor.GOLD+name+ChatColor.GREEN+" fue Completado.");
-				   				for(String text : objetivesmg) {
-				   	   				p.sendMessage(ChatColor.translateAlternateColorCodes('&',text));
-				   				}
-				   			}
-				   			
-				   			ExecuteMultipleCommandsInConsole(p,objetivesaction);
-				   			
-				   		}
-			   		}
-					
-					isCompleteAllSecondaryObjetiveForReward(map);
-					
-					
-					return;
-				}else {
-				
-					l.get(i).setValueinitial(total);
-					SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+l.get(i).getNombre()+ChatColor.GREEN+" a Aumentado "+ChatColor.GOLD+total+"/"+l.get(i).getValuereferencial());
-					return ;
-			    }
-			 
-			
+	public void ObjetiveGeneralActionsComplete(String map,ObjetivesMG oj,GameInfo gi) {
+		
+		FileConfiguration game = getGameConfig(map);
+		List<String> objetivesmg = game.getStringList("Game-Objetives."+oj.getNombre()+".ObjetiveCompleteMessage");
+   		List<String> objetivesaction = game.getStringList("Game-Objetives."+oj.getNombre()+".ObjetiveCompleteActions");
+   		List<String> objetivesactionpl = game.getStringList("Game-Objetives."+oj.getNombre()+".ObjetiveCompletePlayerActions");
+		
+   		 
+   		if(gi instanceof GameAdventure) {
+			GameAdventure ga = (GameAdventure) gi;
+			List<Player> players = ConvertStringToPlayer(ga.getVivo());
+				for(Player p : players) {
+		   			if(!objetivesmg.isEmpty()) {
+		   				p.sendMessage(ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+oj.getNombre()+ChatColor.GREEN+" fue Completado.");
+		   				for(String text : objetivesmg) {
+		   	   				p.sendMessage(ChatColor.translateAlternateColorCodes('&',text));
+		   		}}
+		   		ExecuteMultipleCommandsInConsole(p,objetivesactionpl);
 			}
-		}
-			return ;
+			ExecuteMultipleCommandsInConsole(null,objetivesaction);
+   		}	
+		
+		SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+oj.getNombre()+ChatColor.GREEN+" a sido Completado "+ChatColor.GOLD+oj.getCompleteValue()+"/"+oj.getCompleteValue());
 	}
 	
-	public void IncompletePrimaryObjetive(String map, String name) {
-		GameInfo gi = plugin.getGameInfoPoo().get(map);
-		List<ObjetivesMG> l = gi.getGameObjetivesMg().getObjetives();
+	public void ObjetiveGeneralActionsIncomplete(String map,ObjetivesMG oj,GameInfo gi)  {
+		FileConfiguration game = getGameConfig(map);
+		List<String> objetivesmg = game.getStringList("Game-Objetives."+oj.getNombre()+".ObjetiveIncompleteMessage");
+   		List<String> objetivesaction = game.getStringList("Game-Objetives."+oj.getNombre()+".ObjetiveIncompleteActions");
+   		List<String> objetivesactionpl = game.getStringList("Game-Objetives."+oj.getNombre()+".ObjetiveIncompletePlayerActions");
 		
-		if(!l.stream().filter(o -> o.getNombre().equals(name)).findFirst().isPresent()) {
-			SendMessageToUserAndConsole(null,ChatColor.RED+"El Objetivo Primario "+name+" Incomplete no Existe");
-			return;
-		}
-		
-		for(int i = 0; i<l.size();i++) {
-			
-			if(l.get(i).getNombre().equals(name) && l.get(i).getPriority() == 1 && l.get(i).isStatus() == ObjetiveType.INCOMPLETE) {
-				SendMessageToUserAndConsole(null,ChatColor.GREEN+"El Objetivo Primario "+name+" ya esta Incompleto.");
-				return;
+   		
+   		if(gi instanceof GameAdventure) {
+			GameAdventure ga = (GameAdventure) gi;
+			List<Player> players = ConvertStringToPlayer(ga.getVivo());
+				for(Player p : players) {
+		   			if(!objetivesmg.isEmpty()) {
+		   				p.sendMessage(ChatColor.RED+"Objetivo "+ChatColor.GOLD+oj.getNombre()+ChatColor.RED+" no fue Completado.");
+		   				for(String text : objetivesmg) {
+		   	   				p.sendMessage(ChatColor.translateAlternateColorCodes('&',text));
+		   		}}
+		   		ExecuteMultipleCommandsInConsole(p,objetivesactionpl);
 			}
-			
-			
-			if(l.get(i).getNombre().equals(name) && l.get(i).getPriority() == 1 && l.get(i).isStatus() != ObjetiveType.INCOMPLETE) {
-				FileConfiguration game = getGameConfig(map);
-				l.get(i).setStatus(ObjetiveType.INCOMPLETE);
-				
-					
-			   		List<String> objetives2mg = game.getStringList("Game-Objetives."+name+".ObjetiveIncompleteMessage");
-					List<String> objetivesaction2 = game.getStringList("Game-Objetives."+name+".ObjetiveIncompleteActions");
-			   		
-					if(gi instanceof GameAdventure) {
-						GameAdventure ga = (GameAdventure) gi;
-						List<Player> players = ConvertStringToPlayer(ga.getParticipantes());
-				 		for(Player p : players) {
-				   			if(!objetives2mg.isEmpty()) {
-				   				p.sendMessage(ChatColor.RED+"Objetivo Primario "+ChatColor.GOLD+name+ChatColor.RED+" esta Incompleto.");
-				   				for(String texto : objetives2mg) {
-				   	   				p.sendMessage(ChatColor.translateAlternateColorCodes('&', texto));
-				   	   			}
-				   			}
-				   			
-				   			ExecuteMultipleCommandsInConsole(p,objetivesaction2);
-				   		}
-					}
-					
-			  
-	
-				return;
-			}
-		}
-	
-			
+			ExecuteMultipleCommandsInConsole(null,objetivesaction);
+   		}
+		SendMessageToAllPlayersInGame(map, ChatColor.RED+"El progreso del Ojetivo "+ChatColor.GOLD+oj.getNombre()+ChatColor.RED+" no fue Completado "+ChatColor.GOLD+oj.getIncompleteValue()+"/"+oj.getIncompleteValue());
 	}
 	
-	public void IncompleteSecondaryObjetive(String map, String name) {
+
+	
+
+	
+	public void ObjetiveChangeType(String map, String name, ObjetiveType ob) {
 		GameInfo gi = plugin.getGameInfoPoo().get(map);
 		List<ObjetivesMG> l = gi.getGameObjetivesMg().getObjetives();
 		
 		
 		if(!l.stream().filter(o -> o.getNombre().equals(name)).findFirst().isPresent()) {
-			SendMessageToUserAndConsole(null,ChatColor.RED+"El Objetivo Secundario "+name+" Incomplete no Existe");
+			SendMessageToUserAndConsole(null,ChatColor.RED+"El Objetivo "+ChatColor.GOLD+name+ChatColor.RED+" no Existe.");
 			return;
+		}else{
+			ObjetivesMG mo = (ObjetivesMG) l.stream().filter(o -> o.getNombre().equals(name)).findFirst().get();
+			
+			switch(ob) {
+			case WAITING:
+				mo.setObjetiveType(ObjetiveType.WAITING);
+				SendMessageToAllPlayersInGame(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Esperando.");
+				break;
+			case COMPLETE:
+				mo.setObjetiveType(ObjetiveType.COMPLETE);
+				SendMessageToAllPlayersInGame(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Completado.");
+				mo.setValue(mo.getCompleteValue());
+				ObjetiveGeneralActionsComplete(map,mo,gi);
+				isCompleteAllPrimaryObjetiveForReward(map);
+				isCompleteAllSecondaryObjetiveForReward(map);
+				break;
+			case INCOMPLETE:
+				mo.setObjetiveType(ObjetiveType.INCOMPLETE);
+				SendMessageToAllPlayersInGame(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Incompleto.");
+				mo.setValue(mo.getIncompleteValue());
+				ObjetiveGeneralActionsIncomplete(map,mo,gi);
+				break;
+			case DANGER:
+				mo.setObjetiveType(ObjetiveType.DANGER);
+				SendMessageToAllPlayersInGame(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Peligro.");
+				break;
+			case UNKNOW:
+				mo.setObjetiveType(ObjetiveType.UNKNOW);
+				SendMessageToAllPlayersInGame(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Desconocido.");
+				break;
+			case WARNING:
+				mo.setObjetiveType(ObjetiveType.WARNING);
+				SendMessageToAllPlayersInGame(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Advertencia.");
+				break;
+			case RESET:
+				mo.setObjetiveType(ObjetiveType.WAITING);
+				SendMessageToAllPlayersInGame(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" se Resteo.");
+				mo.setValue(mo.getStartValue());
+				break;
+			case CONCLUDED:
+				mo.setObjetiveType(ObjetiveType.CONCLUDED);
+				SendMessageToAllPlayersInGame(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" a Concluido.");
+				mo.setValue(mo.getCompleteValue());
+				ObjetiveGeneralActionsComplete(map,mo,gi);
+				break;
+			
+			default:
+				SendMessageToAllPlayersInGame(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" no tuvo Cambios.");
+			}
 		}
 		
-		for(int i = 0; i<l.size();i++) {
-			
-			if(l.get(i).getNombre().equals(name) && l.get(i).getPriority() >= 2 && l.get(i).isStatus() == ObjetiveType.INCOMPLETE) {
-				SendMessageToUserAndConsole(null,ChatColor.GREEN+"El Objetivo Secundario "+name+" ya esta Incompleto.");
-				return;
-			}
-			
-			if(l.get(i).getNombre().equals(name) && l.get(i).getPriority() >= 2 && l.get(i).isStatus() != ObjetiveType.INCOMPLETE) {
-				
-				FileConfiguration game = getGameConfig(map);
-				l.get(i).setStatus(ObjetiveType.INCOMPLETE);
-		   		List<String> objetives2mg = game.getStringList("Game-Objetives."+name+".ObjetiveIncompleteMessage");
-		   		List<String> objetivesaction2 = game.getStringList("Game-Objetives."+name+".ObjetiveIncompleteActions");
-		   		
-		   		
-		   		if(gi instanceof GameAdventure) {
-					GameAdventure ga = (GameAdventure) gi;
-					List<Player> players = ConvertStringToPlayer(ga.getParticipantes());
-					for(Player p : players) {
-			   			if(!objetives2mg.isEmpty()) {
-			   				p.sendMessage(ChatColor.RED+"Objetivo Secundario "+ChatColor.GOLD+name+ChatColor.RED+" esta Incompleto.");
-			   				for(String texto : objetives2mg) {
-			   	   				p.sendMessage(ChatColor.translateAlternateColorCodes('&', texto));
-			   	   			}
-			   			}
-			   			
-			   			ExecuteMultipleCommandsInConsole(p,objetivesaction2);
-			   		}
-		   		
-		   		}
-		   		
-		   		
-		   		
-		   		
-		   		
-		   		
-				
-				return;
-			}
-		}
-	
-			
+		
+		
 	}
-	
-	
-	public void WaitingPrimaryObjetive(String map, String name) {
-		GameInfo gi = plugin.getGameInfoPoo().get(map);
-		List<ObjetivesMG> l = gi.getGameObjetivesMg().getObjetives();
-		
-		if(!l.stream().filter(o -> o.getNombre().equals(name)).findFirst().isPresent()) {
-			SendMessageToUserAndConsole(null,ChatColor.RED+"El Objetivo Primario "+name+" Wait no Existe");
-			return;
-		}
-		
-		
-		for(int i = 0; i<l.size();i++) {
-			
-			if(l.get(i).getNombre().equals(name) && l.get(i).getPriority() == 1 && l.get(i).isStatus() == ObjetiveType.WAITING) {
-				SendMessageToUserAndConsole(null,ChatColor.GREEN+"El Objetivo Primario "+name+" ya esta Esperando.");
-				return;
-			}
-			
-			
-			if(l.get(i).getNombre().equals(name) && l.get(i).getPriority() == 1 && l.get(i).isStatus() != ObjetiveType.WAITING) {
-			
-				l.get(i).setStatus(ObjetiveType.WAITING);
-				
-				
-				if(gi instanceof GameAdventure) {
-					GameAdventure ga = (GameAdventure) gi;
-					 List<Player> players = ConvertStringToPlayer(ga.getParticipantes());
-					  for(Player p : players) {
-						  p.sendMessage(ChatColor.GREEN+"Estatus de Objetivo "+name+" Actualizado a Esperando.");
-					  }
-				}
-				
-				
-	
-				return;
-			}
-		}
-	
-			
-	}
-	
-	public void WaitingSecondaryObjetive(String map, String name) {
-		GameInfo gi = plugin.getGameInfoPoo().get(map);
-		List<ObjetivesMG> l = gi.getGameObjetivesMg().getObjetives();
-		
-		if(!l.stream().filter(o -> o.getNombre().equals(name)).findFirst().isPresent()) {
-			SendMessageToUserAndConsole(null,ChatColor.RED+"El Objetivo Secundario "+name+" Wait no Existe");
-			return;
-		}
-		
-		for(int i = 0; i<l.size();i++) {
-			
-			if(l.get(i).getNombre().equals(name) && l.get(i).getPriority() >= 2 && l.get(i).isStatus() == ObjetiveType.WAITING) {
-				SendMessageToUserAndConsole(null,ChatColor.GREEN+"El Objetivo Secundario "+name+" ya esta Esperando.");
-				return;
-			}
-			
-			if(l.get(i).getNombre().equals(name) && l.get(i).getPriority() >= 2 && l.get(i).isStatus() != ObjetiveType.WAITING) {
-				
-				l.get(i).setStatus(ObjetiveType.WAITING);
-				
-				
-				if(gi instanceof GameAdventure) {
-					GameAdventure ga = (GameAdventure) gi;
-					List<Player> players = ConvertStringToPlayer(ga.getParticipantes());
-					  for(Player p : players) {
-						  p.sendMessage(ChatColor.GREEN+"Estatus de Objetivo "+name+" Actualizado a Esperando.");
-					  }
-				}
-			
-		
-				return;
-			}
-		}
-	
-			
-	}
-	
-	public void UnknowPrimaryObjetive(String map, String name) {
-		GameInfo gi = plugin.getGameInfoPoo().get(map);
-		List<ObjetivesMG> l = gi.getGameObjetivesMg().getObjetives();
-		
-		if(!l.stream().filter(o -> o.getNombre().equals(name)).findFirst().isPresent()) {
-			SendMessageToUserAndConsole(null,ChatColor.RED+"El Objetivo Primario "+name+" Unknow no Existe");
-			return;
-		}
-		
-		for(int i = 0; i<l.size();i++) {
-			
-			if(l.get(i).getNombre().equals(name) && l.get(i).getPriority() == 1 && l.get(i).isStatus() == ObjetiveType.UNKNOW) {
-				SendMessageToUserAndConsole(null,ChatColor.GREEN+"El Objetivo Primario "+name+" ya esta Unknow.");
-				return;
-			}
-			
-			
-			if(l.get(i).getNombre().equals(name) && l.get(i).getPriority() == 1 && l.get(i).isStatus() != ObjetiveType.UNKNOW) {
-			
-				l.get(i).setStatus(ObjetiveType.UNKNOW);
-				
-				if(gi instanceof GameAdventure) {
-					GameAdventure ga = (GameAdventure) gi;
-					List<Player> players = ConvertStringToPlayer(ga.getParticipantes());
-					  for(Player p : players) {
-						  p.sendMessage(ChatColor.GREEN+"Estatus de Objetivo "+name+" Actualizado a Unknow.");
-					  }
-				}
-				
-				
-				
-	
-				return;
-			}
-		}
-	
-			
-	}
-	
-	public void UnknowSecondaryObjetive(String map, String name) {
-		GameInfo gi = plugin.getGameInfoPoo().get(map);
-		List<ObjetivesMG> l = gi.getGameObjetivesMg().getObjetives();
-		
-		if(!l.stream().filter(o -> o.getNombre().equals(name)).findFirst().isPresent()) {
-			SendMessageToUserAndConsole(null,ChatColor.RED+"El Objetivo Secundario "+name+" Unknow no Existe");
-			return;
-		}
-		
-		for(int i = 0; i<l.size();i++) {
-			
-			if(l.get(i).getNombre().equals(name) && l.get(i).getPriority() >= 2 && l.get(i).isStatus() == ObjetiveType.UNKNOW) {
-				SendMessageToUserAndConsole(null,ChatColor.GREEN+"El Objetivo Secundario "+name+" ya esta Unknow.");
-				return;
-			}
-			
-			if(l.get(i).getNombre().equals(name) && l.get(i).getPriority() >= 2 && l.get(i).isStatus() != ObjetiveType.UNKNOW) {
-				
-				l.get(i).setStatus(ObjetiveType.UNKNOW);
-				
-				if(gi instanceof GameAdventure) {
-					GameAdventure ga = (GameAdventure) gi;
-					List<Player> players = ConvertStringToPlayer(ga.getParticipantes());
-					  for(Player p : players) {
-						  p.sendMessage(ChatColor.GREEN+"Estatus de Objetivo "+name+" Actualizado a Unknow.");
-					  }
-				}
-				
-			
-		
-				return;
-			}
-		}
-	
-			
-	}
+
+
 	
 	
    
@@ -3164,7 +3009,7 @@ public class GameConditions {
    		
    		if(!l.isEmpty()) {
    			for(int i = 0;i<l.size();i++) {
-   				if(l.get(i).isStatus() == ObjetiveType.COMPLETE) {
+   				if(l.get(i).getObjetiveType() == ObjetiveType.COMPLETE) {
    					complete.add(l.get(i).getNombre());
    		  }}}
    		
@@ -3172,6 +3017,10 @@ public class GameConditions {
    		
    		return actual ;
 	}
+	
+	
+	
+	
 	
 	//TODO STRING TO PLAYER
 	public List<Player> ConvertStringToPlayer(List<String> l1){
@@ -3188,24 +3037,18 @@ public class GameConditions {
 		if(!l.isEmpty()) {
 			for(int i = 0 ; i < l.size(); i++) {
 				String texto = l.get(i);
+				if(player != null) {
+					Bukkit.dispatchCommand(console, ChatColor.translateAlternateColorCodes('&', texto.replaceAll("%player%",player.getName())));
+				}else {
+					Bukkit.dispatchCommand(console, ChatColor.translateAlternateColorCodes('&', texto));
+				}
 				
-				Bukkit.dispatchCommand(console, ChatColor.translateAlternateColorCodes('&', texto.replaceAll("%player%",player.getName())));
 				
 			}
 		}
 	}
 	
-	public void ExecuteMultipleCommandsInConsoleOnly(List<String> l) {
-		ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-		if(!l.isEmpty()) {
-			for(int i = 0 ; i < l.size(); i++) {
-				String texto = l.get(i);
-				
-				Bukkit.dispatchCommand(console, ChatColor.translateAlternateColorCodes('&', texto));
-				
-			}
-		}
-	}
+
 	
 	public void LoadDialogues(String nameyml ,String id,String  map) {
 		FileConfiguration dialogue = getDialogueConfig(nameyml);

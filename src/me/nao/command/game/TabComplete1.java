@@ -64,8 +64,7 @@ public class TabComplete1 implements TabCompleter{
 			arguments.add("force-revive");
 			arguments.add("maintenance");
 			arguments.add("objetives");
-			arguments.add("objetive-primary");
-			arguments.add("objetive-secondary");
+			arguments.add("objetive");
 			arguments.add("tp");
 			arguments.add("tp-all");
 			arguments.add("tp-all-toplayer");

@@ -50,6 +50,7 @@ import me.nao.gamemode.InfectedGame;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameReportType;
 import me.nao.general.info.GameReports;
+import me.nao.general.info.ObjetiveType;
 import me.nao.main.game.Main;
 import me.nao.manager.ClassArena;
 import me.nao.manager.ClassIntoGame;
@@ -92,7 +93,7 @@ public class Comandos implements CommandExecutor{
 		//mensaje desde consola
 		// con el if se evita que se use el comando desde consola
 		if(!(sender instanceof Player)){
-			
+			GameConditions gc = new GameConditions(plugin);
 			if(args.length > 0) {
 				if(args[0].equalsIgnoreCase("reload")) {
 					FileConfiguration config = plugin.getConfig();
@@ -119,8 +120,7 @@ public class Comandos implements CommandExecutor{
 					
 					
 					return true;
-					}//TODO isban
-				else if(args[0].equalsIgnoreCase("isban")) {
+					}else if(args[0].equalsIgnoreCase("isban")) {
 					if (args.length == 2) {
 						String name = args[1];
 						CooldownMG2 cool = new CooldownMG2(plugin);
@@ -131,13 +131,100 @@ public class Comandos implements CommandExecutor{
 						Bukkit.getConsoleSender().sendMessage("Usa /mg isban <player>");
 					}
 					return true;
-				}	else if(args[0].equalsIgnoreCase("ban") || args[0].equalsIgnoreCase("kick")  || args[0].equalsIgnoreCase("tempban")  || args[0].equalsIgnoreCase("warn") || args[0].equalsIgnoreCase("pardon")){
+				}else if(args[0].equalsIgnoreCase("ban") || args[0].equalsIgnoreCase("kick")  || args[0].equalsIgnoreCase("tempban")  || args[0].equalsIgnoreCase("warn") || args[0].equalsIgnoreCase("pardon")){
 					IdentifierReports(null,args);
 					
 					return true;
-				}
-				else if(args[0].equalsIgnoreCase("showobjetive")) {
-					GameConditions gc = new GameConditions(plugin);
+				}else if(args[0].equalsIgnoreCase("message") ) {
+					
+						//mg reload arena
+						
+						//mg message Tuto hola como estan.
+						if (args.length >= 2) {
+							String name = args[1];
+					
+							String mensaje = "";
+				        	 for(int i = 2 ;i < args.length; i++) {
+								 mensaje = mensaje+args[i]+" "; 
+								 
+							 }
+							gc.SendMessageToAllUsersOfSameMissionCommand(null, name, mensaje);
+						}else {
+							gc.SendMessageToUserAndConsole(null,plugin.nombre+ChatColor.GREEN+" Usa /mg message <map> <message>");
+						}
+					
+					
+			
+					
+					return true;
+					}
+				
+				else if(args[0].equalsIgnoreCase("tittle") ) {
+					
+						//mg reload arena
+						
+						//mg message Tuto hola como estan.
+						if (args.length >= 2) {
+							String name = args[1];
+					
+							String mensaje = "";
+				        	 for(int i = 2 ;i < args.length; i++) {
+								 mensaje = mensaje+args[i]+" "; 
+								 
+							 }
+							gc.SendTittleToAllUsersOfSameMissionCommand(null, name, mensaje);
+						}else {
+							gc.SendMessageToUserAndConsole(null,plugin.nombre+ChatColor.GREEN+" Usa /mg tittle <map> <message1 ; message2>");
+						}
+					
+					
+			
+					
+					return true;
+					}else if(args[0].equalsIgnoreCase("objetive")){
+					if(args.length == 4) {
+						
+						String map = args[1];
+						String name = args[2];
+						String unk = args[3];
+						Pattern p = Pattern.compile("([0-9])");
+						Matcher m = p.matcher(unk);
+						if(m.find()) {
+							int value = Integer.valueOf(unk);
+							gc.ObjetivesValue(map, name, value);
+						}else {
+							ObjetiveType obj = ObjetiveType.valueOf(args[3].toUpperCase());
+							if(obj != null) {
+								gc.ObjetiveChangeType(map, name, obj);
+								
+							}else {
+							
+								gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
+				 				gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
+							}
+							
+							
+						}
+						
+			 			
+			 			
+						
+						
+						//mg objetive tutorial CASA COMPLETE
+					}else {
+						
+						gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
+		 				gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
+					}
+						
+						
+					
+					
+					
+					
+					return true;
+				}else if(args[0].equalsIgnoreCase("showobjetive")) {
+					
 					gc.LoadObjetivesOfGameDebug("Tutorial");
 					return true;
 				}
@@ -592,7 +679,7 @@ public class Comandos implements CommandExecutor{
 					if (args.length == 2) {
 						String name = args[1];
 						FileConfiguration config = plugin.getConfig();
-						GameConditions gc = new GameConditions(plugin);
+					
 				 		if(gc.ExistMap(name)) {
 							 List<String> al = config.getStringList("Arenas-Locked.List");
 							 if(!al.contains(name)) {
@@ -645,7 +732,7 @@ public class Comandos implements CommandExecutor{
 					if (args.length == 2) {
 						String name = args[1];
 						FileConfiguration config = plugin.getConfig();
-						GameConditions gc = new GameConditions(plugin);
+					
 				 		if(gc.ExistMap(name)) {
 						
 							 List<String> al = config.getStringList("Arenas-Locked.List");
@@ -2285,9 +2372,43 @@ public class Comandos implements CommandExecutor{
 					
 					return true;
 				}
-				else if(args[0].equalsIgnoreCase("objetive-primary") ||args[0].equalsIgnoreCase("objetive-secondary")){
-					ObjetiveMgStatus(player,args);
-		
+				//TODO OBJETIVE //mg objetive tutorial CASA 1
+				else if(args[0].equalsIgnoreCase("objetive")){
+					if(args.length == 4) {
+						
+						String map = args[1];
+						String name = args[2];
+						String unk = args[3];
+						Pattern p = Pattern.compile("([0-9])");
+						Matcher m = p.matcher(unk);
+						if(m.find()) {
+							int value = Integer.valueOf(unk);
+							gc.ObjetivesValue(map, name, value);
+						}else {
+							ObjetiveType obj = ObjetiveType.valueOf(args[3].toUpperCase());
+							if(obj != null) {
+								gc.ObjetiveChangeType(map, name, obj);
+								
+							}else {
+								player.sendMessage(ChatColor.RED+"Ese no es un Tipo de Objetivo");
+								gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
+				 				gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
+							}
+							
+							
+						}
+						
+			 			
+			 			
+						
+						
+						//mg objetive tutorial CASA COMPLETE
+					}else {
+						
+						gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
+		 				gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
+					}
+						 
 					
 					return true;
 				}else if(args[0].equalsIgnoreCase("objetives") ) {
@@ -2657,109 +2778,8 @@ public class Comandos implements CommandExecutor{
  		return;
  	}
  	
+ 		// 		1					2	3  	4 = 5
  	
- 	//mg objetive-primary complete map nombre 1
- 	public void ObjetiveMgStatus(Player player,String[] args) {
- 		GameConditions gc = new GameConditions(plugin);
- 		
- 		if(args.length == 5) {
- 			
- 			String type = args[0];
- 			String status = args[1];
- 			String map = args[2];
- 			String name = args[3];
- 			
- 			if(!gc.ExistMap(map)) {
- 				gc.SendMessageToUserAndConsole(player, ChatColor.RED+"El mapa "+map+" no existe.");
- 				return;
- 			}
- 			
- 			if(!gc.isMapinGame(map)) {
- 				gc.SendMessageToUserAndConsole(player, ChatColor.RED+"El mapa "+map+" no esta en Juego.");
- 				return;
- 			}
- 			
- 			if(type.equalsIgnoreCase("objetive-primary") && status.equalsIgnoreCase("complete")) {
- 				
- 	 			int value = Integer.valueOf(args[4]);
- 					gc.CompletePrimaryObjetive(map, name, value);
- 				
- 			}else if(type.equalsIgnoreCase("objetive-secondary") && status.equalsIgnoreCase("complete")) {
- 				
- 	 			int value = Integer.valueOf(args[4]);
- 					gc.CompleteSecondaryObjetive(map, name, value);
- 				
- 			}else {
- 				gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive-primary <complete-incomplete> <map> <objetivo> 1");
- 				gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive-secondary <complete-incomplete> <map> <objetivo> 1");
- 				gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive-primary <incomplete> <map> <objetivo>");
- 			    gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive-secondary <incomplete> <map> <objetivo>");
- 			}
- 			
- 				
- 				
- 			
- 			return;
- 			
- 		}else if(args.length == 4) {
- 			String type = args[0];
- 			String status = args[1];
- 			String map = args[2];
- 			String name = args[3];
- 			
- 			if(!gc.ExistMap(map)) {
- 				gc.SendMessageToUserAndConsole(player, ChatColor.RED+"El mapa "+map+" no existe.");
- 				return;
- 			}
- 			
- 			if(!gc.isMapinGame(map)) {
- 				gc.SendMessageToUserAndConsole(player, ChatColor.RED+"El mapa "+map+" no esta en Juego.");
- 				return;
- 			}
- 			
- 			//mg objpry waiting Tutorial name
- 			if(type.equalsIgnoreCase("objetive-primary") && status.equalsIgnoreCase("incomplete")) {
- 				
-					gc.IncompletePrimaryObjetive(map, name);
-					return;
-			}else if(type.equalsIgnoreCase("objetive-primary") && status.equalsIgnoreCase("waiting")) {
- 				
-					gc.WaitingPrimaryObjetive(map, name);
-					return;
-			}else if(type.equalsIgnoreCase("objetive-primary") && status.equalsIgnoreCase("unknow")) {
- 				
-					gc.UnknowPrimaryObjetive(map, name);
-					return;
-			}
-			else if(type.equalsIgnoreCase("objetive-secondary") && status.equalsIgnoreCase("incomplete")) {
-	 			
-				gc.IncompleteSecondaryObjetive(map, name);
-				return;
-			}else if(type.equalsIgnoreCase("objetive-secondary") && status.equalsIgnoreCase("waiting")) {
-	 			
-				   gc.WaitingSecondaryObjetive(map, name);
-				   return;
-			}else if(type.equalsIgnoreCase("objetive-secondary") && status.equalsIgnoreCase("unknow")) {
-	 			
-				gc.UnknowSecondaryObjetive(map, name);
-				return;
-			}
-			
-			else {
- 				gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive-primary <complete-incomplete-waiting-unknow> <map> <objetivo> 1");
- 				gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive-secondary <complete-incomplete-waiting-unknow> <map> <objetivo> 1");
- 				gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive-primary <complete-incomplete-waiting-unknow> <map> <objetivo>");
- 			    gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive-secondary <complete-incomplete-waiting-unknow> <map> <objetivo>");
- 			}
- 			return;
- 		}else {
- 				gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive-primary <complete-incomplete-waiting-unknow> <map> <objetivo> 1.");
-				gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive-secondary <complete-incomplete-waiting-unknow> <map> <objetivo> 1.");
-				gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive-primary <complete-incomplete-waiting-unknow> <map> <objetivo>.");
-			    gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive-secondary <complete-incomplete-waiting-unknow> <map> <objetivo>.");
- 		}
- 		return;
- 	}
  	
  	
  	public boolean isATimeMgFormat(String val) {

@@ -144,6 +144,13 @@ public class MinigameShop1 implements Listener{
 		plugin.getPags().put(player, 1);
 		PlayerInfo p = plugin.getPlayerInfoPoo().get(player);
 		GameInfo gi = plugin.getGameInfoPoo().get(p.getMapName());
+		GameConditions gmc = new GameConditions(plugin);
+		if(!gmc.HasObjetives(p.getMapName())) {
+			player.sendMessage(ChatColor.RED+"El Mapa no tiene Habilitado los Objetivos.");
+			return;
+		}
+		
+		
 		List<ObjetivesMG> l1 = gi.getGameObjetivesMg().getObjetives();
 		
 		if(l1.isEmpty()) {
@@ -161,12 +168,12 @@ public class MinigameShop1 implements Listener{
 		ItemStack it = new ItemStack(Material.ENCHANTED_GOLDEN_APPLE);
 		ItemStack it2 = new ItemStack(Material.GOLDEN_APPLE);
 		
-		GameConditions gmc = new GameConditions(plugin);
+		
 		
 		for(ObjetivesMG ob : l1) {
-			if(gmc.isNecesaryObjetivePrimary(p.getMapName()) && ob.getPriority() == 1) {
+			if(ob.getPriority() == 1) {
 				pr.add(ob);
-			}else if(gmc.isNecesaryObjetiveSedondary(p.getMapName())){
+			}else {
 				se.add(ob);
 			}
 		}
@@ -175,14 +182,14 @@ public class MinigameShop1 implements Listener{
 		if(pr.isEmpty()) {
 			inv.setItem(21,CreateTempItemWithList(it,""+ChatColor.RED+ChatColor.BOLD+"No hay Objetivos Primarios", pr));
 		}else {
-			inv.setItem(21,CreateTempItemWithList(it,""+ChatColor.DARK_GREEN+ChatColor.BOLD+"Primarios", pr));
+			inv.setItem(21,CreateTempItemWithList(it,""+ChatColor.DARK_GREEN+ChatColor.BOLD+"Objetivos Primarios", pr));
 		}
 		
 		
 		if(se.isEmpty()) {
 			inv.setItem(23,CreateTempItemWithList(it2,""+ChatColor.RED+ChatColor.BOLD+"No hay Objetivos Secundarios", se));
 		}else {
-			inv.setItem(23, CreateTempItemWithList(it2,""+ChatColor.DARK_GREEN+ChatColor.BOLD+"Secundarios", se));
+			inv.setItem(23, CreateTempItemWithList(it2,""+ChatColor.DARK_GREEN+ChatColor.BOLD+"Objetivos Secundarios", se));
 
 		}
 		inv.setItem(40, Items.CERRAR.getValue());
@@ -221,50 +228,86 @@ public class MinigameShop1 implements Listener{
 		
 		for(ObjetivesMG ob : l) {
 			
-			if(ob.isStatus() == ObjetiveType.COMPLETE) {
+			if(ob.getObjetiveType() == ObjetiveType.COMPLETE) {
 				ItemStack item = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
 				ItemMeta meta = item.getItemMeta();
 				meta.setDisplayName(""+ChatColor.GREEN+ChatColor.BOLD+ob.getNombre());
 				List<String> descrip = new ArrayList<>();
 				descrip.add(ChatColor.YELLOW+ob.getDescription());
-				descrip.add(ChatColor.GREEN+"("+ob.getValueinitial()+"/"+ob.getValuereferencial()+")");
+				descrip.add(ChatColor.GREEN+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
 				descrip.add(""+ChatColor.GREEN+ChatColor.BOLD+"COMPLETADO");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
 				li.add(item);
 				
-			}if(ob.isStatus() == ObjetiveType.INCOMPLETE) {
+			}if(ob.getObjetiveType() == ObjetiveType.INCOMPLETE) {
 				ItemStack item = new ItemStack(Material.RED_STAINED_GLASS_PANE);
 				ItemMeta meta = item.getItemMeta();
 				meta.setDisplayName(""+ChatColor.RED+ChatColor.BOLD+ob.getNombre());
 				List<String> descrip = new ArrayList<>();
 				descrip.add(ChatColor.YELLOW+ob.getDescription());
-				descrip.add(ChatColor.GREEN+"("+ob.getValueinitial()+"/"+ob.getValuereferencial()+")");
+				descrip.add(ChatColor.GREEN+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
 				descrip.add(""+ChatColor.RED+ChatColor.BOLD+"INCOMPLETO");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
 				li.add(item);
 				
-			}if(ob.isStatus() == ObjetiveType.WAITING) {
+			}if(ob.getObjetiveType() == ObjetiveType.WAITING) {
 				ItemStack item = new ItemStack(Material.YELLOW_STAINED_GLASS_PANE);
 				ItemMeta meta = item.getItemMeta();
 				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ob.getNombre());
 				List<String> descrip = new ArrayList<>();
 				descrip.add(ChatColor.RED+ob.getDescription());
-				descrip.add(ChatColor.AQUA+"("+ob.getValueinitial()+"/"+ob.getValuereferencial()+")");
-				descrip.add(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"EN PROCESO");
+				descrip.add(ChatColor.AQUA+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
+				descrip.add(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"EN PROGRESO");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
 				li.add(item);
 				
-			}if(ob.isStatus() == ObjetiveType.UNKNOW) {
+			}if(ob.getObjetiveType() == ObjetiveType.UNKNOW) {
 				ItemStack item = new ItemStack(Material.WHITE_STAINED_GLASS_PANE);
 				ItemMeta meta = item.getItemMeta();
 				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ChatColor.MAGIC+ob.getNombre());
 				List<String> descrip = new ArrayList<>();
 				descrip.add(""+ChatColor.RED+ChatColor.MAGIC+ob.getDescription());
-				descrip.add(""+ChatColor.AQUA+ChatColor.MAGIC+"("+ob.getValueinitial()+"/"+ob.getValuereferencial()+")");
-				descrip.add(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+ChatColor.MAGIC+"EN PROCESO");
+				descrip.add(""+ChatColor.AQUA+ChatColor.MAGIC+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
+				descrip.add(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+ChatColor.MAGIC+"EN PROGRESO");
+				meta.setLore(descrip);
+				item.setItemMeta(meta);
+				li.add(item);
+				
+			}if(ob.getObjetiveType() == ObjetiveType.WARNING) {
+				ItemStack item = new ItemStack(Material.YELLOW_STAINED_GLASS_PANE);
+				ItemMeta meta = item.getItemMeta();
+				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ob.getNombre());
+				List<String> descrip = new ArrayList<>();
+				descrip.add(ChatColor.RED+ob.getDescription());
+				descrip.add(ChatColor.AQUA+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
+				descrip.add(""+ChatColor.YELLOW+ChatColor.BOLD+"ADVERTENCIA OBJETIVO EN CONTRA EN PROGRESO");
+				meta.setLore(descrip);
+				item.setItemMeta(meta);
+				li.add(item);
+				
+			}if(ob.getObjetiveType() == ObjetiveType.DANGER) {
+				ItemStack item = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+				ItemMeta meta = item.getItemMeta();
+				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ChatColor.MAGIC+ob.getNombre());
+				List<String> descrip = new ArrayList<>();
+				descrip.add(""+ChatColor.DARK_RED+ChatColor.MAGIC+ob.getDescription());
+				descrip.add(""+ChatColor.AQUA+ChatColor.MAGIC+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
+				descrip.add(""+ChatColor.DARK_RED+ChatColor.BOLD+ChatColor.MAGIC+"UN OBJETIVO PELIGROSO EN CONTRA EN PROGRESO");
+				meta.setLore(descrip);
+				item.setItemMeta(meta);
+				li.add(item);
+				
+			}if(ob.getObjetiveType() == ObjetiveType.CONCLUDED) {
+				ItemStack item = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+				ItemMeta meta = item.getItemMeta();
+				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ChatColor.MAGIC+ob.getNombre());
+				List<String> descrip = new ArrayList<>();
+				descrip.add(""+ChatColor.GRAY+ChatColor.BOLD+ob.getDescription());
+				descrip.add(""+ChatColor.AQUA+ChatColor.BOLD+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
+				descrip.add(""+ChatColor.GRAY+ChatColor.BOLD+ChatColor.MAGIC+"OBJETIVO EN CONTRA CONCLUIDO");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
 				li.add(item);
@@ -309,50 +352,86 @@ public class MinigameShop1 implements Listener{
 		
 		for(ObjetivesMG ob : l) {
 			
-			if(ob.isStatus() == ObjetiveType.COMPLETE) {
+			if(ob.getObjetiveType() == ObjetiveType.COMPLETE) {
 				ItemStack item = new ItemStack(Material.LIME_STAINED_GLASS_PANE);
 				ItemMeta meta = item.getItemMeta();
 				meta.setDisplayName(""+ChatColor.GREEN+ChatColor.BOLD+ob.getNombre());
 				List<String> descrip = new ArrayList<>();
 				descrip.add(ChatColor.YELLOW+ob.getDescription());
-				descrip.add(ChatColor.GREEN+"("+ob.getValueinitial()+"/"+ob.getValuereferencial()+")");
+				descrip.add(ChatColor.GREEN+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
 				descrip.add(""+ChatColor.GREEN+ChatColor.BOLD+"COMPLETADO");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
 				li.add(item);
 				
-			}if(ob.isStatus() == ObjetiveType.INCOMPLETE) {
+			}if(ob.getObjetiveType() == ObjetiveType.INCOMPLETE) {
 				ItemStack item = new ItemStack(Material.RED_STAINED_GLASS_PANE);
 				ItemMeta meta = item.getItemMeta();
 				meta.setDisplayName(""+ChatColor.RED+ChatColor.BOLD+ob.getNombre());
 				List<String> descrip = new ArrayList<>();
 				descrip.add(ChatColor.YELLOW+ob.getDescription());
-				descrip.add(ChatColor.GREEN+"("+ob.getValueinitial()+"/"+ob.getValuereferencial()+")");
+				descrip.add(ChatColor.GREEN+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
 				descrip.add(""+ChatColor.RED+ChatColor.BOLD+"INCOMPLETO");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
 				li.add(item);
 				
-			}if(ob.isStatus() == ObjetiveType.WAITING) {
-				ItemStack item = new ItemStack(Material.YELLOW_STAINED_GLASS_PANE);
+			}if(ob.getObjetiveType() == ObjetiveType.WAITING) {
+				ItemStack item = new ItemStack(Material.BLUE_STAINED_GLASS_PANE);
 				ItemMeta meta = item.getItemMeta();
 				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ob.getNombre());
 				List<String> descrip = new ArrayList<>();
 				descrip.add(ChatColor.RED+ob.getDescription());
-				descrip.add(ChatColor.AQUA+"("+ob.getValueinitial()+"/"+ob.getValuereferencial()+")");
-				descrip.add(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"EN PROCESO");
+				descrip.add(ChatColor.AQUA+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
+				descrip.add(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"EN PROGRESO");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
 				li.add(item);
 				
-			}if(ob.isStatus() == ObjetiveType.UNKNOW) {
+			}if(ob.getObjetiveType() == ObjetiveType.UNKNOW) {
 				ItemStack item = new ItemStack(Material.WHITE_STAINED_GLASS_PANE);
 				ItemMeta meta = item.getItemMeta();
 				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ChatColor.MAGIC+ob.getNombre());
 				List<String> descrip = new ArrayList<>();
 				descrip.add(""+ChatColor.RED+ChatColor.MAGIC+ob.getDescription());
-				descrip.add(""+ChatColor.AQUA+ChatColor.MAGIC+"("+ob.getValueinitial()+"/"+ob.getValuereferencial()+")");
-				descrip.add(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+ChatColor.MAGIC+"EN PROCESO");
+				descrip.add(""+ChatColor.AQUA+ChatColor.MAGIC+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
+				descrip.add(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+ChatColor.MAGIC+"EN PROGRESO");
+				meta.setLore(descrip);
+				item.setItemMeta(meta);
+				li.add(item);
+				
+			}if(ob.getObjetiveType() == ObjetiveType.WARNING) {
+				ItemStack item = new ItemStack(Material.YELLOW_STAINED_GLASS_PANE);
+				ItemMeta meta = item.getItemMeta();
+				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ob.getNombre());
+				List<String> descrip = new ArrayList<>();
+				descrip.add(ChatColor.RED+ob.getDescription());
+				descrip.add(ChatColor.AQUA+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
+				descrip.add(""+ChatColor.YELLOW+ChatColor.BOLD+"ADVERTENCIA OBJETIVO EN CONTRA EN PROGRESO");
+				meta.setLore(descrip);
+				item.setItemMeta(meta);
+				li.add(item);
+				
+			}if(ob.getObjetiveType() == ObjetiveType.DANGER) {
+				ItemStack item = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+				ItemMeta meta = item.getItemMeta();
+				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ChatColor.MAGIC+ob.getNombre());
+				List<String> descrip = new ArrayList<>();
+				descrip.add(""+ChatColor.DARK_RED+ChatColor.MAGIC+ob.getDescription());
+				descrip.add(""+ChatColor.AQUA+ChatColor.MAGIC+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
+				descrip.add(""+ChatColor.DARK_RED+ChatColor.BOLD+ChatColor.MAGIC+"UN OBJETIVO PELIGROSO EN CONTRA EN PROGRESO");
+				meta.setLore(descrip);
+				item.setItemMeta(meta);
+				li.add(item);
+				
+			}if(ob.getObjetiveType() == ObjetiveType.CONCLUDED) {
+				ItemStack item = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
+				ItemMeta meta = item.getItemMeta();
+				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ChatColor.MAGIC+ob.getNombre());
+				List<String> descrip = new ArrayList<>();
+				descrip.add(""+ChatColor.GRAY+ChatColor.BOLD+ob.getDescription());
+				descrip.add(""+ChatColor.AQUA+ChatColor.BOLD+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
+				descrip.add(""+ChatColor.GRAY+ChatColor.BOLD+ChatColor.MAGIC+"OBJETIVO EN CONTRA CONCLUIDO");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
 				li.add(item);
@@ -753,7 +832,7 @@ public class MinigameShop1 implements Listener{
 					if(gc.ExistMap(name)) {
 						gc.JoinToTheGames(player, name);
 					}else {
-						player.sendMessage(ChatColor.RED+"Esa arena no existe.");
+						player.sendMessage(ChatColor.RED+"Ese Mapa no existe.");
 					}
 					
 //					if(plugin.ExistArena(name)) {
@@ -1717,14 +1796,20 @@ public class MinigameShop1 implements Listener{
 		if(!l.isEmpty()) {
 			meta.setDisplayName(Nombre);
 			for(int i=0;i<l.size();i++) {
-				if(l.get(i).isStatus() == ObjetiveType.COMPLETE) {
-					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+l.get(i).getNombre()+ChatColor.DARK_GRAY+" Completo "+ChatColor.GREEN+"("+l.get(i).getValueinitial()+"/"+l.get(i).getValuereferencial()+")");
-				}else if(l.get(i).isStatus() == ObjetiveType.INCOMPLETE) {
-					l2.add(""+ChatColor.RED+ChatColor.BOLD+l.get(i).getNombre()+ChatColor.DARK_GRAY+" Incompleto "+ChatColor.RED+"("+l.get(i).getValueinitial()+"/"+l.get(i).getValuereferencial()+")");
-				}else if(l.get(i).isStatus() == ObjetiveType.WAITING) {
-					l2.add(""+ChatColor.YELLOW+ChatColor.BOLD+l.get(i).getNombre()+ChatColor.DARK_GRAY+" En Progreso "+ChatColor.GOLD+"("+l.get(i).getValueinitial()+"/"+l.get(i).getValuereferencial()+")");
-				}else if(l.get(i).isStatus() == ObjetiveType.UNKNOW) {
-					l2.add(""+ChatColor.YELLOW+ChatColor.MAGIC+l.get(i).getNombre()+ChatColor.DARK_GRAY+ChatColor.MAGIC+" En Progreso "+ChatColor.GOLD+ChatColor.MAGIC+"("+l.get(i).getValueinitial()+"/"+l.get(i).getValuereferencial()+")");
+				if(l.get(i).getObjetiveType() == ObjetiveType.COMPLETE) {
+					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+l.get(i).getNombre()+ChatColor.DARK_GRAY+" Completo "+ChatColor.GREEN+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
+				}else if(l.get(i).getObjetiveType() == ObjetiveType.INCOMPLETE) {
+					l2.add(""+ChatColor.RED+ChatColor.BOLD+l.get(i).getNombre()+ChatColor.DARK_GRAY+" Incompleto "+ChatColor.RED+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
+				}else if(l.get(i).getObjetiveType() == ObjetiveType.WAITING) {
+					l2.add(""+ChatColor.AQUA+ChatColor.BOLD+l.get(i).getNombre()+ChatColor.DARK_GRAY+" En Progreso "+ChatColor.GOLD+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
+				}else if(l.get(i).getObjetiveType() == ObjetiveType.UNKNOW) {
+					l2.add(""+ChatColor.WHITE+ChatColor.MAGIC+l.get(i).getNombre()+ChatColor.DARK_GRAY+ChatColor.MAGIC+" En Progreso "+ChatColor.GOLD+ChatColor.MAGIC+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
+				}else if(l.get(i).getObjetiveType() == ObjetiveType.WARNING) {
+					l2.add(""+ChatColor.YELLOW+ChatColor.BOLD+l.get(i).getNombre()+ChatColor.DARK_GRAY+" En Progreso "+ChatColor.GOLD+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
+				}else if(l.get(i).getObjetiveType() == ObjetiveType.DANGER) {
+					l2.add(""+ChatColor.DARK_RED+ChatColor.BOLD+l.get(i).getNombre()+ChatColor.DARK_GRAY+" En Progreso "+ChatColor.GOLD+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
+				}else if(l.get(i).getObjetiveType() == ObjetiveType.CONCLUDED) {
+					l2.add(""+ChatColor.GRAY+ChatColor.BOLD+l.get(i).getNombre()+ChatColor.DARK_GRAY+" Concluido "+ChatColor.GOLD+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
 				}
 				
 			}
