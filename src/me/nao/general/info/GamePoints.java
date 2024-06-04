@@ -35,7 +35,7 @@ public class GamePoints {
 	}
 
 	
-	public int getReviveAsistence() {
+	public int getHelpRevive() {
 		return asisrevive;
 	}
 
@@ -53,7 +53,7 @@ public class GamePoints {
 		this.revive = revive;
 	}
 	
-	public void setReviveAsistence(int asisrevive) {
+	public void setHelpRevive(int asisrevive) {
 		this.asisrevive = asisrevive;
 	}
 	

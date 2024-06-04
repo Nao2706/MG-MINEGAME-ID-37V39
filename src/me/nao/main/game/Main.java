@@ -77,7 +77,7 @@ public class Main extends JavaPlugin{
 
     List<String> air;
     List<String> timeract;
-  
+    List<String> read;
     
     //Esto fue un test
   
@@ -330,6 +330,7 @@ public class Main extends JavaPlugin{
 	
 		air = new ArrayList<String>();
 		timeract = new ArrayList<String>();
+		read = new ArrayList<String>();
 	
 		
 		pags = new HashMap <Player,Integer>();
@@ -483,6 +484,10 @@ public class Main extends JavaPlugin{
    
    public List<String> getTimerAction(){
 	   return timeract;
+   }
+   
+   public List<String> getPlayerReading(){
+	   return read;
    }
    
   

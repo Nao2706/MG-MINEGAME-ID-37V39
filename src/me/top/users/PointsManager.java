@@ -17,6 +17,8 @@ import org.bukkit.entity.Player;
 
 import me.nao.cooldown.Cooldown;
 import me.nao.cosmetics.fireworks.Fireworks;
+import me.nao.general.info.GamePoints;
+import me.nao.general.info.PlayerInfo;
 import me.nao.main.game.Main;
 
 public class PointsManager {
@@ -29,21 +31,32 @@ public class PointsManager {
 	
 	
 		//AGREGAR PUNTOS SI EL JUGADOR LLEGA A LA META 
-		public void addPoints(Player player, int punto) {
+		public void addGamePoints(Player player) {
 	
-				FileConfiguration points = plugin.getPoints();
+			FileConfiguration points = plugin.getPoints();
+			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+			GamePoints gp = pl.getGamePoints();
+			if(points.contains("Players."+player.getName()+".Kills")) {
+				int point = points.getInt("Players."+player.getName()+".Kills");
+				int point2 = points.getInt("Players."+player.getName()+".Deads");
+				int point3 = points.getInt("Players."+player.getName()+".Revive");
+				int point4 = points.getInt("Players."+player.getName()+".Help-Revive");
 				
-				if(points.contains("Players."+player.getName()+".Kills")) {
-					int point = points.getInt("Players."+player.getName()+".Kills");
-					points.set("Players."+player.getName()+".Kills", point+punto);
-					saveAll();
-					
-				}else {
-					
-					points.set("Players."+player.getName()+".Kills",punto);
-					saveAll();
-				}
-			
+				points.set("Players."+player.getName()+".Kills",point+gp.getKills());
+				points.set("Players."+player.getName()+".Deads",point2+gp.getDeads());
+				points.set("Players."+player.getName()+".Revive",point3+gp.getRevive());
+				points.set("Players."+player.getName()+".Help-Revive",point4+gp.getHelpRevive());
+				saveAll();
+				
+			}else {
+				
+				points.set("Players."+player.getName()+".Kills",gp.getKills());
+				points.set("Players."+player.getName()+".Deads",gp.getDeads());
+				points.set("Players."+player.getName()+".Revive",gp.getRevive());
+				points.set("Players."+player.getName()+".Help-Revive",gp.getHelpRevive());
+				saveAll();
+			}
+		
 			
 		}
 		

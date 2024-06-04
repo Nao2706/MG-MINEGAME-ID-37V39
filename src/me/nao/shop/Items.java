@@ -39,6 +39,7 @@ import org.bukkit.inventory.meta.ItemMeta;
             CERRAR(""+ChatColor.RED+ChatColor.BOLD+"CERRAR", Material.BARRIER,null, 1, ChatColor.GREEN+"Salir de la Tienda"),
             CERRAR2(""+ChatColor.RED+ChatColor.BOLD+"CERRAR", Material.BARRIER,null, 1, ChatColor.GREEN+"Cerrar Menu."),
             VOLVER(""+ChatColor.WHITE+ChatColor.BOLD+"VOLVER", Material.JIGSAW,null, 1, ChatColor.GREEN+"Regresa al Menu Principal de la Tienda."),
+            VOLVER2(""+ChatColor.WHITE+ChatColor.BOLD+"VOLVER", Material.JIGSAW,null, 1, ChatColor.GREEN+"Regresa al Menu Principal. "),
             
             ARMAS(""+ChatColor.RED+ChatColor.BOLD+"ESPADAS", Material.IRON_SWORD,null, 1, ChatColor.GREEN+"Compra una para Defenderte."),
             ARMAS2(""+ChatColor.GREEN+ChatColor.BOLD+"ARCOS", Material.BOW,null, 1, ChatColor.GREEN+"Arcos y Ballestas a la Venta."),

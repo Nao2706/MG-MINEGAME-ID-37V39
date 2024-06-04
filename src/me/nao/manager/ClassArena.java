@@ -191,8 +191,8 @@ public class ClassArena {
    public void SetObjetiveInfoDefault(FileConfiguration ym, String objetive) {
 	   
 	   
-	   for(int i = 1 ;i<5;i++) {
-		   	ym.set("Game-Objetives."+objetive+i+".Priority",1);
+	   for(int i = 0 ;i<5;i++) {
+		   	ym.set("Game-Objetives."+objetive+i+".Priority",i);
 		 	ym.set("Game-Objetives."+objetive+i+".Status",ObjetiveType.WAITING.toString());
 		 	ym.set("Game-Objetives."+objetive+i+".Start-Value",0);
 			ym.set("Game-Objetives."+objetive+i+".Complete-Value",10);

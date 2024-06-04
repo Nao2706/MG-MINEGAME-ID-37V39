@@ -164,39 +164,86 @@ public class MinigameShop1 implements Listener{
 		
 		List<ObjetivesMG> pr = new ArrayList<>();
 		List<ObjetivesMG> se = new ArrayList<>();
+		List<ObjetivesMG> host = new ArrayList<>();
 		
 		ItemStack it = new ItemStack(Material.ENCHANTED_GOLDEN_APPLE);
 		ItemStack it2 = new ItemStack(Material.GOLDEN_APPLE);
 		
+		ItemStack objehostiles = new ItemStack(Material.SKELETON_SKULL);
+		ItemStack info = new ItemStack(Material.BEACON);
+		
+		ItemMeta meta = info.getItemMeta();
+		meta.setDisplayName(""+ChatColor.GREEN+ChatColor.BOLD+"INFORMACION TIPOS DE OBJETIVOS");
+		List<String> list = new ArrayList<>();
+		list.add(""+ChatColor.GREEN+ChatColor.UNDERLINE+"Completo: "+ChatColor.WHITE+"El completar un Objetivo trae recompensas");
+		list.add(ChatColor.WHITE+"el completar todos los objetivos da algo mas.");
+		list.add("");
+		list.add(""+ChatColor.RED+ChatColor.UNDERLINE+"Incompleto: "+ChatColor.WHITE+"Si el Objetivo no se cumple puede traer castigos. "+ChatColor.YELLOW+"(Opcional el Castigo)");
+		list.add("");
+		list.add(""+ChatColor.WHITE+ChatColor.UNDERLINE+"En Espera"+ChatColor.WHITE+"A la espera de cambios durante el Juego");
+		list.add("");
+		list.add(""+ChatColor.AQUA+ChatColor.UNDERLINE+"Desconocido: "+ChatColor.WHITE+"Este Objetivo no se sabra hasta mas adelante.");
+		list.add("");
+		list.add(""+ChatColor.YELLOW+ChatColor.UNDERLINE+"Advertencia: "+ChatColor.WHITE+"Este Objetivo va en contra de todos");
+		list.add(ChatColor.WHITE+"si se llena puede haber un "+ChatColor.YELLOW+"Castigo leve.");
+		list.add("");
+		list.add(""+ChatColor.DARK_RED+ChatColor.UNDERLINE+"Peligro: "+ChatColor.WHITE+"Este Objetivo va en contra de todos");
+		list.add(ChatColor.WHITE+"si se llena puede haber un"+ChatColor.RED+" Castigo Grave.");
+		list.add("");
+		list.add(""+ChatColor.GRAY+ChatColor.UNDERLINE+"Concluido: "+ChatColor.WHITE+"El Objetivo cambia a "+ChatColor.GRAY+"Concluido"+ChatColor.WHITE+"cuando los Objetivos ");
+		list.add(ChatColor.YELLOW+"Advertencia "+ChatColor.WHITE+"o "+ChatColor.RED+"Peligro "+ChatColor.WHITE+"se completan.");
+		list.add("");
+		list.add(""+ChatColor.RED+ChatColor.UNDERLINE+"Cancelado:"+ChatColor.WHITE+"Los Objetivos pueden llegar a ser "+ChatColor.GOLD+"Cancelados");
+		list.add(ChatColor.WHITE+"para evitar su Progreso.");
+		list.add("");
+		list.add(ChatColor.WHITE+"Algunos Objetivos se Completaran con ciertas Condiciones");
+		list.add(ChatColor.WHITE+"asi que presta atencion a lo que te rodea, Suerte.");
 		
 		
-		for(ObjetivesMG ob : l1) {
-			if(ob.getPriority() == 1) {
+		meta.setLore(list);
+		
+		info.setItemMeta(meta);
+		
+		
+		for(ObjetivesMG ob : l1) {	
+			if(ob.getPriority() <= 0) {
+				host.add(ob);
+			}else if(ob.getPriority() == 1){
 				pr.add(ob);
-			}else {
+			}else if(ob.getPriority() >= 2){
 				se.add(ob);
 			}
 		}
+		//31 para amenazas
 		
+	
 		
 		if(pr.isEmpty()) {
-			inv.setItem(21,CreateTempItemWithList(it,""+ChatColor.RED+ChatColor.BOLD+"No hay Objetivos Primarios", pr));
+			inv.setItem(21,CreateTempItemWithList(it,""+ChatColor.RED+ChatColor.BOLD+"Sin Objetivos Primarios", pr));
 		}else {
-			inv.setItem(21,CreateTempItemWithList(it,""+ChatColor.DARK_GREEN+ChatColor.BOLD+"Objetivos Primarios", pr));
+			inv.setItem(21,CreateTempItemWithList(it,""+ChatColor.GREEN+ChatColor.BOLD+"Objetivos Primarios", pr));
 		}
 		
 		
 		if(se.isEmpty()) {
-			inv.setItem(23,CreateTempItemWithList(it2,""+ChatColor.RED+ChatColor.BOLD+"No hay Objetivos Secundarios", se));
+			inv.setItem(23,CreateTempItemWithList(it2,""+ChatColor.RED+ChatColor.BOLD+"Sin Objetivos Secundarios", se));
 		}else {
-			inv.setItem(23, CreateTempItemWithList(it2,""+ChatColor.DARK_GREEN+ChatColor.BOLD+"Objetivos Secundarios", se));
-
+			inv.setItem(23, CreateTempItemWithList(it2,""+ChatColor.GREEN+ChatColor.BOLD+"Objetivos Secundarios", se));
 		}
-		inv.setItem(40, Items.CERRAR.getValue());
+		
+		
+		if(host.isEmpty()) {
+			inv.setItem(31,CreateTempItemWithList(objehostiles,""+ChatColor.RED+ChatColor.BOLD+"Sin Objetivos Hostiles", host));
+		}else {
+			inv.setItem(31,CreateTempItemWithList(objehostiles,""+ChatColor.GOLD+ChatColor.BOLD+"Objetivos Hostiles", host));
+		}
+		
+		inv.setItem(13, info);
+		inv.setItem(40, Items.CERRAR2.getValue());
 		player.openInventory(inv);
+		UpdateInventory2(player);
 		
-		
-		
+		 
 	
 	}
 	
@@ -220,7 +267,7 @@ public class MinigameShop1 implements Listener{
 		}
 		
 		
-		Inventory inv = Bukkit.createInventory(null,54,""+ChatColor.GREEN+ChatColor.BOLD+"OBJETIVOS PRIMARIOS");
+		Inventory inv = Bukkit.createInventory(null,54,""+ChatColor.GOLD+ChatColor.BOLD+"OBJETIVOS PRIMARIOS");
 		MenuDecoration(inv,Material.BLACK_STAINED_GLASS_PANE);
 		
 		
@@ -253,7 +300,7 @@ public class MinigameShop1 implements Listener{
 				li.add(item);
 				
 			}if(ob.getObjetiveType() == ObjetiveType.WAITING) {
-				ItemStack item = new ItemStack(Material.YELLOW_STAINED_GLASS_PANE);
+				ItemStack item = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
 				ItemMeta meta = item.getItemMeta();
 				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ob.getNombre());
 				List<String> descrip = new ArrayList<>();
@@ -276,51 +323,29 @@ public class MinigameShop1 implements Listener{
 				item.setItemMeta(meta);
 				li.add(item);
 				
-			}if(ob.getObjetiveType() == ObjetiveType.WARNING) {
-				ItemStack item = new ItemStack(Material.YELLOW_STAINED_GLASS_PANE);
-				ItemMeta meta = item.getItemMeta();
-				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ob.getNombre());
-				List<String> descrip = new ArrayList<>();
-				descrip.add(ChatColor.RED+ob.getDescription());
-				descrip.add(ChatColor.AQUA+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
-				descrip.add(""+ChatColor.YELLOW+ChatColor.BOLD+"ADVERTENCIA OBJETIVO EN CONTRA EN PROGRESO");
-				meta.setLore(descrip);
-				item.setItemMeta(meta);
-				li.add(item);
-				
-			}if(ob.getObjetiveType() == ObjetiveType.DANGER) {
+			}if(ob.getObjetiveType() == ObjetiveType.CANCELLED) {
 				ItemStack item = new ItemStack(Material.RED_STAINED_GLASS_PANE);
 				ItemMeta meta = item.getItemMeta();
-				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ChatColor.MAGIC+ob.getNombre());
-				List<String> descrip = new ArrayList<>();
-				descrip.add(""+ChatColor.DARK_RED+ChatColor.MAGIC+ob.getDescription());
-				descrip.add(""+ChatColor.AQUA+ChatColor.MAGIC+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
-				descrip.add(""+ChatColor.DARK_RED+ChatColor.BOLD+ChatColor.MAGIC+"UN OBJETIVO PELIGROSO EN CONTRA EN PROGRESO");
-				meta.setLore(descrip);
-				item.setItemMeta(meta);
-				li.add(item);
-				
-			}if(ob.getObjetiveType() == ObjetiveType.CONCLUDED) {
-				ItemStack item = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
-				ItemMeta meta = item.getItemMeta();
-				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ChatColor.MAGIC+ob.getNombre());
+				meta.setDisplayName(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+ob.getNombre());
 				List<String> descrip = new ArrayList<>();
 				descrip.add(""+ChatColor.GRAY+ChatColor.BOLD+ob.getDescription());
-				descrip.add(""+ChatColor.AQUA+ChatColor.BOLD+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
-				descrip.add(""+ChatColor.GRAY+ChatColor.BOLD+ChatColor.MAGIC+"OBJETIVO EN CONTRA CONCLUIDO");
+				descrip.add(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
+				descrip.add(""+ChatColor.RED+ChatColor.BOLD+"OBJETIVO CANCELADO");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
 				li.add(item);
 				
 			}
+
 			
 			
 		}
-		inv.setItem(41, Items.VOLVER.getValue());
-		inv.setItem(40, Items.CERRAR.getValue());
+		inv.setItem(41, Items.VOLVER2.getValue());
+		inv.setItem(40, Items.CERRAR2.getValue());
 		PagsCreation(player, inv, li);
 		
 		player.openInventory(inv);
+		UpdateInventory2(player);
 		return;
 		
 	}
@@ -345,7 +370,7 @@ public class MinigameShop1 implements Listener{
 		
 		
 		Inventory inv = Bukkit.createInventory(null,54,""+ChatColor.GREEN+ChatColor.BOLD+"OBJETIVOS SECUNDARIOS");
-		MenuDecoration(inv,Material.BLACK_STAINED_GLASS_PANE);
+		MenuDecoration(inv,Material.LIGHT_BLUE_STAINED_GLASS_PANE);
 		
 		
 		
@@ -377,7 +402,7 @@ public class MinigameShop1 implements Listener{
 				li.add(item);
 				
 			}if(ob.getObjetiveType() == ObjetiveType.WAITING) {
-				ItemStack item = new ItemStack(Material.BLUE_STAINED_GLASS_PANE);
+				ItemStack item = new ItemStack(Material.GRAY_STAINED_GLASS_PANE);
 				ItemMeta meta = item.getItemMeta();
 				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ob.getNombre());
 				List<String> descrip = new ArrayList<>();
@@ -400,14 +425,71 @@ public class MinigameShop1 implements Listener{
 				item.setItemMeta(meta);
 				li.add(item);
 				
-			}if(ob.getObjetiveType() == ObjetiveType.WARNING) {
+			}if(ob.getObjetiveType() == ObjetiveType.CANCELLED) {
+				ItemStack item = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+				ItemMeta meta = item.getItemMeta();
+				meta.setDisplayName(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+ob.getNombre());
+				List<String> descrip = new ArrayList<>();
+				descrip.add(""+ChatColor.GRAY+ChatColor.BOLD+ob.getDescription());
+				descrip.add(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
+				descrip.add(""+ChatColor.RED+ChatColor.BOLD+ChatColor.MAGIC+"OBJETIVO  CANCELADO");
+				meta.setLore(descrip);
+				item.setItemMeta(meta);
+				li.add(item);
+				
+			}
+
+			
+			
+		}
+		inv.setItem(41, Items.VOLVER2.getValue());
+		inv.setItem(40, Items.CERRAR2.getValue());
+		PagsCreation(player, inv, li);
+		
+		player.openInventory(inv);
+		UpdateInventory2(player);
+		return;
+		
+	}
+	
+	
+	public void ObjetivesHostile(Player player) {
+		PlayerInfo p = plugin.getPlayerInfoPoo().get(player);
+		GameInfo gi = plugin.getGameInfoPoo().get(p.getMapName());
+		List<ObjetivesMG> l1 = gi.getGameObjetivesMg().getObjetives();
+		List<ObjetivesMG> l = new ArrayList<>();
+		List<ItemStack> li = new ArrayList<>();
+		
+		for(int i = 0; i<l1.size();i++) {
+			if(l1.get(i).getPriority() <= 0) {
+				l.add(l1.get(i));
+			}
+			
+		}
+		
+		if(l.isEmpty()) {
+			player.sendMessage(ChatColor.RED+"Este Mapa no incluye Objetivos Hostiles.");
+			return;
+		}
+		
+		 
+		Inventory inv = Bukkit.createInventory(null,54,""+ChatColor.RED+ChatColor.BOLD+"OBJETIVOS HOSTILES");
+		MenuDecoration(inv,Material.RED_STAINED_GLASS_PANE);
+		
+		
+		
+		
+		for(ObjetivesMG ob : l) {
+			
+	
+			if(ob.getObjetiveType() == ObjetiveType.WARNING) {
 				ItemStack item = new ItemStack(Material.YELLOW_STAINED_GLASS_PANE);
 				ItemMeta meta = item.getItemMeta();
 				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ob.getNombre());
 				List<String> descrip = new ArrayList<>();
 				descrip.add(ChatColor.RED+ob.getDescription());
 				descrip.add(ChatColor.AQUA+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
-				descrip.add(""+ChatColor.YELLOW+ChatColor.BOLD+"ADVERTENCIA OBJETIVO EN CONTRA EN PROGRESO");
+				descrip.add(""+ChatColor.YELLOW+ChatColor.BOLD+"EN PROGRESO ADVERTENCIA OBJETIVO EN CONTRA ");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
 				li.add(item);
@@ -417,9 +499,9 @@ public class MinigameShop1 implements Listener{
 				ItemMeta meta = item.getItemMeta();
 				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ChatColor.MAGIC+ob.getNombre());
 				List<String> descrip = new ArrayList<>();
-				descrip.add(""+ChatColor.DARK_RED+ChatColor.MAGIC+ob.getDescription());
+				descrip.add(""+ChatColor.DARK_RED+ChatColor.BOLD+ob.getDescription());
 				descrip.add(""+ChatColor.AQUA+ChatColor.MAGIC+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
-				descrip.add(""+ChatColor.DARK_RED+ChatColor.BOLD+ChatColor.MAGIC+"UN OBJETIVO PELIGROSO EN CONTRA EN PROGRESO");
+				descrip.add(""+ChatColor.DARK_RED+ChatColor.BOLD+"EN PROGRESO UN OBJETIVO PELIGROSO EN CONTRA");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
 				li.add(item);
@@ -436,15 +518,28 @@ public class MinigameShop1 implements Listener{
 				item.setItemMeta(meta);
 				li.add(item);
 				
+			}if(ob.getObjetiveType() == ObjetiveType.CANCELLED) {
+				ItemStack item = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+				ItemMeta meta = item.getItemMeta();
+				meta.setDisplayName(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+ob.getNombre());
+				List<String> descrip = new ArrayList<>();
+				descrip.add(""+ChatColor.GRAY+ChatColor.BOLD+ob.getDescription());
+				descrip.add(""+ChatColor.RED+ChatColor.BOLD+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
+				descrip.add(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"OBJETIVO EN CONTRA CANCELADO");
+				meta.setLore(descrip);
+				item.setItemMeta(meta);
+				li.add(item);
+				
 			}
 			
 			
 		}
-		inv.setItem(41, Items.VOLVER.getValue());
-		inv.setItem(40, Items.CERRAR.getValue());
+		inv.setItem(41, Items.VOLVER2.getValue());
+		inv.setItem(40, Items.CERRAR2.getValue());
 		PagsCreation(player, inv, li);
 		
 		player.openInventory(inv);
+		UpdateInventory2(player);
 		return;
 		
 	}
@@ -518,6 +613,51 @@ public class MinigameShop1 implements Listener{
 		
 	}
 	
+	public void UpdateInventory2(Player player) {
+		
+		if(plugin.getPlayerReading().contains(player.getName())) {
+			
+			return;
+		}
+		plugin.getPlayerReading().add(player.getName());
+		BukkitScheduler sh = Bukkit.getServer().getScheduler();
+	
+		TaskID = sh.scheduleSyncRepeatingTask(plugin, new Runnable() {
+			public void run() {
+				if(!UpdateObjetivesMenu(player)) {
+					Bukkit.getScheduler().cancelTask(TaskID);
+					plugin.getPlayerReading().remove(player.getName());
+					return;
+				}
+			
+			
+			}
+			
+			
+		}, 0L, 20L);
+		
+		
+	}
+	
+	
+	public boolean UpdateObjetivesMenu(Player player) {
+	
+	  if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("OBJETIVOS")) {
+			ShowObjetives(player);
+			return true;
+		}if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("OBJETIVOS PRIMARIOS")) {
+			ObjetivesPrimary(player);
+			return true;
+		}if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("OBJETIVOS SECUNDARIOS")) {
+			ObjetivesSecondary(player);
+			return true;
+		}if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("OBJETIVOS HOSTILES")) {
+			ObjetivesHostile(player);
+			return true;
+		}
+		return false;
+	}
+	
 	
 	public boolean isCustomInventory(Player player) {
 		
@@ -526,6 +666,8 @@ public class MinigameShop1 implements Listener{
 		}
 		return false;
 	}
+	
+	
 	
 	
 	
@@ -1364,12 +1506,10 @@ public class MinigameShop1 implements Listener{
 				NewPagBack(player);
 			}
 			
-			if(item.isSimilar(Items.CERRAR.getValue())) {
+			if(item.isSimilar(Items.CERRAR.getValue()) || item.isSimilar(Items.CERRAR2.getValue())) {
 				player.closeInventory();
 			}
-			if(item.isSimilar(Items.CERRAR2.getValue())) {
-				player.closeInventory();
-			}
+	
 			
 			if(item.isSimilar(Items.ADELANTE.getValue())) {
 				plugin.getPags().replace(player, plugin.getPags().get(player)+1);
@@ -1381,6 +1521,8 @@ public class MinigameShop1 implements Listener{
 				ObjetivesPrimary(player);
 			}if(item.hasItemMeta() && item.getItemMeta().hasDisplayName() && ChatColor.stripColor(item.getItemMeta().getDisplayName()).equals("Objetivos Secundarios")) {
 				ObjetivesSecondary(player);
+			}if(item.hasItemMeta() && item.getItemMeta().hasDisplayName() && ChatColor.stripColor(item.getItemMeta().getDisplayName()).equals("Objetivos Hostiles")) {
+				ObjetivesHostile(player);
 			}
 				
 			
@@ -1431,7 +1573,7 @@ public class MinigameShop1 implements Listener{
 		
 		player.openInventory(inv);
 	}
-	
+	 
 	
 	public void createInvArmas(Player player) {
 		//creas el inventario l
@@ -1590,7 +1732,7 @@ public class MinigameShop1 implements Listener{
 	
 			List<String> l = new ArrayList<String>();
 			l.add("TIENDA"); l.add("ESPADAS");l.add("ARCOS Y BALLESTAS");l.add("DEFENSA");l.add("COMIDA Y POSIONES");l.add("ESPECIALES");l.add("REVIVIR");l.add("MENU DE MISIONES");
-			l.add("OBJETIVOS");l.add("OBJETIVOS PRIMARIOS");l.add("OBJETIVOS SECUNDARIOS");
+			l.add("OBJETIVOS");l.add("OBJETIVOS PRIMARIOS");l.add("OBJETIVOS SECUNDARIOS");l.add("OBJETIVOS HOSTILES");
 			String namet = ChatColor.stripColor(e.getView().getTitle());
 			
 			
@@ -1755,18 +1897,22 @@ public class MinigameShop1 implements Listener{
 		
 	   }
 	
-	   
+	//NUEVA PAGINA EN UNA PAGINA SECUNDARIA   
 	public void NewPag(Player player) {
 		if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("MENU DE MISIONES")) {
 			MissionsMenu(player);
-		}if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("OBJETIVOS PRIMARIOS")) {
+		}else if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("OBJETIVOS PRIMARIOS")) {
 			ObjetivesPrimary(player);
-		}if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("OBJETIVOS SECUNDARIOS")) {
+		}else if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("OBJETIVOS SECUNDARIOS")) {
 			ObjetivesSecondary(player);
-		}if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("REVIVIR")) {
+		}else if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("REVIVIR")) {
 			GameReviveInv(player);
+		}else if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("OBJETIVOS HOSTILES")) {
+			ObjetivesHostile(player);
 		}
 	}
+	
+	//NUEVA PAGINA EN PAG PRINCIPAL
 	public void NewPagBack(Player player) {
 		List<String> l = new ArrayList<String>();
 		
@@ -1776,6 +1922,8 @@ public class MinigameShop1 implements Listener{
 		}if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("OBJETIVOS PRIMARIOS")) {
 			ShowObjetives(player);
 		}if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("OBJETIVOS SECUNDARIOS")) {
+			ShowObjetives(player);
+		}if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("OBJETIVOS HOSTILES")) {
 			ShowObjetives(player);
 		}
 	}
@@ -1797,32 +1945,38 @@ public class MinigameShop1 implements Listener{
 			meta.setDisplayName(Nombre);
 			for(int i=0;i<l.size();i++) {
 				if(l.get(i).getObjetiveType() == ObjetiveType.COMPLETE) {
-					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+l.get(i).getNombre()+ChatColor.DARK_GRAY+" Completo "+ChatColor.GREEN+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
+					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+l.get(i).getNombre()+ChatColor.DARK_GRAY+" Completo "+ChatColor.GREEN+ChatColor.STRIKETHROUGH+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.INCOMPLETE) {
-					l2.add(""+ChatColor.RED+ChatColor.BOLD+l.get(i).getNombre()+ChatColor.DARK_GRAY+" Incompleto "+ChatColor.RED+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
+					l2.add(""+ChatColor.RED+ChatColor.BOLD+l.get(i).getNombre()+ChatColor.DARK_GRAY+" Incompleto "+ChatColor.RED+ChatColor.STRIKETHROUGH+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.WAITING) {
-					l2.add(""+ChatColor.AQUA+ChatColor.BOLD+l.get(i).getNombre()+ChatColor.DARK_GRAY+" En Progreso "+ChatColor.GOLD+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
+					l2.add(""+ChatColor.WHITE+ChatColor.BOLD+l.get(i).getNombre()+ChatColor.DARK_GRAY+" En Espera "+ChatColor.GOLD+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.UNKNOW) {
-					l2.add(""+ChatColor.WHITE+ChatColor.MAGIC+l.get(i).getNombre()+ChatColor.DARK_GRAY+ChatColor.MAGIC+" En Progreso "+ChatColor.GOLD+ChatColor.MAGIC+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
+					l2.add(""+ChatColor.WHITE+ChatColor.MAGIC+l.get(i).getNombre()+ChatColor.DARK_GRAY+" Desconocido "+ChatColor.GOLD+ChatColor.MAGIC+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.WARNING) {
-					l2.add(""+ChatColor.YELLOW+ChatColor.BOLD+l.get(i).getNombre()+ChatColor.DARK_GRAY+" En Progreso "+ChatColor.GOLD+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
+					l2.add(""+ChatColor.YELLOW+ChatColor.BOLD+l.get(i).getNombre()+ChatColor.DARK_GRAY+" Advertencia "+ChatColor.GOLD+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.DANGER) {
-					l2.add(""+ChatColor.DARK_RED+ChatColor.BOLD+l.get(i).getNombre()+ChatColor.DARK_GRAY+" En Progreso "+ChatColor.GOLD+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
+					l2.add(""+ChatColor.DARK_RED+ChatColor.BOLD+l.get(i).getNombre()+ChatColor.DARK_GRAY+" Peligro "+ChatColor.GOLD+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.CONCLUDED) {
 					l2.add(""+ChatColor.GRAY+ChatColor.BOLD+l.get(i).getNombre()+ChatColor.DARK_GRAY+" Concluido "+ChatColor.GOLD+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
+				}else if(l.get(i).getObjetiveType() == ObjetiveType.CANCELLED) {
+					l2.add(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+l.get(i).getNombre()+ChatColor.DARK_GRAY+" Cancelado "+ChatColor.GOLD+ChatColor.STRIKETHROUGH+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
 				}
 				
 			}
 			
-			GameConditions gc = new GameConditions(plugin);
-			l2.add("");
-		    l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"Clickeame Para ver mas Detalles.");
-		    l2.add(""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(gc.getAmountOfObjetivesComplete(l), l.size(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]");
-		    l2.add(ChatColor.GOLD+"Hay un Progreso del "+ChatColor.GREEN+Porcentage(gc.getAmountOfObjetivesComplete(l), l.size()));
+		
+				GameConditions gc = new GameConditions(plugin);
+				l2.add("");
+			    l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"Clickeame Para ver mas Detalles.");
+			    l2.add(""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(gc.getAmountOfObjetivesComplete(l), l.size(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]");
+			    l2.add(ChatColor.GOLD+"Hay un Progreso del "+ChatColor.GREEN+Porcentage(gc.getAmountOfObjetivesComplete(l), l.size()));
+			
+			
+			
 		    meta.setLore(l2);
 			item.setItemMeta(meta);
 		}else {
-			  meta.setDisplayName(""+ChatColor.DARK_GREEN+ChatColor.BOLD+"Sin Objetivos "+Nombre);
+			  meta.setDisplayName(Nombre);
 			  item.setType(Material.BARRIER);
 			  l2.add(""+ChatColor.RED+ChatColor.BOLD+"Sin Datos");
 			  l2.add(""+ChatColor.YELLOW+ChatColor.BOLD+"No hay Sistema...");

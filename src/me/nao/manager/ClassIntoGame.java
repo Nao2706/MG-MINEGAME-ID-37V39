@@ -24,6 +24,7 @@ import me.nao.cosmetics.fireworks.Fireworks;
 import me.nao.gamemode.DestroyNexo;
 import me.nao.general.info.GameInfo;
 import me.nao.general.info.GameNexo;
+import me.nao.general.info.GamePoints;
 import me.nao.general.info.GameType;
 import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
@@ -95,7 +96,7 @@ public class ClassIntoGame {
 					cm.SendMessageToUsersOfSameGame(player, ChatColor.GOLD+player.getName()+ChatColor.GREEN+" Revivio a "+ChatColor.WHITE+target.getName());
 					 //BORRAR ICONO DE MUERTE
 					player.getInventory().removeItem(new ItemStack(Material.DIAMOND,35));
-					pl.getGamePoints().setReviveAsistence(pl.getGamePoints().getReviveAsistence()+1);
+					pl.getGamePoints().setHelpRevive(pl.getGamePoints().getHelpRevive()+1);
 					
 					PlayerInfo targetrevive = plugin.getPlayerInfoPoo().get(target);
 					targetrevive.getGamePoints().setRevive(targetrevive.getGamePoints().getRevive()+1);
@@ -368,7 +369,7 @@ public class ClassIntoGame {
 				if(gm.getGameType() == GameType.ADVENTURE) {
 				
 					c.TptoSpawnArenaSimple(player);
-					player.sendMessage(ChatColor.RED+"Ups me temo que sino Completas los Objetivos Primarios oh no podras Ganar.");
+					player.sendMessage(ChatColor.RED+"Ups me temo que sino Completas los Objetivos Primarios no podras Ganar.");
 				}if(gm.getGameType() == GameType.RESISTENCE) {
 					GamePlayerLost(player);
 					player.sendMessage(ChatColor.RED+"Ups me temo que no Completaste los Objetivos Primarios para poder Ganar.");
@@ -394,7 +395,7 @@ public class ClassIntoGame {
 				
 				if(gm.getGameType() == GameType.ADVENTURE) {
 					c.TptoSpawnArenaSimple(player);
-					player.sendMessage(ChatColor.RED+"Ups me temo que sino Completas los Objetivos Secundarios oh no podras Ganar.");
+					player.sendMessage(ChatColor.RED+"Ups me temo que sino Completas los Objetivos Secundarios no podras Ganar.");
 				}if(gm.getGameType() == GameType.RESISTENCE) {
 					GamePlayerLost(player);
 					player.sendMessage(ChatColor.RED+"Ups me temo que no Completaste los Objetivos Secundarios para poder Ganar.");
@@ -420,7 +421,7 @@ public class ClassIntoGame {
 			}else {
 				if(gm.getGameType() == GameType.ADVENTURE) {
 					c.TptoSpawnArenaSimple(player);
-					player.sendMessage(ChatColor.RED+"Ups me temo que sino Completas los Objetivos Primarios y Secundarios oh no podras Ganar.");
+					player.sendMessage(ChatColor.RED+"Ups me temo que sino Completas los Objetivos Primarios y Secundarios no podras Ganar.");
 				}if(gm.getGameType() == GameType.RESISTENCE) {
 					GamePlayerLost(player);
 					player.sendMessage(ChatColor.RED+"Ups me temo que no Completaste los Objetivos Primarios y Secundarios para poder Ganar.");
@@ -548,10 +549,18 @@ public class ClassIntoGame {
 	
 	public void getPointsOfPlayerGame(Player player) {
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
-		
-		int puntos = pl.getGamePoints().getKills();
+		GamePoints gp = pl.getGamePoints();
+		int puntos = gp.getKills();
+		int puntos2 = gp.getDeads();
+		int puntos3 = gp.getRevive();
+		int puntos4 = gp.getHelpRevive();
+		int puntos5 = gp.getDamage();
 		player.sendMessage(""+ChatColor.YELLOW+ChatColor.BOLD+"[PUNTUACION ACTUAL]");
-		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"Tientes un Total de : "+ChatColor.YELLOW+ChatColor.BOLD+puntos+ChatColor.GREEN+ChatColor.BOLD+" en el Juego.");
+		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"Eliminaciones : "+ChatColor.YELLOW+ChatColor.BOLD+puntos);
+		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"Muertes : "+ChatColor.YELLOW+ChatColor.BOLD+puntos2);
+		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"Revivido : "+ChatColor.YELLOW+ChatColor.BOLD+puntos3);
+		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"Ayudas a Revivir : "+ChatColor.YELLOW+ChatColor.BOLD+puntos4);
+		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"Daño : "+ChatColor.YELLOW+ChatColor.BOLD+puntos5);
 		
 	}
 	
@@ -570,14 +579,13 @@ public class ClassIntoGame {
 	
 	public void isTheGameRanked(Player player ,String mapa) {
 		List<String> are = plugin.getConfig().getStringList("Arena-Points.List");
-		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		//int puntos = plugin.getEspecificPlayerPoints().get(player);
-		int puntos = pl.getGamePoints().getKills();
+		//int puntos = pl.getGamePoints().getKills();
 		
 		if(are.contains(mapa)) {
 			PointsManager pm = new PointsManager(plugin);
-			player.sendMessage(ChatColor.GREEN+"Se han agregado +"+ChatColor.GOLD+puntos+ChatColor.GREEN+" al Ranking de Juegos");
-			pm.addPoints(player, puntos);	
+			player.sendMessage(ChatColor.GREEN+"Se han agregado Puntos al Ranking de Juegos");
+			pm.addGamePoints(player);	
 		}else {
 			player.sendMessage(ChatColor.RED+"Este Mapa no añade Puntos al Ranking de Juegos.");
 		}

@@ -2,6 +2,8 @@ package me.nao.general.info;
 
 public enum ObjetiveType {
 	
+	HIDE,
+	CANCELLED,
 	CONCLUDED,
 	WARNING,
 	DANGER,

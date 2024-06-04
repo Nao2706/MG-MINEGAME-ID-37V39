@@ -30,11 +30,11 @@ public class GameNexo extends GameInfo{
 
 
 
-
+	//O1 Y O2 son los objetivos si es que se completaron para evitar doble reclamo o recompensa
 	public GameNexo(String name,int maxplayers,int minplayers, GameType mision, EstadoPartida estpart, StopMotivo motivo, BossBar boss,
-			String time,GameObjetivesMG objetives,List<String> participantes, List<String> spectator, List<String> t1, List<String> t2, Location n1,
+			String time,GameObjetivesMG objetives,List<String> participantes, List<String> spectator,boolean o1,boolean o2, List<String> t1, List<String> t2, Location n1,
 			Location n2, int point1, int point2) {
-		super(name,maxplayers,minplayers,mision,estpart,motivo,boss,time,objetives,participantes,spectator);
+		super(name,maxplayers,minplayers,mision,estpart,motivo,boss,time,objetives,participantes,spectator,o1,o2);
 		this.participantes = participantes;
 		this.t1 = t1;
 		this.t2 = t2;

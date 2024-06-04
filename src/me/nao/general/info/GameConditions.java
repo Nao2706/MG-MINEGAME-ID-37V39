@@ -676,7 +676,7 @@ public class GameConditions {
 					    List<String> muertos = new ArrayList<>();
 					    List<String> arrivo = new ArrayList<>();
 					
-			    	GameAdventure mis = new GameAdventure(map ,maxplayers,minplayers,misiontype ,EstadoPartida.ESPERANDO,StopMotivo.NINGUNO,boss,time,LoadObjetivesOfGames(map),participantes,espectador,vivos,muertos,arrivo);
+			    	GameAdventure mis = new GameAdventure(map ,maxplayers,minplayers,misiontype ,EstadoPartida.ESPERANDO,StopMotivo.NINGUNO,boss,time,LoadObjetivesOfGames(map),participantes,espectador,vivos,muertos,arrivo,false,false);
 					System.out.println("MISION: "+mis.ShowGame());
 					
 					plugin.getGameInfoPoo().put(map, mis);
@@ -695,7 +695,7 @@ public class GameConditions {
 			    		return;
 			    	}
 			    	
-					GameNexo gn = new GameNexo(map ,maxplayers,minplayers,misiontype ,EstadoPartida.ESPERANDO,StopMotivo.NINGUNO,boss,time,LoadObjetivesOfGames(map),participantes,espectador,t1,t2,bl,rd,100,100);
+					GameNexo gn = new GameNexo(map ,maxplayers,minplayers,misiontype ,EstadoPartida.ESPERANDO,StopMotivo.NINGUNO,boss,time,LoadObjetivesOfGames(map),participantes,espectador,false,false,t1,t2,bl,rd,100,100);
 				
 					System.out.println("NEXO: "+gn.ShowGame());
 				
@@ -2290,7 +2290,7 @@ public class GameConditions {
 												 .replace("%pointuser%", Integer.toString(e.getValue()))
 												 .replace("%reward%", Long.toString(RewardPointsForItems(e.getValue())))
 												 .replace("%revive%", Integer.toString(getReviveInfo(e.getKey())))
-												 .replace("%asisrevive%", Integer.toString(getReviveAsistenceInfo(e.getKey())))
+												 .replace("%helprevive%", Integer.toString(getReviveAsistenceInfo(e.getKey())))
 												 .replace("%deads%", Integer.toString(getDeadsInfo(e.getKey())))
 												 .replace("%damage%", Integer.toString(getDamageInfo(e.getKey())))
 												 //.replace("%cronomet%", time)
@@ -2402,7 +2402,7 @@ public class GameConditions {
 												 .replace("%pointuser%", Integer.toString(e.getValue()))
 												 .replace("%reward%", Long.toString(RewardPointsForItems(e.getValue())))
 												 .replace("%revive%", Integer.toString(getReviveInfo(e.getKey())))
-												 .replace("%asisrevive%", Integer.toString(getReviveAsistenceInfo(e.getKey())))
+												 .replace("%helprevive%", Integer.toString(getReviveAsistenceInfo(e.getKey())))
 												 .replace("%deads%", Integer.toString(getDeadsInfo(e.getKey())))
 												 .replace("%damage%", Integer.toString(getDamageInfo(e.getKey())))
 												 //.replace("%cronomet%", time)
@@ -2436,7 +2436,7 @@ public class GameConditions {
  	   	 return plugin.getPlayerInfoPoo().get(ConvertStringToPlayer(name)).getGamePoints().getDeads();
  	}
  	public int getReviveAsistenceInfo(String name) {
- 	   	 return plugin.getPlayerInfoPoo().get(ConvertStringToPlayer(name)).getGamePoints().getReviveAsistence();
+ 	   	 return plugin.getPlayerInfoPoo().get(ConvertStringToPlayer(name)).getGamePoints().getHelpRevive();
  	}
  	
  	public int getDamageInfo(String name) {
@@ -2544,7 +2544,7 @@ public class GameConditions {
 	   				int valuei = game.getInt("Game-Objetives."+key+".Incomplete-Value");
    	   				
    	   				String description = game.getString("Game-Objetives."+key+".Description");
-   	   				ObjetivesMG gob = new ObjetivesMG(key,priority,values,valueinit,valuec,valuei,description,ObjetiveType.valueOf(status));
+   	   				ObjetivesMG gob = new ObjetivesMG(key,priority,values,valueinit,valuec,valuei,description,ObjetiveType.valueOf(status.toUpperCase()));
    	   				l.add(gob);
    	   				
    	   		}}
@@ -2618,7 +2618,7 @@ public class GameConditions {
  	
 	
 	
-	
+	//para reclamar recompensa y comprobar
  	public void isCompleteAllPrimaryObjetiveForReward(String map) {
  		GameInfo gi = plugin.getGameInfoPoo().get(map);
    		List<ObjetivesMG> l = gi.getGameObjetivesMg().getObjetives();
@@ -2639,8 +2639,13 @@ public class GameConditions {
    		}else {
    			if(!l.stream().filter(o -> o.getPriority() == 1).findFirst().isPresent()) {
    				return;
+   				
+   			// condicional para evitar claimear doble 	
+   			}else if(gi.isObjetivesPrimaryComplete()) {
+   			 return;	
    			}
    			
+   			gi.setObjetivesPrimaryComplete(true);
    			FileConfiguration game = getGameConfig(map);
 			List<String> rewardpm = game.getStringList("Complete-All-Objetives-Primary.Message");
 		 	List<String> rewardp = game.getStringList("Complete-All-Objetives-Primary.Actions");
@@ -2670,6 +2675,7 @@ public class GameConditions {
    		return;
  	}
  	
+ 	//para reclamar recompensa y comprobar
  	public void isCompleteAllSecondaryObjetiveForReward(String map) {
  		GameInfo gi = plugin.getGameInfoPoo().get(map);
    		List<ObjetivesMG> l = gi.getGameObjetivesMg().getObjetives();
@@ -2690,7 +2696,12 @@ public class GameConditions {
    		}else{
    			if(!l.stream().filter(o -> o.getPriority() >= 2).findFirst().isPresent()) {
    				return;
-   			}
+   			}else if(gi.isObjetivesSecondaryComplete()) {
+      			 return;	
+      		}
+
+   			gi.setObjetivesSecondaryComplete(true);
+      			
    			
    			FileConfiguration game = getGameConfig(map);
 			List<String> rewardpm = game.getStringList("Complete-All-Objetives-Secondary.Message");
@@ -2726,6 +2737,8 @@ public class GameConditions {
    		
    		return;
  	}
+ 	
+ 	//para mostrar a jugador
  	public boolean isAllPrimaryObjetivesComplete(Player player ,String map) {
    		GameInfo gi = plugin.getGameInfoPoo().get(map);
    		List<ObjetivesMG> l = gi.getGameObjetivesMg().getObjetives();
@@ -2734,7 +2747,6 @@ public class GameConditions {
    		if(!l.isEmpty()) {
    			for(int i = 0 ; i < l.size();i++) {
    				ObjetivesMG obj = l.get(i);
-   				if(obj.getObjetiveType() == ObjetiveType.WARNING || obj.getObjetiveType() == ObjetiveType.DANGER) continue;
    				if(obj.getPriority() == 1 && obj.getObjetiveType() != ObjetiveType.COMPLETE) {
    					
    					p.add(obj);
@@ -2754,7 +2766,7 @@ public class GameConditions {
  		return true;
  	}
  	
- 	
+ 	//para mostrar a jugador
 	public boolean isAllSecondaryObjetivesComplete(Player player ,String map) {
    		GameInfo gi = plugin.getGameInfoPoo().get(map);
    		List<ObjetivesMG> l = gi.getGameObjetivesMg().getObjetives();
@@ -2763,7 +2775,7 @@ public class GameConditions {
    		if(!l.isEmpty()) {
    			for(int i = 0 ; i < l.size();i++) {
    				ObjetivesMG obj = l.get(i);
-   				if(obj.getObjetiveType() == ObjetiveType.WARNING || obj.getObjetiveType() == ObjetiveType.DANGER) continue;
+
    				if(obj.getPriority() >= 2 && obj.getObjetiveType() != ObjetiveType.COMPLETE) {
    					p.add(obj);
    				}
@@ -2804,6 +2816,9 @@ public class GameConditions {
 				return;
 			}else if(obj.getObjetiveType() == ObjetiveType.CONCLUDED) {
 				SendMessageToUserAndConsole(null,ChatColor.GOLD+map+" "+ChatColor.GREEN+"El Objetivo "+name+" alcanzo el Estado Concluido.");
+				return;
+			}else if(obj.getObjetiveType() == ObjetiveType.CANCELLED) {
+				SendMessageToUserAndConsole(null,ChatColor.GOLD+map+" "+ChatColor.GREEN+"El Objetivo "+name+" alcanzo el Estado Cancelado.");
 				return;
 			}else if(obj.getObjetiveType() == ObjetiveType.WAITING || obj.getObjetiveType() == ObjetiveType.WARNING || obj.getObjetiveType() == ObjetiveType.DANGER) {
 				int vals = obj.getStartValue();
@@ -2975,6 +2990,12 @@ public class GameConditions {
 				mo.setObjetiveType(ObjetiveType.WAITING);
 				SendMessageToAllPlayersInGame(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" se Resteo.");
 				mo.setValue(mo.getStartValue());
+				if(mo.getPriority() == 1) {
+					gi.setObjetivesPrimaryComplete(false);
+				}else if(mo.getPriority() >= 2){
+					gi.setObjetivesSecondaryComplete(false);
+				}
+				
 				break;
 			case CONCLUDED:
 				mo.setObjetiveType(ObjetiveType.CONCLUDED);
@@ -2992,8 +3013,6 @@ public class GameConditions {
 		
 	}
 
-
-	
 	
    
    	//mg objetive-primary complete 1

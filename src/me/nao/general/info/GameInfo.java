@@ -24,7 +24,7 @@ public class GameInfo {
 	private BossBar boss;
 	private String time;
 	private GameObjetivesMG objetives;
-
+	private boolean objetivesprimary, objetivessecondary;
 
 
 	
@@ -34,7 +34,7 @@ public class GameInfo {
 	 
 	 */
 	public GameInfo(String name,int maxplayers,int minplayers, GameType mision, EstadoPartida estpart, StopMotivo motivo, BossBar boss,
-			String time,GameObjetivesMG objetives,List<String> participantes,List<String> spectator) {
+			String time,GameObjetivesMG objetives,List<String> participantes,List<String> spectator,boolean o1 , boolean o2) {
 	
 		this.name = name;
 		this.maxplayers = maxplayers;
@@ -47,6 +47,8 @@ public class GameInfo {
 		this.objetives = objetives;
 		this.participantes = participantes;
 		this.spectator = spectator;
+		this.objetivesprimary = o1;
+		this.objetivessecondary = o2;
 	}
 	
 	
@@ -95,12 +97,30 @@ public class GameInfo {
 		return spectator;
 	}
 	
+	public boolean isObjetivesPrimaryComplete() {
+		return objetivesprimary;
+	}
+
+
+	public boolean isObjetivesSecondaryComplete() {
+		return objetivessecondary;
+	}
+	
 	public void setEstadopartida(EstadoPartida estpart) {
 		this.estpart = estpart;
 	}
 
 	public void setMotivo(StopMotivo motivo) {
 		this.motivo = motivo;
+	}
+
+	public void setObjetivesPrimaryComplete(boolean objetivesprimary) {
+		this.objetivesprimary = objetivesprimary;
+	}
+
+
+	public void setObjetivesSecondaryComplete(boolean objetivessecondary) {
+		this.objetivessecondary = objetivessecondary;
 	}
 
 

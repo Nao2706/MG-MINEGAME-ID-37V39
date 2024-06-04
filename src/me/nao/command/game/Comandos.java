@@ -1100,13 +1100,22 @@ public class Comandos implements CommandExecutor{
 							String name = player.getName();
 
 							if (name.equals(key)) {
-								int puntaje = points1.getInt("Players." + key + ".Kills");
+							
+								int point = points1.getInt("Players."+player.getName()+".Kills");
+								int point2 = points1.getInt("Players."+player.getName()+".Deads");
+								int point3 = points1.getInt("Players."+player.getName()+".Revive");
+								int point4 = points1.getInt("Players."+player.getName()+".Help-Revive");
 								if (message.getBoolean("Message-My-Points.message")) {
 									List<String> messagep = message.getStringList("Message-My-Points.message-points-texto");
 									for (int j = 0; j < messagep.size(); j++) {
 										String texto = messagep.get(j);
 										player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 50.0F, 1F);
-										player.sendMessage(ChatColor.translateAlternateColorCodes('&',texto.replaceAll("%player%", key).replace("%pointuser%",	String.valueOf(puntaje))));
+										player.sendMessage(ChatColor.translateAlternateColorCodes('&',texto.replaceAll("%player%", key).replace("%pointuser%",	String.valueOf(point))
+												.replace("%revive%",String.valueOf(point3))
+												 .replace("%helprevive%", String.valueOf(point4))
+												 .replace("%deads%",String.valueOf(point2))
+											
+												));
 									}
 
 								}
