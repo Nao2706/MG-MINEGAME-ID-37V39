@@ -72,6 +72,7 @@ public class TabComplete1 implements TabCompleter{
 			arguments.add("misions");
 			arguments.add("message");
 			arguments.add("tittle");
+			arguments.add("points");
 			
 		}
 		

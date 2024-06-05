@@ -2356,6 +2356,8 @@ public class Comandos implements CommandExecutor{
 					if(args.length == 2) {
 						String target = args[1];
 						gc.TpPlayerOfGameToLocation(player, target);
+					}else {
+						player.sendMessage(ChatColor.RED+"/mg tp-all-toplayer <target>");
 					}
 					return true;
 				}

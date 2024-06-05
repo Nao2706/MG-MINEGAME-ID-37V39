@@ -6,6 +6,8 @@ package me.nao.timers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -45,6 +47,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.RayTraceResult;
+
 
 import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
@@ -395,7 +398,7 @@ public class AdventureTemp {
 				      ShootEntityToPlayer(target);
 					  RemoveEntitysInBarrier(target);
 					  removeTrapArrows(target);
-					  getNearbyBlocks2(target);
+					  getGeneratorsOfOres(target);
 					  getNearbyBlocks3(target);
 					  JumpMob(target);
 					  
@@ -578,7 +581,7 @@ public class AdventureTemp {
 	
 	
 	//TODO NERBYBLOCK 2
-	public void getNearbyBlocks2(Player player) {
+	public void getGeneratorsOfOres(Player player) {
 		FileConfiguration config = plugin.getConfig();
 		Block block = player.getLocation().getBlock();
 		Block r = block.getRelative(0, 0, 0);
@@ -603,6 +606,7 @@ public class AdventureTemp {
 										player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
 									}
 									 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.NETHERITE_INGOT));
+									 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.NETHERITE_BLOCK,RandomBetweenValue(1, 100)));
 									 a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
 			
 								}
@@ -612,6 +616,7 @@ public class AdventureTemp {
 										player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
 									}
 								     a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.DIAMOND));
+								     a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.DIAMOND_BLOCK,RandomBetweenValue(1, 100)));
 									 a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
 								}
 								
@@ -620,6 +625,7 @@ public class AdventureTemp {
 										player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
 									}
 									 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.EMERALD));
+									 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.EMERALD_BLOCK,RandomBetweenValue(1, 100)));
 									 a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
 								}
 								
@@ -628,6 +634,7 @@ public class AdventureTemp {
 										player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
 									}
 									 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.IRON_INGOT));
+									 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.IRON_BLOCK,RandomBetweenValue(1, 100)));
 									 a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
 								}
 								
@@ -636,6 +643,7 @@ public class AdventureTemp {
 										player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
 									}
 									 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.GOLD_INGOT));
+									 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.GOLD_BLOCK,RandomBetweenValue(1, 100)));
 									 a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
 								}
 							
@@ -659,6 +667,31 @@ public class AdventureTemp {
 
 		}
 	}	
+	
+	
+	public int RandomBetweenValue(int min ,int max) {
+		
+		try {
+			Random r = new Random();
+			int value = r.nextInt(max-min+1) + min;
+			
+			if(value == 5 || value == 3 || value == 2 || value == 1) {
+				return value;
+			}else if(value >= 6){
+				return 0;
+			}
+		}catch(IllegalArgumentException e) {
+			 Logger logger = Logger.getLogger(AdventureTemp.class.getName());
+	       	 logger.log(Level.WARNING,"Coloca primero un valor menor y despues un mayor. "+max+"/"+min);
+		}
+		System.out.println("F");
+		return -1;
+		
+	}
+	
+	
+	
+	
 	
 	//TODO SPAWN GENERATOR 3
 	public void getNearbyBlocks3(Player player) {
@@ -701,6 +734,9 @@ public class AdventureTemp {
 
 		}
 	}
+	
+	
+	
 	
 	//REVISAR ESTO PENDIENTE DE CODIGO INNECESARIO
 	public void DetectChestAndGenerator(Block b,Player player) {

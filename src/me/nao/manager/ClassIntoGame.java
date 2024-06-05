@@ -560,8 +560,12 @@ public class ClassIntoGame {
 		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"Muertes : "+ChatColor.YELLOW+ChatColor.BOLD+puntos2);
 		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"Revivido : "+ChatColor.YELLOW+ChatColor.BOLD+puntos3);
 		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"Ayudas a Revivir : "+ChatColor.YELLOW+ChatColor.BOLD+puntos4);
-		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"Daño : "+ChatColor.YELLOW+ChatColor.BOLD+puntos5);
+		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"Daño : "+ChatColor.YELLOW+ChatColor.BOLD+TransformPosOrNeg(puntos5));
 		
+	}
+	
+	public int TransformPosOrNeg(int i) {
+		return i =  (~(i -1));
 	}
 	
 	public List<Entity> getNearbyEntites(Location l , int size){
