@@ -417,7 +417,22 @@ public class AdventureTemp {
 			//TODO TERMINANDO
 			else if(part == EstadoPartida.TERMINANDO) {
 				 
-
+					   	if(end == 0) {
+						   	
+				   			
+					   		
+					   		System.out.println("ANTES ADVENTURE RUN : "+ms.ShowGame());
+			    			
+		//			   		
+		//						//RemoveArmorStandsAndItemsInMap(target);
+								gc.EndTheGame(name);
+								gc.EndGameActions(name);
+				  
+					    	 //ms.setEstadopartida(EstadoPartida.ESPERANDO);
+				   		
+			    		Bukkit.getScheduler().cancelTask(taskID);	
+			    		System.out.println("SE DETUVO ;)");
+				     }
 			 	
 					for(String players : joins) {
 						Player target = Bukkit.getServer().getPlayerExact(players);
@@ -451,22 +466,7 @@ public class AdventureTemp {
 					}
 					
 					
-				   	if(end == 0) {
-				   	
-				   			
-					   		
-					   		System.out.println("ANTES ADVENTURE RUN : "+ms.ShowGame());
-			    			
-//					   		
-//								//RemoveArmorStandsAndItemsInMap(target);
-								gc.EndTheGame(name);
-								gc.EndGameActions(name);
-				  
-					    	 //ms.setEstadopartida(EstadoPartida.ESPERANDO);
-				   		
-			    		Bukkit.getScheduler().cancelTask(taskID);	
-			    		System.out.println("SE DETUVO ;)");
-				     }
+			
 					
 				
 				end--;
@@ -675,7 +675,7 @@ public class AdventureTemp {
 			Random r = new Random();
 			int value = r.nextInt(max-min+1) + min;
 			
-			if(value == 5 || value == 3 || value == 2 || value == 1) {
+			if(value == 3 || value == 2 || value == 1) {
 				return value;
 			}else if(value >= 6){
 				return 0;
