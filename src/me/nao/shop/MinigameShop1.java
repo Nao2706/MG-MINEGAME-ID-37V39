@@ -1743,7 +1743,9 @@ public class MinigameShop1 implements Listener{
 		
 		//String tittle = ChatColor.translateAlternateColorCodes("&", usa el fileconfiguartion);
 		// String tittlec = ChatColor.stripColor(titulo);
-		 
+		if(e.getClickedInventory() == null) {
+			return;
+		}
 	
 			List<String> l = new ArrayList<String>();
 			l.add("TIENDA"); l.add("ESPADAS");l.add("ARCOS Y BALLESTAS");l.add("DEFENSA");l.add("COMIDA Y POSIONES");l.add("ESPECIALES");l.add("REVIVIR");l.add("MENU DE MISIONES");
@@ -1994,7 +1996,7 @@ public class MinigameShop1 implements Listener{
 			  meta.setDisplayName(Nombre);
 			  item.setType(Material.BARRIER);
 			  l2.add(""+ChatColor.RED+ChatColor.BOLD+"Sin Datos");
-			  l2.add(""+ChatColor.YELLOW+ChatColor.BOLD+"No hay Sistema...");
+			  l2.add(""+ChatColor.YELLOW+ChatColor.BOLD+"No hay Sistema... ");
 			  meta.setLore(l2);
 			  item.setItemMeta(meta);
 		}

@@ -818,7 +818,7 @@ public class ClassArena {
 			if(!start.isEmpty()) {
 				for(int i = 0 ; i < start.size(); i++) {
 					String texto = start.get(i);
-
+					if(!gc.hasPlayerPermissionByLuckPerms(player, texto)) continue;
 					Bukkit.dispatchCommand(console, ChatColor.translateAlternateColorCodes('&', texto.replaceAll("%player%",player.getName())));
 				}
 			}

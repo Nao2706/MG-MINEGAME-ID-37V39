@@ -672,14 +672,20 @@ public class EventRandoms implements Listener{
 				Player player = (Player) entidad;
 		  
 				GameConditions gc = new GameConditions(plugin);
-				PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 				
-				 if(entidadAtacada instanceof LivingEntity) {
-					 LivingEntity mob = (LivingEntity) entidadAtacada;
-					  	pl.getGamePoints().setDamage(pl.getGamePoints().getDamage()+ConvertDoubleToInt(mob.getHealth()-mob.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()));
-				 }
 				 
-				if(gc.isPlayerinGame(player)) {
+				if(!gc.isPlayerinGame(player)) {
+					return;
+				}
+					
+					
+					PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+					
+					 if(entidadAtacada instanceof LivingEntity) {
+						 LivingEntity mob = (LivingEntity) entidadAtacada;
+						  	pl.getGamePoints().setDamage(pl.getGamePoints().getDamage()+ConvertDoubleToInt(mob.getHealth()-mob.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()));
+					 }
+					
 					  if(entidadAtacada instanceof Player || entidadAtacada instanceof Villager) {
 						  String arenaName = pl.getMapName();
 							
@@ -695,7 +701,7 @@ public class EventRandoms implements Listener{
 					
 					
 					
-				}
+				
 				
 			
 			  
@@ -1567,7 +1573,9 @@ public class EventRandoms implements Listener{
 				
 				 
 				  if(entidadhit != null) {
-						
+					  if(!gc.isPlayerinGame(player)) {
+						  return;
+					  }
 					  	PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 					  	if(entidadhit instanceof LivingEntity) {
 							 LivingEntity mob = (LivingEntity) entidadhit;
@@ -1575,7 +1583,7 @@ public class EventRandoms implements Listener{
 						 }
 					  	
 					  	
-						if(gc.isPlayerinGame(player) && entidadhit instanceof Player || entidadhit instanceof Villager) {
+						if(entidadhit instanceof Player || entidadhit instanceof Villager) {
 								String arenaName = pl.getMapName();
 				
 					 			if(!gc.isPvPAllowed(arenaName)) {

@@ -2628,15 +2628,14 @@ public class Comandos implements CommandExecutor{
 						 
 					   if(segundo == 0 && minuto == 0) {
 						  
-						   player.sendMessage(ChatColor.GOLD+"Timer Finalizado con Exito :)");
+						   player.sendMessage(ChatColor.GOLD+"Timer Finalizado con Exito");
 							t.cancel();
 						}
 					  
 					
 						
 						
-					  // System.out.println();
-					  
+				
 						player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.GREEN+"Cuenta atras : "+hora+"h "+minuto+"m "+segundo+"s " ));
 						
 						}

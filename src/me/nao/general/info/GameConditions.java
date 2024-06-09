@@ -51,6 +51,7 @@ import me.nao.timers.InfectedTemp;
 import me.nao.timers.NexoTemp;
 import me.nao.timers.AdventureTemp;
 import me.nao.timers.ResistenceTemp;
+import me.nao.utils.Utils;
 import me.nao.yamlfile.game.YamlFilePlus;
 
 public class GameConditions {
@@ -196,7 +197,7 @@ public class GameConditions {
 				RestorePlayer(target);
 			}
 				plugin.getGameInfoPoo().remove(name);
-				System.out.println("DESPUES MISION OBJECT BORRADO: "+plugin.getGameInfoPoo().toString());
+				System.out.println("LOG END GAME DESPUES MISION OBJECT BORRADO: "+plugin.getGameInfoPoo().toString());
 
 		}
 		
@@ -443,7 +444,7 @@ public class GameConditions {
 			  if(!winreward.isEmpty()) {
 					for(int i = 0 ; i < winreward.size(); i++) {
 						String texto = winreward.get(i);
-
+						if(!hasPlayerPermissionByLuckPerms(player,texto)) continue;
 						Bukkit.dispatchCommand(console, ChatColor.translateAlternateColorCodes('&', texto.replaceAll("%player%",player.getName()).replaceAll("%points%",String.valueOf(RewardPointsForItems(puntaje)))));
 						
 				      }
@@ -530,6 +531,7 @@ public class GameConditions {
 		   if(!lostreward.isEmpty()) {
 			   for(int i = 0 ; i < lostreward.size(); i++) {
 					String texto = lostreward.get(i);
+					if(!hasPlayerPermissionByLuckPerms(player,texto)) continue;
 					Bukkit.dispatchCommand(console, ChatColor.translateAlternateColorCodes('&', texto.replaceAll("%player%",player.getName()).replaceAll("%points%",String.valueOf(RewardPointsForItems(puntaje)))));
 
 			}}
@@ -677,7 +679,7 @@ public class GameConditions {
 					    List<String> arrivo = new ArrayList<>();
 					
 			    	GameAdventure mis = new GameAdventure(map ,maxplayers,minplayers,misiontype ,EstadoPartida.ESPERANDO,StopMotivo.NINGUNO,boss,time,LoadObjetivesOfGames(map),participantes,espectador,vivos,muertos,arrivo,false,false);
-					System.out.println("MISION: "+mis.ShowGame());
+					System.out.println("LOG-1 MISION: "+mis.ShowGame());
 					
 					plugin.getGameInfoPoo().put(map, mis);
 			    }else if(misiontype == GameType.NEXO) {
@@ -691,13 +693,13 @@ public class GameConditions {
 			    	
 			    	if(bl == null || rd == null) {
 			    		
-			    		System.out.println("NEXO: Error no uno de los Location del Nexo Rojo o Azul no existe mapa: "+map);
+			    		System.out.println("LOG-2 NEXO: Error no uno de los Location del Nexo Rojo o Azul no existe mapa: "+map);
 			    		return;
 			    	}
 			    	
 					GameNexo gn = new GameNexo(map ,maxplayers,minplayers,misiontype ,EstadoPartida.ESPERANDO,StopMotivo.NINGUNO,boss,time,LoadObjetivesOfGames(map),participantes,espectador,false,false,t1,t2,bl,rd,100,100);
 				
-					System.out.println("NEXO: "+gn.ShowGame());
+					System.out.println("LOG-3 NEXO: "+gn.ShowGame());
 				
 					plugin.getGameInfoPoo().put(map, gn);
 			    }
@@ -705,7 +707,7 @@ public class GameConditions {
 			  
 			}catch(NullPointerException e) {
 				e.printStackTrace();
-				System.out.println("Error en el Mapa "+map);
+				System.out.println("LOG-4 Error en el Mapa "+map);
 			}
 		}
 		return;
@@ -719,7 +721,7 @@ public class GameConditions {
 		 GameInfo ms = plugin.getGameInfoPoo().get(map);
 		 if(ms instanceof GameAdventure) {
 				GameAdventure ga = (GameAdventure) ms;
-				 System.out.println("MISION: "+ms.ShowGame());
+				 System.out.println("LOG-2 CANSTART MISION: "+ms.ShowGame());
 				 player.sendMessage(ChatColor.GREEN+"Has Entrado en el Mapa "+ChatColor.translateAlternateColorCodes('&',getNameOfTheMap(map).replace("%player%",player.getName())));
 
 				 player.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.YELLOW+" Te has unido"+ChatColor.RED+" ("+ChatColor.GOLD+ga.getParticipantes().size()+ChatColor.YELLOW+"/"+ChatColor.GOLD+ getMaxPlayerMap(map)+ChatColor.RED+")");
@@ -1041,7 +1043,7 @@ public class GameConditions {
 				if(misiontype == GameType.ADVENTURE) {
 					
 					if(cooldown.HasSancionPlayer(player)) {
-						// System.out.println("Bloqueado");
+					
 						 return false;
 					 }
 					if(!mision.contains("Pre-Lobby")) {
@@ -1092,12 +1094,14 @@ public class GameConditions {
 					 }if(mision.getBoolean("Requires-Permission")) {
 			 				String perm = mision.getString("Permission-To-Play");
 			 				if(!player.hasPermission(perm)) {
-			 					List<String> perml = mision.getStringList("Requires-Permission.Message");
+			 					List<String> perml = mision.getStringList("How-Get-Permission.Message");
 			 					if(!perml.isEmpty()) {
 			 						
+			 						player.sendMessage("");
 			 						for(int i =0;i< perml.size();i++) {
 			 							player.sendMessage(ChatColor.translateAlternateColorCodes('&', perml.get(i)).replace("%player%", player.getName()));
 			 						}
+			 						player.sendMessage("");			
 			 						
 			 						
 			 					}else {
@@ -1117,7 +1121,7 @@ public class GameConditions {
 				}else if(misiontype == GameType.RESISTENCE) {
 					
 					if(cooldown.HasSancionPlayer(player)) {
-						// System.out.println("Bloqueado");
+					
 						 return false;
 					 }
 					if(!mision.contains("Pre-Lobby")) {
@@ -1179,12 +1183,14 @@ public class GameConditions {
 					 }if(mision.getBoolean("Requires-Permission")) {
 			 				String perm = mision.getString("Permission-To-Play");
 			 				if(!player.hasPermission(perm)) {
-			 					List<String> perml = mision.getStringList("Requires-Permission.Message");
+			 					List<String> perml = mision.getStringList("How-Get-Permission.Message");
 			 					if(!perml.isEmpty()) {
 			 						
+			 						player.sendMessage("");
 			 						for(int i =0;i< perml.size();i++) {
 			 							player.sendMessage(ChatColor.translateAlternateColorCodes('&', perml.get(i)).replace("%player%", player.getName()));
 			 						}
+			 						player.sendMessage("");			
 			 						
 			 						
 			 					}else {
@@ -1204,7 +1210,7 @@ public class GameConditions {
 				}else if(misiontype == GameType.INFECTED) {
 					
 					if(cooldown.HasSancionPlayer(player)) {
-						// System.out.println("Bloqueado");
+					
 						 return false;
 					 }
 					if(!mision.contains("Pre-Lobby")) {
@@ -1265,13 +1271,14 @@ public class GameConditions {
 					 }if(mision.getBoolean("Requires-Permission")) {
 			 				String perm = mision.getString("Permission-To-Play");
 			 				if(!player.hasPermission(perm)) {
-			 					List<String> perml = mision.getStringList("Requires-Permission.Message");
+			 					List<String> perml = mision.getStringList("How-Get-Permission.Message");
 			 					if(!perml.isEmpty()) {
 			 						
+			 						player.sendMessage("");
 			 						for(int i =0;i< perml.size();i++) {
 			 							player.sendMessage(ChatColor.translateAlternateColorCodes('&', perml.get(i)).replace("%player%", player.getName()));
 			 						}
-			 						
+			 						player.sendMessage("");			 						
 			 						
 			 					}else {
 			 						player.sendMessage(ChatColor.RED+"Mapa Bloqueado: Necesitas un Permiso para Acceder.");
@@ -1299,7 +1306,7 @@ public class GameConditions {
 			 if(misiontype == GameType.NEXO) {
 					
 					if(cooldown.HasSancionPlayer(player)) {
-						// System.out.println("Bloqueado");
+						
 						 return false;
 					 }
 					if(!mision.contains("Pre-Lobby")) {
@@ -1375,13 +1382,13 @@ public class GameConditions {
 					 }if(mision.getBoolean("Requires-Permission")) {
 			 				String perm = mision.getString("Permission-To-Play");
 			 				if(!player.hasPermission(perm)) {
-			 					List<String> perml = mision.getStringList("Requires-Permission.Message");
+			 					List<String> perml = mision.getStringList("How-Get-Permission.Message");
 			 					if(!perml.isEmpty()) {
-			 						
+			 						perml.add("");
 			 						for(int i =0;i< perml.size();i++) {
 			 							player.sendMessage(ChatColor.translateAlternateColorCodes('&', perml.get(i)).replace("%player%", player.getName()));
 			 						}
-			 						
+			 						perml.add("");
 			 						
 			 					}else {
 			 						player.sendMessage(ChatColor.RED+"Mapa Bloqueado: Necesitas un Permiso para Acceder.");
@@ -1597,16 +1604,13 @@ public class GameConditions {
 		List <DayOfWeek> l = new ArrayList<DayOfWeek>();
 		try {
 			for(int i = 0; i < d.length;i++) {
-				//System.out.println(d[i]);
-				
-			//	System.out.println(d[i].toUpperCase().replace("Lunes","MONDAY").replace("Martes","TUESDAY").replace("Miercoles","WEDNESDAY").replace("Jueves","THURSDAY").replace("Viernes","FRIDAY").replace("Sabado","SATURDAY").replace("Domingo","SUNDAY"));
-				l.add(DayOfWeek.valueOf(d[i].replace("Lunes","MONDAY").replace("Martes","TUESDAY").replace("Miercoles","WEDNESDAY").replace("Jueves","THURSDAY").replace("Viernes","FRIDAY").replace("Sabado","SATURDAY").replace("Domingo","SUNDAY").toUpperCase()));
+			l.add(DayOfWeek.valueOf(d[i].replace("Lunes","MONDAY").replace("Martes","TUESDAY").replace("Miercoles","WEDNESDAY").replace("Jueves","THURSDAY").replace("Viernes","FRIDAY").replace("Sabado","SATURDAY").replace("Domingo","SUNDAY").toUpperCase()));
 			
 					
 			
 			}
 		}catch(IllegalArgumentException e) {
-			System.out.println("El Formato 1 o 2 no es el correcto");
+			System.out.println("LOG-1 SPANISH El Formato 1 o 2 no es el correcto ");
 		}
 		
 		return l;
@@ -1779,7 +1783,6 @@ public class GameConditions {
 						LocalDateTime tw5 = LocalDateTime.of(lt.getYear(), lt.getMonth(), lt.getDayOfMonth(), hora2, minuto2);
 						
 						if(lt.isAfter(tw4) && lt.isBefore(tw5)) {
-							//System.out.println("estas en el dia correctocon fecha");
 							return true;
 						}else {
 							StringTokenizer st2 = new StringTokenizer(time);
@@ -1848,10 +1851,10 @@ public class GameConditions {
 			}else{
 				//si no tiene numero es forma 1
 				List <DayOfWeek> l = SpanishToEnglish(time);
-				//System.out.println("forma 1");
+			
 				//si contiene ejecuta el codigo chido
 				if(l.contains(lt.getDayOfWeek())) {
-					//System.out.println("estas en el dia correcto1");
+				
 					return true;
 				}else{
 					//sino es muestra el cooldown
@@ -2139,7 +2142,7 @@ public class GameConditions {
 				BossBar boss = ms.getBoss();
 				boss.removePlayer(player);
 				
-				System.out.println("ANTES MISION: "+ms.ShowGame());
+				System.out.println("LOG-1 RESTORE ANTES MISION: "+ms.ShowGame());
 				
 					//SE SECCIONA POR QUE HAY QUE VER SI SE SALVO O NO SU INVENTARIO
 					if(pl.hasPlayerMoreInfo()) {
@@ -2167,7 +2170,7 @@ public class GameConditions {
 			    SetDefaultHeartsInGame(player);
 				BossBar boss = ms.getBoss();
 				boss.removePlayer(player);
-				System.out.println("ANTES NEXO: "+ms.ShowGame());
+				System.out.println("LOG 2 RESTORE ANTES NEXO: "+ms.ShowGame());
 				
 					player.teleport(pl.getLocationMG());
 					pl.RestoreAllPlayerMg(player);
@@ -2257,7 +2260,7 @@ public class GameConditions {
 		// TERCERA PARTE IMPRIMIR DATOS DE MAYOR A MENOR
 	
 		
-				System.out.println("-------TOP--------");
+				System.out.println("LOG 1 -------TOP--------");
 				
 				
 					if (message.getBoolean("Message.message-top")) {
@@ -2369,7 +2372,7 @@ public class GameConditions {
 		// TERCERA PARTE IMPRIMIR DATOS DE MAYOR A MENOR
 		
 		
-				System.out.println("-------TOP--------");
+				System.out.println("LOG 1-------TOP--------");
 				
 				
 					if (message.getBoolean("Message.message-top")) {
@@ -2490,7 +2493,7 @@ public class GameConditions {
 						// TERCERA PARTE IMPRIMIR DATOS DE MAYOR A MENOR
 					
 						
-								System.out.println("-------TOP--------");
+								System.out.println("LOG 1 REWARD-------TOP--------");
 								
 									int i = 0;
 									for (Map.Entry<String, Integer> e : list) {
@@ -2586,6 +2589,7 @@ public class GameConditions {
 	   				List<String> objetives2mg = game.getStringList("Game-Objetives."+key+".ObjetiveIncompleteMessage");
 	   				List<String> objetivesaction2 = game.getStringList("Game-Objetives."+key+".ObjetiveIncompleteActions");
 	   				
+	   				System.out.println("LOG DE OBJETIVOS");
 	   				System.out.println(key);
 	   				System.out.println(descripcion);
 	   				System.out.println(priority);
@@ -2609,7 +2613,7 @@ public class GameConditions {
    		
    		GameObjetivesMG go = new GameObjetivesMG(l);
    		for(ObjetivesMG o : go.getObjetives()) {
-   			System.out.println(o.getNombre()+" "+o.getPriority()+" "+o.getValue()+" "+o.getCompleteValue()+" "+o.getObjetiveType().toString());
+   			System.out.println("LOG DE OBJETIVOS LISTA "+o.getNombre()+" "+o.getPriority()+" "+o.getValue()+" "+o.getCompleteValue()+" "+o.getObjetiveType().toString());
    		}
    	
    		
@@ -2797,6 +2801,11 @@ public class GameConditions {
 	
 	public void ObjetivesValue(String map, String name ,int value) {
 		
+		if(!isMapinGame(map)) {
+			SendMessageToUserAndConsole(null,"El Mapa "+map+" no esta en Juego no puedes editar Objetivos.");
+			return;
+		}
+		
 		GameInfo gi = plugin.getGameInfoPoo().get(map);
 		List<ObjetivesMG> l = gi.getGameObjetivesMg().getObjetives();
 		
@@ -2941,10 +2950,16 @@ public class GameConditions {
 	}
 	
 
-	
+	 
 
 	
 	public void ObjetiveChangeType(String map, String name, ObjetiveType ob) {
+		
+		if(!isMapinGame(map)) {
+			SendMessageToUserAndConsole(null,"El Mapa "+map+" no esta en Juego no puedes editar el tipo de Objetivos.");
+			return;
+		}
+		
 		GameInfo gi = plugin.getGameInfoPoo().get(map);
 		List<ObjetivesMG> l = gi.getGameObjetivesMg().getObjetives();
 		
@@ -3079,7 +3094,7 @@ public class GameConditions {
 			DialogRun dr = new DialogRun(plugin,gd);
 			dr.StartDialog();
 		}else {
-			System.out.println("No existe "+id);
+			System.out.println("LOG DIALOGOS: No existe "+id);
 		}
 		
 		
@@ -3119,6 +3134,25 @@ public class GameConditions {
 //	player.sendMessage(ChatColor.GREEN+"Obtuviste la clase "+ChatColor.RED+name);
 	}
 	
+	
+	public boolean hasPlayerPermissionByLuckPerms(Player player ,String text) {
+		
+		if(!text.contains("permission set")) {
+			return false;
+		}else {
+			
+				String[] split = text.split(" ");
+				String perm = split[5];
+				if(player.hasPermission(perm)) {
+					 Bukkit.getConsoleSender().sendMessage(Utils.colorText("&cEl Jugador &a%player% &cya tiene el Permiso &6%perm% &c(Omitiendo).".replace("%player%", player.getName()).replace("%perm%", perm))); 
+					return false;
+				}else{
+					return true;
+				}
+		}
+			
+		
+	}
 	
 	public Player ConvertStringToPlayer(String name) {
 		

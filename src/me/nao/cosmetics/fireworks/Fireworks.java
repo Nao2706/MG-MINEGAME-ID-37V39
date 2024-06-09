@@ -8,6 +8,7 @@ import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
@@ -36,6 +37,16 @@ public class Fireworks {
 		
 				fm.setPower(3);
 				f.setFireworkMeta(fm);
+				
+				ParticleOfWin();
+	}
+	
+	public void ParticleOfWin() {
+		Location l = player.getLocation();
+		
+		l.getWorld().spawnParticle(Particle.TOTEM, player.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */10, 1, 1, 1, /* velocidad */0, null, true);
+		
+		
 	}
 	
 	

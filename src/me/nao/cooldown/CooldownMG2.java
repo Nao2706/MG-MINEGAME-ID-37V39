@@ -159,7 +159,7 @@ public class CooldownMG2 {
 		FileConfiguration report = plugin.getReportsYaml();
 		
 		if(!report.contains("Players."+player.getName())) {
-			System.out.println("Limpio :)");
+			System.out.println("LOG SI TIENE SANCION: Limpio :)");
 			return false;
 		}
 		
