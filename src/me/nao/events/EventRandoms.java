@@ -69,6 +69,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupArrowEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.event.server.TabCompleteEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -99,6 +100,20 @@ public class EventRandoms implements Listener{
 	public EventRandoms(Main plugin) {
 		this.plugin = plugin;
 	}
+	
+	//@EventHandler(priority = EventPriority.LOWEST)
+	public void runev(PlayerToggleSprintEvent e) {
+	
+		Player player = (Player) e.getPlayer();
+		int t = 0;
+		if(player.isSprinting()) {
+			player.sendMessage("Tiempo corriendo "+(t+1));
+		}else {
+			player.sendMessage("stop");
+		}
+		
+	}
+	
 	
 
 	@EventHandler(priority = EventPriority.LOWEST)

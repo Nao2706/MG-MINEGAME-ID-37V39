@@ -53,6 +53,7 @@ import me.nao.timers.AdventureTemp;
 import me.nao.timers.ResistenceTemp;
 import me.nao.utils.Utils;
 import me.nao.yamlfile.game.YamlFilePlus;
+import me.top.users.PointsManager;
 
 public class GameConditions {
 	
@@ -404,7 +405,10 @@ public class GameConditions {
 		}	
 		
 		
-		
+		if(isMapRanked(name)) {
+			PointsManager pm = new PointsManager(plugin) ;
+			pm.WinGamePoints(player);
+		}
 		
 	
 		int puntaje = pl.getGamePoints().getKills();
@@ -495,7 +499,10 @@ public class GameConditions {
 		}
 		
 	
-	
+		if(isMapRanked(name)) {
+			PointsManager pm = new PointsManager(plugin) ;
+			pm.LoseGamePoints(player);
+		}
 	
 		FileConfiguration mision = getGameConfig(name);
 		List<String> lostreward = mision.getStringList("Lost-Rewards.Commands");
@@ -967,7 +974,10 @@ public class GameConditions {
 		return false;
 	}
 	
-
+	public boolean isMapRanked(String map) {
+		List<String> are = plugin.getConfig().getStringList("Maps-Points.List");
+		return are.contains(map);
+	}
 	
 	public FileConfiguration getGameConfig(String name) {
 		YamlFilePlus file = new YamlFilePlus(plugin);
@@ -2287,6 +2297,20 @@ public class GameConditions {
 								
 								 		
 										// String time = plugin.getPlayerCronomet().get(e.getKey());
+									if(i == 1) {
+										 player.sendMessage(ChatColor.translateAlternateColorCodes('&',""+ChatColor.AQUA+ChatColor.BOLD+"MVP "+texto
+												 .replace("%player%", e.getKey())
+												 .replace("%place%", Integer.toString(i))
+												 .replace("%pointuser%", Integer.toString(e.getValue()))
+												 .replace("%reward%", Long.toString(RewardPointsForItems(e.getValue())))
+												 .replace("%revive%", Integer.toString(getReviveInfo(e.getKey())))
+												 .replace("%helprevive%", Integer.toString(getReviveAsistenceInfo(e.getKey())))
+												 .replace("%deads%", Integer.toString(getDeadsInfo(e.getKey())))
+												 .replace("%damage%", Integer.toString(getDamageInfo(e.getKey())))
+												 //.replace("%cronomet%", time)
+												
+												 ));
+									}else {
 										 player.sendMessage(ChatColor.translateAlternateColorCodes('&',texto
 												 .replace("%player%", e.getKey())
 												 .replace("%place%", Integer.toString(i))
@@ -2299,6 +2323,8 @@ public class GameConditions {
 												 //.replace("%cronomet%", time)
 												
 												 ));
+									}
+										
 										
 										 
 									
@@ -2399,7 +2425,22 @@ public class GameConditions {
 								
 								 		
 										// String time = plugin.getPlayerCronomet().get(e.getKey());
-									SendMessageToUserAndConsole(null,texto
+								
+									if(i == 1) {
+											SendMessageToUserAndConsole(null,""+ChatColor.AQUA+ChatColor.BOLD+"MVP "+texto
+													 .replace("%player%", e.getKey())
+													 .replace("%place%", Integer.toString(i))
+													 .replace("%pointuser%", Integer.toString(e.getValue()))
+													 .replace("%reward%", Long.toString(RewardPointsForItems(e.getValue())))
+													 .replace("%revive%", Integer.toString(getReviveInfo(e.getKey())))
+													 .replace("%helprevive%", Integer.toString(getReviveAsistenceInfo(e.getKey())))
+													 .replace("%deads%", Integer.toString(getDeadsInfo(e.getKey())))
+													 .replace("%damage%", Integer.toString(getDamageInfo(e.getKey())))
+													 //.replace("%cronomet%", time)
+													
+													 );
+									}else {
+										SendMessageToUserAndConsole(null,texto
 												 .replace("%player%", e.getKey())
 												 .replace("%place%", Integer.toString(i))
 												 .replace("%pointuser%", Integer.toString(e.getValue()))
@@ -2411,7 +2452,7 @@ public class GameConditions {
 												 //.replace("%cronomet%", time)
 												
 												 );
-										
+									}
 										 
 									
 								}
@@ -2671,11 +2712,6 @@ public class GameConditions {
 				ExecuteMultipleCommandsInConsole(null, rewardpl);
 			}	
    		}
-   		
-			
-			
-		  	
-   		
    		return;
  	}
  	

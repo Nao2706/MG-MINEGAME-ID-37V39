@@ -42,23 +42,120 @@ public class PointsManager {
 				int point3 = points.getInt("Players."+player.getName()+".Revive");
 				int point4 = points.getInt("Players."+player.getName()+".Help-Revive");
 				
+				
 				points.set("Players."+player.getName()+".Kills",point+gp.getKills());
 				points.set("Players."+player.getName()+".Deads",point2+gp.getDeads());
 				points.set("Players."+player.getName()+".Revive",point3+gp.getRevive());
 				points.set("Players."+player.getName()+".Help-Revive",point4+gp.getHelpRevive());
 				saveAll();
-				
+				CalcReferenceExp(player,CalcExp(player, gp));
 			}else {
 				
+				
+				points.set("Players."+player.getName()+".Prestige",0);
+				points.set("Players."+player.getName()+".Level",0);
+				points.set("Players."+player.getName()+".Xp",0);
+				points.set("Players."+player.getName()+".Reference-Xp",1000);
+				points.set("Players."+player.getName()+".Streaks",1);
+				points.set("Players."+player.getName()+".Wins",1);
+				points.set("Players."+player.getName()+".Loses",0);
 				points.set("Players."+player.getName()+".Kills",gp.getKills());
 				points.set("Players."+player.getName()+".Deads",gp.getDeads());
 				points.set("Players."+player.getName()+".Revive",gp.getRevive());
 				points.set("Players."+player.getName()+".Help-Revive",gp.getHelpRevive());
+				
 				saveAll();
+				
+				CalcReferenceExp(player,CalcExp(player, gp));
 			}
 		
 			
 		}
+		
+		
+		public int CalcExp(Player player,GamePoints gp) {
+			//k 200 hr 100 deads -200 revive 50 
+			int kills = gp.getKills();
+			int helpr = gp.getHelpRevive();
+			int deads = gp.getDeads();
+			int revive = gp.getRevive();
+			int total ;
+			
+			kills = kills * 25;
+			helpr = helpr * 15;
+			deads = deads * 25;
+			revive = revive * 10;
+			
+			total = kills+helpr+revive-deads;
+		
+			
+			if(total <= 0) {
+				player.sendMessage(ChatColor.RED+"XP Ganada: "+0);
+			}else {
+				player.sendMessage(ChatColor.RED+"XP Ganada: "+total);
+				return total;
+			}
+			
+			
+			
+			return 0;
+		}
+		
+		public void CalcReferenceExp(Player player ,int val) {
+			FileConfiguration points = plugin.getPoints();
+			int refer = points.getInt("Players."+player.getName()+".Reference-Xp");
+			int xp = points.getInt("Players."+player.getName()+".Xp");
+			int point = points.getInt("Players."+player.getName()+".Streaks");
+
+			xp = xp + val + (point * 100);
+			
+			if(xp >= refer) {
+				xp = xp - refer;
+				refer = refer+ refer;
+				
+				int lvl = points.getInt("Players."+player.getName()+".Level");
+			
+				lvl = lvl +1;
+				player.sendMessage("Level Up "+lvl);
+				points.set("Players."+player.getName()+".Level",lvl);
+				points.set("Players."+player.getName()+".Xp",xp);
+				points.set("Players."+player.getName()+".Reference-Xp",refer);
+				saveAll();
+				return;
+			}else {
+				points.set("Players."+player.getName()+".Xp",xp);
+				saveAll();
+			}
+			
+		}
+		
+		
+		public void WinGamePoints(Player player) {
+			FileConfiguration points = plugin.getPoints();
+			if(points.contains("Players."+player.getName())) {
+				int point = points.getInt("Players."+player.getName()+".Streaks");
+				int point2 = points.getInt("Players."+player.getName()+".Wins");
+				
+				points.set("Players."+player.getName()+".Streaks",point+1);
+				points.set("Players."+player.getName()+".Wins",point2+1);
+				
+				
+			}
+		}
+		
+		public void LoseGamePoints(Player player) {
+			FileConfiguration points = plugin.getPoints();
+			if(points.contains("Players."+player.getName())) {
+			
+				int point2 = points.getInt("Players."+player.getName()+".Loses");
+				
+				points.set("Players."+player.getName()+".Streaks",0);
+				points.set("Players."+player.getName()+".Loses",point2+1);
+				
+				
+			}
+		}
+	
 		
 		
 		public void isInTop(Player player) {

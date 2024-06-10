@@ -582,11 +582,11 @@ public class ClassIntoGame {
 	}
 	
 	public void isTheGameRanked(Player player ,String mapa) {
-		List<String> are = plugin.getConfig().getStringList("Arena-Points.List");
+		GameConditions gm = new GameConditions(plugin);
 		//int puntos = plugin.getEspecificPlayerPoints().get(player);
 		//int puntos = pl.getGamePoints().getKills();
 		
-		if(are.contains(mapa)) {
+		if(gm.isMapRanked(mapa)) {
 			PointsManager pm = new PointsManager(plugin);
 			player.sendMessage(ChatColor.GREEN+"Se han agregado Puntos al Ranking de Juegos");
 			pm.addGamePoints(player);	

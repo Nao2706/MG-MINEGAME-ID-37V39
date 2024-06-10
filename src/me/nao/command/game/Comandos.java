@@ -681,9 +681,9 @@ public class Comandos implements CommandExecutor{
 						FileConfiguration config = plugin.getConfig();
 					
 				 		if(gc.ExistMap(name)) {
-							 List<String> al = config.getStringList("Arenas-Locked.List");
+							 List<String> al = config.getStringList("Maps-Locked.List");
 							 if(!al.contains(name)) {
-								 config.set("Arenas-Locked.List",al);
+								 config.set("Maps-Locked.List",al);
 								 al.add(name);
 								 plugin.getConfig().save();
 								 plugin.getConfig().reload();
@@ -735,9 +735,9 @@ public class Comandos implements CommandExecutor{
 					
 				 		if(gc.ExistMap(name)) {
 						
-							 List<String> al = config.getStringList("Arenas-Locked.List");
+							 List<String> al = config.getStringList("Maps-Locked.List");
 							 if(al.contains(name)) {
-								 config.set("Arenas-Locked.List",al);
+								 config.set("Maps-Locked.List",al);
 								 al.remove(name);
 								 plugin.getConfig().save();
 								 plugin.getConfig().reload();
@@ -1780,7 +1780,7 @@ public class Comandos implements CommandExecutor{
 						}
 						
 						FileConfiguration config = plugin.getConfig();
-						 List<String> al = config.getStringList("Arenas-Locked.List");
+						 List<String> al = config.getStringList("Maps-Locked.List");
 						 if(al.contains(name) && !player.isOp()) {
 							 player.sendMessage(plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+name+ChatColor.RED+" esta Bloqueado.");
 							 return true;
@@ -1807,7 +1807,7 @@ public class Comandos implements CommandExecutor{
 					if (args.length == 2) {
 						String name = args[1];
 						FileConfiguration config = plugin.getConfig();
-						 List<String> al = config.getStringList("Arenas-Locked.List");
+						 List<String> al = config.getStringList("Maps-Locked.List");
 						 if(al.contains(name) && !player.isOp()) {
 							 player.sendMessage(plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+name+ChatColor.RED+" esta Bloqueado.");
 							 return true;
@@ -2075,9 +2075,9 @@ public class Comandos implements CommandExecutor{
 						FileConfiguration config = plugin.getConfig();
 					
 				 		if(gc.ExistMap(name)) {
-							 List<String> al = config.getStringList("Arenas-Locked.List");
+							 List<String> al = config.getStringList("Maps-Locked.List");
 							 if(al.contains(name)) {
-								 config.set("Arenas-Locked.List",al);
+								 config.set("Maps-Locked.List",al);
 								 al.remove(name);
 								 plugin.getConfig().save();
 								 plugin.getConfig().reload();
@@ -2104,9 +2104,9 @@ public class Comandos implements CommandExecutor{
 						String name = args[1];
 						FileConfiguration config = plugin.getConfig();
 						if(gc.ExistMap(name)) {
-							 List<String> al = config.getStringList("Arenas-Locked.List");
+							 List<String> al = config.getStringList("Maps-Locked.List");
 							 if(!al.contains(name)) {
-								 config.set("Arenas-Locked.List",al);
+								 config.set("Maps-Locked.List",al);
 								 al.add(name);
 								 plugin.getConfig().save();
 								 plugin.getConfig().reload();
