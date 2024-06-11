@@ -1,13 +1,18 @@
 package me.nao.general.info;
 
+import java.util.HashMap;
+
+import org.bukkit.entity.Player;
+
 public class ObjetivesMG {
 	
 	
 	private String nombre ,description;
 	private int priority ,valuestart, valueinitial, valuecomplete,valueincomplete;
 	private ObjetiveType status;
+	private HashMap<Player,Integer> value;
 	
-	public ObjetivesMG(String nombre,  int priority, int valuestart, int valueinitial, int valuecomplete,int valueincomplete,String description, ObjetiveType status) {
+	public ObjetivesMG(String nombre,  int priority, int valuestart, int valueinitial, int valuecomplete,int valueincomplete,String description, ObjetiveType status,HashMap<Player,Integer> value) {
 		this.nombre = nombre;
 		this.valuestart = valuestart;
 		this.valueinitial = valueinitial;
@@ -16,6 +21,7 @@ public class ObjetivesMG {
 		this.description = description;
 		this.status = status;
 		this.priority = priority;
+		this.value = value;
 	}
 
 	public String getNombre() {
@@ -48,6 +54,10 @@ public class ObjetivesMG {
 
 	public ObjetiveType getObjetiveType() {
 		return status;
+	}
+	
+	public HashMap<Player,Integer> getParticipants(){
+		return value;
 	}
 
 	public void setValue(int valueinitial) {

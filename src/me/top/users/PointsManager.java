@@ -15,6 +15,8 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
+import com.google.common.base.Strings;
+
 import me.nao.cooldown.Cooldown;
 import me.nao.cosmetics.fireworks.Fireworks;
 import me.nao.general.info.GamePoints;
@@ -92,7 +94,7 @@ public class PointsManager {
 			if(total <= 0) {
 				player.sendMessage(ChatColor.RED+"XP Ganada: "+0);
 			}else {
-				player.sendMessage(ChatColor.RED+"XP Ganada: "+total);
+				//player.sendMessage(ChatColor.RED+"XP Ganada: "+total);
 				return total;
 			}
 			
@@ -106,8 +108,13 @@ public class PointsManager {
 			int refer = points.getInt("Players."+player.getName()+".Reference-Xp");
 			int xp = points.getInt("Players."+player.getName()+".Xp");
 			int point = points.getInt("Players."+player.getName()+".Streaks");
-
+			
+			
+			player.sendMessage("Has Ganado "+val+" de Xp para el modo Ranked.");
+			player.sendMessage(ChatColor.GOLD+"Experiencia Anterior: "+ChatColor.YELLOW+val+ChatColor.RED+" + "+ChatColor.GREEN+xp+ChatColor.RED+" + "+ChatColor.GOLD+"Racha: "+ChatColor.RED+point);
 			xp = xp + val + (point * 100);
+			player.sendMessage("Total: "+ChatColor.GREEN+xp);
+			
 			
 			if(xp >= refer) {
 				xp = xp - refer;
@@ -124,6 +131,8 @@ public class PointsManager {
 				return;
 			}else {
 				points.set("Players."+player.getName()+".Xp",xp);
+				player.sendMessage(" "+ChatColor.RED+xp+ChatColor.GOLD+"/"+ChatColor.GREEN+refer);
+				player.sendMessage(getProgressBar(xp, refer,20, '|', ChatColor.GREEN, ChatColor.RED));
 				saveAll();
 			}
 			
@@ -138,7 +147,7 @@ public class PointsManager {
 				
 				points.set("Players."+player.getName()+".Streaks",point+1);
 				points.set("Players."+player.getName()+".Wins",point2+1);
-				
+				saveAll();
 				
 			}
 		}
@@ -151,7 +160,7 @@ public class PointsManager {
 				
 				points.set("Players."+player.getName()+".Streaks",0);
 				points.set("Players."+player.getName()+".Loses",point2+1);
-				
+				saveAll();
 				
 			}
 		}
@@ -371,7 +380,12 @@ public class PointsManager {
 		 
 	}
 	
-	
+	public String getProgressBar(int current, int max, int totalBars, char symbol, ChatColor completedColor,ChatColor notCompletedColor) {
+        float percent = (float) current/max;
+        int progressBars = (int) (totalBars * percent);
+ 
+        return Strings.repeat(""+ completedColor +ChatColor.BOLD + symbol, progressBars) + Strings.repeat("" + notCompletedColor +ChatColor.BOLD+ symbol, totalBars - progressBars);
+   }
 	
 	public void saveAll() {
 		plugin.getPoints().save();

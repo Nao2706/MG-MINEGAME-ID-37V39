@@ -1,4 +1,4 @@
-version: 1.50.1
+version: 1.70.0
 name: MineGame
 main: me.nao.main.game.Main
 api-version: 1.19

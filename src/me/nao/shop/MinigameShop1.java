@@ -4,7 +4,11 @@ package me.nao.shop;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -278,6 +282,15 @@ public class MinigameShop1 implements Listener{
 				descrip.add(ChatColor.YELLOW+ob.getDescription());
 				descrip.add(ChatColor.GREEN+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
 				descrip.add(""+ChatColor.GREEN+ChatColor.BOLD+"COMPLETADO");
+				descrip.add(""+ChatColor.GOLD+ChatColor.BOLD+"["+getProgressBar(ob.getValue(), ob.getCompleteValue(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GOLD+ChatColor.BOLD+"]");
+				List<Map.Entry<Player, Integer>> lis = getParticipants(ob.getParticipants());
+				if(!lis.isEmpty()) {
+					descrip.add(""+ChatColor.GREEN+ChatColor.BOLD+"Ayudaron");
+					for(Map.Entry<Player, Integer> e : lis) {
+						descrip.add(ChatColor.GREEN+"-"+ChatColor.AQUA+e.getKey().getName()+ChatColor.GOLD+" = "+ChatColor.RED+e.getValue());
+					}
+				}
+				
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
 				li.add(item);
@@ -289,6 +302,7 @@ public class MinigameShop1 implements Listener{
 				List<String> descrip = new ArrayList<>();
 				descrip.add(ChatColor.YELLOW+ob.getDescription());
 				descrip.add(ChatColor.GREEN+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
+				descrip.add(""+ChatColor.GOLD+ChatColor.BOLD+"["+getProgressBar(ob.getValue(), ob.getCompleteValue(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GOLD+ChatColor.BOLD+"]");
 				descrip.add(""+ChatColor.RED+ChatColor.BOLD+"INCOMPLETO");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
@@ -301,7 +315,16 @@ public class MinigameShop1 implements Listener{
 				List<String> descrip = new ArrayList<>();
 				descrip.add(ChatColor.RED+ob.getDescription());
 				descrip.add(ChatColor.AQUA+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
+				descrip.add(""+ChatColor.GOLD+ChatColor.BOLD+"["+getProgressBar(ob.getValue(), ob.getCompleteValue(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GOLD+ChatColor.BOLD+"]");
 				descrip.add(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"EN PROGRESO");
+				List<Map.Entry<Player, Integer>> lis = getParticipants(ob.getParticipants());
+				if(!lis.isEmpty()) {
+					descrip.add(""+ChatColor.GREEN+ChatColor.BOLD+"Ayudaron");
+					for(Map.Entry<Player, Integer> e : lis) {
+						descrip.add(ChatColor.GREEN+"-"+ChatColor.AQUA+e.getKey().getName()+ChatColor.GOLD+" = "+ChatColor.RED+e.getValue());
+					}
+				}
+				
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
 				li.add(item);
@@ -325,6 +348,7 @@ public class MinigameShop1 implements Listener{
 				List<String> descrip = new ArrayList<>();
 				descrip.add(""+ChatColor.GRAY+ChatColor.BOLD+ob.getDescription());
 				descrip.add(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
+				descrip.add(""+ChatColor.GOLD+ChatColor.BOLD+"["+getProgressBar(ob.getValue(), ob.getCompleteValue(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GOLD+ChatColor.BOLD+"]");
 				descrip.add(""+ChatColor.RED+ChatColor.BOLD+"OBJETIVO CANCELADO");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
@@ -379,7 +403,15 @@ public class MinigameShop1 implements Listener{
 				List<String> descrip = new ArrayList<>();
 				descrip.add(ChatColor.YELLOW+ob.getDescription());
 				descrip.add(ChatColor.GREEN+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
+				descrip.add(""+ChatColor.GOLD+ChatColor.BOLD+"["+getProgressBar(ob.getValue(), ob.getCompleteValue(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GOLD+ChatColor.BOLD+"]");
 				descrip.add(""+ChatColor.GREEN+ChatColor.BOLD+"COMPLETADO");
+				List<Map.Entry<Player, Integer>> lis = getParticipants(ob.getParticipants());
+				if(!lis.isEmpty()) {
+					descrip.add(""+ChatColor.GREEN+ChatColor.BOLD+"Ayudaron");
+					for(Map.Entry<Player, Integer> e : lis) {
+						descrip.add(ChatColor.GREEN+"-"+ChatColor.AQUA+e.getKey().getName()+ChatColor.GOLD+" = "+ChatColor.RED+e.getValue());
+					}
+				}
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
 				li.add(item);
@@ -391,6 +423,7 @@ public class MinigameShop1 implements Listener{
 				List<String> descrip = new ArrayList<>();
 				descrip.add(ChatColor.YELLOW+ob.getDescription());
 				descrip.add(ChatColor.GREEN+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
+				descrip.add(""+ChatColor.GOLD+ChatColor.BOLD+"["+getProgressBar(ob.getValue(), ob.getCompleteValue(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GOLD+ChatColor.BOLD+"]");
 				descrip.add(""+ChatColor.RED+ChatColor.BOLD+"INCOMPLETO");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
@@ -403,7 +436,15 @@ public class MinigameShop1 implements Listener{
 				List<String> descrip = new ArrayList<>();
 				descrip.add(ChatColor.RED+ob.getDescription());
 				descrip.add(ChatColor.AQUA+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
+				descrip.add(""+ChatColor.GOLD+ChatColor.BOLD+"["+getProgressBar(ob.getValue(), ob.getCompleteValue(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GOLD+ChatColor.BOLD+"]");
 				descrip.add(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"EN PROGRESO");
+				List<Map.Entry<Player, Integer>> lis = getParticipants(ob.getParticipants());
+				if(!lis.isEmpty()) {
+					descrip.add(""+ChatColor.GREEN+ChatColor.BOLD+"Ayudaron");
+					for(Map.Entry<Player, Integer> e : lis) {
+						descrip.add(ChatColor.GREEN+"-"+ChatColor.AQUA+e.getKey().getName()+ChatColor.GOLD+" = "+ChatColor.RED+e.getValue());
+					}
+				}
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
 				li.add(item);
@@ -427,6 +468,7 @@ public class MinigameShop1 implements Listener{
 				List<String> descrip = new ArrayList<>();
 				descrip.add(""+ChatColor.GRAY+ChatColor.BOLD+ob.getDescription());
 				descrip.add(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
+				descrip.add(""+ChatColor.GOLD+ChatColor.BOLD+"["+getProgressBar(ob.getValue(), ob.getCompleteValue(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GOLD+ChatColor.BOLD+"]");
 				descrip.add(""+ChatColor.RED+ChatColor.BOLD+ChatColor.MAGIC+"OBJETIVO  CANCELADO");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
@@ -483,6 +525,7 @@ public class MinigameShop1 implements Listener{
 				List<String> descrip = new ArrayList<>();
 				descrip.add(""+ChatColor.RED+ChatColor.MAGIC+ob.getDescription());
 				descrip.add(""+ChatColor.AQUA+ChatColor.MAGIC+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
+				descrip.add(""+ChatColor.GOLD+ChatColor.BOLD+"["+getProgressBar(ob.getValue(), ob.getCompleteValue(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GOLD+ChatColor.BOLD+"]");
 				descrip.add(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+ChatColor.MAGIC+"EN PROGRESO");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
@@ -496,6 +539,7 @@ public class MinigameShop1 implements Listener{
 				List<String> descrip = new ArrayList<>();
 				descrip.add(ChatColor.RED+ob.getDescription());
 				descrip.add(ChatColor.AQUA+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
+				descrip.add(""+ChatColor.GOLD+ChatColor.BOLD+"["+getProgressBar(ob.getValue(), ob.getCompleteValue(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GOLD+ChatColor.BOLD+"]");
 				descrip.add(""+ChatColor.YELLOW+ChatColor.BOLD+"EN PROGRESO ADVERTENCIA OBJETIVO EN CONTRA ");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
@@ -508,6 +552,7 @@ public class MinigameShop1 implements Listener{
 				List<String> descrip = new ArrayList<>();
 				descrip.add(""+ChatColor.DARK_RED+ChatColor.BOLD+ob.getDescription());
 				descrip.add(""+ChatColor.AQUA+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
+				descrip.add(""+ChatColor.GOLD+ChatColor.BOLD+"["+getProgressBar(ob.getValue(), ob.getCompleteValue(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GOLD+ChatColor.BOLD+"]");
 				descrip.add(""+ChatColor.DARK_RED+ChatColor.BOLD+"EN PROGRESO UN OBJETIVO PELIGROSO EN CONTRA");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
@@ -520,6 +565,7 @@ public class MinigameShop1 implements Listener{
 				List<String> descrip = new ArrayList<>();
 				descrip.add(""+ChatColor.GRAY+ChatColor.BOLD+ob.getDescription());
 				descrip.add(""+ChatColor.AQUA+ChatColor.BOLD+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
+				descrip.add(""+ChatColor.GOLD+ChatColor.BOLD+"["+getProgressBar(ob.getValue(), ob.getCompleteValue(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GOLD+ChatColor.BOLD+"]");
 				descrip.add(""+ChatColor.GRAY+ChatColor.BOLD+ChatColor.MAGIC+"OBJETIVO EN CONTRA CONCLUIDO");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
@@ -532,6 +578,7 @@ public class MinigameShop1 implements Listener{
 				List<String> descrip = new ArrayList<>();
 				descrip.add(""+ChatColor.GRAY+ChatColor.BOLD+ob.getDescription());
 				descrip.add(""+ChatColor.RED+ChatColor.BOLD+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
+				descrip.add(""+ChatColor.GOLD+ChatColor.BOLD+"["+getProgressBar(ob.getValue(), ob.getCompleteValue(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GOLD+ChatColor.BOLD+"]");
 				descrip.add(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"OBJETIVO EN CONTRA CANCELADO");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
@@ -2005,6 +2052,21 @@ public class MinigameShop1 implements Listener{
 		
 		return item;
 	}
+	
+	public List<Map.Entry<Player, Integer>> getParticipants(HashMap<Player,Integer> vals){
+   		
+   		
+   		List<Map.Entry<Player, Integer>> list = new ArrayList<>(vals.entrySet());
+
+		
+		Collections.sort(list, new Comparator<Map.Entry<Player, Integer>>() {
+			public int compare(Map.Entry<Player, Integer> e1, Map.Entry<Player, Integer> e2) {
+				return e2.getValue() - e1.getValue();
+			}
+		});
+   		
+   		return list;
+   	}
 	
 	public String Porcentage(int current , int max ) {
 		float percent = (float) current/max*100;

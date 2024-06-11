@@ -169,7 +169,9 @@ public class ResistenceTemp {
 				    	//	players.sendMessage(ChatColor.RED+"No hay jugadores suficientes para empezar la partida :(");
 			    		}else {
 			    			target.playSound(target.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
-			    			target.sendMessage(ChatColor.YELLOW+"La partida empieza en "+ChatColor.RED+startm);
+			       	  	    target.sendTitle("",ChatColor.YELLOW+"La partida empieza en "+ChatColor.RED+startm, 20, 20, 20);
+
+			    			//target.sendMessage(ChatColor.YELLOW+"La partida empieza en "+ChatColor.RED+startm);
 			    		}
 						
 						
@@ -380,7 +382,9 @@ public class ResistenceTemp {
 				    		}else {
 				    			//RemoveArmorStandsAndItemsInMap(target);
 				    			target.playSound(target.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
-				    			target.sendMessage(ChatColor.GREEN+"La partida termina en "+ChatColor.DARK_PURPLE+end);
+			 	       		    target.sendTitle("",ChatColor.GREEN+"La partida termina en "+ChatColor.DARK_PURPLE+end, 20, 20, 20);
+
+				    			//target.sendMessage(ChatColor.GREEN+"La partida termina en "+ChatColor.DARK_PURPLE+end);
 				    		}
 						
 						RemoveEntitysAfterGame(target);
@@ -397,7 +401,9 @@ public class ResistenceTemp {
 				    		}else {
 				    			//RemoveArmorStandsAndItemsInMap(target);
 				    			target.playSound(target.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
-				    			target.sendMessage(ChatColor.RED+"La partida termina en "+ChatColor.DARK_PURPLE+end);
+			 	       		    target.sendTitle("",ChatColor.GREEN+"La partida termina en "+ChatColor.DARK_PURPLE+end, 20, 20, 20);
+
+				    			//target.sendMessage(ChatColor.GREEN+"La partida termina en "+ChatColor.DARK_PURPLE+end);
 				    		}
 						RemoveEntitysAfterGame(target);
 					}

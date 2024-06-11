@@ -191,11 +191,11 @@ public class Comandos implements CommandExecutor{
 						Matcher m = p.matcher(unk);
 						if(m.find()) {
 							int value = Integer.valueOf(unk);
-							gc.ObjetivesValue(map, name, value);
+							gc.ObjetivesValue(map, name, value,null);
 						}else {
 							ObjetiveType obj = ObjetiveType.valueOf(args[3].toUpperCase());
 							if(obj != null) {
-								gc.ObjetiveChangeType(map, name, obj);
+								gc.ObjetiveChangeType(map, name, obj,null);
 								
 							}else {
 							
@@ -210,11 +210,36 @@ public class Comandos implements CommandExecutor{
 			 			
 						
 						
-						//mg objetive tutorial CASA COMPLETE
+						//mg objetive tutorial CASA COMPLETE 1 NAO
+					}else if(args.length == 5){
+						String map = args[1];
+						String name = args[2];
+						String unk = args[3];
+						String target = args[4];
+						Pattern p = Pattern.compile("([0-9])");
+						Matcher m = p.matcher(unk);
+						if(m.find()) {
+							int value = Integer.valueOf(unk);
+							gc.ObjetivesValue(map, name, value,target);
+						}else {
+							ObjetiveType obj = ObjetiveType.valueOf(args[3].toUpperCase());
+							if(obj != null) {
+								gc.ObjetiveChangeType(map, name, obj,target);
+								
+							}else {
+								gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning> <player>");
+								gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1 <player>");
+								gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
+				 				gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
+							}
+							
+							
+						}
 					}else {
-						
+						gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning> <player>");
 						gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
 		 				gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
+		 				gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1 <player>");
 					}
 						
 						
@@ -2394,11 +2419,11 @@ public class Comandos implements CommandExecutor{
 						Matcher m = p.matcher(unk);
 						if(m.find()) {
 							int value = Integer.valueOf(unk);
-							gc.ObjetivesValue(map, name, value);
+							gc.ObjetivesValue(map, name, value,null);
 						}else {
 							ObjetiveType obj = ObjetiveType.valueOf(args[3].toUpperCase());
 							if(obj != null) {
-								gc.ObjetiveChangeType(map, name, obj);
+								gc.ObjetiveChangeType(map, name, obj,null);
 								
 							}else {
 								player.sendMessage(ChatColor.RED+"Ese no es un Tipo de Objetivo");
@@ -2414,10 +2439,35 @@ public class Comandos implements CommandExecutor{
 						
 						
 						//mg objetive tutorial CASA COMPLETE
+					}else if(args.length == 5){
+						String map = args[1];
+						String name = args[2];
+						String unk = args[3];
+						String target = args[4];
+						Pattern p = Pattern.compile("([0-9])");
+						Matcher m = p.matcher(unk);
+						if(m.find()) {
+							int value = Integer.valueOf(unk);
+							gc.ObjetivesValue(map, name, value,target);
+						}else {
+							ObjetiveType obj = ObjetiveType.valueOf(args[3].toUpperCase());
+							if(obj != null) {
+								gc.ObjetiveChangeType(map, name, obj,target);
+								
+							}else {
+								gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning> <player>");
+								gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1 <player>");
+								gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
+				 				gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
+							}
+							
+							
+						}
 					}else {
-						
+						gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning> <player>");
 						gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
 		 				gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
+		 				gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1 <player>");
 					}
 						 
 					

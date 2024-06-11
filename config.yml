@@ -15,7 +15,7 @@ Maintenance: false
 Maps-Created:
     List:
     - example
-Arenas-Locked:
+Maps-Locked:
     List:    
     - example
 HeadShoot-World:
@@ -24,7 +24,7 @@ HeadShoot-World:
 Regen-Explosion:
     List:
     - example    
-Arena-Points:
+Maps-Points:
     List:
     - example  
 Random-Reward:
