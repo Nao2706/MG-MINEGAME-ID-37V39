@@ -43,6 +43,7 @@ import me.nao.cooldown.CooldownMG2;
 import me.nao.gamemode.DestroyNexo;
 import me.nao.main.game.Main;
 import me.nao.manager.ClassArena;
+import me.nao.manager.ClassIntoGame;
 import me.nao.manager.EstadoPartida;
 import me.nao.manager.StopMotivo;
 import me.nao.teamsmg.MgTeams;
@@ -128,7 +129,7 @@ public class GameConditions {
 					
 				}
 			}
-			
+			 
 			
 			if(spectador.contains(player.getName())) {
 				SendMessageToUsersOfSameGame(player, ChatColor.WHITE+"El jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" salio del Modo Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size() - 1)+ChatColor.RED+"]");
@@ -136,6 +137,9 @@ public class GameConditions {
 				 SendMessageToUsersOfSameGame(player,
 							ChatColor.YELLOW+"A Salido "+ChatColor.GREEN+player.getName()+ChatColor.RED+" ("+ChatColor.GOLD+(ga.getParticipantes().size()-1)+ChatColor.YELLOW+"/"+ChatColor.GOLD+getMaxPlayerMap(pl.getMapName())+ChatColor.RED+")");			
 			}
+			
+			
+			
 			
 			 String mt = mision.getString("Start.Tittle-of-Mision"); 
 			 player.sendMessage(ChatColor.GREEN+"Has salido del Mapa "+ChatColor.translateAlternateColorCodes('&',mt.replaceAll("%player%",player.getName())));
@@ -164,6 +168,8 @@ public class GameConditions {
 				}
 			}
 			
+			
+			
 			if(spectador.contains(player.getName())) {
 				SendMessageToUsersOfSameGame(player, ChatColor.WHITE+"El jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" salio del Modo Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size() - 1)+ChatColor.RED+"]");
 			}else {
@@ -179,6 +185,63 @@ public class GameConditions {
 		//player.sendMessage("Saliste.");
 		
 	}
+	
+	
+	public void IlegalLeaveMapCommand(Player player) {
+		
+		if(!isPlayerinGame(player)) {
+			return;
+		}
+		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+		GameAdventure ga = (GameAdventure) plugin.getGameInfoPoo().get(pl.getMapName());
+		if(CanJoinWithYourInventory(pl.getMapName()) && !ga.getSpectator().contains(player.getName())) {
+			
+			if(ga.getMuerto().contains(player.getName())) {
+				LeaveOfTheGame(player);
+			}else{
+				Block block = player.getLocation().getBlock();
+				Block b = block.getRelative(0, -2, 0);
+				if(!(b.getType() == Material.STRUCTURE_BLOCK)) {
+					 player.sendMessage(ChatColor.YELLOW+"Debes estar dentro de una Zona Segura para salirte.");
+					 player.sendMessage(ChatColor.RED+"Si te Desconectas fuera de una Zona segura tu Inventario se Borrara.");
+					 return;
+				}else {
+					LeaveOfTheGame(player);
+				}
+			}
+		}else {
+			LeaveOfTheGame(player);
+		}
+	}
+	
+	
+	
+public void IlegalLeaveMapConexion(Player player) {
+		
+		if(!isPlayerinGame(player)) {
+			return;
+		}
+		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+		GameAdventure ga = (GameAdventure) plugin.getGameInfoPoo().get(pl.getMapName());
+		if(CanJoinWithYourInventory(pl.getMapName()) && !ga.getSpectator().contains(player.getName())) {
+			
+			if(ga.getMuerto().contains(player.getName())) {
+				LeaveOfTheGame(player);
+			}else{
+				Block block = player.getLocation().getBlock();
+				Block b = block.getRelative(0, -2, 0);
+				if(!(b.getType() == Material.STRUCTURE_BLOCK)) {
+					ClassIntoGame ci = new ClassIntoGame(plugin);
+					ci.PlayerDropAllItems(player);
+					LeaveOfTheGame(player);
+					 return;
+				}else {
+					LeaveOfTheGame(player);
+				}
+			}
+		}
+	}
+	
 	
 	
 	public void EndTheGame(String  name) {
@@ -2904,7 +2967,7 @@ public class GameConditions {
 						if(player != null) {
 							Player target = Bukkit.getPlayerExact(player);
 							if(target != null && gc.isPlayerinGame(target)) {
-								SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado gracias a "+target.getName()+" "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+								SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado gracias a "+target.getName()+" "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
 
 								if(obj.getParticipants().containsKey(target)) {
 									obj.getParticipants().put(target,obj.getParticipants().get(target)+value);
@@ -2912,11 +2975,11 @@ public class GameConditions {
 									obj.getParticipants().put(target,value);
 								}
 							}else {
-								SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+								SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
 		
 							}
 						}else {
-							SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+							SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
 							
 						}
 						
@@ -2931,12 +2994,12 @@ public class GameConditions {
 						ObjetiveGeneralActionsIncomplete(map,obj,gi);
 					}else {
 						obj.setValue(val);
-						SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+						//SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
 					
 						if(player != null) {
 							Player target = Bukkit.getPlayerExact(player);
 							if(target != null && gc.isPlayerinGame(target)) {
-								SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado gracias a "+target.getName()+" "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+								SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado gracias a "+target.getName()+" "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
 
 								if(obj.getParticipants().containsKey(target)) {
 									obj.getParticipants().put(target,obj.getParticipants().get(target)+value);
@@ -2944,11 +3007,11 @@ public class GameConditions {
 									obj.getParticipants().put(target,value);
 								}
 							}else {
-								SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+								SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
 		
 							}
 						}else {
-							SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+							SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
 							
 						}
 						
@@ -2970,7 +3033,7 @@ public class GameConditions {
 						if(player != null) {
 							Player target = Bukkit.getPlayerExact(player);
 							if(target != null && gc.isPlayerinGame(target)) {
-								SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado gracias a "+target.getName()+" "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+								SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado gracias a "+target.getName()+" "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
 
 								if(obj.getParticipants().containsKey(target)) {
 									obj.getParticipants().put(target,obj.getParticipants().get(target)+value);
@@ -2978,11 +3041,11 @@ public class GameConditions {
 									obj.getParticipants().put(target,value);
 								}
 							}else {
-								SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+								SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
 		
 							}
 						}else {
-							SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+							SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
 							
 						}
 						
@@ -2999,7 +3062,7 @@ public class GameConditions {
 						if(player != null) {
 							Player target = Bukkit.getPlayerExact(player);
 							if(target != null && gc.isPlayerinGame(target)) {
-								SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado gracias a "+target.getName()+" "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+								SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado gracias a "+target.getName()+" "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
 
 								if(obj.getParticipants().containsKey(target)) {
 									obj.getParticipants().put(target,obj.getParticipants().get(target)+value);
@@ -3007,11 +3070,11 @@ public class GameConditions {
 									obj.getParticipants().put(target,value);
 								}
 							}else {
-								SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+								SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
 		
 							}
 						}else {
-							SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+							SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
 							
 						}
 						
@@ -3127,7 +3190,7 @@ public class GameConditions {
 					if(target != null && gc.isPlayerinGame(target)) {
 						SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getNombre()+ChatColor.GREEN+" fue Completado gracias a "+target.getName()+" "+ChatColor.GOLD+mo.getCompleteValue()+"/"+mo.getCompleteValue());
 
-						mo.getParticipants().put(target,mo.getCompleteValue());
+						mo.getParticipants().put(target,mo.getParticipants().get(target)+1);
 						
 					}
 				}

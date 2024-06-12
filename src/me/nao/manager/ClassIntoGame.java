@@ -13,6 +13,8 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -596,18 +598,47 @@ public class ClassIntoGame {
 		return;
 	}
 	
+	//TODO DROP
 	public void PlayerDropAllItems(Player player) {
+		GameConditions gm = new GameConditions(plugin);
+		PlayerInfo pi = plugin.getPlayerInfoPoo().get(player);
+		
+		if(gm.CanJoinWithYourInventory(pi.getMapName())) {
+			ItemDropEntity(player);
+		}else {
+			if(player.getInventory().getContents().length >= 1) {
+				for (ItemStack itemStack : player.getInventory().getContents()) {
+					if(itemStack == null) continue;
+							
+						player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
+	                    player.getInventory().removeItem(itemStack);
+	              }
+					player.getInventory().clear(); 
+			}
+		}
+	
+		
+		return;
+	}
+	
+	
+	public void ItemDropEntity(Player player) {
+		
 		if(player.getInventory().getContents().length >= 1) {
 			for (ItemStack itemStack : player.getInventory().getContents()) {
 				if(itemStack == null) continue;
-						
-					player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
+				
+					Entity ent = (Entity) player.getWorld().spawnEntity(player.getLocation(),EntityType.DROPPED_ITEM);
+					Item it = (Item) ent;
+					it.setItemStack(itemStack);
+					it.setOwner(player.getUniqueId());
+				
                     player.getInventory().removeItem(itemStack);
               }
 				player.getInventory().clear(); 
 		}
-		return;
 	}
+	
 	
 	public void GameMobDamagerCause(Player player ,Entity e) {
 	

@@ -1856,39 +1856,7 @@ public class Comandos implements CommandExecutor{
 				 
 				}else if(args[0].equalsIgnoreCase("leave")) {
 					
-					gc.LeaveOfTheGame(player);
-					
-					
-//					if(plugin.PlayerisArena(player)) {
-//						
-//						String name = plugin.getArenaPlayerInfo().get(player);
-//
-//						YamlFilePlus u = new YamlFilePlus(plugin);
-//						FileConfiguration ym = u.getSpecificYamlFile("Arenas",name);
-//						
-//						 Block block = player.getLocation().getBlock();
-//						 Block b = block.getRelative(0, -2, 0);
-//						 
-//						 if(ym.getBoolean("Allow-Inventory")) {
-//							 if(!(b.getType() == Material.EMERALD_BLOCK) && plugin.getEstatusArena().get(name) == EstadoPartida.JUGANDO) {
-//								 player.sendMessage(ChatColor.YELLOW+"Debes estar dentro de una zona segura para salirte.");
-//								 player.sendMessage(ChatColor.RED+"Si te desconectas fuera de una zona segura tu inventario se borrara.");
-//								 return true;
-//							 }else {
-//								 c.LeavePlayerArenas(player);
-//								 return true;
-//							 }
-//							 
-//						 }else {
-//							 c.LeavePlayerArenas(player);
-//						 }
-//						 
-//						
-//						
-//				
-//					}else {
-//						player.sendMessage(ChatColor.RED+"No estas en ninguna partida");
-//					}
+					gc.IlegalLeaveMapCommand(player);
 				
 				return true;
 				}
@@ -2484,8 +2452,12 @@ public class Comandos implements CommandExecutor{
 					
 					
 					return true;
-				}
-				else if(args[0].equalsIgnoreCase("top") ){
+				}else if(args[0].equalsIgnoreCase("dropentity")){
+					ClassIntoGame ci = new ClassIntoGame(plugin);
+					ci.ItemDropEntity(player);
+					
+					return true;
+				}else if(args[0].equalsIgnoreCase("top") ){
 					if(points1.contains("Players")) {
 						if (message.getBoolean("Command.message-top")) {
 							List<String> messagep = message.getStringList("Command.message-top-decoracion1");

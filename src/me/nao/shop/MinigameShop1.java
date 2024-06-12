@@ -173,7 +173,8 @@ public class MinigameShop1 implements Listener{
 		ItemStack it = new ItemStack(Material.ENCHANTED_GOLDEN_APPLE);
 		ItemStack it2 = new ItemStack(Material.GOLDEN_APPLE);
 		
-		ItemStack objehostiles = new ItemStack(Material.SKELETON_SKULL);
+		ItemStack obh = new ItemStack(Material.TNT);
+		
 		ItemStack info = new ItemStack(Material.BEACON);
 		
 		ItemMeta meta = info.getItemMeta();
@@ -232,9 +233,9 @@ public class MinigameShop1 implements Listener{
 		
 		
 		if(host.isEmpty()) {
-			inv.setItem(31,CreateTempItemWithList(objehostiles,""+ChatColor.RED+ChatColor.BOLD+"Sin Objetivos Hostiles", host));
+			inv.setItem(31,CreateTempItemWithList(obh,""+ChatColor.RED+ChatColor.BOLD+"Sin Objetivos Hostiles", host));
 		}else {
-			inv.setItem(31,CreateTempItemWithList(objehostiles,""+ChatColor.GOLD+ChatColor.BOLD+"Objetivos Hostiles", host));
+			inv.setItem(31,CreateTempItemWithList(obh,""+ChatColor.GOLD+ChatColor.BOLD+"Objetivos Hostiles", host));
 		}
 		
 		inv.setItem(13, info);
@@ -268,7 +269,7 @@ public class MinigameShop1 implements Listener{
 		
 		Inventory inv = Bukkit.createInventory(null,54,""+ChatColor.GOLD+ChatColor.BOLD+"OBJETIVOS PRIMARIOS");
 		MenuDecoration(inv,Material.BLACK_STAINED_GLASS_PANE);
-		
+	
 		
 		
 		
@@ -283,11 +284,13 @@ public class MinigameShop1 implements Listener{
 				descrip.add(ChatColor.GREEN+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
 				descrip.add(""+ChatColor.GREEN+ChatColor.BOLD+"COMPLETADO");
 				descrip.add(""+ChatColor.GOLD+ChatColor.BOLD+"["+getProgressBar(ob.getValue(), ob.getCompleteValue(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GOLD+ChatColor.BOLD+"]");
+				descrip.add(ChatColor.GOLD+"Hay un Progreso del "+ChatColor.GREEN+Porcentage(ob.getValue(),ob.getCompleteValue()));
+
 				List<Map.Entry<Player, Integer>> lis = getParticipants(ob.getParticipants());
 				if(!lis.isEmpty()) {
 					descrip.add(""+ChatColor.GREEN+ChatColor.BOLD+"Ayudaron");
 					for(Map.Entry<Player, Integer> e : lis) {
-						descrip.add(ChatColor.GREEN+"-"+ChatColor.AQUA+e.getKey().getName()+ChatColor.GOLD+" = "+ChatColor.RED+e.getValue());
+						descrip.add(ChatColor.GRAY+"- "+ChatColor.GREEN+e.getKey().getName()+ChatColor.GOLD+": "+ChatColor.RED+e.getValue());
 					}
 				}
 				
@@ -303,6 +306,7 @@ public class MinigameShop1 implements Listener{
 				descrip.add(ChatColor.YELLOW+ob.getDescription());
 				descrip.add(ChatColor.GREEN+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
 				descrip.add(""+ChatColor.GOLD+ChatColor.BOLD+"["+getProgressBar(ob.getValue(), ob.getCompleteValue(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GOLD+ChatColor.BOLD+"]");
+				descrip.add(ChatColor.GOLD+"Hay un Progreso del "+ChatColor.GREEN+Porcentage(ob.getValue(),ob.getCompleteValue()));
 				descrip.add(""+ChatColor.RED+ChatColor.BOLD+"INCOMPLETO");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
@@ -316,6 +320,7 @@ public class MinigameShop1 implements Listener{
 				descrip.add(ChatColor.RED+ob.getDescription());
 				descrip.add(ChatColor.AQUA+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
 				descrip.add(""+ChatColor.GOLD+ChatColor.BOLD+"["+getProgressBar(ob.getValue(), ob.getCompleteValue(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GOLD+ChatColor.BOLD+"]");
+				descrip.add(ChatColor.GOLD+"Hay un Progreso del "+ChatColor.GREEN+Porcentage(ob.getValue(),ob.getCompleteValue()));
 				descrip.add(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"EN PROGRESO");
 				List<Map.Entry<Player, Integer>> lis = getParticipants(ob.getParticipants());
 				if(!lis.isEmpty()) {
@@ -349,6 +354,7 @@ public class MinigameShop1 implements Listener{
 				descrip.add(""+ChatColor.GRAY+ChatColor.BOLD+ob.getDescription());
 				descrip.add(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
 				descrip.add(""+ChatColor.GOLD+ChatColor.BOLD+"["+getProgressBar(ob.getValue(), ob.getCompleteValue(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GOLD+ChatColor.BOLD+"]");
+				descrip.add(ChatColor.GOLD+"Hay un Progreso del "+ChatColor.GREEN+Porcentage(ob.getValue(),ob.getCompleteValue()));
 				descrip.add(""+ChatColor.RED+ChatColor.BOLD+"OBJETIVO CANCELADO");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
@@ -404,6 +410,7 @@ public class MinigameShop1 implements Listener{
 				descrip.add(ChatColor.YELLOW+ob.getDescription());
 				descrip.add(ChatColor.GREEN+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
 				descrip.add(""+ChatColor.GOLD+ChatColor.BOLD+"["+getProgressBar(ob.getValue(), ob.getCompleteValue(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GOLD+ChatColor.BOLD+"]");
+				descrip.add(ChatColor.GOLD+"Hay un Progreso del "+ChatColor.GREEN+Porcentage(ob.getValue(),ob.getCompleteValue()));
 				descrip.add(""+ChatColor.GREEN+ChatColor.BOLD+"COMPLETADO");
 				List<Map.Entry<Player, Integer>> lis = getParticipants(ob.getParticipants());
 				if(!lis.isEmpty()) {
@@ -424,6 +431,7 @@ public class MinigameShop1 implements Listener{
 				descrip.add(ChatColor.YELLOW+ob.getDescription());
 				descrip.add(ChatColor.GREEN+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
 				descrip.add(""+ChatColor.GOLD+ChatColor.BOLD+"["+getProgressBar(ob.getValue(), ob.getCompleteValue(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GOLD+ChatColor.BOLD+"]");
+				descrip.add(ChatColor.GOLD+"Hay un Progreso del "+ChatColor.GREEN+Porcentage(ob.getValue(),ob.getCompleteValue()));
 				descrip.add(""+ChatColor.RED+ChatColor.BOLD+"INCOMPLETO");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
@@ -437,6 +445,7 @@ public class MinigameShop1 implements Listener{
 				descrip.add(ChatColor.RED+ob.getDescription());
 				descrip.add(ChatColor.AQUA+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
 				descrip.add(""+ChatColor.GOLD+ChatColor.BOLD+"["+getProgressBar(ob.getValue(), ob.getCompleteValue(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GOLD+ChatColor.BOLD+"]");
+				descrip.add(ChatColor.GOLD+"Hay un Progreso del "+ChatColor.GREEN+Porcentage(ob.getValue(),ob.getCompleteValue()));
 				descrip.add(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"EN PROGRESO");
 				List<Map.Entry<Player, Integer>> lis = getParticipants(ob.getParticipants());
 				if(!lis.isEmpty()) {
@@ -469,6 +478,7 @@ public class MinigameShop1 implements Listener{
 				descrip.add(""+ChatColor.GRAY+ChatColor.BOLD+ob.getDescription());
 				descrip.add(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
 				descrip.add(""+ChatColor.GOLD+ChatColor.BOLD+"["+getProgressBar(ob.getValue(), ob.getCompleteValue(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GOLD+ChatColor.BOLD+"]");
+				descrip.add(ChatColor.GOLD+"Hay un Progreso del "+ChatColor.GREEN+Porcentage(ob.getValue(),ob.getCompleteValue()));
 				descrip.add(""+ChatColor.RED+ChatColor.BOLD+ChatColor.MAGIC+"OBJETIVO  CANCELADO");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
@@ -526,6 +536,7 @@ public class MinigameShop1 implements Listener{
 				descrip.add(""+ChatColor.RED+ChatColor.MAGIC+ob.getDescription());
 				descrip.add(""+ChatColor.AQUA+ChatColor.MAGIC+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
 				descrip.add(""+ChatColor.GOLD+ChatColor.BOLD+"["+getProgressBar(ob.getValue(), ob.getCompleteValue(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GOLD+ChatColor.BOLD+"]");
+				descrip.add(ChatColor.GOLD+"Hay un Progreso del "+ChatColor.GREEN+Porcentage(ob.getValue(),ob.getCompleteValue()));
 				descrip.add(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+ChatColor.MAGIC+"EN PROGRESO");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
@@ -540,6 +551,7 @@ public class MinigameShop1 implements Listener{
 				descrip.add(ChatColor.RED+ob.getDescription());
 				descrip.add(ChatColor.AQUA+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
 				descrip.add(""+ChatColor.GOLD+ChatColor.BOLD+"["+getProgressBar(ob.getValue(), ob.getCompleteValue(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GOLD+ChatColor.BOLD+"]");
+				descrip.add(ChatColor.GOLD+"Hay un Progreso del "+ChatColor.GREEN+Porcentage(ob.getValue(),ob.getCompleteValue()));
 				descrip.add(""+ChatColor.YELLOW+ChatColor.BOLD+"EN PROGRESO ADVERTENCIA OBJETIVO EN CONTRA ");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
@@ -553,6 +565,7 @@ public class MinigameShop1 implements Listener{
 				descrip.add(""+ChatColor.DARK_RED+ChatColor.BOLD+ob.getDescription());
 				descrip.add(""+ChatColor.AQUA+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
 				descrip.add(""+ChatColor.GOLD+ChatColor.BOLD+"["+getProgressBar(ob.getValue(), ob.getCompleteValue(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GOLD+ChatColor.BOLD+"]");
+				descrip.add(ChatColor.GOLD+"Hay un Progreso del "+ChatColor.GREEN+Porcentage(ob.getValue(),ob.getCompleteValue()));
 				descrip.add(""+ChatColor.DARK_RED+ChatColor.BOLD+"EN PROGRESO UN OBJETIVO PELIGROSO EN CONTRA");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
@@ -566,6 +579,7 @@ public class MinigameShop1 implements Listener{
 				descrip.add(""+ChatColor.GRAY+ChatColor.BOLD+ob.getDescription());
 				descrip.add(""+ChatColor.AQUA+ChatColor.BOLD+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
 				descrip.add(""+ChatColor.GOLD+ChatColor.BOLD+"["+getProgressBar(ob.getValue(), ob.getCompleteValue(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GOLD+ChatColor.BOLD+"]");
+				descrip.add(ChatColor.GOLD+"Hay un Progreso del "+ChatColor.GREEN+Porcentage(ob.getValue(),ob.getCompleteValue()));
 				descrip.add(""+ChatColor.GRAY+ChatColor.BOLD+ChatColor.MAGIC+"OBJETIVO EN CONTRA CONCLUIDO");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
@@ -579,6 +593,7 @@ public class MinigameShop1 implements Listener{
 				descrip.add(""+ChatColor.GRAY+ChatColor.BOLD+ob.getDescription());
 				descrip.add(""+ChatColor.RED+ChatColor.BOLD+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
 				descrip.add(""+ChatColor.GOLD+ChatColor.BOLD+"["+getProgressBar(ob.getValue(), ob.getCompleteValue(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GOLD+ChatColor.BOLD+"]");
+				descrip.add(ChatColor.GOLD+"Hay un Progreso del "+ChatColor.GREEN+Porcentage(ob.getValue(),ob.getCompleteValue()));
 				descrip.add(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"OBJETIVO EN CONTRA CANCELADO");
 				meta.setLore(descrip);
 				item.setItemMeta(meta);
@@ -2027,8 +2042,6 @@ public class MinigameShop1 implements Listener{
 				}
 				
 			}
-			
-		
 				GameConditions gc = new GameConditions(plugin);
 				l2.add("");
 			    l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"Clickeame Para ver mas Detalles.");
@@ -2040,10 +2053,11 @@ public class MinigameShop1 implements Listener{
 		    meta.setLore(l2);
 			item.setItemMeta(meta);
 		}else {
-			  meta.setDisplayName(Nombre);
+			 
 			  item.setType(Material.BARRIER);
-			  l2.add(""+ChatColor.RED+ChatColor.BOLD+"Sin Datos");
-			  l2.add(""+ChatColor.YELLOW+ChatColor.BOLD+"No hay Sistema... ");
+			  meta.setDisplayName(Nombre);
+			  l2.add(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"Sin Datos");
+			  l2.add(""+ChatColor.YELLOW+ChatColor.BOLD+"No hay Sistema...");
 			  meta.setLore(l2);
 			  item.setItemMeta(meta);
 		}

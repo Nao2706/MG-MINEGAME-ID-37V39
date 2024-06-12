@@ -29,6 +29,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Evoker;
 import org.bukkit.entity.Husk;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -441,7 +442,13 @@ public class ResistenceTemp {
 	    		for(Entity e : l) {
 	        		
 	        		if(e.getType() != EntityType.PLAYER && e.getType() != EntityType.PAINTING) {
-	        			e.remove();
+	        			if(e.getType() == EntityType.DROPPED_ITEM) {
+	        				Item ite = (Item) e;
+	        				if(ite.getOwner() != null) continue;
+	        					e.remove();
+	        			    }else {
+	        			    	e.remove();
+	        			    }
 	        		}
 	        	}
 	    	}
@@ -1212,6 +1219,8 @@ public class ResistenceTemp {
     
     	
     }
+    
+    
     
     
 //    public void RemoveArmorStandsAndItemsInMap(Player players) {

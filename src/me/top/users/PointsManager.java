@@ -58,8 +58,8 @@ public class PointsManager {
 				points.set("Players."+player.getName()+".Level",0);
 				points.set("Players."+player.getName()+".Xp",0);
 				points.set("Players."+player.getName()+".Reference-Xp",1000);
-				points.set("Players."+player.getName()+".Streaks",1);
-				points.set("Players."+player.getName()+".Wins",1);
+				points.set("Players."+player.getName()+".Streaks",0);
+				points.set("Players."+player.getName()+".Wins",0);
 				points.set("Players."+player.getName()+".Loses",0);
 				points.set("Players."+player.getName()+".Kills",gp.getKills());
 				points.set("Players."+player.getName()+".Deads",gp.getDeads());
@@ -110,10 +110,10 @@ public class PointsManager {
 			int point = points.getInt("Players."+player.getName()+".Streaks");
 			
 			
-			player.sendMessage("Has Ganado "+val+" de Xp para el modo Ranked.");
-			player.sendMessage(ChatColor.GOLD+"Experiencia Anterior: "+ChatColor.YELLOW+val+ChatColor.RED+" + "+ChatColor.GREEN+xp+ChatColor.RED+" + "+ChatColor.GOLD+"Racha: "+ChatColor.RED+point);
+			//player.sendMessage("Has Ganado "+val+" de Xp para el modo Ranked.");
+			player.sendMessage(ChatColor.GOLD+"Xp Anterior: "+ChatColor.YELLOW+val+ChatColor.RED+" + "+ChatColor.GOLD+"Xp Ganada: "+ChatColor.GREEN+xp+ChatColor.RED+" x "+ChatColor.GOLD+"Racha: "+ChatColor.RED+point+" Experiencia Total: "+ChatColor.GREEN+(xp + val + (point * 100)) );
 			xp = xp + val + (point * 100);
-			player.sendMessage("Total: "+ChatColor.GREEN+xp);
+			
 			
 			
 			if(xp >= refer) {
@@ -127,6 +127,8 @@ public class PointsManager {
 				points.set("Players."+player.getName()+".Level",lvl);
 				points.set("Players."+player.getName()+".Xp",xp);
 				points.set("Players."+player.getName()+".Reference-Xp",refer);
+				player.sendMessage(" "+ChatColor.RED+xp+ChatColor.GOLD+"/"+ChatColor.GREEN+refer);
+				player.sendMessage(getProgressBar(xp, refer,20, '|', ChatColor.GREEN, ChatColor.RED));
 				saveAll();
 				return;
 			}else {

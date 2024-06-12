@@ -498,7 +498,7 @@ public class EventRandoms implements Listener{
 		    Player player = (Player) e.getPlayer();
 		
 		    GameConditions gc = new GameConditions(plugin);
-			gc.LeaveOfTheGame(player);
+			gc.IlegalLeaveMapConexion(player);
 		
 		if(player.isOp()) {
 		//	e.setQuitMessage(ChatColor.GRAY+"["+ChatColor.RED+"!"+ChatColor.GRAY+"]"+ChatColor.RED+" El Admin Salio al server de Test "+ChatColor.GOLD+player.getName());
