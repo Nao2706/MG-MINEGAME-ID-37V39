@@ -463,7 +463,7 @@ public class ResistenceTemp {
 		Block r = block.getRelative(0, 0, 0);
 		int rango = config.getInt("Mob-Spawn-Range") ;
 		
-		if (r.getType().equals(Material.AIR)) {
+		if (r.getType() == (Material.AIR)) {
 			for (int x = -rango; x < rango+1; x++) {
 				for (int y = -rango; y < rango+1; y++) {
 					for (int z = -rango; z < rango+1; z++) {
@@ -554,7 +554,7 @@ public class ResistenceTemp {
 		Block r = block.getRelative(0, 0, 0);
 		int rango = config.getInt("Item-Spawn-Range") ;
 		
-		if (r.getType().equals(Material.AIR)) {
+		if (r.getType() == (Material.AIR)) {
 			for (int x = -rango; x < rango+1; x++) {
 				for (int y = -rango; y < rango+1; y++) {
 					for (int z = -rango; z < rango+1; z++) {
@@ -651,7 +651,7 @@ public class ResistenceTemp {
 			 Logger logger = Logger.getLogger(AdventureTemp.class.getName());
 	       	 logger.log(Level.WARNING,"Coloca primero un valor menor y despues un mayor. "+max+"/"+min);
 		}
-		System.out.println("F");
+		
 		return -1;
 		
 	}
@@ -663,7 +663,7 @@ public class ResistenceTemp {
 		Block r = block.getRelative(0, 0, 0);
 		int rango = config.getInt("Item-Spawn-Range") ;
 		
-		if (r.getType().equals(Material.AIR)) {
+		if (r.getType() == (Material.AIR)) {
 			for (int x = -rango; x < rango+1; x++) {
 				for (int y = -rango; y < rango+1; y++) {
 					for (int z = -rango; z < rango+1; z++) {

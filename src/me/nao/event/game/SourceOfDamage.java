@@ -514,12 +514,12 @@ public class SourceOfDamage implements Listener{
 						//PlayerInfo pi = plugin.getPlayerInfoPoo().get(target);
 						e.setCancelled(true);
 						 ClassIntoGame cs = new ClassIntoGame(plugin);
-						 cs.GamePlayerDeadInArena(target);
+						 cs.GamePlayerDeadInMap(target);
 						 target.setHealth(20);
 						 target.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"INSTAKILL DE AREA", 40, 80, 40);
 						 target.sendMessage(ChatColor.RED+"Moriste por "+ChatColor.YELLOW+"Instakill de Area.");
 											 
-					    gc.SendMessageToUsersOfSameGame(target,ChatColor.GOLD+target.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"InstaKill de Area");
+					    gc.SendMessageToUsersOfSameMap(target,ChatColor.GOLD+target.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"InstaKill de Area");
 						 
 						 
 						 /*
@@ -560,12 +560,12 @@ public class SourceOfDamage implements Listener{
 						//PlayerInfo pi = plugin.getPlayerInfoPoo().get(target);
 						e.setCancelled(true);
 						 ClassIntoGame cs = new ClassIntoGame(plugin);
-						 cs.GamePlayerDeadInArena(target);
+						 cs.GamePlayerDeadInMap(target);
 						 target.setHealth(20);
 						 target.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"INSTAKILL POR COMANDO", 40, 80, 40);
 						 target.sendMessage(ChatColor.RED+"Moriste por "+ChatColor.YELLOW+"Instakill por Comando.");
 						 
-					  gc.SendMessageToUsersOfSameGame(target,ChatColor.GOLD+target.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"InstaKill por Comando.");
+					  gc.SendMessageToUsersOfSameMap(target,ChatColor.GOLD+target.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"InstaKill por Comando.");
 								     	
 								     		 //esto lo veran los que estan en arena
 								 

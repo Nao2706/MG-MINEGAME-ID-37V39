@@ -148,7 +148,7 @@ public class Comandos implements CommandExecutor{
 								 mensaje = mensaje+args[i]+" "; 
 								 
 							 }
-							gc.SendMessageToAllUsersOfSameMissionCommand(null, name, mensaje);
+							gc.SendMessageToAllUsersOfSameMapCommand(null, name, mensaje);
 						}else {
 							gc.SendMessageToUserAndConsole(null,plugin.nombre+ChatColor.GREEN+" Usa /mg message <map> <message>");
 						}
@@ -172,7 +172,7 @@ public class Comandos implements CommandExecutor{
 								 mensaje = mensaje+args[i]+" "; 
 								 
 							 }
-							gc.SendTittleToAllUsersOfSameMissionCommand(null, name, mensaje);
+							gc.SendTittleToAllUsersOfSameMapCommand(null, name, mensaje);
 						}else {
 							gc.SendMessageToUserAndConsole(null,plugin.nombre+ChatColor.GREEN+" Usa /mg tittle <map> <message1 ; message2>");
 						}
@@ -1119,34 +1119,47 @@ public class Comandos implements CommandExecutor{
 						}
 						//==============1
 						
+						MinigameShop1 mg = new MinigameShop1(plugin);
 						
-						for (String key : points1.getConfigurationSection("Players").getKeys(false)) {
-
-							String name = player.getName();
-
-							if (name.equals(key)) {
-							
-								int point = points1.getInt("Players."+player.getName()+".Kills");
+								int lvl = points1.getInt("Players."+player.getName()+".Level");
+								int refer = points1.getInt("Players."+player.getName()+".Reference-Xp");
+								int xp = points1.getInt("Players."+player.getName()+".Xp");
+								int points = points1.getInt("Players."+player.getName()+".Streaks");
+								int pointk = points1.getInt("Players."+player.getName()+".Kills");
 								int point2 = points1.getInt("Players."+player.getName()+".Deads");
 								int point3 = points1.getInt("Players."+player.getName()+".Revive");
 								int point4 = points1.getInt("Players."+player.getName()+".Help-Revive");
+								int point5 = points1.getInt("Players."+player.getName()+".Wins");
+								int point6 = points1.getInt("Players."+player.getName()+".Loses");
+								
 								if (message.getBoolean("Message-My-Points.message")) {
 									List<String> messagep = message.getStringList("Message-My-Points.message-points-texto");
 									for (int j = 0; j < messagep.size(); j++) {
 										String texto = messagep.get(j);
 										player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 50.0F, 1F);
-										player.sendMessage(ChatColor.translateAlternateColorCodes('&',texto.replaceAll("%player%", key).replace("%pointuser%",	String.valueOf(point))
-												.replace("%revive%",String.valueOf(point3))
+										player.sendMessage(ChatColor.translateAlternateColorCodes('&',texto.replaceAll("%player%", player.getName())
+												 .replace("%kills%",	String.valueOf(pointk))
+												 .replace("%revive%",String.valueOf(point3))
 												 .replace("%helprevive%", String.valueOf(point4))
 												 .replace("%deads%",String.valueOf(point2))
-											
+												 .replace("%refer%",String.valueOf(refer))
+												 .replace("%xp%", String.valueOf(xp))
+												 .replace("%streaks%",String.valueOf(points))
+												 .replace("%progress%",""+ChatColor.GRAY+ChatColor.BOLD+"["+mg.getProgressBar(xp,refer, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GRAY+ChatColor.BOLD+"]")
+												 .replace("%porcent%",mg.Porcentage(xp,refer))
+												 .replace("%lvl%",String.valueOf(lvl))
+												 .replace("%wins%",String.valueOf(point5))
+												 .replace("%loses%",String.valueOf(point6))
+												 
+												 
+												 
 												));
 									}
 
 								}
-							}
+							
 
-						}
+						
 						///2
 						if (message.getBoolean("Message-My-Points.message")) {
 							List<String> messagemp2 = message.getStringList("Message-My-Points.message-points-decoracion2");
@@ -1215,7 +1228,7 @@ public class Comandos implements CommandExecutor{
 								 mensaje = mensaje+args[i]+" "; 
 								 
 							 }
-							gc.SendMessageToAllUsersOfSameMissionCommand(player, name, mensaje);
+							gc.SendMessageToAllUsersOfSameMapCommand(player, name, mensaje);
 						}else {
 							player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg message <map> <message>");
 						}
@@ -1242,7 +1255,7 @@ public class Comandos implements CommandExecutor{
 								 mensaje = mensaje+args[i]+" "; 
 								 
 							 }
-							gc.SendTittleToAllUsersOfSameMissionCommand(player, name, mensaje);
+							gc.SendTittleToAllUsersOfSameMapCommand(player, name, mensaje);
 						}else {
 							player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg tittle <map> <message1 ; message2>");
 						}
@@ -1827,8 +1840,23 @@ public class Comandos implements CommandExecutor{
 				
 				 return true;
 				 
-				}
-				else if(args[0].equalsIgnoreCase("join")) {
+				}else if(args[0].equalsIgnoreCase("head")) {
+					if (args.length == 2) {
+						 Material m = Material.matchMaterial(args[1].toUpperCase());
+						 if(m == null) {
+                             player.sendMessage(args[1]+ChatColor.RED+" Ese item no es un material");
+                               return false;
+						 }
+						 
+						 ItemStack ite = new ItemStack(m);
+						 player.getInventory().setHelmet(ite);
+						
+					}else {
+						player.sendMessage(ChatColor.RED+"/mg head <material>");
+					}
+					
+					return true;
+				}else if(args[0].equalsIgnoreCase("join")) {
 					if (args.length == 2) {
 						String name = args[1];
 						FileConfiguration config = plugin.getConfig();

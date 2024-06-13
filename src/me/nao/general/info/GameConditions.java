@@ -120,9 +120,9 @@ public class GameConditions {
 					 min1 = min1 - join.size();
 					  
 					 if(min1 == 1) {
-						 SendMessageToUsersOfSameGame(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugador para empezar.");
+						 SendMessageToUsersOfSameMap(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugador para empezar.");
 					 }else {
-						 SendMessageToUsersOfSameGame(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugadores para empezar.");
+						 SendMessageToUsersOfSameMap(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugadores para empezar.");
 
 						
 					 }
@@ -132,9 +132,9 @@ public class GameConditions {
 			 
 			
 			if(spectador.contains(player.getName())) {
-				SendMessageToUsersOfSameGame(player, ChatColor.WHITE+"El jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" salio del Modo Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size() - 1)+ChatColor.RED+"]");
+				SendMessageToUsersOfSameMap(player, ChatColor.WHITE+"El jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" salio del Modo Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size() - 1)+ChatColor.RED+"]");
 			}else {
-				 SendMessageToUsersOfSameGame(player,
+				SendMessageToUsersOfSameMap(player,
 							ChatColor.YELLOW+"A Salido "+ChatColor.GREEN+player.getName()+ChatColor.RED+" ("+ChatColor.GOLD+(ga.getParticipantes().size()-1)+ChatColor.YELLOW+"/"+ChatColor.GOLD+getMaxPlayerMap(pl.getMapName())+ChatColor.RED+")");			
 			}
 			
@@ -158,9 +158,9 @@ public class GameConditions {
 					 min1 = min1 - join.size();
 					  
 					 if(min1 == 1) {
-						 SendMessageToUsersOfSameGame(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugador para empezar.");
+						 SendMessageToUsersOfSameMap(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugador para empezar.");
 					 }else {
-						 SendMessageToUsersOfSameGame(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugadores para empezar.");
+						 SendMessageToUsersOfSameMap(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugadores para empezar.");
 
 						
 					 }
@@ -171,9 +171,9 @@ public class GameConditions {
 			
 			
 			if(spectador.contains(player.getName())) {
-				SendMessageToUsersOfSameGame(player, ChatColor.WHITE+"El jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" salio del Modo Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size() - 1)+ChatColor.RED+"]");
+				SendMessageToUsersOfSameMap(player, ChatColor.WHITE+"El jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" salio del Modo Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size() - 1)+ChatColor.RED+"]");
 			}else {
-				 SendMessageToUsersOfSameGame(player,
+				 SendMessageToUsersOfSameMap(player,
 							ChatColor.YELLOW+"A Salido "+ChatColor.GREEN+player.getName()+ChatColor.RED+" ("+ChatColor.GOLD+(gn.getParticipantes().size()-1)+ChatColor.YELLOW+"/"+ChatColor.GOLD+getMaxPlayerMap(pl.getMapName())+ChatColor.RED+")");			
 			}
 			 String mt = mision.getString("Start.Tittle-of-Mision"); 
@@ -228,6 +228,7 @@ public void IlegalLeaveMapConexion(Player player) {
 			if(ga.getMuerto().contains(player.getName())) {
 				LeaveOfTheGame(player);
 			}else{
+				
 				Block block = player.getLocation().getBlock();
 				Block b = block.getRelative(0, -2, 0);
 				if(!(b.getType() == Material.STRUCTURE_BLOCK)) {
@@ -235,9 +236,10 @@ public void IlegalLeaveMapConexion(Player player) {
 					ci.PlayerDropAllItems(player);
 					LeaveOfTheGame(player);
 					 return;
-				}else {
+				}else{
 					LeaveOfTheGame(player);
 				}
+				
 			}
 		}
 	}
@@ -796,7 +798,7 @@ public void IlegalLeaveMapConexion(Player player) {
 
 				 player.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.YELLOW+" Te has unido"+ChatColor.RED+" ("+ChatColor.GOLD+ga.getParticipantes().size()+ChatColor.YELLOW+"/"+ChatColor.GOLD+ getMaxPlayerMap(map)+ChatColor.RED+")");
 
-				 SendMessageToUsersOfSameGame(player,
+				 SendMessageToUsersOfSameMap(player,
 				ChatColor.YELLOW+"Se a unido "+ChatColor.GREEN+player.getName()+ChatColor.RED+" ("+ChatColor.GOLD+ga.getParticipantes().size()+ChatColor.YELLOW+"/"+ChatColor.GOLD+getMaxPlayerMap(map)+ChatColor.RED+")");
 				
 				 if(getMinPlayerMap(map) > ga.getParticipantes().size()) {
@@ -806,10 +808,10 @@ public void IlegalLeaveMapConexion(Player player) {
 					 //TEXTO 
 					 if(min1 == 1) {
 						 player.sendMessage(ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugador para empezar.");
-						 SendMessageToUsersOfSameGame(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugador para empezar.");
+						 SendMessageToUsersOfSameMap(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugador para empezar.");
 					 }else {
 						 player.sendMessage(ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugadores para empezar.");
-						 SendMessageToUsersOfSameGame(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugadores para empezar.");
+						 SendMessageToUsersOfSameMap(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugadores para empezar.");
 
 					 } 
 			   }
@@ -818,9 +820,9 @@ public void IlegalLeaveMapConexion(Player player) {
 				ms.setEstadopartida(EstadoPartida.COMENZANDO);
 				if(ms.getEstopartida() == EstadoPartida.COMENZANDO) {
 				     int  segundo = config.getInt("CountDownPreLobby");
-					 player.sendMessage(ChatColor.GREEN+"Se a alcanzado el minimo de Jugadores necesarios, la partida Comenzara en "+ChatColor.RED+segundo+ChatColor.GREEN+" segundos.");
+					// player.sendMessage(ChatColor.GREEN+"Se a alcanzado el minimo de Jugadores necesarios, la partida Comenzara en "+ChatColor.RED+segundo+ChatColor.GREEN+" segundos.");
 					 
-					 SendMessageToUsersOfSameGame(player, ChatColor.GREEN+"Se a alcanzado el minimo de Jugadores necesarios, la partida Comenzara en "+ChatColor.RED+segundo+ChatColor.GREEN+" segundos.");
+					 SendMessageToAllUsersOfSameMap(player, ChatColor.GREEN+"Se a alcanzado el minimo de Jugadores necesarios, la partida Comenzara en "+ChatColor.RED+segundo+ChatColor.GREEN+" segundos.");
 					// TempInGame2 t = new TempInGame2(plugin);
 			     	// t.Inicio(map);
 				}
@@ -2009,7 +2011,7 @@ public void IlegalLeaveMapConexion(Player player) {
 				GameAdventure ga = (GameAdventure) ms;
 				 List<String> spectador = ga.getSpectator();
 				 player.sendMessage(ChatColor.GREEN+"Estas como Espectador en el Mapa: "+ChatColor.GOLD+map);
-				 SendMessageToUsersOfSameGame(player, ChatColor.WHITE+"El Jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" se Unio como Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size())+ChatColor.RED+"]");
+				 SendMessageToUsersOfSameMap(player, ChatColor.WHITE+"El Jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" se Unio como Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size())+ChatColor.RED+"]");
 				 ClassArena ca = new ClassArena(plugin);
 				 ca.TptoSpawnSpectator(player, map);
 		 }
@@ -2019,7 +2021,7 @@ public void IlegalLeaveMapConexion(Player player) {
 	}
 	
 	//TODO CHAT
-	public void SendMessageToAllUsersOfSameMission(Player player ,String text) {
+	public void SendMessageToAllUsersOfSameMap(Player player ,String text) {
 		
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		String arenaName = pl.getMapName();
@@ -2051,7 +2053,7 @@ public void IlegalLeaveMapConexion(Player player) {
 	
 	
 	//TODO CHAT
-	public void SendMessageToAllUsersOfSameMissionCommand(Player player, String map ,String text) {
+	public void SendMessageToAllUsersOfSameMapCommand(Player player, String map ,String text) {
 		
 		if(!isMapinGame(map)) {
 			
@@ -2095,7 +2097,7 @@ public void IlegalLeaveMapConexion(Player player) {
 	
 	//mg message Tutorial hola que hacen ???
 	//mg tittle Tutorial hola que hacen ??? ; que mas
-	public void SendTittleToAllUsersOfSameMissionCommand(Player player, String map ,String text) {
+	public void SendTittleToAllUsersOfSameMapCommand(Player player, String map ,String text) {
 		
 		if(!isMapinGame(map)) {
 			
@@ -2150,7 +2152,8 @@ public void IlegalLeaveMapConexion(Player player) {
 	}
 	
 	
-	public void SendMessageToUsersOfSameGame(Player player ,String text) {
+	//LA DIFERENCIA ES QUE EN ESTE OMITE TU NOMBRE EN EL ALL PLAYERS ES UN MENSAJE GLOBAL PARA TODOS LOS JUGADORES INCLUYENDOTE
+	public void SendMessageToUsersOfSameMap(Player player ,String text) {
 		
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		String arenaName = pl.getMapName();
@@ -2171,7 +2174,7 @@ public void IlegalLeaveMapConexion(Player player) {
 		
 	}
 	
-	public void SendMessageToAllPlayersInGame(String map,String text) {
+	public void SendMessageToAllPlayersInMap(String map,String text) {
 		
 		
 		GameInfo ms = plugin.getGameInfoPoo().get(map);
@@ -2967,7 +2970,7 @@ public void IlegalLeaveMapConexion(Player player) {
 						if(player != null) {
 							Player target = Bukkit.getPlayerExact(player);
 							if(target != null && gc.isPlayerinGame(target)) {
-								SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado gracias a "+target.getName()+" "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+								SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado gracias a "+target.getName()+" "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
 
 								if(obj.getParticipants().containsKey(target)) {
 									obj.getParticipants().put(target,obj.getParticipants().get(target)+value);
@@ -2975,11 +2978,11 @@ public void IlegalLeaveMapConexion(Player player) {
 									obj.getParticipants().put(target,value);
 								}
 							}else {
-								SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+								SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
 		
 							}
 						}else {
-							SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+							SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
 							
 						}
 						
@@ -2999,7 +3002,7 @@ public void IlegalLeaveMapConexion(Player player) {
 						if(player != null) {
 							Player target = Bukkit.getPlayerExact(player);
 							if(target != null && gc.isPlayerinGame(target)) {
-								SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado gracias a "+target.getName()+" "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+								SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado gracias a "+target.getName()+" "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
 
 								if(obj.getParticipants().containsKey(target)) {
 									obj.getParticipants().put(target,obj.getParticipants().get(target)+value);
@@ -3007,11 +3010,11 @@ public void IlegalLeaveMapConexion(Player player) {
 									obj.getParticipants().put(target,value);
 								}
 							}else {
-								SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+								SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
 		
 							}
 						}else {
-							SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+							SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
 							
 						}
 						
@@ -3033,7 +3036,7 @@ public void IlegalLeaveMapConexion(Player player) {
 						if(player != null) {
 							Player target = Bukkit.getPlayerExact(player);
 							if(target != null && gc.isPlayerinGame(target)) {
-								SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado gracias a "+target.getName()+" "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+								SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado gracias a "+target.getName()+" "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
 
 								if(obj.getParticipants().containsKey(target)) {
 									obj.getParticipants().put(target,obj.getParticipants().get(target)+value);
@@ -3041,11 +3044,11 @@ public void IlegalLeaveMapConexion(Player player) {
 									obj.getParticipants().put(target,value);
 								}
 							}else {
-								SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+								SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
 		
 							}
 						}else {
-							SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+							SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
 							
 						}
 						
@@ -3062,7 +3065,7 @@ public void IlegalLeaveMapConexion(Player player) {
 						if(player != null) {
 							Player target = Bukkit.getPlayerExact(player);
 							if(target != null && gc.isPlayerinGame(target)) {
-								SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado gracias a "+target.getName()+" "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+								SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado gracias a "+target.getName()+" "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
 
 								if(obj.getParticipants().containsKey(target)) {
 									obj.getParticipants().put(target,obj.getParticipants().get(target)+value);
@@ -3070,11 +3073,11 @@ public void IlegalLeaveMapConexion(Player player) {
 									obj.getParticipants().put(target,value);
 								}
 							}else {
-								SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+								SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
 		
 							}
 						}else {
-							SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+							SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
 							
 						}
 						
@@ -3116,7 +3119,7 @@ public void IlegalLeaveMapConexion(Player player) {
 			ExecuteMultipleCommandsInConsole(null,objetivesaction);
    		}	
 		
-		SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+oj.getNombre()+ChatColor.GREEN+" a sido Completado "+ChatColor.GOLD+oj.getCompleteValue()+"/"+oj.getCompleteValue());
+   		SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+oj.getNombre()+ChatColor.GREEN+" a sido Completado "+ChatColor.GOLD+oj.getCompleteValue()+"/"+oj.getCompleteValue());
 	}
 	
 	public void ObjetiveGeneralActionsIncomplete(String map,ObjetivesMG oj,GameInfo gi)  {
@@ -3139,7 +3142,7 @@ public void IlegalLeaveMapConexion(Player player) {
 			}
 			ExecuteMultipleCommandsInConsole(null,objetivesaction);
    		}
-		SendMessageToAllPlayersInGame(map, ChatColor.RED+"El progreso del Ojetivo "+ChatColor.GOLD+oj.getNombre()+ChatColor.RED+" no fue Completado "+ChatColor.GOLD+oj.getIncompleteValue()+"/"+oj.getIncompleteValue());
+   		SendMessageToAllPlayersInMap(map, ChatColor.RED+"El progreso del Ojetivo "+ChatColor.GOLD+oj.getNombre()+ChatColor.RED+" no fue Completado "+ChatColor.GOLD+oj.getIncompleteValue()+"/"+oj.getIncompleteValue());
 	}
 	
 
@@ -3166,12 +3169,12 @@ public void IlegalLeaveMapConexion(Player player) {
 			switch(ob) {
 			case WAITING:
 				mo.setObjetiveType(ObjetiveType.WAITING);
-				SendMessageToAllPlayersInGame(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Esperando.");
+				SendMessageToAllPlayersInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Esperando.");
 				
 				if(player != null) {
 					Player target = Bukkit.getPlayerExact(player);
 					if(target != null && gc.isPlayerinGame(target)) {
-						SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getNombre()+ChatColor.GREEN+" cambio a Esperando gracias a "+target.getName());
+						SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getNombre()+ChatColor.GREEN+" cambio a Esperando gracias a "+target.getName());
 
 					}
 				}
@@ -3179,7 +3182,7 @@ public void IlegalLeaveMapConexion(Player player) {
 				break;
 			case COMPLETE:
 				mo.setObjetiveType(ObjetiveType.COMPLETE);
-				SendMessageToAllPlayersInGame(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" fue Completado.");
+				SendMessageToAllPlayersInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" fue Completado.");
 				mo.setValue(mo.getCompleteValue());
 				ObjetiveGeneralActionsComplete(map,mo,gi);
 				isCompleteAllPrimaryObjetiveForReward(map);
@@ -3188,7 +3191,7 @@ public void IlegalLeaveMapConexion(Player player) {
 				if(player != null) {
 					Player target = Bukkit.getPlayerExact(player);
 					if(target != null && gc.isPlayerinGame(target)) {
-						SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getNombre()+ChatColor.GREEN+" fue Completado gracias a "+target.getName()+" "+ChatColor.GOLD+mo.getCompleteValue()+"/"+mo.getCompleteValue());
+						SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getNombre()+ChatColor.GREEN+" fue Completado gracias a "+target.getName()+" "+ChatColor.GOLD+mo.getCompleteValue()+"/"+mo.getCompleteValue());
 
 						mo.getParticipants().put(target,mo.getParticipants().get(target)+1);
 						
@@ -3198,14 +3201,14 @@ public void IlegalLeaveMapConexion(Player player) {
 				break;
 			case INCOMPLETE:
 				mo.setObjetiveType(ObjetiveType.INCOMPLETE);
-				SendMessageToAllPlayersInGame(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Incompleto.");
+				SendMessageToAllPlayersInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Incompleto.");
 				mo.setValue(mo.getIncompleteValue());
 				ObjetiveGeneralActionsIncomplete(map,mo,gi);
 				
 				if(player != null) {
 					Player target = Bukkit.getPlayerExact(player);
 					if(target != null && gc.isPlayerinGame(target)) {
-						SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getNombre()+ChatColor.GREEN+" cambio a Incompleto gracias a "+target.getName());
+						SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getNombre()+ChatColor.GREEN+" cambio a Incompleto gracias a "+target.getName());
 
 						mo.getParticipants().put(target,mo.getIncompleteValue());
 						
@@ -3215,27 +3218,27 @@ public void IlegalLeaveMapConexion(Player player) {
 				break;
 			case DANGER:
 				mo.setObjetiveType(ObjetiveType.DANGER);
-				SendMessageToAllPlayersInGame(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Peligro.");
+				SendMessageToAllPlayersInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Peligro.");
 				break;
 			case UNKNOW:
 				mo.setObjetiveType(ObjetiveType.UNKNOW);
-				SendMessageToAllPlayersInGame(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Desconocido.");
+				SendMessageToAllPlayersInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Desconocido.");
 				
 				if(player != null) {
 					Player target = Bukkit.getPlayerExact(player);
 					if(target != null && gc.isPlayerinGame(target)) {
-						SendMessageToAllPlayersInGame(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getNombre()+ChatColor.GREEN+" cambio a Desconocido gracias a "+target.getName());
+						SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getNombre()+ChatColor.GREEN+" cambio a Desconocido gracias a "+target.getName());
 
 					}
 				}
 				break;
 			case WARNING:
 				mo.setObjetiveType(ObjetiveType.WARNING);
-				SendMessageToAllPlayersInGame(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Advertencia.");
+				SendMessageToAllPlayersInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Advertencia.");
 				break;
 			case RESET:
 				mo.setObjetiveType(ObjetiveType.WAITING);
-				SendMessageToAllPlayersInGame(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" se Resteo.");
+				SendMessageToAllPlayersInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" se Resteo.");
 				mo.setValue(mo.getStartValue());
 				if(mo.getPriority() == 1) {
 					gi.setObjetivesPrimaryComplete(false);
@@ -3246,13 +3249,13 @@ public void IlegalLeaveMapConexion(Player player) {
 				break;
 			case CONCLUDED:
 				mo.setObjetiveType(ObjetiveType.CONCLUDED);
-				SendMessageToAllPlayersInGame(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" a Concluido.");
+				SendMessageToAllPlayersInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" a Concluido.");
 				mo.setValue(mo.getCompleteValue());
 				ObjetiveGeneralActionsComplete(map,mo,gi);
 				break;
 			
 			default:
-				SendMessageToAllPlayersInGame(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" no tuvo Cambios.");
+				SendMessageToAllPlayersInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" no tuvo Cambios.");
 			}
 		}
 		

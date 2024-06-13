@@ -82,7 +82,7 @@ public class AdventureTemp {
 	
 	
 	public void Inicio(String name) {
-		  
+		
 		FileConfiguration config = plugin.getConfig();
 		GameConditions gc = new GameConditions(plugin);
 		BukkitScheduler sh = Bukkit.getServer().getScheduler();
@@ -505,7 +505,7 @@ public class AdventureTemp {
 		Block r = block.getRelative(0, 0, 0);
 		int rango = config.getInt("Mob-Spawn-Range") ;
 		
-		if (r.getType().equals(Material.AIR)) {
+		if (r.getType() == Material.AIR) {
 			for (int x = -rango; x < rango+1; x++) {
 				for (int y = -rango; y < rango+1; y++) {
 					for (int z = -rango; z < rango+1; z++) {
@@ -594,7 +594,7 @@ public class AdventureTemp {
 		Block r = block.getRelative(0, 0, 0);
 		int rango = config.getInt("Item-Spawn-Range") ;
 		
-		if (r.getType().equals(Material.AIR)) {
+		if (r.getType() == Material.AIR) {
 			for (int x = -rango; x < rango+1; x++) {
 				for (int y = -rango; y < rango+1; y++) {
 					for (int z = -rango; z < rango+1; z++) {
@@ -707,7 +707,7 @@ public class AdventureTemp {
 		Block r = block.getRelative(0, 0, 0);
 		int rango = config.getInt("Item-Spawn-Range") ;
 		
-		if (r.getType().equals(Material.AIR)) {
+		if (r.getType() == Material.AIR) {
 			for (int x = -rango; x < rango+1; x++) {
 				for (int y = -rango; y < rango+1; y++) {
 					for (int z = -rango; z < rango+1; z++) {

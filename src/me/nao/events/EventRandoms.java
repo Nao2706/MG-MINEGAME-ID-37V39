@@ -451,7 +451,7 @@ public class EventRandoms implements Listener{
 							v.setTicksLived(1200);
 							removeItemstackCustom(player, Items.MEDICOP.getValue());
 							
-							gc.SendMessageToUsersOfSameGame(player, ChatColor.AQUA+"El Jugador "+ChatColor.GREEN+player.getName()+ChatColor.AQUA+" a un Medico");
+							gc.SendMessageToUsersOfSameMap(player, ChatColor.AQUA+"El Jugador "+ChatColor.GREEN+player.getName()+ChatColor.AQUA+" a un Medico");
 							
 							
 							
@@ -1142,14 +1142,14 @@ public class EventRandoms implements Listener{
 						
 						if(alive1.contains(player.getName())) {
 		
-							cm.SendMessageToAllUsersOfSameMission(player, ""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.GREEN+ChatColor.BOLD+"VIVO"+ChatColor.DARK_GRAY+ChatColor.BOLD+"] "+ra.getRank(player)+ChatColor.WHITE+player.getName()+": "+ChatColor.GREEN+message);
+							cm.SendMessageToAllUsersOfSameMap(player, ""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.GREEN+ChatColor.BOLD+"VIVO"+ChatColor.DARK_GRAY+ChatColor.BOLD+"] "+ra.getRank(player)+ChatColor.WHITE+player.getName()+": "+ChatColor.GREEN+message);
 						}if(deads1.contains(player.getName())) {
 		
-							cm.SendMessageToAllUsersOfSameMission(player, ""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.RED+ChatColor.BOLD+"MUERTO"+ChatColor.DARK_GRAY+ChatColor.BOLD+"] "+ra.getRank(player)+ChatColor.WHITE+player.getName()+": "+ChatColor.YELLOW+message);
+							cm.SendMessageToAllUsersOfSameMap(player, ""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.RED+ChatColor.BOLD+"MUERTO"+ChatColor.DARK_GRAY+ChatColor.BOLD+"] "+ra.getRank(player)+ChatColor.WHITE+player.getName()+": "+ChatColor.YELLOW+message);
 		
 						}if(spec.contains(player.getName())) {
 		
-							cm.SendMessageToAllUsersOfSameMission(player, ""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.WHITE+ChatColor.BOLD+"ESPECTADOR"+ChatColor.DARK_GRAY+ChatColor.BOLD+"] "+ra.getRank(player)+ChatColor.WHITE+player.getName()+": "+ChatColor.GRAY+message);
+							cm.SendMessageToAllUsersOfSameMap(player, ""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.WHITE+ChatColor.BOLD+"ESPECTADOR"+ChatColor.DARK_GRAY+ChatColor.BOLD+"] "+ra.getRank(player)+ChatColor.WHITE+player.getName()+": "+ChatColor.GRAY+message);
 						}
 
 					 e.setCancelled(true);
@@ -2715,7 +2715,7 @@ public class EventRandoms implements Listener{
 														player.sendMessage(ChatColor.YELLOW+"Necesitas que todos los jugadores vivos esten cerca para avanzar.");
 														
 														
-													gc.SendMessageToUsersOfSameGame(player, ChatColor.GREEN+player.getName()+ChatColor.RED+" Solicita una reunion para poder activar un Evento.");
+													gc.SendMessageToUsersOfSameMap(player, ChatColor.GREEN+player.getName()+ChatColor.RED+" Solicita una reunion para poder activar un Evento.");
 															
 															 }
 												  
