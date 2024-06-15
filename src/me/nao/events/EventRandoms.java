@@ -129,13 +129,18 @@ public class EventRandoms implements Listener{
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void ClickEntity(PlayerInteractAtEntityEvent e) {
 		Player player = (Player) e.getPlayer();
+		GameConditions gc = new GameConditions(plugin);
 		
-		if(plugin.getPlayerInfoPoo().containsKey(player)) {
+		if(gc.isPlayerinGame(player)) {
 			if(!player.getPassengers().isEmpty() ) {
 				player.sendMessage(ChatColor.RED+"Ya tienes una Entidad encima.");
 				return;
 			}
-			
+			PlayerInfo pi = plugin.getPlayerInfoPoo().get(player);
+			GameInfo gi = plugin.getGameInfoPoo().get(pi.getMapName());
+			if(gi.getEstopartida() != EstadoPartida.JUGANDO) {
+				return;
+			}
 				Entity ent = e.getRightClicked();
 				if(ent.getType() == EntityType.PLAYER) {
 					Player target = (Player) ent;
@@ -339,7 +344,7 @@ public class EventRandoms implements Listener{
 					if (e.getItem() != null) {
 						
 						
-						if (e.getItem().getItemMeta().equals(Items.JEDIP.getValue().getItemMeta())) {
+						if (e.getItem().isSimilar(Items.JEDIP.getValue())) {
 				
 							player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 20.0F, 1F);
 							for(Entity e1 : getNearbyEntites(player.getLocation(),20)) {
@@ -350,7 +355,7 @@ public class EventRandoms implements Listener{
 							removeItemstackCustom(player, Items.JEDIP.getValue());
 				       }
 						
-						if (e.getItem().getItemMeta().equals(Items.CHECKPOINTP.getValue().getItemMeta())) {
+						if (e.getItem().isSimilar(Items.CHECKPOINTP.getValue())) {
 							
 							
 							plugin.getCheckPoint().put(player, player.getLocation());
@@ -360,7 +365,7 @@ public class EventRandoms implements Listener{
 						}
 						 
 						
-					if (e.getItem().getItemMeta().equals(Items.RAINARROW.getValue().getItemMeta())) {
+					if (e.getItem().isSimilar(Items.RAINARROW.getValue())) {
 							player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 20.0F, 1F);
 						
 						//player.launchProjectile(org.bukkit.entity.EnderPearl.class);
@@ -373,13 +378,18 @@ public class EventRandoms implements Listener{
 							LaunchRandomArrow(player, -5, -5);
 						}
 						
-					if (e.getItem().getItemMeta().equals(Items.STOREXPRESSP.getValue().getItemMeta())) {
+					if (e.getItem().isSimilar(Items.STOREXPRESSP.getValue())) {
 																		MinigameShop1 inv = new MinigameShop1(plugin);
 									inv.createInv(player);
 									removeItemstackCustom(player, Items.STOREXPRESSP.getValue());		
 						}
+					if (e.getItem().isSimilar(Items.OBJETIVOSP.getValue())) {
+						MinigameShop1 ms = new MinigameShop1(plugin);
+						ms.ShowObjetives(player);
+					}
+
 						
-					if (e.getItem().getItemMeta().equals(Items.REFUERZOSP.getValue().getItemMeta())) {
+					if (e.getItem().isSimilar(Items.REFUERZOSP.getValue())) {
 						Location loc = player.getLocation();
 						Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.IRON_GOLEM);
 						IronGolem ih = (IronGolem) h1;
@@ -389,7 +399,7 @@ public class EventRandoms implements Listener{
 						
 			          }
 					
-					if (e.getItem().getItemMeta().equals(Items.REFUERZOS2P.getValue().getItemMeta())) {
+					if (e.getItem().isSimilar(Items.REFUERZOS2P.getValue())) {
 						Location loc = player.getLocation();
 						Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.SNOWMAN);
 						Snowman ih = (Snowman) h1;
@@ -398,7 +408,7 @@ public class EventRandoms implements Listener{
 						
 						
 			         }
-					if (e.getItem().getItemMeta().equals(Items.BAZUKAP.getValue().getItemMeta())) {
+					if (e.getItem().isSimilar(Items.BAZUKAP.getValue())) {
 						if(player.getInventory().containsAtLeast(Items.COHETEP.getValue(), 1)) {
 							removeItemstackCustom(player, Items.COHETEP.getValue());
 							Location loc = player.getLocation();
@@ -413,7 +423,7 @@ public class EventRandoms implements Listener{
 
 						}
 					}
-					if (e.getItem().getItemMeta().equals(Items.ARROWLP.getValue().getItemMeta())) {
+					if (e.getItem().isSimilar(Items.ARROWLP.getValue())) {
 							if(player.getInventory().containsAtLeast(new ItemStack(Material.ARROW), 2)) {
 									Location loc = player.getLocation();
 									Location loc2 = player.getLocation();
@@ -442,7 +452,7 @@ public class EventRandoms implements Listener{
 					}
 					
 					
-						if (e.getItem().getItemMeta().equals(Items.MEDICOP.getValue().getItemMeta())) {
+						if (e.getItem().isSimilar(Items.MEDICOP.getValue())) {
 							Location loc = player.getLocation();
 							Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.VILLAGER);
 							Villager v = (Villager) h1;
@@ -1437,6 +1447,9 @@ public class EventRandoms implements Listener{
 		public void spawnLootEnchantedTable(Player player,Location l) {
 				FileConfiguration config = plugin.getConfig();
 				Random ra = new Random();
+				GameConditions gc = new GameConditions(plugin);
+				PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+				String map = pl.getMapName();
 				// hierro oro diamante esmeralda netherite creeper zombi
 				int r = ra.nextInt(7);
 				int low = 20;
@@ -1446,6 +1459,7 @@ public class EventRandoms implements Listener{
 				List<Entity> list = getNearbyEntitesItems(l, 5);
 				//System.out.println("Lista 2 "+list.size());
 				if(list.size() >= config.getInt("Loot-Table-Limit")) {
+					gc.SendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+ChatColor.RED+" Tu ambicion sera tu perdicion.\nAnti-Looter-2 y Suicida Invocados");
 					l.getWorld().spawnParticle(Particle.FLAME, l.add(0.5, 1, 0.5),	/* N DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
 					player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 20.0F, 0F);
 					LivingEntity entidad = (LivingEntity) l.getWorld().spawnEntity(l.add(0.5,1,0.5), EntityType.ZOMBIE);
@@ -1479,6 +1493,8 @@ public class EventRandoms implements Listener{
 				}
 				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND), 100)) {
+					
+					gc.SendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+ChatColor.RED+" recibio un Castigo por tener muchos Diamantes.\nAnti-Looter y Guardia del Loot Invocados");
 					l.getWorld().spawnParticle(Particle.FLAME, l.add(0.5, 1, 0.5),	/* N DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
 					player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 20.0F, 0F);
 					LivingEntity entidad = (LivingEntity) l.getWorld().spawnEntity(l.add(0.5,1,0.5), EntityType.ZOMBIE);
@@ -1508,6 +1524,9 @@ public class EventRandoms implements Listener{
 				}
 				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.GOLD_INGOT), 100)) {
+					
+					gc.SendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+ChatColor.RED+" recibio un Castigo por tener mucho Oro.\nGuardias del Loot Invocados");
+
 					l.getWorld().spawnParticle(Particle.FLAME, l.add(0.5, 1, 0.5),	/* N DE PARTICULAS */5, 0.5, 1, 0.5, /* velocidad */0, null, true);
 
 					player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 20.0F, 0F);

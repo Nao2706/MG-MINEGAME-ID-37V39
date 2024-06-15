@@ -174,7 +174,7 @@ public class InfectedTemp {
 				    		  
 				    			ms.setEstadopartida(EstadoPartida.JUGANDO);
 				    			ClassArena c = new ClassArena(plugin);
-							    c.TptoSpawnArena(target, name);
+							    c.TptoSpawnMap(target, name);
 				    			
 				    		  	}
 						  

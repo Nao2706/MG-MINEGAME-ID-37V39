@@ -1081,7 +1081,10 @@ public class MinigameShop1 implements Listener{
 				  player.sendMessage(ChatColor.RED+"Tu Inventario esta lleno has Espacio.");
 				  return;
 			  }
-		
+			 if(item.isSimilar(Items.OBJETIVOS.getValue())) {
+				 player.getInventory().addItem(Items.OBJETIVOSP.getValue());
+				 return;
+			 }
 			if(item.isSimilar(Items.ESPADAENCAN1.getValue())) {
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 5)) {
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1633,7 +1636,8 @@ public class MinigameShop1 implements Listener{
 		//los itemstacks estan como ejemplo puesto que sale mejor hacer o dedicar una clase para items 
 		Inventory inv = Bukkit.createInventory(null,54,""+ChatColor.DARK_GREEN+ChatColor.BOLD+"TIENDA");
 		MenuDecoration(inv,Material.BLACK_STAINED_GLASS_PANE);
-		
+		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+		GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
 		
 		inv.setItem(11, Items.ARMAS.getValue());
 		inv.setItem(13, Items.ARMAS2.getValue());
@@ -1641,7 +1645,12 @@ public class MinigameShop1 implements Listener{
 		inv.setItem(21, Items.COMIDA.getValue());
 		inv.setItem(23, Items.ESPECIALES.getValue());
 		inv.setItem(40, Items.CERRAR.getValue());
-
+		
+		List<ObjetivesMG> l = gi.getGameObjetivesMg().getObjetives();
+		if(!l.stream().filter(o -> o.getNombre().equals("Mapa Con Objetivos Borrados")).findFirst().isPresent()) {
+			inv.setItem(31, Items.OBJETIVOS.getValue());
+		}
+		//31
 		// slot 49 es el centro verticalmente 
 		//inv.setItem(49, Items.CERRAR.getValue());
 		//tope es 53 no hay 54

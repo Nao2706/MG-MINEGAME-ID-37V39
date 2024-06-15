@@ -32,6 +32,7 @@ import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.PlayerInfo;
 import me.nao.main.game.Main;
+import me.nao.shop.Items;
 import me.nao.shop.MinigameShop1;
 import me.nao.teamsmg.MgTeams;
 import me.top.users.PointsManager;
@@ -85,7 +86,19 @@ public class ClassIntoGame {
 					cm.RevivePlayerToGame(target, mapa);
 				
 					cm.setKitMg(target);
-					
+					if(cm.HasObjetives(mapa)) {
+						if(player.getInventory().getItemInMainHand() != null) {
+							if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
+								player.getInventory().setItemInMainHand(Items.OBJETIVOSP.getValue());
+								
+							}else {
+								ItemStack item = player.getInventory().getItemInMainHand();
+								player.getWorld().dropItem(player.getLocation(),item);
+								player.getInventory().setItemInMainHand(Items.OBJETIVOSP.getValue());
+							}
+							
+						}
+					}
 					MgTeams t = new MgTeams(plugin);
 					t.JoinTeamLifeMG(target);
 					
@@ -218,7 +231,7 @@ public class ClassIntoGame {
 			}else if(gmc.hasAntiVoid(player) && gi.getGameType() != GameType.NEXO){
 				
 				ClassArena c = new ClassArena(plugin);
-				c.TptoSpawnArenaSimple(player);
+				c.TptoSpawnMapSimple(player);
 				player.sendTitle(ChatColor.GREEN+"Anti Void Activado",ChatColor.GREEN+"No te Caigas",20,60,20);
 
 				player.sendMessage(ChatColor.GREEN+"-Que suerte el Mapa tiene Anti Void pero Siempre Regresaras al Inicio del Mapa Ojo con el Tiempo.");
@@ -369,7 +382,7 @@ public class ClassIntoGame {
 			}else {
 				if(gm.getGameType() == GameType.ADVENTURE) {
 				
-					c.TptoSpawnArenaSimple(player);
+					c.TptoSpawnMapSimple(player);
 					player.sendMessage(ChatColor.RED+"Ups me temo que sino Completas los Objetivos Primarios no podras Ganar.");
 				}if(gm.getGameType() == GameType.RESISTENCE) {
 					GamePlayerLost(player);
@@ -395,7 +408,7 @@ public class ClassIntoGame {
 			}else {
 				
 				if(gm.getGameType() == GameType.ADVENTURE) {
-					c.TptoSpawnArenaSimple(player);
+					c.TptoSpawnMapSimple(player);
 					player.sendMessage(ChatColor.RED+"Ups me temo que sino Completas los Objetivos Secundarios no podras Ganar.");
 				}if(gm.getGameType() == GameType.RESISTENCE) {
 					GamePlayerLost(player);
@@ -421,7 +434,7 @@ public class ClassIntoGame {
 				isTheGameRanked(player,mapa);
 			}else {
 				if(gm.getGameType() == GameType.ADVENTURE) {
-					c.TptoSpawnArenaSimple(player);
+					c.TptoSpawnMapSimple(player);
 					player.sendMessage(ChatColor.RED+"Ups me temo que sino Completas los Objetivos Primarios y Secundarios no podras Ganar.");
 				}if(gm.getGameType() == GameType.RESISTENCE) {
 					GamePlayerLost(player);

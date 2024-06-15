@@ -48,6 +48,10 @@ import org.bukkit.inventory.meta.ItemMeta;
             ESPECIALES(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"ESPECIALES", Material.BEACON,null, 1, ChatColor.GREEN+"Items con acciones Especiales."),
 
             
+            OBJETIVOS(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"OBJETIVOS DEL MAPA", Material.BOOK,null, 1, ChatColor.GREEN+"Mira los Objetivos que tenga el Mapa. ", ChatColor.RED+"Clickeame para Obtener un Libro. "),
+            OBJETIVOSP(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"OBJETIVOS DEL MAPA", Material.BOOK,null, 1, ChatColor.GREEN+"Mira los Objetivos que tenga el Mapa. ", ChatColor.RED+"Clickeame. "),
+
+            
             RAINARROW(""+ChatColor.GREEN+ChatColor.BOLD+"MULTIPLE ARROW", Material.JIGSAW,null, 1, ChatColor.GREEN+"Click Derecho para "+ChatColor.RED+"Lanzar Multiples Flechas "),
 
 

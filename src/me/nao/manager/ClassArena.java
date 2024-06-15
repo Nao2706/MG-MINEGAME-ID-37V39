@@ -27,6 +27,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
@@ -35,7 +36,7 @@ import me.nao.general.info.GameType;
 import me.nao.general.info.ObjetiveType;
 import me.nao.general.info.PlayerInfo;
 import me.nao.main.game.Main;
-
+import me.nao.shop.Items;
 import me.nao.timers.Countdown;
 
 
@@ -740,7 +741,7 @@ public class ClassArena {
    }
    
     
-   public void TptoSpawnArenaSimple(Player player){
+   public void TptoSpawnMapSimple(Player player){
 	   GameConditions gc = new GameConditions(plugin);
 	   PlayerInfo pi = plugin.getPlayerInfoPoo().get(player);
 	   FileConfiguration ym = gc.getGameConfig(pi.getMapName());
@@ -761,7 +762,7 @@ public class ClassArena {
    }
    
    //TODO TP AL SPAWN DE LA ARENA
-   public void TptoSpawnArena(Player player ,String map){
+   public void TptoSpawnMap(Player player ,String map){
 	   GameConditions gc = new GameConditions(plugin);
 	   FileConfiguration ym = gc.getGameConfig(map);
 	   if(ym.contains("Spawn")) {
@@ -823,8 +824,21 @@ public class ClassArena {
 				}
 			}
 			
-		     	GameConditions cm = new GameConditions(plugin);
-				cm.setKitMg(player);
+		     	 
+				gc.setKitMg(player);
+				if(gc.HasObjetives(map)) {
+					if(player.getInventory().getItemInMainHand() != null) {
+						if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
+							player.getInventory().setItemInMainHand(Items.OBJETIVOSP.getValue());
+							
+						}else {
+							ItemStack item = player.getInventory().getItemInMainHand();
+							player.getWorld().dropItem(player.getLocation(),item);
+							player.getInventory().setItemInMainHand(Items.OBJETIVOSP.getValue());
+						}
+						
+					}
+				}
 			//getInventoryY(player);
 			
 				return;
@@ -859,7 +873,7 @@ public class ClassArena {
    
    
  //TODO TP AL PRELOBBY DE LA ARENA
-   public void TptoPreLobbyArena(Player player ,String arenaName){
+   public void TptoPreLobbyMap(Player player ,String arenaName){
 	   GameConditions gc = new GameConditions(plugin);
 	   FileConfiguration ym = gc.getGameConfig(arenaName);
 	   if(ym.contains("Pre-Lobby")) {

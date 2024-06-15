@@ -80,7 +80,7 @@ public class GameConditions {
 				//Salva al Jugador checa si debe setearle un inv
 				SetAndSavePlayer(player, map);
 				AddPlayerToGame(player,map);
-				cl.TptoPreLobbyArena(player, map);
+				cl.TptoPreLobbyMap(player, map);
 				CanStartTheGame(player,map);
 				return;
 		}
@@ -855,6 +855,9 @@ public void IlegalLeaveMapConexion(Player player) {
 		return true;
 	}
 	
+	
+	
+	
 	public boolean isPlayerinGame(Player player) {
 		return plugin.getPlayerInfoPoo().containsKey(player);
 	}
@@ -862,7 +865,6 @@ public void IlegalLeaveMapConexion(Player player) {
 	public boolean isMapinGame(String map) {
 		return plugin.getGameInfoPoo().containsKey(map);
 	}
-	
 	
 	public boolean hasAntiVoid(Player player ) {
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
@@ -890,6 +892,11 @@ public void IlegalLeaveMapConexion(Player player) {
 	public boolean isPvPAllowed(String map) {
 		 FileConfiguration game = getGameConfig(map);
 		 return game.getBoolean("Allow-PVP");
+	}
+	
+	public boolean hasMapObjetives(String map) {
+		 FileConfiguration game = getGameConfig(map);
+		 return game.getBoolean("Has-Objetives");
 	}
 	
 	public boolean CanUseKit(String map) {
@@ -1673,7 +1680,7 @@ public void IlegalLeaveMapConexion(Player player) {
 	
 	
 	//TODO  TIEMPO PARA ABAJO	
-	
+	//LISTA QUE CONVIERTE DE ESPAÑOL A INGLES DE LA CONFIG
 	public List <DayOfWeek> SpanishToEnglish(String days) {
 		String[] d = days.split(" ");
 		List <DayOfWeek> l = new ArrayList<DayOfWeek>();
@@ -1878,11 +1885,7 @@ public void IlegalLeaveMapConexion(Player player) {
 										sb.append(ChatColor.RED+"entre las horas ");
 									}
 									i++;
-									
-								}
-								 
-								
-							}
+							}}
 						
 							String dias = sb.toString();
 							player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"Cerrado: "+ChatColor.GOLD+"Solo funciona los dias "+dias);
@@ -1911,17 +1914,13 @@ public void IlegalLeaveMapConexion(Player player) {
 							}
 							i++;
 							
-						}
-						 
-						
-					}
+					}}
 				
 					String dias = sb.toString();
 					player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"Cerrado: "+ChatColor.GOLD+"Solo funciona los dias "+dias);
 					//isJoinRunning(player);
 					return false;
 				}
-				
 				
 			}else{
 				//si no tiene numero es forma 1
@@ -1939,7 +1938,6 @@ public void IlegalLeaveMapConexion(Player player) {
 					int men = st.countTokens();
 					int i = 1;
 					int tm = st.countTokens()-1; 
-					
 		
 					while(st.hasMoreTokens()) {
 					
@@ -1952,10 +1950,7 @@ public void IlegalLeaveMapConexion(Player player) {
 							}
 							i++;
 							
-						}
-						 
-						
-					}
+					}}
 				
 					String dias = sb.toString();
 					player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"Cerrado: "+ChatColor.GOLD+"Solo funciona los dias "+dias);
@@ -2168,7 +2163,13 @@ public void IlegalLeaveMapConexion(Player player) {
 						   if(target.getName().equals(player.getName())) continue;
 						   target.sendMessage(ChatColor.translateAlternateColorCodes('&', text));
 					}
-				
+					List<Player> spect = ConvertStringToPlayer(ga.getSpectator());
+					if(!spect.isEmpty()) {
+						for(Player target : spect) {
+							
+							target.sendMessage(ChatColor.translateAlternateColorCodes('&',text));
+						}
+					}
 		 } 
 		
 		
@@ -2674,7 +2675,7 @@ public void IlegalLeaveMapConexion(Player player) {
    	   				
    	   		}}
    			
-   			if(l.size() > 1) {
+   			if(l.size() >= 1) {
    				if(l.stream().filter(o -> o.getNombre().equals("Mapa Con Objetivos Borrados")).findFirst().isPresent()) {
    					l.remove(ghost);
    				}
@@ -3439,17 +3440,17 @@ public void IlegalLeaveMapConexion(Player player) {
 
 
 	
-	public void Team1Win() {
-		
-	}
-	
-	public void Team2Win() {
-		
-	}
-	
-	public void TeamsDraw() {
-		
-	}
-	
+//	public void Team1Win() {
+//		
+//	}
+//	
+//	public void Team2Win() {
+//		
+//	}
+//	
+//	public void TeamsDraw() {
+//		
+//	}
+//	
 	
 }

@@ -188,7 +188,7 @@ public class AdventureTemp {
 				    			ms.setEstadopartida(EstadoPartida.JUGANDO);
 				    			
 				    			ClassArena c = new ClassArena(plugin);
-							    c.TptoSpawnArena(target, name);
+							    c.TptoSpawnMap(target, name);
 				    			
 				    		}
 						  
@@ -691,7 +691,7 @@ public class AdventureTemp {
 			 Logger logger = Logger.getLogger(AdventureTemp.class.getName());
 	       	 logger.log(Level.WARNING,"Coloca primero un valor menor y despues un mayor. "+max+"/"+min);
 		}
-		System.out.println("F");
+		
 		return -1;
 		
 	}
