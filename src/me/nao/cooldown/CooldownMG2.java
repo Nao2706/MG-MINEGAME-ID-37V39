@@ -3,13 +3,14 @@ package me.nao.cooldown;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import me.nao.general.info.GameReportType;
 import me.nao.general.info.GameReports;
 import me.nao.main.game.Main;
-import net.md_5.bungee.api.ChatColor;
+
 
 
 
@@ -231,7 +232,7 @@ public class CooldownMG2 {
 		if(report.contains("Players."+target)) {
 			
 			GameReportType statusconfig = GameReportType.valueOf(report.getString("Players."+target+".Status").toUpperCase());
-			if(statusconfig == GameReportType.BAN) {
+			if(statusconfig == GameReportType.BAN || statusconfig == GameReportType.TEMPBAN) {
 				 if(gr == GameReportType.PARDON) {
 					sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue perdonado.");
 					SetTimeCooldownMg(seconds,r.getReportype(),r.getTarget(),r.DataReport());
@@ -285,6 +286,7 @@ public class CooldownMG2 {
 
 			}
 			return;
+			
 		}else {
 			if(gr == GameReportType.WARN) {
 				sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue Advertido en los Juegos de Aventura.");
@@ -346,7 +348,7 @@ public class CooldownMG2 {
 		}else if(type == GameReportType.PARDON) {
 			long millis = 0;  
 			int t = 0;
-			report.set("Players."+player+".Status",type.toString());
+			report.set("Players."+player+".Status","NINGUNO");
 			report.set("Players."+player+".TempBanTime",t);
 			report.set("Players."+player+".Server-Time", millis);
 			List<String> list = report.getStringList("Players."+player+".Reports");
@@ -365,6 +367,7 @@ public class CooldownMG2 {
 		
 		
 		plugin.getReportsYaml().save();
+		plugin.getReportsYaml().reload();
 		
 	}
 	
@@ -383,6 +386,7 @@ public class CooldownMG2 {
 			if(target != null) {
 				target.sendMessage(text);
 			}
+		Bukkit.getConsoleSender().sendMessage(text);
 	}
 	
 	

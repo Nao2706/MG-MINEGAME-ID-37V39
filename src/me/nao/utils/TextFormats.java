@@ -1,5 +1,6 @@
 package me.nao.utils;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -42,7 +43,17 @@ public class TextFormats {
 	}
 	
 	
-	
+	public static String formatValue(float value) {
+	    String arr[] = {"", "K", "M", "B", "T", "P", "E"};
+	    int index = 0;
+	    while ((value / 1000) >= 1) {
+	        value = value / 1000;
+	        index++;
+	    }
+	    DecimalFormat decimalFormat = new DecimalFormat("#.##");
+	    //SI SE DA ESPACIO AL %s %s al mostrar saldra asi 1 K juntos sale 1K
+	    return String.format("%s%s", decimalFormat.format(value), arr[index]);
+	}
 	
 	
 	

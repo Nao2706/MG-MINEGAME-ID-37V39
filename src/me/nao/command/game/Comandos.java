@@ -132,8 +132,20 @@ public class Comandos implements CommandExecutor{
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("ban") || args[0].equalsIgnoreCase("kick")  || args[0].equalsIgnoreCase("tempban")  || args[0].equalsIgnoreCase("warn") || args[0].equalsIgnoreCase("pardon")){
-					IdentifierReports(null,args);
 					
+					if(args.length >= 3) {
+						 String mensaje = "";
+			        	 for(int i = 2 ;i < args.length; i++) {
+							 mensaje = mensaje+args[i]+" "; 
+							 
+						//	 mensaje.add(arg);
+						 }
+			        	 IdentifierReports(null,args,mensaje);
+			        	 //mg warn NAO HOLA Q HACES BRO
+			        		
+					}else {
+						
+					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("message") ) {
 					
@@ -2400,7 +2412,31 @@ public class Comandos implements CommandExecutor{
 				
 				//TODO SANCION
 				else if(args[0].equalsIgnoreCase("ban") || args[0].equalsIgnoreCase("kick")  || args[0].equalsIgnoreCase("tempban")  || args[0].equalsIgnoreCase("warn") || args[0].equalsIgnoreCase("pardon")){
-					IdentifierReports(player,args);
+					if(args.length >= 3) {
+						 String mensaje = "";
+			        	 for(int i = 2 ;i < args.length; i++) {
+							 mensaje = mensaje+args[i]+" "; 
+							 
+						//	 mensaje.add(arg);
+						 }
+			        	 IdentifierReports(player,args,mensaje);
+			        	 //mg warn NAO HOLA Q HACES BRO
+			        		
+					}else {
+						if(player != null) {
+							player.sendMessage(ChatColor.YELLOW+"Usa /mg ban,kick,warn <player> <obligatorio una razon> Para especificar tiempo porfavor usa los siguientes 1D 1H 1M 1S 1d 1h 1m 1s .");
+						}
+						Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Usa /mg ban,kick,warn <player> <obligatorio una razon> Para especificar tiempo porfavor usa los siguientes 1D 1H 1M 1S 1d 1h 1m 1s .");
+						if(player != null) {
+							player.sendMessage(ChatColor.YELLOW+"Usa /mg tempban <player> <1DHMS> <obligatorio una razon>");
+							player.sendMessage(ChatColor.YELLOW+"Usa /mg tempban <player> <1DHMS> <1DHMS> <obligatorio una razon>");
+							player.sendMessage(ChatColor.YELLOW+"Usa /mg tempban <player> <1DHMS> <1DHMS> <1DHMS> <obligatorio una razon>");
+						}
+						Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+"Usa /mg tempban <player> <1DHMS> <obligatorio una razon>");
+						Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+"Usa /mg tempban <player> <1DHMS> <1DHMS> <obligatorio una razon>");
+						Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+"Usa /mg tempban <player> <1DHMS> <1DHMS> <1DHMS> <obligatorio una razon>");
+					}
+				
 					
 					return true;
 				}
@@ -2860,7 +2896,7 @@ public class Comandos implements CommandExecutor{
 	
 
 //mg ban NAO POR NOOB
-	public void IdentifierReports(Player player,String[] report) {
+	public void IdentifierReports(Player player,String[] report,String comments) {
 		
 		try {
 			 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss a",Locale.ENGLISH);
@@ -2879,39 +2915,41 @@ public class Comandos implements CommandExecutor{
 					 return;
 				 }
 				 
-				 //WARN BAN O KICK
+				 //mg pardon NAO
 				 if(type.startsWith("pardon")) {
-					 if(report.length == 3) {
-						 String comments = report[2];
-						 GameReports gr = new GameReports(target,GameReportType.valueOf(type.toUpperCase()),ld.format(formatter).toString(),"SIN TIEMPO"+type,player.getName(),comments.replace("-", " ").replace(",", " "));
+					 if(report.length >= 3) {
+						
+						 GameReports gr = new GameReports(target,GameReportType.valueOf(type.toUpperCase()),ld.format(formatter).toString(),"SIN TIEMPO",player.getName(),comments.replace("-", " ").replace(",", " "));
 							cool.SetSancionPlayer(player, gr, 0);
 					 }
 				 }
 				 if(type.startsWith("ban")|| type.startsWith("kick") || type.startsWith("warn")) {
-						if(report.length == 3) {
+						if(report.length >= 3) {
 							
 							//mg warn nao test
 							//mg ban nao
 							
-							String comments = report[2];
+							
 						
 							//String timeg = time;
 							GameConditions gc = new GameConditions(plugin);
 							
 							if(player != null) {
-								GameReports gr = new GameReports(target,GameReportType.valueOf(type.toUpperCase()),ld.format(formatter).toString(),"SIN TIEMPO"+type,player.getName(),comments.replace("-", " ").replace(",", " "));
+								GameReports gr = new GameReports(target,GameReportType.valueOf(type.toUpperCase()),ld.format(formatter).toString(),"SIN TIEMPO",player.getName(),comments.replace("-", " ").replace(",", " "));
 								cool.SetSancionPlayer(player, gr, 0);
 							}else {
-								GameReports gr = new GameReports(target,GameReportType.valueOf(type.toUpperCase()),ld.format(formatter).toString(),"SIN TIEMPO"+type,"CONSOLA",comments.replace("-", " ").replace(",", " "));
+								GameReports gr = new GameReports(target,GameReportType.valueOf(type.toUpperCase()),ld.format(formatter).toString(),"SIN TIEMPO","CONSOLA",comments.replace("-", " ").replace(",", " "));
 								cool.SetSancionPlayer(player, gr, 0);
 							}
 							
 							Player target1 = Bukkit.getServer().getPlayerExact(target);
+							if(!type.startsWith("warn")) {
+								if(target1 != null && gc.isPlayerinGame(target1)) {
+									gc.LeaveOfTheGame(target1);
 
-							if(target1 != null && gc.isPlayerinGame(target1)) {
-								gc.LeaveOfTheGame(target1);
-
-							}	
+								}	
+							}
+							
 							
 							return;
 						}else {
@@ -2934,17 +2972,13 @@ public class Comandos implements CommandExecutor{
 					 //mg tempban nao 1h 1h 1h com
 					 
 					 
-					 if(report.length == 4) {
+					 if(report.length >= 4) {
 							
 							
 							// chequear
 							//3 comen
 						
 							String time = report[2];
-							String comments = report[3];
-							
-						
-							
 							
 							
 							if(!isATimeMgFormat(time)) {
@@ -2977,13 +3011,13 @@ public class Comandos implements CommandExecutor{
 							return;
 						//objeto	
 							//cooldown 5
-						}else if(report.length == 5) {
+						}else if(report.length >= 5) {
 							
 						
 							
 							String time = report[2];
 							String time2 = report[3];
-							String comments = report[4];
+							
 							
 							if(!isATimeMgFormat(time) && !isATimeMgFormat(time2)) {
 								if(player != null) {
@@ -3014,14 +3048,14 @@ public class Comandos implements CommandExecutor{
 							
 							//objeto
 							//cooldown 6
-						}else if(report.length == 6) {
+						}else if(report.length >= 6) {
 							
 						
 						
 							String time = report[2];
 							String time2 = report[3];
 							String time3 = report[4];
-							String comments = report[5];
+						
 							
 							if(!isATimeMgFormat(time) && !isATimeMgFormat(time2) && !isATimeMgFormat(time3)) {
 								if(player != null) {
@@ -3073,17 +3107,17 @@ public class Comandos implements CommandExecutor{
 			     //mg tempban NAO 1 ES 3 PERO PUEDE SER 4
 		}catch(ArrayIndexOutOfBoundsException e) {
 			if(player != null) {
-				player.sendMessage(ChatColor.YELLOW+"Usa /mg ban,kick,warn <player> <escribe una razon> Para especificar tiempo porfavor usa los siguientes 1D 1H 1M 1S 1d 1h 1m 1s .");
+				player.sendMessage(ChatColor.YELLOW+"Usa /mg ban,kick,warn <player> <escribe una razon> Para especificar tiempo porfavor usa los siguientes 1D 1H 1M 1S 1d 1h 1m 1s ...");
 			}
-			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Usa /mg ban,kick,warn <player> <escribe una razon> Para especificar tiempo porfavor usa los siguientes 1D 1H 1M 1S 1d 1h 1m 1s .");
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Usa /mg ban,kick,warn <player> <escribe una razon> Para especificar tiempo porfavor usa los siguientes 1D 1H 1M 1S 1d 1h 1m 1s ...");
 			if(player != null) {
-				player.sendMessage(ChatColor.YELLOW+"Usa /mg tempban <player> <1DHMS> <escribe una razon>");
-				player.sendMessage(ChatColor.YELLOW+"Usa /mg tempban <player> <1DHMS> <1DHMS> <escribe una razon>");
-				player.sendMessage(ChatColor.YELLOW+"Usa /mg tempban <player> <1DHMS> <1DHMS> <1DHMS> <escribe una razon>");
+				player.sendMessage(ChatColor.YELLOW+"Usa /mg tempban <player> <1DHMS> <escribe una razon>...");
+				player.sendMessage(ChatColor.YELLOW+"Usa /mg tempban <player> <1DHMS> <1DHMS> <escribe una razon>...");
+				player.sendMessage(ChatColor.YELLOW+"Usa /mg tempban <player> <1DHMS> <1DHMS> <1DHMS> <escribe una razon>...");
 			}
-			Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+"Usa /mg tempban <player> <1DHMS> <escribe una razon>");
-			Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+"Usa /mg tempban <player> <1DHMS> <1DHMS> <escribe una razon>");
-			Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+"Usa /mg tempban <player> <1DHMS> <1DHMS> <1DHMS> <escribe una razon>");
+			Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+"Usa /mg tempban <player> <1DHMS> <escribe una razon>...");
+			Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+"Usa /mg tempban <player> <1DHMS> <1DHMS> <escribe una razon>...");
+			Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+"Usa /mg tempban <player> <1DHMS> <1DHMS> <1DHMS> <escribe una razon>...");
 		 return;
 		}
 	

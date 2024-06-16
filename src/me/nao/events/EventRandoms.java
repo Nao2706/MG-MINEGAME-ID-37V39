@@ -138,11 +138,11 @@ public class EventRandoms implements Listener{
 			}
 			PlayerInfo pi = plugin.getPlayerInfoPoo().get(player);
 			GameInfo gi = plugin.getGameInfoPoo().get(pi.getMapName());
-			if(gi.getEstopartida() != EstadoPartida.JUGANDO) {
-				return;
-			}
+			if(gi.getEstopartida() == EstadoPartida.JUGANDO) {
+				
 				Entity ent = e.getRightClicked();
 				if(ent.getType() == EntityType.PLAYER) {
+					
 					Player target = (Player) ent;
 					if(target.getGameMode() != GameMode.SPECTATOR) {
 							player.addPassenger(target);
@@ -150,8 +150,8 @@ public class EventRandoms implements Listener{
 				}else {
 					player.addPassenger(ent);
 				}
-			
-			
+				return;
+			}
 		}
 		
 	}
