@@ -32,8 +32,6 @@ public class GameReports {
 		return reportype;
 	}
 	public String getTimereal() {
-		
-		
 		return timereal;
 	}
 	public String getTimeReport() {
@@ -48,7 +46,7 @@ public class GameReports {
 
 	
 	public String DataReport() {
-		return "Jugador="+getTarget()+" Sancion="+getReportype().toString()+" Fecha="+getTimereal()+" Tiempo="+getTimeReport()+" Moderador="+getModerador()+" Razon=("+getCausa()+")";
+		return "Jugador="+getTarget()+"-Sancion="+getReportype().toString()+"-Fecha="+getTimereal()+"-Tiempo="+getTimeReport()+"-Moderador="+getModerador()+"-Razon=("+getCausa()+")";
 	}
 	
 }

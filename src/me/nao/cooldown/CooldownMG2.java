@@ -174,12 +174,13 @@ public class CooldownMG2 {
 			
 			String cooldown = getCooldown(time,player.getName());
 			if(cooldown.equals("-1")) {
-				report.set("Players."+player.getName()+".Status","NINGUNO");
+				report.set("Players."+player+".Status",GameReportType.NINGUNO.toString());
 				plugin.getReportsYaml().save();
 				plugin.getReportsYaml().reload();
+				sendMessageGeneral(player,ChatColor.GREEN+player.getName()+" Tu sancion se Completo ya puedes Jugar.");
 				return false;
 			}else {
-				player.sendMessage(ChatColor.RED+"Estas Baneado Temporalmente de los Juegos de Aventura");
+				player.sendMessage(ChatColor.RED+"Estas Baneado Temporalmente de los Juegos");
 				player.sendMessage(ChatColor.YELLOW+"Tiempo Remanente: "+ChatColor.RED+cooldown);
 				return true;
 		}}
@@ -192,26 +193,27 @@ public class CooldownMG2 {
 	public void HasSancionPlayerConsoleOrOp(Player player,String target) {
 		FileConfiguration report = plugin.getReportsYaml();
 		
-		if(!report.contains("Players."+player.getName())) {
+		if(!report.contains("Players."+target)) {
 			System.out.println("Limpio2  :)");
 			return;
 		}
 		
 		GameReportType statusconfig = GameReportType.valueOf(report.getString("Players."+target+".Status").toUpperCase());
 		if(statusconfig == GameReportType.BAN) {
-			sendMessageGeneral(player,ChatColor.RED+target+" Esta Baneado Permanentemente de los Juegos de Aventura");
+			sendMessageGeneral(player,ChatColor.RED+target+" Esta Baneado Permanentemente de los Juegos");
 			return ;
 		}else if(statusconfig == GameReportType.TEMPBAN) {
 			int time = report.getInt("Players."+target+".TempBanTime");
 			
 			String cooldown = getCooldown(time,target);
 			if(cooldown.equals("-1")) {
-				report.set("Players."+target+".Status","NINGUNO");
+				report.set("Players."+target+".Status",GameReportType.NINGUNO.toString());
 				plugin.getReportsYaml().save();
 				plugin.getReportsYaml().reload();
+				sendMessageGeneral(player,ChatColor.GREEN+target+" No tiene ninguna sancion Activa.");
 				return ;
 			}else {
-				sendMessageGeneral(player,ChatColor.RED+target+" Esta Baneado Temporalmente de los Juegos de Aventura");
+				sendMessageGeneral(player,ChatColor.RED+target+" Esta Baneado Temporalmente de los Juegos");
 				sendMessageGeneral(player,ChatColor.YELLOW+"Tiempo Remanente: "+ChatColor.RED+cooldown);
 				return ;
 		}}else if(statusconfig == GameReportType.NINGUNO) {
@@ -230,93 +232,103 @@ public class CooldownMG2 {
 		String target = r.getTarget();
 		
 		if(report.contains("Players."+target)) {
-			
 			GameReportType statusconfig = GameReportType.valueOf(report.getString("Players."+target+".Status").toUpperCase());
-			if(statusconfig == GameReportType.BAN || statusconfig == GameReportType.TEMPBAN) {
-				 if(gr == GameReportType.PARDON) {
-					sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue perdonado.");
-					SetTimeCooldownMg(seconds,r.getReportype(),r.getTarget(),r.DataReport());
+			if(gr == GameReportType.BAN) {
+				
+				if(gr == statusconfig) {
+					sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" ya fue Baneado Permanentemente de los Juegos.");
+
 				}else {
-					sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" esta Baneado no puedes agregar otro Reporte.");
+					sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue Baneo Permanentemente de los Juegos.");
+					sendToTarget(target,""+ChatColor.DARK_RED+ChatColor.BOLD+"Recibiste un Baneo Permanente en los Juegos.");
+					sendToTarget(target,"Razon: "+ChatColor.GREEN+r.getCausa());
+					sendToTarget(target,ChatColor.GREEN+"Moderador: "+ChatColor.AQUA+r.getModerador());
+					SetTimeCooldownMg(seconds,r.getReportype(),r.getTarget(),r.DataReport());
 
 				}
 				
 				return;
-			}else if(statusconfig == GameReportType.TEMPBAN) {
-				int time = report.getInt("Players."+target+".TempBanTime");
-				String coold = getCooldown(time,target);
-				if(coold.equals("-1")) {
-					report.set("Players."+player+".Status","NINGUNO");
-					plugin.getReportsYaml().save();
-					plugin.getReportsYaml().reload();
+			}else if(gr == GameReportType.TEMPBAN) {
+				if(statusconfig == GameReportType.TEMPBAN) {
+						int time = report.getInt("Players."+target+".TempBanTime");
+						String coold = getCooldown(time,target);
+						if(coold.equals("-1")) {
+							report.set("Players."+player+".Status",GameReportType.NINGUNO.toString());
+							plugin.getReportsYaml().save();
+							plugin.getReportsYaml().reload();
+							
+						}else {
+							sendMessageGeneral(player,ChatColor.RED+"El Jugador "+ChatColor.YELLOW+target+ChatColor.RED+" tiene una sancion en progreso.");
+							sendMessageGeneral(player,ChatColor.AQUA+"El Jugador "+ChatColor.GREEN+target+ChatColor.AQUA+" ya tiene un TempBan de "+ChatColor.RED+coold);
+							//setear que no tiene
+						}
+				}else {
+					sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue sancionado por "+ChatColor.GREEN+r.getTimeReport());
+					sendToTarget(target,""+ChatColor.RED+ChatColor.BOLD+"Recibiste un Baneo Temporal en los Juegos.");
+					sendToTarget(target,""+ChatColor.GREEN+ChatColor.BOLD+"Tiempo : "+ChatColor.RED+ChatColor.BOLD+ShowInMomentCooldown(seconds, String.valueOf(System.currentTimeMillis())));
+					sendToTarget(target,"Razon: "+ChatColor.GREEN+r.getCausa());
+					sendToTarget(target,ChatColor.GREEN+"Moderador: "+ChatColor.AQUA+r.getModerador());
+					SetTimeCooldownMg(seconds,r.getReportype(),r.getTarget(),r.DataReport());
+				}
+				return;
+			}else if(gr == GameReportType.PARDON) {
+				if(statusconfig == GameReportType.NINGUNO && gr == GameReportType.PARDON) {
+					
+					sendMessageGeneral(player,ChatColor.GREEN+"El Jugador "+ChatColor.YELLOW+target+ChatColor.GREEN+" no tiene Ninguna Sancion.");
 					
 				}else {
-					sendMessageGeneral(player,ChatColor.RED+"El Jugador "+ChatColor.YELLOW+target+ChatColor.RED+" tiene una sancion en progreso.");
-					sendMessageGeneral(player,ChatColor.AQUA+"El Jugador "+ChatColor.GREEN+target+ChatColor.AQUA+" ya tiene un TempBan de "+ChatColor.RED+coold);
-					//setear que no tiene
+					sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue perdonado.");
+					SetTimeCooldownMg(seconds,r.getReportype(),r.getTarget(),r.DataReport());
 				}
 				return;
 			}else if(gr == GameReportType.WARN) {
-				sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue Advertido en los Juegos de Aventura.");
-				sendToTarget(target,"Recibiste un Advertencia en los Juegos de Aventura. ");
+				sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue Advertido en los Juegos.");
+				sendToTarget(target,"Recibiste un Advertencia en los Juegos. ");
 				sendToTarget(target,"Razon: "+ChatColor.GREEN+r.getCausa());
 				sendToTarget(target,ChatColor.GREEN+"Moderador: "+ChatColor.AQUA+r.getModerador());
 				SetTimeCooldownMg(seconds,r.getReportype(),r.getTarget(),r.DataReport());
 			}else if(gr == GameReportType.KICK) {
-				sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue Kickeado de los Juegos de Aventura.");
-				sendToTarget(target,"Recibiste un Kickeo en los Juegos de Aventura. ");
-				sendToTarget(target,"Razon: "+ChatColor.GREEN+r.getCausa());
-				sendToTarget(target,ChatColor.GREEN+"Moderador: "+ChatColor.AQUA+r.getModerador());
-				SetTimeCooldownMg(seconds,r.getReportype(),r.getTarget(),r.DataReport());
-
-			}else if(gr == GameReportType.BAN) {
-				sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue Baneo Permanentemente de los Juegos de Aventura.");
-				sendToTarget(target,""+ChatColor.DARK_RED+ChatColor.BOLD+"Recibiste un Baneo Permanente en los Juegos de Aventura.");
-				sendToTarget(target,"Razon: "+ChatColor.GREEN+r.getCausa());
-				sendToTarget(target,ChatColor.GREEN+"Moderador: "+ChatColor.AQUA+r.getModerador());
-				SetTimeCooldownMg(seconds,r.getReportype(),r.getTarget(),r.DataReport());
-
-			}else if(gr == GameReportType.TEMPBAN) {
-				sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue sancionado por "+ChatColor.GREEN+r.getTimeReport());
-				sendToTarget(target,""+ChatColor.RED+ChatColor.BOLD+"Recibiste un Baneo Temporal en los Juegos de Aventura.");
-				sendToTarget(target,""+ChatColor.GREEN+ChatColor.BOLD+"Tiempo : "+ChatColor.RED+ChatColor.BOLD+ShowInMomentCooldown(seconds, String.valueOf(System.currentTimeMillis())));
+				sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue Kickeado de los Juegos.");
+				sendToTarget(target,"Recibiste un Kickeo en los Juegos. ");
 				sendToTarget(target,"Razon: "+ChatColor.GREEN+r.getCausa());
 				sendToTarget(target,ChatColor.GREEN+"Moderador: "+ChatColor.AQUA+r.getModerador());
 				SetTimeCooldownMg(seconds,r.getReportype(),r.getTarget(),r.DataReport());
 
 			}
+			
+			
 			return;
 			
 		}else {
 			if(gr == GameReportType.WARN) {
 				sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue Advertido en los Juegos de Aventura.");
-				sendToTarget(target,"Recibiste un Advertencia en los Juegos de Aventura. ");
+				sendToTarget(target,"Recibiste un Advertencia en los Juegos. ");
 				sendToTarget(target,"Razon: "+ChatColor.GREEN+r.getCausa());
 				sendToTarget(target,ChatColor.GREEN+"Moderador: "+ChatColor.AQUA+r.getModerador());
 				SetTimeCooldownMg(seconds,r.getReportype(),r.getTarget(),r.DataReport());
 			}else if(gr == GameReportType.KICK) {
 				sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue Kickeado de los Juegos de Aventura.");
-				sendToTarget(target,"Recibiste un Kickeo en los Juegos de Aventura. ");
+				sendToTarget(target,"Recibiste un Kickeo en los Juegos. ");
 				sendToTarget(target,"Razon: "+ChatColor.GREEN+r.getCausa());
 				sendToTarget(target,ChatColor.GREEN+"Moderador: "+ChatColor.AQUA+r.getModerador());
 				SetTimeCooldownMg(seconds,r.getReportype(),r.getTarget(),r.DataReport());
 
 			}else if(gr == GameReportType.BAN) {
 				sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue Baneo Permanentemente de los Juegos de Aventura.");
-				sendToTarget(target,""+ChatColor.DARK_RED+ChatColor.BOLD+"Recibiste un Baneo Permanente en los Juegos de Aventura.");
+				sendToTarget(target,""+ChatColor.DARK_RED+ChatColor.BOLD+"Recibiste un Baneo Permanente en los Juegos.");
 				sendToTarget(target,"Razon: "+ChatColor.GREEN+r.getCausa());
 				sendToTarget(target,ChatColor.GREEN+"Moderador: "+ChatColor.AQUA+r.getModerador());
 				SetTimeCooldownMg(seconds,r.getReportype(),r.getTarget(),r.DataReport());
 
 			}else if(gr == GameReportType.TEMPBAN) {
 				sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue sancionado por "+ChatColor.GREEN+r.getTimeReport());
-				sendToTarget(target,""+ChatColor.RED+ChatColor.BOLD+"Recibiste un Baneo Temporal en los Juegos de Aventura.");
+				sendToTarget(target,""+ChatColor.RED+ChatColor.BOLD+"Recibiste un Baneo Temporal en los Juegos.");
 				sendToTarget(target,""+ChatColor.GREEN+ChatColor.BOLD+"Tiempo : "+ChatColor.RED+ChatColor.BOLD+ShowInMomentCooldown(seconds, String.valueOf(System.currentTimeMillis())));
 				sendToTarget(target,"Razon: "+ChatColor.GREEN+r.getCausa());
 				sendToTarget(target,ChatColor.GREEN+"Moderador: "+ChatColor.AQUA+r.getModerador());
 				SetTimeCooldownMg(seconds,r.getReportype(),r.getTarget(),r.DataReport());
 
-			}else if(gr == GameReportType.TEMPBAN) {
+			}else if(gr == GameReportType.PARDON) {
 				sendMessageGeneral(player,ChatColor.YELLOW+"No puedes usar Pardon con "+ChatColor.GREEN+target+ChatColor.YELLOW+" porque no esta sancionado.");
 
 			}
@@ -357,7 +369,7 @@ public class CooldownMG2 {
 		}else {
 			long millis = 0;
 			int t = 0;
-			report.set("Players."+player+".Status",type.toString());
+			report.set("Players."+player+".Status","NINGUNO");
 			report.set("Players."+player+".TempBanTime",t);
 			report.set("Players."+player+".Server-Time",millis);
 			List<String> list = report.getStringList("Players."+player+".Reports");
