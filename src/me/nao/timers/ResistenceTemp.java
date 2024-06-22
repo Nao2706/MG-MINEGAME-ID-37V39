@@ -59,6 +59,7 @@ import me.nao.manager.EstadoPartida;
 import me.nao.manager.StopMotivo;
 //import net.md_5.bungee.api.ChatMessageType;
 //import net.md_5.bungee.api.chat.TextComponent;
+import me.nao.scoreboard.MgScore;
 
 
 
@@ -91,6 +92,8 @@ public class ResistenceTemp {
 			
 			GameInfo ms = plugin.getGameInfoPoo().get(name);
 			GameAdventure ga = (GameAdventure) ms;
+			 MgScore sco = new MgScore(plugin);
+			
 			int startm = config.getInt("CountDownPreLobby");
 			int end = 10;
 		
@@ -270,6 +273,8 @@ public class ResistenceTemp {
 					
 					for(String players : joins) {
 						Player target = Bukkit.getServer().getPlayerExact(players);
+						sco.ShowProgressObjetive(target);
+						
 						
 				    	if(segundo == 0 && minuto == 0 && hora == 0) {
 				   

@@ -39,13 +39,14 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 
-import me.nao.cooldown.CooldownMG2;
+import me.nao.cooldown.ReportsManager;
 import me.nao.gamemode.DestroyNexo;
 import me.nao.main.game.Main;
 import me.nao.manager.ClassArena;
 import me.nao.manager.ClassIntoGame;
 import me.nao.manager.EstadoPartida;
 import me.nao.manager.StopMotivo;
+import me.nao.scoreboard.MgScore;
 import me.nao.teamsmg.MgTeams;
 import me.nao.timers.DialogRun;
 import me.nao.timers.InfectedTemp;
@@ -104,7 +105,8 @@ public class GameConditions {
 		
 		
 		EstadoPartida part = ms.getEstopartida();
-		
+		MgScore sco = new MgScore(plugin);
+		sco.ClearScore(player);
 		if(ms instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) ms;
 			List<String> spectador = ga.getSpectator();
@@ -252,14 +254,17 @@ public void IlegalLeaveMapConexion(Player player) {
 		if(gi instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) gi;
 			List<Player> player = ConvertStringToPlayer(ga.getParticipantes());
-
+			MgScore sco = new MgScore(plugin);
+		
 			for(Player target : player) {
+				sco.ClearScore(target);
 				RestorePlayer(target);
 			}
 			
 			List<Player> spec = ConvertStringToPlayer(ga.getSpectator());
 			
 			for(Player target : spec) {
+				sco.ClearScore(target);
 				RestorePlayer(target);
 			}
 				plugin.getGameInfoPoo().remove(name);
@@ -1120,7 +1125,7 @@ public void IlegalLeaveMapConexion(Player player) {
 				 BossBar boss = minfo.getBoss();
 				 GameType misiontype = minfo.getGameType();
 				 int maxplayers = mision.getInt("Max-Player");
-				 CooldownMG2 cooldown = new CooldownMG2(plugin) ;
+				 ReportsManager cooldown = new ReportsManager(plugin) ;
 				 
 				if(misiontype == GameType.ADVENTURE) {
 					
@@ -1383,7 +1388,7 @@ public void IlegalLeaveMapConexion(Player player) {
 			 BossBar boss = minfo.getBoss();
 			 GameType misiontype = minfo.getGameType();
 			 int maxplayers = mision.getInt("Max-Player");
-			 CooldownMG2 cooldown = new CooldownMG2(plugin) ;
+			 ReportsManager cooldown = new ReportsManager(plugin) ;
 			 
 			 if(misiontype == GameType.NEXO) {
 					
@@ -2365,7 +2370,8 @@ public void IlegalLeaveMapConexion(Player player) {
 								 		
 										// String time = plugin.getPlayerCronomet().get(e.getKey());
 									if(i == 1) {
-										 player.sendMessage(ChatColor.translateAlternateColorCodes('&',""+ChatColor.AQUA+ChatColor.BOLD+"MVP "+texto
+										 player.sendMessage(ChatColor.translateAlternateColorCodes('&',texto
+												 .replace("%mvp%",""+ChatColor.GREEN+ChatColor.BOLD+" MVP ")
 												 .replace("%player%", e.getKey())
 												 .replace("%place%", Integer.toString(i))
 												 .replace("%pointuser%", Integer.toString(e.getValue()))
@@ -2509,7 +2515,8 @@ public void IlegalLeaveMapConexion(Player player) {
 										// String time = plugin.getPlayerCronomet().get(e.getKey());
 								
 									if(i == 1) {
-											SendMessageToUserAndConsole(null,""+ChatColor.AQUA+ChatColor.BOLD+"MVP "+texto
+											SendMessageToUserAndConsole(null,texto
+													 .replace("%mvp%",""+ChatColor.GREEN+ChatColor.BOLD+" MVP ")
 													 .replace("%player%", e.getKey())
 													 .replace("%place%", Integer.toString(i))
 													 .replace("%pointuser%", Integer.toString(e.getValue()))

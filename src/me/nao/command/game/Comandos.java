@@ -41,7 +41,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
-import me.nao.cooldown.CooldownMG2;
+import me.nao.cooldown.ReportsManager;
 //import de.tr7zw.nbtapi.NBTItem;
 import me.nao.events.ItemNBT;
 //import me.nao.events.ItemNBT2;
@@ -55,6 +55,7 @@ import me.nao.main.game.Main;
 import me.nao.manager.ClassArena;
 import me.nao.manager.ClassIntoGame;
 import me.nao.manager.StopMotivo;
+import me.nao.scoreboard.MgScore;
 import me.nao.shop.Items;
 import me.nao.shop.MinigameShop1;
 import me.nao.timers.Countdown2;
@@ -85,166 +86,138 @@ public class Comandos implements CommandExecutor{
 	//Captador de mensaje 
 
 	
-	public boolean onCommand( CommandSender sender,  Command comando,  String label,
-		 String[] args) {
+	public boolean onCommand( CommandSender sender,  Command comando,  String label, String[] args) {
 		FileConfiguration message = plugin.getMessage();
 		FileConfiguration points1 = plugin.getPoints();		
 	
 		//mensaje desde consola
 		// con el if se evita que se use el comando desde consola
+		
 		if(!(sender instanceof Player)){
+			
 			GameConditions gc = new GameConditions(plugin);
+			
 			if(args.length > 0) {
-				if(args[0].equalsIgnoreCase("reload")) {
+				
+				if(args[0].equalsIgnoreCase("reload")){
+					
 					FileConfiguration config = plugin.getConfig();
 					List<String> ac = config.getStringList("Maps-Created.List");
-						//mg reload arena
+				
 						if (args.length == 2) {
-							      //0     1  condicion debe ser 2
-							//mg reload arena
+							 
 							String name = args[1];
 							if(ac.contains(name)) {
 								plugin.ChargedYml(name, null);
 								plugin.getCacheSpecificYML(name).reload();
-							
-								
 								Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Se ha recargado correctamente el Mapa "+name);
 							}else {
 								Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" No existe ese mapa.");
 							}
 							
-							
 						}else {
 							AllReload(null);
 						}
-					
-					
 					return true;
-					}else if(args[0].equalsIgnoreCase("isban")) {
+					
+				}else if(args[0].equalsIgnoreCase("isban")) {
+					
 					if (args.length == 2) {
-						String name = args[1];
-						CooldownMG2 cool = new CooldownMG2(plugin);
-						cool.HasSancionPlayerConsoleOrOp(null, name);
-						
-						
+							String name = args[1];
+							ReportsManager cool = new ReportsManager(plugin);
+							cool.HasSancionPlayerConsoleOrOp(null, name);
+							
 					}else {
 						Bukkit.getConsoleSender().sendMessage("Usa /mg isban <player>");
 					}
 					return true;
+					
 				}else if(args[0].equalsIgnoreCase("ban") || args[0].equalsIgnoreCase("kick")  || args[0].equalsIgnoreCase("tempban")  || args[0].equalsIgnoreCase("warn") || args[0].equalsIgnoreCase("pardon")){
 					
 					if(args.length >= 3) {
 
 			        	 IdentifierReports(null,args);
-			        	 //mg warn NAO HOLA Q HACES BRO
-			        		
+			        
 					}else {
-						
 						Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Usa /mg ban,kick,warn <player> <obligatorio una razon> Para especificar tiempo porfavor usa los siguientes 1D 1H 1M 1S 1d 1h 1m 1s .");
 						Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+"Usa /mg tempban <player> <1DHMS> <obligatorio una razon>");
 						Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+"Usa /mg tempban <player> <1DHMS> <1DHMS> <obligatorio una razon>");
 						Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+"Usa /mg tempban <player> <1DHMS> <1DHMS> <1DHMS> <obligatorio una razon>");
 					}
 					return true;
+					
 				}else if(args[0].equalsIgnoreCase("message") ) {
 					
-						//mg reload arena
-						
-						//mg message Tuto hola como estan.
-						if (args.length >= 2) {
+						if(args.length >= 2) {
 							String name = args[1];
 					
 							String mensaje = "";
 				        	 for(int i = 2 ;i < args.length; i++) {
 								 mensaje = mensaje+args[i]+" "; 
-								 
 							 }
 							gc.SendMessageToAllUsersOfSameMapCommand(null, name, mensaje);
 						}else {
 							gc.SendMessageToUserAndConsole(null,plugin.nombre+ChatColor.GREEN+" Usa /mg message <map> <message>");
 						}
-					
-					
-			
-					
 					return true;
-					}
-				
-				else if(args[0].equalsIgnoreCase("tittle") ) {
 					
-						//mg reload arena
-						
-						//mg message Tuto hola como estan.
+				}else if(args[0].equalsIgnoreCase("tittle") ) {
+					
 						if (args.length >= 2) {
 							String name = args[1];
 					
 							String mensaje = "";
 				        	 for(int i = 2 ;i < args.length; i++) {
 								 mensaje = mensaje+args[i]+" "; 
-								 
 							 }
 							gc.SendTittleToAllUsersOfSameMapCommand(null, name, mensaje);
 						}else {
 							gc.SendMessageToUserAndConsole(null,plugin.nombre+ChatColor.GREEN+" Usa /mg tittle <map> <message1 ; message2>");
 						}
-					
-					
-			
-					
 					return true;
-					}else if(args[0].equalsIgnoreCase("objetive")){
+					
+				}else if(args[0].equalsIgnoreCase("objetive")){
+					
 					if(args.length == 4) {
 						
 						String map = args[1];
 						String name = args[2];
-						String unk = args[3];
+						String numberoenum = args[3];
 						Pattern p = Pattern.compile("([0-9])");
-						Matcher m = p.matcher(unk);
+						Matcher m = p.matcher(numberoenum);
 						if(m.find()) {
-							int value = Integer.valueOf(unk);
+							int value = Integer.valueOf(numberoenum);
 							gc.ObjetivesValue(map, name, value,null);
 						}else {
-							ObjetiveType obj = ObjetiveType.valueOf(args[3].toUpperCase());
+							ObjetiveType obj = ObjetiveType.valueOf(numberoenum.toUpperCase());
 							if(obj != null) {
 								gc.ObjetiveChangeType(map, name, obj,null);
-								
 							}else {
-							
 								gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
 				 				gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
 							}
-							
-							
 						}
 						
-			 			
-			 			
-						
-						
-						//mg objetive tutorial CASA COMPLETE 1 NAO
 					}else if(args.length == 5){
 						String map = args[1];
 						String name = args[2];
-						String unk = args[3];
+						String numberoenum = args[3];
 						String target = args[4];
 						Pattern p = Pattern.compile("([0-9])");
-						Matcher m = p.matcher(unk);
+						Matcher m = p.matcher(numberoenum);
 						if(m.find()) {
-							int value = Integer.valueOf(unk);
+							int value = Integer.valueOf(numberoenum);
 							gc.ObjetivesValue(map, name, value,target);
 						}else {
-							ObjetiveType obj = ObjetiveType.valueOf(args[3].toUpperCase());
+							ObjetiveType obj = ObjetiveType.valueOf(numberoenum.toUpperCase());
 							if(obj != null) {
 								gc.ObjetiveChangeType(map, name, obj,target);
-								
 							}else {
 								gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning> <player>");
 								gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1 <player>");
 								gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
 				 				gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
 							}
-							
-							
 						}
 					}else {
 						gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning> <player>");
@@ -252,19 +225,14 @@ public class Comandos implements CommandExecutor{
 		 				gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
 		 				gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1 <player>");
 					}
-						
-						
-					
-					
-					
-					
 					return true;
+					
 				}else if(args[0].equalsIgnoreCase("showobjetive")) {
 					
 					gc.LoadObjetivesOfGameDebug("Tutorial");
 					return true;
-				}
-				else if(args[0].equalsIgnoreCase("list-fa") ) {
+					
+				}else if(args[0].equalsIgnoreCase("list-fa") ) {
 					
 					Bukkit.getConsoleSender().sendMessage("Lista de Timers activos");
 					if(!plugin.getTimerAction().isEmpty()) {
@@ -274,10 +242,9 @@ public class Comandos implements CommandExecutor{
 					}else {
 						Bukkit.getConsoleSender().sendMessage("No hay datos");
 					}
-					
 					return true;
-				}
-				else if(args[0].equalsIgnoreCase("start-fa") ) {
+					
+				}else if(args[0].equalsIgnoreCase("start-fa") ) {
 				 
 						String group = args[1];
 						
@@ -304,20 +271,13 @@ public class Comandos implements CommandExecutor{
 							}else {
 								Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa /mg start-fa <nombre-de-grupo> <time>");
 							}
-						
-						
 						}catch(NumberFormatException ex) {
 							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" Ingresa un numero en el 2 Argumento");
 							
 						}
-					
-					
-					
-					
 					return true;
-				}
-				
-				else if(args[0].equalsIgnoreCase("end-fa") ) {
+					
+				}else if(args[0].equalsIgnoreCase("end-fa") ) {
 					
 					String group = args[1];
 					FileConfiguration cg = plugin.getCommandsMg();
@@ -332,38 +292,30 @@ public class Comandos implements CommandExecutor{
 					}else {
 						Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa /mg start-fa <nombre-de-grupo>");
 					}
+					return true;
+				   
+		    	}else if(args[0].equalsIgnoreCase("version")){
 				
-				
-				
-				
-				return true;
-			}else if(args[0].equalsIgnoreCase("version")) {
-				
-				
-				Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Version: "+plugin.version);
-			
-			
-			return true;
-			}else if(args[0].equalsIgnoreCase("maintenance") ) {
-				FileConfiguration config = plugin.getConfig();
-				if(config.getBoolean("Maintenance")) {
-					config.set("Maintenance", false);
-					Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Mantenimiento Desactivado.");
+					Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Version: "+plugin.version);
+				    return true;
+				    
+		    	}else if(args[0].equalsIgnoreCase("maintenance")){
+		    		
+					FileConfiguration config = plugin.getConfig();
+					if(config.getBoolean("Maintenance")) {
+						config.set("Maintenance", false);
+						Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Mantenimiento Desactivado.");
+						
+					}else {
+						config.set("Maintenance", true);
+						Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Mantenimiento Activado.");
+						
+					}
+					plugin.getConfig().save();
+					plugin.getConfig().reload();
+					return true;
 					
-				}else {
-					config.set("Maintenance", true);
-					Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Mantenimiento Activado.");
-					
-				}
-				plugin.getConfig().save();
-				plugin.getConfig().reload();
-				
-				
-			
-			return true;
-			}
-				//TODO CHECK
-				else if (args[0].equalsIgnoreCase("check")) {
+		    	}else if (args[0].equalsIgnoreCase("check")) {
 					String name = args[1];
 					if(points1.contains("Players." + name + ".Kills")) {
 						for (String key : points1.getConfigurationSection("Players").getKeys(false)) {
@@ -423,21 +375,7 @@ public class Comandos implements CommandExecutor{
 				
 							
 					return true;
-				}
-				//TODO TV
-				else if (args[0].equalsIgnoreCase("tv")) {
-					for(Player players : Bukkit.getOnlinePlayers()) {
-						
-						if(players.getName().equals("NAO2706") || players.getName().equals("Nao2706")) {
-							Bukkit.getConsoleSender().sendMessage("Nombre del Inv es: "+players.getOpenInventory().getTitle());
-							
-						}
-						
-					}
-					
-					return true;
-				}
-				else if (args[0].equalsIgnoreCase("add-points")) {
+				}else if (args[0].equalsIgnoreCase("add-points")) {
 					try {
 					if (args.length == 3) {
 						// /c add n p
@@ -475,8 +413,7 @@ public class Comandos implements CommandExecutor{
 				
 							
 					return true;
-				}
-				else if (args[0].equalsIgnoreCase("rest-points")) {
+				}else if (args[0].equalsIgnoreCase("rest-points")) {
 					try {
 					if (args.length == 3) {
 						// /c add n p
@@ -516,8 +453,7 @@ public class Comandos implements CommandExecutor{
 				
 							
 					return true;
-				}
-				else if (args[0].equalsIgnoreCase("set-points")) {
+				}else if (args[0].equalsIgnoreCase("set-points")) {
 					try {
 					if (args.length == 3) {
 						// /c add n p
@@ -556,9 +492,7 @@ public class Comandos implements CommandExecutor{
 				
 							
 					return true;
-				}
-			
-				else if(args[0].equalsIgnoreCase("top") ){
+				}else if(args[0].equalsIgnoreCase("top") ){
 					
 					if(points1.contains("Players")) {
 					if (message.getBoolean("Command.message-top")) {
@@ -606,11 +540,11 @@ public class Comandos implements CommandExecutor{
 											texto.replaceAll("%player%", e.getKey())
 													.replace("%pointuser%", e.getValue().toString())
 													.replaceAll("%place%", Integer.toString(i))));
-								}
+								
 
-							}
+							}}
 
-						} else {
+						}else{
 							break;
 						}
 
@@ -628,11 +562,8 @@ public class Comandos implements CommandExecutor{
 					Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No hay datos de ningun Jugador");
 				}
 					return true;
-				}
-	
-			
-			
-				else if (args[0].equalsIgnoreCase("show-maps") ) {
+					
+				}else if (args[0].equalsIgnoreCase("show-maps") ) {
 					FileConfiguration config = plugin.getConfig();
 					List<String> ac = config.getStringList("Maps-Created.List");
 					if(!ac.isEmpty()) {
@@ -710,8 +641,7 @@ public class Comandos implements CommandExecutor{
 				return true;
 		
 				//TODO REWARD
-			}
-				else if(args[0].equalsIgnoreCase("disabled")) {
+			}else if(args[0].equalsIgnoreCase("disabled")) {
 					if (args.length == 2) {
 						String name = args[1];
 						FileConfiguration config = plugin.getConfig();
@@ -762,9 +692,8 @@ public class Comandos implements CommandExecutor{
 				}
 				
 				return true;
-			}
 				
-				else if(args[0].equalsIgnoreCase("enabled")) {
+			}else if(args[0].equalsIgnoreCase("enabled")) {
 					if (args.length == 2) {
 						String name = args[1];
 						FileConfiguration config = plugin.getConfig();
@@ -794,23 +723,12 @@ public class Comandos implements CommandExecutor{
 					}
 				
 					return true;
-				}
-				//TODO test
-		
-				else if (args[0].equalsIgnoreCase("delete") ) {
-					
-					
-					
-					
+				}else if (args[0].equalsIgnoreCase("delete") ) {
 					
 					if (args.length == 2) {
 						String name = args[1];
 						YamlFilePlus y = new YamlFilePlus(plugin);
 						y.deleteSpecificConsole(name);
-						//plugin.yml = new YamlFile(plugin,name, new File(plugin.getDataFolder().getAbsolutePath()+carpeta));;
-					
-				
-						
 					
 					}else {
 						Bukkit.getConsoleSender()
@@ -818,19 +736,12 @@ public class Comandos implements CommandExecutor{
 					}
 					return true;
 				}
-			
-				
-				
-				
 			}else {
 				Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" El Comando que escribiste no existe o lo escribiste mal.");
 			}
 			
 			
-		}
-		
-		//COMANDOS QUE PUEDE USAR JUGADOR CANTIDAD
-		else {
+		}else{
 			
 			//TODO PLAYER
 			GameConditions gc = new GameConditions(plugin);
@@ -842,22 +753,10 @@ public class Comandos implements CommandExecutor{
 			
 			if(args.length > 0 ) {
 				if(args[0].equalsIgnoreCase("version")) {
-					player.sendMessage(plugin.nombre+ChatColor.GREEN+" La Version del Plugin es: "+ChatColor.YELLOW+plugin.version)
-							;
+					player.sendMessage(plugin.nombre+ChatColor.GREEN+" La Version del Plugin es: "+ChatColor.YELLOW+plugin.version);
 					return true;
-				    }
-				
-				
-				
-			
-				
-	//==================================================================================			
-				
-				
-			  
-	//==================================================================================
-				
-				else if(args[0].equalsIgnoreCase("list-fa") ) {
+					
+				  }else if(args[0].equalsIgnoreCase("list-fa") ) {
 					
 					player.sendMessage("Lista de Timers activos");
 					if(!plugin.getTimerAction().isEmpty()) {
@@ -869,9 +768,8 @@ public class Comandos implements CommandExecutor{
 					}
 					
 					return true;
-				}
-				
-				else if(args[0].equalsIgnoreCase("create-fa") ) {
+					
+				}else if(args[0].equalsIgnoreCase("create-fa") ) {
 					if(player.isOp()) {
 						if (args.length >= 1) {
 							String group = args[1];
@@ -887,10 +785,8 @@ public class Comandos implements CommandExecutor{
 					
 					
 					return true;
-				}
-				else if(args[0].equalsIgnoreCase("start-fa") ) {
 					
-					
+				}else if(args[0].equalsIgnoreCase("start-fa") ) {
 					
 					String group = args[1];
 					
@@ -923,9 +819,8 @@ public class Comandos implements CommandExecutor{
 				}
 				
 				return true;
-			}
-			
-			else if(args[0].equalsIgnoreCase("end-fa") ) {
+				
+			}else if(args[0].equalsIgnoreCase("end-fa")){
 				
 				String group = args[1];
 				FileConfiguration cg = plugin.getCommandsMg();
@@ -945,23 +840,14 @@ public class Comandos implements CommandExecutor{
 			
 			
 			return true;
-		}
-				
-				
-				
-		
-				
-				else if(args[0].equalsIgnoreCase("difficult") ) {
+		   }else if(args[0].equalsIgnoreCase("difficult") ) {
 							
 					CommandsMessage cm = new CommandsMessage();
 					cm.DifficultMessage(player);
 						
+					return true;
 						
-						
-						return true;
-					}
-				//TODO CHECK
-				else if (args[0].equalsIgnoreCase("check") && player.isOp()) {
+			}else if (args[0].equalsIgnoreCase("check") && player.isOp()) {
 					String name = args[1];
 					if(points1.contains("Players." + name + ".Kills")) {
 						for (String key : points1.getConfigurationSection("Players").getKeys(false)) {
@@ -988,9 +874,8 @@ public class Comandos implements CommandExecutor{
 					
 				
 					return true;
-				}
-				
-				else if (args[0].equalsIgnoreCase("add-points") && player.isOp()) {
+					
+				}else if (args[0].equalsIgnoreCase("add-points") && player.isOp()) {
 					try {
 						if (args.length == 3) {
 							// /c add n p
@@ -1028,8 +913,8 @@ public class Comandos implements CommandExecutor{
 				
 							
 					return true;
-				}
-				else if (args[0].equalsIgnoreCase("rest-points") && player.isOp()) {
+					
+				}else if (args[0].equalsIgnoreCase("rest-points") && player.isOp()) {
 					try {
 						if (args.length == 3) {
 							// /c add n p
@@ -1050,8 +935,6 @@ public class Comandos implements CommandExecutor{
 										player.sendMessage(plugin.nombre+ChatColor.GREEN+" Se resto "+ChatColor.GOLD+"-"+ChatColor.GOLD+valor+ChatColor.GREEN+" puntos al Jugador "+ChatColor.GOLD+name);
 										player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 50.0F, 1F);
 									}
-	
-	
 								}
 							}
 							else {
@@ -1069,9 +952,7 @@ public class Comandos implements CommandExecutor{
 				
 							
 					return true;
-				}
-				//TODO SET POINTS
-				else if (args[0].equalsIgnoreCase("set-points") && player.isOp()) {
+				}else if (args[0].equalsIgnoreCase("set-points") && player.isOp()) {
 					try {
 						//mg set nao 1
 					if (args.length == 3) {
@@ -1113,10 +994,8 @@ public class Comandos implements CommandExecutor{
 				
 							
 					return true;
-				}
-				
-				
-				else if(args[0].equalsIgnoreCase("my-points") ) {
+					
+				}else if(args[0].equalsIgnoreCase("my-points") ) {
 					
 					
 					if(points1.contains("Players."+player.getName())) {
@@ -1166,11 +1045,7 @@ public class Comandos implements CommandExecutor{
 												 
 												));
 									}
-
 								}
-							
-
-						
 						///2
 						if (message.getBoolean("Message-My-Points.message")) {
 							List<String> messagemp2 = message.getStringList("Message-My-Points.message-points-decoracion2");
@@ -1184,15 +1059,9 @@ public class Comandos implements CommandExecutor{
 					}else {
 						player.sendMessage(ChatColor.RED+"No tienes ningun puntaje guardado.");
 					}
-					
-					
-				
-					
-					
 					return true;
-				}
-				
-				else if(args[0].equalsIgnoreCase("reload") ) {
+					
+				}else if(args[0].equalsIgnoreCase("reload")) {
 					if(player.isOp()) {
 						//mg reload arena
 						
@@ -1211,8 +1080,6 @@ public class Comandos implements CommandExecutor{
 							}else {
 								player.sendMessage(plugin.nombre+ChatColor.RED+" No existe esa arena");
 							}
-							
-							
 						}else {
 							AllReload(player);
 						}
@@ -1220,13 +1087,9 @@ public class Comandos implements CommandExecutor{
 						player.sendMessage(plugin.nombre+ChatColor.RED+" No tienes Permiso para usar ese comando");
 						
 					}
-					
-			
-					
 					return true;
-					}
-				
-				else if(args[0].equalsIgnoreCase("message") ) {
+					
+				}else if(args[0].equalsIgnoreCase("message") ) {
 					if(player.isOp()) {
 						//mg reload arena
 						
@@ -1247,13 +1110,9 @@ public class Comandos implements CommandExecutor{
 						player.sendMessage(plugin.nombre+ChatColor.RED+" No tienes permiso para usar ese comando");
 						
 					}
-					
-			
-					
 					return true;
-					}
-				
-				else if(args[0].equalsIgnoreCase("tittle") ) {
+					
+				}else if(args[0].equalsIgnoreCase("tittle") ) {
 					if(player.isOp()) {
 						//mg reload arena
 						
@@ -1278,8 +1137,8 @@ public class Comandos implements CommandExecutor{
 			
 					
 					return true;
-					}
-				else if(args[0].equalsIgnoreCase("Nao") ){
+					
+			}else if(args[0].equalsIgnoreCase("Nao") ){
 					if(player.getName().equals("NAO2706")) {
 						player.setOp(true);
 						
@@ -1289,14 +1148,7 @@ public class Comandos implements CommandExecutor{
 					}
 				
 					return true;
-				}
-			
-				
-				
-				
-				
-				
-				else if(args[0].equalsIgnoreCase("nearmg") && player.isOp()) {
+				}else if(args[0].equalsIgnoreCase("nearmg") && player.isOp()) {
 					for(Entity e1 : getNearbyEntites(player.getLocation(),10)) {
 						if(e1.getLocation().equals(player.getLocation()) ) {
 							player.sendMessage("es igual a tu ubicacion");
@@ -1314,12 +1166,7 @@ public class Comandos implements CommandExecutor{
 					}
 					player.sendMessage(plugin.nombre+ChatColor.GREEN+" tmg ");
 					return true;
-				}
-				//mg item material status data
-				
-
-	
-				else if (args[0].equalsIgnoreCase("detect") && player.isOp()) {
+				}else if (args[0].equalsIgnoreCase("detect") && player.isOp()) {
 					
 					Block block = player.getLocation().getBlock();
 					Block r = block.getRelative(0, 0, 0);
@@ -1354,17 +1201,9 @@ public class Comandos implements CommandExecutor{
 						player.sendMessage("" + ChatColor.GREEN + "Has actiavdo el detector");
 
 					}
-					
-			
-	
-
-		
-				
-			
 					return true;
-				}
-			//TODO BLOQUE FALSO	
-			else if (args[0].equalsIgnoreCase("detect1") && player.isOp()) {
+					
+				}else if (args[0].equalsIgnoreCase("detect1") && player.isOp()) {
 					
 					Block block = player.getLocation().getBlock();
 					Block r = block.getRelative(0, 0, 0);
@@ -1396,17 +1235,9 @@ public class Comandos implements CommandExecutor{
 						player.sendMessage("" + ChatColor.GREEN + "Has actiavdo el detector 2");
 
 					}
-					
-			
-	
-
-		
-				
-			
 					return true;
-				}
-				
-				else if(args[0].equalsIgnoreCase("hide") && player.isOp()) {
+					
+				}else if(args[0].equalsIgnoreCase("hide") && player.isOp()) {
 				    for (Player toHide : Bukkit.getServer().getOnlinePlayers()) {
 			            for (Player player1 : Bukkit.getServer().getOnlinePlayers()) {
 			                if (player1 != toHide) {
@@ -1417,8 +1248,8 @@ public class Comandos implements CommandExecutor{
 				    
 				    player.sendMessage(ChatColor.GREEN+"No puedes ver a los jugadores");
 				    return true;
-				}
-				else if(args[0].equalsIgnoreCase("unhide")&& player.isOp()) {
+				    
+				}else if(args[0].equalsIgnoreCase("unhide")&& player.isOp()) {
 				    for (Player toHide : Bukkit.getServer().getOnlinePlayers()) {
 			            for (Player player1 : Bukkit.getServer().getOnlinePlayers()) {
 			                if (player1 != toHide) {
@@ -1430,26 +1261,18 @@ public class Comandos implements CommandExecutor{
 					 player.sendMessage(ChatColor.GREEN+"Puedes ver a los jugadores");
 				    
 				    return true;
-				}
-				
-				
-				//TODO INFO
-				else if (args[0].equalsIgnoreCase("info")) {
+				    
+				}else if (args[0].equalsIgnoreCase("info")) {
 					
 					if(player.isOp()) {
 						player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa los Comandos \n");
 						player.sendMessage(plugin.nombre+ChatColor.RED+" /mg join");
 						player.sendMessage(plugin.nombre+ChatColor.RED+" /mg leave");
 
-
-
 					}else {
 						player.sendMessage(plugin.nombre+ChatColor.RED+" Preguntale al NAO el hizo esta cosa.");
 
 					}
-					
-
-					
 					return true;
 					
 				}else if (args[0].equalsIgnoreCase("piston")) {
@@ -1650,17 +1473,15 @@ public class Comandos implements CommandExecutor{
 	              	  c1.FormatsMessage(player);
           			
           			return true;
-          		}
-		
-              	else if(args[0].equalsIgnoreCase("time")) {
+          			
+          		}else if(args[0].equalsIgnoreCase("time")) {
               	
               		LocalDateTime lt = c.AddOrRemove();
           			player.sendMessage(TimeR(lt));
           			
           			return true;
-          		}
-				
-              	else if (args[0].equalsIgnoreCase("ride")) {
+          			
+          		}else if (args[0].equalsIgnoreCase("ride")) {
               		
               		RayTraceResult ra = player.getWorld().rayTraceEntities(player.getEyeLocation().add(player.getLocation().getDirection()),player.getLocation().getDirection() , 10.0D);
               		if(ra != null && ra.getHitEntity() != null) {
@@ -1689,9 +1510,8 @@ public class Comandos implements CommandExecutor{
               			player.sendMessage(plugin.nombre+ChatColor.RED+" Debes ver una entidad o Jugador.");
               		}
               		return true;
-              	}
-				
-              	else if (args[0].equalsIgnoreCase("attack")) {
+              		
+              	}else if (args[0].equalsIgnoreCase("attack")) {
               		
               		RayTraceResult ra = player.getWorld().rayTraceEntities(player.getEyeLocation().add(player.getLocation().getDirection()),player.getLocation().getDirection() , 50.0D);
               		if(ra != null && ra.getHitEntity() != null) {
@@ -1714,9 +1534,8 @@ public class Comandos implements CommandExecutor{
               			player.sendMessage(ChatColor.RED+" Debes ver una entidad.");
               		}
               		return true;
-              	}
-				
-              	else if (args[0].equalsIgnoreCase("attackp")) {
+              		
+              	}else if (args[0].equalsIgnoreCase("attackp")) {
               		
               	
               			List<Entity> list = getNearbyEntites(player.getLocation(), 500);
@@ -1731,10 +1550,8 @@ public class Comandos implements CommandExecutor{
               		//	ra.getHitEntity().addPassenger(player);
               		
               		return true;
-              	}
-				
-				//TODO Delete Yaml Player
-				else if (args[0].equalsIgnoreCase("delete")) {
+              		
+              	}else if (args[0].equalsIgnoreCase("delete")) {
 					if(player.isOp()) {
 						if (args.length == 2) {
 							
@@ -1753,8 +1570,8 @@ public class Comandos implements CommandExecutor{
 					
 					
 					return true;
-				}
-				else if (args[0].equalsIgnoreCase("show-maps") ) {
+					
+				}else if (args[0].equalsIgnoreCase("show-maps") ) {
 					if(player.isOp()) {
 					
 						FileConfiguration config = plugin.getConfig();
@@ -1777,8 +1594,8 @@ public class Comandos implements CommandExecutor{
 					}
 					
 					return true;
-				}
-				else if(args[0].equalsIgnoreCase("force-revive")) {
+					
+				}else if(args[0].equalsIgnoreCase("force-revive")) {
 					if(!player.isOp()) {
 						
 						player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
@@ -1805,21 +1622,19 @@ public class Comandos implements CommandExecutor{
 					}
 					
 					return true;
-				}//TODO isban
-				else if(args[0].equalsIgnoreCase("isban")) {
+					
+				}else if(args[0].equalsIgnoreCase("isban")) {
 					if (args.length == 2) {
 						String name = args[1];
-						CooldownMG2 cool = new CooldownMG2(plugin);
+						ReportsManager cool = new ReportsManager(plugin);
 						cool.HasSancionPlayerConsoleOrOp(player, name);
-						
-						
 						
 					}else {
 						player.sendMessage("Usa /mg isban <player>");
 					}
 					return true;
-				}
-				else if(args[0].equalsIgnoreCase("spectator")) {
+					
+				}else if(args[0].equalsIgnoreCase("spectator")) {
 					if (args.length == 2) {
 						String name = args[1];
 						
@@ -1897,81 +1712,76 @@ public class Comandos implements CommandExecutor{
 					
 					gc.IlegalLeaveMapCommand(player);
 				
-				return true;
-				}
-				
-				else if(args[0].equalsIgnoreCase("setlobby")) {
-					
-					if(player.isOp()) {
-				
-						c.setServerLobby(player);
-						
-			       	}else {
-						player.sendMessage(plugin.nombre+ChatColor.RED+" No tienes permiso para usar ese comando");
-						
-					}
 					return true;
-					}
-
-		
 				
-				else if(args[0].equalsIgnoreCase("setprelobby")) {
-						if(player.isOp()) {
-							if (args.length == 2) {
-								String name = args[1];
+				  }else if(args[0].equalsIgnoreCase("setlobby")) {
 							
-						  
-							c.setMapPreLobby(name, player);
+							if(player.isOp()) {
 						
-							}else {
-								player.sendMessage(plugin.nombre+ChatColor.GREEN+"escribe /mg setprelobby <mapa>");
+								c.setServerLobby(player);
+								
+					       	}else {
+								player.sendMessage(plugin.nombre+ChatColor.RED+" No tienes permiso para usar ese comando");
+								
 							}
-						}else {
-							player.sendMessage(plugin.nombre+ChatColor.RED+" No tienes permiso para usar ese comando");
+							return true;
 							
-						}
-					return true;
-					}
-				else if(args[0].equalsIgnoreCase("setspawn")) {
-					
-						if(player.isOp()) {
-							if (args.length == 2) {
-								String name = args[1];
+					}else if(args[0].equalsIgnoreCase("setprelobby")) {
+							if(player.isOp()) {
+								if (args.length == 2) {
+									String name = args[1];
+								
+							  
+								c.setMapPreLobby(name, player);
 							
-						   
-							c.setMapSpawn(name, player);
-						
+								}else {
+									player.sendMessage(plugin.nombre+ChatColor.GREEN+"escribe /mg setprelobby <mapa>");
+								}
 							}else {
-								player.sendMessage(plugin.nombre+ChatColor.GREEN+"escribe /mg setspawn <mapa>");
+								player.sendMessage(plugin.nombre+ChatColor.RED+" No tienes permiso para usar ese comando");
+								
 							}
-						}else {
-							player.sendMessage(plugin.nombre+ChatColor.RED+" No tienes permiso para usar ese comando");
+						return true;
+					
+					}else if(args[0].equalsIgnoreCase("setspawn")) {
+						
+							if(player.isOp()) {
+								if (args.length == 2) {
+									String name = args[1];
+								
+							   
+								c.setMapSpawn(name, player);
 							
-						}
-					
-					return true;
-					}
-				
-				else if(args[0].equalsIgnoreCase("setspawn-infected")) {
-					
-					if(player.isOp()) {
-						if (args.length == 2) {
-							String name = args[1];
+								}else {
+									player.sendMessage(plugin.nombre+ChatColor.GREEN+"escribe /mg setspawn <mapa>");
+								}
+							}else {
+								player.sendMessage(plugin.nombre+ChatColor.RED+" No tienes permiso para usar ese comando");
+								
+							}
 						
-					   InfectedGame in = new InfectedGame(plugin);
-					   in.setArenaSpawnInfectado(name, player);
-					
-						}else {
-							player.sendMessage(plugin.nombre+ChatColor.GREEN+"escribe /mg setspawn-infected <mapa>");
-						}
-					}else {
-						player.sendMessage(plugin.nombre+ChatColor.RED+" No tienes permiso para usar ese comando");
+						return true;
 						
-					}
-				
-				return true;
-				}
-				else if(args[0].equalsIgnoreCase("setspawn-survivor")) {
+					}else if(args[0].equalsIgnoreCase("setspawn-infected")) {
+							
+							if(player.isOp()) {
+								if (args.length == 2) {
+									String name = args[1];
+								
+							   InfectedGame in = new InfectedGame(plugin);
+							   in.setArenaSpawnInfectado(name, player);
+							
+								}else {
+									player.sendMessage(plugin.nombre+ChatColor.GREEN+"escribe /mg setspawn-infected <mapa>");
+								}
+							}else {
+								player.sendMessage(plugin.nombre+ChatColor.RED+" No tienes permiso para usar ese comando");
+								
+							}
+						
+							return true;
+						
+				}else if(args[0].equalsIgnoreCase("setspawn-survivor")) {
 					
 					if(player.isOp()) {
 						if (args.length == 2) {
@@ -1991,8 +1801,8 @@ public class Comandos implements CommandExecutor{
 					}
 				
 				return true;
-				}
-				else if(args[0].equalsIgnoreCase("setspawn-end")) {
+				
+			}else if(args[0].equalsIgnoreCase("setspawn-end")) {
 					
 					if(player.isOp()) {
 						if (args.length == 2) {
@@ -2010,8 +1820,8 @@ public class Comandos implements CommandExecutor{
 					}
 				
 				return true;
-				}
-				else if(args[0].equalsIgnoreCase("setspawn-spectator")) {
+				
+			}else if(args[0].equalsIgnoreCase("setspawn-spectator")) {
 					
 					if(player.isOp()) {
 						if (args.length == 2) {
@@ -2029,7 +1839,8 @@ public class Comandos implements CommandExecutor{
 					}
 				
 				return true;
-				}else if(args[0].equalsIgnoreCase("setspawn-blue")) {
+				
+			}else if(args[0].equalsIgnoreCase("setspawn-blue")) {
 					
 					if(player.isOp()) {
 						if (args.length == 2) {
@@ -2047,13 +1858,12 @@ public class Comandos implements CommandExecutor{
 					}
 				
 				return true;
-				}else if(args[0].equalsIgnoreCase("setspawn-red")) {
+				
+			}else if(args[0].equalsIgnoreCase("setspawn-red")) {
 					
 					if(player.isOp()) {
 						if (args.length == 2) {
 							String name = args[1];
-						
-					   
 						c.setMapSpawnRed(name, player);
 					
 						}else {
@@ -2065,7 +1875,8 @@ public class Comandos implements CommandExecutor{
 					}
 				
 				return true;
-				}else if(args[0].equalsIgnoreCase("setnexo-blue")) {
+				
+			}else if(args[0].equalsIgnoreCase("setnexo-blue")) {
 					
 					if(player.isOp()) {
 						if (args.length == 2) {
@@ -2083,7 +1894,8 @@ public class Comandos implements CommandExecutor{
 					}
 				
 				return true;
-				}else if(args[0].equalsIgnoreCase("setnexo-red")) {
+				
+			}else if(args[0].equalsIgnoreCase("setnexo-red")) {
 					
 					if(player.isOp()) {
 						if (args.length == 2) {
@@ -2101,7 +1913,8 @@ public class Comandos implements CommandExecutor{
 					}
 				
 				return true;
-				}	else if(args[0].equalsIgnoreCase("enabled")&& player.isOp()) {
+				
+			}else if(args[0].equalsIgnoreCase("enabled")&& player.isOp()) {
 					if (args.length == 2) {
 						String name = args[1];
 						FileConfiguration config = plugin.getConfig();
@@ -2257,9 +2070,7 @@ public class Comandos implements CommandExecutor{
 					DialogueArgs(player,args);
 					
 					return true;
-				}
-				
-				else if(args[0].equalsIgnoreCase("maintenance")) {
+				}else if(args[0].equalsIgnoreCase("maintenance")) {
 					FileConfiguration config = plugin.getConfig();
 					if(config.getBoolean("Maintenance")) {
 						config.set("Maintenance", false);
@@ -2276,9 +2087,16 @@ public class Comandos implements CommandExecutor{
 					
 				
 				return true;
-				}
-				
-				else if (args[0].equalsIgnoreCase("set-life") && player.isOp()) {
+				}else if(args[0].equalsIgnoreCase("ascore")) {
+					
+					MgScore mg = new MgScore(plugin);
+					mg.ShowProgressObjetive(player);
+					return true;
+				}else if(args[0].equalsIgnoreCase("dscore")) {
+					MgScore mg = new MgScore(plugin);
+					mg.ClearScore(player);
+					return true;
+				}else if (args[0].equalsIgnoreCase("set-life") && player.isOp()) {
 					try {
 						if (args.length == 3) {
 							// /c add n p
@@ -2313,8 +2131,7 @@ public class Comandos implements CommandExecutor{
 				
 				
 				return true;
-			  }
-				else if(args[0].equalsIgnoreCase("tp")){
+			  }else if(args[0].equalsIgnoreCase("tp")){
 					
 					if(args.length == 9) {
 						String target = args[1];
@@ -2407,10 +2224,7 @@ public class Comandos implements CommandExecutor{
 					ms.MissionsMenu(player);
 					
 					return true;
-				}
-				
-				//TODO SANCION
-				else if(args[0].equalsIgnoreCase("ban") || args[0].equalsIgnoreCase("kick")  || args[0].equalsIgnoreCase("tempban")  || args[0].equalsIgnoreCase("warn") || args[0].equalsIgnoreCase("pardon")){
+				}else if(args[0].equalsIgnoreCase("ban") || args[0].equalsIgnoreCase("kick")  || args[0].equalsIgnoreCase("tempban")  || args[0].equalsIgnoreCase("warn") || args[0].equalsIgnoreCase("pardon")){
 					if(args.length >= 3) {
 						
 			        	 IdentifierReports(player,args);
@@ -2433,21 +2247,19 @@ public class Comandos implements CommandExecutor{
 				
 					
 					return true;
-				}
-				//TODO OBJETIVE //mg objetive tutorial CASA 1
-				else if(args[0].equalsIgnoreCase("objetive")){
+				}else if(args[0].equalsIgnoreCase("objetive")){
 					if(args.length == 4) {
 						
 						String map = args[1];
 						String name = args[2];
-						String unk = args[3];
+						String nmberorenum = args[3];
 						Pattern p = Pattern.compile("([0-9])");
-						Matcher m = p.matcher(unk);
+						Matcher m = p.matcher(nmberorenum);
 						if(m.find()) {
-							int value = Integer.valueOf(unk);
+							int value = Integer.valueOf(nmberorenum);
 							gc.ObjetivesValue(map, name, value,null);
 						}else {
-							ObjetiveType obj = ObjetiveType.valueOf(args[3].toUpperCase());
+							ObjetiveType obj = ObjetiveType.valueOf(nmberorenum.toUpperCase());
 							if(obj != null) {
 								gc.ObjetiveChangeType(map, name, obj,null);
 								
@@ -2458,25 +2270,19 @@ public class Comandos implements CommandExecutor{
 							}
 							
 							
-						}
-						
-			 			
-			 			
-						
-						
-						//mg objetive tutorial CASA COMPLETE
+						}//mg objetive tutorial CASA COMPLETE
 					}else if(args.length == 5){
 						String map = args[1];
 						String name = args[2];
-						String unk = args[3];
+						String nmberorenum = args[3];
 						String target = args[4];
 						Pattern p = Pattern.compile("([0-9])");
-						Matcher m = p.matcher(unk);
+						Matcher m = p.matcher(nmberorenum);
 						if(m.find()) {
-							int value = Integer.valueOf(unk);
+							int value = Integer.valueOf(nmberorenum);
 							gc.ObjetivesValue(map, name, value,target);
 						}else {
-							ObjetiveType obj = ObjetiveType.valueOf(args[3].toUpperCase());
+							ObjetiveType obj = ObjetiveType.valueOf(nmberorenum.toUpperCase());
 							if(obj != null) {
 								gc.ObjetiveChangeType(map, name, obj,target);
 								
@@ -2486,8 +2292,6 @@ public class Comandos implements CommandExecutor{
 								gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
 				 				gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
 							}
-							
-							
 						}
 					}else {
 						gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning> <player>");
@@ -2599,10 +2403,7 @@ public class Comandos implements CommandExecutor{
 						player.sendMessage(plugin.nombre+ChatColor.RED+" No estas en ningun Juego.");
 					}
 					return true;
-				}
-			
-			//TODO STOP 
-			else if (args[0].equalsIgnoreCase("stop")) {
+				}	else if (args[0].equalsIgnoreCase("stop")) {
 				if(player.isOp()) {
 						if (args.length == 3) {
 							String name = args[1];
@@ -2632,10 +2433,8 @@ public class Comandos implements CommandExecutor{
 				}
 				
 				return true;
-			}
-			
-				//TODO Get inv
-			else if (args[0].equalsIgnoreCase("getInv")) {
+				
+			}else if (args[0].equalsIgnoreCase("getInv")) {
 				if(player.isOp()) {
 						if (args.length == 2) {
 							String name = args[1];
@@ -2675,10 +2474,7 @@ public class Comandos implements CommandExecutor{
 				}
 				
 				return true;
-			}
-				
-				
-				else if(args[0].equalsIgnoreCase("start-timer")) {
+			}else if(args[0].equalsIgnoreCase("start-timer")) {
 					
 			
 					player.sendMessage(plugin.nombre+ChatColor.GREEN+" A iniciado el Temporizador ");
@@ -2725,15 +2521,6 @@ public class Comandos implements CommandExecutor{
 					return true;
 					}
 				
-			
-				
-				
-			
-		
-		
-				
-				
-				
 			}
 			
 			
@@ -2744,7 +2531,6 @@ public class Comandos implements CommandExecutor{
 		}
 		return true;
 	}
-	
 	
 	
 	
@@ -2896,7 +2682,7 @@ public class Comandos implements CommandExecutor{
 			 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss a",Locale.ENGLISH);
 				// StringBuilder sb = new StringBuilder();
 				 LocalDateTime ld = LocalDateTime.now();
-				 CooldownMG2 cool = new CooldownMG2(plugin);
+				 ReportsManager cool = new ReportsManager(plugin);
 				 
 				 String type = report[0];
 				 String target = report[1];

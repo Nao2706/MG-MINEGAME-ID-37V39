@@ -60,6 +60,7 @@ import me.nao.manager.EstadoPartida;
 import me.nao.manager.StopMotivo;
 //import net.md_5.bungee.api.ChatMessageType;
 //import net.md_5.bungee.api.chat.TextComponent;
+import me.nao.scoreboard.MgScore;
 
 
 
@@ -92,6 +93,8 @@ public class AdventureTemp {
 			
 			GameInfo ms = plugin.getGameInfoPoo().get(name);
 			GameAdventure ga = (GameAdventure) ms;
+		    MgScore sco = new MgScore(plugin);
+		    
 			int startm = config.getInt("CountDownPreLobby");
 			int end = 10;
 		
@@ -120,7 +123,7 @@ public class AdventureTemp {
 		 	
 		    BossBar boss = ms.getBoss();
 		    
-		    
+		
 		@Override
 		public void run() {
 			
@@ -271,7 +274,7 @@ public class AdventureTemp {
 					}
 				 	
 				  boss.setTitle(""+ChatColor.DARK_RED+ChatColor.BOLD+"Tiempo Remanente:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+hora+"h "+minuto+"m "+segundo+"s " );
-				
+				 
 				 //boss = Bukkit.createBossBar("Hello",BarColor.GREEN, BarStyle.SOLID,  null ,null);
 //					List<String> alive1 = plugin.getAlive().get(name);
 //					List<String> arrive1 = plugin.getArrive().get(name);
@@ -292,6 +295,7 @@ public class AdventureTemp {
 					for(String players : joins) {
 						Player target = Bukkit.getServer().getPlayerExact(players);
 						
+						sco.ShowProgressObjetive(target);
 				    	if(segundo == 0 && minuto == 0 && hora == 0) {
 				    		
 //				  
