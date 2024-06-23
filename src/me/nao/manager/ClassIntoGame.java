@@ -672,7 +672,12 @@ public class ClassIntoGame {
 			if(e instanceof Player) {
 				Player p = (Player) e;
 				player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto..",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+p.getName(), 40, 80, 40);
-				player.sendMessage(ChatColor.RED+"Moriste por un: "+ChatColor.YELLOW+p.getName());
+				if(p.getName().equals(player.getName())) {
+					player.sendMessage(ChatColor.RED+"Moriste por Suicidarte");
+				}else{
+					player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+p.getName());
+				}
+			
 				gmc.SendMessageToUsersOfSameMap(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+p.getName());
 				GamePlayerDeadInMap(player);
 			
@@ -685,7 +690,11 @@ public class ClassIntoGame {
 				if(damager instanceof Player) {
 					Player killer = (Player) e;
 					player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+killer.getName(), 40, 80, 40);
-					player.sendMessage(ChatColor.RED+"Moriste por "+ChatColor.YELLOW+killer.getName());
+					if(damager.getName().equals(player.getName())) {
+						player.sendMessage(ChatColor.RED+"Moriste por Suicidarte");
+					}else{
+						player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+killer.getName());
+					}
 					gmc.SendMessageToUsersOfSameMap(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+killer.getName());
 					
 				//SINO PROVIENE DE UN JUGADOR SE EVALUA SI TIENE NOMBRE (ES CUSTOM) SINO ES DE UN MOV	

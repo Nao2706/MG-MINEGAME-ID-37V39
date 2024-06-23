@@ -3,6 +3,7 @@ package me.nao.scoreboard;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -33,7 +34,7 @@ public class MgScore {
 		this.plugin = plugin;
 	}
 	
-	
+	//main scoreboard usa la scoreboard del juego (se guarda informcion)
 	public void CreateLife(Player player) {
 	 	ScoreboardManager manager = Bukkit.getScoreboardManager();
 		Scoreboard board = manager.getMainScoreboard();
@@ -61,6 +62,7 @@ public class MgScore {
 	}
 	
 	
+	//new scoreboard no guarda nada por lo menos no encontre registros de la nueva scoreboard
 	public void ShowProgressObjetive(Player player){
 		
 		GameConditions gc = new GameConditions(plugin);
@@ -82,7 +84,7 @@ public class MgScore {
 		List<ObjetivesMG> pr = new ArrayList<>();
 		List<ObjetivesMG> se = new ArrayList<>();
 		List<ObjetivesMG> host = new ArrayList<>();
-		List<ObjetivesMG> os = new ArrayList<>();
+	
 		
 		
 		for(ObjetivesMG ob : l1) {	
@@ -95,22 +97,65 @@ public class MgScore {
 			}
 		}
 		
-		os.addAll(pr);
-		os.addAll(se);
-		os.addAll(host);
-		
+	
 		ScoreboardManager manager = Bukkit.getScoreboardManager();
 		Scoreboard scoreboard = manager.getNewScoreboard();
 		Objective ob = scoreboard.registerNewObjective("Anuncio",Criteria.DUMMY,"");
-		ob.setDisplayName(""+ChatColor.GREEN+ChatColor.BOLD+"OBJETIVOS");
+	
 		ob.setDisplaySlot(DisplaySlot.SIDEBAR);
 		
-		List<String> listaobjs = StatusIntoScore(os);
+		
+		
+		List<String> primobje = StatusIntoScore(pr);
+		List<String> second = StatusIntoScore(se);
+		List<String> hostilobje = StatusIntoScore(host);
+		Random rand = new Random();
+		int val = rand.nextInt(2+1);
+		
+		List<String> show = new ArrayList<>();
+		
+		
+		
+		 if(val == 0) {
+			 ob.setDisplayName(""+ChatColor.GREEN+ChatColor.BOLD+"OBJETIVOS");
+			 show.add(ChatColor.RED+"|-----------|");
+			 show.add(ChatColor.RED+" ");
+			 show.add(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.RED+ChatColor.BOLD+"Hostiles"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
+			 show.addAll(hostilobje);
+			 show.add(ChatColor.RED+"  ");
+			 show.add(ChatColor.RED+"|-----------| ");
+			 show.add(ChatColor.YELLOW+"Revisa el Libro !!!");
+	    }else if(val == 1) {
+	    	 ob.setDisplayName(""+ChatColor.GOLD+ChatColor.BOLD+"OBJETIVOS");
+	    	 show.add(ChatColor.AQUA+"|-----------|");
+	    	 show.add(ChatColor.RED+" ");
+			 show.add(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"Primarios"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
+			 show.addAll(primobje);
+			 show.add(ChatColor.RED+"  ");
+			 show.add(ChatColor.AQUA+"|-----------| ");
+			 show.add(ChatColor.RED+"Revisa el Libro !!!");
+		}else if(val == 2) {
+			 ob.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"OBJETIVOS");
+			 show.add(ChatColor.YELLOW+"|-----------|");
+			 show.add(ChatColor.RED+" ");
+			 show.add(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"Secundarios"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
+			 show.addAll(second);
+			 show.add(ChatColor.RED+"  ");
+			 show.add(ChatColor.YELLOW+"|-----------| ");
+			 show.add(ChatColor.GREEN+"Revisa el Libro !!!");
+		}
+		
+		
 	
-		for(int i = 0; i< listaobjs.size();i++) {
+	
+		
+		
+	
+	
+		for(int i = 0; i< show.size();i++) {
 			
-			Score score = ob.getScore(listaobjs.get(i));
-			score.setScore((listaobjs.size()-i));
+			Score score = ob.getScore(show.get(i));
+			score.setScore((show.size()-i));
 		}
 		player.setScoreboard(scoreboard);
 		
@@ -125,13 +170,11 @@ public class MgScore {
 	public List<String> StatusIntoScore(List<ObjetivesMG> l) {
 		List<String> l2 = new ArrayList<>();
 		
-		
-		 
 		if(!l.isEmpty()) {
 		
 			for(int i=0;i<l.size();i++) {
 				if(l.get(i).getObjetiveType() == ObjetiveType.COMPLETE) {
-					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+l.get(i).getNombre()+" "+Porcentage(l.get(i).getValue(),l.get(i).getCompleteValue()));
+					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+""+ChatColor.GREEN+ChatColor.BOLD+l.get(i).getNombre()+" "+Porcentage(l.get(i).getValue(),l.get(i).getCompleteValue()));
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.INCOMPLETE) {
 					l2.add(""+ChatColor.RED+ChatColor.BOLD+l.get(i).getNombre()+" "+Porcentage(l.get(i).getValue(),l.get(i).getCompleteValue()));
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.WAITING) {
@@ -149,9 +192,11 @@ public class MgScore {
 				}
 				
 			}
+		}else {
+			l2.add(""+ChatColor.RED+ChatColor.BOLD+"Vacio");
 		}
+	
 		
-		l2.add(ChatColor.GREEN+"Revisa el Libro");
 		return l2;
 	}
 	
