@@ -87,11 +87,11 @@ public class GameConditions {
 		}
 		
 	}
-	
-	
+	 
+	  
 	//TODO LEAVE
 	public void LeaveOfTheGame(Player player) {
-		 
+		  
 		if(!isPlayerinGame(player)) {
 			player.sendMessage(ChatColor.RED+"No estas en Ningun Juego.");
 			return;
@@ -102,7 +102,7 @@ public class GameConditions {
 		
 		GameInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
 		
-		
+		 
 		
 		EstadoPartida part = ms.getEstopartida();
 		MgScore sco = new MgScore(plugin);
@@ -145,7 +145,7 @@ public class GameConditions {
 			
 			 String mt = mision.getString("Start.Tittle-of-Mision"); 
 			 player.sendMessage(ChatColor.GREEN+"Has salido del Mapa "+ChatColor.translateAlternateColorCodes('&',mt.replaceAll("%player%",player.getName())));
-			RestorePlayer(player);
+			 RestorePlayer(player);
 			
 		}else if(ms instanceof GameNexo) {
 			GameNexo gn = (GameNexo) ms;
@@ -203,17 +203,19 @@ public class GameConditions {
 			}else{
 				Block block = player.getLocation().getBlock();
 				Block b = block.getRelative(0, -2, 0);
-				if(!(b.getType() == Material.STRUCTURE_BLOCK)) {
+				if(b.getType() != Material.STRUCTURE_BLOCK) {
 					 player.sendMessage(ChatColor.YELLOW+"Debes estar dentro de una Zona Segura para salirte.");
 					 player.sendMessage(ChatColor.RED+"Si te Desconectas fuera de una Zona segura tu Inventario se Borrara.");
-					 return;
+					 
 				}else {
 					LeaveOfTheGame(player);
 				}
+				return;
 			}
 		}else {
 			LeaveOfTheGame(player);
 		}
+		return;
 	}
 	
 	
@@ -223,27 +225,35 @@ public void IlegalLeaveMapConexion(Player player) {
 		if(!isPlayerinGame(player)) {
 			return;
 		}
+		
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		GameAdventure ga = (GameAdventure) plugin.getGameInfoPoo().get(pl.getMapName());
 		if(CanJoinWithYourInventory(pl.getMapName()) && !ga.getSpectator().contains(player.getName())) {
 			
 			if(ga.getMuerto().contains(player.getName())) {
 				LeaveOfTheGame(player);
+			
 			}else{
-				
 				Block block = player.getLocation().getBlock();
 				Block b = block.getRelative(0, -2, 0);
-				if(!(b.getType() == Material.STRUCTURE_BLOCK)) {
+				if(b.getType() != Material.STRUCTURE_BLOCK) {
 					ClassIntoGame ci = new ClassIntoGame(plugin);
 					ci.PlayerDropAllItems(player);
 					LeaveOfTheGame(player);
+				
 					 return;
 				}else{
+					
 					LeaveOfTheGame(player);
 				}
 				
 			}
+		}else{
+			
+			LeaveOfTheGame(player);
 		}
+	
+		return;
 	}
 	
 	
@@ -1081,7 +1091,20 @@ public void IlegalLeaveMapConexion(Player player) {
 		
 	}
 	
-	
+	public void JoinSpectator(Player player ,String map) {
+		 //MODO ESPECTADOR no te uniras como jugador
+		 SetAndSavePlayer(player, map);
+		 SpectatorAddToGame(player, map);
+		 GameInfo ms = plugin.getGameInfoPoo().get(map);
+		 if(ms instanceof GameAdventure) {
+				GameAdventure ga = (GameAdventure) ms;
+				 List<String> spectador = ga.getSpectator();
+				 player.sendMessage(ChatColor.GREEN+"Estas como Espectador en el Mapa: "+ChatColor.GOLD+map);
+				 SendMessageToUsersOfSameMap(player, ChatColor.WHITE+"El Jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" se Unio como Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size())+ChatColor.RED+"]");
+				 ClassArena ca = new ClassArena(plugin);
+				 ca.TptoSpawnSpectator(player, map);
+		 }
+	}
 
 	
 	public boolean CanJoinToTheMision(Player player ,String map) {
@@ -1972,8 +1995,8 @@ public void IlegalLeaveMapConexion(Player player) {
 	}
 	
 	
-	public String TimeDiferenceMg(LocalDateTime fechactual, LocalDateTime fin) {
-        LocalDateTime tempDateTime = LocalDateTime.from(fechactual);
+	public String TimeDiferenceMg(LocalDateTime inicio, LocalDateTime fin) {
+        LocalDateTime tempDateTime = LocalDateTime.from(inicio);
 
         //no cuenta el dia finalejemplo   10 incio 15 final dias diferencia de dias son 4
         long years = tempDateTime.until( fin, ChronoUnit.YEARS );
@@ -2001,24 +2024,6 @@ public void IlegalLeaveMapConexion(Player player) {
                 seconds + " Segundos.";
 	}
 	
-	
-	public void JoinSpectator(Player player ,String map) {
-		 //MODO ESPECTADOR no te uniras como jugador
-		 SetAndSavePlayer(player, map);
-		 SpectatorAddToGame(player, map);
-		 GameInfo ms = plugin.getGameInfoPoo().get(map);
-		 if(ms instanceof GameAdventure) {
-				GameAdventure ga = (GameAdventure) ms;
-				 List<String> spectador = ga.getSpectator();
-				 player.sendMessage(ChatColor.GREEN+"Estas como Espectador en el Mapa: "+ChatColor.GOLD+map);
-				 SendMessageToUsersOfSameMap(player, ChatColor.WHITE+"El Jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" se Unio como Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size())+ChatColor.RED+"]");
-				 ClassArena ca = new ClassArena(plugin);
-				 ca.TptoSpawnSpectator(player, map);
-		 }
-		 
-		
-		
-	}
 	
 	//TODO CHAT
 	public void SendMessageToAllUsersOfSameMap(Player player ,String text) {
@@ -2168,13 +2173,14 @@ public void IlegalLeaveMapConexion(Player player) {
 						   if(target.getName().equals(player.getName())) continue;
 						   target.sendMessage(ChatColor.translateAlternateColorCodes('&', text));
 					}
+					
 					List<Player> spect = ConvertStringToPlayer(ga.getSpectator());
 					if(!spect.isEmpty()) {
 						for(Player target : spect) {
 							
 							target.sendMessage(ChatColor.translateAlternateColorCodes('&',text));
-						}
-					}
+						
+					}}
 		 } 
 		
 		
@@ -2194,8 +2200,8 @@ public void IlegalLeaveMapConexion(Player player) {
 						Player user = Bukkit.getServer().getPlayerExact(target);
 						
 						user.sendMessage(ChatColor.translateAlternateColorCodes('&', text));
-					}
-				}	
+					
+				}}	
 		 }
 	
 
@@ -2298,7 +2304,7 @@ public void IlegalLeaveMapConexion(Player player) {
 	
 	
 	   //TODO TOP
-   	public void Top(Player player ,String arenaName) {
+   	public void Top(String arenaName) {
    					FileConfiguration message = plugin.getMessage();
    		
 		
@@ -2307,27 +2313,22 @@ public void IlegalLeaveMapConexion(Player player) {
 					HashMap<String, Integer> scores = new HashMap<>();
 
 						GameInfo ms = plugin.getGameInfoPoo().get(arenaName);
+						List<Player> joins = new ArrayList<>();
+						List<Player> spectador = new ArrayList<>();
+						
 						 if(ms instanceof GameAdventure) {
 								GameAdventure ga = (GameAdventure) ms;
-								List<Player> joins = ConvertStringToPlayer(ga.getParticipantes());
-								List<Player> spectador = ConvertStringToPlayer(ga.getSpectator());
+								 joins = ConvertStringToPlayer(ga.getParticipantes());
+								 spectador = ConvertStringToPlayer(ga.getSpectator());
 								for(Player user : joins) {
 									PlayerInfo pl = plugin.getPlayerInfoPoo().get(user);
 									
 									if(spectador.contains(user)) continue;
 									 scores.put(user.getName(), pl.getGamePoints().getKills());	
 								}
-						 }
-					
-						
-					
-						
-							
-						
+						 }		
 			// SE GUARDAN LOS DATOS EN EL HASH MAP
 			
-
-		
 
 		// SEGUNDA PARTE CALCULO MUESTRA DE MAYOR A MENOR PUNTAJE
 		List<Map.Entry<String, Integer>> list = new ArrayList<>(scores.entrySet());
@@ -2345,78 +2346,81 @@ public void IlegalLeaveMapConexion(Player player) {
 				System.out.println("LOG 1 -------TOP--------");
 				
 				
-					if (message.getBoolean("Message.message-top")) {
-						List<String> messagep1 = message.getStringList("Message.message-top-decoracion1");
-						for (int j1 = 0; j1 < messagep1.size(); j1++) {
-							String texto2 = messagep1.get(j1);
-							 
-							player.sendMessage(ChatColor.translateAlternateColorCodes('&', texto2));
-					  }}			
-							
 					
-					int i = 0;
-					for (Map.Entry<String, Integer> e : list) {
+					for(Player player : joins) {
 
-					
-						if (i <= message.getInt("Top-Amount")) {
-							i++;
-							// player.sendMessage(i+" Nombre:"+e.getKey()+" Puntos:"+e.getValue());
-
-							if (message.getBoolean("Message.message-top")) {
-								List<String> messagep = message.getStringList("Message.message-top-texto");
-								for (int j = 0; j < messagep.size(); j++) {
-									String texto = messagep.get(j);
+						if (message.getBoolean("Message.message-top")) {
+							List<String> messagep1 = message.getStringList("Message.message-top-decoracion1");
+							for (int j1 = 0; j1 < messagep1.size(); j1++) {
+								String texto2 = messagep1.get(j1);
+								 
+								player.sendMessage(ChatColor.translateAlternateColorCodes('&', texto2));
+						  }}			
 								
-								 		
-										// String time = plugin.getPlayerCronomet().get(e.getKey());
-									if(i == 1) {
-										 player.sendMessage(ChatColor.translateAlternateColorCodes('&',texto
-												 .replace("%mvp%",""+ChatColor.GREEN+ChatColor.BOLD+" MVP ")
-												 .replace("%player%", e.getKey())
-												 .replace("%place%", Integer.toString(i))
-												 .replace("%pointuser%", Integer.toString(e.getValue()))
-												 .replace("%reward%", Long.toString(RewardPointsForItems(e.getValue())))
-												 .replace("%revive%", Integer.toString(getReviveInfo(e.getKey())))
-												 .replace("%helprevive%", Integer.toString(getReviveAsistenceInfo(e.getKey())))
-												 .replace("%deads%", Integer.toString(getDeadsInfo(e.getKey())))
-												 .replace("%damage%", Integer.toString(getDamageInfo(e.getKey())))
-												 //.replace("%cronomet%", time)
-												
-												 ));
-									}else {
-										 player.sendMessage(ChatColor.translateAlternateColorCodes('&',texto
-												 .replace("%player%", e.getKey())
-												 .replace("%place%", Integer.toString(i))
-												 .replace("%pointuser%", Integer.toString(e.getValue()))
-												 .replace("%reward%", Long.toString(RewardPointsForItems(e.getValue())))
-												 .replace("%revive%", Integer.toString(getReviveInfo(e.getKey())))
-												 .replace("%helprevive%", Integer.toString(getReviveAsistenceInfo(e.getKey())))
-												 .replace("%deads%", Integer.toString(getDeadsInfo(e.getKey())))
-												 .replace("%damage%", Integer.toString(getDamageInfo(e.getKey())))
-												 //.replace("%cronomet%", time)
-												
-												 ));
-									}
-										
-										
-										 
+						
+						int i = 0;
+						for (Map.Entry<String, Integer> e : list) {
+
+						
+							if (i <= message.getInt("Top-Amount")) {
+								i++;
+								// player.sendMessage(i+" Nombre:"+e.getKey()+" Puntos:"+e.getValue());
+
+								if (message.getBoolean("Message.message-top")) {
+									List<String> messagep = message.getStringList("Message.message-top-texto");
+									for (int j = 0; j < messagep.size(); j++) {
+										String texto = messagep.get(j);
 									
+									 		
+											// String time = plugin.getPlayerCronomet().get(e.getKey());
+										if(i == 1) {
+											 player.sendMessage(ChatColor.translateAlternateColorCodes('&',texto
+													 .replace("%mvp%",""+ChatColor.GREEN+ChatColor.BOLD+" MVP ")
+													 .replace("%player%", e.getKey())
+													 .replace("%place%", Integer.toString(i))
+													 .replace("%pointuser%", Integer.toString(e.getValue()))
+													 .replace("%reward%", Long.toString(RewardPointsForItems(e.getValue())))
+													 .replace("%revive%", Integer.toString(getReviveInfo(e.getKey())))
+													 .replace("%helprevive%", Integer.toString(getReviveAsistenceInfo(e.getKey())))
+													 .replace("%deads%", Integer.toString(getDeadsInfo(e.getKey())))
+													 .replace("%damage%", Integer.toString(getDamageInfo(e.getKey())))
+													 //.replace("%cronomet%", time)
+													
+													 ));
+										}else {
+											 player.sendMessage(ChatColor.translateAlternateColorCodes('&',texto
+													 .replace("%mvp%","")
+													 .replace("%player%", e.getKey())
+													 .replace("%place%", Integer.toString(i))
+													 .replace("%pointuser%", Integer.toString(e.getValue()))
+													 .replace("%reward%", Long.toString(RewardPointsForItems(e.getValue())))
+													 .replace("%revive%", Integer.toString(getReviveInfo(e.getKey())))
+													 .replace("%helprevive%", Integer.toString(getReviveAsistenceInfo(e.getKey())))
+													 .replace("%deads%", Integer.toString(getDeadsInfo(e.getKey())))
+													 .replace("%damage%", Integer.toString(getDamageInfo(e.getKey())))
+													 //.replace("%cronomet%", time)
+													
+													 ));
+										}
+											
+											
+											 
+										
+									}
+
 								}
 
 							}
-
 						}
+						
+						 if (message.getBoolean("Message.message-top")) {
+								List<String> messagep3 = message.getStringList("Message.message-top-decoracion2");
+								for (int j3 = 0; j3 < messagep3.size(); j3++) {
+									String texto3 = messagep3.get(j3);
+								
+									player.sendMessage(ChatColor.translateAlternateColorCodes('&', texto3));
+						  }}
 					}
-					
-					 if (message.getBoolean("Message.message-top")) {
-							List<String> messagep3 = message.getStringList("Message.message-top-decoracion2");
-							for (int j3 = 0; j3 < messagep3.size(); j3++) {
-								String texto3 = messagep3.get(j3);
-							
-								player.sendMessage(ChatColor.translateAlternateColorCodes('&', texto3));
-					  }}
-					
-					
 				
 	
 			
@@ -2530,6 +2534,7 @@ public void IlegalLeaveMapConexion(Player player) {
 													 );
 									}else {
 										SendMessageToUserAndConsole(null,texto
+												 .replace("%mvp%","")
 												 .replace("%player%", e.getKey())
 												 .replace("%place%", Integer.toString(i))
 												 .replace("%pointuser%", Integer.toString(e.getValue()))
@@ -2763,9 +2768,7 @@ public void IlegalLeaveMapConexion(Player player) {
    				ObjetivesMG obj = l.get(i);
    				if(obj.getPriority() == 1 && obj.getObjetiveType() != ObjetiveType.COMPLETE) {
    					p.add(obj);
-   				}
-   				
-   			}
+   			}}
    		}
    		
    		if(!p.isEmpty()) {
@@ -2815,9 +2818,7 @@ public void IlegalLeaveMapConexion(Player player) {
    				ObjetivesMG obj = l.get(i);
    				if(obj.getPriority() >= 2 && obj.getObjetiveType() != ObjetiveType.COMPLETE) {
    					p.add(obj);
-   				}
-   				
-   			}
+   			}}
    		}
    		
    		if(!p.isEmpty()) {
@@ -2879,9 +2880,7 @@ public void IlegalLeaveMapConexion(Player player) {
    				if(obj.getPriority() == 1 && obj.getObjetiveType() != ObjetiveType.COMPLETE) {
    					
    					p.add(obj);
-   				}
-   				
-   			}
+   			}}
    		}
    		
    		if(!p.isEmpty()) {
@@ -2890,8 +2889,6 @@ public void IlegalLeaveMapConexion(Player player) {
    			}
    			return false;
    		}
-   		
- 		
  		return true;
  	}
  	
@@ -2907,9 +2904,7 @@ public void IlegalLeaveMapConexion(Player player) {
 
    				if(obj.getPriority() >= 2 && obj.getObjetiveType() != ObjetiveType.COMPLETE) {
    					p.add(obj);
-   				}
-   				
-   			}
+   				}}
    		}
    		
    		if(!p.isEmpty()) {
@@ -2918,8 +2913,6 @@ public void IlegalLeaveMapConexion(Player player) {
    			}
    			return false;
    		}
-   		
- 		
  		return true;
  	}
    	
@@ -3088,13 +3081,11 @@ public void IlegalLeaveMapConexion(Player player) {
 							SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
 							
 						}
-						
 					}
 				}
 				
 			   		isCompleteAllPrimaryObjetiveForReward(map);
 					isCompleteAllSecondaryObjetiveForReward(map);
-				
 			}
 			
 		}

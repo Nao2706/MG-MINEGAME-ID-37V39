@@ -331,7 +331,6 @@ public class ClassIntoGame {
 				}
 			}else if(motivo == StopMotivo.WIN && gm.getGameType() == GameType.RESISTENCE && gm.getEstopartida() == EstadoPartida.JUGANDO) {
 				ClassArena c = new ClassArena(plugin);
-		        gmc.Top(player,mapa);
 			    c.EndTptoSpawn(player, mapa);
 				return;
 				
@@ -375,7 +374,7 @@ public class ClassIntoGame {
 					f.spawnFireballGreenLarge();
 					gmc.SendMessageToUsersOfSameMap(player, ChatColor.GOLD+player.getName()+ChatColor.GREEN+" llego a la Meta.");
 				}if(gm.getGameType() == GameType.RESISTENCE) {
-			         gmc.Top(player,mapa);
+			       
 				     c.EndTptoSpawn(player, mapa);
 				}
 				isTheGameRanked(player,mapa);
@@ -401,7 +400,7 @@ public class ClassIntoGame {
 					f.spawnFireballGreenLarge();
 					gmc.SendMessageToUsersOfSameMap(player, ChatColor.GOLD+player.getName()+ChatColor.GREEN+" llego a la Meta.");
 				}if(gm.getGameType() == GameType.RESISTENCE) {
-			         gmc.Top(player,mapa);
+			      
 				     c.EndTptoSpawn(player, mapa);
 				}
 				isTheGameRanked(player,mapa);
@@ -428,7 +427,7 @@ public class ClassIntoGame {
 					f.spawnFireballGreenLarge();
 					gmc.SendMessageToUsersOfSameMap(player, ChatColor.GOLD+player.getName()+ChatColor.GREEN+" llego a la Meta.");
 				}if(gm.getGameType() == GameType.RESISTENCE) {
-			         gmc.Top(player,mapa);
+			       
 				     c.EndTptoSpawn(player, mapa);
 				}
 				isTheGameRanked(player,mapa);
@@ -452,7 +451,7 @@ public class ClassIntoGame {
 				f.spawnFireballGreenLarge();
 				gmc.SendMessageToUsersOfSameMap(player, ChatColor.GOLD+player.getName()+ChatColor.GREEN+" llego a la Meta.");
 			}if(gm.getGameType() == GameType.RESISTENCE) {
-		         gmc.Top(player,mapa);
+		      
 			     c.EndTptoSpawn(player, mapa);
 			}
 			isTheGameRanked(player,mapa);

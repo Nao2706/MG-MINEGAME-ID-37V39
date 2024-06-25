@@ -293,8 +293,8 @@ public class InfectedTemp {
 				    	}else if(dead.size() == joins.size()) {
 				  		GameInfo ms = plugin.getGameInfoPoo().get(name);
 				  		System.out.println("ANTES MISION MISION: "+ms.ShowGame());
-				  		GameConditions gm = new GameConditions(plugin);
-					    gm.Top(target,name);
+				  		//GameConditions gm = new GameConditions(plugin);
+					   // gm.Top(target,name);
 				  		ms.setEstadopartida(EstadoPartida.TERMINANDO);
 				  		 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"( FIN. )");

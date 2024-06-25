@@ -394,10 +394,14 @@ public class ClassArena {
 	    		}
 				
 			}else {
-				player.sendMessage(ChatColor.YELLOW+"El Mapa "+ChatColor.GREEN+name+ChatColor.YELLOW+" no existe");
+				if(player != null) {
+					player.sendMessage(ChatColor.YELLOW+"El Mapa "+ChatColor.GREEN+name+ChatColor.YELLOW+" no existe");
+				}
+				Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+"El Mapa "+ChatColor.GREEN+name+ChatColor.YELLOW+" no existe");
+
 			}
 			
-			}
+		}
 			
 			
    }

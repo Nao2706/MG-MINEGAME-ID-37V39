@@ -509,16 +509,14 @@ public class EventRandoms implements Listener{
 		
 		    GameConditions gc = new GameConditions(plugin);
 			gc.IlegalLeaveMapConexion(player);
-		
+		    //gc.LeaveOfTheGame(player);
 		if(player.isOp()) {
 		//	e.setQuitMessage(ChatColor.GRAY+"["+ChatColor.RED+"!"+ChatColor.GRAY+"]"+ChatColor.RED+" El Admin Salio al server de Test "+ChatColor.GOLD+player.getName());
 		}else {
 		//	e.setQuitMessage(ChatColor.GRAY+"["+ChatColor.RED+"!"+ChatColor.GRAY+"]"+ChatColor.RED+" Salio al server de Test "+ChatColor.GREEN+player.getName());
 		}
-		
-		
-		
-		
+	
+		return;	
 		
 	}
 	
@@ -1153,17 +1151,17 @@ public class EventRandoms implements Listener{
 						if(alive1.contains(player.getName())) {
 		
 							cm.SendMessageToAllUsersOfSameMap(player, ""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.GREEN+ChatColor.BOLD+"VIVO"+ChatColor.DARK_GRAY+ChatColor.BOLD+"] "+ra.getRank(player)+ChatColor.WHITE+player.getName()+": "+ChatColor.GREEN+message);
-						}if(deads1.contains(player.getName())) {
+						}else if(deads1.contains(player.getName())) {
 		
 							cm.SendMessageToAllUsersOfSameMap(player, ""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.RED+ChatColor.BOLD+"MUERTO"+ChatColor.DARK_GRAY+ChatColor.BOLD+"] "+ra.getRank(player)+ChatColor.WHITE+player.getName()+": "+ChatColor.YELLOW+message);
 		
-						}if(spec.contains(player.getName())) {
+						}else if(spec.contains(player.getName())) {
 		
 							cm.SendMessageToAllUsersOfSameMap(player, ""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.WHITE+ChatColor.BOLD+"ESPECTADOR"+ChatColor.DARK_GRAY+ChatColor.BOLD+"] "+ra.getRank(player)+ChatColor.WHITE+player.getName()+": "+ChatColor.GRAY+message);
 						}
 
 					 e.setCancelled(true);
-				}
+					}
 				}
 		
 		 }
@@ -1189,7 +1187,7 @@ public class EventRandoms implements Listener{
 				if(enti.getType() == EntityType.PLAYER) {
 					Player player = (Player) enti;
 					
-			GameConditions gc = new GameConditions(plugin);
+					GameConditions gc = new GameConditions(plugin);
 					if(gc.isPlayerinGame(player)) {
 						if(e.getRegainReason() == RegainReason.MAGIC_REGEN || e.getRegainReason() == RegainReason.MAGIC || e.getRegainReason() == RegainReason.CUSTOM ) {
 							 
@@ -1257,35 +1255,35 @@ public class EventRandoms implements Listener{
 			     
 			   Entity entidad = e.getEntity();
 			
-			if(entidad.getType().equals(EntityType.ZOMBIE)) {
+			if(entidad.getType() == EntityType.ZOMBIE) {
 				if(e instanceof EntityCombustByEntityEvent || e instanceof EntityCombustByBlockEvent ) {
 					return;
 				}else {
 					e.setCancelled(true);
 				}
 			}
-			if(entidad.getType().equals(EntityType.SKELETON)) {
+			if(entidad.getType() == EntityType.SKELETON) {
 				if(e instanceof EntityCombustByEntityEvent || e instanceof EntityCombustByBlockEvent ) {
 					return;
 				}else {
 					e.setCancelled(true);
 				}
 			}
-			if(entidad.getType().equals(EntityType.DROWNED)) {
+			if(entidad.getType() == EntityType.DROWNED) {
 				if(e instanceof EntityCombustByEntityEvent || e instanceof EntityCombustByBlockEvent ) {
 					return;
 				}else {
 					e.setCancelled(true);
 				}
 			}
-			if(entidad.getType().equals(EntityType.ZOMBIE_VILLAGER)) {
+			if(entidad.getType() == EntityType.ZOMBIE_VILLAGER) {
 				if(e instanceof EntityCombustByEntityEvent || e instanceof EntityCombustByBlockEvent ) {
 					return;
 				}else {
 					e.setCancelled(true);
 				}
 			}
-			if(entidad.getType().equals(EntityType.PHANTOM)) {
+			if(entidad.getType() == EntityType.PHANTOM) {
 				if(e instanceof EntityCombustByEntityEvent || e instanceof EntityCombustByBlockEvent ) {
 					return;
 				}else {

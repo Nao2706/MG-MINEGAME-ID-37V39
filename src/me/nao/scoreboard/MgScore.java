@@ -176,19 +176,19 @@ public class MgScore {
 				if(l.get(i).getObjetiveType() == ObjetiveType.COMPLETE) {
 					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+""+ChatColor.GREEN+ChatColor.BOLD+l.get(i).getNombre()+" "+Porcentage(l.get(i).getValue(),l.get(i).getCompleteValue()));
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.INCOMPLETE) {
-					l2.add(""+ChatColor.RED+ChatColor.BOLD+l.get(i).getNombre()+" "+Porcentage(l.get(i).getValue(),l.get(i).getCompleteValue()));
+					l2.add(""+ChatColor.RED+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.GOLD+Porcentage(l.get(i).getValue(),l.get(i).getCompleteValue()));
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.WAITING) {
-					l2.add(""+ChatColor.WHITE+ChatColor.BOLD+l.get(i).getNombre()+" "+Porcentage(l.get(i).getValue(),l.get(i).getCompleteValue()));
+					l2.add(""+ChatColor.WHITE+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.RED+Porcentage(l.get(i).getValue(),l.get(i).getCompleteValue()));
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.UNKNOW) {
-					l2.add(""+ChatColor.WHITE+ChatColor.MAGIC+l.get(i).getNombre()+" "+Porcentage(l.get(i).getValue(),l.get(i).getCompleteValue()));
+					l2.add(""+ChatColor.WHITE+ChatColor.MAGIC+l.get(i).getNombre()+" "+ChatColor.RED+Porcentage(l.get(i).getValue(),l.get(i).getCompleteValue()));
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.WARNING) {
-					l2.add(""+ChatColor.YELLOW+ChatColor.BOLD+l.get(i).getNombre()+" "+Porcentage(l.get(i).getValue(),l.get(i).getCompleteValue()));
+					l2.add(""+ChatColor.YELLOW+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.RED+Porcentage(l.get(i).getValue(),l.get(i).getCompleteValue()));
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.DANGER) {
-					l2.add(""+ChatColor.DARK_RED+ChatColor.BOLD+l.get(i).getNombre()+" "+Porcentage(l.get(i).getValue(),l.get(i).getCompleteValue()));
+					l2.add(""+ChatColor.DARK_RED+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.GOLD+Porcentage(l.get(i).getValue(),l.get(i).getCompleteValue()));
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.CONCLUDED) {
-					l2.add(""+ChatColor.DARK_GRAY+ChatColor.BOLD+l.get(i).getNombre()+" "+Porcentage(l.get(i).getValue(),l.get(i).getCompleteValue()));
+					l2.add(""+ChatColor.DARK_GRAY+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.RED+Porcentage(l.get(i).getValue(),l.get(i).getCompleteValue()));
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.CANCELLED) {
-					l2.add(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+l.get(i).getNombre()+" "+Porcentage(l.get(i).getValue(),l.get(i).getCompleteValue()));
+					l2.add(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+l.get(i).getNombre()+" "+ChatColor.GOLD+Porcentage(l.get(i).getValue(),l.get(i).getCompleteValue()));
 				}
 				
 			}

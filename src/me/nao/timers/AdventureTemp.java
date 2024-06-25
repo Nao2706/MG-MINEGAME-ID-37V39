@@ -32,6 +32,7 @@ import org.bukkit.entity.Husk;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Vindicator;
@@ -86,6 +87,7 @@ public class AdventureTemp {
 		
 		FileConfiguration config = plugin.getConfig();
 		GameConditions gc = new GameConditions(plugin);
+		ClassIntoGame c = new ClassIntoGame(plugin);
 		BukkitScheduler sh = Bukkit.getServer().getScheduler();
        
 		taskID = sh.scheduleSyncRepeatingTask(plugin,new Runnable(){
@@ -127,11 +129,11 @@ public class AdventureTemp {
 		@Override
 		public void run() {
 			
-			List<Player> joins = gc.ConvertStringToPlayer(ms.getParticipantes());
-			List<Player> arrive = gc.ConvertStringToPlayer(ga.getArrivo());
-			List<Player> alive = gc.ConvertStringToPlayer(ga.getVivo());
-			List<Player> dead = gc.ConvertStringToPlayer(ga.getMuerto());
-			List<Player> spect = gc.ConvertStringToPlayer(ga.getSpectator());
+			List<String> joins = ms.getParticipantes();
+			List<String> arrive = ga.getArrivo();
+			List<String> alive = ga.getVivo();
+			List<String> dead = ga.getMuerto();
+			List<String> spect = ga.getSpectator();
 			EstadoPartida part = ms.getEstopartida();
 			StopMotivo motivo = ms.getMotivo();
 
@@ -162,15 +164,15 @@ public class AdventureTemp {
 					gc.StartGameActions(name);
 				}
 			
-				for(Player players : joins) {
-				
+				for(String target : joins) {
+					Player players = Bukkit.getPlayerExact(target);
 					//String mision = plugin.getPlayerInfoPoo().get(target).getMisionName();
 					
 					
 						if(startm <= 5) {
 			       	  		if(startm != 0) {
-			       	  		players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 2F);
-			       	  	players.sendTitle(""+ChatColor.AQUA+ChatColor.BOLD+String.valueOf(startm),""+ChatColor.GREEN+ChatColor.BOLD+"La partida empieza en ", 20, 20, 20);
+			       	  			players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 2F);
+			       	  			players.sendTitle(""+ChatColor.AQUA+ChatColor.BOLD+String.valueOf(startm),""+ChatColor.GREEN+ChatColor.BOLD+"La partida empieza en ", 20, 20, 20);
 			       	  		}
 			    			
 				    	//	players.sendMessage(ChatColor.RED+"No hay jugadores suficientes para empezar la partida :(");
@@ -275,149 +277,103 @@ public class AdventureTemp {
 				 	
 				  boss.setTitle(""+ChatColor.DARK_RED+ChatColor.BOLD+"Tiempo Remanente:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+hora+"h "+minuto+"m "+segundo+"s " );
 				 
+				
+				  
 				 //boss = Bukkit.createBossBar("Hello",BarColor.GREEN, BarStyle.SOLID,  null ,null);
 //					List<String> alive1 = plugin.getAlive().get(name);
 //					List<String> arrive1 = plugin.getArrive().get(name);
 					//List<String> ends = ym.getStringList("End.Commands");
 					
+				  //TIME OUT
+					
+					//EL ORDEN DEL TERMINADO SIEMPRE DEBE IR AL FINAL SINO PUEDE DAR NULLPOINTER POR Q TRATAS DE ACCEDER A COSAS VIEJAS
 					if(segundo == 0 && minuto == 0 && hora == 0) {
+						for(String target : joins) {
+							 Player players = Bukkit.getPlayerExact(target);
+							if(!arrive.contains(players.getName()) && alive.contains(players.getName())) {
+								 
+								  c.GamePlayerLost(players);
+								  players.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Tiempo Agotado",""+ChatColor.YELLOW+ChatColor.BOLD+"Debiste ser mas Rapido", 20, 20, 20);
+
+							  }
+						}
+						
+						 boss.setProgress(1.0);
+				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN...");
+						 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Jugadores que ganaron "+ChatColor.GREEN+arrive+ChatColor.RED+" mapa: "+ChatColor.GREEN+name);
 						 gc.TopConsole(name);
+						 gc.Top(name);
+						 ms.setEstadopartida(EstadoPartida.TERMINANDO);
+						
+				  		 
+				  		 //STOP
 					}else if(motivo == StopMotivo.WIN || motivo == StopMotivo.LOSE || motivo == StopMotivo.ERROR || motivo == StopMotivo.FORCE) {
 						 gc.TopConsole(name);
+						 gc.Top(name);
+						 boss.setProgress(1.0);
+				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN..");
+						 ms.setEstadopartida(EstadoPartida.TERMINANDO);
+						 
+						 //ALL DEADS
 					}else if(dead.size() == joins.size()) {
-						 gc.TopConsole(name);
-					}else if(alive.size() == arrive.size()) {
-						 gc.TopConsole(name);
-					}
-				 
-				  	
-				  
-					for(Player players : joins) {
 						
-						
-						sco.ShowProgressObjetive(players);
-				    	if(segundo == 0 && minuto == 0 && hora == 0) {
-				    		
-//				  
-				    		
-				    		 boss.setProgress(1.0);
-					  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN...");
-				    		 //Bukkit.getScheduler().cancelTask(taskID);	
-					  		 gc.Top(players,name);
-					  		
-					  		   if(!arrive.contains(players) && alive.contains(players)) {
-									  ClassIntoGame c = new ClassIntoGame(plugin);
-									  c.GamePlayerLost(players);
-									  players.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Tiempo Agotado",""+ChatColor.YELLOW+ChatColor.BOLD+"Debiste ser mas Rapido", 20, 20, 20);
-
-					  		   }
-   							
-					    		
-					    			//RemoveArmorStandsAndItemsInMap(target);
-									Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Jugadores que ganaron "+ChatColor.GREEN+ConvertPlayerToString(arrive)+ChatColor.RED+" mapa: "+ChatColor.GREEN+name);
-
-									ms.setEstadopartida(EstadoPartida.TERMINANDO);
+						for(String target : joins) {
+								 Player players = Bukkit.getPlayerExact(target);
+							 players.sendMessage(ChatColor.GREEN+"Todos los jugadores fueron eliminados F ");
+						 }
 							
-  								
-									
-									System.out.println("TIME");
-					    			
-					    		
-						  
-					     }else if(motivo == StopMotivo.WIN || motivo == StopMotivo.LOSE || motivo == StopMotivo.ERROR || motivo == StopMotivo.FORCE) {
-//				    			
-				    			
-				    			//Bukkit.getScheduler().cancelTask(taskID);
-				    			 boss.setProgress(1.0);
-						  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN..");
-						  		//RemoveArmorStandsAndItemsInMap(target);
-						  		 if(motivo == StopMotivo.WIN || motivo == StopMotivo.LOSE ) {
-						  			 gc.Top(players,name);
-						  		 }
-						  		
-						  		ms.setEstadopartida(EstadoPartida.TERMINANDO);
-						  		System.out.println("STOP MOMENT");
-						  		
-				    	}else if(dead.size() == joins.size()) {
-				    		
-				    		System.out.println("ALL DEADS");
-				  		GameInfo ms = plugin.getGameInfoPoo().get(name);
-				  		System.out.println("ANTES MISION MISION: "+ms.ShowGame());
-				  		
-				  		ms.setEstadopartida(EstadoPartida.TERMINANDO);
-				  		 boss.setProgress(1.0);
+						 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Todos perdieron "+ChatColor.GREEN+joins+ChatColor.RED+" mapa: "+ChatColor.GREEN+name+"\n");
+
+						 gc.TopConsole(name);
+						 gc.Top(name);
+						 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"( FIN. )");
-						 // Bukkit.getScheduler().cancelTask(taskID);
-				  		 gc.Top(players,name);
-				  		//target.sendMessage(ChatColor.RED+"Todos los jugadores murieron ");
-					
-							
-								//RemoveArmorStandsAndItemsInMap(target);
-
-								
-//								GameConditions gm = new GameConditions(plugin);
-//						         gm.Top(name);
-									
-								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Todos perdieron "+ChatColor.GREEN+ConvertPlayerToString(joins)+ChatColor.RED+" mapa: "+ChatColor.GREEN+name+"\n");
-
-								players.sendMessage(ChatColor.GREEN+"Todos los jugadores fueron eliminados F ");
-									
-					     	
-						  
-						  
-					  }else if(alive.size() == arrive.size()) {
-						  System.out.println("WINN");
-						  
+						 ms.setEstadopartida(EstadoPartida.TERMINANDO);
 						
-						  GameInfo ms = plugin.getGameInfoPoo().get(name);
-					  		System.out.println("ANTES MISION MISION: "+ms.ShowGame());
-					        
-						         ms.setEstadopartida(EstadoPartida.TERMINANDO);
-						        
-							     boss.setProgress(1.0);
-						  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"[ FIN ]");
-							//  Bukkit.getScheduler().cancelTask(taskID);
-						  		 gc.Top(players,name);
-						  		
-							  if(arrive.contains(players)) {
-								  players.sendMessage(ChatColor.GREEN+"Todos los jugadores con vida han llegado a la meta "+ConvertPlayerToString(arrive));
-							  }
-								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Participaron "+ChatColor.GREEN+ConvertPlayerToString(joins)+ChatColor.RED+" mapa: "+ChatColor.GREEN+name);
-	
-						    	Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Jugadores que ganaron "+ChatColor.GREEN+ConvertPlayerToString(arrive)+ChatColor.RED+" mapa: "+ChatColor.GREEN+name+"\n");
-							 
-							    
-								
-									//RemoveArmorStandsAndItemsInMap(target);
-									
-							
-						    	players.sendMessage(ChatColor.GREEN+"Todos los jugadores con vida llegaron ");
-								
-								
-							  //  TempEndGame2 t = new TempEndGame2(plugin);
-							  //  t.Inicio(name);
-								
-						     
-						  
-					  }
-					  
-				     
-				      ShootEntityToPlayer(players);
-					  RemoveEntitysInBarrier(players);
-					  removeTrapArrows(players);
-					  getGeneratorsOfOres(players);
-					  getNearbyBlocks3(players);
-					  JumpMob(players);
-					  
-					  String s1 = String.valueOf(segundo);
-					  if(s1.endsWith("0")) {
-						  getNearbyBlocks(players);
-					  }
+						 
+						 //WIN
+					}else if(alive.size() == arrive.size()) {
 						
-					
-					
+						for(String target : joins) {
+							 Player players = Bukkit.getPlayerExact(target);
+								if(arrive.contains(players.getName())) {
+									  players.sendMessage(ChatColor.GREEN+"Todos los jugadores con vida han llegado a la meta "+arrive);
+								}
+								players.sendMessage(ChatColor.GREEN+"Todos los Jugadores con Vida llegaron.");
+						 }
+						
+						 boss.setProgress(1.0);
+				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"[ FIN ]");
+				  		 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Participaron "+ChatColor.GREEN+joins+ChatColor.RED+" mapa: "+ChatColor.GREEN+name);
+				  		 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Jugadores que ganaron "+ChatColor.GREEN+arrive+ChatColor.RED+" mapa: "+ChatColor.GREEN+name+"\n");
+
+						 gc.TopConsole(name);
+						 gc.Top(name);
+						 ms.setEstadopartida(EstadoPartida.TERMINANDO);
+						
+				  		
 					}
-				
+					
+					for(String target : joins) {
+						Player players = Bukkit.getPlayerExact(target);
+						if(players != null){
+							sco.ShowProgressObjetive(players);
+						    
+							  ShootEntityToPlayer(players);
+							  RemoveEntitysInBarrier(players);
+							  removeTrapArrows(players);
+							  getGeneratorsOfOres(players);
+							  getNearbyBlocks3(players);
+							  JumpMob(players);
+							  
+							  String s1 = String.valueOf(segundo);
+							  if(s1.endsWith("0")) {
+								  getNearbyBlocks(players);
+							  }
+						}
+					}
+					
+					
 					 gc.HasTimePath("Time-"+hora+"-"+minuto+"-"+segundo, name);
 				//colocar terminando
 			}
@@ -425,24 +381,15 @@ public class AdventureTemp {
 			else if(part == EstadoPartida.TERMINANDO) {
 				 
 					   	if(end == 0) {
-						   	
-				   			
-					   		
-					   		System.out.println("ANTES ADVENTURE RUN : "+ms.ShowGame());
-			    			
-		//			   		
-		//						//RemoveArmorStandsAndItemsInMap(target);
+					   			System.out.println("ANTES ADVENTURE RUN : "+ms.ShowGame());
 								gc.EndTheGame(name);
 								gc.EndGameActions(name);
-				  
-					    	 //ms.setEstadopartida(EstadoPartida.ESPERANDO);
-				   		
-			    		Bukkit.getScheduler().cancelTask(taskID);	
-			    		System.out.println("SE DETUVO ;)");
+								Bukkit.getScheduler().cancelTask(taskID);	
+								System.out.println("SE DETUVO ;)");
 				     }
 			 	
-					for(Player players : joins) {
-						
+					for(String target : joins) {
+						Player players = Bukkit.getPlayerExact(target);
 						if(end <= 5) {
 		 	       		  //  RemoveArmorStandsAndItemsInMap(target);
 							players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 2F);
@@ -459,7 +406,8 @@ public class AdventureTemp {
 					}
 					
 					
-					for(Player players : spect) {
+					for(String target : spect) {
+						Player players = Bukkit.getPlayerExact(target);
 						
 						if(end <= 5) {
 		 	       		  //  RemoveArmorStandsAndItemsInMap(target);
@@ -501,6 +449,9 @@ public class AdventureTemp {
 		
 	  }
 	
+	
+	
+
 
 	//TODO NERBYBLOCK
 	public void getNearbyBlocks(Player player) {
@@ -701,8 +652,32 @@ public class AdventureTemp {
 	}
 	
 	
+	 public List<String> ConvertPlayerToString(List<Player> pl){
+    	 List<String> l = new ArrayList<>();
+    	 
+    	 for(Player player : pl) {
+    		 l.add(player.getName());
+    	 }
+    	return l;
+    }
 	
-	
+	  public void JumpMob(Player player) {
+	    	List<Entity> entities = getNearbyEntites(player.getLocation(), 50);
+	    	for(int i = 0;i< entities.size();i++) {
+	    		Block block = entities.get(i).getLocation().getBlock();
+	    		Block r = block.getRelative(0, 0, 0);
+	    		
+	    		if(entities.get(i).getType() == EntityType.PLAYER) continue;
+	    		
+	    		if(r.getType() == Material.OAK_PRESSURE_PLATE) {
+	    			 entities.get(i).setVelocity(entities.get(i).getLocation().getDirection().multiply(3).setY(2));
+	    		}
+	    		if(r.getType() == Material.STONE_PRESSURE_PLATE) {
+	   			   entities.get(i).setVelocity(entities.get(i).getLocation().getDirection().multiply(3).setY(1));
+	    		}
+	    		
+	    	}
+	    }
 	
 	//TODO SPAWN GENERATOR 3
 	public void getNearbyBlocks3(Player player) {
@@ -886,23 +861,7 @@ public class AdventureTemp {
 		
     }
     
-    public void JumpMob(Player player) {
-    	List<Entity> entities = getNearbyEntites(player.getLocation(), 50);
-    	for(int i = 0;i< entities.size();i++) {
-    		Block block = entities.get(i).getLocation().getBlock();
-    		Block r = block.getRelative(0, 0, 0);
-    		
-    		if(entities.get(i).getType() == EntityType.PLAYER) continue;
-    		
-    		if(r.getType() == Material.OAK_PRESSURE_PLATE) {
-    			 entities.get(i).setVelocity(entities.get(i).getLocation().getDirection().multiply(3).setY(2));
-    		}
-    		if(r.getType() == Material.STONE_PRESSURE_PLATE) {
-   			   entities.get(i).setVelocity(entities.get(i).getLocation().getDirection().multiply(3).setY(1));
-    		}
-    		
-    	}
-    }
+  
 	
 	//TODO vindicator
     public void vindicador(World world , int x , int y , int z) {
@@ -1252,17 +1211,10 @@ public class AdventureTemp {
     }
 
 
-    public List<String> ConvertPlayerToString(List<Player> pl){
-    	 List<String> l = new ArrayList<>();
-    	 
-    	 for(Player player : pl) {
-    		 l.add(player.getName());
-    	 }
-    	return l;
-    }
+   
 
     public void ShootEntityToPlayer(Player player) {
-    	
+    	 
     	List<Entity> l = getNearbyEntites(player.getLocation(),150);
     	
     	if(!l.isEmpty()) {
@@ -1328,7 +1280,12 @@ public class AdventureTemp {
         		Block block = b.getRelative(0,-1,0);
         		
         		if(e.getType() != EntityType.PLAYER && block.getType() == Material.BARRIER) {
-        			e.remove();
+        			if(e instanceof Mob) {
+        				((Mob) e).setHealth(0);
+        			}else {
+        				e.remove();
+        			}
+        			
         		}
         	}
     	}

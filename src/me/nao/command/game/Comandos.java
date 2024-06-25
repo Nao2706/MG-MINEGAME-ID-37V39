@@ -641,7 +641,37 @@ public class Comandos implements CommandExecutor{
 				return true;
 		
 				//TODO REWARD
-			}else if(args[0].equalsIgnoreCase("disabled")) {
+			}else if (args[0].equalsIgnoreCase("stop")) {
+				
+					if (args.length == 3) {
+						
+						String name = args[1];
+						try {
+							StopMotivo motivo = StopMotivo.valueOf(args[2].toUpperCase());
+							
+							//plugin.yml = new YamlFile(plugin,name, new File(plugin.getDataFolder().getAbsolutePath()+carpeta));;
+							//MG STOP NAME
+							Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"STOP MOTIVO: "+motivo.toString());
+							ClassArena c = new ClassArena(plugin);
+							c.StopGames(null, name,motivo);
+						}catch(IllegalArgumentException e) {
+							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Ese motivo no existe usa: Win , Lose , Error o Force. ");
+						}
+						
+						
+					
+						
+					 }else {
+					
+						Bukkit.getConsoleSender()
+						.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg stop <mapa> ");
+					 }
+					
+			
+			
+			return true;
+			
+		}else if(args[0].equalsIgnoreCase("disabled")) {
 					if (args.length == 2) {
 						String name = args[1];
 						FileConfiguration config = plugin.getConfig();
@@ -2403,7 +2433,7 @@ public class Comandos implements CommandExecutor{
 						player.sendMessage(plugin.nombre+ChatColor.RED+" No estas en ningun Juego.");
 					}
 					return true;
-				}	else if (args[0].equalsIgnoreCase("stop")) {
+				}else if (args[0].equalsIgnoreCase("stop")) {
 				if(player.isOp()) {
 						if (args.length == 3) {
 							String name = args[1];

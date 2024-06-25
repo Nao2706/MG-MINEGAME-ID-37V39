@@ -21,6 +21,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -594,11 +595,11 @@ public class SourceOfDamage implements Listener{
 			
 			Block block = e.getEntity().getLocation().getBlock();
 			Block b = block.getRelative(0, -1, 0);
-			if(b.getType().equals(Material.BARRIER) && e.getEntity().getType() != EntityType.PLAYER){
+			if(b.getType() == Material.BARRIER && e.getEntity().getType() != EntityType.PLAYER){
 				
-				e.getEntity().remove();
-			
-				
+				if(e instanceof Mob) {
+					((Mob) e).setHealth(0);
+				}
 			}
 	
 		}

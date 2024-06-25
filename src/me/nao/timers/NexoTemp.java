@@ -288,7 +288,7 @@ public class NexoTemp {
 				    		 boss.setProgress(1.0);
 					  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN...");
 				    		 //Bukkit.getScheduler().cancelTask(taskID);	
-					  		 gc.Top(target,name);
+					  		 //gc.Top(target,name);
 					  		 
 
 					    		
@@ -311,7 +311,7 @@ public class NexoTemp {
 						  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN..");
 						  		//RemoveArmorStandsAndItemsInMap(target);
 						  		 if(motivo == StopMotivo.WIN || motivo == StopMotivo.LOSE ) {
-						  			 gc.Top(target,name);
+						  	//		 gc.Top(target,name);
 						  		 }
 						  		
 						  		ms.setEstadopartida(EstadoPartida.TERMINANDO);
