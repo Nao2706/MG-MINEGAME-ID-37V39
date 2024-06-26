@@ -357,8 +357,9 @@ public class AdventureTemp {
 					for(String target : joins) {
 						Player players = Bukkit.getPlayerExact(target);
 						if(players != null){
-							sco.ShowProgressObjetive(players);
-						    
+							//sco.ShowProgressObjetive(players);
+						  
+							
 							  ShootEntityToPlayer(players);
 							  RemoveEntitysInBarrier(players);
 							  removeTrapArrows(players);
@@ -369,6 +370,12 @@ public class AdventureTemp {
 							  String s1 = String.valueOf(segundo);
 							  if(s1.endsWith("0")) {
 								  getNearbyBlocks(players);
+							  }if(s1.endsWith("3")) {
+								  sco.ShowObjetives(players,0);
+							  }if(s1.endsWith("6")) {
+								  sco.ShowObjetives(players,2);
+							  }if(s1.endsWith("9")) {
+								  sco.ShowObjetives(players,1);
 							  }
 						}
 					}

@@ -1740,7 +1740,7 @@ public class Comandos implements CommandExecutor{
 				 
 				}else if(args[0].equalsIgnoreCase("leave")) {
 					
-					gc.IlegalLeaveMapCommand(player);
+					gc.LeaveMapCommandIlegal(player);
 				
 					return true;
 				
@@ -2119,8 +2119,8 @@ public class Comandos implements CommandExecutor{
 				return true;
 				}else if(args[0].equalsIgnoreCase("ascore")) {
 					
-					MgScore mg = new MgScore(plugin);
-					mg.ShowProgressObjetive(player);
+				//	MgScore mg = new MgScore(plugin);
+					//mg.ShowProgressObjetive(player);
 					return true;
 				}else if(args[0].equalsIgnoreCase("dscore")) {
 					MgScore mg = new MgScore(plugin);

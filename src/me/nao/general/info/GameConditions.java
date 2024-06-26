@@ -189,7 +189,7 @@ public class GameConditions {
 	}
 	
 	
-	public void IlegalLeaveMapCommand(Player player) {
+	public void LeaveMapCommandIlegal(Player player) {
 		
 		if(!isPlayerinGame(player)) {
 			return;
@@ -220,7 +220,7 @@ public class GameConditions {
 	
 	
 	
-public void IlegalLeaveMapConexion(Player player) {
+public void LeaveMapConexionIlegal(Player player) {
 		
 		if(!isPlayerinGame(player)) {
 			return;
@@ -815,6 +815,8 @@ public void IlegalLeaveMapConexion(Player player) {
 
 				 SendMessageToUsersOfSameMap(player,
 				ChatColor.YELLOW+"Se a unido "+ChatColor.GREEN+player.getName()+ChatColor.RED+" ("+ChatColor.GOLD+ga.getParticipantes().size()+ChatColor.YELLOW+"/"+ChatColor.GOLD+getMaxPlayerMap(map)+ChatColor.RED+")");
+				MgScore sc = new MgScore(plugin);
+				sc.LoadScore(player);
 				
 				 if(getMinPlayerMap(map) > ga.getParticipantes().size()) {
 					 
@@ -2461,16 +2463,9 @@ public void IlegalLeaveMapConexion(Player player) {
 								
 								for(Player user : joins) {
 									PlayerInfo pl = plugin.getPlayerInfoPoo().get(user);
-									
-								
 									 scores.put(user.getName(), pl.getGamePoints().getKills());	
 								}
 						 }
-					
-						
-					
-						
-							
 						
 			// SE GUARDAN LOS DATOS EN EL HASH MAP
 			
@@ -2490,7 +2485,7 @@ public void IlegalLeaveMapConexion(Player player) {
 		// TERCERA PARTE IMPRIMIR DATOS DE MAYOR A MENOR
 		
 		
-				System.out.println("LOG 1-------TOP--------");
+				System.out.println("LOG 1-------TOP-------- CONSOLE");
 				
 				
 					if (message.getBoolean("Message.message-top")) {
@@ -2501,26 +2496,41 @@ public void IlegalLeaveMapConexion(Player player) {
 							SendMessageToUserAndConsole(null, texto2);
 					  }}			
 							
-					
-					int i = 0;
-					for (Map.Entry<String, Integer> e : list) {
+					if(!list.isEmpty()) {
+						
+						int i = 0;
+						for (Map.Entry<String, Integer> e : list) {
 
-					
-						if (i <= message.getInt("Top-Amount")) {
-							i++;
-							// player.sendMessage(i+" Nombre:"+e.getKey()+" Puntos:"+e.getValue());
+						
+							if (i <= message.getInt("Top-Amount")) {
+								i++;
+								// player.sendMessage(i+" Nombre:"+e.getKey()+" Puntos:"+e.getValue());
 
-							if (message.getBoolean("Message.message-top")) {
-								List<String> messagep = message.getStringList("Message.message-top-texto");
-								for (int j = 0; j < messagep.size(); j++) {
-									String texto = messagep.get(j);
-								
-								 		
-										// String time = plugin.getPlayerCronomet().get(e.getKey());
-								
-									if(i == 1) {
+								if (message.getBoolean("Message.message-top")) {
+									List<String> messagep = message.getStringList("Message.message-top-texto");
+									for (int j = 0; j < messagep.size(); j++) {
+										String texto = messagep.get(j);
+									
+									 		
+											// String time = plugin.getPlayerCronomet().get(e.getKey());
+									
+										if(i == 1) {
+												SendMessageToUserAndConsole(null,texto
+														 .replace("%mvp%",""+ChatColor.GREEN+ChatColor.BOLD+" MVP ")
+														 .replace("%player%", e.getKey())
+														 .replace("%place%", Integer.toString(i))
+														 .replace("%pointuser%", Integer.toString(e.getValue()))
+														 .replace("%reward%", Long.toString(RewardPointsForItems(e.getValue())))
+														 .replace("%revive%", Integer.toString(getReviveInfo(e.getKey())))
+														 .replace("%helprevive%", Integer.toString(getReviveAsistenceInfo(e.getKey())))
+														 .replace("%deads%", Integer.toString(getDeadsInfo(e.getKey())))
+														 .replace("%damage%", Integer.toString(getDamageInfo(e.getKey())))
+														 //.replace("%cronomet%", time)
+														
+														 );
+										}else {
 											SendMessageToUserAndConsole(null,texto
-													 .replace("%mvp%",""+ChatColor.GREEN+ChatColor.BOLD+" MVP ")
+													 .replace("%mvp%","")
 													 .replace("%player%", e.getKey())
 													 .replace("%place%", Integer.toString(i))
 													 .replace("%pointuser%", Integer.toString(e.getValue()))
@@ -2532,29 +2542,18 @@ public void IlegalLeaveMapConexion(Player player) {
 													 //.replace("%cronomet%", time)
 													
 													 );
-									}else {
-										SendMessageToUserAndConsole(null,texto
-												 .replace("%mvp%","")
-												 .replace("%player%", e.getKey())
-												 .replace("%place%", Integer.toString(i))
-												 .replace("%pointuser%", Integer.toString(e.getValue()))
-												 .replace("%reward%", Long.toString(RewardPointsForItems(e.getValue())))
-												 .replace("%revive%", Integer.toString(getReviveInfo(e.getKey())))
-												 .replace("%helprevive%", Integer.toString(getReviveAsistenceInfo(e.getKey())))
-												 .replace("%deads%", Integer.toString(getDeadsInfo(e.getKey())))
-												 .replace("%damage%", Integer.toString(getDamageInfo(e.getKey())))
-												 //.replace("%cronomet%", time)
-												
-												 );
+										}
+											 
+										
 									}
-										 
-									
-								}
-
-							}
-
+								   }
+							      }
 						}
+						
+					}else {
+						SendMessageToUserAndConsole(null, "Vacio");
 					}
+					
 					
 					 if (message.getBoolean("Message.message-top")) {
 							List<String> messagep3 = message.getStringList("Message.message-top-decoracion2");

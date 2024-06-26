@@ -111,7 +111,7 @@ public class PointsManager {
 			
 			
 			//player.sendMessage("Has Ganado "+val+" de Xp para el modo Ranked.");
-			player.sendMessage(ChatColor.GOLD+"Xp Anterior: "+ChatColor.YELLOW+val+ChatColor.RED+" + "+ChatColor.GOLD+"Xp Ganada: "+ChatColor.GREEN+xp+ChatColor.RED+" x "+ChatColor.GOLD+"Racha: "+ChatColor.RED+point+" Experiencia Total: "+ChatColor.GREEN+(xp + val + (point * 100)) );
+			player.sendMessage(ChatColor.GOLD+"Xp Anterior: "+ChatColor.YELLOW+val+ChatColor.RED+" + "+ChatColor.GOLD+"Xp Ganada: "+ChatColor.GREEN+xp+ChatColor.RED+" x "+ChatColor.GOLD+"Racha: "+ChatColor.RED+point+" Total: "+ChatColor.GREEN+(xp + val + (point * 100)) );
 			xp = xp + val + (point * 100);
 			
 			

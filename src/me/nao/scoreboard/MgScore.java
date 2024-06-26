@@ -63,7 +63,7 @@ public class MgScore {
 	
 	
 	//new scoreboard no guarda nada por lo menos no encontre registros de la nueva scoreboard
-	public void ShowProgressObjetive(Player player){
+	public void LoadScore(Player player){
 		
 		GameConditions gc = new GameConditions(plugin);
 		
@@ -71,31 +71,7 @@ public class MgScore {
 			return;
 		}
 		
-		PlayerInfo p = plugin.getPlayerInfoPoo().get(player);
-		GameInfo gi = plugin.getGameInfoPoo().get(p.getMapName());
-		
-		List<ObjetivesMG> l1 = gi.getGameObjetivesMg().getObjetives();
-		
-		if(l1.isEmpty()) {
-			return;
-		}
-		
-		
-		List<ObjetivesMG> pr = new ArrayList<>();
-		List<ObjetivesMG> se = new ArrayList<>();
-		List<ObjetivesMG> host = new ArrayList<>();
-	
-		
-		
-		for(ObjetivesMG ob : l1) {	
-			if(ob.getPriority() <= 0) {
-				host.add(ob);
-			}else if(ob.getPriority() == 1){
-				pr.add(ob);
-			}else if(ob.getPriority() >= 2){
-				se.add(ob);
-			}
-		}
+
 		
 	
 		ScoreboardManager manager = Bukkit.getScoreboardManager();
@@ -106,51 +82,56 @@ public class MgScore {
 		
 		
 		
-		List<String> primobje = StatusIntoScore(pr);
-		List<String> second = StatusIntoScore(se);
-		List<String> hostilobje = StatusIntoScore(host);
-		Random rand = new Random();
-		int val = rand.nextInt(2+1);
+		
 		
 		List<String> show = new ArrayList<>();
 		
+		Random r = new Random();
 		
+		int val = r.nextInt(3+1); 
 		
-		 if(val == 0) {
-			 ob.setDisplayName(""+ChatColor.GREEN+ChatColor.BOLD+"OBJETIVOS");
-			 show.add(ChatColor.RED+"|-----------|");
-			 show.add(ChatColor.RED+" ");
-			 show.add(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.RED+ChatColor.BOLD+"Hostiles"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
-			 show.addAll(hostilobje);
-			 show.add(ChatColor.RED+"  ");
-			 show.add(ChatColor.RED+"|-----------| ");
-			 show.add(ChatColor.YELLOW+"Revisa el Libro !!!");
-	    }else if(val == 1) {
-	    	 ob.setDisplayName(""+ChatColor.GOLD+ChatColor.BOLD+"OBJETIVOS");
-	    	 show.add(ChatColor.AQUA+"|-----------|");
-	    	 show.add(ChatColor.RED+" ");
-			 show.add(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"Primarios"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
-			 show.addAll(primobje);
-			 show.add(ChatColor.RED+"  ");
-			 show.add(ChatColor.AQUA+"|-----------| ");
-			 show.add(ChatColor.RED+"Revisa el Libro !!!");
-		}else if(val == 2) {
-			 ob.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"OBJETIVOS");
-			 show.add(ChatColor.YELLOW+"|-----------|");
-			 show.add(ChatColor.RED+" ");
-			 show.add(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"Secundarios"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
-			 show.addAll(second);
-			 show.add(ChatColor.RED+"  ");
-			 show.add(ChatColor.YELLOW+"|-----------| ");
-			 show.add(ChatColor.GREEN+"Revisa el Libro !!!");
-		}
-		
-		
-	
-	
-		
-		
-	
+			 ob.setDisplayName(""+ChatColor.YELLOW+ChatColor.BOLD+"NOTAS");
+			 
+			 if(val == 0) {
+				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"-------------");
+				 show.add(ChatColor.RED+" ");
+				 show.add(""+ChatColor.YELLOW+ChatColor.BOLD+"Cargando Informacion....");
+				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Puede que haya");
+				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Puede que no");
+				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Crees Ganar???");
+				 show.add(ChatColor.RED+"  ");
+				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"------------- ");
+			 }if(val == 1) {
+				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"-------------");
+				 show.add(ChatColor.RED+" ");
+				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Cargando Informacion....");
+				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Te fijaste ");
+				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"en la Dificultad");
+				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"no ?? F");
+				 show.add(ChatColor.RED+"  ");
+				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"------------- ");
+			 }if(val == 2) {
+				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"-------------");
+				 show.add(ChatColor.RED+" ");
+				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Cargando Informacion....");
+				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Es facil perderse");
+				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Explora con cuidado");
+				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Y trata de no jugar solo");
+				 show.add(ChatColor.RED+"  ");
+				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"------------- ");
+			 }if(val == 3) {
+				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"-------------");
+				 show.add(ChatColor.RED+" ");
+				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Cargando Informacion....");
+				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"La clave es aprender");
+				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"del mapa y sus trucos");
+				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"o eran los hacks??");
+				 show.add(ChatColor.RED+"  ");
+				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"------------- ");
+			 }
+			 
+			
+			
 	
 		for(int i = 0; i< show.size();i++) {
 			
@@ -158,6 +139,181 @@ public class MgScore {
 			score.setScore((show.size()-i));
 		}
 		player.setScoreboard(scoreboard);
+		
+	}
+	
+	
+	public void ShowObjetives(Player player,int priority) {
+		
+		GameConditions gc = new GameConditions(plugin);
+		
+		if(!gc.isPlayerinGame(player)) {
+			return;
+		}
+		
+		
+		PlayerInfo p = plugin.getPlayerInfoPoo().get(player);
+		
+		if(gc.HasObjetives(p.getMapName())) {
+			GameInfo gi = plugin.getGameInfoPoo().get(p.getMapName());
+			
+			List<ObjetivesMG> l1 = gi.getGameObjetivesMg().getObjetives();
+			
+			if(l1.isEmpty()) {
+				return;
+			}
+			
+			
+			List<ObjetivesMG> pr = new ArrayList<>();
+			List<ObjetivesMG> se = new ArrayList<>();
+			List<ObjetivesMG> host = new ArrayList<>();
+		
+			
+			
+			for(ObjetivesMG ob : l1) {	
+				if(ob.getPriority() <= 0) {
+					host.add(ob);
+				}else if(ob.getPriority() == 1){
+					pr.add(ob);
+				}else if(ob.getPriority() >= 2){
+					se.add(ob);
+				}
+			}
+			
+		
+			ScoreboardManager manager = Bukkit.getScoreboardManager();
+			Scoreboard scoreboard = manager.getNewScoreboard();
+			Objective ob = scoreboard.registerNewObjective("Anuncio",Criteria.DUMMY,"");
+		
+			ob.setDisplaySlot(DisplaySlot.SIDEBAR);
+			
+			List<String> primobje = StatusIntoScore(pr);
+			List<String> second = StatusIntoScore(se);
+			List<String> hostilobje = StatusIntoScore(host);
+//			Random rand = new Random();
+//			int val = rand.nextInt(2+1);
+			
+			List<String> show = new ArrayList<>();
+			
+			 if(priority == 0) {
+				 ob.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.RED+ChatColor.BOLD+"OBJETIVOS HOSTILES"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
+				 show.add(""+ChatColor.RED+ChatColor.BOLD+"-------------");
+				 show.add(ChatColor.RED+" ");
+				 show.addAll(hostilobje);
+				 show.add(ChatColor.RED+"  ");
+				 show.add(""+ChatColor.RED+ChatColor.BOLD+"------------- ");
+				 if(!host.isEmpty()) {
+					 show.add(""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(gc.getAmountOfObjetivesComplete(host), host.size(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]");
+					 show.add(ChatColor.GOLD+"Hay un Progreso del "+ChatColor.GREEN+Porcentage(gc.getAmountOfObjetivesComplete(host), host.size()));
+					
+				 }else {
+					 show.add(ChatColor.RED+"Sin Objetivos Hostiles");
+				 }
+				
+				 show.add(ChatColor.YELLOW+"Revisa el Libro !!!");
+		    }else if(priority == 1) {
+		    	 ob.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"OBJETIVOS PRIMARIOS"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
+		    	 if(!pr.isEmpty()) {
+		    		 if(gc.isNecesaryObjetivePrimary(p.getMapName())) {
+			    		 show.add(ChatColor.GOLD+"Obligatorio" +ChatColor.RED+" Si");
+			    	 }else {
+			    		 show.add(ChatColor.GOLD+"Obligatorio" +ChatColor.RED+" No");
+			    	 }
+		    	 }
+		    	 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"-------------");
+		    	 show.add(ChatColor.RED+" ");
+				 show.addAll(primobje);
+				 show.add(ChatColor.RED+"  ");
+				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"------------- ");
+				 if(!pr.isEmpty()) {
+					 show.add(""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(gc.getAmountOfObjetivesComplete(pr), pr.size(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]");
+					 show.add(ChatColor.GOLD+"Hay un Progreso del "+ChatColor.GREEN+Porcentage(gc.getAmountOfObjetivesComplete(pr), pr.size()));
+				 }else {
+					 show.add(ChatColor.RED+"Sin Objetivos Primarios");
+				 }
+				 show.add(ChatColor.RED+"Revisa el Libro !!!");
+			}else if(priority == 2) {
+				 ob.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"OBJETIVOS SECUNDARIOS"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
+				 if(!se.isEmpty()) {
+		    		 if(gc.isNecesaryObjetiveSedondary(p.getMapName())) {
+			    		 show.add(ChatColor.GOLD+"Obligatorio" +ChatColor.RED+" Si");
+			    	 }else {
+			    		 show.add(ChatColor.GOLD+"Obligatorio" +ChatColor.RED+" No");
+			    	 }
+		    	 }
+				 show.add(""+ChatColor.YELLOW+ChatColor.BOLD+"-------------");
+				 show.add(ChatColor.RED+" ");
+				 show.addAll(second);
+				 show.add(ChatColor.RED+"  ");
+				 show.add(""+ChatColor.YELLOW+ChatColor.BOLD+"------------- ");
+				 if(!se.isEmpty()) {
+					 show.add(""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(gc.getAmountOfObjetivesComplete(se), se.size(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]");
+					 show.add(ChatColor.GOLD+"Hay un Progreso del "+ChatColor.GREEN+Porcentage(gc.getAmountOfObjetivesComplete(se), se.size()));
+				 }else {
+					 show.add(ChatColor.RED+"Sin Objetivos Secundarios");
+				 }
+				
+				 show.add(ChatColor.GREEN+"Revisa el Libro !!!");
+				 
+			}
+			
+			
+		
+		
+			
+			
+		
+		
+			for(int i = 0; i< show.size();i++) {
+				
+				Score score = ob.getScore(show.get(i));
+				score.setScore((show.size()-i));
+			}
+			player.setScoreboard(scoreboard);
+		}else {
+			ScoreboardManager manager = Bukkit.getScoreboardManager();
+			Scoreboard scoreboard = manager.getNewScoreboard();
+			Objective ob = scoreboard.registerNewObjective("Anuncio",Criteria.DUMMY,"");
+		
+			ob.setDisplaySlot(DisplaySlot.SIDEBAR);
+			
+			List<String> con = new ArrayList<>();
+			con.add(ChatColor.GREEN+"Cuidado por donde vas");
+			con.add(ChatColor.GREEN+"No abuses de la Tienda");
+			con.add(ChatColor.GREEN+"Ojo con el Tiempo");
+			con.add(ChatColor.GREEN+"Juega acompañado");
+			con.add(ChatColor.GREEN+"No te mueras tan facil");
+			con.add(ChatColor.GREEN+"Muy dificil?? no creo");
+			con.add(ChatColor.GREEN+"Probaste preguntar??");
+			con.add(ChatColor.GREEN+"No te van a revivir :(");
+			con.add(ChatColor.GREEN+"Falta un medico");
+			con.add(ChatColor.GREEN+"Un Enigma");
+			con.add(ChatColor.GREEN+"Concentrate para ganar");
+			con.add(ChatColor.GREEN+"Compra cosas buenas");
+			con.add(ChatColor.GREEN+"Perdido??");
+			con.add(ChatColor.GREEN+"Facilito 100%");
+			con.add(ChatColor.GREEN+"Dificil? un 1%");
+			con.add(ChatColor.GREEN+"Sigue tu instinto");
+			con.add(ChatColor.GREEN+"Saludos de NAO2706");
+			
+			Random r = new Random();
+			
+			List<String> show = new ArrayList<>();
+			 ob.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.RED+ChatColor.BOLD+"CONSEJOS"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
+			 show.add(""+ChatColor.RED+ChatColor.BOLD+"-------------");
+			 show.add(ChatColor.RED+" ");
+			 show.add(con.get(r.nextInt(con.size())));
+			 show.add(ChatColor.RED+"  ");
+			 show.add(""+ChatColor.RED+ChatColor.BOLD+"------------- ");
+			 
+			 for(int i = 0; i< show.size();i++) {
+					
+					Score score = ob.getScore(show.get(i));
+					score.setScore((show.size()-i));
+				}
+		 player.setScoreboard(scoreboard);
+			 
+		}
 		
 	}
 	
@@ -174,21 +330,21 @@ public class MgScore {
 		
 			for(int i=0;i<l.size();i++) {
 				if(l.get(i).getObjetiveType() == ObjetiveType.COMPLETE) {
-					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+""+ChatColor.GREEN+ChatColor.BOLD+l.get(i).getNombre()+" "+Porcentage(l.get(i).getValue(),l.get(i).getCompleteValue()));
+					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.GREEN+ChatColor.BOLD+""+ChatColor.GREEN+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.RED+l.get(i).getValue()+"/"+ChatColor.RED+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.INCOMPLETE) {
-					l2.add(""+ChatColor.RED+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.GOLD+Porcentage(l.get(i).getValue(),l.get(i).getCompleteValue()));
+					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.RED+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.RED+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.RED+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.WAITING) {
-					l2.add(""+ChatColor.WHITE+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.RED+Porcentage(l.get(i).getValue(),l.get(i).getCompleteValue()));
+					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.WHITE+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.RED+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.RED+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.UNKNOW) {
-					l2.add(""+ChatColor.WHITE+ChatColor.MAGIC+l.get(i).getNombre()+" "+ChatColor.RED+Porcentage(l.get(i).getValue(),l.get(i).getCompleteValue()));
+					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.WHITE+ChatColor.MAGIC+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.RED+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.RED+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.WARNING) {
-					l2.add(""+ChatColor.YELLOW+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.RED+Porcentage(l.get(i).getValue(),l.get(i).getCompleteValue()));
+					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.YELLOW+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.RED+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.RED+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.DANGER) {
-					l2.add(""+ChatColor.DARK_RED+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.GOLD+Porcentage(l.get(i).getValue(),l.get(i).getCompleteValue()));
+					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.DARK_RED+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.RED+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.RED+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.CONCLUDED) {
-					l2.add(""+ChatColor.DARK_GRAY+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.RED+Porcentage(l.get(i).getValue(),l.get(i).getCompleteValue()));
+					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.DARK_GRAY+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.RED+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.RED+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.CANCELLED) {
-					l2.add(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+l.get(i).getNombre()+" "+ChatColor.GOLD+Porcentage(l.get(i).getValue(),l.get(i).getCompleteValue()));
+					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.RED+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.RED+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
 				}
 				
 			}
