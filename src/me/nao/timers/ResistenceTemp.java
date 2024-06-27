@@ -309,6 +309,7 @@ public class ResistenceTemp {
 						  String s1 = String.valueOf(segundo);
 						  if(s1.endsWith("0")) {
 							  getNearbyBlocks(players);
+							  sco.ShowObjetives(players,3);
 						  }if(s1.endsWith("3")) {
 							  sco.ShowObjetives(players,0);
 						  }if(s1.endsWith("6")) {

@@ -2210,6 +2210,29 @@ public void LeaveMapConexionIlegal(Player player) {
 		
 	}
 	
+	public void SendTittleToAllPlayersInMap(String map,String text,String text2) {
+		
+		
+		GameInfo ms = plugin.getGameInfoPoo().get(map);
+		//MisionInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
+		 if(ms instanceof GameAdventure) {
+				GameAdventure ga = (GameAdventure) ms;
+				List<String> play = ga.getParticipantes();
+				
+				if(!play.isEmpty()) {
+					for(String target : play) {
+						Player user = Bukkit.getServer().getPlayerExact(target);
+						
+						user.sendTitle(ChatColor.translateAlternateColorCodes('&', text), ChatColor.translateAlternateColorCodes('&', text2), 20, 20, 20);
+					
+				}}	
+		 }
+	
+
+		
+	}
+	
+	
 	//TODO CONSOLE AND PLAYER FOR OP OR DEBUG
 	public void SendMessageToUserAndConsole(Player player ,String text) {
 		
@@ -2680,7 +2703,7 @@ public void LeaveMapConexionIlegal(Player player) {
 	   				int valuec = game.getInt("Game-Objetives."+key+".Complete-Value");
 	   				int valuei = game.getInt("Game-Objetives."+key+".Incomplete-Value");
    	   				
-   	   				String description = game.getString("Game-Objetives."+key+".Description");
+   	   				String description = ChatColor.translateAlternateColorCodes('&', game.getString("Game-Objetives."+key+".Description"));
    	   				ObjetivesMG gob = new ObjetivesMG(key,priority,values,valueinit,valuec,valuei,description,ObjetiveType.valueOf(status.toUpperCase()),new HashMap<Player,Integer>());
    	   				l.add(gob);
    	   				
@@ -2956,8 +2979,11 @@ public void LeaveMapConexionIlegal(Player player) {
 				
 					// VALOR START: 10  VALOR COMPLETE: 0
 				if(vals > valc) {
+					
+					//SI ES MENOR O IGUAL A COMPLETO
 					if(val <= valc) {
 						
+						//SI ES WAIT PASA A COMPLETO SI ES DANGER O WARNING A CONCLUDED
 						if(obj.getObjetiveType() == ObjetiveType.WAITING) {
 							obj.setObjetiveType(ObjetiveType.COMPLETE);
 							
@@ -2967,10 +2993,12 @@ public void LeaveMapConexionIlegal(Player player) {
 						obj.setValue(obj.getCompleteValue());
 						ObjetiveGeneralActionsComplete(map,obj,gi);
 						
+						//SI ES NULL CAMBIA A NORMAL EL OBJETIVO SINO ES NULL LO CONVIERTE A PLAYER Y SE CHECA QUE ESTE EN JUEGO SI ES NULL O NO ESTA SIGUE SIENDO UN CAMBIO NORMAL
 						if(player != null) {
 							Player target = Bukkit.getPlayerExact(player);
 							if(target != null && gc.isPlayerinGame(target)) {
-								SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado gracias a "+target.getName()+" "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+								SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Completado gracias a "+target.getName()+" "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
+								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" Completado por "+target.getName()+" "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
 
 								if(obj.getParticipants().containsKey(target)) {
 									obj.getParticipants().put(target,obj.getParticipants().get(target)+value);
@@ -2978,12 +3006,13 @@ public void LeaveMapConexionIlegal(Player player) {
 									obj.getParticipants().put(target,value);
 								}
 							}else {
-								SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
-		
+								SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
+								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
 							}
 						}else {
-							SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
-							
+							SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
+							SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
+
 						}
 						
 					
@@ -3002,7 +3031,8 @@ public void LeaveMapConexionIlegal(Player player) {
 						if(player != null) {
 							Player target = Bukkit.getPlayerExact(player);
 							if(target != null && gc.isPlayerinGame(target)) {
-								SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado gracias a "+target.getName()+" "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+								SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado gracias a "+target.getName()+" "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
+								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" Cambio por "+target.getName()+" "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
 
 								if(obj.getParticipants().containsKey(target)) {
 									obj.getParticipants().put(target,obj.getParticipants().get(target)+value);
@@ -3010,12 +3040,14 @@ public void LeaveMapConexionIlegal(Player player) {
 									obj.getParticipants().put(target,value);
 								}
 							}else {
-								SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
-		
+								SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
+								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+" cambio "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
+
 							}
 						}else {
-							SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
-							
+							SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
+							SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+" cambio "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
+
 						}
 						
 						
@@ -3036,7 +3068,8 @@ public void LeaveMapConexionIlegal(Player player) {
 						if(player != null) {
 							Player target = Bukkit.getPlayerExact(player);
 							if(target != null && gc.isPlayerinGame(target)) {
-								SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado gracias a "+target.getName()+" "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+								SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Completado gracias a "+target.getName()+" "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
+								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" Completado por "+target.getName()+" "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
 
 								if(obj.getParticipants().containsKey(target)) {
 									obj.getParticipants().put(target,obj.getParticipants().get(target)+value);
@@ -3044,12 +3077,14 @@ public void LeaveMapConexionIlegal(Player player) {
 									obj.getParticipants().put(target,value);
 								}
 							}else {
-								SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
-		
+								SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
+								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
+
 							}
 						}else {
-							SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
-							
+							SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
+							SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
+
 						}
 						
 					}else if(val <= vali) {
@@ -3065,20 +3100,24 @@ public void LeaveMapConexionIlegal(Player player) {
 						if(player != null) {
 							Player target = Bukkit.getPlayerExact(player);
 							if(target != null && gc.isPlayerinGame(target)) {
-								SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado gracias a "+target.getName()+" "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
+								SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado gracias a "+target.getName()+" "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
+								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" Cambio por "+target.getName()+" "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
 
+								
 								if(obj.getParticipants().containsKey(target)) {
 									obj.getParticipants().put(target,obj.getParticipants().get(target)+value);
 								}else {
 									obj.getParticipants().put(target,value);
 								}
 							}else {
-								SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
-		
+								SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
+								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+" cambio "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
+
 							}
 						}else {
-							SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Ojetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.GOLD+val+"/"+obj.getCompleteValue());
-							
+							SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
+							SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+" cambio "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
+
 						}
 					}
 				}
@@ -3251,7 +3290,14 @@ public void LeaveMapConexionIlegal(Player player) {
 				mo.setValue(mo.getCompleteValue());
 				ObjetiveGeneralActionsComplete(map,mo,gi);
 				break;
-			
+			case HIDE:
+				mo.setObjetiveType(ObjetiveType.HIDE);
+				SendMessageToAllPlayersInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" esta Oculto.");
+				break;
+			case CANCELLED:
+				mo.setObjetiveType(ObjetiveType.CANCELLED);
+				SendMessageToAllPlayersInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" esta Cancelado.");
+				break;
 			default:
 				SendMessageToAllPlayersInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" no tuvo Cambios.");
 			}
@@ -3309,8 +3355,6 @@ public void LeaveMapConexionIlegal(Player player) {
 				}else {
 					Bukkit.dispatchCommand(console, ChatColor.translateAlternateColorCodes('&', texto));
 				}
-				
-				
 			}
 		}
 	}

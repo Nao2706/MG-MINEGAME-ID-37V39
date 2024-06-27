@@ -108,7 +108,7 @@ public class AdventureTemp {
 		    int  segundo2 = 0;
 			int  minuto2 = 0 ;
 			int  hora2 = 0 ;
-																						//APARENTEMENTE ESTOS DOS SON BarFlag. unas flags
+			int anuncios = 0;																			//APARENTEMENTE ESTOS DOS SON BarFlag. unas flags
 		
 			
 		   
@@ -367,19 +367,27 @@ public class AdventureTemp {
 							  getNearbyBlocks3(players);
 							  JumpMob(players);
 							  
+							  if(anuncios >= 0 && anuncios <= 5) {
+								  sco.ShowObjetives(players,1);
+							  }else if(anuncios >= 6 && anuncios <= 11) {
+								  sco.ShowObjetives(players,2);
+							  }else if(anuncios >= 12 && anuncios <= 17) {
+								  sco.ShowObjetives(players,0);
+							  }else if(anuncios >= 18 && anuncios <= 23) {
+								  sco.ShowObjetives(players,3);
+							  }
 							  String s1 = String.valueOf(segundo);
 							  if(s1.endsWith("0")) {
 								  getNearbyBlocks(players);
-							  }if(s1.endsWith("3")) {
-								  sco.ShowObjetives(players,0);
-							  }if(s1.endsWith("6")) {
-								  sco.ShowObjetives(players,2);
-							  }if(s1.endsWith("9")) {
-								  sco.ShowObjetives(players,1);
 							  }
 						}
 					}
 					
+					if(anuncios == 25) {
+						anuncios = 0;
+					  }
+					
+					anuncios ++;
 					
 					 gc.HasTimePath("Time-"+hora+"-"+minuto+"-"+segundo, name);
 				//colocar terminando

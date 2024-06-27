@@ -1076,11 +1076,18 @@ public class MinigameShop1 implements Listener{
 				ClassIntoGame c = new ClassIntoGame(plugin);
 				c.GameRevivePlayer(player, name);
 			}
-		
-			 if(player.getInventory().firstEmpty() == -1) {
-				  player.sendMessage(ChatColor.RED+"Tu Inventario esta lleno has Espacio.");
-				  return;
+			 if(!ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("OBJETIVOS PRIMARIOS")
+						|| !ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("OBJETIVOS SECUNDARIOS")
+						|| !ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("OBJETIVOS")
+						|| !ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("OBJETIVOS HOSTILES")) {
+				 if(player.getInventory().firstEmpty() == -1) {
+						
+					 player.sendMessage(ChatColor.RED+"Tu Inventario esta lleno has Espacio.");
+					  return;
+				 
 			  }
+			 }
+			
 			 if(item.isSimilar(Items.OBJETIVOS.getValue())) {
 				 player.getInventory().addItem(Items.OBJETIVOSP.getValue());
 				 return;
@@ -2003,7 +2010,7 @@ public class MinigameShop1 implements Listener{
 	//NUEVA PAGINA EN PAG PRINCIPAL
 	public void NewPagBack(Player player) {
 		List<String> l = new ArrayList<String>();
-		
+		 
 		l.add("ESPADAS");l.add("ARCOS Y BALLESTAS");l.add("DEFENSA");l.add("COMIDA Y POSIONES");l.add("ESPECIALES");
 		if(player.getOpenInventory() != null && l.contains(ChatColor.stripColor(player.getOpenInventory().getTitle()))) {
 			createInv(player);
@@ -2051,6 +2058,11 @@ public class MinigameShop1 implements Listener{
 				}
 				
 			}
+			if(l2.isEmpty()) {
+				l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"Cargando...");
+ 
+			  }
+			
 				GameConditions gc = new GameConditions(plugin);
 				l2.add("");
 			    l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"Clickeame Para ver mas Detalles.");

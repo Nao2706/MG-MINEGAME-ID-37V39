@@ -189,12 +189,16 @@ public class Comandos implements CommandExecutor{
 							int value = Integer.valueOf(numberoenum);
 							gc.ObjetivesValue(map, name, value,null);
 						}else {
-							ObjetiveType obj = ObjetiveType.valueOf(numberoenum.toUpperCase());
-							if(obj != null) {
-								gc.ObjetiveChangeType(map, name, obj,null);
-							}else {
-								gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
-				 				gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
+							try {
+								ObjetiveType obj = ObjetiveType.valueOf(numberoenum.toUpperCase());
+								if(obj != null) {
+									gc.ObjetiveChangeType(map, name, obj,null);
+								}else {
+									gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
+					 				gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
+								}
+							}catch(IllegalArgumentException e) {
+								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No existe el tipo "+ChatColor.GOLD+numberoenum);
 							}
 						}
 						
@@ -209,14 +213,18 @@ public class Comandos implements CommandExecutor{
 							int value = Integer.valueOf(numberoenum);
 							gc.ObjetivesValue(map, name, value,target);
 						}else {
-							ObjetiveType obj = ObjetiveType.valueOf(numberoenum.toUpperCase());
-							if(obj != null) {
-								gc.ObjetiveChangeType(map, name, obj,target);
-							}else {
-								gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning> <player>");
-								gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1 <player>");
-								gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
-				 				gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
+							try {
+								ObjetiveType obj = ObjetiveType.valueOf(numberoenum.toUpperCase());
+								if(obj != null) {
+									gc.ObjetiveChangeType(map, name, obj,target);
+								}else {
+									gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning> <player>");
+									gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1 <player>");
+									gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
+					 				gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
+								}
+							}catch(IllegalArgumentException e) {
+								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No existe el tipo "+ChatColor.GOLD+numberoenum);
 							}
 						}
 					}else {
@@ -254,7 +262,7 @@ public class Comandos implements CommandExecutor{
 						
 						FileConfiguration cg = plugin.getCommandsMg();
 						if(!cg.contains("Commands."+group)) {
-							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No existe ese path.");
+							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"MG(start-fa) No existe ese path.");
 							return true;
 						}
 						
@@ -282,7 +290,7 @@ public class Comandos implements CommandExecutor{
 					String group = args[1];
 					FileConfiguration cg = plugin.getCommandsMg();
 					if(!cg.contains("Commands."+group)) {
-						Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No existe ese path.");
+						Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"MG(end-fa) No existe ese path.");
 						return true;
 					}
 					
@@ -826,7 +834,7 @@ public class Comandos implements CommandExecutor{
 					
 					FileConfiguration cg = plugin.getCommandsMg();
 					if(!cg.contains("Commands."+group)) {
-						player.sendMessage(ChatColor.RED+"No existe ese path.");
+						player.sendMessage(ChatColor.RED+"MG(start-fa) No existe ese path.");
 						return true;
 					}
 				try {	
@@ -855,7 +863,7 @@ public class Comandos implements CommandExecutor{
 				String group = args[1];
 				FileConfiguration cg = plugin.getCommandsMg();
 				if(!cg.contains("Commands."+group)) {
-					player.sendMessage(ChatColor.RED+"No existe ese path.");
+					player.sendMessage(ChatColor.RED+"MG(end-fa) No existe ese path.");
 					return true;
 				}
 				
@@ -2280,6 +2288,7 @@ public class Comandos implements CommandExecutor{
 				}else if(args[0].equalsIgnoreCase("objetive")){
 					if(args.length == 4) {
 						
+						
 						String map = args[1];
 						String name = args[2];
 						String nmberorenum = args[3];
@@ -2289,15 +2298,21 @@ public class Comandos implements CommandExecutor{
 							int value = Integer.valueOf(nmberorenum);
 							gc.ObjetivesValue(map, name, value,null);
 						}else {
-							ObjetiveType obj = ObjetiveType.valueOf(nmberorenum.toUpperCase());
-							if(obj != null) {
-								gc.ObjetiveChangeType(map, name, obj,null);
-								
-							}else {
-								player.sendMessage(ChatColor.RED+"Ese no es un Tipo de Objetivo");
-								gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
-				 				gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
+							try {
+								ObjetiveType obj = ObjetiveType.valueOf(nmberorenum.toUpperCase());
+								if(obj != null) {
+									gc.ObjetiveChangeType(map, name, obj,null);
+									
+								}else {
+									player.sendMessage(ChatColor.RED+"Ese no es un Tipo de Objetivo");
+									gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
+					 				gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
+								}
+							}catch(IllegalArgumentException e) {
+								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No existe el tipo "+ChatColor.GOLD+nmberorenum );
 							}
+							
+							
 							
 							
 						}//mg objetive tutorial CASA COMPLETE
@@ -2312,15 +2327,20 @@ public class Comandos implements CommandExecutor{
 							int value = Integer.valueOf(nmberorenum);
 							gc.ObjetivesValue(map, name, value,target);
 						}else {
-							ObjetiveType obj = ObjetiveType.valueOf(nmberorenum.toUpperCase());
-							if(obj != null) {
-								gc.ObjetiveChangeType(map, name, obj,target);
-								
-							}else {
-								gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning> <player>");
-								gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1 <player>");
-								gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
-				 				gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
+							 try {
+								ObjetiveType obj = ObjetiveType.valueOf(nmberorenum.toUpperCase());
+								if(obj != null) {
+									gc.ObjetiveChangeType(map, name, obj,target);
+									
+								}else {
+									gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning> <player>");
+									gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1 <player>");
+									gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
+					 				gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
+								}
+							
+							}catch(IllegalArgumentException e) {
+								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No existe el tipo "+ChatColor.GOLD+nmberorenum );
 							}
 						}
 					}else {

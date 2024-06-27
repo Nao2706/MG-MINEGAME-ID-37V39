@@ -132,24 +132,36 @@ public class EventRandoms implements Listener{
 		GameConditions gc = new GameConditions(plugin);
 		
 		if(gc.isPlayerinGame(player)) {
-			if(!player.getPassengers().isEmpty() ) {
-				player.sendMessage(ChatColor.RED+"Ya tienes una Entidad encima.");
-				return;
-			}
+			
 			PlayerInfo pi = plugin.getPlayerInfoPoo().get(player);
 			GameInfo gi = plugin.getGameInfoPoo().get(pi.getMapName());
 			if(gi.getEstopartida() == EstadoPartida.JUGANDO) {
 				
 				Entity ent = e.getRightClicked();
-				if(ent.getType() == EntityType.PLAYER) {
-					
-					Player target = (Player) ent;
-					if(target.getGameMode() != GameMode.SPECTATOR) {
-							player.addPassenger(target);
+				
+//				if(!player.getPassengers().isEmpty() && player.isSneaking()) {
+//					
+//					player.removePassenger(player.getPassengers().get(0));
+//					Entity ent2 = (Entity) player.getPassengers().get(0);
+//					Location loc = player.getLocation();
+//					ent2.setVelocity(loc.getDirection().multiply(3).setY(1));
+//				
+//					return;
+//				}
+//				
+				
+				if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
+					if(ent.getType() == EntityType.PLAYER) {
+						
+						Player target = (Player) ent;
+						if(target.getGameMode() != GameMode.SPECTATOR) {
+								player.addPassenger(target);
+						}
+					}else {
+						player.addPassenger(ent);
 					}
-				}else {
-					player.addPassenger(ent);
 				}
+				
 				return;
 			}
 		}
@@ -175,6 +187,7 @@ public class EventRandoms implements Listener{
 		GameConditions gc = new GameConditions(plugin);
 		if(gc.isPlayerinGame(player)) {
 			
+				
 				if(e.getAction() == Action.PHYSICAL) {
 					if(e.getClickedBlock().getType() == Material.TRIPWIRE) {
 						
@@ -1409,7 +1422,7 @@ public class EventRandoms implements Listener{
 						Location pl = player.getLocation();
 						Location hookl = e.getHook().getLocation();
 						Location ch = hookl.subtract(pl);
-						
+						 
 						player.setVelocity(ch.toVector().multiply(0.3).setY(1));
 						
 					}

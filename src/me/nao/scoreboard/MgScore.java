@@ -20,6 +20,7 @@ import com.google.common.base.Strings;
 
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
+import me.nao.general.info.GamePoints;
 import me.nao.general.info.ObjetiveType;
 import me.nao.general.info.ObjetivesMG;
 import me.nao.general.info.PlayerInfo;
@@ -153,6 +154,7 @@ public class MgScore {
 		
 		
 		PlayerInfo p = plugin.getPlayerInfoPoo().get(player);
+		GamePoints gp = (GamePoints) p.getGamePoints();
 		
 		if(gc.HasObjetives(p.getMapName())) {
 			GameInfo gi = plugin.getGameInfoPoo().get(p.getMapName());
@@ -199,7 +201,11 @@ public class MgScore {
 				 ob.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.RED+ChatColor.BOLD+"OBJETIVOS HOSTILES"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
 				 show.add(""+ChatColor.RED+ChatColor.BOLD+"-------------");
 				 show.add(ChatColor.RED+" ");
-				 show.addAll(hostilobje);
+				 if(!hostilobje.isEmpty()){
+					 show.addAll(hostilobje);
+				 }else{
+					 show.add(ChatColor.YELLOW+"Cargando..."); 
+				 }
 				 show.add(ChatColor.RED+"  ");
 				 show.add(""+ChatColor.RED+ChatColor.BOLD+"------------- ");
 				 if(!host.isEmpty()) {
@@ -215,14 +221,18 @@ public class MgScore {
 		    	 ob.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"OBJETIVOS PRIMARIOS"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
 		    	 if(!pr.isEmpty()) {
 		    		 if(gc.isNecesaryObjetivePrimary(p.getMapName())) {
-			    		 show.add(ChatColor.GOLD+"Obligatorio" +ChatColor.RED+" Si");
+			    		 show.add(ChatColor.GOLD+"Obligatorio:" +ChatColor.RED+" Si");
 			    	 }else {
-			    		 show.add(ChatColor.GOLD+"Obligatorio" +ChatColor.RED+" No");
+			    		 show.add(ChatColor.GOLD+"Obligatorio:" +ChatColor.RED+" No");
 			    	 }
 		    	 }
 		    	 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"-------------");
 		    	 show.add(ChatColor.RED+" ");
-				 show.addAll(primobje);
+				 if(!primobje.isEmpty()){
+					 show.addAll(primobje);
+				 }else{
+					 show.add(ChatColor.YELLOW+"Cargando..."); 
+				 }
 				 show.add(ChatColor.RED+"  ");
 				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"------------- ");
 				 if(!pr.isEmpty()) {
@@ -236,14 +246,18 @@ public class MgScore {
 				 ob.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"OBJETIVOS SECUNDARIOS"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
 				 if(!se.isEmpty()) {
 		    		 if(gc.isNecesaryObjetiveSedondary(p.getMapName())) {
-			    		 show.add(ChatColor.GOLD+"Obligatorio" +ChatColor.RED+" Si");
+			    		 show.add(ChatColor.GOLD+"Obligatorio:" +ChatColor.RED+" Si");
 			    	 }else {
-			    		 show.add(ChatColor.GOLD+"Obligatorio" +ChatColor.RED+" No");
+			    		 show.add(ChatColor.GOLD+"Obligatorio:" +ChatColor.RED+" No");
 			    	 }
 		    	 }
 				 show.add(""+ChatColor.YELLOW+ChatColor.BOLD+"-------------");
 				 show.add(ChatColor.RED+" ");
-				 show.addAll(second);
+				 if(!second.isEmpty()){
+					 show.addAll(second);
+				 }else{
+					 show.add(ChatColor.YELLOW+"Cargando..."); 
+				 }
 				 show.add(ChatColor.RED+"  ");
 				 show.add(""+ChatColor.YELLOW+ChatColor.BOLD+"------------- ");
 				 if(!se.isEmpty()) {
@@ -254,6 +268,22 @@ public class MgScore {
 				 }
 				
 				 show.add(ChatColor.GREEN+"Revisa el Libro !!!");
+				 
+			}else if(priority == 3) {
+				 ob.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"Stats "+player.getName()+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
+			
+				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"=========");
+				 show.add(ChatColor.RED+" ");
+				
+				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Kills: "+ChatColor.RED+ChatColor.BOLD+gp.getKills());  
+				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Damage: "+ChatColor.RED+ChatColor.BOLD+gc.TransformPosOrNeg(gp.getDamage())); 
+				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Deads: "+ChatColor.RED+ChatColor.BOLD+gp.getDeads()); 
+				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Revive: "+ChatColor.RED+ChatColor.BOLD+gp.getRevive()); 
+				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Help-Revive: "+ChatColor.RED+ChatColor.BOLD+gp.getHelpRevive()); 
+				 
+				 show.add(ChatColor.RED+"  ");
+				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"========= ");
+				
 				 
 			}
 			
@@ -330,15 +360,15 @@ public class MgScore {
 		
 			for(int i=0;i<l.size();i++) {
 				if(l.get(i).getObjetiveType() == ObjetiveType.COMPLETE) {
-					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.GREEN+ChatColor.BOLD+""+ChatColor.GREEN+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.RED+l.get(i).getValue()+"/"+ChatColor.RED+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
+					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.GREEN+ChatColor.BOLD+""+ChatColor.GREEN+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.GREEN+l.get(i).getValue()+"/"+ChatColor.GREEN+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.INCOMPLETE) {
 					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.RED+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.RED+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.RED+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.WAITING) {
-					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.WHITE+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.RED+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.RED+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
+					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.WHITE+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.AQUA+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.AQUA+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.UNKNOW) {
-					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.WHITE+ChatColor.MAGIC+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.RED+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.RED+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
+					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.WHITE+ChatColor.MAGIC+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.WHITE+ChatColor.STRIKETHROUGH+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.WHITE+ChatColor.STRIKETHROUGH+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.WARNING) {
-					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.YELLOW+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.RED+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.RED+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
+					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.YELLOW+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.YELLOW+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.YELLOW+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.DANGER) {
 					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.DARK_RED+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.RED+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.RED+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.CONCLUDED) {
@@ -349,7 +379,7 @@ public class MgScore {
 				
 			}
 		}else {
-			l2.add(""+ChatColor.RED+ChatColor.BOLD+"Vacio");
+			l2.add(""+ChatColor.WHITE+ChatColor.BOLD+"Vacio");
 		}
 	
 		
