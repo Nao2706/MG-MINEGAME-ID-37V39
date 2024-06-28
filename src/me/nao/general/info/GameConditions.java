@@ -939,7 +939,7 @@ public void LeaveMapConexionIlegal(Player player) {
 	
 	public boolean isLocketTheMap(String map) {
 		FileConfiguration config = plugin.getConfig();
-		 List<String> ac = config.getStringList("Arenas-Locked.List");
+		 List<String> ac = config.getStringList("Maps-Locked.List");
 		 return ac.contains(map);
 	}
 	

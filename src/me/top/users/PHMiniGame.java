@@ -4,6 +4,8 @@ package me.top.users;
 import org.bukkit.entity.Player;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import me.nao.general.info.GameConditions;
+import me.nao.general.info.PlayerInfo;
 import me.nao.main.game.Main;
 import me.nao.manager.ClassArena;
 
@@ -99,10 +101,10 @@ public class PHMiniGame extends PlaceholderExpansion{
  
         if(player == null){
             return "";
-        }
- 
-        // %mg_top_1%
-        if(identifier.equals("top_1") || identifier.equals("top_2") || identifier.equals("top_3") || identifier.equals("top_4") || identifier.equals("top_5") ||
+            
+            
+        }// %mg_top_1%
+        else if(identifier.equals("top_1") || identifier.equals("top_2") || identifier.equals("top_3") || identifier.equals("top_4") || identifier.equals("top_5") ||
         identifier.equals("top_6") || identifier.equals("top_7") || identifier.equals("top_8") || identifier.equals("top_9") || identifier.equals("top_10")){
         	PointsManager p = new PointsManager(plugin);
         	String[] spl = identifier.split("_");
@@ -110,38 +112,37 @@ public class PHMiniGame extends PlaceholderExpansion{
         	n = n -1;
         	return p.PositionArmorStand(n);
         	
-        }
-      
-        
-        if(identifier.equals("%dific1%")){
+        }else if(identifier.equals("dific_1")){
         	ClassArena c = new ClassArena(plugin);
         	return c.DifficultyMission("%dific1%");
-        }
-        if(identifier.equals("%dific2%")){
+        }else if(identifier.equals("dific_2")){
         	ClassArena c = new ClassArena(plugin);
         	return c.DifficultyMission("%dific2%");
-        }
-        if(identifier.equals("%dific3%")){
+        }else if(identifier.equals("dific_3")){
         	ClassArena c = new ClassArena(plugin);
         	return c.DifficultyMission("%dific3%");
-        }
-        if(identifier.equals("%dific3%")){
+        }else if(identifier.equals("dific_3")){
         	ClassArena c = new ClassArena(plugin);
         	return c.DifficultyMission("%dific3%");
-        }
-        if(identifier.equals("%dific4%")){
+        }else if(identifier.equals("dific_4")){
         	ClassArena c = new ClassArena(plugin);
         	return c.DifficultyMission("%dific4%");
-        }
-        if(identifier.equals("%dific5%")){
+        }else if(identifier.equals("dific5")){
         	ClassArena c = new ClassArena(plugin);
         	return c.DifficultyMission("%dific5%");
-        }
-        if(identifier.equals("%dific6%")){
+        }else if(identifier.equals("dific6")){
         	ClassArena c = new ClassArena(plugin);
         	return c.DifficultyMission("%dific6%");
+        }else if(identifier.equals("getmap")){
+        	return getMapNamePlaceHolder(player);
+        }else if(identifier.equals("isingame")){
+        	return isPlayerinGamePlaceHolder(player);
+        }else if(identifier.equals("author")){
+        	return getAuthor();
+        }else if(identifier.equals("version")){
+        	return getVersion();
         }
- 
+        
         // We return null if an invalid placeholder (f.e. %someplugin_placeholder3%) 
         // was provided
         return null;
@@ -149,6 +150,22 @@ public class PHMiniGame extends PlaceholderExpansion{
 	
 	
 	
+	public String getMapNamePlaceHolder(Player player) {
+		GameConditions gc = new GameConditions(plugin);
+		String status = "";
+		if(gc.isPlayerinGame(player)) {
+			PlayerInfo pi = plugin.getPlayerInfoPoo().get(player);
+			status = pi.getMapName();
+		}else {
+			status = "Ninguno";
+		}
+		return status;
+	}
+	
+	public String isPlayerinGamePlaceHolder(Player player) {
+		GameConditions gc = new GameConditions(plugin);
+		return String.valueOf(gc.isPlayerinGame(player));
+	}
 	
 	
 	

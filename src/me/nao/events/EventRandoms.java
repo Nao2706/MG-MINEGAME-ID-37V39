@@ -120,7 +120,12 @@ public class EventRandoms implements Listener{
 	public void shifting(PlayerToggleSneakEvent e) {
 		Player player = (Player) e.getPlayer();
 		if(!player.getPassengers().isEmpty() && player.isSneaking()) {
-			player.removePassenger(player.getPassengers().get(0));
+			Entity ent = (Entity) player.getPassengers().get(0);
+			player.removePassenger(ent);
+			if(ent.getType() == EntityType.PRIMED_TNT || ent.getType() == EntityType.FIREBALL) {
+				Location loc = player.getLocation();
+				ent.setVelocity(loc.getDirection().multiply(3).setY(1));
+			}
 			return;
 		}
 		
@@ -139,16 +144,15 @@ public class EventRandoms implements Listener{
 				
 				Entity ent = e.getRightClicked();
 				
-//				if(!player.getPassengers().isEmpty() && player.isSneaking()) {
-//					
-//					player.removePassenger(player.getPassengers().get(0));
-//					Entity ent2 = (Entity) player.getPassengers().get(0);
-//					Location loc = player.getLocation();
-//					ent2.setVelocity(loc.getDirection().multiply(3).setY(1));
-//				
-//					return;
-//				}
-//				
+				if(!player.getPassengers().isEmpty() && player.isSneaking()) {
+					Entity ent2 = (Entity) player.getPassengers().get(0);
+					player.removePassenger(ent2);
+					Location loc = player.getLocation();
+					ent2.setVelocity(loc.getDirection().multiply(3).setY(2));
+				
+					return;
+				}
+				
 				
 				if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
 					if(ent.getType() == EntityType.PLAYER) {
