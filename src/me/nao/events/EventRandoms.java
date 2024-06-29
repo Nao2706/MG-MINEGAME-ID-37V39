@@ -65,9 +65,11 @@ import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupArrowEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.event.server.TabCompleteEvent;
@@ -119,7 +121,7 @@ public class EventRandoms implements Listener{
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void shifting(PlayerToggleSneakEvent e) {
 		Player player = (Player) e.getPlayer();
-		if(!player.getPassengers().isEmpty() && player.isSneaking()) {
+		if(!player.getPassengers().isEmpty() && player.isSneaking() ) {
 			Entity ent = (Entity) player.getPassengers().get(0);
 			player.removePassenger(ent);
 			if(ent.getType() == EntityType.PRIMED_TNT || ent.getType() == EntityType.FIREBALL) {
@@ -144,16 +146,6 @@ public class EventRandoms implements Listener{
 				
 				Entity ent = e.getRightClicked();
 				
-				if(!player.getPassengers().isEmpty() && player.isSneaking()) {
-					Entity ent2 = (Entity) player.getPassengers().get(0);
-					player.removePassenger(ent2);
-					Location loc = player.getLocation();
-					ent2.setVelocity(loc.getDirection().multiply(3).setY(2));
-				
-					return;
-				}
-				
-				
 				if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
 					if(ent.getType() == EntityType.PLAYER) {
 						
@@ -172,6 +164,43 @@ public class EventRandoms implements Listener{
 		
 	}
 	
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void Playerheld(PlayerItemHeldEvent e) {
+		Player player = (Player) e.getPlayer();
+		
+		GameConditions gc = new GameConditions(plugin);
+		if(gc.isPlayerinGame(player)) {
+			
+			if(e.getNewSlot() >= 0 || e.getNewSlot() <= 8) {
+				if(!player.getPassengers().isEmpty() && player.isSneaking()) {
+					Entity ent2 = (Entity) player.getPassengers().get(0);
+					player.removePassenger(ent2);
+					Location loc = player.getLocation();
+					ent2.setVelocity(loc.getDirection().multiply(3).setY(1));
+				
+					return;
+				}
+			}
+			
+		}
+	}
+	
+	//@EventHandler(priority = EventPriority.LOWEST)
+	public void PlayerSwapItem(PlayerSwapHandItemsEvent e) {
+		Player player = (Player) e.getPlayer();
+		
+		GameConditions gc = new GameConditions(plugin);
+		if(gc.isPlayerinGame(player)) {
+			if(!player.getPassengers().isEmpty() && player.isSneaking()) {
+				Entity ent2 = (Entity) player.getPassengers().get(0);
+				player.removePassenger(ent2);
+				Location loc = player.getLocation();
+				ent2.setVelocity(loc.getDirection().multiply(3).setY(1));
+			
+				return;
+			}
+		}
+	}
 	
 	//TODO INTERACCION
 	@SuppressWarnings("deprecation")
@@ -191,6 +220,7 @@ public class EventRandoms implements Listener{
 		GameConditions gc = new GameConditions(plugin);
 		if(gc.isPlayerinGame(player)) {
 			
+				
 				
 				if(e.getAction() == Action.PHYSICAL) {
 					if(e.getClickedBlock().getType() == Material.TRIPWIRE) {
