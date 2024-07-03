@@ -360,7 +360,7 @@ public class MgScore {
 		
 			for(int i=0;i<l.size();i++) {
 				if(l.get(i).getObjetiveType() == ObjetiveType.COMPLETE) {
-					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.GREEN+ChatColor.BOLD+""+ChatColor.GREEN+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.GREEN+l.get(i).getValue()+"/"+ChatColor.GREEN+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
+					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.GREEN+ChatColor.BOLD+""+ChatColor.GREEN+ChatColor.BOLD+ChatColor.STRIKETHROUGH+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.GREEN+l.get(i).getValue()+"/"+ChatColor.GREEN+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.INCOMPLETE) {
 					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.RED+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.RED+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.RED+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveType.WAITING) {

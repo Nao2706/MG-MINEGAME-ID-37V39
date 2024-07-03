@@ -36,6 +36,7 @@ import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.RayTraceResult;
@@ -1573,6 +1574,7 @@ public class Comandos implements CommandExecutor{
               		}
               		return true;
               		
+              		//mg attack MISIONES,124,23,344
               	}else if (args[0].equalsIgnoreCase("attackp")) {
               		
               	
@@ -1582,6 +1584,7 @@ public class Comandos implements CommandExecutor{
               				if(e.getType() != EntityType.PLAYER && e instanceof Creature) {
               					Creature ent = (Creature) e;
               					ent.setTarget(player);
+              					
               				}
               			}
               			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"El Objetivo "+player.getName()+" a sido Marcado ");
@@ -1589,7 +1592,64 @@ public class Comandos implements CommandExecutor{
               		
               		return true;
               		
-              	}else if (args[0].equalsIgnoreCase("delete")) {
+              		//mg attackloc coords radius
+              		//mg attackloc 124,445,56 0,200
+              	}else if (args[0].equalsIgnoreCase("attackloc")) {
+              		if (args.length == 3) {
+						
+						String name = args[1];
+						String radius = args[2];
+						String[] radius1 = radius.split(",");
+						 String[] coords = name.split(",");
+						    String world = coords[0];
+						    double x = Double.valueOf(coords[1]);
+						    double y = Double.valueOf(coords[2]);
+						    double z = Double.valueOf(coords[3]);
+						    int r1 = Integer.valueOf(radius1[0]);
+						    int r2 = Integer.valueOf(radius1[1]);
+						    
+	              		Location l = new Location(Bukkit.getWorld(world),x,y,z);
+	                  	
+	          			List<Entity> entity = getNearbyEntites(l,r1);
+	          			
+	          			List<Entity> attackers = getNearbyEntites(l, r2);
+	          			
+	          			if(!entity.isEmpty() && !attackers.isEmpty()) {
+	          				for(Entity e : attackers) {
+	          					if(e.getType() != EntityType.PLAYER && e instanceof Monster) {
+		          					Monster ent = (Monster) e;
+		          					if(entity.get(0) instanceof LivingEntity) {
+		          						LivingEntity mob = (LivingEntity) entity.get(0);
+		          						ent.setTarget(mob);
+		          					}
+		          					
+		          					
+		          				}
+	          				}
+	          				if(entity.get(0) instanceof Player) {
+	          					Player player1 = (Player) entity.get(0);
+		          				Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"El Objetivo "+player1.getName()+" a sido Marcado ");
+
+	          				}else {
+		          				Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"El Objetivo "+entity.get(0)+" a sido Marcado ");
+
+	          				}
+	          			}
+	          				
+	          			
+	          		
+						//plugin.yml = new YamlFile(plugin,name, new File(plugin.getDataFolder().getAbsolutePath()+carpeta));;
+					
+					
+					}else {
+						player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg delete <nombre-yml> ");
+					}
+              		
+          		//	ra.getHitEntity().addPassenger(player);
+          		
+          		return true;
+          		
+          	}else if (args[0].equalsIgnoreCase("delete")) {
 					if(player.isOp()) {
 						if (args.length == 2) {
 							

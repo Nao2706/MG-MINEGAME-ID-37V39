@@ -1019,6 +1019,8 @@ public class MinigameShop1 implements Listener{
 		
 	}
 	
+	
+	//TODO STORE CHEST
 	public void StoreChest(Player player,ItemStack item) {
 		
 		
@@ -1076,23 +1078,16 @@ public class MinigameShop1 implements Listener{
 				ClassIntoGame c = new ClassIntoGame(plugin);
 				c.GameRevivePlayer(player, name);
 			}
-			 if(!ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("OBJETIVOS PRIMARIOS")
-						|| !ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("OBJETIVOS SECUNDARIOS")
-						|| !ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("OBJETIVOS")
-						|| !ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("OBJETIVOS HOSTILES")) {
-				 if(player.getInventory().firstEmpty() == -1) {
-						
-					 player.sendMessage(ChatColor.RED+"Tu Inventario esta lleno has Espacio.");
-					  return;
-				 
-			  }
-			 }
+		
 			
 			 if(item.isSimilar(Items.OBJETIVOS.getValue())) {
 				 player.getInventory().addItem(Items.OBJETIVOSP.getValue());
 				 return;
 			 }
 			if(item.isSimilar(Items.ESPADAENCAN1.getValue())) {
+				
+				if(!HasSpaceinInventory(player)) return;
+				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 5)) {
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
 					player.getInventory().addItem(Items.ESPADAENCAN1P.getValue());
@@ -1104,6 +1099,9 @@ public class MinigameShop1 implements Listener{
 			}	
 			
 			if(item.isSimilar(Items.STOREXPRESS.getValue())) {
+				
+				if(!HasSpaceinInventory(player)) return;
+				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.IRON_INGOT), 192)) {
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
 					player.getInventory().addItem(Items.STOREXPRESSP.getValue());
@@ -1114,6 +1112,9 @@ public class MinigameShop1 implements Listener{
 			}
 				
 			if(item.isSimilar(Items.REFUERZOS.getValue())) {
+				
+				if(!HasSpaceinInventory(player)) return;
+				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 30)) {
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
 					player.getInventory().addItem(Items.REFUERZOSP.getValue());
@@ -1123,6 +1124,9 @@ public class MinigameShop1 implements Listener{
 				}
 			}
 			if(item.isSimilar(Items.REFUERZOS2.getValue())) {
+				
+				if(!HasSpaceinInventory(player)) return;
+				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 64)) {
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
 					player.getInventory().addItem(Items.REFUERZOS2P.getValue());
@@ -1133,6 +1137,9 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.JEDI.getValue())) {
+				
+				if(!HasSpaceinInventory(player)) return;
+				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 40)) {
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
 					player.getInventory().addItem(Items.JEDIP.getValue());
@@ -1142,6 +1149,9 @@ public class MinigameShop1 implements Listener{
 				}
 			}
 			if(item.isSimilar(Items.PALO.getValue())) {
+				
+				if(!HasSpaceinInventory(player)) return;
+				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 40)) {
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
 					player.getInventory().addItem(Items.PALOP.getValue());
@@ -1152,6 +1162,9 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.ESPADADIAMANTE.getValue())) {
+				
+				if(!HasSpaceinInventory(player)) return;
+				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND), 9)) {
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
 					player.getInventory().addItem(new ItemStack(Material.DIAMOND_SWORD,1));
@@ -1162,6 +1175,9 @@ public class MinigameShop1 implements Listener{
 		   }
 			
 			if(item.isSimilar(Items.ESPADAHIERRO.getValue())) {
+				
+				if(!HasSpaceinInventory(player)) return;
+				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND), 5)) {
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
 					player.getInventory().addItem(new ItemStack(Material.IRON_SWORD,1));
@@ -1182,6 +1198,9 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.ESPADAMADERA.getValue())) {
+				
+				if(!HasSpaceinInventory(player)) return;
+				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND), 1)) {
 					player.getInventory().addItem(new ItemStack(Material.WOODEN_SWORD,1));
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1191,6 +1210,9 @@ public class MinigameShop1 implements Listener{
 				}
 			}
 			if(item.isSimilar(Items.ESPADAPIEDRA.getValue())) {
+				
+				if(!HasSpaceinInventory(player)) return;
+				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND), 3)) {
 					player.getInventory().addItem(new ItemStack(Material.STONE_SWORD,1));
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1200,6 +1222,9 @@ public class MinigameShop1 implements Listener{
 				}
 			}
 			if(item.isSimilar(Items.ESPADANETHERITA.getValue())) {
+				
+				if(!HasSpaceinInventory(player)) return;
+				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND), 12)) {
 					player.getInventory().addItem(new ItemStack(Material.NETHERITE_SWORD,1));
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1210,6 +1235,9 @@ public class MinigameShop1 implements Listener{
 			}
 		
 			if(item.isSimilar(Items.CHECKPOINT.getValue())) {
+				
+				if(!HasSpaceinInventory(player)) return;
+				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 20)) {
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
 					player.getInventory().addItem(Items.CHECKPOINTP.getValue());
@@ -1219,6 +1247,9 @@ public class MinigameShop1 implements Listener{
 				}
 			}
 			if(item.isSimilar(Items.KATANA.getValue())) {
+				
+				if(!HasSpaceinInventory(player)) return;
+				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 62)) {
 					player.getInventory().addItem(Items.KATANAP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1228,6 +1259,9 @@ public class MinigameShop1 implements Listener{
 				}
 			}
 			if(item.isSimilar(Items.KATANA2.getValue())) {
+				
+				if(!HasSpaceinInventory(player)) return;
+				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 100)) {
 					player.getInventory().addItem(Items.KATANA2P.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1238,6 +1272,9 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.TRIDENTE.getValue())) {
+				
+				if(!HasSpaceinInventory(player)) return;
+				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.EMERALD), 5)) {
 					player.getInventory().addItem(new ItemStack(Material.TRIDENT,1));
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1247,6 +1284,9 @@ public class MinigameShop1 implements Listener{
 				}
 			}
 			if(item.isSimilar(Items.TOTEM.getValue())) {
+				
+				if(!HasSpaceinInventory(player)) return;
+				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.EMERALD), 30)) {
 					player.getInventory().addItem(new ItemStack(Material.TOTEM_OF_UNDYING,1));
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1256,6 +1296,9 @@ public class MinigameShop1 implements Listener{
 				}
 			}
 			if(item.isSimilar(Items.ESCUDO.getValue())) {
+				
+				if(!HasSpaceinInventory(player)) return;
+				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.IRON_INGOT), 20)) {
 					player.getInventory().addItem(new ItemStack(Material.SHIELD,1));
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1286,6 +1329,9 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.TRIDENTEE.getValue())) {
+				
+				if(!HasSpaceinInventory(player)) return;
+				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 64)) {
 					player.getInventory().addItem(Items.TRIDENTEEP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1296,6 +1342,9 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.TRIDENTEE2.getValue())) {
+				
+				if(!HasSpaceinInventory(player)) return;
+				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 100)) {
 					player.getInventory().addItem(Items.TRIDENTEE2P.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1306,6 +1355,9 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.ARCOENCAN1.getValue())) {
+				
+				if(!HasSpaceinInventory(player)) return;
+				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 30)) {
 					player.getInventory().addItem(Items.ARCOENCAN1P.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1315,6 +1367,9 @@ public class MinigameShop1 implements Listener{
 				}
 			}
 			if(item.isSimilar(Items.DEADBOW.getValue())) {
+				
+				if(!HasSpaceinInventory(player)) return;
+				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 40)) {
 					player.getInventory().addItem(Items.DEADBOWP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1325,6 +1380,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.DEADBOW2.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 110)) {
 					player.getInventory().addItem(Items.DEADBOW2P.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1335,6 +1391,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.ARCO.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
 					if(player.getInventory().containsAtLeast(new ItemStack(Material.IRON_INGOT), 20)) {
 						player.getInventory().addItem(new ItemStack(Material.BOW,1));
 						player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1345,6 +1402,7 @@ public class MinigameShop1 implements Listener{
 				}
 		
 			if(item.isSimilar(Items.MEDICO.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 30)) {
 					player.getInventory().addItem(Items.MEDICOP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1355,6 +1413,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.BALLESTA1.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 40)) {
 					player.getInventory().addItem(Items.BALLESTA1P.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1366,6 +1425,7 @@ public class MinigameShop1 implements Listener{
 			
 			
 			if(item.isSimilar(Items.BALLESTA2.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 64)) {
 					player.getInventory().addItem(Items.BALLESTA2P.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1377,6 +1437,7 @@ public class MinigameShop1 implements Listener{
 			
 			
 			if(item.isSimilar(Items.BALLESTA.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.GOLD_INGOT), 12)) {
 					player.getInventory().addItem(new ItemStack(Material.CROSSBOW,1));
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1386,6 +1447,7 @@ public class MinigameShop1 implements Listener{
 				}
 			}
 			if(item.isSimilar(Items.FLECHA.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.GOLD_INGOT), 3)) {
 					player.getInventory().addItem(new ItemStack(Material.ARROW,5));
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1395,6 +1457,7 @@ public class MinigameShop1 implements Listener{
 				}
 			}
 			if(item.isSimilar(Items.FLECHAESPECTRAL.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.GOLD_INGOT), 4)) {
 					player.getInventory().addItem(new ItemStack(Material.SPECTRAL_ARROW,5));
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1404,6 +1467,7 @@ public class MinigameShop1 implements Listener{
 				}
 			}
 			if(item.isSimilar(Items.MANZANA.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.IRON_INGOT),1)) {
 					player.getInventory().addItem(new ItemStack(Material.APPLE,5));
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1414,6 +1478,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.MANZANAORO.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.EMERALD),10)) {
 					player.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE,10));
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1424,6 +1489,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Posion.HEALTH.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND),3)) {
 					player.getInventory().addItem(Posion.HEALTHP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1434,6 +1500,7 @@ public class MinigameShop1 implements Listener{
 			}
 		
 			if(item.isSimilar(Posion.SPEED.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND),20)) {
 					player.getInventory().addItem(Posion.SPEEDP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1443,6 +1510,7 @@ public class MinigameShop1 implements Listener{
 				}
 			}
 			if(item.isSimilar(Posion.REGENER.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND),2)) {
 					player.getInventory().addItem(Posion.REGENERP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1453,6 +1521,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Posion.ABSOR.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND),25)) {
 					player.getInventory().addItem(Posion.ABSORP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1463,6 +1532,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Posion.RESIS.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),2)) {
 					player.getInventory().addItem(Posion.RESISP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1473,6 +1543,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.GANCHO.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),30)) {
 					player.getInventory().addItem(Items.GANCHOP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1482,6 +1553,7 @@ public class MinigameShop1 implements Listener{
 				}
 			}
 			if(item.isSimilar(Items.GANCHO2.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),50)) {
 					player.getInventory().addItem(Items.GANCHO2P.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1491,6 +1563,7 @@ public class MinigameShop1 implements Listener{
 				}
 			}
 			if(item.isSimilar(Items.ESCU1.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),40)) {
 					player.getInventory().addItem(Items.ESCU1P.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1501,6 +1574,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.ESCU2.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),40)) {
 					player.getInventory().addItem(Items.ESCU2P.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1511,6 +1585,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.ESCU3.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),45)) {
 					player.getInventory().addItem(Items.ESCU3P.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1521,6 +1596,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.ESCU4.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),35)) {
 					player.getInventory().addItem(Items.ESCU4P.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1530,6 +1606,7 @@ public class MinigameShop1 implements Listener{
 				}
 			}
 			if(item.isSimilar(Items.ESCU5.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),200)) {
 					player.getInventory().addItem(Items.ESCU5P.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1540,6 +1617,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.ARROWL.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),64)) {
 					player.getInventory().addItem(Items.ARROWLP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1550,6 +1628,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.BAZUKA.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),128)) {
 					player.getInventory().addItem(Items.BAZUKAP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1560,6 +1639,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.COHETE.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),40)) {
 					player.getInventory().addItem(Items.COHETEP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1616,6 +1696,17 @@ public class MinigameShop1 implements Listener{
 			
 			
 	}
+	
+	public boolean HasSpaceinInventory(Player player) {
+		 if(player.getInventory().firstEmpty() == -1) {
+				
+			 player.sendMessage(ChatColor.RED+"Tu Inventario esta lleno has Espacio.");
+			  return false;
+		 }else {
+			 return true;
+		 }
+	}
+	
 	//CHEQUEAR LUEGO
 	public void CreateInvChest(Player player,Chest chest) {
 		//creas el inventario l
