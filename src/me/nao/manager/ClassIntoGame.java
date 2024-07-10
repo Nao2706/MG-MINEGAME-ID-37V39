@@ -23,7 +23,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import me.nao.cosmetics.fireworks.Fireworks;
-import me.nao.gamemode.DestroyNexo;
+//import me.nao.gamemode.DestroyNexo;
 import me.nao.general.info.GameInfo;
 import me.nao.general.info.GameNexo;
 import me.nao.general.info.GamePoints;
@@ -281,14 +281,14 @@ public class ClassIntoGame {
 					
 				}else if(gi.getGameType() == GameType.NEXO) {
 					 if(gi instanceof GameNexo) {
-							GameNexo gn = (GameNexo) gi;
-							DestroyNexo dn = new DestroyNexo(plugin);
-							if(gn.getBlueTeamMg().contains(player.getName())) {
-								player.teleport(dn.TpSpawnBlue(mapa));
-							}else if(gn.getRedTeamMg().contains(player.getName())){
-								player.teleport(dn.TpSpawnRed(mapa));
-							}
-							
+//							GameNexo gn = (GameNexo) gi;
+//							DestroyNexo dn = new DestroyNexo(plugin);
+//							if(gn.getBlueTeamMg().contains(player.getName())) {
+//								player.teleport(dn.TpSpawnBlue(mapa));
+//							}else if(gn.getRedTeamMg().contains(player.getName())){
+//								player.teleport(dn.TpSpawnRed(mapa));
+//							}
+//							
 						}
 				}
 				
@@ -522,13 +522,13 @@ public class ClassIntoGame {
 			player.sendMessage(ChatColor.GREEN+"Puedes ser revivido por tus compañeros.(Siempre que hayan cofres de Revivir)");
 			
 		}else if(gi instanceof GameNexo) {
-			GameNexo gn = (GameNexo) gi;
-			DestroyNexo dn = new DestroyNexo(plugin);
-			if(gn.getBlueTeamMg().contains(player.getName())) {
-				player.teleport(dn.TpSpawnBlue(mapa));
-			}else if(gn.getRedTeamMg().contains(player.getName())){
-				player.teleport(dn.TpSpawnRed(mapa));
-			}
+//			GameNexo gn = (GameNexo) gi;
+//			DestroyNexo dn = new DestroyNexo(plugin);
+//			if(gn.getBlueTeamMg().contains(player.getName())) {
+//				player.teleport(dn.TpSpawnBlue(mapa));
+//			}else if(gn.getRedTeamMg().contains(player.getName())){
+//				player.teleport(dn.TpSpawnRed(mapa));
+//			}
 			
 			
 			

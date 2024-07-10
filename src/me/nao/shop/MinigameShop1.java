@@ -751,7 +751,7 @@ public class MinigameShop1 implements Listener{
 	public boolean isUpdateable(Player player) {
 		
 		
-		if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("MENU DE MISIONES")) {
+		if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("MENU DE MAPAS")) {
 			FileConfiguration config = plugin.getConfig();
 			FileConfiguration menu = plugin.getMenuItems();
 			ClassArena ca = new ClassArena(plugin);
@@ -863,13 +863,13 @@ public class MinigameShop1 implements Listener{
 		 List<String> ac = config.getStringList("Maps-Created.List");
 		
 		 if(ac.isEmpty()) {
-			 player.sendMessage(ChatColor.RED+"No hay misiones Disponibles.");
+			 player.sendMessage(ChatColor.RED+"No hay Mapas Disponibles.");
 			 return ;
 		 }
 		 
 			 FileConfiguration menu = plugin.getMenuItems();
 			 ClassArena ca = new ClassArena(plugin);
-			 Inventory inv = Bukkit.createInventory(null,54,""+ChatColor.DARK_GREEN+ChatColor.BOLD+"MENU DE MISIONES");
+			 Inventory inv = Bukkit.createInventory(null,54,""+ChatColor.DARK_GREEN+ChatColor.BOLD+"MENU DE MAPAS");
 			 List<String> l = new ArrayList<String>();
 			 
 		 
@@ -1029,7 +1029,7 @@ public class MinigameShop1 implements Listener{
 		// une al jugador al clickear en el menu de misiones
 		
 		GameConditions gc = new GameConditions(plugin);
-			if(!gc.isPlayerinGame(player) && player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("MENU DE MISIONES")) {
+			if(!gc.isPlayerinGame(player) && player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("MENU DE MAPAS")) {
 				
 				if(item.isSimilar(Items.ADELANTE.getValue())) {
 					plugin.getPags().replace(player, plugin.getPags().get(player)+1);
@@ -1887,7 +1887,7 @@ public class MinigameShop1 implements Listener{
 			List<String> l = new ArrayList<String>();
 			
 			l.add("TIENDA"); l.add("ESPADAS");l.add("ARCOS Y BALLESTAS");l.add("DEFENSA");l.add("COMIDA Y POSIONES");l.add("ESPECIALES");l.add("REVIVIR");
-			l.add("MENU DE MISIONES");l.add("OBJETIVOS");l.add("OBJETIVOS PRIMARIOS");l.add("OBJETIVOS SECUNDARIOS");
+			l.add("MENU DE MAPAS");l.add("OBJETIVOS");l.add("OBJETIVOS PRIMARIOS");l.add("OBJETIVOS SECUNDARIOS");
 			String namet = ChatColor.stripColor(e.getView().getTitle());
 			if(l.contains(namet)) {
 				
@@ -1917,7 +1917,7 @@ public class MinigameShop1 implements Listener{
 		}
 	
 			List<String> l = new ArrayList<String>();
-			l.add("TIENDA"); l.add("ESPADAS");l.add("ARCOS Y BALLESTAS");l.add("DEFENSA");l.add("COMIDA Y POSIONES");l.add("ESPECIALES");l.add("REVIVIR");l.add("MENU DE MISIONES");
+			l.add("TIENDA"); l.add("ESPADAS");l.add("ARCOS Y BALLESTAS");l.add("DEFENSA");l.add("COMIDA Y POSIONES");l.add("ESPECIALES");l.add("REVIVIR");l.add("MENU DE MAPAS");
 			l.add("OBJETIVOS");l.add("OBJETIVOS PRIMARIOS");l.add("OBJETIVOS SECUNDARIOS");l.add("OBJETIVOS HOSTILES");
 			String namet = ChatColor.stripColor(e.getView().getTitle());
 			
@@ -2085,7 +2085,7 @@ public class MinigameShop1 implements Listener{
 	
 	//NUEVA PAGINA EN UNA PAGINA SECUNDARIA   
 	public void NewPag(Player player) {
-		if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("MENU DE MISIONES")) {
+		if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("MENU DE MAPAS")) {
 			MissionsMenu(player);
 		}else if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("OBJETIVOS PRIMARIOS")) {
 			ObjetivesPrimary(player);

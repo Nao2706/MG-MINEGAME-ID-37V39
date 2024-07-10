@@ -42,6 +42,7 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.entity.AbstractArrow.PickupStatus;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Monster;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -84,7 +85,7 @@ import org.bukkit.util.Vector;
 
 import me.nao.cosmetics.fireworks.RankPlayer;
 import me.nao.general.info.GameInfo;
-import me.nao.general.info.GameNexo;
+//import me.nao.general.info.GameNexo;
 import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.PlayerInfo;
@@ -93,6 +94,8 @@ import me.nao.main.game.Main;
 import me.nao.manager.EstadoPartida;
 import me.nao.shop.Items;
 import me.nao.shop.MinigameShop1;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 
 
 public class EventRandoms implements Listener{
@@ -148,7 +151,10 @@ public class EventRandoms implements Listener{
 				
 				if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
 					if(ent.getType() == EntityType.PLAYER) {
-						
+						if(!player.getPassengers().isEmpty()) {
+							 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.RED+ChatColor.BOLD+"YA TIENES ENCIMA A UNA ENTIDAD"));
+							return;
+						}
 						Player target = (Player) ent;
 						if(target.getGameMode() != GameMode.SPECTATOR) {
 								player.addPassenger(target);
@@ -176,7 +182,16 @@ public class EventRandoms implements Listener{
 					Entity ent2 = (Entity) player.getPassengers().get(0);
 					player.removePassenger(ent2);
 					Location loc = player.getLocation();
-					ent2.setVelocity(loc.getDirection().multiply(3).setY(1));
+					if(ent2 instanceof Mob) {
+						
+						
+						ent2.setVelocity(loc.getDirection().multiply(3).setY(1));
+					}else if(ent2 instanceof Player) {
+						Player target = (Player) ent2;
+						target.setVelocity(loc.getDirection().multiply(3).setY(1));
+						
+					}
+					
 				
 					return;
 				}
@@ -570,60 +585,60 @@ public class EventRandoms implements Listener{
 	 
 	 	@EventHandler(priority = EventPriority.LOWEST)
 		public void PlayerBreakMG(BlockBreakEvent e) {
-	 		Player player = e.getPlayer();
-	 		GameConditions gm = new GameConditions(plugin);
-	 		if(gm.isPlayerinGame(player)) {
-	 			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
-	 			GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
-	 			if(gi instanceof GameNexo) {
-	 				GameNexo gn = (GameNexo) gi;
-	 				if(gn.getBlueTeamMg().contains(player.getName()) && gn.getRedNexoLocation() == e.getBlock().getLocation()){
-	 					List<Player> redt = gm.ConvertStringToPlayer(gn.getRedTeamMg());
-	 					if(gn.getRedLifeNexo() != 0) {
-	 						
-	 						
-	 						gn.SetRedLifeNexo(gn.getRedLifeNexo()-1);
-	 						for(Player rd : redt) {
-	 							rd.sendMessage(ChatColor.BLUE+player.getName()+" "+ChatColor.GOLD+" esta Atacando el Nexo: "+ChatColor.GREEN+gn.getRedLifeNexo()+ChatColor.GOLD+"/"+ChatColor.GREEN+"100");
-	 						}
-	 						
-		 					e.setCancelled(true);
-	 					}else if(gn.getRedLifeNexo() == 0)  {
-	 						
-	 						for(Player rd : redt) {
-	 							rd.sendMessage(ChatColor.BLUE+player.getName()+" "+ChatColor.GOLD+" Destruyo el Nexo: "+ChatColor.GREEN+gn.getRedLifeNexo()+ChatColor.GOLD+"/"+ChatColor.GREEN+"100");
-	 						}
-	 						
-	 						gn.setEstadopartida(EstadoPartida.TERMINANDO);
-	 						e.setCancelled(true);
-	 					}
-	 				
-	 				}else if(gn.getRedTeamMg().contains(player.getName()) && gn.getBlueNexoLocation() == e.getBlock().getLocation()){
-	 					List<Player> bluet = gm.ConvertStringToPlayer(gn.getBlueTeamMg());
-	 					if(gn.getBlueLifeNexo() != 0) {
-	 						
-
-	 						gn.SetBlueLifeNexo(gn.getBlueLifeNexo()-1);
-	 						
-	 						for(Player bl : bluet) {
-	 							bl.sendMessage(ChatColor.RED+player.getName()+" "+ChatColor.GOLD+" esta Atacando el Nexo: "+ChatColor.GREEN+gn.getBlueLifeNexo()+ChatColor.GOLD+"/"+ChatColor.GREEN+"100");
-	 						}
-		 					e.setCancelled(true);
-	 					}else if(gn.getBlueLifeNexo() == 0){
-	 						
-	 						for(Player bl : bluet) {
-	 							bl.sendMessage(ChatColor.RED+player.getName()+" "+ChatColor.GOLD+" Destruyo el Nexo: "+ChatColor.GREEN+gn.getBlueLifeNexo()+ChatColor.GOLD+"/"+ChatColor.GREEN+"100");
-	 						}
-	 						
-	 						gn.setEstadopartida(EstadoPartida.TERMINANDO);
-	 						e.setCancelled(true);
-
-	 					}
-	 					
-	 				}
-	 			}
-	 			
-	 		}
+//	 		Player player = e.getPlayer();
+//	 		GameConditions gm = new GameConditions(plugin);
+//	 		if(gm.isPlayerinGame(player)) {
+//	 			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+//	 			GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
+//	 			if(gi instanceof GameNexo) {
+//	 				GameNexo gn = (GameNexo) gi;
+//	 				if(gn.getBlueTeamMg().contains(player.getName()) && gn.getRedNexoLocation() == e.getBlock().getLocation()){
+//	 					List<Player> redt = gm.ConvertStringToPlayer(gn.getRedTeamMg());
+//	 					if(gn.getRedLifeNexo() != 0) {
+//	 						
+//	 						
+//	 						gn.SetRedLifeNexo(gn.getRedLifeNexo()-1);
+//	 						for(Player rd : redt) {
+//	 							rd.sendMessage(ChatColor.BLUE+player.getName()+" "+ChatColor.GOLD+" esta Atacando el Nexo: "+ChatColor.GREEN+gn.getRedLifeNexo()+ChatColor.GOLD+"/"+ChatColor.GREEN+"100");
+//	 						}
+//	 						
+//		 					e.setCancelled(true);
+//	 					}else if(gn.getRedLifeNexo() == 0)  {
+//	 						
+//	 						for(Player rd : redt) {
+//	 							rd.sendMessage(ChatColor.BLUE+player.getName()+" "+ChatColor.GOLD+" Destruyo el Nexo: "+ChatColor.GREEN+gn.getRedLifeNexo()+ChatColor.GOLD+"/"+ChatColor.GREEN+"100");
+//	 						}
+//	 						
+//	 						gn.setEstadopartida(EstadoPartida.TERMINANDO);
+//	 						e.setCancelled(true);
+//	 					}
+//	 				
+//	 				}else if(gn.getRedTeamMg().contains(player.getName()) && gn.getBlueNexoLocation() == e.getBlock().getLocation()){
+//	 					List<Player> bluet = gm.ConvertStringToPlayer(gn.getBlueTeamMg());
+//	 					if(gn.getBlueLifeNexo() != 0) {
+//	 						
+//
+//	 						gn.SetBlueLifeNexo(gn.getBlueLifeNexo()-1);
+//	 						
+//	 						for(Player bl : bluet) {
+//	 							bl.sendMessage(ChatColor.RED+player.getName()+" "+ChatColor.GOLD+" esta Atacando el Nexo: "+ChatColor.GREEN+gn.getBlueLifeNexo()+ChatColor.GOLD+"/"+ChatColor.GREEN+"100");
+//	 						}
+//		 					e.setCancelled(true);
+//	 					}else if(gn.getBlueLifeNexo() == 0){
+//	 						
+//	 						for(Player bl : bluet) {
+//	 							bl.sendMessage(ChatColor.RED+player.getName()+" "+ChatColor.GOLD+" Destruyo el Nexo: "+ChatColor.GREEN+gn.getBlueLifeNexo()+ChatColor.GOLD+"/"+ChatColor.GREEN+"100");
+//	 						}
+//	 						
+//	 						gn.setEstadopartida(EstadoPartida.TERMINANDO);
+//	 						e.setCancelled(true);
+//
+//	 					}
+//	 					
+//	 				}
+//	 			}
+//	 			
+//	 		}
 	 		
 	 		
 		}

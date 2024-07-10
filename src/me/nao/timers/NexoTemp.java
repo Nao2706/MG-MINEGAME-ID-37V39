@@ -46,7 +46,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.RayTraceResult;
 
-import me.nao.gamemode.DestroyNexo;
+//import me.nao.gamemode.DestroyNexo;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameNexo;
 import me.nao.main.game.Main;
@@ -80,7 +80,7 @@ public class NexoTemp {
 		FileConfiguration config = plugin.getConfig();
 		GameConditions gc = new GameConditions(plugin);
 		BukkitScheduler sh = Bukkit.getServer().getScheduler();
-		DestroyNexo dn = new DestroyNexo(plugin);
+		//DestroyNexo dn = new DestroyNexo(plugin);
 		taskID = sh.scheduleSyncRepeatingTask(plugin,new Runnable(){
 			
 			
@@ -173,7 +173,7 @@ public class NexoTemp {
 				    			ms.setEstadopartida(EstadoPartida.JUGANDO);
 				    			
 				    		
-				    			dn.TpAllTeamsToSpawn(name);
+				    			//dn.TpAllTeamsToSpawn(name);
 				    			
 				    			gc.StartGameActions(name);
 				    		}
@@ -270,19 +270,19 @@ public class NexoTemp {
 						
 				    	if(segundo == 0 && minuto == 0 && hora == 0) {
 				    		
-				    		int bluep = ms.getBlueLifeNexo();
-				    		int redp = ms.getRedLifeNexo();
-				    		
-				    		if(bluep == redp) {
-								  target.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Tiempo Agotado",""+ChatColor.YELLOW+ChatColor.BOLD+"Empate entre ambos Equipos", 20, 20, 20);
-	
-				    		}else if(bluep > redp) {
-								  target.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Tiempo Agotado",""+ChatColor.RED+ChatColor.BOLD+"Equipo Azul Gana", 20, 20, 20);
-
-				    		}else {
-								  target.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Tiempo Agotado",""+ChatColor.RED+ChatColor.BOLD+"Equipo Rojo Gana", 20, 20, 20);
-
-				    		}
+//				    		int bluep = ms.getBlueLifeNexo();
+//				    		int redp = ms.getRedLifeNexo();
+//				    		
+//				    		if(bluep == redp) {
+//								  target.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Tiempo Agotado",""+ChatColor.YELLOW+ChatColor.BOLD+"Empate entre ambos Equipos", 20, 20, 20);
+//	
+//				    		}else if(bluep > redp) {
+//								  target.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Tiempo Agotado",""+ChatColor.RED+ChatColor.BOLD+"Equipo Azul Gana", 20, 20, 20);
+//
+//				    		}else {
+//								  target.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Tiempo Agotado",""+ChatColor.RED+ChatColor.BOLD+"Equipo Rojo Gana", 20, 20, 20);
+//
+//				    		}
 //				  
 				    		
 				    		 boss.setProgress(1.0);
@@ -316,17 +316,17 @@ public class NexoTemp {
 						  		
 						  		ms.setEstadopartida(EstadoPartida.TERMINANDO);
 						  		System.out.println("STOP MOMENT");
-						  		
-				    	}else if(ms.getBlueTeamMg().isEmpty()) {
-							  target.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"No hay Jugadores en el Equipo "+ChatColor.BLUE+ChatColor.BOLD+"Azul",""+ChatColor.WHITE+ChatColor.BOLD+"Finalizando Partida", 20, 20, 20);
-							  ms.setEstadopartida(EstadoPartida.TERMINANDO);
-
-				    	}
-				    	else if(ms.getRedTeamMg().isEmpty()) {
-							  target.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"No hay Jugadores en el Equipo "+ChatColor.RED+ChatColor.BOLD+"Rojo",""+ChatColor.WHITE+ChatColor.BOLD+"Finalizando Partida", 20, 20, 20);
-							  ms.setEstadopartida(EstadoPartida.TERMINANDO);
-
-				    	}
+					     }
+//				    	}else if(ms.getBlueTeamMg().isEmpty()) {
+//							  target.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"No hay Jugadores en el Equipo "+ChatColor.BLUE+ChatColor.BOLD+"Azul",""+ChatColor.WHITE+ChatColor.BOLD+"Finalizando Partida", 20, 20, 20);
+//							  ms.setEstadopartida(EstadoPartida.TERMINANDO);
+//
+//				    	}
+//				    	else if(ms.getRedTeamMg().isEmpty()) {
+//							  target.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"No hay Jugadores en el Equipo "+ChatColor.RED+ChatColor.BOLD+"Rojo",""+ChatColor.WHITE+ChatColor.BOLD+"Finalizando Partida", 20, 20, 20);
+//							  ms.setEstadopartida(EstadoPartida.TERMINANDO);
+//
+//				    	}
 					  
 				     
 				      ShootEntityToPlayer(target);
@@ -376,7 +376,7 @@ public class NexoTemp {
 			    			
 //					   		
 //								//RemoveArmorStandsAndItemsInMap(target);
-					   			dn.EndNexo(name);
+					   			//dn.EndNexo(name);
 								gc.EndGameActions(name);
 				  
 					    	 //ms.setEstadopartida(EstadoPartida.ESPERANDO);
