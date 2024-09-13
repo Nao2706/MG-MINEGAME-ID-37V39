@@ -771,11 +771,11 @@ public class ClassIntoGame {
 							player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"CAIDA", 40, 80, 40);
 							if(EntityHasName(mob)) {
 								player.sendMessage(ChatColor.RED+"Moriste por una "+ChatColor.YELLOW+"Caida mientras Tratabas de Escapar de "+mob.getCustomName());
-								gmc.SendMessageToUsersOfSameMap(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por una "+ChatColor.YELLOW+"CAIDA  mientras Tratabas de Escapar de "+mob.getCustomName());
+								gmc.SendMessageToUsersOfSameMap(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por una "+ChatColor.YELLOW+"CAIDA mientras Tratabas de Escapar de "+mob.getCustomName());
 
 							}else {
 								player.sendMessage(ChatColor.RED+"Moriste por una "+ChatColor.YELLOW+"Caida mientras Tratabas de Escapar de "+mob.getType());
-								gmc.SendMessageToUsersOfSameMap(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por una "+ChatColor.YELLOW+"CAIDA  mientras Tratabas de Escapar de "+mob.getType());
+								gmc.SendMessageToUsersOfSameMap(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por una "+ChatColor.YELLOW+"CAIDA mientras Tratabas de Escapar de "+mob.getType());
 
 							}
 							     

@@ -813,6 +813,8 @@ public class MinigameShop1 implements Listener{
 							}else {
 								
 								FileConfiguration map = getGameConfig(name);
+								GameConditions gc = new GameConditions(plugin);
+								
 								ItemStack ite = new ItemStack(m);
 								String display = menu.getString(name+".Display-Name");
 								ItemMeta met = ite.getItemMeta();
@@ -824,6 +826,16 @@ public class MinigameShop1 implements Listener{
 									for(int lor = 0 ; lor < list.size();lor++) {
 										list2.add(ChatColor.translateAlternateColorCodes('&',list.get(lor)));
 									}
+									
+									
+									list2.add("");
+									if(gc.HasMaintenance()) {
+										list2.add(""+ChatColor.RED+ChatColor.BOLD+"X EN MANTENIMIENTO X");
+									}
+									if(gc.isLocketTheMap(name)) {
+										list2.add(""+ChatColor.GOLD+ChatColor.BOLD+"MAPA: "+ChatColor.RED+ChatColor.BOLD+"DESHABILITADO.");
+									}
+									
 									list2.add("");
 									
 									if(map.getBoolean("Requires-Permission")) {
@@ -982,6 +994,7 @@ public class MinigameShop1 implements Listener{
 						}else {
 							
 							FileConfiguration map = getGameConfig(name);
+							GameConditions gc = new GameConditions(plugin);
 							
 							
 							ItemStack ite = new ItemStack(m);
@@ -994,6 +1007,13 @@ public class MinigameShop1 implements Listener{
 								list2.add("");
 								for(int lor = 0 ; lor < list.size();lor++) {
 									list2.add(ChatColor.translateAlternateColorCodes('&',list.get(lor)));
+								}
+								list2.add("");
+								if(gc.HasMaintenance()) {
+									list2.add(""+ChatColor.RED+ChatColor.BOLD+"X EN MANTENIMIENTO X");
+								}
+								if(gc.isLocketTheMap(name)) {
+									list2.add(""+ChatColor.GOLD+ChatColor.BOLD+"MAPA: "+ChatColor.RED+ChatColor.BOLD+"DESHABILITADO.");
 								}
 								list2.add("");
 								

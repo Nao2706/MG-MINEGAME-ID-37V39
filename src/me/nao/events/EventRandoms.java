@@ -1677,9 +1677,9 @@ public class EventRandoms implements Listener{
 				
 				 
 				  if(entidadhit != null) {
-					  if(!gc.isPlayerinGame(player)) {
-						  return;
-					  }
+					    if(!gc.isPlayerinGame(player)) return;
+					    
+					    //AUMENTO DE PUNTO POR ELIMINAR MOBS VIVOS , 
 					  	PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 					  	if(entidadhit instanceof LivingEntity) {
 							 LivingEntity mob = (LivingEntity) entidadhit;
@@ -1690,14 +1690,12 @@ public class EventRandoms implements Listener{
 						if(entidadhit instanceof Player || entidadhit instanceof Villager) {
 								String arenaName = pl.getMapName();
 				
+								if(entidadhit == player)return;
+								
 					 			if(!gc.isPvPAllowed(arenaName)) {
 					 				e.setCancelled(true);
 					 				player.sendMessage(ChatColor.RED+"El PVP en el Mapa "+ChatColor.GOLD+arenaName+ChatColor.RED+" no esta Habilitado");
-					 			}
-					 			
-					 		
-								
-							}
+					 	}}
 							return;
 					 }
 				  
