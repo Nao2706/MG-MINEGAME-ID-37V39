@@ -216,10 +216,22 @@ public class YamlFilePlus extends YamlConfiguration {
 		if(!ac.isEmpty()) {
 		
 			if(ac.contains(name)) {
-				config.set("Arenas-Created.List",ac);
+				
+				
+				config.set("Maps-Created.List",ac);
 				ac.remove(name);
 				plugin.getConfig().save();
 				plugin.getConfig().reload();
+				
+				
+				FileConfiguration menuitems = plugin.getMenuItems();
+				
+				menuitems.set(name,null);
+				
+				   plugin.getMenuItems().save();
+				   plugin.getMenuItems().reload();
+				
+				
 			    File folder = this.plugin.getDataFolder();
 		        File file = new File(folder, name);
 		        String[] nombre_archivos = folder.list();
@@ -280,7 +292,7 @@ public class YamlFilePlus extends YamlConfiguration {
 		if(!ac.isEmpty()) {
 		
 			if(ac.contains(name)) {
-				config.set("Arenas-Created.List",ac);
+				config.set("Maps-Created.List",ac);
 				ac.remove(name);
 				plugin.getConfig().save();
 				plugin.getConfig().reload();

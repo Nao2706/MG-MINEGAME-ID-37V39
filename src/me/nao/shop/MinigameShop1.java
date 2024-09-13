@@ -1,3 +1,4 @@
+
 package me.nao.shop;
 
 
@@ -41,6 +42,7 @@ import me.nao.general.info.PlayerInfo;
 import me.nao.main.game.Main;
 import me.nao.manager.ClassArena;
 import me.nao.manager.ClassIntoGame;
+import me.nao.yamlfile.game.YamlFilePlus;
 
 
 
@@ -653,22 +655,18 @@ public class MinigameShop1 implements Listener{
 			MenuDecoration(inv,Material.BLACK_STAINED_GLASS_PANE);
 			player.openInventory(inv);
 		}
-		
-
-		
-		
-		
 	}
 
 
-	
+	 
 	
 	public void UpdateInventory(Player player) {
 		BukkitScheduler sh = Bukkit.getServer().getScheduler();
-	
+	 
+		GameConditions gc = new GameConditions(plugin);
 		TaskID = sh.scheduleSyncRepeatingTask(plugin, new Runnable() {
 			public void run() {
-				if(!isUpdateable(player)) {
+				if(!isUpdateable(player) || gc.isPlayerinGame(player)) {
 					Bukkit.getScheduler().cancelTask(TaskID);
 					return;
 				}
@@ -813,6 +811,8 @@ public class MinigameShop1 implements Listener{
 								
 								itemlist.add(item);
 							}else {
+								
+								FileConfiguration map = getGameConfig(name);
 								ItemStack ite = new ItemStack(m);
 								String display = menu.getString(name+".Display-Name");
 								ItemMeta met = ite.getItemMeta();
@@ -824,6 +824,30 @@ public class MinigameShop1 implements Listener{
 									for(int lor = 0 ; lor < list.size();lor++) {
 										list2.add(ChatColor.translateAlternateColorCodes('&',list.get(lor)));
 									}
+									list2.add("");
+									
+									if(map.getBoolean("Requires-Permission")) {
+						 				String perm = map.getString("Permission-To-Play");
+						 				if(!player.hasPermission(perm)) {
+						 					
+						 					list2.add(""+ChatColor.RED+ChatColor.BOLD+"BLOQUEADO");
+						 					List<String> perml = map.getStringList("How-Get-Permission.Message");
+						 					if(!perml.isEmpty()) {
+						 						
+						 						
+						 						for(int i2 =0;i2< perml.size();i2++) {
+						 							list2.add(ChatColor.translateAlternateColorCodes('&', perml.get(i2)).replace("%player%", player.getName()));
+						 						}
+						 					}else {
+						 						list2.add(ChatColor.RED+"Mapa Bloqueado: Necesitas un Permiso para Acceder.");
+						 					}
+						 					
+						 				
+						 				}else {
+						 					list2.add(""+ChatColor.GREEN+ChatColor.BOLD+"DESBLOQUEADO");
+						 				}
+						 		    }
+									
 									list2.add("");
 									if(plugin.getGameInfoPoo().get(name) != null) {
 										list2.add(""+ChatColor.GREEN+ChatColor.BOLD+"JUGADORES: "+ChatColor.RED+ChatColor.BOLD+plugin.getGameInfoPoo().get(name).getParticipantes().size());
@@ -956,6 +980,10 @@ public class MinigameShop1 implements Listener{
 							
 							itemlist.add(item);
 						}else {
+							
+							FileConfiguration map = getGameConfig(name);
+							
+							
 							ItemStack ite = new ItemStack(m);
 							String display = menu.getString(name+".Display-Name");
 							ItemMeta met = ite.getItemMeta();
@@ -968,6 +996,30 @@ public class MinigameShop1 implements Listener{
 									list2.add(ChatColor.translateAlternateColorCodes('&',list.get(lor)));
 								}
 								list2.add("");
+								
+								if(map.getBoolean("Requires-Permission")) {
+					 				String perm = map.getString("Permission-To-Play");
+					 				if(!player.hasPermission(perm)) {
+					 					
+					 					list2.add(""+ChatColor.RED+ChatColor.BOLD+"BLOQUEADO");
+					 					List<String> perml = map.getStringList("How-Get-Permission.Message");
+					 					if(!perml.isEmpty()) {
+					 						
+					 						
+					 						for(int i =0;i< perml.size();i++) {
+					 							list2.add(ChatColor.translateAlternateColorCodes('&', perml.get(i)).replace("%player%", player.getName()));
+					 						}
+					 					}else {
+					 						list2.add(ChatColor.RED+"Mapa Bloqueado: Necesitas un Permiso para Acceder.");
+					 					}
+					 					
+					 				
+					 				}else {
+					 					list2.add(""+ChatColor.GREEN+ChatColor.BOLD+"DESBLOQUEADO");
+					 				}
+					 		    }
+								
+								list2.add("");
 								if(plugin.getGameInfoPoo().get(name) != null) {
 									list2.add(""+ChatColor.GREEN+ChatColor.BOLD+"JUGADORES: "+ChatColor.RED+ChatColor.BOLD+plugin.getGameInfoPoo().get(name).getParticipantes().size());
 									list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESPECTADORES: "+ChatColor.RED+ChatColor.BOLD+plugin.getGameInfoPoo().get(name).getSpectator().size());
@@ -975,7 +1027,7 @@ public class MinigameShop1 implements Listener{
 									list2.add(""+ChatColor.GREEN+ChatColor.BOLD+"JUGADORES: "+ChatColor.RED+ChatColor.BOLD+"0");
 									list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESPECTADORES: "+ChatColor.RED+ChatColor.BOLD+"0");
 								}
-								
+								 
 							
 								met.setLore(list2);
 							}
@@ -1051,7 +1103,9 @@ public class MinigameShop1 implements Listener{
 					
 					
 					if(gc.ExistMap(name)) {
+						player.closeInventory();
 						gc.JoinToTheGames(player, name);
+						
 					}else {
 						player.sendMessage(ChatColor.RED+"Ese Mapa no existe.");
 					}
@@ -2199,6 +2253,13 @@ public class MinigameShop1 implements Listener{
 		NumberFormat nf = NumberFormat.getInstance();
 		nf.setMaximumFractionDigits(0);
 		return nf.format(percent)+"%";
+	}
+
+	public FileConfiguration getGameConfig(String name) {
+		YamlFilePlus file = new YamlFilePlus(plugin);
+		FileConfiguration config = file.getSpecificYamlFile("Maps",name);
+		//u.saveSpecificl(name);
+	    return config;
 	}
 	
 }

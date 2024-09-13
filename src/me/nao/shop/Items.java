@@ -34,7 +34,8 @@ import org.bukkit.inventory.meta.ItemMeta;
             BENGALAROJA(""+ChatColor.RED+ChatColor.BOLD+"BENGALA ROJA", Material.REDSTONE_TORCH,null, 1,ChatColor.YELLOW+"Bombardea el Area donde cae. ",ChatColor.RED+"Debes estar en un Sitio despejado.. ",ChatColor.GREEN+"Click Derecho para Lanzar. "),
             BENGALAVERDE(""+ChatColor.GREEN+ChatColor.BOLD+"BENGALA VERDE", Material.REDSTONE_TORCH,null, 1,ChatColor.YELLOW+"Recibe un paquete de Ayuda Random. ",ChatColor.RED+"Debes estar en un Sitio despejado.. ",ChatColor.GREEN+"Click Derecho para Lanzar. "),
 
-            
+            TEST(""+ChatColor.RED+ChatColor.BOLD+"TEST", Material.STICK,null, 1, ChatColor.GREEN+"Falling Block"),
+
             
             CERRAR(""+ChatColor.RED+ChatColor.BOLD+"CERRAR", Material.BARRIER,null, 1, ChatColor.GREEN+"Salir de la Tienda"),
             CERRAR2(""+ChatColor.RED+ChatColor.BOLD+"CERRAR", Material.BARRIER,null, 1, ChatColor.GREEN+"Cerrar Menu."),

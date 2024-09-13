@@ -1780,6 +1780,9 @@ public class Comandos implements CommandExecutor{
 					}
 					
 					return true;
+				}else if(args[0].equalsIgnoreCase("test")) {
+				  
+					return true;
 				}else if(args[0].equalsIgnoreCase("join")) {
 					if (args.length == 2) {
 						String name = args[1];
@@ -2988,7 +2991,28 @@ public class Comandos implements CommandExecutor{
 	
 	
 	
-	
+//	  public char getBlock(int x, int y, int z, final World bukkitWorld) {
+//	        final World world = bukkitWorld;
+//	        final Chunk chunk = world.getChunkAt(x >> 4, z >> 4);
+//	        if (chunk == null) {
+//	            return 0;
+//	        }
+//	        int sectionY = y >> 4;
+//	        if (sectionY < 0 || sectionY > 16) {
+//	            return 0;
+//	        }
+//	        
+//	        
+//	        ChunkSection section = ((Object) chunk).getSections()[sectionY];
+//	        if (section == null || section.a()) {
+//	            return 0;
+//	        }
+//	        x = x & 15;
+//	        y = y & 15;
+//	        z = z & 15;
+//	        final char block = section.getIdArray()[y << 8 | z << 4 | x];
+//	        return block;
+//	    }
 	
 	
 	public void AllReload(Player player) {

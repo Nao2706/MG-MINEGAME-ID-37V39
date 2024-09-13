@@ -275,11 +275,11 @@ public class MgScore {
 				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"=========");
 				 show.add(ChatColor.RED+" ");
 				
-				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Kills: "+ChatColor.RED+ChatColor.BOLD+gp.getKills());  
-				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Damage: "+ChatColor.RED+ChatColor.BOLD+gc.TransformPosOrNeg(gp.getDamage())); 
-				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Deads: "+ChatColor.RED+ChatColor.BOLD+gp.getDeads()); 
-				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Revive: "+ChatColor.RED+ChatColor.BOLD+gp.getRevive()); 
-				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Help-Revive: "+ChatColor.RED+ChatColor.BOLD+gp.getHelpRevive()); 
+				 show.add(" "+ChatColor.GREEN+ChatColor.BOLD+"Kills: "+ChatColor.RED+ChatColor.BOLD+gp.getKills());  
+				 show.add(" "+ChatColor.GREEN+ChatColor.BOLD+"Damage: "+ChatColor.RED+ChatColor.BOLD+gc.TransformPosOrNeg(gp.getDamage())); 
+				 show.add(" "+ChatColor.GREEN+ChatColor.BOLD+"Deads: "+ChatColor.RED+ChatColor.BOLD+gp.getDeads()); 
+				 show.add(" "+ChatColor.GREEN+ChatColor.BOLD+"Revive: "+ChatColor.RED+ChatColor.BOLD+gp.getRevive()); 
+				 show.add(" "+ChatColor.GREEN+ChatColor.BOLD+"Help-Revive: "+ChatColor.RED+ChatColor.BOLD+gp.getHelpRevive()); 
 				 
 				 show.add(ChatColor.RED+"  ");
 				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"========= ");
@@ -300,7 +300,7 @@ public class MgScore {
 				score.setScore((show.size()-i));
 			}
 			player.setScoreboard(scoreboard);
-		}else {
+		}else{
 			ScoreboardManager manager = Bukkit.getScoreboardManager();
 			Scoreboard scoreboard = manager.getNewScoreboard();
 			Objective ob = scoreboard.registerNewObjective("Anuncio",Criteria.DUMMY,"");

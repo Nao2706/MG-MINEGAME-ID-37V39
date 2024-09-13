@@ -406,6 +406,16 @@ public class EventRandoms implements Listener{
 					if (e.getItem() != null) {
 						
 						
+						if (e.getItem().isSimilar(Items.TEST.getValue())) {
+							
+							FallingBlock f =  player.getWorld().spawnFallingBlock(player.getEyeLocation().add(0.5, 0, 0.5) ,Material.GREEN_STAINED_GLASS.createBlockData());
+							f.setGravity(true);
+							f.setInvulnerable(true);
+							f.setMaxDamage(20);
+							f.setDropItem(false);
+							f.setVelocity(player.getLocation().getDirection().multiply(3).setY(1));
+				       }
+						
 						if (e.getItem().isSimilar(Items.JEDIP.getValue())) {
 				
 							player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 20.0F, 1F);
