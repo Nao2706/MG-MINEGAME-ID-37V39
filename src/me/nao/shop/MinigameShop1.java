@@ -830,7 +830,7 @@ public class MinigameShop1 implements Listener{
 									
 									list2.add("");
 									if(gc.HasMaintenance()) {
-										list2.add(""+ChatColor.RED+ChatColor.BOLD+"X EN MANTENIMIENTO X");
+										list2.add(""+ChatColor.RED+ChatColor.BOLD+"X EN MANTENIMIENTO X".replace("X",""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"X"));
 									}
 									if(gc.isLocketTheMap(name)) {
 										list2.add(""+ChatColor.GOLD+ChatColor.BOLD+"MAPA: "+ChatColor.RED+ChatColor.BOLD+"DESHABILITADO.");
@@ -851,7 +851,7 @@ public class MinigameShop1 implements Listener{
 						 							list2.add(ChatColor.translateAlternateColorCodes('&', perml.get(i2)).replace("%player%", player.getName()));
 						 						}
 						 					}else {
-						 						list2.add(ChatColor.RED+"Mapa Bloqueado: Necesitas un Permiso para Acceder.");
+						 						list2.add(ChatColor.RED+"Mapa Bloqueado: "+ChatColor.GOLD+"Necesitas un Permiso para Acceder.");;
 						 					}
 						 					
 						 				
@@ -1010,7 +1010,7 @@ public class MinigameShop1 implements Listener{
 								}
 								list2.add("");
 								if(gc.HasMaintenance()) {
-									list2.add(""+ChatColor.RED+ChatColor.BOLD+"X EN MANTENIMIENTO X");
+									list2.add(""+ChatColor.RED+ChatColor.BOLD+"X EN MANTENIMIENTO X".replace("X",""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"X"));
 								}
 								if(gc.isLocketTheMap(name)) {
 									list2.add(""+ChatColor.GOLD+ChatColor.BOLD+"MAPA: "+ChatColor.RED+ChatColor.BOLD+"DESHABILITADO.");
@@ -1030,7 +1030,7 @@ public class MinigameShop1 implements Listener{
 					 							list2.add(ChatColor.translateAlternateColorCodes('&', perml.get(i)).replace("%player%", player.getName()));
 					 						}
 					 					}else {
-					 						list2.add(ChatColor.RED+"Mapa Bloqueado: Necesitas un Permiso para Acceder.");
+					 						list2.add(ChatColor.RED+"Mapa Bloqueado: "+ChatColor.GOLD+"Necesitas un Permiso para Acceder.");
 					 					}
 					 					
 					 				

@@ -622,6 +622,7 @@ public class SourceOfDamage implements Listener{
 						if(gc.isPlayerinGame(player)) {
 							e.setCancelled(true);
 							ci.GameMobDamagerCause(player, damager);
+							
 						}	
 					}
 								
@@ -633,10 +634,10 @@ public class SourceOfDamage implements Listener{
 						if(gc.isPlayerinGame(player)) {
 							e.setCancelled(true);
 							ci.GameDamageCause(player, e.getCause());
-							return;
+							
 						}
 					}
-						
+					return;
 				}
 			
 			

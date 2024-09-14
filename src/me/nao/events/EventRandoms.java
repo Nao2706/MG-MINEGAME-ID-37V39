@@ -2802,12 +2802,9 @@ public class EventRandoms implements Listener{
 														player.sendMessage(ChatColor.YELLOW+"Necesitas que todos los jugadores vivos esten cerca para avanzar.");
 														
 														
-													gc.SendMessageToUsersOfSameMap(player, ChatColor.GREEN+player.getName()+ChatColor.RED+" Solicita una reunion para poder activar un Evento.");
-															
-															 }
-												  
-												  
-												  if(!chest.getInventory().isEmpty()) {
+														gc.SendMessageToUsersOfSameMap(player, ChatColor.GREEN+player.getName()+ChatColor.RED+" Solicita una reunion para poder activar un Evento.");
+														return;
+												   }else if(!chest.getInventory().isEmpty()) {
 														for (ItemStack itemStack : chest.getInventory().getContents()) {
 																if(itemStack == null) continue;
 															
@@ -2824,14 +2821,9 @@ public class EventRandoms implements Listener{
 																		   ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 																		   Bukkit.dispatchCommand(console, n.replace("%player%", player.getName()));
 											              }
-												  }
-												  
-												  
-												  
 														return;
+												      }
 													}
-												  
-											
 											  }
 								          }
 									

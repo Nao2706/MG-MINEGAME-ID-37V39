@@ -687,14 +687,18 @@ public class ClassIntoGame {
 				
 				//CHEQUEO POR SI ES DE UN JUGADOR
 				if(damager instanceof Player) {
-					Player killer = (Player) e;
-					player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+killer.getName(), 40, 80, 40);
+					Player killer = (Player) damager;
+				
 					if(damager.getName().equals(player.getName())) {
-						player.sendMessage(ChatColor.RED+"Moriste por Suicidarte");
+						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+"Autodispararse (Suicidio)", 40, 80, 40);
+						player.sendMessage(ChatColor.RED+"Moriste por "+ChatColor.YELLOW+"Autodispararse a ti mismo/a. (Suicidio)");
+						gmc.SendMessageToUsersOfSameMap(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"Autodispararse (Suicidio)");
 					}else{
+						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+killer.getName(), 40, 80, 40);
 						player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+killer.getName());
+						gmc.SendMessageToUsersOfSameMap(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+killer.getName());
 					}
-					gmc.SendMessageToUsersOfSameMap(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+killer.getName());
+					
 					
 				//SINO PROVIENE DE UN JUGADOR SE EVALUA SI TIENE NOMBRE (ES CUSTOM) SINO ES DE UN MOV	
 				}else if(EntityHasShooter(damager)) {
@@ -966,7 +970,11 @@ public class ClassIntoGame {
 	
 	public void HealPlayer(Player player) {
 		PotionEffect vid = new PotionEffect(PotionEffectType.REGENERATION,/*duration*/ 10 * 20,/*amplifier:*/10, true ,true,true );
+		PotionEffect comida = new PotionEffect(PotionEffectType.SATURATION,/*duration*/ 10 * 20,/*amplifier:*/10, true ,true,true );
+		PotionEffect abso = new PotionEffect(PotionEffectType.ABSORPTION,/*duration*/ 10 * 20,/*amplifier:*/10, true ,true,true );
 		player.addPotionEffect(vid);
+		player.addPotionEffect(comida);
+		player.addPotionEffect(abso);
 
 		return;
 	}
