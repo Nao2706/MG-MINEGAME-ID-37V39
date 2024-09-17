@@ -7,7 +7,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 
 
 
@@ -18,7 +18,7 @@ public class Countdown2 {
 	int taskID;
 	
 	
-    private Main plugin;
+    private Minegame plugin;
     private String group;
     private int time ;
     
@@ -26,7 +26,7 @@ public class Countdown2 {
     
     
     //cuenta atras
-	public Countdown2(Main plugin,int time ,String group) {
+	public Countdown2(Minegame plugin,int time ,String group) {
 		this.plugin = plugin;
 		this.time = time;
 		this.group = group;

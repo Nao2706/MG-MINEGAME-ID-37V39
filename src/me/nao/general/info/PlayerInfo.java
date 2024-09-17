@@ -9,11 +9,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 
 public class PlayerInfo {
 	
-	private Main plugin;
+	private Minegame plugin;
 	private boolean isinventorysave;
 	private Player player ;
 	private Collection<PotionEffect> potion ;
@@ -30,7 +30,7 @@ public class PlayerInfo {
 	private String namemision;
 	private GamePoints gp;
 	
-	public PlayerInfo(Main plugin ,boolean isinventorysave,Player player, Collection<PotionEffect> potion, ItemStack[] inv, GameMode gamemode, boolean fly, double vida, double maxvida,int comida, int lvlxp, float xp,Location l,boolean ismision,String nameMision,GamePoints gp) {
+	public PlayerInfo(Minegame plugin ,boolean isinventorysave,Player player, Collection<PotionEffect> potion, ItemStack[] inv, GameMode gamemode, boolean fly, double vida, double maxvida,int comida, int lvlxp, float xp,Location l,boolean ismision,String nameMision,GamePoints gp) {
 	
 		this.plugin = plugin;
 		this.isinventorysave = isinventorysave;
@@ -51,7 +51,7 @@ public class PlayerInfo {
 		
 	}
 	
-	public PlayerInfo(Main plugin ,boolean isinventorysave,Player player, GameMode gamemode, boolean fly,Location l,boolean ismision,String nameMision,GamePoints gp) {
+	public PlayerInfo(Minegame plugin ,boolean isinventorysave,Player player, GameMode gamemode, boolean fly,Location l,boolean ismision,String nameMision,GamePoints gp) {
 		
 		this.plugin = plugin;
 		this.isinventorysave = isinventorysave;

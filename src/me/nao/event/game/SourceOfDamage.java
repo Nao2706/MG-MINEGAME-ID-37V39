@@ -42,16 +42,16 @@ import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
 import me.nao.general.info.PlayerInfo;
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 import me.nao.manager.ClassIntoGame;
 
 
 
 public class SourceOfDamage implements Listener{
 
-	private Main plugin;
+	private Minegame plugin;
 	
-	public SourceOfDamage(Main plugin) {
+	public SourceOfDamage(Minegame plugin) {
 		this.plugin = plugin;
 	}
 	

@@ -31,7 +31,7 @@ import me.nao.general.info.GameType;
 import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.PlayerInfo;
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 import me.nao.shop.Items;
 import me.nao.shop.MinigameShop1;
 import me.nao.teamsmg.MgTeams;
@@ -41,10 +41,10 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class ClassIntoGame {
 	
-	private Main plugin;
+	private Minegame plugin;
 
 	
-	public ClassIntoGame(Main plugin) {
+	public ClassIntoGame(Minegame plugin) {
 		this.plugin = plugin;
 	}
 	

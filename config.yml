@@ -12,6 +12,13 @@ Local-Time-Hour: 1
 Dispenser-Range: 30
 Loot-Table-Limit: 10
 Maintenance: false
+Data-Base:
+    Enabled: false     
+    Host: "sql9.freesqldatabase.com"
+    Puerto: 3306
+    BaseDeDatos: "sql9581887"  
+    Usuario: "sql9581887"
+    Clave: "6QGbkafXab"       
 Maps-Created:
     List:
     - example
@@ -40,4 +47,5 @@ Worlds-Animation:
 FallingBlock-Remove-If-Touch-Ground:
     List:
     - example1
-    - example2      
+    - example2 
+ 

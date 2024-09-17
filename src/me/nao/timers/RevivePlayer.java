@@ -9,7 +9,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
 import me.nao.general.info.PlayerInfo;
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 import me.nao.manager.EstadoPartida;
 
 public class RevivePlayer {
@@ -18,10 +18,10 @@ public class RevivePlayer {
 	private int time;
 	private Player player;
 	private Location l;
-	private Main plugin;
+	private Minegame plugin;
 	int taskID;
 	
-	public RevivePlayer(int time, Location l,Player player, Main plugin) {
+	public RevivePlayer(int time, Location l,Player player, Minegame plugin) {
 		this.time = time;
 		this.l = l;
 		this.player = player;

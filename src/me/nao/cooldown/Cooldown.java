@@ -3,7 +3,7 @@ package me.nao.cooldown;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 
 
 
@@ -12,11 +12,11 @@ import me.nao.main.game.Main;
 public class Cooldown {
 
 
-	private Main plugin;
+	private Minegame plugin;
 	long cooldown;                  // <====================================================
 	
 	
-	public Cooldown(Main plugin,long cooldown) {
+	public Cooldown(Minegame plugin,long cooldown) {
 		this.plugin = plugin;
 		this.cooldown = cooldown;
 	}

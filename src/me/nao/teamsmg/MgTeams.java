@@ -6,13 +6,13 @@ import org.bukkit.scoreboard.Team;
 import org.bukkit.scoreboard.Team.Option;
 import org.bukkit.scoreboard.Team.OptionStatus;
 
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 
 public class MgTeams {
 	
-	private Main plugin;
+	private Minegame plugin;
 	
-	public MgTeams(Main plugin) {
+	public MgTeams(Minegame plugin) {
 		this.plugin = plugin;
 	}
 	

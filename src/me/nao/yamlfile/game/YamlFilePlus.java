@@ -12,14 +12,14 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 
 public class YamlFilePlus extends YamlConfiguration {
 
 	
-	private Main plugin;
+	private Minegame plugin;
 	
-	public YamlFilePlus(Main plugin) {
+	public YamlFilePlus(Minegame plugin) {
 		this.plugin = plugin;
 	}
 	

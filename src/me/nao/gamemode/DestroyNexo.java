@@ -23,14 +23,14 @@ import me.nao.general.info.PlayerInfo;
 import me.nao.general.info.TeamsMg;
 //import me.nao.general.info.GameConditions;
 //import me.nao.general.info.GameNexo;
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 import me.nao.yamlfile.game.YamlFilePlus;
 
 public class DestroyNexo {
 
 	
-	private Main plugin;
-	public DestroyNexo(Main plugin) {
+	private Minegame plugin;
+	public DestroyNexo(Minegame plugin) {
 		this.plugin = plugin;
 	}
 	

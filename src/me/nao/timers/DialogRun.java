@@ -12,7 +12,7 @@ import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameDialogs;
 import me.nao.general.info.GameInfo;
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 import me.nao.manager.EstadoPartida;
 
 
@@ -23,7 +23,7 @@ public class DialogRun {
 	
 	
 	private int taskID;
-    private Main plugin;
+    private Minegame plugin;
     private GameDialogs dialog;
     
 
@@ -34,7 +34,7 @@ public class DialogRun {
     
     
     //cuenta atras
-	public DialogRun(Main plugin,GameDialogs g) {
+	public DialogRun(Minegame plugin,GameDialogs g) {
 		this.plugin = plugin;
 		this.dialog = g;
 	

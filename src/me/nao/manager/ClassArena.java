@@ -35,7 +35,7 @@ import me.nao.general.info.GameInfo;
 import me.nao.general.info.GameType;
 import me.nao.general.info.ObjetiveType;
 import me.nao.general.info.PlayerInfo;
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 import me.nao.shop.Items;
 import me.nao.timers.Countdown;
 
@@ -45,10 +45,10 @@ import me.nao.timers.Countdown;
 public class ClassArena {
 
 		
-	    private Main plugin;
+	    private Minegame plugin;
 	   
 		
-		public ClassArena(Main plugin) {
+		public ClassArena(Minegame plugin) {
 			this.plugin = plugin;
 		}
 		

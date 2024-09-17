@@ -9,16 +9,16 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 
 
 
 
 public class Data {
 	
-	private Main plugin;
+	private Minegame plugin;
 	
-	public Data(Main plugin) {
+	public Data(Minegame plugin) {
 		this.plugin = plugin;
 	}
 	

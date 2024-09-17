@@ -48,7 +48,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 import me.nao.manager.ClassArena;
 import me.nao.manager.ClassIntoGame;
 import me.nao.manager.EstadoPartida;
@@ -63,12 +63,12 @@ public class InfectedTemp {
 	
 	  
 	
-	   private Main plugin;
+	   private Minegame plugin;
 	   int taskID;
 	  
 	
 	  
-	 public InfectedTemp(Main plugin) {
+	 public InfectedTemp(Minegame plugin) {
 		 
 		  this.plugin = plugin;
 		  

@@ -21,13 +21,13 @@ import me.nao.cooldown.Cooldown;
 import me.nao.cosmetics.fireworks.Fireworks;
 import me.nao.general.info.GamePoints;
 import me.nao.general.info.PlayerInfo;
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 
 public class PointsManager {
 
-	private Main plugin;
+	private Minegame plugin;
 	
-	public PointsManager(Main plugin) {
+	public PointsManager(Minegame plugin) {
 		this.plugin = plugin;
 	}
 	

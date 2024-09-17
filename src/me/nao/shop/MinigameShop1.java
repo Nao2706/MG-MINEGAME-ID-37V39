@@ -39,7 +39,7 @@ import me.nao.general.info.GameInfo;
 import me.nao.general.info.ObjetiveType;
 import me.nao.general.info.ObjetivesMG;
 import me.nao.general.info.PlayerInfo;
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 import me.nao.manager.ClassArena;
 import me.nao.manager.ClassIntoGame;
 import me.nao.yamlfile.game.YamlFilePlus;
@@ -51,11 +51,11 @@ import me.nao.yamlfile.game.YamlFilePlus;
 public class MinigameShop1 implements Listener{
 	
 
-	private Main plugin;
+	private Minegame plugin;
 	private int TaskID;
 	
 
-	public MinigameShop1(Main plugin) {
+	public MinigameShop1(Minegame plugin) {
 		this.plugin = plugin;
 	}
 	

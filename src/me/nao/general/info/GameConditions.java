@@ -41,7 +41,7 @@ import org.bukkit.scoreboard.Team;
 
 import me.nao.cooldown.ReportsManager;
 //import me.nao.gamemode.DestroyNexo;
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 import me.nao.manager.ClassArena;
 import me.nao.manager.ClassIntoGame;
 import me.nao.manager.EstadoPartida;
@@ -59,9 +59,9 @@ import me.top.users.PointsManager;
 
 public class GameConditions {
 	
-	private Main plugin;
+	private Minegame plugin;
 	
-	public GameConditions(Main plugin) {
+	public GameConditions(Minegame plugin) {
 		this.plugin = plugin;
 		
 	}

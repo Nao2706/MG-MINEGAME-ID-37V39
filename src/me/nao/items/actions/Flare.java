@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 import me.nao.shop.Items;
 
 public class Flare extends BukkitRunnable{
@@ -23,7 +23,7 @@ public class Flare extends BukkitRunnable{
 	public Flare(Player player,ItemStack it, Location l) {
 		item = l.getWorld().dropItem(l,it);
 		item.setVelocity(player.getEyeLocation().getDirection().multiply(3));
-		runTaskTimer(JavaPlugin.getPlugin(Main.class),0,3);
+		runTaskTimer(JavaPlugin.getPlugin(Minegame.class),0,3);
 
 		
 	}

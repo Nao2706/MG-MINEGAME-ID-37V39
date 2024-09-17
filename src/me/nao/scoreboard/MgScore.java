@@ -24,14 +24,14 @@ import me.nao.general.info.GamePoints;
 import me.nao.general.info.ObjetiveType;
 import me.nao.general.info.ObjetivesMG;
 import me.nao.general.info.PlayerInfo;
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 
 
 
 public class MgScore {
 
-	private Main plugin;
-	public MgScore(Main plugin) {
+	private Minegame plugin;
+	public MgScore(Minegame plugin) {
 		this.plugin = plugin;
 	}
 	

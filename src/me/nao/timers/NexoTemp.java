@@ -49,7 +49,7 @@ import org.bukkit.util.RayTraceResult;
 //import me.nao.gamemode.DestroyNexo;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameNexo;
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 import me.nao.manager.EstadoPartida;
 import me.nao.manager.StopMotivo;
 //import net.md_5.bungee.api.ChatMessageType;
@@ -62,12 +62,12 @@ public class NexoTemp {
 	
 	  
 	
-	   private Main plugin;
+	   private Minegame plugin;
 	   int taskID;
 	  
 	
 	  
-	 public NexoTemp(Main plugin) {
+	 public NexoTemp(Minegame plugin) {
 		 
 		  this.plugin = plugin;
 		  

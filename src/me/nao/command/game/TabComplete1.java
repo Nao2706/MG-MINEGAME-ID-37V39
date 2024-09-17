@@ -8,16 +8,16 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 
 
 
 public class TabComplete1 implements TabCompleter{
 	
 	
-	private Main plugin;
+	private Minegame plugin;
 	
-	public TabComplete1(Main plugin) {
+	public TabComplete1(Minegame plugin) {
 		this.plugin = plugin;
 	}
 	

@@ -9,16 +9,16 @@ import org.bukkit.block.BlockState;
 
 import org.bukkit.scheduler.BukkitRunnable;
 
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 
 
 
 public class RegenRun extends BukkitRunnable{
 	
     @SuppressWarnings("unused")
-	private Main plugin;
+	private Minegame plugin;
 	
-	public RegenRun(Main plugin) {
+	public RegenRun(Minegame plugin) {
 		this.plugin = plugin;
 	}
 	

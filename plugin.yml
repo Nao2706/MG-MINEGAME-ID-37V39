@@ -1,6 +1,6 @@
-version: 1.70.0
+version: 1.71.2
 name: MineGame
-main: me.nao.main.game.Main
+main: me.nao.main.game.Minegame
 api-version: 1.19
 author: NAO2706
 description: SubGames into Minecraft

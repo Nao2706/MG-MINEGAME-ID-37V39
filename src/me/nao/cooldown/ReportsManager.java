@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 
 import me.nao.general.info.GameReportType;
 import me.nao.general.info.GameReports;
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 
 
 
@@ -22,11 +22,11 @@ public class ReportsManager {
 	//cuando se penalice se coloca el cooldown con valor 1225 etc ejemplo
 	//para chequear se estable un objeto con valor 0 por que solo testeara si tiene cooldown
 	
-	private Main plugin;
+	private Minegame plugin;
                // <====================================================
 	
 	
-	public ReportsManager(Main plugin) {
+	public ReportsManager(Minegame plugin) {
 		this.plugin = plugin;
 		
 	}

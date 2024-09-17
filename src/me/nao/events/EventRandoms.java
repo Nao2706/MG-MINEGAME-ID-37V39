@@ -90,7 +90,7 @@ import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.PlayerInfo;
 import me.nao.items.actions.Flare;
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 import me.nao.manager.EstadoPartida;
 import me.nao.shop.Items;
 import me.nao.shop.MinigameShop1;
@@ -100,9 +100,9 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class EventRandoms implements Listener{
 	
-	private Main plugin;
+	private Minegame plugin;
 	
-	public EventRandoms(Main plugin) {
+	public EventRandoms(Minegame plugin) {
 		this.plugin = plugin;
 	}
 	

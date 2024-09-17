@@ -3,14 +3,14 @@ package me.nao.cosmetics.fireworks;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 import net.md_5.bungee.api.ChatColor;
 
 public class RankPlayer {
 	
-	private Main plugin;
+	private Minegame plugin;
 	
-    public RankPlayer (Main plugin) {
+    public RankPlayer (Minegame plugin) {
     	this.plugin = plugin;
     }
 	

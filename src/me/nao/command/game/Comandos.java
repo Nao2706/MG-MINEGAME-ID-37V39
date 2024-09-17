@@ -52,7 +52,7 @@ import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameReportType;
 import me.nao.general.info.GameReports;
 import me.nao.general.info.ObjetiveType;
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 import me.nao.manager.ClassArena;
 import me.nao.manager.ClassIntoGame;
 import me.nao.manager.StopMotivo;
@@ -77,9 +77,9 @@ public class Comandos implements CommandExecutor{
 	
 	
 	
-	private Main plugin;
+	private Minegame plugin;
 	
-	public Comandos(Main plugin) {
+	public Comandos(Minegame plugin) {
 		this.plugin = plugin;
 	}
 	

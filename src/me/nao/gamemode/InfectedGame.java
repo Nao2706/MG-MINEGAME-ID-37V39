@@ -16,14 +16,14 @@ import org.bukkit.scoreboard.Team.Option;
 import org.bukkit.scoreboard.Team.OptionStatus;
 
 import me.nao.general.info.GameConditions;
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 import me.nao.yamlfile.game.YamlFilePlus;
 
 public class InfectedGame {
 
-	private Main plugin;
+	private Minegame plugin;
 	
-	public InfectedGame(Main plugin) {
+	public InfectedGame(Minegame plugin) {
 		this.plugin = plugin;
 	}
 	

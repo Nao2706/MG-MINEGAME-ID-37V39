@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.PlayerInfo;
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 import me.nao.manager.ClassArena;
 
 
@@ -16,9 +16,9 @@ public class PHMiniGame extends PlaceholderExpansion{
 	
 	
 	 // We get an instance of the plugin later.
-    private Main plugin;
+    private Minegame plugin;
  
-    public PHMiniGame(Main plugin) {
+    public PHMiniGame(Minegame plugin) {
     	this.plugin = plugin;
     }
  

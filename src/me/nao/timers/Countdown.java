@@ -5,7 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 
 
 
@@ -16,7 +16,7 @@ public class Countdown {
 	int taskID;
 	
 	
-    private Main plugin;
+    private Minegame plugin;
 	int tiempo;
 	private Player player;
  
@@ -26,7 +26,7 @@ public class Countdown {
     
     
     //cuenta atras
-	public Countdown(Main plugin,int tiempo,Player player) {
+	public Countdown(Minegame plugin,int tiempo,Player player) {
 		this.plugin = plugin;
 		this.tiempo = tiempo;
 		this.player = player;

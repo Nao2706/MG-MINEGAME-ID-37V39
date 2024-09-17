@@ -54,7 +54,7 @@ import org.bukkit.util.RayTraceResult;
 import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
-import me.nao.main.game.Main;
+import me.nao.main.game.Minegame;
 import me.nao.manager.ClassArena;
 import me.nao.manager.ClassIntoGame;
 import me.nao.manager.EstadoPartida;
@@ -70,12 +70,12 @@ public class AdventureTemp {
 	
 	  
 	
-	   private Main plugin;
+	   private Minegame plugin;
 	   int taskID;
 	  
 	
 	  
-	 public AdventureTemp(Main plugin) {
+	 public AdventureTemp(Minegame plugin) {
 		 
 		  this.plugin = plugin;
 		  
