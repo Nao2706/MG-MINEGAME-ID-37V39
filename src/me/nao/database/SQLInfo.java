@@ -1,5 +1,6 @@
 package me.nao.database;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +14,7 @@ import org.bukkit.ChatColor;
 //import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -20,7 +22,7 @@ import me.nao.main.game.Minegame;
 
 
 public class SQLInfo {
-
+ 
 	private  Minegame plugin;
 	
 
@@ -65,7 +67,7 @@ public class SQLInfo {
 	
 	public static boolean isPlayerinDB(Connection connection,UUID uuid) {
 	try {
-			PreparedStatement statement = connection.prepareStatement("SELECT * FROM Vanish WHERE (UUID=?)");
+			PreparedStatement statement = connection.prepareStatement("SELECT * FROM Inventory WHERE (UUID=?)");
 			statement.setString(1,uuid.toString());
 			ResultSet resultado = statement.executeQuery();
 			if(resultado.next()) {
@@ -99,8 +101,8 @@ public class SQLInfo {
 		try {
 		
 				
-			// PreparedStatement statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS Vanish ("+ 
-				PreparedStatement statement = connection.prepareStatement("CREATE TABLE Vanish ("+ 
+			PreparedStatement statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS Inventory ("+ 
+				//PreparedStatement statement = connection.prepareStatement("CREATE TABLE Inventory ("+ 
 						"UUID VARCHAR (40) NOT NULL," + 
 						"Nombre VARCHAR (40)," + 
 						"Value BOOLEAN ," +
@@ -116,15 +118,37 @@ public class SQLInfo {
 		
 	}
 	
-	public static void createPlayer(Connection connection , UUID uuid , String name) {
+	
+	public static void createtableInventory(Connection connection) {
+		try {
+			
+			PreparedStatement statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS Inventory ("+ 
+				//PreparedStatement statement = connection.prepareStatement("CREATE TABLE Inventory ("+ 
+						"UUID VARCHAR (40) NOT NULL," + 
+						"Nombre VARCHAR (40)," + 
+						"Inventario TEXT ," +
+						"PRIMARY KEY (UUID)"+
+						");");
+			
+			statement.executeUpdate();
+			
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	//TODO SAVE
+	public static void SavePlayerInventory(Connection connection , UUID uuid , String name,String inv) {
 		
 		try {	
-		
+			System.out.println("Inv: "+inv);
 			if(!isPlayerinDB(connection, uuid)) {
-				PreparedStatement statement = connection.prepareStatement("INSERT INTO Vanish VALUE (?,?,?)");
+				PreparedStatement statement = connection.prepareStatement("INSERT INTO Inventory VALUE (?,?,?)");
 				statement.setString(1, uuid.toString());
 				statement.setString(2, name);
-				statement.setBoolean(3,true);
+				statement.setString(3,inv);
 			    statement.executeUpdate();
 			  
 			}
@@ -137,6 +161,40 @@ public class SQLInfo {
 	}
 	
 	
+	public static void getInventorySave(Connection connection,UUID uuid,Player player) throws IllegalArgumentException, IOException ,ClassNotFoundException{
+		try {
+			//VanishManager v = new VanishManager(null);
+		
+				
+				PreparedStatement statement = connection.prepareStatement("SELECT * FROM Inventory WHERE (UUID=?)");
+				statement.setString(1,uuid.toString());
+				ResultSet resultado = statement.executeQuery();
+				if(resultado.next()) {
+				
+					String inv = resultado.getString("Inventario");
+			
+					//Inventory invi = BukkitSerialization.fromBase64(inv);
+					ItemStack[] items = BukkitSerialization.deserializeItems(inv);
+				
+					player.getInventory().setContents(items);
+					
+					//String name = resultado.getString("Nombre");
+					//si deseas puedes mandar un mensaje al jugador
+					
+					
+					
+				}
+			
+			
+			
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	//TODO END
 	public static boolean TableExist(Connection connection){
 		
 			//Name:"{\"text\":\"ESPADA NICHIRIN\"}"}}}}] 
@@ -156,6 +214,26 @@ public class SQLInfo {
 		
 	}
 		
+	
+	public static void createPlayer(Connection connection , UUID uuid , String name) {
+		
+		try {	
+		
+			if(!isPlayerinDB(connection, uuid)) {
+				PreparedStatement statement = connection.prepareStatement("INSERT INTO Inventory VALUE (?,?,?)");
+				statement.setString(1, uuid.toString());
+				statement.setString(2, name);
+				statement.setBoolean(3,true);
+			    statement.executeUpdate();
+			  
+			}
+			
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
 	
 	public static void getAllTrue2(Connection connection) {
 		try {

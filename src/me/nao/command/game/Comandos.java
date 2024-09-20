@@ -5,6 +5,7 @@ package me.nao.command.game;
 
 
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -43,6 +44,8 @@ import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
 import me.nao.cooldown.ReportsManager;
+import me.nao.database.BukkitSerialization;
+import me.nao.database.SQLInfo;
 //import de.tr7zw.nbtapi.NBTItem;
 import me.nao.events.ItemNBT;
 //import me.nao.events.ItemNBT2;
@@ -306,6 +309,12 @@ public class Comandos implements CommandExecutor{
 		    	}else if(args[0].equalsIgnoreCase("version")){
 				
 					Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Version: "+plugin.version);
+				    return true;
+				    
+		    	}else if(args[0].equalsIgnoreCase("table")){
+		    		
+		  		    SQLInfo.createtableInventory(plugin.getMySQL());
+					Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Tabla creada 1");
 				    return true;
 				    
 		    	}else if(args[0].equalsIgnoreCase("maintenance")){
@@ -2166,6 +2175,28 @@ public class Comandos implements CommandExecutor{
 				}else if(args[0].equalsIgnoreCase("flare")) {
 					player.getInventory().addItem(Items.BENGALAROJA.getValue());
 					player.getInventory().addItem(Items.BENGALAVERDE.getValue());
+					return true;
+				}else if(args[0].equalsIgnoreCase("dbsave")) {
+					
+					try {
+						SQLInfo.SavePlayerInventory(plugin.getMySQL(), player.getUniqueId(), player.getName(), BukkitSerialization.serializeItems(player.getInventory().getContents()));
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					player.sendMessage(ChatColor.GREEN+"Inventario salvado. 1");
+					
+					return true;
+				}else if(args[0].equalsIgnoreCase("dbget")) {
+					
+					try {
+						SQLInfo.getInventorySave(plugin.getMySQL(), player.getUniqueId(), player);
+						player.sendMessage(ChatColor.GREEN+"Inventario salvado recuperado. 1");
+					} catch (IllegalArgumentException | IOException | ClassNotFoundException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 					return true;
 				}else if(args[0].equalsIgnoreCase("dialogue")) {
 					DialogueArgs(player,args);

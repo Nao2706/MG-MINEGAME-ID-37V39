@@ -4,49 +4,62 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-import org.bukkit.Bukkit;
-import org.bukkit.inventory.Inventory;
+import javax.annotation.Nullable;
+
+
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
+
+
+
+
+
+
+
 public class BukkitSerialization {
-    public static String toBase64(Inventory inventory) {
-        try {
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            BukkitObjectOutputStream dataOutput = new BukkitObjectOutputStream(outputStream);
-            
-            // Write the size of the inventory
-            dataOutput.writeInt(inventory.getSize());
-            
-            // Save every element in the list
-            for (int i = 0; i < inventory.getSize(); i++) {
-                dataOutput.writeObject(inventory.getItem(i));
-            }
-            
-            // Serialize that array
-            dataOutput.close();
-            return Base64Coder.encodeLines(outputStream.toByteArray());
-        } catch (Exception e) {
-            throw new IllegalStateException("Unable to save item stacks.", e);
-        }        
-    }
+	
+	 private BukkitSerialization() {
+		    throw new UnsupportedOperationException("This is a utility class and cannot be instantiated");
+     }
+	
+	  public static @Nullable String serializeItems(final @Nullable ItemStack[] items) throws IOException {
+		    if (items == null) {
+		      return null;
+		    }
+		    final var byteOutputStream = new ByteArrayOutputStream();
+		    try (final var output = new BukkitObjectOutputStream(byteOutputStream)) {
+		      output.writeInt(items.length);
+		      for (final var item : items) {
+		        output.writeObject(item);
+		      }
+		      return Base64Coder.encodeLines(byteOutputStream.toByteArray());
+		    }
+		  }	
+
+	  public static @Nullable ItemStack[] deserializeItems(final @Nullable String serializedItems)
+			    throws IOException, ClassNotFoundException {
+			    if (serializedItems == null) {
+			      return null;
+			    }
+			    try (
+			      final var dataInput =
+			        new BukkitObjectInputStream(new ByteArrayInputStream(Base64Coder.decodeLines(serializedItems)))
+			    ) {
+			      final var items = new ItemStack[dataInput.readInt()];
+			      for (int i = 0; i < items.length; i++) {
+			        final var object = dataInput.readObject();
+			        if (object == null) {
+			          items[i] = null;
+			          continue;
+			        }
+			        items[i] = (ItemStack) object;
+			      }
+			      return items;
+			    }
+	 }
+
     
-    public static Inventory fromBase64(String data) throws IOException {
-        try {
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(data));
-            BukkitObjectInputStream dataInput = new BukkitObjectInputStream(inputStream);
-            Inventory inventory = Bukkit.getServer().createInventory(null, dataInput.readInt());
-    
-            // Read the serialized inventory
-            for (int i = 0; i < inventory.getSize(); i++) {
-                inventory.setItem(i, (ItemStack) dataInput.readObject());
-            }
-            dataInput.close();
-            return inventory;
-        } catch (ClassNotFoundException e) {
-            throw new IOException("Unable to decode class type.", e);
-        }
-    }
 }

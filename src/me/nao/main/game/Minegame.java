@@ -239,6 +239,7 @@ public class Minegame extends JavaPlugin{
 		if(this.config.getBoolean("Data-Base.Enabled")) {
 			  SQLInfo sql = new SQLInfo(this);
 			  this.conexion = new ConexionMySQL(sql.Host(),sql.Puerto(),sql.BaseDeDatos(),sql.Usuario(),sql.Clave());
+			
 			  Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Se esta usando Base de Datos");
 		}else {
 			Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+"No se esta usando Base de Datos");
@@ -282,8 +283,7 @@ public class Minegame extends JavaPlugin{
 		InitializerMg();
 		TeamsMg();
 		DataBase();
-	
-		  
+		
 	
 	}
 	
