@@ -4,15 +4,15 @@ public class GamePoints {
 
 	
 	
-	private int kills , deads , revive, asisrevive, daño;
+	private int kills , deads , revive, asisrevive, damage;
 	
-	//falta el daño
-	public GamePoints(int kills , int deads ,int revive ,int asisrevive,int daño) {
+	
+	public GamePoints(int kills , int deads ,int revive ,int asisrevive,int damage) {
 		this.kills = kills;
 		this.deads = deads;
 		this.revive = revive;
 		this.asisrevive = asisrevive;
-		this.daño = daño;
+		this.damage = damage;
 	}
 
 
@@ -31,7 +31,7 @@ public class GamePoints {
 	}
 	
 	public int getDamage() {
-		return daño;
+		return damage;
 	}
 
 	
@@ -57,8 +57,8 @@ public class GamePoints {
 		this.asisrevive = asisrevive;
 	}
 	
-	public void setDamage(int daño) {
-		this.daño = daño;
+	public void setDamage(int damage) {
+		this.damage = damage;
 	}
 	
 	

@@ -2,9 +2,6 @@ package me.nao.command.game;
 
 
 
-
-
-
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -19,7 +16,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
+ 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -2179,7 +2176,7 @@ public class Comandos implements CommandExecutor{
 				}else if(args[0].equalsIgnoreCase("dbsave")) {
 					
 					try {
-						SQLInfo.SavePlayerInventory(plugin.getMySQL(), player.getUniqueId(), player.getName(), BukkitSerialization.serializeItems(player.getInventory().getContents()));
+						SQLInfo.SavePlayerInventory(plugin.getMySQL(), player.getUniqueId(), player.getName(), BukkitSerialization.serializar(player.getInventory().getContents()));
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();

@@ -174,7 +174,7 @@ public class SQLInfo {
 					String inv = resultado.getString("Inventario");
 			
 					//Inventory invi = BukkitSerialization.fromBase64(inv);
-					ItemStack[] items = BukkitSerialization.deserializeItems(inv);
+					ItemStack[] items = BukkitSerialization.deserializar(inv);
 				
 					player.getInventory().setContents(items);
 					
