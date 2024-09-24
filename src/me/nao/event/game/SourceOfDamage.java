@@ -101,19 +101,9 @@ public class SourceOfDamage implements Listener{
 							}
 						}
 					}
-					
-				
-					
 				}
-				
-	
-				
 			}
-		
 		}
-
-
-		
 		
 	}
 	
@@ -611,8 +601,8 @@ public class SourceOfDamage implements Listener{
 		
 			
 			
-			// TIPO DE DAÑO COMO PROJECTILE O DRAWNING  ENTITY ETC
-			//player.sendMessage("Motivo de daño recibido de "+e.getCause().toString());
+			// TIPO DE DAï¿½O COMO PROJECTILE O DRAWNING  ENTITY ETC
+			//player.sendMessage("Motivo de daï¿½o recibido de "+e.getCause().toString());
 		
 			
 				if(e instanceof EntityDamageByEntityEvent){
@@ -629,7 +619,7 @@ public class SourceOfDamage implements Listener{
 						return;
 					
 				}else {
-					//bloque de daño por causas externas
+					//bloque de daï¿½o por causas externas
 					if(e.getFinalDamage() >= player.getHealth()) {
 						if(gc.isPlayerinGame(player)) {
 							e.setCancelled(true);

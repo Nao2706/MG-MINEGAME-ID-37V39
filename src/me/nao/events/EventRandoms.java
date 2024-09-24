@@ -39,7 +39,9 @@ import org.bukkit.entity.Villager;
 import org.bukkit.entity.Villager.Profession;
 import org.bukkit.entity.Witch;
 import org.bukkit.entity.Zombie;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.AbstractArrow.PickupStatus;
+import org.bukkit.entity.Ageable;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
@@ -78,6 +80,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -986,7 +989,7 @@ public class EventRandoms implements Listener{
 //	               		SpectralArrow aw = (SpectralArrow) projectile;
 //	            		if(aw.isCritical()) {
 //	            			if(!z.isAdult()) {
-//			             
+//			              
 //						               	
 //						        if(z.getEquipment().getHelmet().isSimilar((new ItemStack(Material.AIR))) || z.getEquipment().getHelmet() == null){
 //						        	if(plugin.PlayerisArena(shooter)) {
@@ -1165,7 +1168,7 @@ public class EventRandoms implements Listener{
 //				}
 //	            
 //	 
-//	           
+//	           v
 //	            
 //	           
 //	      }
@@ -1178,18 +1181,139 @@ public class EventRandoms implements Listener{
 	 
 	 //TODO HEADSHOOT revisar
 	 
-	 public boolean isaHeadShot(Player player, Entity damage, Projectile projecil) {
+	 public boolean isaHeadShot(Player player, Entity damage, Projectile projectil) {
 		 
 		 
-         double projectileY = projecil.getLocation().getY();
+         double projectileY = projectil.getLocation().getY();
          double damagedY = damage.getLocation().getY();
          
-         
-         if ((projectileY - damagedY >= 1.60D) ) {// originalmente estaba en 1.35D
-		 
-		 
+         //ADULTO
+         if(damage instanceof Ageable) {
+        	 Ageable entity = (Ageable) damage;
+        	 
+        	
+        	 if(projectil instanceof AbstractArrow) {
+        		 
+        		 AbstractArrow arrow = (AbstractArrow) projectil;
+        		 if(arrow.isCritical()) {
+        			 
+        			 if(entity.isAdult()) {
+                		 
+                		 if((projectileY - damagedY >= 1.60D) && (projectileY - damagedY >= 1.70D) ) {//ADULT originalmente estaba en 1.35D
+                			 
+                			 if(entity.getEquipment().getHelmet().isSimilar((new ItemStack(Material.AIR))) || entity.getEquipment().getHelmet() == null){
+                				 	entity.getWorld().dropItem(entity.getLocation(), new ItemStack(Material.DIAMOND,5));
+        							entity.getWorld().dropItem(entity.getLocation(), new ItemStack(Material.NETHERITE_INGOT,2));
+        			            	entity.getWorld().dropItem(entity.getLocation(), new ItemStack(Material.EMERALD,5));
+        			            	entity.getWorld().dropItem(entity.getLocation(), new ItemStack(Material.GOLD_INGOT,5));
+        			            	entity.getWorld().dropItem(entity.getLocation(), new ItemStack(Material.IRON_INGOT,5));
+                				    entity.setHealth(0);
+                				    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+                		       }else {
+                		    	 
+                		    	     ItemStack it = entity.getEquipment().getHelmet();
+                 		    		 ItemMeta im = it.getItemMeta();
+                 		    		 
+    								 if(im instanceof Damageable) {
+    									 
+    									 Damageable dm  = (Damageable) im;
+    									 
+    									 if(dm.hasDamage()){
+    										 if(dm.getDamage() > 250) {
+    											 dm.setDamage(dm.getDamage() - 250);
+    										 }else {
+    											 entity.getEquipment().setHelmet(new ItemStack(Material.AIR));
+    											 player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 20.0F, 1F);
+    										 }
+    									 }else {
+    										 if(it.getType().getMaxDurability() > 250) {
+    											 dm.setDamage(it.getType().getMaxDurability() - 250);
+    										 }else {
+    											 entity.getEquipment().setHelmet(new ItemStack(Material.AIR));
+    											 player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 20.0F, 1F);
+    										 }
+    									 }
+    									
+    									
+    								 }else {
+    									  entity.getEquipment().setHelmet(new ItemStack(Material.AIR));
+    	        			              player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 20.0F, 1F);
+    								 }
+                 		    	   
+    									entity.getWorld().spawnParticle(Particle.DRIP_LAVA, entity.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
+    									player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_PLACE, 20.0F, 1F);
+    									
+            			                if(entity.getCustomName() != null) {
+           			                	 player.sendMessage(ChatColor.GREEN+entity.getName()+ChatColor.YELLOW+" traia un casco dispara de nuevo.");
+        	   			                }else {
+        	  			                  player.sendMessage(""+ChatColor.GREEN+entity.getType()+ChatColor.YELLOW+" traia un casco dispara de nuevo.");
+        	   			                }
+        			               
+        		            	}
+                			 
+                			 return true;
+                         }
+                	 }else{
+                		 if((projectileY - damagedY >= 0.60D) && (projectileY - damagedY >= 0.70D) ) {//BB originalmente estaba en 1.35D
+                			 if(entity.getEquipment().getHelmet().isSimilar((new ItemStack(Material.AIR))) || entity.getEquipment().getHelmet() == null){
+             				 	entity.getWorld().dropItem(entity.getLocation(), new ItemStack(Material.DIAMOND,5));
+        							entity.getWorld().dropItem(entity.getLocation(), new ItemStack(Material.NETHERITE_INGOT,2));
+        			            	entity.getWorld().dropItem(entity.getLocation(), new ItemStack(Material.EMERALD,5));
+        			            	entity.getWorld().dropItem(entity.getLocation(), new ItemStack(Material.GOLD_INGOT,5));
+        			            	entity.getWorld().dropItem(entity.getLocation(), new ItemStack(Material.IRON_INGOT,5));
+        			            	entity.setHealth(0);
+             				    	player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+             		       }else{
+             		    	     ItemStack it = entity.getEquipment().getHelmet();
+             		    		 ItemMeta im = it.getItemMeta();
+             		    		 
+								 if(im instanceof Damageable) {
+									 
+									 Damageable dm  = (Damageable) im;
+									 
+									 if(dm.hasDamage()){
+										 if(dm.getDamage() > 250) {
+											 dm.setDamage(dm.getDamage() - 250);
+										 }else {
+											 entity.getEquipment().setHelmet(new ItemStack(Material.AIR));
+											 player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 20.0F, 1F);
+										 }
+									 }else {
+										 if(it.getType().getMaxDurability() > 250) {
+											 dm.setDamage(it.getType().getMaxDurability() - 250);
+										 }else {
+											 entity.getEquipment().setHelmet(new ItemStack(Material.AIR));
+											 player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 20.0F, 1F);
+										 }
+									 }
+									
+									
+								 }else {
+									  entity.getEquipment().setHelmet(new ItemStack(Material.AIR));
+	        			              player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 20.0F, 1F);
+								 }
+             		    	   
+									entity.getWorld().spawnParticle(Particle.DRIP_LAVA, entity.getLocation().add(0.5, 0, 0.5),	/* N DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
+									player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_PLACE, 20.0F, 1F);
+									
+        			                if(entity.getCustomName() != null) {
+       			                	 player.sendMessage(ChatColor.GREEN+entity.getName()+ChatColor.YELLOW+" traia un casco dispara de nuevo.");
+    	   			                }else {
+    	  			                  player.sendMessage(""+ChatColor.GREEN+entity.getType()+ChatColor.YELLOW+" traia un casco dispara de nuevo.");
+    	   			                }
+        		           }
+                			 return true;
+                         }
+                	 }
+        		 }
+        	
+    		 }
+        	 
+        	 
          }
-		 
+         
+        
+       
 		 return false;
 	 }
 	 
@@ -1682,8 +1806,9 @@ public class EventRandoms implements Listener{
 					    //AUMENTO DE PUNTO POR ELIMINAR MOBS VIVOS , 
 					  	PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 					  	if(entidadhit instanceof LivingEntity) {
-							 LivingEntity mob = (LivingEntity) entidadhit;
+							    LivingEntity mob = (LivingEntity) entidadhit;
 							  	pl.getGamePoints().setDamage(pl.getGamePoints().getDamage()+ConvertDoubleToInt(mob.getHealth()-mob.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()));
+							  	isaHeadShot(player, mob, projectile);
 						 }
 					  	
 					  	
@@ -1726,7 +1851,7 @@ public class EventRandoms implements Listener{
 				 
 			  }
 			  
-			  
+			   
 		 }
 		
 		//TODO REDUCE
