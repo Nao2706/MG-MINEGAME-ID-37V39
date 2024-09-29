@@ -806,8 +806,8 @@ public class GameConditions {
 				if(ms.getEstopartida() == EstadoPartida.COMENZANDO) {
 				     int  segundo = config.getInt("CountDownPreLobby");
 				
-					 SendMessageToAllUsersOfSameMap(player, ChatColor.GREEN+"\nSe a alcanzado el minimo de Jugadores necesarios.\n"+ChatColor.GOLD+"La partida Comenzara en: "+ChatColor.RED+segundo+ChatColor.GREEN+" segundos.\n");
-			
+					 SendMessageToAllUsersOfSameMap(player, ChatColor.GREEN+"\nSe a alcanzado el minimo de Jugadores necesarios.\n"+ChatColor.GOLD+"La partida Comenzara en: "+ChatColor.RED+segundo+ChatColor.GREEN+" segundos.\n ");
+			 
 				}
 				
 				if(ms.getGameType() == GameType.ADVENTURE) {
@@ -1926,8 +1926,8 @@ public class GameConditions {
 	public void SendMessageToAllUsersOfSameMap(Player player ,String text) {
 		
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
-		String arenaName = pl.getMapName();
-		GameInfo ms = plugin.getGameInfoPoo().get(arenaName);
+		String map = pl.getMapName();
+		GameInfo ms = plugin.getGameInfoPoo().get(map);
 		//MisionInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
 		 if(ms instanceof GameAdventure) {
 				GameAdventure ga = (GameAdventure) ms;
@@ -1947,7 +1947,7 @@ public class GameConditions {
 						target.sendMessage(ChatColor.translateAlternateColorCodes('&', text));
 					}
 				}
-				 Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+arenaName.toUpperCase()+": "+text);
+				 Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+map.toUpperCase()+": "+text);
 		 }
 	}
 	

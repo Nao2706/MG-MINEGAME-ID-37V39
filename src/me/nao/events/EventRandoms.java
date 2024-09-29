@@ -26,6 +26,7 @@ import org.bukkit.block.data.type.Dispenser;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.CaveSpider;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -35,6 +36,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.SmallFireball;
 import org.bukkit.entity.Snowman;
+import org.bukkit.entity.Spider;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.Villager.Profession;
 import org.bukkit.entity.Witch;
@@ -42,6 +44,8 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.AbstractArrow.PickupStatus;
 import org.bukkit.entity.Ageable;
+import org.bukkit.entity.AnimalTamer;
+import org.bukkit.entity.Animals;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
@@ -2482,98 +2486,101 @@ public class EventRandoms implements Listener{
 				        				 alture = 0.57D;
 				        			 }
 				        		 }else {
-				        			 alture = 1.57D;
+				        			 alture = 1.57D; 
 				        		 }
 				        		 
+				        		 if(damage instanceof Animals || damage instanceof AnimalTamer || damage instanceof Spider || damage instanceof CaveSpider){
+				        			return; 
+				        		 }
+				        		 
+		                		 if((projectileY - damagedY >= alture)) {//ADULT OR KID originalmente estaba en 1.35D
+		                			 
+		                			 if(damage.getEquipment().getHelmet().isSimilar((new ItemStack(Material.AIR))) || damage.getEquipment().getHelmet() == null){
+		                				 
+		                				 if(damage.getHealth() > headshoot){
+		                					 
+		 								       damage.getWorld().spawnParticle(Particle.DRIP_LAVA, damage.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
+		                					   damage.setHealth((damage.getHealth() - headshoot));
+		 								       //arrow.setDamage(headshoot);
+		                					   player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+		                					 
+		                				 }else{
+		                					damage.getWorld().dropItem(damage.getLocation(), new ItemStack(Material.DIAMOND,5));
+		         							damage.getWorld().dropItem(damage.getLocation(), new ItemStack(Material.NETHERITE_INGOT,2));
+		         			            	damage.getWorld().dropItem(damage.getLocation(), new ItemStack(Material.EMERALD,5));
+		         			            	damage.getWorld().dropItem(damage.getLocation(), new ItemStack(Material.GOLD_INGOT,5));
+		         			            	damage.getWorld().dropItem(damage.getLocation(), new ItemStack(Material.IRON_INGOT,5));
+		         			            	damage.setHealth(0);
+		         			            	projectil.remove();
+		         			            	player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+		         			            	
+		                				 }
+		                				 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.RED+ChatColor.BOLD+"CRITICAL HEADSHOT"));
+		                				   
+		                		       }else {
+		                		    	   		 ItemStack it = damage.getEquipment().getHelmet();
+		                		    	   	
+		    									 if(it.getType() == Material.NETHERITE_HELMET || it.getType() == Material.DIAMOND_HELMET || it.getType() == Material.GOLDEN_HELMET ||
+		    									    it.getType() == Material.IRON_HELMET || it.getType() == Material.CHAINMAIL_HELMET || it.getType() == Material.LEATHER_HELMET ||
+		    									    it.getType() == Material.TURTLE_HELMET){ 	
+		    										 
+		    										 ItemMeta im = it.getItemMeta();
+		    										 Damageable dm  = (Damageable) im;
+		    							
+		    										 	 int itemdamage = dm.getDamage();
+		        										 int damagetotal = (itemdamage + headshotarmor);
+		        									
+		        										 dm.setDamage(damagetotal);// REPRESENTA EL DAÑO MAS EL PLUS DE DAÑO OSEA 1 + 25 DESPUES 26 +25
+		    											 it.setItemMeta(im); 
+		        										 damage.getEquipment().setHelmet(it);
+		    											
+		    											 int vidaitem = (it.getType().getMaxDurability() - dm.getDamage());
+		    										
+		    											 player.getInventory().setHelmet(it);
+		    											 if(vidaitem <= 0) {
+		    												 damage.getEquipment().setHelmet(new ItemStack(Material.AIR));
+		    												 damage.getWorld().spawnParticle(Particle.DRIP_LAVA, damage.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */25, 0.5, 1, 0.5, /* velocidad */0, null, true);
+
+		        											 player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 20.0F, 1F);
+		        											 if(damage.getCustomName() != null) {
+		           		           			   		             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.RED+">>> "+ChatColor.GRAY+damage.getName()+ChatColor.RED+" <<<"));
+
+		        		        	   			                }else {
+		           		           			                	
+		           		           			   		             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.RED+">>> "+ChatColor.GRAY+damage.getType()+ChatColor.RED+" <<<"));
+
+		        		        	   			                }
+		        											
+		    											 }else {
+		    												 damage.getWorld().spawnParticle(Particle.DRIP_LAVA, damage.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */25, 0.5, 1, 0.5, /* velocidad */0, null, true);
+		        		    								 player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_PLACE, 20.0F, 1F); 
+		        		    								 if(damage.getCustomName() != null) {
+		           		           			   		             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.YELLOW+"!!! "+ChatColor.GRAY+damage.getName()+ChatColor.YELLOW+" !!!"));
+
+		        		        	   			                }else {
+		           		           			   		             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.YELLOW+"!!! "+ChatColor.GRAY+damage.getType()+ChatColor.YELLOW+" !!!"));
+
+		        		        	   			                }
+		    											 }			
+		    									}else{
+		    										
+				    								 damage.getWorld().spawnParticle(Particle.BLOCK_CRACK, damage.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
+		    										 damage.getEquipment().setHelmet(new ItemStack(Material.AIR));
+													 player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 20.0F, 1F);
+		    									}
+		                 		    	   
+		    									
+		    									
+		            			               
+		        			               
+		        		            	}
+		                			 
+		                			 return;
+		                         }
 				        	 }
-				         }else{
-				        	 return;
 				         }
 				         
-                		 if((projectileY - damagedY >= alture)) {//ADULT OR KID originalmente estaba en 1.35D
-                			 
-                			 if(damage.getEquipment().getHelmet().isSimilar((new ItemStack(Material.AIR))) || damage.getEquipment().getHelmet() == null){
-                				 
-                				 if(damage.getHealth() > headshoot){
-                					 
- 								       damage.getWorld().spawnParticle(Particle.DRIP_LAVA, damage.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
-                					   damage.setHealth((damage.getHealth() - headshoot));
- 								       //arrow.setDamage(headshoot);
-                					   player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
-                					 
-                				 }else{
-                					damage.getWorld().dropItem(damage.getLocation(), new ItemStack(Material.DIAMOND,5));
-         							damage.getWorld().dropItem(damage.getLocation(), new ItemStack(Material.NETHERITE_INGOT,2));
-         			            	damage.getWorld().dropItem(damage.getLocation(), new ItemStack(Material.EMERALD,5));
-         			            	damage.getWorld().dropItem(damage.getLocation(), new ItemStack(Material.GOLD_INGOT,5));
-         			            	damage.getWorld().dropItem(damage.getLocation(), new ItemStack(Material.IRON_INGOT,5));
-         			            	damage.setHealth(0);
-         			            	projectil.remove();
-         			            	player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
-         			            	
-                				 }
-                				 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.RED+ChatColor.BOLD+"CRITICAL HEADSHOT"));
-                				   
-                		       }else {
-                		    	   		 ItemStack it = damage.getEquipment().getHelmet();
-                		    	   	
-    									 if(it.getType() == Material.NETHERITE_HELMET || it.getType() == Material.DIAMOND_HELMET || it.getType() == Material.GOLDEN_HELMET ||
-    									    it.getType() == Material.IRON_HELMET || it.getType() == Material.CHAINMAIL_HELMET || it.getType() == Material.LEATHER_HELMET ||
-    									    it.getType() == Material.TURTLE_HELMET){ 	
-    										 
-    										 ItemMeta im = it.getItemMeta();
-    										 Damageable dm  = (Damageable) im;
-    							
-    										 	 int itemdamage = dm.getDamage();
-        										 int damagetotal = (itemdamage + headshotarmor);
-        									
-        										 dm.setDamage(damagetotal);// REPRESENTA EL DAÑO MAS EL PLUS DE DAÑO OSEA 1 + 25 DESPUES 26 +25
-    											 it.setItemMeta(im); 
-        										 damage.getEquipment().setHelmet(it);
-    											
-    											 int vidaitem = (it.getType().getMaxDurability() - dm.getDamage());
-    										
-    											 player.getInventory().setHelmet(it);
-    											 if(vidaitem <= 0) {
-    												 damage.getEquipment().setHelmet(new ItemStack(Material.AIR));
-    												 damage.getWorld().spawnParticle(Particle.DRIP_LAVA, damage.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */25, 0.5, 1, 0.5, /* velocidad */0, null, true);
 
-        											 player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 20.0F, 1F);
-        											 if(damage.getCustomName() != null) {
-           		           			   		             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.RED+">>> "+ChatColor.GRAY+damage.getName()+ChatColor.RED+" <<<"));
-
-        		        	   			                }else {
-           		           			                	
-           		           			   		             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.RED+">>> "+ChatColor.GRAY+damage.getType()+ChatColor.RED+" <<<"));
-
-        		        	   			                }
-        											
-    											 }else {
-    												 damage.getWorld().spawnParticle(Particle.DRIP_LAVA, damage.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */25, 0.5, 1, 0.5, /* velocidad */0, null, true);
-        		    								 player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_PLACE, 20.0F, 1F); 
-        		    								 if(damage.getCustomName() != null) {
-           		           			   		             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.YELLOW+"!!! "+ChatColor.GRAY+damage.getName()+ChatColor.YELLOW+" !!!"));
-
-        		        	   			                }else {
-           		           			   		             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.YELLOW+"!!! "+ChatColor.GRAY+damage.getType()+ChatColor.YELLOW+" !!!"));
-
-        		        	   			                }
-    											 }			
-    									}else{
-    										
-		    								 damage.getWorld().spawnParticle(Particle.BLOCK_CRACK, damage.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
-    										 damage.getEquipment().setHelmet(new ItemStack(Material.AIR));
-											 player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 20.0F, 1F);
-    									}
-                 		    	   
-    									
-    									
-            			               
-        			               
-        		            	}
-                			 
-                			 return;
-                         }
 					 }
 					
 					
