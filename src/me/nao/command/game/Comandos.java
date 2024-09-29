@@ -37,6 +37,8 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
@@ -1512,8 +1514,73 @@ public class Comandos implements CommandExecutor{
 					
 					
 					return true;
-				}
-			   	else if(args[0].equalsIgnoreCase("formats") && player.isOp()) {
+				}else if(args[0].equalsIgnoreCase("dura")) {
+					//CHECA ESTE SI JALA
+					ItemStack item = player.getInventory().getItemInMainHand();
+					ItemMeta im = item.getItemMeta();
+					 
+						 
+						 Damageable dm  = (Damageable) im;
+						
+						 //dm.setDamage(1);
+						 //si se usa el set toca usar el item.setItemMeta(im);
+						 if(dm.hasDamage()) {
+							 player.sendMessage("El item a sido usado "+dm.getDamage()+" veces");
+							 player.sendMessage("Usos restantes "+ChatColor.GREEN+(item.getType().getMaxDurability() - dm.getDamage())+"/"+item.getType().getMaxDurability());
+							 
+							 
+						 }else {
+							 player.sendMessage("El item no a sido usado");
+						 }
+						
+					
+					
+					return true;
+				}else if(args[0].equalsIgnoreCase("dura2")) {
+					//CHECA ESTE SI JALA
+					ItemStack item = player.getInventory().getItemInMainHand();
+					
+					 player.sendMessage("Durabilidad max "+ChatColor.GREEN+item.getType().getMaxDurability());
+							 
+					
+					return true;
+				}else if(args[0].equalsIgnoreCase("dura3")) {
+					//CHECA ESTE SI JALA
+					ItemStack item = player.getInventory().getItemInMainHand();
+					 ItemMeta im = item.getItemMeta();
+					 Damageable dm  = (Damageable) im;
+					
+					 dm.setDamage(dm.getDamage()+1);
+					 item.setItemMeta(im);
+					 player.sendMessage("Bajando vida ");
+							 
+					
+					return true;
+				}else if(args[0].equalsIgnoreCase("dura4")) {
+					//CHECA ESTE SI JALA
+					ItemStack item = player.getInventory().getItemInMainHand();
+					 ItemMeta im = item.getItemMeta();
+					 Damageable dm  = (Damageable) im;
+					
+					 dm.setDamage(dm.getDamage()-1);
+					 
+					 item.setItemMeta(im);			 
+					 player.sendMessage("Subiendo ");
+					
+					return true;
+				}else if(args[0].equalsIgnoreCase("dura5")) {
+					//CHECA ESTE SI JALA
+					ItemStack item = player.getInventory().getItemInMainHand();
+					 ItemMeta im = item.getItemMeta();
+					 Damageable dm  = (Damageable) im;
+					
+					 dm.setDamage(dm.getDamage()+25);
+					 item.setItemMeta(im);
+					 player.sendMessage("Bajando vida ");
+							 
+					
+					return true;
+				}else if(args[0].equalsIgnoreCase("formats") && player.isOp()) {
 	              	  CommandsMessage c1 = new CommandsMessage();
 	              	  c1.FormatsMessage(player);
           			
@@ -3099,7 +3166,7 @@ public voidChangeMode(String mode, Player player){
  * 
  * 
  * String enumValue = args[0] != null ? (args[0].equalsIgnoreCase("survival") ? "SURVIVAL" :  args[0].equalsIgnoreCase("creative") ? "CREATIVE" : args[0].equalsIgnoreCase("adventure") : "ADVENTURE" : args[0].equalsIgnoreCase("spectator") ? "SPECTATOR" : "NONE"): "NONE";
-if(enumValue.equals("NONE") {player.sendMessage("Modo inválido como tu primo");return;}
+if(enumValue.equals("NONE") {player.sendMessage("Modo invï¿½lido como tu primo");return;}
 GameMode mode = GameMode.valueOf(enumValue);
 player.setGameMode(mode);
 player.sendMessage("Tu modo de juego ha sido cambiado a "+enumValue.toLowerCase());

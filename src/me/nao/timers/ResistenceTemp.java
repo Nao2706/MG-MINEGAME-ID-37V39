@@ -536,7 +536,7 @@ public class ResistenceTemp {
 		Block r = block.getRelative(0, 0, 0);
 		int rango = config.getInt("Item-Spawn-Range") ;
 		
-		if (r.getType() == (Material.AIR)) {
+		if (r.getType() == Material.AIR) {
 			for (int x = -rango; x < rango+1; x++) {
 				for (int y = -rango; y < rango+1; y++) {
 					for (int z = -rango; z < rango+1; z++) {
@@ -548,63 +548,56 @@ public class ResistenceTemp {
 						
 						if(player.getGameMode() == GameMode.ADVENTURE ) {
 							
-								
-							
-								if(a.getType() == Material.NETHERITE_BLOCK && b.getType() == Material.BEDROCK) {
-									if(player.getLocation().distance(a.getLocation()) <= rango) {
-										player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
-									}
-									 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.NETHERITE_INGOT));
-									 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.NETHERITE_BLOCK,RandomBetweenValue(1, 100)));
-									 a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
-			
-								}
-								
-								if(a.getType() == Material.DIAMOND_BLOCK && b.getType() == Material.BEDROCK) {
-									if(player.getLocation().distance(a.getLocation()) <= rango) {
-										player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
-									}
-								     a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.DIAMOND));
-								     a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.DIAMOND_BLOCK,RandomBetweenValue(1, 100)));
-									 a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
-								}
-								
-								if(a.getType() == Material.EMERALD_BLOCK && b.getType() == Material.BEDROCK) {
-									if(player.getLocation().distance(a.getLocation()) <= rango) {
-										player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
-									}
-									 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.EMERALD));
-									 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.EMERALD_BLOCK,RandomBetweenValue(1, 100)));
-									 a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
-								}
-								
-								if(a.getType() == Material.IRON_BLOCK && b.getType() == Material.BEDROCK) {
-									if(player.getLocation().distance(a.getLocation()) <= rango) {
-										player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
-									}
-									 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.IRON_INGOT));
-									 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.IRON_BLOCK,RandomBetweenValue(1, 100)));
-									 a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
-								}
-								
-								if(a.getType() == Material.GOLD_BLOCK && b.getType() == Material.BEDROCK) {
-									if(player.getLocation().distance(a.getLocation()) <= rango) {
-										player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
-									}
-									 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.GOLD_INGOT));
-									 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.GOLD_BLOCK,RandomBetweenValue(1, 100)));
-									 a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
-								}
 							
 							
-						
+							
+							if(a.getType() == Material.NETHERITE_BLOCK && b.getType() == Material.BEDROCK) {
+								if(player.getLocation().distance(a.getLocation()) <= rango) {
+									player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
+									a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
+								}
+								 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.NETHERITE_INGOT));
+								 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.NETHERITE_BLOCK,RandomBetweenValue(1, 100)));
 								
+							}
+							
+							if(a.getType() == Material.DIAMOND_BLOCK && b.getType() == Material.BEDROCK) {
+								if(player.getLocation().distance(a.getLocation()) <= rango) {
+									player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
+									a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
+								}
+							     a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.DIAMOND));
+							     a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.DIAMOND_BLOCK,RandomBetweenValue(1, 100)));
+							}
+							
+							if(a.getType() == Material.EMERALD_BLOCK && b.getType() == Material.BEDROCK) {
+								if(player.getLocation().distance(a.getLocation()) <= rango) {
+									player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
+									a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
+								}
+								 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.EMERALD));
+								 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.EMERALD_BLOCK,RandomBetweenValue(1, 100)));
+							}
+							
+							if(a.getType() == Material.IRON_BLOCK && b.getType() == Material.BEDROCK) {
+								if(player.getLocation().distance(a.getLocation()) <= rango) {
+									player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
+									a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
+								}
+								 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.IRON_INGOT));
+								 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.IRON_BLOCK,RandomBetweenValue(1, 100)));
+							}
+							
+							if(a.getType() == Material.GOLD_BLOCK && b.getType() == Material.BEDROCK) {
+								if(player.getLocation().distance(a.getLocation()) <= rango) {
+									player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
+									a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
+								}
+								 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.GOLD_INGOT));
+								 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.GOLD_BLOCK,RandomBetweenValue(1, 100)));
+							}
 								//player.sendMessage("Hay un bloque de diamante en las coords Z:"+a.getLocation().getBlockX()+" Y:"+a.getLocation().getBlockY()+" Z:"+a.getLocation().getBlockZ());
 							}
-
-						
-
-					
 
 					}
 					;

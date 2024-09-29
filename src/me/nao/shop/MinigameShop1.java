@@ -42,6 +42,7 @@ import me.nao.general.info.PlayerInfo;
 import me.nao.main.game.Minegame;
 import me.nao.manager.ClassArena;
 import me.nao.manager.ClassIntoGame;
+import me.nao.manager.EstadoPartida;
 import me.nao.yamlfile.game.YamlFilePlus;
 
 
@@ -59,6 +60,224 @@ public class MinigameShop1 implements Listener{
 		this.plugin = plugin;
 	}
 	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@EventHandler
+	public void clickEventItem(InventoryDragEvent e) {
+	    //Player player = (Player) e.getWhoClicked();
+		
+			List<String> l = new ArrayList<String>();
+			
+			l.add("TIENDA"); l.add("ESPADAS");l.add("ARCOS Y BALLESTAS");l.add("DEFENSA");l.add("COMIDA Y POSIONES");l.add("ESPECIALES");l.add("REVIVIR");
+			l.add("MENU DE MAPAS");l.add("OBJETIVOS");l.add("OBJETIVOS PRIMARIOS");l.add("OBJETIVOS SECUNDARIOS");
+			String namet = ChatColor.stripColor(e.getView().getTitle());
+			if(l.contains(namet)) {
+				
+					e.setCancelled(true);
+		        	//Bukkit.getConsoleSender().sendMessage("ME");
+
+				
+				
+			}
+		
+		
+	}
+	
+	
+	@EventHandler
+	public void clickEvent(InventoryClickEvent e) {
+		
+		Player player = (Player) e.getWhoClicked();
+		
+		
+		
+		
+		//String tittle = ChatColor.translateAlternateColorCodes("&", usa el fileconfiguartion);
+		// String tittlec = ChatColor.stripColor(titulo);
+		if(e.getClickedInventory() == null) {
+			return;
+		}
+	
+			List<String> l = new ArrayList<String>();
+			l.add("TIENDA"); l.add("ESPADAS");l.add("ARCOS Y BALLESTAS");l.add("DEFENSA");l.add("COMIDA Y POSIONES");l.add("ESPECIALES");l.add("REVIVIR");l.add("MENU DE MAPAS");
+			l.add("OBJETIVOS");l.add("OBJETIVOS PRIMARIOS");l.add("OBJETIVOS SECUNDARIOS");l.add("OBJETIVOS HOSTILES");
+			String namet = ChatColor.stripColor(e.getView().getTitle());
+			
+			
+			if(!l.contains(namet)) {
+				return;
+			}
+			
+			//checa que los inventarios creados sean custom 
+			if(!isCustomInventory(player)) {
+				return;
+			}
+			
+			try{
+			
+					if(e.getCurrentItem() == null) {
+						if(e.getClickedInventory().getType() == e.getView().getType()) {
+							//System.out.println("GG");
+							e.setCancelled(true);
+						}
+						return;
+					}
+					
+					
+				
+			}catch(NullPointerException e2) {
+				
+			}
+			
+			
+			
+			
+	
+				
+				if(e.getCurrentItem() != null) {
+					
+					if(e.getClickedInventory().getType() == e.getView().getType()) {
+						//System.out.println("GG");
+						e.setCancelled(true);
+					}
+					
+					
+					if(e.getClickedInventory().getType() == InventoryType.CHEST) {
+						
+						ClickType ct = e.getClick();
+						 switch(ct) {
+						 case CONTROL_DROP: 
+						//	 Bukkit.getConsoleSender().sendMessage("No drop3");
+							 e.setCancelled(true);
+							 break;
+						 case DROP: 
+							// Bukkit.getConsoleSender().sendMessage("No drop2");
+							 e.setCancelled(true);
+							 break;
+							 
+						default:
+							break;
+						 }
+					
+					}
+					
+					InventoryAction action = e.getAction();
+				//	if(!(e.getClickedInventory().getType() == InventoryType.PLAYER)) {
+					//	e.setCancelled(true);
+						
+				//  	}
+					
+					if(e.getClickedInventory().getType() == InventoryType.PLAYER) {
+						
+						
+						  switch(action) {
+					      case MOVE_TO_OTHER_INVENTORY:
+ 
+					          //  player.sendMessage("§cPlease do not shift-click items into this inventory.");
+					            e.setCancelled(true);
+					            return;
+					        case HOTBAR_MOVE_AND_READD:
+ 
+					          //  player.sendMessage("§cPlease do not shift-click items into this inventory.");
+					            e.setCancelled(true);
+					            return;
+					        case HOTBAR_SWAP:
+ 
+					          //  player.sendMessage("§cPlease do not shift-click items into this inventory.");
+					            e.setCancelled(true);
+					            return;
+					            
+					        case SWAP_WITH_CURSOR:
+ 
+						          //  player.sendMessage("§cPlease do not shift-click items into this inventory.");
+						            e.setCancelled(true);
+						            return;
+						default:
+							break;
+				
+						            
+					
+						  }
+					}
+					
+					StoreChest(player, e.getCurrentItem());
+					
+					
+					 	
+						if(player.getOpenInventory().getBottomInventory().getType() == InventoryType.PLAYER && e.getClickedInventory().getType() == InventoryType.CHEST) {
+
+							  switch(action) {
+						      case MOVE_TO_OTHER_INVENTORY:
+ 						          //  player.sendMessage("§cPlease do not shift-click items into this inventory.");
+						            e.setCancelled(true);
+						            return;
+						        case HOTBAR_MOVE_AND_READD:
+ 						          //  player.sendMessage("§cPlease do not shift-click items into this inventory.");
+						            e.setCancelled(true);
+						            return;
+						        case HOTBAR_SWAP:
+ 						          //  player.sendMessage("§cPlease do not shift-click items into this inventory.");
+						            e.setCancelled(true);
+						            return;
+						            
+						        case SWAP_WITH_CURSOR:
+ 							          //  player.sendMessage("§cPlease do not shift-click items into this inventory.");
+							            e.setCancelled(true);
+							            return;
+						        case COLLECT_TO_CURSOR:
+ 							          //  player.sendMessage("§cPlease do not shift-click items into this inventory.");
+							            e.setCancelled(true);
+							            return;
+						        case DROP_ALL_CURSOR:
+ 							          //  player.sendMessage("§cPlease do not shift-click items into this inventory.");
+							            e.setCancelled(true);
+							            return; 
+						        case PLACE_SOME:
+ 
+							          //  player.sendMessage("§cPlease do not shift-click items into this inventory.");
+							            e.setCancelled(true);
+							            return;
+						        case DROP_ONE_SLOT:
+ 							          //  player.sendMessage("§cPlease do not shift-click items into this inventory.");
+							            e.setCancelled(true);
+							            return; 
+						        case DROP_ALL_SLOT:
+ 
+							          //  player.sendMessage("§cPlease do not shift-click items into this inventory.");
+							            e.setCancelled(true);
+							            return;
+						        case PLACE_ALL:
+ 
+							          //  player.sendMessage("§cPlease do not shift-click items into this inventory.");
+							            e.setCancelled(true);
+							            return;
+						        default:
+						            break;
+							  }
+					}
+				   
+				}
+			
+
+			return;
+			
+		  
+		
+	   }
+	
+	
+	
+	
+	
+	
+	//==========================================================
 	
 	public void MenuDecoration(Inventory inv , Material m) {
 		List<Integer> l1 = new ArrayList<Integer>();
@@ -846,10 +1065,10 @@ public class MinigameShop1 implements Listener{
 						 					List<String> perml = map.getStringList("How-Get-Permission.Message");
 						 					if(!perml.isEmpty()) {
 						 						
-						 						
 						 						for(int i2 =0;i2< perml.size();i2++) {
 						 							list2.add(ChatColor.translateAlternateColorCodes('&', perml.get(i2)).replace("%player%", player.getName()));
 						 						}
+						 						
 						 					}else {
 						 						list2.add(ChatColor.RED+"Mapa Bloqueado: "+ChatColor.GOLD+"Necesitas un Permiso para Acceder.");;
 						 					}
@@ -864,9 +1083,15 @@ public class MinigameShop1 implements Listener{
 									if(plugin.getGameInfoPoo().get(name) != null) {
 										list2.add(""+ChatColor.GREEN+ChatColor.BOLD+"JUGADORES: "+ChatColor.RED+ChatColor.BOLD+plugin.getGameInfoPoo().get(name).getParticipantes().size());
 										list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESPECTADORES: "+ChatColor.RED+ChatColor.BOLD+plugin.getGameInfoPoo().get(name).getSpectator().size());
+										list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESTADO: "+plugin.getGameInfoPoo().get(name).getEstopartida().toString().replace(EstadoPartida.ESPERANDO.toString(),ChatColor.WHITE+EstadoPartida.ESPERANDO.toString())
+												.replace(EstadoPartida.COMENZANDO.toString(),ChatColor.GOLD+EstadoPartida.COMENZANDO.toString()).replace(EstadoPartida.JUGANDO.toString(),ChatColor.GREEN+EstadoPartida.JUGANDO.toString())
+												.replace(EstadoPartida.DESACTIVADA.toString(),ChatColor.GRAY+EstadoPartida.DESACTIVADA.toString()).replace(EstadoPartida.TERMINANDO.toString(),ChatColor.RED+EstadoPartida.TERMINANDO.toString())
+												);
+
 									}else {
 										list2.add(""+ChatColor.GREEN+ChatColor.BOLD+"JUGADORES: "+ChatColor.RED+ChatColor.BOLD+"0");
 										list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESPECTADORES: "+ChatColor.RED+ChatColor.BOLD+"0");
+										list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESTADO: "+ChatColor.WHITE+ChatColor.BOLD+"ESPERANDO");
 									}
 									
 								
@@ -1043,9 +1268,15 @@ public class MinigameShop1 implements Listener{
 								if(plugin.getGameInfoPoo().get(name) != null) {
 									list2.add(""+ChatColor.GREEN+ChatColor.BOLD+"JUGADORES: "+ChatColor.RED+ChatColor.BOLD+plugin.getGameInfoPoo().get(name).getParticipantes().size());
 									list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESPECTADORES: "+ChatColor.RED+ChatColor.BOLD+plugin.getGameInfoPoo().get(name).getSpectator().size());
+									list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESTADO: "+plugin.getGameInfoPoo().get(name).getEstopartida().toString().replace(EstadoPartida.ESPERANDO.toString(),ChatColor.WHITE+EstadoPartida.ESPERANDO.toString())
+											.replace(EstadoPartida.COMENZANDO.toString(),ChatColor.GOLD+EstadoPartida.COMENZANDO.toString()).replace(EstadoPartida.JUGANDO.toString(),ChatColor.GREEN+EstadoPartida.JUGANDO.toString())
+											.replace(EstadoPartida.DESACTIVADA.toString(),ChatColor.GRAY+EstadoPartida.DESACTIVADA.toString()).replace(EstadoPartida.TERMINANDO.toString(),ChatColor.RED+EstadoPartida.TERMINANDO.toString())
+											);
+
 								}else {
 									list2.add(""+ChatColor.GREEN+ChatColor.BOLD+"JUGADORES: "+ChatColor.RED+ChatColor.BOLD+"0");
 									list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESPECTADORES: "+ChatColor.RED+ChatColor.BOLD+"0");
+									list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESTADO: "+ChatColor.WHITE+ChatColor.BOLD+"ESPERANDO");
 								}
 								 
 							
@@ -1954,208 +2185,7 @@ public class MinigameShop1 implements Listener{
 	}
 	
 	
-	@EventHandler
-	public void clickEventItem(InventoryDragEvent e) {
-	    //Player player = (Player) e.getWhoClicked();
-		
-			List<String> l = new ArrayList<String>();
-			
-			l.add("TIENDA"); l.add("ESPADAS");l.add("ARCOS Y BALLESTAS");l.add("DEFENSA");l.add("COMIDA Y POSIONES");l.add("ESPECIALES");l.add("REVIVIR");
-			l.add("MENU DE MAPAS");l.add("OBJETIVOS");l.add("OBJETIVOS PRIMARIOS");l.add("OBJETIVOS SECUNDARIOS");
-			String namet = ChatColor.stripColor(e.getView().getTitle());
-			if(l.contains(namet)) {
-				
-					e.setCancelled(true);
-		        	//Bukkit.getConsoleSender().sendMessage("ME");
 
-				
-				
-			}
-		
-		
-	}
-	
-	
-	@EventHandler
-	public void clickEvent(InventoryClickEvent e) {
-		
-		Player player = (Player) e.getWhoClicked();
-		
-		
-		
-		
-		//String tittle = ChatColor.translateAlternateColorCodes("&", usa el fileconfiguartion);
-		// String tittlec = ChatColor.stripColor(titulo);
-		if(e.getClickedInventory() == null) {
-			return;
-		}
-	
-			List<String> l = new ArrayList<String>();
-			l.add("TIENDA"); l.add("ESPADAS");l.add("ARCOS Y BALLESTAS");l.add("DEFENSA");l.add("COMIDA Y POSIONES");l.add("ESPECIALES");l.add("REVIVIR");l.add("MENU DE MAPAS");
-			l.add("OBJETIVOS");l.add("OBJETIVOS PRIMARIOS");l.add("OBJETIVOS SECUNDARIOS");l.add("OBJETIVOS HOSTILES");
-			String namet = ChatColor.stripColor(e.getView().getTitle());
-			
-			
-			if(!l.contains(namet)) {
-				return;
-			}
-			
-			//checa que los inventarios creados sean custom 
-			if(!isCustomInventory(player)) {
-				return;
-			}
-			
-			try{
-			
-					if(e.getCurrentItem() == null) {
-						if(e.getClickedInventory().getType() == e.getView().getType()) {
-							//System.out.println("GG");
-							e.setCancelled(true);
-						}
-						return;
-					}
-					
-					
-				
-			}catch(NullPointerException e2) {
-				
-			}
-			
-			
-			
-			
-	
-				
-				if(e.getCurrentItem() != null) {
-					
-					if(e.getClickedInventory().getType() == e.getView().getType()) {
-						//System.out.println("GG");
-						e.setCancelled(true);
-					}
-					
-					
-					if(e.getClickedInventory().getType() == InventoryType.CHEST) {
-						
-						ClickType ct = e.getClick();
-						 switch(ct) {
-						 case CONTROL_DROP: 
-						//	 Bukkit.getConsoleSender().sendMessage("No drop3");
-							 e.setCancelled(true);
-							 break;
-						 case DROP: 
-							// Bukkit.getConsoleSender().sendMessage("No drop2");
-							 e.setCancelled(true);
-							 break;
-							 
-						default:
-							break;
-						 }
-					
-					}
-					
-					InventoryAction action = e.getAction();
-				//	if(!(e.getClickedInventory().getType() == InventoryType.PLAYER)) {
-					//	e.setCancelled(true);
-						
-				//  	}
-					
-					if(e.getClickedInventory().getType() == InventoryType.PLAYER) {
-						
-						
-						  switch(action) {
-					      case MOVE_TO_OTHER_INVENTORY:
- 
-					          //  player.sendMessage("§cPlease do not shift-click items into this inventory.");
-					            e.setCancelled(true);
-					            return;
-					        case HOTBAR_MOVE_AND_READD:
- 
-					          //  player.sendMessage("§cPlease do not shift-click items into this inventory.");
-					            e.setCancelled(true);
-					            return;
-					        case HOTBAR_SWAP:
- 
-					          //  player.sendMessage("§cPlease do not shift-click items into this inventory.");
-					            e.setCancelled(true);
-					            return;
-					            
-					        case SWAP_WITH_CURSOR:
- 
-						          //  player.sendMessage("§cPlease do not shift-click items into this inventory.");
-						            e.setCancelled(true);
-						            return;
-						default:
-							break;
-				
-						            
-					
-						  }
-					}
-					
-					StoreChest(player, e.getCurrentItem());
-					
-					
-					 	
-						if(player.getOpenInventory().getBottomInventory().getType() == InventoryType.PLAYER && e.getClickedInventory().getType() == InventoryType.CHEST) {
-
-							  switch(action) {
-						      case MOVE_TO_OTHER_INVENTORY:
- 						          //  player.sendMessage("§cPlease do not shift-click items into this inventory.");
-						            e.setCancelled(true);
-						            return;
-						        case HOTBAR_MOVE_AND_READD:
- 						          //  player.sendMessage("§cPlease do not shift-click items into this inventory.");
-						            e.setCancelled(true);
-						            return;
-						        case HOTBAR_SWAP:
- 						          //  player.sendMessage("§cPlease do not shift-click items into this inventory.");
-						            e.setCancelled(true);
-						            return;
-						            
-						        case SWAP_WITH_CURSOR:
- 							          //  player.sendMessage("§cPlease do not shift-click items into this inventory.");
-							            e.setCancelled(true);
-							            return;
-						        case COLLECT_TO_CURSOR:
- 							          //  player.sendMessage("§cPlease do not shift-click items into this inventory.");
-							            e.setCancelled(true);
-							            return;
-						        case DROP_ALL_CURSOR:
- 							          //  player.sendMessage("§cPlease do not shift-click items into this inventory.");
-							            e.setCancelled(true);
-							            return; 
-						        case PLACE_SOME:
- 
-							          //  player.sendMessage("§cPlease do not shift-click items into this inventory.");
-							            e.setCancelled(true);
-							            return;
-						        case DROP_ONE_SLOT:
- 							          //  player.sendMessage("§cPlease do not shift-click items into this inventory.");
-							            e.setCancelled(true);
-							            return; 
-						        case DROP_ALL_SLOT:
- 
-							          //  player.sendMessage("§cPlease do not shift-click items into this inventory.");
-							            e.setCancelled(true);
-							            return;
-						        case PLACE_ALL:
- 
-							          //  player.sendMessage("§cPlease do not shift-click items into this inventory.");
-							            e.setCancelled(true);
-							            return;
-						        default:
-						            break;
-							  }
-					}
-				   
-				}
-			
-
-			return;
-			
-		  
-		
-	   }
 	
 	//NUEVA PAGINA EN UNA PAGINA SECUNDARIA   
 	public void NewPag(Player player) {

@@ -805,11 +805,9 @@ public class GameConditions {
 				ms.setEstadopartida(EstadoPartida.COMENZANDO);
 				if(ms.getEstopartida() == EstadoPartida.COMENZANDO) {
 				     int  segundo = config.getInt("CountDownPreLobby");
-					// player.sendMessage(ChatColor.GREEN+"Se a alcanzado el minimo de Jugadores necesarios, la partida Comenzara en "+ChatColor.RED+segundo+ChatColor.GREEN+" segundos.");
-					 
-					 SendMessageToAllUsersOfSameMap(player, ChatColor.GREEN+"Se a alcanzado el minimo de Jugadores necesarios, la partida Comenzara en "+ChatColor.RED+segundo+ChatColor.GREEN+" segundos.");
-					// TempInGame2 t = new TempInGame2(plugin);
-			     	// t.Inicio(map);
+				
+					 SendMessageToAllUsersOfSameMap(player, ChatColor.GREEN+"\nSe a alcanzado el minimo de Jugadores necesarios.\n"+ChatColor.GOLD+"La partida Comenzara en: "+ChatColor.RED+segundo+ChatColor.GREEN+" segundos.\n");
+			
 				}
 				
 				if(ms.getGameType() == GameType.ADVENTURE) {

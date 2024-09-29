@@ -235,7 +235,7 @@ public class ClassIntoGame {
 				player.sendTitle(ChatColor.GREEN+"Anti Void Activado",ChatColor.GREEN+"No te Caigas",20,60,20);
 
 				player.sendMessage(ChatColor.GREEN+"-Que suerte el Mapa tiene Anti Void pero Siempre Regresaras al Inicio del Mapa Ojo con el Tiempo.");
-				player.sendMessage(ChatColor.GREEN+"-Mmmm no estoy seguro si el Daño por Caida esta Anulado asi que ten Cuidado.");
+				player.sendMessage(ChatColor.GREEN+"-Mmmm no estoy seguro si el Daï¿½o por Caida esta Anulado asi que ten Cuidado.");
 				return;
 			}else {
 				pl.getGamePoints().setDeads(pl.getGamePoints().getDeads()+1);
@@ -261,7 +261,7 @@ public class ClassIntoGame {
 
 				}if(gi.getGameType() == GameType.ADVENTURE) {
 					player.sendMessage(ChatColor.RED+"\nUsa la hotbar para ver a otros jugadores. "+ChatColor.YELLOW+"\n!!!Solo podras ver a los que estan en tu partida");
-					player.sendMessage(ChatColor.GREEN+"Puedes ser revivido por tus compañeros.(Siempre que hayan cofres de Revivir)");
+					player.sendMessage(ChatColor.GREEN+"Puedes ser revivido por tus compaï¿½eros.(Siempre que hayan cofres de Revivir)");
 					
 				 	MgTeams t = new MgTeams(plugin);;
 					t.JoinTeamDeadMG(player);
@@ -519,7 +519,7 @@ public class ClassIntoGame {
 			player.setGameMode(GameMode.SPECTATOR);
 			
 			player.sendMessage(ChatColor.RED+"\nUsa la hotbar para ver a otros jugadores. "+ChatColor.YELLOW+"\n!!!Solo podras ver a los que estan en tu partida");
-			player.sendMessage(ChatColor.GREEN+"Puedes ser revivido por tus compañeros.(Siempre que hayan cofres de Revivir)");
+			player.sendMessage(ChatColor.GREEN+"Puedes ser revivido por tus compaï¿½eros.(Siempre que hayan cofres de Revivir)");
 			
 		}else if(gi instanceof GameNexo) {
 //			GameNexo gn = (GameNexo) gi;
@@ -554,6 +554,7 @@ public class ClassIntoGame {
 		
 			int puntos = pl.getGamePoints().getKills();
 			puntos = puntos+1;
+			
 			pl.getGamePoints().setKills(puntos);
 			player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.GREEN+ChatColor.BOLD+"KILLS: "+ChatColor.RED+puntos));
 
@@ -573,7 +574,7 @@ public class ClassIntoGame {
 		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"Muertes : "+ChatColor.YELLOW+ChatColor.BOLD+puntos2);
 		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"Revivido : "+ChatColor.YELLOW+ChatColor.BOLD+puntos3);
 		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"Ayudas a Revivir : "+ChatColor.YELLOW+ChatColor.BOLD+puntos4);
-		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"Daño : "+ChatColor.YELLOW+ChatColor.BOLD+TransformPosOrNeg(puntos5));
+		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"Daï¿½o : "+ChatColor.YELLOW+ChatColor.BOLD+TransformPosOrNeg(puntos5));
 		
 	}
 	
@@ -604,7 +605,7 @@ public class ClassIntoGame {
 			player.sendMessage(ChatColor.GREEN+"Se han agregado Puntos al Ranking de Juegos");
 			pm.addGamePoints(player);	
 		}else {
-			player.sendMessage(ChatColor.RED+"Este Mapa no añade Puntos al Ranking de Juegos.");
+			player.sendMessage(ChatColor.RED+"Este Mapa no aï¿½ade Puntos al Ranking de Juegos.");
 		}
 		return;
 	}
