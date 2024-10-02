@@ -39,11 +39,13 @@ import org.bukkit.entity.Snowman;
 import org.bukkit.entity.Spider;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.Villager.Profession;
+import org.bukkit.entity.WaterMob;
 import org.bukkit.entity.Witch;
 import org.bukkit.entity.Zombie;
 import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.AbstractArrow.PickupStatus;
 import org.bukkit.entity.Ageable;
+import org.bukkit.entity.Ambient;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.IronGolem;
@@ -2489,19 +2491,18 @@ public class EventRandoms implements Listener{
 				        			 alture = 1.57D; 
 				        		 }
 				        		 
-				        		 if(damage instanceof Animals || damage instanceof AnimalTamer || damage instanceof Spider || damage instanceof CaveSpider){
+				        		 if(damage instanceof Animals || damage instanceof AnimalTamer || damage instanceof Spider || damage instanceof CaveSpider || damage instanceof Ambient || damage instanceof WaterMob){
 				        			return; 
 				        		 }
 				        		 
 		                		 if((projectileY - damagedY >= alture)) {//ADULT OR KID originalmente estaba en 1.35D
 		                			 
-		                			 if(damage.getEquipment().getHelmet().isSimilar((new ItemStack(Material.AIR))) || damage.getEquipment().getHelmet() == null){
+		                			 if(damage.getEquipment().getHelmet().isSimilar(new ItemStack(Material.AIR)) || damage.getEquipment().getHelmet() == null){
 		                				 
 		                				 if(damage.getHealth() > headshoot){
 		                					 
 		 								       damage.getWorld().spawnParticle(Particle.DRIP_LAVA, damage.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
 		                					   damage.setHealth((damage.getHealth() - headshoot));
-		 								       //arrow.setDamage(headshoot);
 		                					   player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 		                					 
 		                				 }else{

@@ -24,7 +24,7 @@ import org.bukkit.inventory.meta.ItemMeta;
             FLECHAESPECTRAL(""+ChatColor.GREEN+ChatColor.BOLD+"FLECHA ESPECTRAL", Material.SPECTRAL_ARROW,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"5 de Oro",ChatColor.YELLOW+ "Marca a tus enemigos para que tus aliados lo vean"),
             ARCO(""+ChatColor.GREEN+ChatColor.BOLD+"ARCO", Material.BOW,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"20 de Hierro"),
             BALLESTA(""+ChatColor.GREEN+ChatColor.BOLD+"BALLESTA", Material.CROSSBOW,null, 1,ChatColor.GREEN+"Precio: "+ChatColor.RED+"12 de Oro",ChatColor.YELLOW+ "Tiene mas alcance que un arco"),
-            TRIDENTE(""+ChatColor.GREEN+ChatColor.BOLD+"TRIDENTE", Material.TRIDENT,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"5 Esmeraldas",ChatColor.YELLOW+ "Tiene un poco mas de daño y puedes lanzarlo en el agua"),
+            TRIDENTE(""+ChatColor.GREEN+ChatColor.BOLD+"TRIDENTE", Material.TRIDENT,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"5 Esmeraldas",ChatColor.YELLOW+ "Tiene un poco mas de daÃ±o y puedes lanzarlo en el agua"),
             ESCUDO(""+ChatColor.GREEN+ChatColor.BOLD+"ESCUDO", Material.SHIELD,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"20 de Hierro",ChatColor.YELLOW+ "Te servira para cubrirte"),
             TOTEM(""+ChatColor.GREEN+ChatColor.BOLD+"TOTEM DE INMORTALIDAD", Material.TOTEM_OF_UNDYING, null,1, ChatColor.GREEN+"Precio:  "+ChatColor.RED+"30 de Esmeralda",ChatColor.YELLOW+ "Te dara otra oportunidad (pero no si te caes del mapa)"),
             MANZANAORO(""+ChatColor.GREEN+ChatColor.BOLD+"MANZANA DE ORO", Material.GOLDEN_APPLE,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"10 Esmeraldas",ChatColor.YELLOW+ "Te curara al comerla"),
@@ -56,25 +56,25 @@ import org.bukkit.inventory.meta.ItemMeta;
             RAINARROW(""+ChatColor.GREEN+ChatColor.BOLD+"MULTIPLE ARROW", Material.JIGSAW,null, 1, ChatColor.GREEN+"Click Derecho para "+ChatColor.RED+"Lanzar Multiples Flechas "),
 
 
-            ESCU1(""+ChatColor.GRAY+ChatColor.BOLD+"ANTI FLECHAS 1", Material.IRON_CHESTPLATE,"protection_environmental,5/protection_projectile,8", 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"40 Netherite",ChatColor.YELLOW+ "Reduce el Daño contra Proyectiles."),
-            ESCU1P(""+ChatColor.GRAY+ChatColor.BOLD+"ANTI FLECHAS 1", Material.IRON_CHESTPLATE,"protection_environmental,5/protection_projectile,8", 1, ChatColor.YELLOW+ "Reduce el Daño contra Proyectiles."),
+            ESCU1(""+ChatColor.GRAY+ChatColor.BOLD+"ANTI FLECHAS 1", Material.IRON_CHESTPLATE,"protection_environmental,5/protection_projectile,8", 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"40 Netherite",ChatColor.YELLOW+ "Reduce el DaÃ±o contra Proyectiles."),
+            ESCU1P(""+ChatColor.GRAY+ChatColor.BOLD+"ANTI FLECHAS 1", Material.IRON_CHESTPLATE,"protection_environmental,5/protection_projectile,8", 1, ChatColor.YELLOW+ "Reduce el DaÃ±o contra Proyectiles."),
 
-            ESCU2(""+ChatColor.YELLOW+ChatColor.BOLD+"ANTI FUEGO 1", Material.GOLDEN_CHESTPLATE,"protection_environmental,5/protection_fire,10", 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"40 Netherite",ChatColor.YELLOW+ "Reduce el Daño contra el Fuego."),
-            ESCU2P(""+ChatColor.YELLOW+ChatColor.BOLD+"ANTI FUEGO 1", Material.GOLDEN_CHESTPLATE,"protection_environmental,5/protection_fire,10", 1, ChatColor.YELLOW+ "Reduce el Daño contra el Fuego."),
+            ESCU2(""+ChatColor.YELLOW+ChatColor.BOLD+"ANTI FUEGO 1", Material.GOLDEN_CHESTPLATE,"protection_environmental,5/protection_fire,10", 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"40 Netherite",ChatColor.YELLOW+ "Reduce el DaÃ±o contra el Fuego."),
+            ESCU2P(""+ChatColor.YELLOW+ChatColor.BOLD+"ANTI FUEGO 1", Material.GOLDEN_CHESTPLATE,"protection_environmental,5/protection_fire,10", 1, ChatColor.YELLOW+ "Reduce el DaÃ±o contra el Fuego."),
 
-            ESCU3(""+ChatColor.AQUA+ChatColor.BOLD+"ANTI EXPLOSION 1", Material.DIAMOND_CHESTPLATE,"protection_environmental,6/protection_explosions,9", 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"45 Netherite",ChatColor.YELLOW+ "Reduce el Daño contra Explosiones."),
-            ESCU3P(""+ChatColor.AQUA+ChatColor.BOLD+"ANTI EXPLOSION 1", Material.DIAMOND_CHESTPLATE,"protection_environmental,6/protection_explosions,9", 1, ChatColor.YELLOW+ "Reduce el Daño contra Explosiones."),
+            ESCU3(""+ChatColor.AQUA+ChatColor.BOLD+"ANTI EXPLOSION 1", Material.DIAMOND_CHESTPLATE,"protection_environmental,6/protection_explosions,9", 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"45 Netherite",ChatColor.YELLOW+ "Reduce el DaÃ±o contra Explosiones."),
+            ESCU3P(""+ChatColor.AQUA+ChatColor.BOLD+"ANTI EXPLOSION 1", Material.DIAMOND_CHESTPLATE,"protection_environmental,6/protection_explosions,9", 1, ChatColor.YELLOW+ "Reduce el DaÃ±o contra Explosiones."),
 
             
-            ESCU4(""+ChatColor.WHITE+ChatColor.BOLD+"ANTI CAIDA 1", Material.LEATHER_CHESTPLATE,"protection_environmental,10/protection_fall,11", 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"35 Netherite",ChatColor.YELLOW+ "Reduce el Daño contra Caida."),
-            ESCU4P(""+ChatColor.WHITE+ChatColor.BOLD+"ANTI CAIDA 1", Material.LEATHER_CHESTPLATE,"protection_environmental,10/protection_fall,11", 1, ChatColor.YELLOW+ "Reduce el Daño contra Caida."),
+            ESCU4(""+ChatColor.WHITE+ChatColor.BOLD+"ANTI CAIDA 1", Material.LEATHER_CHESTPLATE,"protection_environmental,10/protection_fall,11", 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"35 Netherite",ChatColor.YELLOW+ "Reduce el DaÃ±o contra Caida."),
+            ESCU4P(""+ChatColor.WHITE+ChatColor.BOLD+"ANTI CAIDA 1", Material.LEATHER_CHESTPLATE,"protection_environmental,10/protection_fall,11", 1, ChatColor.YELLOW+ "Reduce el DaÃ±o contra Caida."),
          
-            ESCU5(""+ChatColor.GOLD+ChatColor.BOLD+"ANTI TODO", Material.NETHERITE_CHESTPLATE,"protection_environmental,10/protection_fall,11/protection_projectile,10/protection_fire,10/protection_explosions,10", 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"200 Netherite",ChatColor.YELLOW+ "Reduce el Daño contra Casi Todo."),
-            ESCU5P(""+ChatColor.GOLD+ChatColor.BOLD+"ANTI TODO", Material.NETHERITE_CHESTPLATE,"protection_environmental,10/protection_fall,11/protection_projectile,10/protection_fire,10/protection_explosions,10", 1, ChatColor.YELLOW+ "Reduce el Daño contra Casi Todo."),
+            ESCU5(""+ChatColor.GOLD+ChatColor.BOLD+"ANTI TODO", Material.NETHERITE_CHESTPLATE,"protection_environmental,10/protection_fall,11/protection_projectile,10/protection_fire,10/protection_explosions,10", 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"200 Netherite",ChatColor.YELLOW+ "Reduce el DaÃ±o contra Casi Todo."),
+            ESCU5P(""+ChatColor.GOLD+ChatColor.BOLD+"ANTI TODO", Material.NETHERITE_CHESTPLATE,"protection_environmental,10/protection_fall,11/protection_projectile,10/protection_fire,10/protection_explosions,10", 1, ChatColor.YELLOW+ "Reduce el DaÃ±o contra Casi Todo."),
 
             
-            BAZUKA(""+ChatColor.GREEN+ChatColor.BOLD+"BAZOOKA", Material.BLAZE_ROD,"knockback,10", 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"128 Netherite",ChatColor.GREEN+"Habilidad:"+ChatColor.RED+" Daña a Cualquier Entidad ",ChatColor.GREEN+ "Lanzalo a distancia. ",ChatColor.GOLD+"Usa Proyectil especial."),
-            BAZUKAP(""+ChatColor.GREEN+ChatColor.BOLD+"BAZOOKA", Material.BLAZE_ROD,"knockback,10", 1,ChatColor.GREEN+"Habilidad:"+ChatColor.RED+" Daña a Cualquier Entidad ",ChatColor.GREEN+ "Lanzalo a distancia. ",ChatColor.GOLD+"Usa Proyectil especial."),
+            BAZUKA(""+ChatColor.GREEN+ChatColor.BOLD+"BAZOOKA", Material.BLAZE_ROD,"knockback,10", 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"128 Netherite",ChatColor.GREEN+"Habilidad:"+ChatColor.RED+" DaÃ±a a Cualquier Entidad ",ChatColor.GREEN+ "Lanzalo a distancia. ",ChatColor.GOLD+"Usa Proyectil especial."),
+            BAZUKAP(""+ChatColor.GREEN+ChatColor.BOLD+"BAZOOKA", Material.BLAZE_ROD,"knockback,10", 1,ChatColor.GREEN+"Habilidad:"+ChatColor.RED+" DaÃ±a a Cualquier Entidad ",ChatColor.GREEN+ "Lanzalo a distancia. ",ChatColor.GOLD+"Usa Proyectil especial."),
 
 
             COHETE(""+ChatColor.GOLD+ChatColor.BOLD+"COHETE", Material.FIRE_CHARGE,"fire_aspect,3/knockback,4", 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"40 Netherite",ChatColor.GREEN+"Proyectil:"+ChatColor.RED+" Usalo con una bazuka"),
@@ -143,8 +143,8 @@ import org.bukkit.inventory.meta.ItemMeta;
             PALO(""+ChatColor.RED+ChatColor.BOLD+"KICK ALL", Material.STICK,"fire_aspect,3/knockback,10", 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"40 Netherite",ChatColor.YELLOW+ "No dejes que se te acerquen"),
             PALOP(""+ChatColor.RED+ChatColor.BOLD+"KICK ALL", Material.STICK,"fire_aspect,3/knockback,10", 1),
             
-            TRIDENTEE(""+ChatColor.GREEN+ChatColor.BOLD+"TRIDENTE ENCANTADO", Material.TRIDENT,"loyalty,3/impaling,5", 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"64 Netherite",ChatColor.YELLOW+ "Tiene un poco mas de daño y puedes lanzarlo en el agua."),
-            TRIDENTEEP(""+ChatColor.GREEN+ChatColor.BOLD+"TRIDENTE ENCANTADO", Material.TRIDENT,"loyalty,3/impaling,5", 1,ChatColor.YELLOW+ "Tiene un poco mas de daño y puedes lanzarlo en el agua."),
+            TRIDENTEE(""+ChatColor.GREEN+ChatColor.BOLD+"TRIDENTE ENCANTADO", Material.TRIDENT,"loyalty,3/impaling,5", 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"64 Netherite",ChatColor.YELLOW+ "Tiene un poco mas de daÃ±o y puedes lanzarlo en el agua."),
+            TRIDENTEEP(""+ChatColor.GREEN+ChatColor.BOLD+"TRIDENTE ENCANTADO", Material.TRIDENT,"loyalty,3/impaling,5", 1,ChatColor.YELLOW+ "Tiene un poco mas de daÃ±o y puedes lanzarlo en el agua."),
 
             TRIDENTEE2(""+ChatColor.GREEN+ChatColor.BOLD+"TRIDENTE DE POSEIDON", Material.TRIDENT,"loyalty,3/impaling,10", 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"100 Netherite",ChatColor.YELLOW+ "Se lo quitaron a Poseidon???"),
             TRIDENTEE2P(""+ChatColor.GREEN+ChatColor.BOLD+"TRIDENTE DE POSEIDON", Material.TRIDENT,"loyalty,3/impaling,10", 1,ChatColor.YELLOW+ "Se lo quitaron a Poseidon???"),

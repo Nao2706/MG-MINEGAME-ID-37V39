@@ -1084,14 +1084,14 @@ public class MinigameShop1 implements Listener{
 										list2.add(""+ChatColor.GREEN+ChatColor.BOLD+"JUGADORES: "+ChatColor.RED+ChatColor.BOLD+plugin.getGameInfoPoo().get(name).getParticipantes().size());
 										list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESPECTADORES: "+ChatColor.RED+ChatColor.BOLD+plugin.getGameInfoPoo().get(name).getSpectator().size());
 										list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESTADO: "+plugin.getGameInfoPoo().get(name).getEstopartida().toString().replace(EstadoPartida.ESPERANDO.toString(),ChatColor.WHITE+EstadoPartida.ESPERANDO.toString())
-												.replace(EstadoPartida.COMENZANDO.toString(),ChatColor.GOLD+EstadoPartida.COMENZANDO.toString()).replace(EstadoPartida.JUGANDO.toString(),ChatColor.GREEN+EstadoPartida.JUGANDO.toString())
+												.replace(EstadoPartida.COMENZANDO.toString(),ChatColor.YELLOW+EstadoPartida.COMENZANDO.toString()).replace(EstadoPartida.JUGANDO.toString(),ChatColor.GREEN+EstadoPartida.JUGANDO.toString())
 												.replace(EstadoPartida.DESACTIVADA.toString(),ChatColor.GRAY+EstadoPartida.DESACTIVADA.toString()).replace(EstadoPartida.TERMINANDO.toString(),ChatColor.RED+EstadoPartida.TERMINANDO.toString())
 												);
 
 									}else {
-										list2.add(""+ChatColor.GREEN+ChatColor.BOLD+"JUGADORES: "+ChatColor.RED+ChatColor.BOLD+"0");
+										list2.add(""+ChatColor.RED+ChatColor.BOLD+"JUGADORES: "+ChatColor.GREEN+ChatColor.BOLD+"0");
 										list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESPECTADORES: "+ChatColor.RED+ChatColor.BOLD+"0");
-										list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESTADO: "+ChatColor.WHITE+ChatColor.BOLD+"ESPERANDO");
+										list2.add(""+ChatColor.GOLD+ChatColor.BOLD+"ESTADO: "+ChatColor.WHITE+ChatColor.BOLD+"ESPERANDO");
 									}
 									
 								
@@ -1269,14 +1269,14 @@ public class MinigameShop1 implements Listener{
 									list2.add(""+ChatColor.GREEN+ChatColor.BOLD+"JUGADORES: "+ChatColor.RED+ChatColor.BOLD+plugin.getGameInfoPoo().get(name).getParticipantes().size());
 									list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESPECTADORES: "+ChatColor.RED+ChatColor.BOLD+plugin.getGameInfoPoo().get(name).getSpectator().size());
 									list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESTADO: "+plugin.getGameInfoPoo().get(name).getEstopartida().toString().replace(EstadoPartida.ESPERANDO.toString(),ChatColor.WHITE+EstadoPartida.ESPERANDO.toString())
-											.replace(EstadoPartida.COMENZANDO.toString(),ChatColor.GOLD+EstadoPartida.COMENZANDO.toString()).replace(EstadoPartida.JUGANDO.toString(),ChatColor.GREEN+EstadoPartida.JUGANDO.toString())
+											.replace(EstadoPartida.COMENZANDO.toString(),ChatColor.YELLOW+EstadoPartida.COMENZANDO.toString()).replace(EstadoPartida.JUGANDO.toString(),ChatColor.GREEN+EstadoPartida.JUGANDO.toString())
 											.replace(EstadoPartida.DESACTIVADA.toString(),ChatColor.GRAY+EstadoPartida.DESACTIVADA.toString()).replace(EstadoPartida.TERMINANDO.toString(),ChatColor.RED+EstadoPartida.TERMINANDO.toString())
 											);
 
 								}else {
-									list2.add(""+ChatColor.GREEN+ChatColor.BOLD+"JUGADORES: "+ChatColor.RED+ChatColor.BOLD+"0");
+									list2.add(""+ChatColor.RED+ChatColor.BOLD+"JUGADORES: "+ChatColor.GREEN+ChatColor.BOLD+"0");
 									list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESPECTADORES: "+ChatColor.RED+ChatColor.BOLD+"0");
-									list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESTADO: "+ChatColor.WHITE+ChatColor.BOLD+"ESPERANDO");
+									list2.add(""+ChatColor.GOLD+ChatColor.BOLD+"ESTADO: "+ChatColor.WHITE+ChatColor.BOLD+"ESPERANDO");
 								}
 								 
 							

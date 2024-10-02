@@ -835,7 +835,7 @@ public class GameConditions {
 	
 	
 	
-	
+	//TODO BOOLEAN
 	public boolean isPlayerinGame(Player player) {
 		return plugin.getPlayerInfoPoo().containsKey(player);
 	}
@@ -915,7 +915,6 @@ public class GameConditions {
 		 FileConfiguration config = plugin.getConfig();	 
 	     return config.getBoolean("Maintenance");
 	}
-	
 	
 	public boolean ExistMap(String map) {
 		FileConfiguration config = plugin.getConfig();
@@ -2096,7 +2095,6 @@ public class GameConditions {
 	
 	public void SendMessageToAllPlayersOpInMap(String map,String text) {
 		
-		
 		GameInfo ms = plugin.getGameInfoPoo().get(map);
 		//MisionInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
 		 if(ms instanceof GameAdventure) {
@@ -2226,9 +2224,6 @@ public class GameConditions {
 	   //TODO TOP
    	public void Top(String arenaName) {
    					FileConfiguration message = plugin.getMessage();
-   		
-		
-
 		// PRIMERA PARTE
 					HashMap<String, Integer> scores = new HashMap<>();
 
@@ -2331,12 +2326,6 @@ public class GameConditions {
 									player.sendMessage(ChatColor.translateAlternateColorCodes('&', texto3));
 						  }}
 					}
-				
-	
-			
-
-
-		
    		
    	}
    	
@@ -2744,15 +2733,6 @@ public class GameConditions {
 
 		  	}
    		}
-   		
-   		
-			
-			
-					
-					
-				
-			
-		  
    		
    		return;
  	}
@@ -3176,8 +3156,6 @@ public class GameConditions {
 		
 		
 	}
-
-	
    
    	//mg objetive-primary complete 1
     //mg objetive-secondary complete 1
@@ -3200,9 +3178,6 @@ public class GameConditions {
    		
    		return actual ;
 	}
-	
-	
-	
 	
 	
 	//TODO STRING TO PLAYER
@@ -3287,7 +3262,6 @@ public class GameConditions {
 		if(!text.contains("permission set")) {
 			return false;
 		}else {
-			
 				String[] split = text.split(" ");
 				String perm = split[5];
 				if(player.hasPermission(perm)) {
@@ -3302,11 +3276,27 @@ public class GameConditions {
 	}
 	
 	public Player ConvertStringToPlayer(String name) {
-		
 		return Bukkit.getPlayerExact(name);
 	}
 	
 	//TODO NEXO
+	
+	public boolean isInsideOfLocations(Location l , Location l1 , Location l2) {
+		
+		double minX = Math.min(l1.getX(),l2.getX());
+		double minY = Math.min(l1.getY(),l2.getY());
+		double minZ = Math.min(l1.getZ(),l2.getZ());
+		
+		double maxX = Math.max(l1.getX(), l2.getX())+1;
+		double maxY = Math.max(l1.getY(), l2.getY())+1;
+		double maxZ = Math.max(l1.getZ(), l2.getZ())+1;
+
+		return (maxX >= l.getX() && l.getX() >= minX) &&
+			   (maxY >= l.getY() && l.getY() >= minY) &&
+			   (maxZ >= l.getZ() && l.getZ() >= minZ);
+		
+	}
+	
 	
 	public Location RedNexo(String name) {
 		   FileConfiguration ym = getGameConfig(name);
