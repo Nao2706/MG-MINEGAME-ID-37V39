@@ -393,9 +393,7 @@ public class MinigameShop1 implements Listener{
 		
 		ItemStack it = new ItemStack(Material.ENCHANTED_GOLDEN_APPLE);
 		ItemStack it2 = new ItemStack(Material.GOLDEN_APPLE);
-		
 		ItemStack obh = new ItemStack(Material.TNT);
-		
 		ItemStack info = new ItemStack(Material.BEACON);
 		
 		ItemMeta meta = info.getItemMeta();
@@ -1954,24 +1952,59 @@ public class MinigameShop1 implements Listener{
 				}
 			}
 			
+			
+			if(item.isSimilar(Items.RAINARROW.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
+				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),10)) {
+					player.getInventory().addItem(Items.RAINARROWP.getValue());
+					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
+					player.getInventory().removeItem(new ItemStack(Material.NETHERITE_INGOT,10));
+				}else {
+					player.sendMessage(ChatColor.RED+"Necesitas 10 Lingotes de Netherite");
+				}
+			}
+			
+			if(item.isSimilar(Items.BENGALAROJA.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
+				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),30)) {
+					player.getInventory().addItem(Items.BENGALAROJAP.getValue());
+					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
+					player.getInventory().removeItem(new ItemStack(Material.NETHERITE_INGOT,30));
+				}else {
+					player.sendMessage(ChatColor.RED+"Necesitas 30 Lingotes de Netherite");
+				}
+			}
+			
+			
+			if(item.isSimilar(Items.BENGALAVERDE.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
+				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),25)) {
+					player.getInventory().addItem(Items.BENGALAVERDEP.getValue());
+					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
+					player.getInventory().removeItem(new ItemStack(Material.NETHERITE_INGOT,25));
+				}else {
+					player.sendMessage(ChatColor.RED+"Necesitas 25 Lingotes de Netherite");
+				}
+			}
+			
 			if(item.isSimilar(Items.ARMAS.getValue())) {
-				createInvArmas(player);
+				StoreCreateWeaponsMelee(player);
 			}
 			
 			if(item.isSimilar(Items.ARMAS2.getValue())) {
-				createInvArmas2(player);
+				StoreCreateWeaponsShooters(player);
 			}
 			
 			if(item.isSimilar(Items.DEFENSA.getValue())) {
-				createInvDefensa(player);
+				StoreCreateShields(player);
 			}
 			
 			if(item.isSimilar(Items.COMIDA.getValue())) {
-				createInvComida(player);
+				StoreCreateFood(player);
 			}
 			
 			if(item.isSimilar(Items.ESPECIALES.getValue())) {
-				createInvEspeciales(player);
+				StoreCreateSpecialWeapons(player);
 			}
 			
 			if(item.isSimilar(Items.VOLVER.getValue()) || item.isSimilar(Items.VOLVER2.getValue())) {
@@ -2004,7 +2037,6 @@ public class MinigameShop1 implements Listener{
 	
 	public boolean HasSpaceinInventory(Player player) {
 		 if(player.getInventory().firstEmpty() == -1) {
-				
 			 player.sendMessage(ChatColor.RED+"Tu Inventario esta lleno has Espacio.");
 			  return false;
 		 }else {
@@ -2034,7 +2066,7 @@ public class MinigameShop1 implements Listener{
 		
 	}
 	
-	public void createInv(Player player) {
+	public void StoreCreate(Player player) {
 		//creas el inventario l
 		//los itemstacks estan como ejemplo puesto que sale mejor hacer o dedicar una clase para items 
 		Inventory inv = Bukkit.createInventory(null,54,""+ChatColor.DARK_GREEN+ChatColor.BOLD+"TIENDA");
@@ -2064,7 +2096,7 @@ public class MinigameShop1 implements Listener{
 	}
 	 
 	
-	public void createInvArmas(Player player) {
+	public void StoreCreateWeaponsMelee(Player player) {
 		//creas el inventario l
 		//los itemstacks estan como ejemplo puesto que sale mejor hacer o dedicar una clase para items 
 		Inventory inv = Bukkit.createInventory(null,54,""+ChatColor.RED+ChatColor.BOLD+"ESPADAS");
@@ -2089,8 +2121,8 @@ public class MinigameShop1 implements Listener{
 		player.openInventory(inv);
 		
 	}
-
-	public void createInvArmas2(Player player) {
+  
+	public void StoreCreateWeaponsShooters(Player player) {
 		//creas el inventario l
 		//los itemstacks estan como ejemplo puesto que sale mejor hacer o dedicar una clase para items 
 		Inventory inv = Bukkit.createInventory(null,54,""+ChatColor.GREEN+ChatColor.BOLD+"ARCOS Y BALLESTAS");
@@ -2113,7 +2145,7 @@ public class MinigameShop1 implements Listener{
 		
 	}
 	
-	public void createInvDefensa(Player player) {
+	public void StoreCreateShields(Player player) {
 		//creas el inventario l
 		//los itemstacks estan como ejemplo puesto que sale mejor hacer o dedicar una clase para items 
 		Inventory inv = Bukkit.createInventory(null,54,""+ChatColor.BLUE+ChatColor.BOLD+"DEFENSA");
@@ -2135,7 +2167,7 @@ public class MinigameShop1 implements Listener{
 		player.openInventory(inv);
 	}
 	
-	public void createInvComida(Player player) {
+	public void StoreCreateFood(Player player) {
 		//creas el inventario l
 		//los itemstacks estan como ejemplo puesto que sale mejor hacer o dedicar una clase para items 
 		Inventory inv = Bukkit.createInventory(null,54,""+ChatColor.AQUA+ChatColor.BOLD+"COMIDA Y POSIONES");
@@ -2156,7 +2188,7 @@ public class MinigameShop1 implements Listener{
 		player.openInventory(inv);
 	}
 	
-	public void createInvEspeciales(Player player) {
+	public void StoreCreateSpecialWeapons(Player player) {
 		//creas el inventario l
 		//los itemstacks estan como ejemplo puesto que sale mejor hacer o dedicar una clase para items 
 		Inventory inv = Bukkit.createInventory(null,54,""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"ESPECIALES");
@@ -2178,6 +2210,9 @@ public class MinigameShop1 implements Listener{
 		inv.setItem(21, Items.BAZUKA.getValue());
 		inv.setItem(22, Items.COHETE.getValue());
 		inv.setItem(23, Items.GANCHO2.getValue());
+		inv.setItem(24, Items.BENGALAROJA.getValue());
+		inv.setItem(25, Items.BENGALAVERDE.getValue());
+		inv.setItem(28, Items.RAINARROW.getValue());
 		inv.setItem(40, Items.CERRAR.getValue());
 		inv.setItem(41, Items.VOLVER.getValue());
 		
@@ -2208,7 +2243,7 @@ public class MinigameShop1 implements Listener{
 		 
 		l.add("ESPADAS");l.add("ARCOS Y BALLESTAS");l.add("DEFENSA");l.add("COMIDA Y POSIONES");l.add("ESPECIALES");
 		if(player.getOpenInventory() != null && l.contains(ChatColor.stripColor(player.getOpenInventory().getTitle()))) {
-			createInv(player);
+			StoreCreate(player);
 		}if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("OBJETIVOS PRIMARIOS")) {
 			ShowObjetives(player);
 		}if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("OBJETIVOS SECUNDARIOS")) {

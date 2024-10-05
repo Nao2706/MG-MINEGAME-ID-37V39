@@ -18,9 +18,10 @@ public class Flare extends BukkitRunnable{
 	
 	
 	private Item item;
-	
+	private Player player;
 	
 	public Flare(Player player,ItemStack it, Location l) {
+		this.player = player;
 		item = l.getWorld().dropItem(l,it);
 		item.setVelocity(player.getEyeLocation().getDirection().multiply(3));
 		runTaskTimer(JavaPlugin.getPlugin(Minegame.class),0,3);
@@ -36,21 +37,22 @@ public class Flare extends BukkitRunnable{
 		// TODO Auto-generated method stub
 		item.setPickupDelay(9999);
 	
-		if(item.getItemStack().isSimilar(Items.BENGALAROJA.getValue()) ) {
+		if(item.getItemStack().isSimilar(Items.BENGALAROJA.getValue()) || item.getItemStack().isSimilar(Items.BENGALAROJAP.getValue())) {
 			new InstantFirework(FireworkEffect.builder().with(Type.BURST).withColor(Color.RED).build(),item.getLocation());
-		}else if(item.getItemStack().isSimilar(Items.BENGALAVERDE.getValue()) ) {
+		}else if(item.getItemStack().isSimilar(Items.BENGALAVERDE.getValue())  || item.getItemStack().isSimilar(Items.BENGALAVERDEP.getValue()) ) {
 			new InstantFirework(FireworkEffect.builder().with(Type.BURST).withColor(Color.GREEN).build(),item.getLocation());
 		}
 		
 	 
 		if(item == null || item.isOnGround() || item.isDead() || item.isInWater()) {
-			if(item.getItemStack().isSimilar(Items.BENGALAROJA.getValue()) ) {
-				FlareActions fl = new FlareActions();
-				fl.SendAirStrike(item.getLocation());
+			FlareActions fl = new FlareActions();
+			if(item.getItemStack().isSimilar(Items.BENGALAROJA.getValue()) || item.getItemStack().isSimilar(Items.BENGALAROJAP.getValue()) ) {
+				
+				fl.SendAirStrike(player,item.getLocation());
 			
-			}else if(item.getItemStack().isSimilar(Items.BENGALAVERDE.getValue()) ) {
-				FlareActions fl = new FlareActions();
-				fl.SendAirDrop(item.getLocation());
+			}else if(item.getItemStack().isSimilar(Items.BENGALAVERDE.getValue()) || item.getItemStack().isSimilar(Items.BENGALAVERDEP.getValue()) ) {
+				
+				fl.SendAirDrop(player,item.getLocation());
 			
 			}
 			

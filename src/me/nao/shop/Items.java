@@ -31,9 +31,13 @@ import org.bukkit.inventory.meta.ItemMeta;
             MANZANA(""+ChatColor.GREEN+ChatColor.BOLD+"MANZANA", Material.APPLE,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"1 Lingote de Hierro",ChatColor.YELLOW+ "Evitara que mueras de Hambre"),
             
             
-            BENGALAROJA(""+ChatColor.RED+ChatColor.BOLD+"BENGALA ROJA", Material.REDSTONE_TORCH,null, 1,ChatColor.YELLOW+"Bombardea el Area donde cae. ",ChatColor.RED+"Debes estar en un Sitio despejado.. ",ChatColor.GREEN+"Click Derecho para Lanzar. "),
-            BENGALAVERDE(""+ChatColor.GREEN+ChatColor.BOLD+"BENGALA VERDE", Material.REDSTONE_TORCH,null, 1,ChatColor.YELLOW+"Recibe un paquete de Ayuda Random. ",ChatColor.RED+"Debes estar en un Sitio despejado.. ",ChatColor.GREEN+"Click Derecho para Lanzar. "),
+            BENGALAROJA(""+ChatColor.RED+ChatColor.BOLD+"BENGALA ROJA", Material.REDSTONE_TORCH,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"30 Netherite",ChatColor.YELLOW+"Bombardea el Area donde cae. ",ChatColor.RED+"Debes estar en un Sitio despejado.. ",ChatColor.GREEN+"Click Derecho para Lanzar. "),
+            BENGALAROJAP(""+ChatColor.RED+ChatColor.BOLD+"BENGALA ROJA", Material.REDSTONE_TORCH,null, 1,ChatColor.YELLOW+"Bombardea el Area donde cae. ",ChatColor.RED+"Debes estar en un Sitio despejado.. ",ChatColor.GREEN+"Click Derecho para Lanzar. "),
 
+            BENGALAVERDE(""+ChatColor.GREEN+ChatColor.BOLD+"BENGALA VERDE", Material.REDSTONE_TORCH,null, 1,ChatColor.GREEN+"Precio: "+ChatColor.RED+"25 Netherite",ChatColor.YELLOW+"Recibe un paquete de Ayuda Random. ",ChatColor.RED+"Debes estar en un Sitio Despejado.. ",ChatColor.GREEN+"Click Derecho para Lanzar. "),
+            BENGALAVERDEP(""+ChatColor.GREEN+ChatColor.BOLD+"BENGALA VERDE", Material.REDSTONE_TORCH,null, 1,ChatColor.YELLOW+"Recibe un paquete de Ayuda Random. ",ChatColor.RED+"Debes estar en un Sitio Despejado.. ",ChatColor.GREEN+"Click Derecho para Lanzar. "),
+
+            
             TEST(""+ChatColor.RED+ChatColor.BOLD+"TEST", Material.STICK,null, 1, ChatColor.GREEN+"Falling Block"),
 
             
@@ -53,7 +57,8 @@ import org.bukkit.inventory.meta.ItemMeta;
             OBJETIVOSP(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"OBJETIVOS DEL MAPA", Material.BOOK,null, 1, ChatColor.GREEN+"Mira los Objetivos que tenga el Mapa. ", ChatColor.RED+"Clickeame. "),
 
             
-            RAINARROW(""+ChatColor.GREEN+ChatColor.BOLD+"MULTIPLE ARROW", Material.JIGSAW,null, 1, ChatColor.GREEN+"Click Derecho para "+ChatColor.RED+"Lanzar Multiples Flechas "),
+            RAINARROW(""+ChatColor.GREEN+ChatColor.BOLD+"MULTIPLE ARROW", Material.SPECTRAL_ARROW,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"10 Netherite",ChatColor.GREEN+"Click Derecho para "+ChatColor.RED+"Lanzar Multiples Flechas "),
+            RAINARROWP(""+ChatColor.GREEN+ChatColor.BOLD+"MULTIPLE ARROW", Material.SPECTRAL_ARROW,null, 1, ChatColor.GREEN+"Click Derecho para "+ChatColor.RED+"Lanzar Multiples Flechas "),
 
 
             ESCU1(""+ChatColor.GRAY+ChatColor.BOLD+"ANTI FLECHAS 1", Material.IRON_CHESTPLATE,"protection_environmental,5/protection_projectile,8", 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"40 Netherite",ChatColor.YELLOW+ "Reduce el Daño contra Proyectiles."),

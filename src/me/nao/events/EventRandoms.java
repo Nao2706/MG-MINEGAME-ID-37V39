@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -39,6 +40,7 @@ import org.bukkit.entity.Snowman;
 import org.bukkit.entity.Spider;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.Villager.Profession;
+import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.entity.WaterMob;
 import org.bukkit.entity.Witch;
 import org.bukkit.entity.Zombie;
@@ -90,6 +92,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
 import me.nao.cosmetics.fireworks.RankPlayer;
@@ -159,15 +162,24 @@ public class EventRandoms implements Listener{
 				Entity ent = e.getRightClicked();
 				
 				if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
-					if(ent.getType() == EntityType.PLAYER) {
-						if(!player.getPassengers().isEmpty()) {
-							 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.RED+ChatColor.BOLD+"YA TIENES ENCIMA A UNA ENTIDAD"));
-							return;
-						}
+					
+					if(!player.getPassengers().isEmpty()) {
+						 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.RED+ChatColor.BOLD+"YA TIENES ENCIMA A UNA ENTIDAD"));
+						return;
+					}else if(ent.getType() == EntityType.PLAYER) {
 						Player target = (Player) ent;
 						if(target.getGameMode() != GameMode.SPECTATOR) {
 								player.addPassenger(target);
 						}
+					}else if(ent.getType() == EntityType.MINECART_CHEST) {
+						
+						StorageMinecart mc = (StorageMinecart) ent;
+						if(mc.getCustomName() != null && ChatColor.stripColor(mc.getCustomName()).equals("PAQUETE DE AYUDA")) {
+							return;
+						}else {
+							player.addPassenger(ent);	
+						}
+						
 					}else {
 						player.addPassenger(ent);
 					}
@@ -342,7 +354,7 @@ public class EventRandoms implements Listener{
 											  	plugin.getPags().put(player, 1);
 											    player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 20.0F, 1F);
 											  	MinigameShop1 inv = new MinigameShop1(plugin);
-												inv.createInv(player);
+												inv.StoreCreate(player);
 												
 										  }
 										  if(chest.getCustomName().contains("TIENDA TEST")) {
@@ -425,73 +437,71 @@ public class EventRandoms implements Listener{
 							f.setVelocity(player.getLocation().getDirection().multiply(3).setY(1));
 				       }
 						
-						if (e.getItem().isSimilar(Items.JEDIP.getValue())) {
-				
+						if(e.getItem().isSimilar( Items.JEDIP.getValue())) {
 							player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 20.0F, 1F);
 							for(Entity e1 : getNearbyEntites(player.getLocation(),20)) {
 								if(!(e1.getType() == EntityType.PLAYER)) {
 									e1.setVelocity(e1.getLocation().getDirection().multiply(-3).setY(1));
 								}
 							}
-							removeItemstackCustom(player, Items.JEDIP.getValue(),1);
-				       }
+							
+							removeItemstackCustom(player,e.getItem());
+						}
 						
-						if (e.getItem().isSimilar(Items.CHECKPOINTP.getValue())) {
-							
-							
+						if(e.getItem().isSimilar(Items.CHECKPOINTP.getValue())) {
 							plugin.getCheckPoint().put(player, player.getLocation());
 							player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 							player.sendMessage(ChatColor.GREEN+"CheckPoint Marcado.");
-							removeItemstackCustom(player, Items.CHECKPOINTP.getValue(),1);
+							removeItemstackCustom(player,e.getItem());
 						}
-						 
 						
-					if (e.getItem().isSimilar(Items.RAINARROW.getValue())) {
+						
+						if(e.getItem().isSimilar(Items.RAINARROWP.getValue())) {
 							player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 20.0F, 1F);
-						
-						//player.launchProjectile(org.bukkit.entity.EnderPearl.class);
-						
-						
-							LaunchRandomArrow(player, 0, 0);
-							LaunchRandomArrow(player, 5, 5);
-							LaunchRandomArrow(player, -5, 5);
-							LaunchRandomArrow(player, 5, -5);
-							LaunchRandomArrow(player, -5, -5);
+							
+							//player.launchProjectile(org.bukkit.entity.EnderPearl.class);
+			               	for(int i = 0;i<20;i++) {
+									SpawnArrows(player, RandomPosOrNeg(10),RandomPosOrNeg(5));
+								}
+			               	removeItemstackCustom(player,e.getItem());
 						}
 						
-					if (e.getItem().isSimilar(Items.STOREXPRESSP.getValue())) {
-																		MinigameShop1 inv = new MinigameShop1(plugin);
-									inv.createInv(player);
-									removeItemstackCustom(player, Items.STOREXPRESSP.getValue(),1);		
+				
+						if(e.getItem().isSimilar(Items.STOREXPRESSP.getValue())) {
+									MinigameShop1 inv = new MinigameShop1(plugin);
+									inv.StoreCreate(player);
+									removeItemstackCustom(player,e.getItem());
 						}
-					if (e.getItem().isSimilar(Items.OBJETIVOSP.getValue())) {
-						MinigameShop1 ms = new MinigameShop1(plugin);
-						ms.ShowObjetives(player);
-					}
+						
+					
+						
+						if (e.getItem().isSimilar(Items.OBJETIVOSP.getValue())) {
+							MinigameShop1 ms = new MinigameShop1(plugin);
+							ms.ShowObjetives(player);
+						}
 
 						
-					if (e.getItem().isSimilar(Items.REFUERZOSP.getValue())) {
-						Location loc = player.getLocation();
-						Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.IRON_GOLEM);
-						IronGolem ih = (IronGolem) h1;
-						ih.setCustomName(ChatColor.GOLD+player.getName());
-						removeItemstackCustom(player, Items.REFUERZOSP.getValue(),1);
-						
-						
-			          }
+						if(e.getItem().isSimilar( Items.REFUERZOSP.getValue())) {
 					
-					if (e.getItem().isSimilar(Items.REFUERZOS2P.getValue())) {
-						Location loc = player.getLocation();
-						Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.SNOWMAN);
-						Snowman ih = (Snowman) h1;
-						ih.setCustomName(ChatColor.GOLD+player.getName());
-						removeItemstackCustom(player, Items.REFUERZOS2P.getValue(),1);
+							Location loc = player.getLocation();
+							Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.IRON_GOLEM);
+							IronGolem ih = (IronGolem) h1;
+							ih.setCustomName(ChatColor.GOLD+player.getName());
+							removeItemstackCustom(player,e.getItem());
+						 }
+					
+						if(e.getItem().isSimilar(Items.REFUERZOS2P.getValue())) {
+							Location loc = player.getLocation();
+							Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.SNOWMAN);
+							Snowman ih = (Snowman) h1;
+							ih.setCustomName(ChatColor.GOLD+player.getName());
+							
+							removeItemstackCustom(player,e.getItem());
+
 						
-						
-			         }
+						}
 					if (e.getItem().isSimilar(Items.BAZUKAP.getValue())) {
-						if(player.getInventory().containsAtLeast(Items.COHETEP.getValue(), 1)) {
-							removeItemstackCustom(player, Items.COHETEP.getValue(),1);
+						if(player.getInventory().containsAtLeast( Items.COHETEP.getValue(),1)) {
 							Location loc = player.getLocation();
 							Entity fb = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.FIREBALL);
 							fb.setVelocity(loc.getDirection().multiply(3));
@@ -499,13 +509,15 @@ public class EventRandoms implements Listener{
 							Fireball f = (Fireball) fb;
 							f.setYield(10);
 							((Fireball) fb).setShooter(player);
+							
+							removeItemstackCustom(player, Items.COHETEP.getValue());
 						}else {
 							player.sendMessage(ChatColor.RED+"No tienes mas municion de Bazooka");
 
 						}
 					}
 					if (e.getItem().isSimilar(Items.ARROWLP.getValue())) {
-							if(player.getInventory().containsAtLeast(new ItemStack(Material.ARROW), 2)) {
+							if(player.getInventory().containsAtLeast( new ItemStack(Material.ARROW),2)) {
 									Location loc = player.getLocation();
 									Location loc2 = player.getLocation();
 									player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 20.0F, 1F);
@@ -526,21 +538,28 @@ public class EventRandoms implements Listener{
 									((Arrow) h1).setShooter(player);
 									((Arrow) h2).setShooter(player);
 									
-									player.getInventory().removeItem(new ItemStack(Material.ARROW, 2));
+									player.getInventory().removeItem(new ItemStack(Material.ARROW,2));
 								}else {
 									player.sendMessage(ChatColor.RED+"Necesitas tener 2 Flechas minimo para Disparar");
 								}
-					}
+					}	
+					
+						if(e.getItem().isSimilar(Items.BENGALAROJAP.getValue()) || e.getItem().isSimilar(Items.BENGALAVERDEP.getValue())) {
+							new Flare(player, player.getInventory().getItemInMainHand(),player.getEyeLocation());
+							removeItemstackCustom(player,e.getItem());
+						}
 					
 					
-						if (e.getItem().isSimilar(Items.MEDICOP.getValue())) {
+						
+						if(e.getItem().isSimilar(Items.MEDICOP.getValue())) {
+					
 							Location loc = player.getLocation();
 							Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.VILLAGER);
 							Villager v = (Villager) h1;
 							v.setCustomName(""+ChatColor.GREEN+ChatColor.BOLD+"Medico "+ChatColor.RED+ChatColor.BOLD+"+");
 							v.setProfession(Profession.CLERIC);
 							v.setTicksLived(1200);
-							removeItemstackCustom(player, Items.MEDICOP.getValue(),1);
+							removeItemstackCustom(player,e.getItem());
 							
 							gc.SendMessageToUsersOfSameMap(player, ChatColor.AQUA+"El Jugador "+ChatColor.GREEN+player.getName()+ChatColor.AQUA+" a un Medico");
 							
@@ -1342,29 +1361,77 @@ public class EventRandoms implements Listener{
 		 }
 		
 		//TODO REDUCE
-		public void removeItemstackCustom(Player player,ItemStack it,int cant) {
+		public boolean removeItemstackCustom(Player player,ItemStack it,int cant) {
+			
+			
 			Inventory inv = player.getInventory();
-			int slot = inv.first(it);
-
-			@SuppressWarnings("unused")
-			boolean hasAmmo = false;
-			for (slot = 0; slot < inv.getSize(); slot++) {
-
-				ItemStack item = inv.getItem(slot);// 3
-				if (item != null && item.isSimilar(it)) {
-					hasAmmo = true;
+			
+			if(player.getInventory().getItemInMainHand().isSimilar(it)) {
+				if(inv.containsAtLeast(it, cant)) {
 					
-					int amount = item.getAmount() - cant;
-					if (amount <= 0) {
-						item = new ItemStack(Material.AIR);
-					} else {
-						item.setAmount(amount);
+					
+					int slot = inv.first(it);
+					@SuppressWarnings("unused")
+					boolean hasAmmo = false;
+					for (slot = 0; slot < inv.getSize(); slot++) {
+
+						ItemStack item = inv.getItem(slot);// 3
+						if (item != null && item.isSimilar(it)) {
+							hasAmmo = true;
+							
+							int amount = item.getAmount() - cant;
+							if (amount <= 0) {
+								item = new ItemStack(Material.AIR);
+							} else {
+								item.setAmount(amount);
+							}
+							inv.setItem(slot, item);
+							//break;
+							return true;
+						}
 					}
-					inv.setItem(slot, item);
-					break;
+					
 				}
 			}
 			
+		
+			
+			
+			return false;
+		}
+		
+		//ORIGINAL
+		public void removeItemstackCustom(Player player,ItemStack it) {
+			
+			
+				Inventory inv = player.getInventory();
+				int slot = inv.first(it);
+					@SuppressWarnings("unused")
+					boolean hasAmmo = false;
+					for (slot = 0; slot < inv.getSize(); slot++) {
+
+						ItemStack item = inv.getItem(slot);// 3
+						if (item != null && item.isSimilar(it)) {
+							hasAmmo = true;
+							
+							int amount = item.getAmount() - 1;
+							if (amount <= 0) {
+								item = new ItemStack(Material.AIR);
+							} else {
+								item.setAmount(amount);
+							}
+							inv.setItem(slot, item);
+							break;
+						}
+					}
+					
+				
+			
+			
+		
+			
+			
+			return ;
 		}
 		
 		
@@ -1545,32 +1612,7 @@ public class EventRandoms implements Listener{
 			//}
 		}
 		
-		public void LaunchRandomArrow(Player player , float addYaw, float addPitch) {
-			
-			final Location loc = player.getLocation();
-			loc.setYaw(loc.getYaw()+addYaw);
-			loc.setPitch(loc.getPitch()+addPitch);
-			final Vector mot = loc.getDirection();
-			
-			    Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
-	    		Entity h2 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
-	    		
-	    		h1.setVelocity(mot);
-	    		h2.setVelocity(mot);
-	    		
-	    		Arrow aw = (Arrow) h1;
-	    		Arrow aw2 = (Arrow) h2;
-	    		aw.setCritical(true);
-	    		aw.setKnockbackStrength(2);
-	    		aw.setFireTicks(1200);
-	    		aw2.setCritical(true);
-	    		aw2.setKnockbackStrength(2);
-	    		aw2.setFireTicks(1200);
 
-	    		((Arrow) h1).setShooter(player);
-	    		((Arrow) h2).setShooter(player);
-			
-		}
 		
 		public void ProyectileShootType(Dispenser d, EntityType type , int option ,Location loc ) {
 					Location loc2 = loc;
@@ -2583,6 +2625,170 @@ public class EventRandoms implements Listener{
 				         
 
 					 }
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 /// TODO ARROWS
+		 
+		 
+			public int RandomPosOrNeg(int i) {
+				Random r = new Random();
+				int v = r.nextInt(i+1);
+				int r2 = r.nextInt(1+1);
+				if(r2 == 1) {
+					return v;
+				}
+				return TransformPosOrNeg(v);
+				
+			}
+			
+			public int TransformPosOrNeg(int i) {
+				return i =  (~(i -1));
+			}
+			
+			public void SpawnArrows(Player player,float addy ,float addp ) {
+				player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 20.0F, 1F);
+				Location loc = player.getLocation();
+				loc.setYaw(loc.getYaw()+addy);
+				loc.setPitch(loc.getPitch()+addp);
+				Vector v = loc.getDirection();
+				
+				Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
+				
+				h1.setVelocity(v.multiply(5));
+				Arrow aw = (Arrow) h1;
+				aw.setCritical(true);
+				aw.setKnockbackStrength(2);
+				//aw.setFireTicks(1200);
+				aw.setShooter(player);
+				//((Arrow) h1).setShooter(player);
+			}
+			
+			public void SpawnArrowsFire(Player player,float addy ,float addp ) {
+				player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 20.0F, 1F);
+				Location loc = player.getLocation();
+				loc.setYaw(loc.getYaw()+addy);
+				loc.setPitch(loc.getPitch()+addp);
+				Vector v = loc.getDirection();
+				
+				Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
+				
+				h1.setVelocity(v.multiply(5));
+				Arrow aw = (Arrow) h1;
+				aw.setCritical(true);
+				aw.setKnockbackStrength(2);
+				aw.setFireTicks(1200);
+				aw.setShooter(player);
+			}
+			
+			public void SpawnArrowsPoison(Player player,float addy ,float addp ) {
+				player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 20.0F, 1F);
+				PotionEffect poison = new PotionEffect(PotionEffectType.POISON,/*duration*/ 20*20,/*amplifier:*/50, false ,false,true );
+				Location loc = player.getLocation();
+				loc.setYaw(loc.getYaw()+addy);
+				loc.setPitch(loc.getPitch()+addp);
+				Vector v = loc.getDirection();
+				
+				Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
+				
+				h1.setVelocity(v.multiply(5));
+				Arrow aw = (Arrow) h1;
+				aw.setCritical(true);
+				aw.setColor(Color.GREEN);
+				aw.setKnockbackStrength(2);
+				aw.addCustomEffect(poison, false);
+				aw.setShooter(player);
+				//((Arrow) h1).setShooter(player);
+			}
+			
+			public void SpawnArrowsDamage(Player player,float addy ,float addp ) {
+				player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 20.0F, 1F);
+				PotionEffect damage = new PotionEffect(PotionEffectType.HARM,/*duration*/ 20*20,/*amplifier:*/50, false ,false,true );
+
+				Location loc = player.getLocation();
+				loc.setYaw(loc.getYaw()+addy);
+				loc.setPitch(loc.getPitch()+addp);
+				Vector v = loc.getDirection();
+				
+				Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
+				
+				h1.setVelocity(v.multiply(5));
+				Arrow aw = (Arrow) h1;
+				aw.setCritical(true);
+				aw.setColor(Color.RED);
+				aw.setKnockbackStrength(2);
+				aw.addCustomEffect(damage, false);
+				aw.setShooter(player);
+				
+				//((Arrow) h1).setShooter(player);
+			}
+			
+			public void SpawnArrowsExplosive(Player player,float addy ,float addp ) {
+				player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 20.0F, 1F);
+				Location loc = player.getLocation();
+				loc.setYaw(loc.getYaw()+addy);
+				loc.setPitch(loc.getPitch()+addp);
+				Vector v = loc.getDirection();
+				
+				Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
+				
+				h1.setVelocity(v.multiply(5));
+				Arrow aw = (Arrow) h1;
+				aw.setCritical(true);
+				aw.setKnockbackStrength(2);
+				aw.setCustomName("ArrowTNT");
+				aw.setPierceLevel(2);
+				aw.setShooter(player);
+			
+				
+				//((Arrow) h1).setShooter(player);
+			}
+
+			public void SpawnArrowsFireMob(Entity e,float addy ,float addp ) {
+			
+				Location loc = e.getLocation();
+				loc.setYaw(loc.getYaw()+addy);
+				loc.setPitch(loc.getPitch()+addp);
+				Vector v = loc.getDirection();
+				
+				Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
+				
+				h1.setVelocity(v.multiply(5));
+				Arrow aw = (Arrow) h1;
+				aw.setCritical(true);
+				aw.setKnockbackStrength(2);
+				aw.setFireTicks(1200);
+				aw.setShooter((ProjectileSource) e);
+			}
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
 					
 					
 		}

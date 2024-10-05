@@ -681,7 +681,7 @@ public class Comandos implements CommandExecutor{
 					 }else {
 					
 						Bukkit.getConsoleSender()
-						.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg stop <mapa> ");
+						.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg stop <mapa> <motivo Win , Lose , Error o Force>");
 					 }
 					
 			
