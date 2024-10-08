@@ -49,8 +49,7 @@ import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
 import me.nao.main.game.Minegame;
-import me.nao.manager.ClassArena;
-import me.nao.manager.ClassIntoGame;
+import me.nao.manager.MapIntoGame;
 import me.nao.manager.EstadoPartida;
 import me.nao.manager.StopMotivo;
 //import net.md_5.bungee.api.ChatMessageType;
@@ -173,8 +172,7 @@ public class InfectedTemp {
 				    		  if(part == EstadoPartida.COMENZANDO) {
 				    		  
 				    			ms.setEstadopartida(EstadoPartida.JUGANDO);
-				    			ClassArena c = new ClassArena(plugin);
-							    c.TptoSpawnMap(target, name);
+							    gc.TptoSpawnMap(target, name);
 				    			
 				    		  	}
 						  
@@ -272,7 +270,7 @@ public class InfectedTemp {
 									Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Jugadores que ganaron Infectado "+ChatColor.GREEN+alive+ChatColor.RED+" mapa: "+ChatColor.GREEN+name);
 
 									 ms.setEstadopartida(EstadoPartida.TERMINANDO);
-									ClassIntoGame cig = new ClassIntoGame(plugin);
+									MapIntoGame cig = new MapIntoGame(plugin);
 									cig.ObjetivesInGame(target, name);
   								
 									

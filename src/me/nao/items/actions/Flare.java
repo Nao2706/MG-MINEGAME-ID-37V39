@@ -19,9 +19,11 @@ public class Flare extends BukkitRunnable{
 	
 	private Item item;
 	private Player player;
+	private Minegame plugin;
 	
-	public Flare(Player player,ItemStack it, Location l) {
+	public Flare(Player player,ItemStack it, Location l,Minegame plugin) {
 		this.player = player;
+		this.plugin = plugin;
 		item = l.getWorld().dropItem(l,it);
 		item.setVelocity(player.getEyeLocation().getDirection().multiply(3));
 		runTaskTimer(JavaPlugin.getPlugin(Minegame.class),0,3);
@@ -45,7 +47,7 @@ public class Flare extends BukkitRunnable{
 		
 	 
 		if(item == null || item.isOnGround() || item.isDead() || item.isInWater()) {
-			FlareActions fl = new FlareActions();
+			FlareActions fl = new FlareActions(plugin);
 			if(item.getItemStack().isSimilar(Items.BENGALAROJA.getValue()) || item.getItemStack().isSimilar(Items.BENGALAROJAP.getValue()) ) {
 				
 				fl.SendAirStrike(player,item.getLocation());

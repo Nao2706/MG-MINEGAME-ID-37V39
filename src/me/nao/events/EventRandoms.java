@@ -247,7 +247,7 @@ public class EventRandoms implements Listener{
 		
 		
 		if(player.getInventory().getItemInMainHand() != null && player.getInventory().getItemInMainHand().isSimilar(Items.BENGALAROJA.getValue()) || player.getInventory().getItemInMainHand().isSimilar(Items.BENGALAVERDE.getValue())) {
-			new Flare(player, player.getInventory().getItemInMainHand(),player.getEyeLocation());
+			new Flare(player, player.getInventory().getItemInMainHand(),player.getEyeLocation(),plugin);
 		
 			return;
 		}
@@ -545,7 +545,7 @@ public class EventRandoms implements Listener{
 					}	
 					
 						if(e.getItem().isSimilar(Items.BENGALAROJAP.getValue()) || e.getItem().isSimilar(Items.BENGALAVERDEP.getValue())) {
-							new Flare(player, player.getInventory().getItemInMainHand(),player.getEyeLocation());
+							new Flare(player, player.getInventory().getItemInMainHand(),player.getEyeLocation(),plugin);
 							removeItemstackCustom(player,e.getItem());
 						}
 					
@@ -2560,7 +2560,7 @@ public class EventRandoms implements Listener{
 		                				 }
 		                				 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.RED+ChatColor.BOLD+"CRITICAL HEADSHOT"));
 		                				   
-		                		       }else {
+		                		       }else{
 		                		    	   		 ItemStack it = damage.getEquipment().getHelmet();
 		                		    	   	
 		    									 if(it.getType() == Material.NETHERITE_HELMET || it.getType() == Material.DIAMOND_HELMET || it.getType() == Material.GOLDEN_HELMET ||
@@ -2606,10 +2606,11 @@ public class EventRandoms implements Listener{
 		        		        	   			                }
 		    											 }			
 		    									}else{
+		    											 damage.getEquipment().setHelmet(new ItemStack(Material.AIR));
+					    								 damage.getWorld().spawnParticle(Particle.BLOCK_CRACK, damage.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
+														 player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 20.0F, 1F);
+														 return;
 		    										
-				    								 damage.getWorld().spawnParticle(Particle.BLOCK_CRACK, damage.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
-		    										 damage.getEquipment().setHelmet(new ItemStack(Material.AIR));
-													 player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 20.0F, 1F);
 		    									}
 		                 		    	   
 		    									

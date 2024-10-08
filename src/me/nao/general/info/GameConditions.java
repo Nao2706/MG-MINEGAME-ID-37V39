@@ -39,14 +39,17 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
 
+import com.viaversion.viaversion.api.Via;
+import com.viaversion.viaversion.api.ViaAPI;
+
 import me.nao.cooldown.ReportsManager;
 //import me.nao.gamemode.DestroyNexo;
 import me.nao.main.game.Minegame;
-import me.nao.manager.ClassArena;
-import me.nao.manager.ClassIntoGame;
+import me.nao.manager.MapIntoGame;
 import me.nao.manager.EstadoPartida;
 import me.nao.manager.StopMotivo;
 import me.nao.scoreboard.MgScore;
+import me.nao.shop.Items;
 import me.nao.teamsmg.MgTeams;
 import me.nao.timers.DialogRun;
 import me.nao.timers.InfectedTemp;
@@ -56,6 +59,7 @@ import me.nao.timers.ResistenceTemp;
 import me.nao.utils.Utils;
 import me.nao.yamlfile.game.YamlFilePlus;
 import me.top.users.PointsManager;
+
 
 public class GameConditions {
 	
@@ -68,12 +72,12 @@ public class GameConditions {
 	
 	
 	//TODO JOIN
-	
+	 
 	public void JoinToTheGames(Player player,String map) {
 		LoadDataMap(map);
 		
-		if(CanJoinToTheMision(player,map)){
-			ClassArena cl = new ClassArena(plugin);
+		if(CanJoinToTheMap(player,map)){
+			
 			if(ExistProblemBetweenInventorys(map)) {
 				player.sendMessage(ChatColor.RED+"Error conflicto de inventarios llama a un Administrador.");
 				return;
@@ -81,7 +85,7 @@ public class GameConditions {
 				//Salva al Jugador checa si debe setearle un inv
 				SetAndSavePlayer(player, map);
 				AddPlayerToGame(player,map);
-				cl.TptoPreLobbyMap(player, map);
+				TptoPreLobbyMap(player, map);
 				CanStartTheGame(player,map);
 				return;
 		}
@@ -228,7 +232,7 @@ public class GameConditions {
 				Block block = player.getLocation().getBlock();
 				Block b = block.getRelative(0, -2, 0);
 				if(b.getType() != Material.STRUCTURE_BLOCK) {
-					ClassIntoGame ci = new ClassIntoGame(plugin);
+					MapIntoGame ci = new MapIntoGame(plugin);
 					ci.PlayerDropAllItems(player);
 					LeaveOfTheGame(player);
 				
@@ -276,7 +280,215 @@ public class GameConditions {
 	}
 	
 	
+	 //TODO TP AL PRELOBBY DEL MAPA
+	   public void TptoPreLobbyMap(Player player ,String map){
+		   FileConfiguration ym = getGameConfig(map);
+		   if(ym.contains("Pre-Lobby")) {
+			    System.out.println("El jugador "+player.getName()+" fue hacia el prelobby con exito");
+			    String[] coords = ym.getString("Pre-Lobby").split("/");
+			    String world = coords[0];
+			    Double x = Double.valueOf(coords[1]);
+			    Double y = Double.valueOf(coords[2]);
+			    Double z = Double.valueOf(coords[3]);
+			    Float yaw = Float.valueOf(coords[4]);
+			    Float pitch = Float.valueOf(coords[5]);
 
+			    
+				player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 20.0F, 1F);
+				Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch);
+				player.setInvulnerable(true);
+				player.teleport(l);
+				return;
+			} 
+	   }
+	   
+	   //TODO TpEndSpawn
+	   public void EndTptoSpawn(Player player ,String arenaName){
+		   
+		   GameConditions gc = new GameConditions(plugin);
+		   FileConfiguration ym = gc.getGameConfig(arenaName);
+		   if(ym.contains("Spawn-End")) {
+			    String[] coords = ym.getString("Spawn-End").split("/");
+			    String world = coords[0];
+			    Double x = Double.valueOf(coords[1]);
+			    Double y = Double.valueOf(coords[2]);
+			    Double z = Double.valueOf(coords[3]);
+			    Float yaw = Float.valueOf(coords[4]);
+			    Float pitch = Float.valueOf(coords[5]);
+			   
+			    player.setInvulnerable(false);
+				player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 20.0F, 1F);
+				Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch);
+				Random r = new Random();
+				
+				List<String> l1 = new ArrayList<>();
+				l1.add(ChatColor.GREEN+"Por poco y no la cuentas menos mal saliste en una Pieza.");
+				l1.add(ChatColor.GREEN+"Sobreviviste felicidades por tu Victoria");
+				l1.add(ChatColor.GREEN+"Sobreviviste un dia mas para Luchar Felicidades");
+				l1.add(ChatColor.GREEN+"Puede que seas de los pocos con Vida sigue asi.");
+				
+				player.sendMessage(l1.get(r.nextInt(l1.size())));
+				player.teleport(l);
+			
+					return;
+				  
+			} 
+	   }
+	   
+	   
+	   //TODO TpDeathSpawn
+	   public void DeathTptoSpawn(Player player ,String arenaName){
+		   GameConditions gc = new GameConditions(plugin);
+		   FileConfiguration ym = gc.getGameConfig(arenaName);
+		   if(ym.contains("Spawn-Spectator")) {
+			    String[] coords = ym.getString("Spawn-Spectator").split("/");
+			    String world = coords[0];
+			    Double x = Double.valueOf(coords[1]);
+			    Double y = Double.valueOf(coords[2]);
+			    Double z = Double.valueOf(coords[3]);
+			    Float yaw = Float.valueOf(coords[4]);
+			    Float pitch = Float.valueOf(coords[5]);
+			   
+			    player.setInvulnerable(false);
+				player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 20.0F, 1F);
+				Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch);
+				player.teleport(l);
+			
+					return;
+				  
+			} 
+	   }
+	   
+	    
+	   public void TptoSpawnMapSimple(Player player){
+		   GameConditions gc = new GameConditions(plugin);
+		   PlayerInfo pi = plugin.getPlayerInfoPoo().get(player);
+		   FileConfiguration ym = gc.getGameConfig(pi.getMapName());
+		   if(ym.contains("Spawn")) {
+			   
+
+			   String[] coords = ym.getString("Spawn").split("/");
+			    String world = coords[0];
+			    Double x = Double.valueOf(coords[1]);
+			    Double y = Double.valueOf(coords[2]);
+			    Double z = Double.valueOf(coords[3]);
+			    Float yaw = Float.valueOf(coords[4]);
+			    Float pitch = Float.valueOf(coords[5]);
+				Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch);
+				player.teleport(l);
+				return;
+		   }
+	   }
+	   
+	   //TODO TP AL SPAWN DE LA ARENA
+	   public void TptoSpawnMap(Player player ,String map){
+		   GameConditions gc = new GameConditions(plugin);
+		   FileConfiguration ym = gc.getGameConfig(map);
+		   if(ym.contains("Spawn")) {
+			   
+			   
+			   GameInfo gm = plugin.getGameInfoPoo().get(map);
+			   plugin.getFirstLogMg().put(map, gm.ShowGame());
+			   
+			   List<String> startc = ym.getStringList("Start.Chat-Message");
+			   List<String> start = ym.getStringList("Start.Actions");
+			   
+			   String[] t = ym.getString("Start.Tittle-Time").split("-");
+			   int a = Integer.valueOf(t[0]);
+			   int b = Integer.valueOf(t[1]);
+			   int c = Integer.valueOf(t[2]);
+				//ym.set("Start.Actions", start);
+			    String[] coords = ym.getString("Spawn").split("/");
+			    String world = coords[0];
+			    Double x = Double.valueOf(coords[1]);
+			    Double y = Double.valueOf(coords[2]);
+			    Double z = Double.valueOf(coords[3]);
+			    Float yaw = Float.valueOf(coords[4]);
+			    Float pitch = Float.valueOf(coords[5]);
+			    
+			    
+			      
+			        String[] sts = ym.getString("Start.Sound-of-Mision").split(";");
+			        try {
+			    	    Sound soundtype = Sound.valueOf(sts[0].toUpperCase());
+					    Float volumen = Float.valueOf(sts[1]);
+					    Float grade = Float.valueOf(sts[2]);
+						player.playSound(player.getLocation(), soundtype, volumen,grade);
+			       }catch(IllegalArgumentException e) {
+			    	   Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Error de Argumentos en Start Sound of Mision en la arena: "+ChatColor.GOLD+map);
+			       }
+			
+			    player.setInvulnerable(false);
+				Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch);
+				player.teleport(l);
+				gc.SetHeartsInGame(player, map);
+				//este send message es un separador de chat contra la cuenta atras xd
+				player.sendMessage(" ");
+				
+				if(!startc.isEmpty()) {
+					for(int i = 0 ; i< startc.size();i++) { 
+						player.sendMessage(ChatColor.translateAlternateColorCodes('&',DifficultyMap(startc.get(i)).replaceAll("%player%", player.getName())));
+					}
+				}
+				
+				
+				player.sendTitle(ChatColor.translateAlternateColorCodes('&',ym.getString("Start.Tittle-of-Mision").replaceAll("%player%", player.getName())), ChatColor.translateAlternateColorCodes('&',DifficultyMap(ym.getString("Start.SubTittle-of-Mision")).replaceAll("%player%", player.getName())), a,b,c);
+				
+				ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+				if(!start.isEmpty()) {
+					for(int i = 0 ; i < start.size(); i++) {
+						String texto = start.get(i);
+						if(!gc.hasPlayerPermissionByLuckPerms(player, texto)) continue;
+						Bukkit.dispatchCommand(console, ChatColor.translateAlternateColorCodes('&', texto.replaceAll("%player%",player.getName())));
+					}
+				}
+				
+			     	 
+					gc.setKitMg(player);
+					if(gc.HasObjetives(map)) {
+						if(player.getInventory().getItemInMainHand() != null) {
+							if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
+								player.getInventory().setItemInMainHand(Items.OBJETIVOSP.getValue());
+								
+							}else {
+								ItemStack item = player.getInventory().getItemInMainHand();
+								player.getWorld().dropItem(player.getLocation(),item);
+								player.getInventory().setItemInMainHand(Items.OBJETIVOSP.getValue());
+							}
+							
+						}
+					}
+				//getInventoryY(player);
+				
+					return;
+				  
+			} 
+	   }
+	  
+
+	   //TP SPAWN SPECTATOR
+	   public void TptoSpawnSpectator(Player player ,String arenaName){
+		   GameConditions gc = new GameConditions(plugin);
+		   FileConfiguration ym = gc.getGameConfig(arenaName);
+		   if(ym.contains("Spawn-Spectator")) {
+			    String[] coords = ym.getString("Spawn-Spectator").split("/");
+			    String world = coords[0];
+			    Double x = Double.valueOf(coords[1]);
+			    Double y = Double.valueOf(coords[2]);
+			    Double z = Double.valueOf(coords[3]);
+			    Float yaw = Float.valueOf(coords[4]);
+			    Float pitch = Float.valueOf(coords[5]);
+			   
+			    player.setInvulnerable(false);
+				player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 20.0F, 1F);
+				Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch);
+				player.teleport(l);
+				//player.sendMessage(ChatColor.translateAlternateColorCodes('&',ym.getString("Chat-Message")));
+				//player.sendTitle(ChatColor.translateAlternateColorCodes('&',ym.getString("Tittle-of-Mision")), ChatColor.translateAlternateColorCodes('&',ym.getString("SubTittle-of-Mision")), 20, 40, 20);
+					return;
+				  
+			} 
+	   }   
 	
 	public void ForceGameModePlayerRol(Player player) {
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
@@ -313,8 +525,8 @@ public class GameConditions {
 		Block b = block.getRelative(0, 0, 0);
 		
 		if(b.getType() == Material.BARRIER && player.getGameMode() == GameMode.SPECTATOR) {
-			ClassArena c = new ClassArena(plugin);
-			c.TptoSpawnSpectator(player, pi.getMapName());
+			
+			TptoSpawnSpectator(player, pi.getMapName());
 			
 			Random r = new Random();
 			
@@ -332,6 +544,37 @@ public class GameConditions {
 	}
 	
 
+	
+
+	public String DifficultyMap(String text) {
+		
+		if(text.contains("%dific1%")) {
+			return text.replace("%dific1%",""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"DIFICULTAD:"+ChatColor.GREEN+ChatColor.BOLD+" FACIL"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]" );
+		}
+		if(text.contains("%dific2%")) {
+			return text.replace("%dific2%",""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"DIFICULTAD:"+ChatColor.YELLOW+ChatColor.BOLD+" MEDIA"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]" );
+		}
+		if(text.contains("%dific3%")) {
+			return text.replace("%dific3%",""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"DIFICULTAD:"+ChatColor.RED+ChatColor.BOLD+" DIFICIL"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]" );
+		}
+		if(text.contains("%dific4%")) {
+			return text.replace("%dific4%",""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"DIFICULTAD:"+ChatColor.DARK_RED+ChatColor.BOLD+" HARDCORE"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]" );
+		}
+		if(text.contains("%dific5%")) {
+			return text.replace("%dific5%",""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"DIFICULTAD:"+ChatColor.DARK_PURPLE+ChatColor.BOLD+" ELITE"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]" );
+		}
+		if(text.contains("%dific6%")) {
+			return text.replace("%dific6%",""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"DIFICULTAD:"+ChatColor.GOLD+ChatColor.BOLD+" LEYENDA"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]" );
+		}
+		if(text.contains("%resp1%")) {
+			return text.replace("%resp1%",""+ChatColor.YELLOW+ChatColor.BOLD+"NOTA: "+ChatColor.GREEN+"Incluye Cofres para ser Revivido por otros Jugadores." );
+		}
+		if(text.contains("%resp2%")) {
+			return text.replace("%resp2%",""+ChatColor.YELLOW+ChatColor.BOLD+"NOTA: "+ChatColor.RED+"No incluye Cofres para ser Revivido por otros Jugadores." );
+		}
+		
+		return text;
+	}
 	
 	
 	
@@ -1045,13 +1288,12 @@ public class GameConditions {
 				 List<String> spectador = ga.getSpectator();
 				 player.sendMessage(ChatColor.GREEN+"Estas como Espectador en el Mapa: "+ChatColor.GOLD+map);
 				 SendMessageToUsersOfSameMap(player, ChatColor.WHITE+"El Jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" se Unio como Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size())+ChatColor.RED+"]");
-				 ClassArena ca = new ClassArena(plugin);
-				 ca.TptoSpawnSpectator(player, map);
+				 TptoSpawnSpectator(player, map);
 		 }
 	}
 
 	
-	public boolean CanJoinToTheMision(Player player ,String map) {
+	public boolean CanJoinToTheMap(Player player ,String map) {
 		 if(isPlayerinGame(player)) {
 			 player.sendMessage(ChatColor.RED+"Ya estas en un Juego...");
 			 return false;
@@ -2541,6 +2783,148 @@ public class GameConditions {
 		
 	}	
    	
+	
+	   //TODO STOP
+	   public void StopGames(Player player , String name,StopMotivo motivo) {
+		   
+		   GameConditions gc = new GameConditions(plugin);
+			if(gc.ExistMap(name)) {
+				GameInfo ms = plugin.getGameInfoPoo().get(name);
+				if(ms instanceof GameAdventure) {
+					GameAdventure ga = (GameAdventure) ms;
+					EstadoPartida estadoPartida = ms.getEstopartida();
+					if(estadoPartida == EstadoPartida.JUGANDO) {
+						MapIntoGame ci = new MapIntoGame(plugin);
+						
+						ms.setMotivo(motivo);
+						List<String> vivos = ga.getVivo();
+						List<Player> players = gc.ConvertStringToPlayer(vivos);
+						if(motivo == StopMotivo.WIN) {
+							
+							if(vivos.isEmpty()) {
+								Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+ms.getGameType().toString()+ChatColor.GREEN+" Ganaron en la Arena: "+ChatColor.GOLD+name+ChatColor.GREEN+" por Condiciones varias , Terminando. Pero no hay ningun jugador vivo.");
+
+								return;
+							}
+							
+							Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+ms.getGameType().toString()+ChatColor.GREEN+"AVENTURA: Ganaron en la Arena: "+ChatColor.GOLD+name+ChatColor.GREEN+" por Condiciones varias , Terminando.");
+							
+							
+							if(ms.getGameType() == GameType.ADVENTURE) {
+								for(Player target : players) {
+									target.sendMessage(ChatColor.GREEN+"Victoria todos los que quedaron Vivos han Ganado...");
+									ci.GamePlayerWin(target);
+								}
+								return;
+							}else if(ms.getGameType() == GameType.RESISTENCE) {
+								
+								
+								for(Player target : players) {
+									target.sendMessage(ChatColor.GREEN+"Victoria todos los que quedaron Vivos han Ganado...");
+									gc.EndTptoSpawn(target, name);
+								}
+								return;
+							
+							}
+						
+						}else if(motivo == StopMotivo.LOSE) {
+							
+							if(vivos.isEmpty()) {
+								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+ms.getGameType().toString()+ChatColor.GREEN+"Perdieron en la Arena: "+ChatColor.GOLD+name+ChatColor.GREEN+" por Condiciones varias , Terminando. Pero no hay ningun jugador vivo.");
+
+								return;
+							}
+							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+ms.getGameType().toString()+ChatColor.RED+"Perdieron en la Arena: "+ChatColor.GREEN+name+ChatColor.RED+" por Condiciones varias , Terminando.");
+						
+							
+							if(ms.getGameType() == GameType.ADVENTURE) {
+								for(Player target : players) {
+									target.sendMessage(ChatColor.RED+"Todos los Jugadores con Vida han Perdido...");
+									ci.GamePlayerLost(target);
+								}
+								return;
+							}else if(ms.getGameType() == GameType.RESISTENCE) {
+								for(Player target : players) {
+									target.sendMessage(ChatColor.RED+"Todos los Jugadores con Vida han Perdido...");
+									ci.GamePlayerLost(target);
+								}
+								return;
+							}
+							
+						}else if(motivo == StopMotivo.ERROR) {
+							
+							
+							if(vivos.isEmpty()) {
+								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+ms.getGameType().toString()+ChatColor.GREEN+"Hubo un error en el Mapa: "+ChatColor.GOLD+name+ChatColor.GREEN+" por Condiciones varias , Terminando. Pero no hay ningun jugador vivo.");
+
+								return;
+							}
+							
+							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+ms.getGameType().toString()+ChatColor.RED+"Hubo un error en el Mapa: "+ChatColor.GREEN+name+ChatColor.RED+" Terminando.");
+							
+							if(ms.getGameType() == GameType.ADVENTURE) {
+								for(Player target : players) {
+									target.sendMessage(ChatColor.RED+"Hubo un error en el Mapa: "+ChatColor.GREEN+name+ChatColor.RED+" Terminando.");
+									ci.GamePlayerLost(target);
+								}
+								return;
+							}else if(ms.getGameType() == GameType.RESISTENCE) {
+								for(Player target : players) {
+									target.sendMessage(ChatColor.RED+"Hubo un error en el Mapa: "+ChatColor.GREEN+name+ChatColor.RED+" Terminando.");
+									ci.GamePlayerLost(target);
+								}
+								return;
+							}
+							
+						}else if(motivo == StopMotivo.FORCE) {
+							
+							
+							if(vivos.isEmpty()) {
+								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+ms.getGameType().toString()+ChatColor.GREEN+"Perdieron en el Mapa: "+ChatColor.GOLD+name+ChatColor.GREEN+" por Condiciones varias , Terminando. Pero no hay ningun jugador vivo.");
+
+								return;
+							}
+							
+							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+ms.getGameType().toString()+ChatColor.RED+"El Mapa "+ChatColor.GREEN+name+ChatColor.RED+" fue Forzada a terminar.");
+							
+							if(ms.getGameType() == GameType.ADVENTURE) {
+								for(Player target : players) {
+									target.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GREEN+name+ChatColor.RED+" fue Forzada a terminar.");
+									ci.GamePlayerLost(target);
+								}
+								return;
+							}else if(ms.getGameType() == GameType.RESISTENCE) {
+								for(Player target : players) {
+									target.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GREEN+name+ChatColor.RED+" fue Forzada a terminar.");
+									ci.GamePlayerLost(target);
+								}
+								return;
+							}
+						}
+					
+		    			
+		    		}else {
+		    			//no puedes detener una partida que no esta jugando
+		    			if(player != null) {
+							player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GREEN+name+ChatColor.RED+" no esta en estado Jugando.");
+						}
+						
+						Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GREEN+name+ChatColor.RED+" no esta en estado Jugando.");
+		    		}
+					
+				}else {
+					if(player != null) {
+						player.sendMessage(ChatColor.YELLOW+"El Mapa "+ChatColor.GREEN+name+ChatColor.YELLOW+" no existe");
+					}
+					Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+"El Mapa "+ChatColor.GREEN+name+ChatColor.YELLOW+" no existe");
+
+				}
+				
+			}
+				
+				
+	   }
+	
    	//TODO OBJETIVOS
  	public GameObjetivesMG LoadObjetivesOfGames(String map) {
    		FileConfiguration game = getGameConfig(map);
@@ -2548,7 +2932,7 @@ public class GameConditions {
    		List<ObjetivesMG> l = new ArrayList<>();   		
    		if(HasObjetives(map)) {
    			
-   			ObjetivesMG ghost = new ObjetivesMG("Mapa Con Objetivos Borrados",1,0,0,0,0,"Habilitaron los Objetivos pero no hay ninguno en la Config del Mapa.",ObjetiveType.WAITING,new HashMap<Player,Integer>());
+   			ObjetivesMG ghost = new ObjetivesMG("Mapa Con Objetivos Borrados",1,0,0,0,0,"Habilitaron los Objetivos pero no hay ninguno en la Config del Mapa.",ObjetiveStatusType.WAITING,new HashMap<Player,Integer>());
    			l.add(ghost);
    			if(game.contains("Game-Objetives")) {
    	   			for (String key : game.getConfigurationSection("Game-Objetives").getKeys(false)) {
@@ -2560,7 +2944,7 @@ public class GameConditions {
 	   				int valuei = game.getInt("Game-Objetives."+key+".Incomplete-Value");
    	   				
    	   				String description = ChatColor.translateAlternateColorCodes('&', game.getString("Game-Objetives."+key+".Description"));
-   	   				ObjetivesMG gob = new ObjetivesMG(key,priority,values,valueinit,valuec,valuei,description,ObjetiveType.valueOf(status.toUpperCase()),new HashMap<Player,Integer>());
+   	   				ObjetivesMG gob = new ObjetivesMG(key,priority,values,valueinit,valuec,valuei,description,ObjetiveStatusType.valueOf(status.toUpperCase()),new HashMap<Player,Integer>());
    	   				l.add(gob);
    	   				
    	   		}}
@@ -2584,7 +2968,7 @@ public class GameConditions {
    		List<ObjetivesMG> l = new ArrayList<>();
    		
    		if(HasObjetives(map)) {
-   			ObjetivesMG ghost = new ObjetivesMG("Mapa Con Objetivos Borrados",1,0,0,0,0,"Habilitaron los Objetivos pero no hay ninguno en la Config del Mapa.",ObjetiveType.WAITING,new HashMap<Player,Integer>());
+   			ObjetivesMG ghost = new ObjetivesMG("Mapa Con Objetivos Borrados",1,0,0,0,0,"Habilitaron los Objetivos pero no hay ninguno en la Config del Mapa.",ObjetiveStatusType.WAITING,new HashMap<Player,Integer>());
    			l.add(ghost);
 	   		if(game.contains("Game-Objetives")) {
 	   			for (String key : game.getConfigurationSection("Game-Objetives").getKeys(false)) {
@@ -2611,7 +2995,7 @@ public class GameConditions {
 	   				System.out.println(objetives2mg.toString());
 	   				System.out.println(objetivesaction2.toString());
 	   				
-	   				ObjetivesMG omg = new ObjetivesMG(key,priority,values,valueinit,valuec,valuei,descripcion, ObjetiveType.valueOf(status.toUpperCase()),new HashMap<Player,Integer>());
+	   				ObjetivesMG omg = new ObjetivesMG(key,priority,values,valueinit,valuec,valuei,descripcion, ObjetiveStatusType.valueOf(status.toUpperCase()),new HashMap<Player,Integer>());
 	   				l.add(omg);
 	   		}}
 	   		
@@ -2644,7 +3028,7 @@ public class GameConditions {
    		if(!l.isEmpty()) {
    			for(int i = 0 ; i < l.size();i++) {
    				ObjetivesMG obj = l.get(i);
-   				if(obj.getPriority() == 1 && obj.getObjetiveType() != ObjetiveType.COMPLETE) {
+   				if(obj.getPriority() == 1 && obj.getObjetiveType() != ObjetiveStatusType.COMPLETE) {
    					p.add(obj);
    			}}
    		}
@@ -2694,7 +3078,7 @@ public class GameConditions {
    		if(!l.isEmpty()) {
    			for(int i = 0 ; i < l.size();i++) {
    				ObjetivesMG obj = l.get(i);
-   				if(obj.getPriority() >= 2 && obj.getObjetiveType() != ObjetiveType.COMPLETE) {
+   				if(obj.getPriority() >= 2 && obj.getObjetiveType() != ObjetiveStatusType.COMPLETE) {
    					p.add(obj);
    			}}
    		}
@@ -2746,7 +3130,7 @@ public class GameConditions {
    		if(!l.isEmpty()) {
    			for(int i = 0 ; i < l.size();i++) {
    				ObjetivesMG obj = l.get(i);
-   				if(obj.getPriority() == 1 && obj.getObjetiveType() != ObjetiveType.COMPLETE) {
+   				if(obj.getPriority() == 1 && obj.getObjetiveType() != ObjetiveStatusType.COMPLETE) {
    					
    					p.add(obj);
    			}}
@@ -2771,7 +3155,7 @@ public class GameConditions {
    			for(int i = 0 ; i < l.size();i++) {
    				ObjetivesMG obj = l.get(i);
 
-   				if(obj.getPriority() >= 2 && obj.getObjetiveType() != ObjetiveType.COMPLETE) {
+   				if(obj.getPriority() >= 2 && obj.getObjetiveType() != ObjetiveStatusType.COMPLETE) {
    					p.add(obj);
    				}}
    		}
@@ -2804,19 +3188,19 @@ public class GameConditions {
 			
 			ObjetivesMG obj = l.stream().filter(o -> o.getNombre().equals(name)).findFirst().get();
 			
-			if(obj.getObjetiveType() == ObjetiveType.COMPLETE) {
+			if(obj.getObjetiveType() == ObjetiveStatusType.COMPLETE) {
 				SendMessageToUserAndConsole(null,ChatColor.GOLD+map+" "+ChatColor.GREEN+"El Objetivo "+name+" alcanzo el Estado Completo.");
 				return;
-			}else if(obj.getObjetiveType() == ObjetiveType.INCOMPLETE) {
+			}else if(obj.getObjetiveType() == ObjetiveStatusType.INCOMPLETE) {
 				SendMessageToUserAndConsole(null,ChatColor.GOLD+map+" "+ChatColor.GREEN+"El Objetivo "+name+" alcanzo el Estado Incompleto.");
 				return;
-			}else if(obj.getObjetiveType() == ObjetiveType.CONCLUDED) {
+			}else if(obj.getObjetiveType() == ObjetiveStatusType.CONCLUDED) {
 				SendMessageToUserAndConsole(null,ChatColor.GOLD+map+" "+ChatColor.GREEN+"El Objetivo "+name+" alcanzo el Estado Concluido.");
 				return;
-			}else if(obj.getObjetiveType() == ObjetiveType.CANCELLED) {
+			}else if(obj.getObjetiveType() == ObjetiveStatusType.CANCELLED) {
 				SendMessageToUserAndConsole(null,ChatColor.GOLD+map+" "+ChatColor.GREEN+"El Objetivo "+name+" alcanzo el Estado Cancelado.");
 				return;
-			}else if(obj.getObjetiveType() == ObjetiveType.WAITING || obj.getObjetiveType() == ObjetiveType.WARNING || obj.getObjetiveType() == ObjetiveType.DANGER) {
+			}else if(obj.getObjetiveType() == ObjetiveStatusType.WAITING || obj.getObjetiveType() == ObjetiveStatusType.WARNING || obj.getObjetiveType() == ObjetiveStatusType.DANGER) {
 				int vals = obj.getStartValue();
 				int val =  obj.getValue();
 				int valc = obj.getCompleteValue();
@@ -2831,11 +3215,11 @@ public class GameConditions {
 					if(val <= valc) {
 						
 						//SI ES WAIT PASA A COMPLETO SI ES DANGER O WARNING A CONCLUDED
-						if(obj.getObjetiveType() == ObjetiveType.WAITING) {
-							obj.setObjetiveType(ObjetiveType.COMPLETE);
+						if(obj.getObjetiveType() == ObjetiveStatusType.WAITING) {
+							obj.setObjetiveType(ObjetiveStatusType.COMPLETE);
 							
 						}else {
-							obj.setObjetiveType(ObjetiveType.CONCLUDED);
+							obj.setObjetiveType(ObjetiveStatusType.CONCLUDED);
 						}
 						obj.setValue(obj.getCompleteValue());
 						ObjetiveGeneralActionsComplete(map,obj,gi);
@@ -2864,10 +3248,10 @@ public class GameConditions {
 						
 					
 					}else if(val >= vali) {
-						if(obj.getObjetiveType() == ObjetiveType.WAITING) {
-							obj.setObjetiveType(ObjetiveType.INCOMPLETE);
+						if(obj.getObjetiveType() == ObjetiveStatusType.WAITING) {
+							obj.setObjetiveType(ObjetiveStatusType.INCOMPLETE);
 						}else {
-							obj.setObjetiveType(ObjetiveType.CONCLUDED);
+							obj.setObjetiveType(ObjetiveStatusType.CONCLUDED);
 						}
 						obj.setValue(obj.getIncompleteValue());
 						ObjetiveGeneralActionsIncomplete(map,obj,gi);
@@ -2905,10 +3289,10 @@ public class GameConditions {
 					//VALOR START: 0  VALOR COMPLETE: 10
 				}else if(vals < valc) {
 					if(val >= valc) {
-						if(obj.getObjetiveType() == ObjetiveType.WAITING) {
-							obj.setObjetiveType(ObjetiveType.COMPLETE);
+						if(obj.getObjetiveType() == ObjetiveStatusType.WAITING) {
+							obj.setObjetiveType(ObjetiveStatusType.COMPLETE);
 						}else {
-							obj.setObjetiveType(ObjetiveType.CONCLUDED);
+							obj.setObjetiveType(ObjetiveStatusType.CONCLUDED);
 						}
 						obj.setValue(obj.getCompleteValue()); 
 						ObjetiveGeneralActionsComplete(map,obj,gi);
@@ -2935,10 +3319,10 @@ public class GameConditions {
 						}
 						
 					}else if(val <= vali) {
-						if(obj.getObjetiveType() == ObjetiveType.WAITING) {
-							obj.setObjetiveType(ObjetiveType.INCOMPLETE);
+						if(obj.getObjetiveType() == ObjetiveStatusType.WAITING) {
+							obj.setObjetiveType(ObjetiveStatusType.INCOMPLETE);
 						}else {
-							obj.setObjetiveType(ObjetiveType.CONCLUDED);
+							obj.setObjetiveType(ObjetiveStatusType.CONCLUDED);
 						}
 						obj.setValue(obj.getIncompleteValue());
 						ObjetiveGeneralActionsIncomplete(map,obj,gi);
@@ -3036,7 +3420,7 @@ public class GameConditions {
 	 
 
 	//TODO TYPE
-	public void ObjetiveChangeType(String map, String name, ObjetiveType ob,String player) {
+	public void ObjetiveChangeType(String map, String name, ObjetiveStatusType ob,String player) {
 		
 		if(!isMapinGame(map)) {
 			SendMessageToUserAndConsole(null,"El Mapa "+map+" no esta en Juego no puedes editar el tipo de Objetivos.");
@@ -3055,7 +3439,7 @@ public class GameConditions {
 			GameConditions gc = new GameConditions(plugin);
 			switch(ob) {
 			case WAITING:
-				mo.setObjetiveType(ObjetiveType.WAITING);
+				mo.setObjetiveType(ObjetiveStatusType.WAITING);
 				SendMessageToAllPlayersInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Esperando.");
 				
 				if(player != null) {
@@ -3068,7 +3452,7 @@ public class GameConditions {
 				
 				break;
 			case COMPLETE:
-				mo.setObjetiveType(ObjetiveType.COMPLETE);
+				mo.setObjetiveType(ObjetiveStatusType.COMPLETE);
 				SendMessageToAllPlayersInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" fue Completado.");
 				mo.setValue(mo.getCompleteValue());
 				ObjetiveGeneralActionsComplete(map,mo,gi);
@@ -3087,7 +3471,7 @@ public class GameConditions {
 				
 				break;
 			case INCOMPLETE:
-				mo.setObjetiveType(ObjetiveType.INCOMPLETE);
+				mo.setObjetiveType(ObjetiveStatusType.INCOMPLETE);
 				SendMessageToAllPlayersInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Incompleto.");
 				mo.setValue(mo.getIncompleteValue());
 				ObjetiveGeneralActionsIncomplete(map,mo,gi);
@@ -3104,11 +3488,11 @@ public class GameConditions {
 				
 				break;
 			case DANGER:
-				mo.setObjetiveType(ObjetiveType.DANGER);
+				mo.setObjetiveType(ObjetiveStatusType.DANGER);
 				SendMessageToAllPlayersOpInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Peligro.");
 				break;
 			case UNKNOW:
-				mo.setObjetiveType(ObjetiveType.UNKNOW);
+				mo.setObjetiveType(ObjetiveStatusType.UNKNOW);
 				SendMessageToAllPlayersOpInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Desconocido.");
 				
 				if(player != null) {
@@ -3120,11 +3504,11 @@ public class GameConditions {
 				}
 				break;
 			case WARNING:
-				mo.setObjetiveType(ObjetiveType.WARNING);
+				mo.setObjetiveType(ObjetiveStatusType.WARNING);
 				SendMessageToAllPlayersOpInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Advertencia.");
 				break;
 			case RESET:
-				mo.setObjetiveType(ObjetiveType.WAITING);
+				mo.setObjetiveType(ObjetiveStatusType.WAITING);
 				SendMessageToAllPlayersOpInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" se Reseteo.");
 				mo.setValue(mo.getStartValue());
 				if(mo.getPriority() == 1) {
@@ -3135,17 +3519,17 @@ public class GameConditions {
 				
 				break;
 			case CONCLUDED:
-				mo.setObjetiveType(ObjetiveType.CONCLUDED);
+				mo.setObjetiveType(ObjetiveStatusType.CONCLUDED);
 				SendMessageToAllPlayersOpInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" a Concluido.");
 				mo.setValue(mo.getCompleteValue());
 				ObjetiveGeneralActionsComplete(map,mo,gi);
 				break;
 			case HIDE:
-				mo.setObjetiveType(ObjetiveType.HIDE);
+				mo.setObjetiveType(ObjetiveStatusType.HIDE);
 				SendMessageToAllPlayersInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" esta Oculto.");
 				break;
 			case CANCELLED:
-				mo.setObjetiveType(ObjetiveType.CANCELLED);
+				mo.setObjetiveType(ObjetiveStatusType.CANCELLED);
 				SendMessageToAllPlayersOpInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" esta Cancelado.");
 				break;
 			default:
@@ -3156,6 +3540,11 @@ public class GameConditions {
 		
 		
 	}
+	
+	
+	
+	
+	
    
    	//mg objetive-primary complete 1
     //mg objetive-secondary complete 1
@@ -3170,7 +3559,7 @@ public class GameConditions {
    		
    		if(!l.isEmpty()) {
    			for(int i = 0;i<l.size();i++) {
-   				if(l.get(i).getObjetiveType() == ObjetiveType.COMPLETE) {
+   				if(l.get(i).getObjetiveType() == ObjetiveStatusType.COMPLETE) {
    					complete.add(l.get(i).getNombre());
    		  }}}
    		
@@ -3298,6 +3687,145 @@ public class GameConditions {
 	}
 	
 	
+	
+	
+	public void getPlayerVersion(Player player) {
+		
+		
+		if(Bukkit.getPluginManager().getPlugin("ViaVersion") != null) {
+			//
+			@SuppressWarnings("rawtypes")
+			ViaAPI api = Via.getAPI(); // Get the API
+			@SuppressWarnings("unchecked")
+			int version = api.getPlayerVersion(player); // Get the protocol version
+			
+		
+			player.sendMessage("La version de tu minecraft es: "+ConvertProtocolVersion(version));
+			
+		}else {
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+" ViaVersion no encontrado para MG");
+		}
+		
+		
+	}
+	
+	
+	public String ConvertProtocolVersion(int protocol) {
+		String version = "";
+		
+		
+		switch(protocol) {
+			case 47:
+				version = "1.8 - 1.8.8";
+			break;
+			case 107:
+				version = "1.9";
+			break;
+			case 110:
+				version = "1.9.3 - 1.9.4";
+			break;
+			case  210:
+				version = "1.10";
+			break;
+			case  315:
+				version = "1.11";
+			break;
+			case  316:
+				version = "1.11.1 - 1.11.2";
+			break;
+			case  335:
+				version = "1.12";
+			break;
+			case  338:
+				version = "1.12.1";
+			break;
+			case  340:
+				version = "1.12.1";
+			break;
+			case  393:
+				version = "1.13";
+			break;
+			case  477:
+				version = "1.14";
+			break;
+			case  480:
+				version = "1.14.1";
+			break;
+			case  485:
+				version = "1.14.2";
+			break;
+			case  490:
+				version = "1.14.3";
+			break;
+			case  498:
+				version = "1.14.4";
+			break;
+			case  573:
+				version = "1.15";
+			break;
+			case  575:
+				version = "1.15.1";
+			break;
+			case  578:
+				version = "1.15.2";
+			break;
+			case  735:
+				version = "1.16";
+			break;
+			case  736:
+				version = "1.16.1";
+			break;
+			case  751:
+				version = "1.16.2";
+			break;
+			case  753:
+				version = "1.16.3";
+			break;
+			case  754:
+				version = "1.16.4";
+			break;
+			case  755:
+				version = "1.17";
+			break;
+			case  756:
+				version = "1.17.1";
+			break;
+			case  757:
+				version = "1.18";
+			break;
+			case  758:
+				version = "1.18.2";
+			break;
+			case  759:
+				version = "1.19";
+			break;
+			case  760:
+				version = "1.19.1";
+			break;
+			case  762:
+				version = "1.19.4";
+			break;
+			case  763:
+				version = "1.20 - 1.20.1";
+			break;
+			case  764:
+				version = "1.20.2";
+			break;
+			case  765:
+				version = "1.20.3 - 1.20.4";
+			break;
+			case  766:
+				version = "1.20.5";
+			break;
+			default:
+			version = "Esta usando una version Snapshot.";	
+		}
+		return version;
+	}
+	
+	
+	
+	//TODO NEXO
 	public Location RedNexo(String name) {
 		   FileConfiguration ym = getGameConfig(name);
 		   if(!ym.contains("Red-Nexo")) {

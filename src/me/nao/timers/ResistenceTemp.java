@@ -54,8 +54,7 @@ import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
 import me.nao.main.game.Minegame;
-import me.nao.manager.ClassArena;
-import me.nao.manager.ClassIntoGame;
+import me.nao.manager.MapIntoGame;
 import me.nao.manager.EstadoPartida;
 import me.nao.manager.StopMotivo;
 //import net.md_5.bungee.api.ChatMessageType;
@@ -186,8 +185,8 @@ public class ResistenceTemp {
 				    		  if(part == EstadoPartida.COMENZANDO) {
 				    		  
 				    			ms.setEstadopartida(EstadoPartida.JUGANDO);
-				    			ClassArena c = new ClassArena(plugin);
-							    c.TptoSpawnMap(players, name);
+				    			
+							    gc.TptoSpawnMap(players, name);
 				    		
 				    		  	}
 						  
@@ -265,7 +264,7 @@ public class ResistenceTemp {
 				 
 				  
 				  if(segundo == 0 && minuto == 0 && hora == 0) {
-					  ClassIntoGame cig = new ClassIntoGame(plugin);
+					  MapIntoGame cig = new MapIntoGame(plugin);
 						 for(Player players : alive) {
 							 cig.ObjetivesInGame(players, name);
 						 }

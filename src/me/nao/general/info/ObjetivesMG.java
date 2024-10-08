@@ -9,10 +9,10 @@ public class ObjetivesMG {
 	
 	private String nombre ,description;
 	private int priority ,valuestart, valueinitial, valuecomplete,valueincomplete;
-	private ObjetiveType status;
+	private ObjetiveStatusType status;
 	private HashMap<Player,Integer> value;
 	
-	public ObjetivesMG(String nombre,  int priority, int valuestart, int valueinitial, int valuecomplete,int valueincomplete,String description, ObjetiveType status,HashMap<Player,Integer> value) {
+	public ObjetivesMG(String nombre,  int priority, int valuestart, int valueinitial, int valuecomplete,int valueincomplete,String description, ObjetiveStatusType status,HashMap<Player,Integer> value) {
 		this.nombre = nombre;
 		this.valuestart = valuestart;
 		this.valueinitial = valueinitial;
@@ -52,7 +52,7 @@ public class ObjetivesMG {
 		return description;
 	}
 
-	public ObjetiveType getObjetiveType() {
+	public ObjetiveStatusType getObjetiveType() {
 		return status;
 	}
 	
@@ -64,7 +64,7 @@ public class ObjetivesMG {
 		this.valueinitial = valueinitial;
 	}
 
-	public void setObjetiveType(ObjetiveType status) {
+	public void setObjetiveType(ObjetiveStatusType status) {
 		this.status = status;
 	}
 	

@@ -55,8 +55,7 @@ import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
 import me.nao.main.game.Minegame;
-import me.nao.manager.ClassArena;
-import me.nao.manager.ClassIntoGame;
+import me.nao.manager.MapIntoGame;
 import me.nao.manager.EstadoPartida;
 import me.nao.manager.StopMotivo;
 //import net.md_5.bungee.api.ChatMessageType;
@@ -87,7 +86,7 @@ public class AdventureTemp {
 		
 		FileConfiguration config = plugin.getConfig();
 		GameConditions gc = new GameConditions(plugin);
-		ClassIntoGame c = new ClassIntoGame(plugin);
+		MapIntoGame c = new MapIntoGame(plugin);
 		BukkitScheduler sh = Bukkit.getServer().getScheduler();
        
 		taskID = sh.scheduleSyncRepeatingTask(plugin,new Runnable(){
@@ -192,8 +191,8 @@ public class AdventureTemp {
 				    		  
 				    			ms.setEstadopartida(EstadoPartida.JUGANDO);
 				    			
-				    			ClassArena c = new ClassArena(plugin);
-							    c.TptoSpawnMap(players, name);
+				    			
+							    gc.TptoSpawnMap(players, name);
 				    			
 				    		}
 						  

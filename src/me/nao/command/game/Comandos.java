@@ -53,10 +53,10 @@ import me.nao.gamemode.InfectedGame;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameReportType;
 import me.nao.general.info.GameReports;
-import me.nao.general.info.ObjetiveType;
+import me.nao.general.info.ObjetiveStatusType;
 import me.nao.main.game.Minegame;
-import me.nao.manager.ClassArena;
-import me.nao.manager.ClassIntoGame;
+import me.nao.manager.MapManager;
+import me.nao.manager.MapIntoGame;
 import me.nao.manager.StopMotivo;
 import me.nao.scoreboard.MgScore;
 import me.nao.shop.Items;
@@ -193,7 +193,7 @@ public class Comandos implements CommandExecutor{
 							gc.ObjetivesValue(map, name, value,null);
 						}else {
 							try {
-								ObjetiveType obj = ObjetiveType.valueOf(numberoenum.toUpperCase());
+								ObjetiveStatusType obj = ObjetiveStatusType.valueOf(numberoenum.toUpperCase());
 								if(obj != null) {
 									gc.ObjetiveChangeType(map, name, obj,null);
 								}else {
@@ -217,7 +217,7 @@ public class Comandos implements CommandExecutor{
 							gc.ObjetivesValue(map, name, value,target);
 						}else {
 							try {
-								ObjetiveType obj = ObjetiveType.valueOf(numberoenum.toUpperCase());
+								ObjetiveStatusType obj = ObjetiveStatusType.valueOf(numberoenum.toUpperCase());
 								if(obj != null) {
 									gc.ObjetiveChangeType(map, name, obj,target);
 								}else {
@@ -606,7 +606,7 @@ public class Comandos implements CommandExecutor{
 						
 						//plugin.yml = new YamlFile(plugin,name, new File(plugin.getDataFolder().getAbsolutePath()+carpeta));;
 						
-						ClassArena ca = new ClassArena(plugin);
+						MapManager ca = new MapManager(plugin);
 						ca.CreateNewGame(name,null);
 						
 						
@@ -624,7 +624,7 @@ public class Comandos implements CommandExecutor{
 							String name = args[1];
 							String path = args[2];
 							//mg creaete lol
-							ClassArena ca = new ClassArena(plugin);
+							MapManager ca = new MapManager(plugin);
 							ca.CreateDialog(name, path, null);
 						
 						 }else {
@@ -644,7 +644,7 @@ public class Comandos implements CommandExecutor{
 					String name = args[1];
 					String path = args[2];
 					//mg creaete lol
-					ClassArena ca = new ClassArena(plugin);
+					MapManager ca = new MapManager(plugin);
 					ca.CreateDialog(name, path, null);
 				
 				 }else {
@@ -669,8 +669,8 @@ public class Comandos implements CommandExecutor{
 							//plugin.yml = new YamlFile(plugin,name, new File(plugin.getDataFolder().getAbsolutePath()+carpeta));;
 							//MG STOP NAME
 							Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"STOP MOTIVO: "+motivo.toString());
-							ClassArena c = new ClassArena(plugin);
-							c.StopGames(null, name,motivo);
+						
+							gc.StopGames(null, name,motivo);
 						}catch(IllegalArgumentException e) {
 							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Ese motivo no existe usa: Win , Lose , Error o Force. ");
 						}
@@ -724,7 +724,7 @@ public class Comandos implements CommandExecutor{
 				   
 				    
 					if(target != null) {
-						ClassIntoGame ci = new ClassIntoGame(plugin);
+						MapIntoGame ci = new MapIntoGame(plugin);
 						ci.GameRevivePlayerByCommand(null, target.getName());
 						//target.setMaxHealth(target.getMaxHealth());
 						
@@ -792,7 +792,7 @@ public class Comandos implements CommandExecutor{
 			
 			//TODO PLAYER
 			GameConditions gc = new GameConditions(plugin);
-			ClassArena c = new ClassArena(plugin);
+			MapManager c = new MapManager(plugin);
 			Player player = (Player) sender ;
 	
 			
@@ -1778,7 +1778,7 @@ public class Comandos implements CommandExecutor{
 					   
 					    
 						if(target != null) {
-							ClassIntoGame ci = new ClassIntoGame(plugin);
+							MapIntoGame ci = new MapIntoGame(plugin);
 							ci.GameRevivePlayerByCommand(player, target.getName());
 							//target.setMaxHealth(target.getMaxHealth());
 							
@@ -2457,7 +2457,7 @@ public class Comandos implements CommandExecutor{
 							gc.ObjetivesValue(map, name, value,null);
 						}else {
 							try {
-								ObjetiveType obj = ObjetiveType.valueOf(nmberorenum.toUpperCase());
+								ObjetiveStatusType obj = ObjetiveStatusType.valueOf(nmberorenum.toUpperCase());
 								if(obj != null) {
 									gc.ObjetiveChangeType(map, name, obj,null);
 									
@@ -2486,7 +2486,7 @@ public class Comandos implements CommandExecutor{
 							gc.ObjetivesValue(map, name, value,target);
 						}else {
 							 try {
-								ObjetiveType obj = ObjetiveType.valueOf(nmberorenum.toUpperCase());
+								ObjetiveStatusType obj = ObjetiveStatusType.valueOf(nmberorenum.toUpperCase());
 								if(obj != null) {
 									gc.ObjetiveChangeType(map, name, obj,target);
 									
@@ -2523,7 +2523,7 @@ public class Comandos implements CommandExecutor{
 					
 					return true;
 				}else if(args[0].equalsIgnoreCase("dropentity")){
-					ClassIntoGame ci = new ClassIntoGame(plugin);
+					MapIntoGame ci = new MapIntoGame(plugin);
 					ci.ItemDropEntity(player);
 					
 					return true;
@@ -2599,17 +2599,18 @@ public class Comandos implements CommandExecutor{
 					
 					
 					return true;
-				}
-				
-				else if (args[0].equalsIgnoreCase("points")) {
+				}else if (args[0].equalsIgnoreCase("points")) {
 					if(gc.isPlayerinGame(player)) {
 					//	String arena = plugin.getArenaPlayerInfo().get(player);
-						ClassIntoGame cs = new ClassIntoGame(plugin);
+						MapIntoGame cs = new MapIntoGame(plugin);
 						cs.getPointsOfPlayerGame(player);
 						
 					}else {
 						player.sendMessage(plugin.nombre+ChatColor.RED+" No estas en ningun Juego.");
 					}
+					return true;
+				}else if (args[0].equalsIgnoreCase("minecraft")) {
+					gc.getPlayerVersion(player);
 					return true;
 				}else if (args[0].equalsIgnoreCase("stop")) {
 				if(player.isOp()) {
@@ -2621,7 +2622,7 @@ public class Comandos implements CommandExecutor{
 								//plugin.yml = new YamlFile(plugin,name, new File(plugin.getDataFolder().getAbsolutePath()+carpeta));;
 								//MG STOP NAME
 								Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"STOP MOTIVO: "+motivo.toString());
-								c.StopGames(player, name,motivo);
+								gc.StopGames(player, name,motivo);
 							}catch(IllegalArgumentException e) {
 								player.sendMessage(plugin.nombre+ChatColor.GREEN+" Ese motivo no existe usa: Win , Lose , Error o Force. ");
 							}

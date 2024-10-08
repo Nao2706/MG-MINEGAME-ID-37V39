@@ -16,19 +16,29 @@ import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
+import me.nao.general.info.GameConditions;
+import me.nao.main.game.Minegame;
 import me.nao.shop.Items;
 
 
 
 public class FlareActions {
 	
+	private Minegame plugin;
+	
+	public FlareActions(Minegame plugin) {
+		this.plugin = plugin;
+	}
+	
+	
 	public void SendAirDrop(Player player,Location l ) {
 		
-	
-	
+		GameConditions gc = new GameConditions(plugin);
+		String map = plugin.getPlayerInfoPoo().get(player).getMapName();
+		
 		Block b = l.getWorld().getHighestBlockAt(l);
 		if(b.getType() == Material.BARRIER) {
-			player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"AC 130: "+ChatColor.GREEN+"Paquete de ayuda en Camino suerte.");
+			gc.SendMessageToAllPlayersInMap(map,""+ChatColor.RED+ChatColor.BOLD+"AC 130: "+ChatColor.GREEN+"Paquete de ayuda solicitado por "+ChatColor.GOLD+player.getName()+ChatColor.GREEN+" suerte.");
 
 			StorageMinecart ent = (StorageMinecart) b.getWorld().spawnEntity(b.getLocation().add(0.5, -3, 0.5), EntityType.MINECART_CHEST);
 			ent.setCustomName(""+ChatColor.GREEN+ChatColor.BOLD+"PAQUETE DE AYUDA");
@@ -54,9 +64,13 @@ public class FlareActions {
 	}
 	
 	public void SendAirStrike(Player player,Location l) {
+		
+		GameConditions gc = new GameConditions(plugin);
+		String map = plugin.getPlayerInfoPoo().get(player).getMapName();
+		
 		Block b = l.getWorld().getHighestBlockAt(l);
 		if(b.getType() == Material.BARRIER) {
-			player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"A10 WARTHOG: "+ChatColor.GREEN+"Ataque en Camino");
+			gc.SendMessageToAllPlayersInMap(map,""+ChatColor.RED+ChatColor.BOLD+"A10 WARTHOG: "+ChatColor.GREEN+"Ataque Aereo Solicitado por "+ChatColor.GOLD+player.getName()+ChatColor.GREEN+" en Camino.");
 
 			Entity fb = b.getWorld().spawnEntity(b.getLocation().add(0.5, -1, 0.5), EntityType.FIREBALL);
 			//fb.setCustomName("Mortero");

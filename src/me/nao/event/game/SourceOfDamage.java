@@ -43,7 +43,7 @@ import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
 import me.nao.general.info.PlayerInfo;
 import me.nao.main.game.Minegame;
-import me.nao.manager.ClassIntoGame;
+import me.nao.manager.MapIntoGame;
 
 
 
@@ -161,7 +161,7 @@ public class SourceOfDamage implements Listener{
 			if(gc.isPlayerinGame(player)) {
 				gc.ForceGameModePlayerRol(player);
 				gc.TryToScapeInSpectatorMode(player);
-				ClassIntoGame ci = new ClassIntoGame(plugin);
+				MapIntoGame ci = new MapIntoGame(plugin);
 				ci.GamePlayerFallMap(player);
 				ci.GamePlayerWin(player);
 //				ci.PlayerFallMap(player);	
@@ -401,7 +401,7 @@ public class SourceOfDamage implements Listener{
 					
 				
 				
-				 ClassIntoGame c = new ClassIntoGame(plugin);
+				 MapIntoGame c = new MapIntoGame(plugin);
 				 c.GamePlayerAddPoints(player);
 				 
 				 //iba el otor
@@ -504,7 +504,7 @@ public class SourceOfDamage implements Listener{
 					if(target != null && gc.isPlayerinGame(target)){
 						//PlayerInfo pi = plugin.getPlayerInfoPoo().get(target);
 						e.setCancelled(true);
-						 ClassIntoGame cs = new ClassIntoGame(plugin);
+						 MapIntoGame cs = new MapIntoGame(plugin);
 						 cs.GamePlayerDeadInMap(target);
 						 target.setHealth(20);
 						 target.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"INSTAKILL DE AREA", 40, 80, 40);
@@ -550,7 +550,7 @@ public class SourceOfDamage implements Listener{
 					if(target != null && gc.isPlayerinGame(target)){
 						//PlayerInfo pi = plugin.getPlayerInfoPoo().get(target);
 						e.setCancelled(true);
-						 ClassIntoGame cs = new ClassIntoGame(plugin);
+						 MapIntoGame cs = new MapIntoGame(plugin);
 						 cs.GamePlayerDeadInMap(target);
 						 target.setHealth(20);
 						 target.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"INSTAKILL POR COMANDO", 40, 80, 40);
@@ -596,7 +596,7 @@ public class SourceOfDamage implements Listener{
 		
 		if(e.getEntity() instanceof Player) {
 			Player player = (Player) e.getEntity();
-			ClassIntoGame ci = new ClassIntoGame(plugin);
+			MapIntoGame ci = new MapIntoGame(plugin);
 			GameConditions gc = new GameConditions(plugin);
 		
 			
