@@ -108,6 +108,7 @@ public class GameConditions {
 		EstadoPartida part = ms.getEstopartida();
 		MgScore sco = new MgScore(plugin);
 		sco.ClearScore(player);
+		
 		if(ms instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) ms;
 			List<String> spectador = ga.getSpectator();
@@ -175,7 +176,7 @@ public class GameConditions {
 			}
 			 String mt = mision.getString("Start.Tittle-of-Mision"); 
 			 player.sendMessage(ChatColor.GREEN+"Has salido del Mapa "+ChatColor.translateAlternateColorCodes('&',mt.replaceAll("%player%",player.getName())));
-			RestorePlayer(player);
+			 RestorePlayer(player);
 		}
 		
 	
@@ -273,7 +274,7 @@ public class GameConditions {
 				RestorePlayer(target);
 			}
 				plugin.getGameInfoPoo().remove(name);
-				System.out.println("LOG END GAME DESPUES MISION OBJECT BORRADO: "+plugin.getGameInfoPoo().toString());
+				System.out.println("LOG END GAME DESPUES MAP OBJECT BORRADO: "+plugin.getGameInfoPoo().toString());
 
 		}
 		
@@ -287,11 +288,11 @@ public class GameConditions {
 			    System.out.println("El jugador "+player.getName()+" fue hacia el prelobby con exito");
 			    String[] coords = ym.getString("Pre-Lobby").split("/");
 			    String world = coords[0];
-			    Double x = Double.valueOf(coords[1]);
-			    Double y = Double.valueOf(coords[2]);
-			    Double z = Double.valueOf(coords[3]);
-			    Float yaw = Float.valueOf(coords[4]);
-			    Float pitch = Float.valueOf(coords[5]);
+			    double x = Double.valueOf(coords[1]);
+			    double y = Double.valueOf(coords[2]);
+			    double z = Double.valueOf(coords[3]);
+			    float yaw = Float.valueOf(coords[4]);
+			    float pitch = Float.valueOf(coords[5]);
 
 			    
 				player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 20.0F, 1F);
@@ -310,24 +311,24 @@ public class GameConditions {
 		   if(ym.contains("Spawn-End")) {
 			    String[] coords = ym.getString("Spawn-End").split("/");
 			    String world = coords[0];
-			    Double x = Double.valueOf(coords[1]);
-			    Double y = Double.valueOf(coords[2]);
-			    Double z = Double.valueOf(coords[3]);
-			    Float yaw = Float.valueOf(coords[4]);
-			    Float pitch = Float.valueOf(coords[5]);
+			    double x = Double.valueOf(coords[1]);
+			    double y = Double.valueOf(coords[2]);
+			    double z = Double.valueOf(coords[3]);
+			    float yaw = Float.valueOf(coords[4]);
+			    float pitch = Float.valueOf(coords[5]);
 			   
 			    player.setInvulnerable(false);
 				player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 20.0F, 1F);
 				Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch);
 				Random r = new Random();
 				
-				List<String> l1 = new ArrayList<>();
-				l1.add(ChatColor.GREEN+"Por poco y no la cuentas menos mal saliste en una Pieza.");
-				l1.add(ChatColor.GREEN+"Sobreviviste felicidades por tu Victoria");
-				l1.add(ChatColor.GREEN+"Sobreviviste un dia mas para Luchar Felicidades");
-				l1.add(ChatColor.GREEN+"Puede que seas de los pocos con Vida sigue asi.");
+				List<String> point1 = new ArrayList<>();
+				point1.add(ChatColor.GREEN+"Por poco y no la cuentas menos mal saliste en una Pieza.");
+				point1.add(ChatColor.GREEN+"Sobreviviste felicidades por tu Victoria");
+				point1.add(ChatColor.GREEN+"Sobreviviste un dia mas para Luchar Felicidades");
+				point1.add(ChatColor.GREEN+"Puede que seas de los pocos con Vida sigue asi.");
 				
-				player.sendMessage(l1.get(r.nextInt(l1.size())));
+				player.sendMessage(point1.get(r.nextInt(point1.size())));
 				player.teleport(l);
 			
 					return;
@@ -813,7 +814,7 @@ public class GameConditions {
 		
 		  String[] lostt = mision.getString("Lost.Tittle-Time").split("-");
 	       int al = Integer.valueOf(lostt[0]);
-	       int al2 = Integer.valueOf(lostt[1]);
+	       int apoint2 = Integer.valueOf(lostt[1]);
 	       int al3 = Integer.valueOf(lostt[2]);
 	       
 		   String[] sts = mision.getString("Lost.Sound-of-Lost").split(";");
@@ -835,7 +836,7 @@ public class GameConditions {
 	       }
 	      
 	       
-		   player.sendTitle(ChatColor.translateAlternateColorCodes('&',mision.getString("Lost.Tittle-of-Lost").replaceAll("%player%", player.getName())), ChatColor.translateAlternateColorCodes('&',mision.getString("Lost.SubTittle-of-Lost").replaceAll("%player%", player.getName())), al,al2,al3);
+		   player.sendTitle(ChatColor.translateAlternateColorCodes('&',mision.getString("Lost.Tittle-of-Lost").replaceAll("%player%", player.getName())), ChatColor.translateAlternateColorCodes('&',mision.getString("Lost.SubTittle-of-Lost").replaceAll("%player%", player.getName())), al,apoint2,al3);
 		   if(!lostreward.isEmpty()) {
 			   for(int i = 0 ; i < lostreward.size(); i++) {
 					String texto = lostreward.get(i);
@@ -946,7 +947,7 @@ public class GameConditions {
 	}
 	
 	//TODO LOAD MAP
-	public void LoadDataMap(String map) {
+	public boolean LoadDataMap(String map) {
 		
 		
 		if(!plugin.getGameInfoPoo().containsKey(map)) {
@@ -1007,8 +1008,9 @@ public class GameConditions {
 				e.printStackTrace();
 				System.out.println("LOG-4 Error en el Mapa "+map);
 			}
+			return true;
 		}
-		return;
+		return false;
 	}
 	
 
@@ -1295,10 +1297,10 @@ public class GameConditions {
 	
 	public boolean CanJoinToTheMap(Player player ,String map) {
 		 if(isPlayerinGame(player)) {
-			 player.sendMessage(ChatColor.RED+"Ya estas en un Juego...");
+			 player.sendMessage(ChatColor.RED+" Ya estas en un Juego...");
 			 return false;
 		 }if(!ExistMap(map)) {
-			 player.sendMessage(ChatColor.RED+"Ese Mapa no Existe...");
+			 player.sendMessage(ChatColor.RED+" Ese Mapa no Existe...");
 			 return false;
 		 }if(ConditionsToStartAdventureGame(player,map)) {
 			return true;//visto bueno para entrar
@@ -1874,7 +1876,9 @@ public class GameConditions {
 		String[] d = days.split(" ");
 		List <DayOfWeek> l = new ArrayList<DayOfWeek>();
 		try {
+			
 			for(int i = 0; i < d.length;i++) {
+				
 			l.add(DayOfWeek.valueOf(d[i].replace("Lunes","MONDAY").replace("Martes","TUESDAY").replace("Miercoles","WEDNESDAY").replace("Jueves","THURSDAY").replace("Viernes","FRIDAY").replace("Sabado","SATURDAY").replace("Domingo","SUNDAY").toUpperCase()));
 			
 			}
@@ -1896,11 +1900,13 @@ public class GameConditions {
 		int slh = config.getInt("Local-Time-Hour");
 		
 		if(simbol.equals("+")) {
+			
 			lt = lt.plusDays(sld).plusHours(slh);
-		}
-		
-		else if(simbol.equals("-")) {
+			
+		}else if(simbol.equals("-")) {
+			
 			lt = lt.minusDays(sld).minusHours(slh);
+			
 		}
 		return lt;
 	}
@@ -1941,8 +1947,7 @@ public class GameConditions {
 								player.sendMessage(ChatColor.GREEN+"================================================");
 								//isJoinRunning(player);
 								return false;
-							}
-							if(lt.isAfter(t2)) {
+							}else if(lt.isAfter(t2)) {
 								player.sendMessage(ChatColor.RED+"================================================");
 								player.sendMessage(""+ChatColor.YELLOW+ChatColor.BOLD+"                     [CERRADO] ");
 								player.sendMessage(ChatColor.YELLOW+"Me temo que el Tiempo para Ingresar ya paso.");
@@ -2002,6 +2007,7 @@ public class GameConditions {
 					List <DayOfWeek> lw = new ArrayList<DayOfWeek>();
 					List <String> le = new ArrayList<String>();
 					StringTokenizer st = new StringTokenizer(time);
+					
 					while(st.hasMoreTokens()) {
 						
 						String cad = st.nextToken();
@@ -2062,7 +2068,6 @@ public class GameConditions {
 							//isJoinRunning(player);
 							return false;
 						}
-						
 						
 				}else {
 					StringTokenizer st2 = new StringTokenizer(time);
@@ -3570,10 +3575,10 @@ public class GameConditions {
 	
 	
 	//TODO STRING TO PLAYER
-	public List<Player> ConvertStringToPlayer(List<String> l1){
+	public List<Player> ConvertStringToPlayer(List<String> point1){
 		List<Player> l = new ArrayList<>();
-		for(int i = 0;i<l1.size();i++) {
-   			Player user = Bukkit.getServer().getPlayerExact(l1.get(i));
+		for(int i = 0;i<point1.size();i++) {
+   			Player user = Bukkit.getServer().getPlayerExact(point1.get(i));
    			l.add(user);
    		}
 		return l ;
@@ -3625,6 +3630,7 @@ public class GameConditions {
 		
 	}
 	
+	//TODO OBTENER KIT DE CARTEL
 	public void getInventorySing(String name , Player player) {
 		FileConfiguration invt = plugin.getInventorysYaml();
 		
@@ -3645,7 +3651,7 @@ public class GameConditions {
 //	player.sendMessage(ChatColor.GREEN+"Obtuviste la clase "+ChatColor.RED+name);
 	}
 	
-	
+	//TODO VER SI USA UN COMANDO DE LUCKPERMS Y SI TIENE PERMISO
 	public boolean hasPlayerPermissionByLuckPerms(Player player ,String text) {
 		
 		if(!text.contains("permission set")) {
@@ -3664,55 +3670,74 @@ public class GameConditions {
 		
 	}
 	
-	public Player ConvertStringToPlayer(String name) {
-		return Bukkit.getPlayerExact(name);
-	}
+	public Player ConvertStringToPlayer(String name) {return Bukkit.getPlayerExact(name);}
 	
 	//TODO NEXO
 	
-	public boolean isInsideOfLocations(Location l , Location l1 , Location l2) {
+	public boolean isInsideOfLocations(Location player , Location point1 , Location point2) {
 		
-		double minX = Math.min(l1.getX(),l2.getX());
-		double minY = Math.min(l1.getY(),l2.getY());
-		double minZ = Math.min(l1.getZ(),l2.getZ());
+		double minX = Math.min(point1.getX(),point2.getX());
+		double minY = Math.min(point1.getY(),point2.getY());
+		double minZ = Math.min(point1.getZ(),point2.getZ());
 		
-		double maxX = Math.max(l1.getX(), l2.getX())+1;
-		double maxY = Math.max(l1.getY(), l2.getY())+1;
-		double maxZ = Math.max(l1.getZ(), l2.getZ())+1;
+		double maxX = Math.max(point1.getX(), point2.getX())+1;
+		double maxY = Math.max(point1.getY(), point2.getY())+1;
+		double maxZ = Math.max(point1.getZ(), point2.getZ())+1;
 
-		return (maxX >= l.getX() && l.getX() >= minX) &&
-			   (maxY >= l.getY() && l.getY() >= minY) &&
-			   (maxZ >= l.getZ() && l.getZ() >= minZ);
+		return (maxX >= player.getX() && player.getX() >= minX) &&
+			   (maxY >= player.getY() && player.getY() >= minY) &&
+			   (maxZ >= player.getZ() && player.getZ() >= minZ);
 		
 	}
 	
 	
 	
-	
-	public void getPlayerVersion(Player player) {
+	//TODO GET VERSION PLAYER AT MG
+	public void getPlayerVersion(Player player,String targ) {
 		
 		
 		if(Bukkit.getPluginManager().getPlugin("ViaVersion") != null) {
 			//
+			
+			Player target = Bukkit.getPlayerExact(targ);
 			@SuppressWarnings("rawtypes")
 			ViaAPI api = Via.getAPI(); // Get the API
-			@SuppressWarnings("unchecked")
-			int version = api.getPlayerVersion(player); // Get the protocol version
-			
-		
-			player.sendMessage("La version de tu minecraft es: "+ConvertProtocolVersion(version));
-			
-		}else {
-			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+" ViaVersion no encontrado para MG");
-		}
-		
-		
+	
+			if(target != null) {
+				@SuppressWarnings("unchecked")
+				int version  = api.getPlayerVersion(target); // Get the protocol version; 
+				
+				
+				
+					if(player != null) {
+						if(player == target) {
+							player.sendMessage(ChatColor.GOLD+"La version de tu minecraft es: "+ChatColor.GREEN+ConvertProtocolVersion(version));
+							return;
+						}else {
+							player.sendMessage(ChatColor.GOLD+"La version de minecraft de "+ChatColor.GREEN+target.getName()+ChatColor.GOLD+" es: "+ChatColor.GREEN+ConvertProtocolVersion(version));
+							return;
+						}
+					}else {
+						Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+"La version de minecraft de "+ChatColor.GREEN+target.getName()+ChatColor.GOLD+" es: "+ChatColor.GREEN+ConvertProtocolVersion(version));
+					}
+				}else {
+					if(player != null) {
+						player.sendMessage(ChatColor.RED+" El jugador no esta en Linea o el nombre es Incorrecto.");
+					}else {
+						Bukkit.getConsoleSender().sendMessage(ChatColor.RED+" El jugador no esta en Linea o el nombre es Incorrecto.");
+					}
+					
+				}
+				
+			}else {
+				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+" ViaVersion no encontrado para MG");
+			}
 	}
+
 	
-	
+	//TODO MG VERSION (
 	public String ConvertProtocolVersion(int protocol) {
 		String version = "";
-		
 		
 		switch(protocol) {
 			case 47:

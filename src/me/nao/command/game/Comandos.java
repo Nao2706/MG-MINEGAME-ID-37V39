@@ -362,9 +362,17 @@ public class Comandos implements CommandExecutor{
 					
 				
 					return true;
-				}
-				
-				else if (args[0].equalsIgnoreCase("set-life") ) {
+				}else if (args[0].equalsIgnoreCase("versionpl")) {
+					if (args.length == 2) {
+						String target = args[1];
+						gc.getPlayerVersion(null, target);
+					}else {
+						gc.getPlayerVersion(null, null);
+					}
+					
+					
+					return true;
+				}else if (args[0].equalsIgnoreCase("set-life") ) {
 					try {
 					if (args.length == 3) {
 						// /c add n p
@@ -1588,7 +1596,7 @@ public class Comandos implements CommandExecutor{
           			
           		}else if(args[0].equalsIgnoreCase("time")) {
               	
-              		LocalDateTime lt = c.AddOrRemove();
+              		LocalDateTime lt = gc.AddOrRemoveMg();
           			player.sendMessage(TimeR(lt));
           			
           			return true;
@@ -1852,9 +1860,6 @@ public class Comandos implements CommandExecutor{
 						player.sendMessage(ChatColor.RED+"/mg head <material>");
 					}
 					
-					return true;
-				}else if(args[0].equalsIgnoreCase("test")) {
-				  
 					return true;
 				}else if(args[0].equalsIgnoreCase("join")) {
 					if (args.length == 2) {
@@ -2609,8 +2614,15 @@ public class Comandos implements CommandExecutor{
 						player.sendMessage(plugin.nombre+ChatColor.RED+" No estas en ningun Juego.");
 					}
 					return true;
-				}else if (args[0].equalsIgnoreCase("minecraft")) {
-					gc.getPlayerVersion(player);
+				}else if (args[0].equalsIgnoreCase("versionpl")) {
+					if (args.length == 2) {
+						String target = args[1];
+						gc.getPlayerVersion(player, target);
+					}else {
+						gc.getPlayerVersion(player, player.getName());
+					}
+					
+					
 					return true;
 				}else if (args[0].equalsIgnoreCase("stop")) {
 				if(player.isOp()) {

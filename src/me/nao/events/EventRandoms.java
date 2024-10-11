@@ -2409,11 +2409,6 @@ public class EventRandoms implements Listener{
 			
 			List<Entity> e = getNearbyEntitesPlayers(b.getLocation(), 10);
 			List<Entity> e3 = new ArrayList<Entity>();
-			
-			
-		
-			
-			
 			List<Player> alive1 = gc.ConvertStringToPlayer(ga.getVivo());
 			
 			for(Entity e2 : e) {
@@ -2514,7 +2509,7 @@ public class EventRandoms implements Listener{
 						 
 				         double projectileY = projectil.getLocation().getY();
 				         double damagedY = damage.getLocation().getY();
-				         int headshoot = 250;
+				         int headshoot = 50;
 				         int headshotarmor = 25;
 				         double alture = 0;
 				         //ADULTO
@@ -2562,7 +2557,8 @@ public class EventRandoms implements Listener{
 		                				   
 		                		       }else{
 		                		    	   		 ItemStack it = damage.getEquipment().getHelmet();
-		                		    	   	
+		                		    	   		 System.out.println("type1 "+it.getType());
+		                		    	   		 
 		    									 if(it.getType() == Material.NETHERITE_HELMET || it.getType() == Material.DIAMOND_HELMET || it.getType() == Material.GOLDEN_HELMET ||
 		    									    it.getType() == Material.IRON_HELMET || it.getType() == Material.CHAINMAIL_HELMET || it.getType() == Material.LEATHER_HELMET ||
 		    									    it.getType() == Material.TURTLE_HELMET){ 	
@@ -2607,7 +2603,7 @@ public class EventRandoms implements Listener{
 		    											 }			
 		    									}else{
 		    											 damage.getEquipment().setHelmet(new ItemStack(Material.AIR));
-					    								 damage.getWorld().spawnParticle(Particle.BLOCK_CRACK, damage.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
+					    								// damage.getWorld().spawnParticle(Particle.BLOCK_CRACK, damage.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
 														 player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 20.0F, 1F);
 														 return;
 		    										
