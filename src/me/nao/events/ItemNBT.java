@@ -5,9 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Material;
-
+import org.bukkit.block.Chest;
+//import org.bukkit.block.data.BlockData;
+//import org.bukkit.block.data.type.Chest;
+//import org.bukkit.block.Chest;
+import org.bukkit.inventory.Inventory;
 //import org.bukkit.craftbukkit.v1_19_R2.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BlockStateMeta;
 
 import de.tr7zw.nbtapi.NBTItem;
 
@@ -22,9 +27,8 @@ public class ItemNBT {
 		ItemStack item2 = new ItemStack(item);
 		
 		NBTItem nb = new NBTItem(item2);
+
 		List <String> l = nb.getStringList(status);
-		
-		
 		
 		if(data.contains(",")) {
 			 String[] datos = data.split(",");
@@ -103,6 +107,32 @@ public class ItemNBT {
     ItemStack it = new ItemStack(Material.DIAMOND);
         return it;
        // return CraftItemStack.asBukkitCopy(stack);
+    }
+    
+    //READ CHESTS WITH +NBT ITEMS 
+    public static void getItemsChest(ItemStack item) {
+ 
+    	if(item.getItemMeta() instanceof BlockStateMeta) {
+    		BlockStateMeta bm = (BlockStateMeta) item.getItemMeta();
+    		System.out.println("WII 2 blockstate");
+    		if(bm.getBlockState() instanceof Chest) {
+    			
+    			Chest c = (Chest) bm.getBlockState();
+    		
+    		
+    			Inventory inv = c.getInventory();
+    			for(ItemStack i : inv.getContents()){
+    				if(i == null)continue;
+    				System.out.println("WII2 "+i.getType());
+    			}
+    		
+    			
+    		}
+    		
+    		
+    	}
+    
+    	
     }
     
     

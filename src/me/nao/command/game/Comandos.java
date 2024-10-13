@@ -2152,6 +2152,12 @@ public class Comandos implements CommandExecutor{
 					
 					
 					//TODO ITEM
+			}else if(args[0].equalsIgnoreCase("itemread")) {
+				  player.sendMessage(ChatColor.RED+"Leyendo item.");
+				  
+				  ItemNBT.getItemsChest(player.getInventory().getItemInMainHand());
+				  
+				return true;
 			}else if(args[0].equalsIgnoreCase("item")) {
 					//mg item 1 2 3 4
 							if(!player.isOp()) {
