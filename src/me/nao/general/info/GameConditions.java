@@ -3681,7 +3681,7 @@ public class GameConditions {
 		double minZ = Math.min(point1.getZ(),point2.getZ());
 		
 		double maxX = Math.max(point1.getX(), point2.getX())+1;
-		double maxY = Math.max(point1.getY(), point2.getY())+1;
+		double maxY = Math.max(point1.getY(), point2.getY());//quite un +1 
 		double maxZ = Math.max(point1.getZ(), point2.getZ())+1;
 
 		return (maxX >= player.getX() && player.getX() >= minX) &&

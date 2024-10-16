@@ -96,12 +96,12 @@ import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
 import me.nao.cosmetics.fireworks.RankPlayer;
+import me.nao.flare.actions.Flare;
 import me.nao.general.info.GameInfo;
 //import me.nao.general.info.GameNexo;
 import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.PlayerInfo;
-import me.nao.items.actions.Flare;
 import me.nao.main.game.Minegame;
 import me.nao.manager.EstadoPartida;
 import me.nao.shop.Items;
@@ -1172,7 +1172,7 @@ public class EventRandoms implements Listener{
 				PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 				String map = pl.getMapName();
 				// hierro oro diamante esmeralda netherite creeper zombi
-				int r = ra.nextInt(7);
+				int r = ra.nextInt(7+1);
 				int low = 20;
 				int hig = 30;
 				int r2 = ra.nextInt(hig-low+1) + low;
@@ -1337,6 +1337,22 @@ public class EventRandoms implements Listener{
 						  if(b.getType() == Material.TARGET) {
 							  DetectDispenser(b.getLocation());
 							  DetectChestAndCommand(b.getLocation());
+						  }if(b.getType() == Material.STRUCTURE_BLOCK) {
+							if(projectile instanceof AbstractArrow) {
+								AbstractArrow arrow = (AbstractArrow) projectile;
+								Vector v = arrow.getVelocity().normalize().multiply(-1);
+								Vector v2 = arrow.getVelocity().normalize().multiply(-2);
+								Vector v3 = arrow.getVelocity().normalize().multiply(-3);
+								
+								Block newblock = b.getLocation().add(v).getBlock();
+								Block newblock2 = b.getLocation().add(v2).getBlock();
+								Block newblock3 = b.getLocation().add(v3).getBlock();
+								
+								newblock.setType(Material.DIAMOND_BLOCK);
+								newblock2.setType(Material.DIAMOND_BLOCK);
+								newblock3.setType(Material.DIAMOND_BLOCK);
+							}
+							  
 						  }
 				  }
 			

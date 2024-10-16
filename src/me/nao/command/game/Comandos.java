@@ -2277,6 +2277,41 @@ public class Comandos implements CommandExecutor{
 					DialogueArgs(player,args);
 					
 					return true;
+				}else if(args[0].equalsIgnoreCase("medio")) {
+					
+					if(args.length == 2) { 
+						  String locs = args[1];
+						  String[] split = locs.split("_");
+						  
+						  String[] split2 = split[0].split(",");
+						  String[] split3 = split[1].split(",");
+						  
+						  double x = Double.valueOf(split2[0]);
+						  double y = Double.valueOf(split2[1]);
+						  double z = Double.valueOf(split2[2]);
+						  
+						  
+						  double x1 = Double.valueOf(split3[0]);
+						  double y2 = Double.valueOf(split3[1]);
+						  double z3 = Double.valueOf(split3[2]);
+						  
+						  Location loc1 = new Location(player.getWorld(),x,y,z);
+						  Location loc2 = new Location(player.getWorld(),x1,y2,z3);
+						  
+						  boolean isinside = gc.isInsideOfLocations(player.getLocation(), loc1, loc2);
+						  
+						  if(isinside) {
+							  player.sendMessage(ChatColor.GREEN+" esta dentro"); 
+						  }else {
+							  player.sendMessage(ChatColor.GREEN+" esta fuera"); 
+						  }
+						  
+						
+					}else {
+						 player.sendMessage(ChatColor.RED+" /mg medio 123,34,45_-56,54,24");
+					}
+					
+					return true;
 				}else if(args[0].equalsIgnoreCase("maintenance")) {
 					FileConfiguration config = plugin.getConfig();
 					if(config.getBoolean("Maintenance")) {
