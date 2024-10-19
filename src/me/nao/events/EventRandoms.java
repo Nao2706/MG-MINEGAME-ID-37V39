@@ -259,19 +259,14 @@ public class EventRandoms implements Listener{
 				
 				
 				if(e.getAction() == Action.PHYSICAL) {
-					if(e.getClickedBlock().getType() == Material.TRIPWIRE) {
+					if(e.getClickedBlock().getType() == Material.TRIPWIRE || e.getClickedBlock().getType() == Material.STONE_PRESSURE_PLATE) {
 						
 						DetectDispenser(player.getLocation());
 						//Bukkit.broadcastMessage("1");
 						
 						
 					}
-					if(e.getClickedBlock().getType() == Material.STONE_PRESSURE_PLATE) {
-						//Bukkit.broadcastMessage("3");
-						
-						DetectDispenser(player.getLocation());
-						
-					}
+					
 					if(e.getClickedBlock().getType() == Material.OAK_PRESSURE_PLATE) {
 						//Bukkit.broadcastMessage("3");
 						DetectChestAndJump(player);
@@ -324,8 +319,8 @@ public class EventRandoms implements Listener{
 							DetectChestAndReadBook(player, b3);
 							DetectChestAndPotion(player, b3);
 							DetectChestAndCommand(player.getLocation());
-							DetectChestAndArmorSoulStand(player);
-							DetectChestAndArmorNexoStand(player);
+							//DetectChestAndArmorSoulStand(player);
+							//DetectChestAndArmorNexoStand(player);
 							
 					 }
 						
@@ -1296,6 +1291,7 @@ public class EventRandoms implements Listener{
 		
 			  Projectile projectile = e.getEntity();
 			  GameConditions gc = new GameConditions(plugin);
+			  
 			 
 			  if(projectile.getShooter() instanceof Player) {
 				 
@@ -1333,6 +1329,18 @@ public class EventRandoms implements Listener{
 				  
 				  if(e.getHitBlock() != null) {
 					  Block b = e.getHitBlock();
+					  if(projectile instanceof AbstractArrow) {
+						  AbstractArrow arrow = (AbstractArrow) projectile;
+						  if(arrow.getCustomName() != null) {
+							  if(arrow.getCustomName().equals("Flecha Trampa") || arrow.getCustomName().equals("Flecha Trampa Mejorada")) {
+								arrow.remove();
+							  }
+						  }else{
+							  if(b.getType() == Material.BARRIER) {
+								  arrow.remove();
+							  }
+						  }
+					  }
 						 // Player player = (Player) projectile.getShooter();
 						  if(b.getType() == Material.TARGET) {
 							  DetectDispenser(b.getLocation());
@@ -1340,17 +1348,15 @@ public class EventRandoms implements Listener{
 						  }if(b.getType() == Material.STRUCTURE_BLOCK) {
 							if(projectile instanceof AbstractArrow) {
 								AbstractArrow arrow = (AbstractArrow) projectile;
-								Vector v = arrow.getVelocity().normalize().multiply(-1);
-								Vector v2 = arrow.getVelocity().normalize().multiply(-2);
-								Vector v3 = arrow.getVelocity().normalize().multiply(-3);
 								
-								Block newblock = b.getLocation().add(v).getBlock();
-								Block newblock2 = b.getLocation().add(v2).getBlock();
-								Block newblock3 = b.getLocation().add(v3).getBlock();
+							
+								for(int i = 1 ; i < 6; i++) {
+									Vector v = arrow.getVelocity().normalize().multiply(-i);
+									Block newblock = b.getLocation().add(v).getBlock();
+									if(newblock.getType() != Material.AIR) continue;	
+									newblock.setType(Material.DIAMOND_BLOCK);
+								}
 								
-								newblock.setType(Material.DIAMOND_BLOCK);
-								newblock2.setType(Material.DIAMOND_BLOCK);
-								newblock3.setType(Material.DIAMOND_BLOCK);
 							}
 							  
 						  }
@@ -1514,7 +1520,7 @@ public class EventRandoms implements Listener{
 				
 			//	Powerable pw = (Powerable) r.getBlockData();
 			//	if(pw.isPowered()) {
-
+ 
 					for (int x = -rango; x < rango+1; x++) {
 						for (int y = -rango; y < rango+1; y++) {
 							for (int z = -rango; z < rango+1; z++) {
@@ -1537,10 +1543,15 @@ public class EventRandoms implements Listener{
 										if(i.containsAtLeast(new ItemStack(Material.SPECTRAL_ARROW), 1)) {
 											ProyectileShootType(d, EntityType.ARROW, 2, loc);									
 										}
-									
 										//TODO FIRE
 										if(i.containsAtLeast(new ItemStack(Material.FIRE_CHARGE), 1)) {
 											ProyectileShootType(d, EntityType.SMALL_FIREBALL, 1, loc);
+											
+										}if(i.containsAtLeast(Items.ARROWDIS.getValue(),1)) {
+											ProyectileShootType(d, EntityType.ARROW, 3, loc);
+											
+										}if(i.containsAtLeast(Items.ARROWDIS2.getValue(),1)) {
+											ProyectileShootType(d, EntityType.ARROW, 4, loc);
 										}
 									
 									
@@ -1628,7 +1639,7 @@ public class EventRandoms implements Listener{
 			//}
 		}
 		
-
+	
 		
 		public void ProyectileShootType(Dispenser d, EntityType type , int option ,Location loc ) {
 					Location loc2 = loc;
@@ -1636,11 +1647,12 @@ public class EventRandoms implements Listener{
 					if(d.getFacing() == BlockFace.NORTH) {
 						
 						if(type == EntityType.ARROW) {
-							
+						
+						
+							Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0.5,0.5,-1), EntityType.ARROW);
 								if(option == 1) {
-									Entity h1 = loc.getWorld().spawnEntity(loc.add(0.5,0.5,-1), EntityType.ARROW);
-									h1.setVelocity(d.getFacing().getDirection().multiply(6));
-									Arrow aw = (Arrow) h1;
+									
+									aw.setVelocity(d.getFacing().getDirection().multiply(6));
 									aw.setCritical(true);
 									aw.setKnockbackStrength(10);
 									aw.setTicksLived(20);
@@ -1648,20 +1660,31 @@ public class EventRandoms implements Listener{
 									aw.setPickupStatus(PickupStatus.CREATIVE_ONLY);
 								}
 								if(option == 2) {
-									Entity h1 = loc.getWorld().spawnEntity(loc.add(0.5,0.5,-1), EntityType.ARROW);
-									h1.setVelocity(d.getFacing().getDirection().multiply(6));
-									Arrow aw = (Arrow) h1;
+									aw.setVelocity(d.getFacing().getDirection().multiply(6));
 									aw.setCritical(true);
 									aw.setKnockbackStrength(10);
 									aw.setTicksLived(20);
 									aw.setFireTicks(1200);
 									aw.setCustomName("Flecha Trampa");
 									aw.setPickupStatus(PickupStatus.CREATIVE_ONLY);
+								}if(option == 3) {
+									
+								 	for(int i = 0;i<20;i++) {
+										SpawnArrowsDispenser(aw.getLocation(),d.getFacing(), RandomPosOrNeg(10),RandomPosOrNeg(5),false);
+									}
+									
+								}if(option == 4) {
+									
+								 	for(int i = 0;i<20;i++) {
+										SpawnArrowsDispenser(aw.getLocation(),d.getFacing(), RandomPosOrNeg(10),RandomPosOrNeg(5),true);
+									}
+								
 								}
 								// dos flechas
 						
 						}
 						if(type == EntityType.SMALL_FIREBALL) {
+							
 							if(option == 1) {
 								Entity h1 = loc.getWorld().spawnEntity(loc.add(0.5,0.5,-1), EntityType.SMALL_FIREBALL);
 								h1.setVelocity(d.getFacing().getDirection().multiply(6));
@@ -1690,10 +1713,10 @@ public class EventRandoms implements Listener{
 					if(d.getFacing() == BlockFace.SOUTH) {
 								if(type == EntityType.ARROW) {
 									
+									
+									Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0.5,0.5,1), EntityType.ARROW);
 									if(option == 1) {
-										Entity h1 = loc.getWorld().spawnEntity(loc.add(0.5,0.5,1), EntityType.ARROW);
-										h1.setVelocity(d.getFacing().getDirection().multiply(6));
-										Arrow aw = (Arrow) h1;
+										aw.setVelocity(d.getFacing().getDirection().multiply(6));
 										aw.setCritical(true);
 										aw.setKnockbackStrength(10);
 										aw.setTicksLived(20);
@@ -1701,20 +1724,31 @@ public class EventRandoms implements Listener{
 										aw.setPickupStatus(PickupStatus.CREATIVE_ONLY);
 									}
 									if(option == 2) {
-										Entity h1 = loc.getWorld().spawnEntity(loc.add(0.5,0.5,1), EntityType.ARROW);
-										h1.setVelocity(d.getFacing().getDirection().multiply(6));
-										Arrow aw = (Arrow) h1;
+										aw.setVelocity(d.getFacing().getDirection().multiply(6));
 										aw.setCritical(true);
 										aw.setKnockbackStrength(10);
 										aw.setTicksLived(20);
 										aw.setFireTicks(1200);
 										aw.setCustomName("Flecha Trampa");
 										aw.setPickupStatus(PickupStatus.CREATIVE_ONLY);
+									}if(option == 3) {
+										
+									 	for(int i = 0;i<20;i++) {
+											SpawnArrowsDispenser(aw.getLocation(),d.getFacing(), RandomPosOrNeg(10),RandomPosOrNeg(5),false);
+										}
+										
+									}if(option == 3) {
+										
+									 	for(int i = 0;i<20;i++) {
+											SpawnArrowsDispenser(aw.getLocation(),d.getFacing(), RandomPosOrNeg(10),RandomPosOrNeg(5),true);
+										}
+										
 									}
 									// dos flechas
 							
 							}
 							if(type == EntityType.SMALL_FIREBALL) {
+								
 									if(option == 1) {
 										Entity h1 = loc.getWorld().spawnEntity(loc.add(0.5,0.5,1), EntityType.SMALL_FIREBALL);
 										h1.setVelocity(d.getFacing().getDirection().multiply(6));
@@ -1742,11 +1776,10 @@ public class EventRandoms implements Listener{
 					}
 					if(d.getFacing() == BlockFace.EAST) {
 						if(type == EntityType.ARROW) {
-							
+						
+							Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(1,0.5,0.5), EntityType.ARROW);
 							if(option == 1) {
-								Entity h1 = loc.getWorld().spawnEntity(loc.add(1,0.5,0.5), EntityType.ARROW);
-								h1.setVelocity(d.getFacing().getDirection().multiply(6));
-								Arrow aw = (Arrow) h1;
+								aw.setVelocity(d.getFacing().getDirection().multiply(6));
 								aw.setCritical(true);
 								aw.setKnockbackStrength(10);
 								aw.setTicksLived(20);
@@ -1754,15 +1787,25 @@ public class EventRandoms implements Listener{
 								aw.setPickupStatus(PickupStatus.CREATIVE_ONLY);
 							}
 							if(option == 2) {
-								Entity h1 = loc.getWorld().spawnEntity(loc.add(1,0.5,0.5), EntityType.ARROW);
-								h1.setVelocity(d.getFacing().getDirection().multiply(6));
-								Arrow aw = (Arrow) h1;
+								aw.setVelocity(d.getFacing().getDirection().multiply(6));
 								aw.setCritical(true);
 								aw.setKnockbackStrength(10);
 								aw.setTicksLived(20);
 								aw.setFireTicks(1200);
 								aw.setCustomName("Flecha Trampa");
 								aw.setPickupStatus(PickupStatus.CREATIVE_ONLY);
+							}if(option == 3) {
+								
+							 	for(int i = 0;i<20;i++) {
+									SpawnArrowsDispenser(aw.getLocation(),d.getFacing(), RandomPosOrNeg(10),RandomPosOrNeg(5),false);
+								}
+								
+							}if(option == 3) {
+								
+							 	for(int i = 0;i<20;i++) {
+									SpawnArrowsDispenser(aw.getLocation(),d.getFacing(), RandomPosOrNeg(10),RandomPosOrNeg(5),true);
+								}
+								
 							}
 							// dos flechas
 		
@@ -1781,10 +1824,10 @@ public class EventRandoms implements Listener{
 					if(d.getFacing() == BlockFace.WEST) {
 						if(type == EntityType.ARROW) {
 							
+							
+							Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(-1,0.5,0.5), EntityType.ARROW);
 							if(option == 1) {
-								Entity h1 = loc.getWorld().spawnEntity(loc.add(-1,0.5,0.5), EntityType.ARROW);
-								h1.setVelocity(d.getFacing().getDirection().multiply(6));
-								Arrow aw = (Arrow) h1;
+								aw.setVelocity(d.getFacing().getDirection().multiply(6));
 								aw.setCritical(true);
 								aw.setKnockbackStrength(10);
 								aw.setTicksLived(20);
@@ -1792,15 +1835,25 @@ public class EventRandoms implements Listener{
 								aw.setPickupStatus(PickupStatus.CREATIVE_ONLY);
 							}
 							if(option == 2) {
-								Entity h1 = loc.getWorld().spawnEntity(loc.add(-1,0.5,0.5), EntityType.ARROW);
-								h1.setVelocity(d.getFacing().getDirection().multiply(6));
-								Arrow aw = (Arrow) h1;
+								aw.setVelocity(d.getFacing().getDirection().multiply(6));
 								aw.setCritical(true);
 								aw.setKnockbackStrength(10);
 								aw.setTicksLived(20);
 								aw.setFireTicks(1200);
 								aw.setCustomName("Flecha Trampa");
 								aw.setPickupStatus(PickupStatus.CREATIVE_ONLY);
+							}if(option == 3) {
+								
+							 	for(int i = 0;i<20;i++) {
+									SpawnArrowsDispenser(aw.getLocation(),d.getFacing(), RandomPosOrNeg(10),RandomPosOrNeg(5),false);
+								}
+								
+							}if(option == 4) {
+								
+							 	for(int i = 0;i<20;i++) {
+									SpawnArrowsDispenser(aw.getLocation(),d.getFacing(), RandomPosOrNeg(10),RandomPosOrNeg(5),true);
+								}
+								
 							}
 							// dos flechas
 
@@ -1819,10 +1872,12 @@ public class EventRandoms implements Listener{
 					if(d.getFacing() == BlockFace.UP) {
 						if(type == EntityType.ARROW) {
 							
+							
+							
+							Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0.5,1,0.5), EntityType.ARROW);
+							
 							if(option == 1) {
-								Entity h1 = loc.getWorld().spawnEntity(loc.add(0.5,1,0.5), EntityType.ARROW);
-								h1.setVelocity(d.getFacing().getDirection().multiply(6));
-								Arrow aw = (Arrow) h1;
+								aw.setVelocity(d.getFacing().getDirection().multiply(6));
 								aw.setCritical(true);
 								aw.setKnockbackStrength(10);
 								aw.setTicksLived(20);
@@ -1830,15 +1885,25 @@ public class EventRandoms implements Listener{
 								aw.setPickupStatus(PickupStatus.CREATIVE_ONLY);
 							}
 							if(option == 2) {
-								Entity h1 = loc.getWorld().spawnEntity(loc.add(0.5,1,0.5), EntityType.ARROW);
-								h1.setVelocity(d.getFacing().getDirection().multiply(6));
-								Arrow aw = (Arrow) h1;
+								aw.setVelocity(d.getFacing().getDirection().multiply(6));
 								aw.setCritical(true);
 								aw.setKnockbackStrength(10);
 								aw.setTicksLived(20);
 								aw.setFireTicks(1200);
 								aw.setCustomName("Flecha Trampa");
 								aw.setPickupStatus(PickupStatus.CREATIVE_ONLY);
+							}if(option == 3) {
+								
+							 	for(int i = 0;i<20;i++) {
+									SpawnArrowsDispenser(aw.getLocation(),d.getFacing(), RandomPosOrNeg(10),RandomPosOrNeg(5),false);
+								}
+								
+							}if(option == 4) {
+								
+							 	for(int i = 0;i<20;i++) {
+									SpawnArrowsDispenser(aw.getLocation(),d.getFacing(), RandomPosOrNeg(10),RandomPosOrNeg(5),true);
+								}
+								
 							}
 							// dos flechas
 
@@ -1857,11 +1922,11 @@ public class EventRandoms implements Listener{
 					}
 					if(d.getFacing() == BlockFace.DOWN) {
 						if(type == EntityType.ARROW) {
+						
+							Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0.5,-1,0.5), EntityType.ARROW);
 							
 							if(option == 1) {
-								Entity h1 = loc.getWorld().spawnEntity(loc.add(0.5,-1,0.5), EntityType.ARROW);
-								h1.setVelocity(d.getFacing().getDirection().multiply(6));
-								Arrow aw = (Arrow) h1;
+								aw.setVelocity(d.getFacing().getDirection().multiply(6));
 								aw.setCritical(true);
 								aw.setKnockbackStrength(10);
 								aw.setTicksLived(20);
@@ -1869,15 +1934,25 @@ public class EventRandoms implements Listener{
 								aw.setPickupStatus(PickupStatus.CREATIVE_ONLY);
 							}
 							if(option == 2) {
-								Entity h1 = loc.getWorld().spawnEntity(loc.add(0.5,-1,0.5), EntityType.ARROW);
-								h1.setVelocity(d.getFacing().getDirection().multiply(6));
-								Arrow aw = (Arrow) h1;
+								aw.setVelocity(d.getFacing().getDirection().multiply(6));
 								aw.setCritical(true);
 								aw.setKnockbackStrength(10);
 								aw.setTicksLived(20);
 								aw.setFireTicks(1200);
 								aw.setCustomName("Flecha Trampa");
 								aw.setPickupStatus(PickupStatus.CREATIVE_ONLY);
+							}if(option == 3) {
+								
+							 	for(int i = 0;i<20;i++) {
+									SpawnArrowsDispenser(aw.getLocation(),d.getFacing(), RandomPosOrNeg(10),RandomPosOrNeg(5),false);
+								}
+								
+							}if(option == 4) {
+								
+							 	for(int i = 0;i<20;i++) {
+									SpawnArrowsDispenser(aw.getLocation(),d.getFacing(), RandomPosOrNeg(10),RandomPosOrNeg(5),true);
+								}
+								
 							}
 							// dos flechas
 
@@ -2639,29 +2714,21 @@ public class EventRandoms implements Listener{
 
 					 }
 		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
 		 /// TODO ARROWS
 		 
 		 
-			public int RandomPosOrNeg(int i) {
+			public int RandomPosOrNeg(int i){
 				Random r = new Random();
 				int v = r.nextInt(i+1);
+				//genera aleatoriedad si es 0 devuelve el valor como tal si es 1 devuelve un valor positivo o negativo
 				int r2 = r.nextInt(1+1);
-				if(r2 == 1) {
+				if(r2 == 1){
 					return v;
 				}
 				return TransformPosOrNeg(v);
-				
 			}
 			
-			public int TransformPosOrNeg(int i) {
+			public int TransformPosOrNeg(int i){
 				return i =  (~(i -1));
 			}
 			
@@ -2781,7 +2848,30 @@ public class EventRandoms implements Listener{
 			}
 		 
 		 
-		 
+			public void SpawnArrowsDispenser(Location l,BlockFace bf,float addy ,float addp , boolean iswithfire) {
+				
+				
+				
+				Location loc = l;
+				Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc, EntityType.ARROW);
+				
+				
+				loc.setYaw(loc.getYaw()+addy);
+				loc.setPitch(loc.getPitch()+addp);
+				Vector v = bf.getDirection();
+				
+				aw.setCritical(true);
+				aw.setCustomName("Flecha Trampa Mejorada");
+				aw.setKnockbackStrength(2);
+				aw.setVelocity(v.multiply(6));;
+				if(iswithfire) {
+					aw.setFireTicks(1200);
+				}
+				
+				//aw.setFireTicks(1200);
+				aw.setShooter(null);
+				//((Arrow) h1).setShooter(player);
+			}
 		 
 		 
 		 

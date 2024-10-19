@@ -2312,6 +2312,12 @@ public class Comandos implements CommandExecutor{
 					}
 					
 					return true;
+				}else if(args[0].equalsIgnoreCase("arrow")) {
+					
+					player.getInventory().addItem(Items.ARROWDIS.getValue());
+					player.getInventory().addItem(Items.ARROWDIS2.getValue());
+					
+					return true;
 				}else if(args[0].equalsIgnoreCase("maintenance")) {
 					FileConfiguration config = plugin.getConfig();
 					if(config.getBoolean("Maintenance")) {

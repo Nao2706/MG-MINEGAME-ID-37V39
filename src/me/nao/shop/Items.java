@@ -87,7 +87,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 
             
             ZOMBIPALO(""+ChatColor.RED+ChatColor.BOLD+"ANTI-LOOT", Material.STICK,"knockback,7", 1,ChatColor.GREEN+"Aparece por tu ambicion."),
+            ARROWDIS(""+ChatColor.RED+ChatColor.BOLD+"ARROW DISPENSER 1", Material.BLAZE_ROD,"knockback,7", 1,ChatColor.GREEN+"Genera flechas por dispensador. "),
+            ARROWDIS2(""+ChatColor.RED+ChatColor.BOLD+"ARROW DISPENSER 2", Material.BLAZE_ROD,"knockback,7", 1,ChatColor.GREEN+"Genera flechas por dispensador. "),
 
+            
             
             GANCHO(""+ChatColor.RED+ChatColor.BOLD+"GANCHO", Material.FISHING_ROD,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"30 Netherite",ChatColor.YELLOW+ "Desplazate mas rapido."),
             GANCHOP(""+ChatColor.RED+ChatColor.BOLD+"GANCHO", Material.FISHING_ROD,null, 1,ChatColor.YELLOW+ "Desplazate mas rapido."),

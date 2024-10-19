@@ -1,6 +1,8 @@
 package me.top.users;
 
 
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
@@ -111,40 +113,13 @@ public class PHMiniGame extends PlaceholderExpansion{
         	n = n -1;
         	return p.PositionArmorStand(n);
         	
-        }else if(identifier.equals("dific_1")){
+        }else if(identifier.equals("dific_1") || identifier.equals("dific_2") || identifier.equals("dific_3") || identifier.equals("dific_4") || identifier.equals("dific_5")
+        		|| identifier.equals("dific_6")){
         	
         	GameConditions c = new GameConditions(plugin);
-        	return c.DifficultyMap("%dific1%");
+        	int value = Integer.valueOf(identifier.replace("dific_",""));
         	
-        }else if(identifier.equals("dific_2")){
-        	
-        	GameConditions c = new GameConditions(plugin);
-        	return c.DifficultyMap("%dific2%");
-        	
-        }else if(identifier.equals("dific_3")){
-        	
-        	GameConditions c = new GameConditions(plugin);
-        	return c.DifficultyMap("%dific3%");
-        	
-        }else if(identifier.equals("dific_3")){
-        	
-        	GameConditions c = new GameConditions(plugin);
-        	return c.DifficultyMap("%dific3%");
-        	
-        }else if(identifier.equals("dific_4")){
-        	
-        	GameConditions c = new GameConditions(plugin);
-        	return c.DifficultyMap("%dific4%");
-        	
-        }else if(identifier.equals("dific5")){
-        	
-        	GameConditions c = new GameConditions(plugin);
-        	return c.DifficultyMap("%dific5%");
-        	
-        }else if(identifier.equals("dific6")){
-        	
-        	GameConditions c = new GameConditions(plugin);
-        	return c.DifficultyMap("%dific6%");
+        	return c.DifficultyMap("%dific"+value+"%");
         	
         }else if(identifier.equals("getmap")){
         	return getMapNamePlaceHolder(player);
@@ -158,6 +133,20 @@ public class PHMiniGame extends PlaceholderExpansion{
         }else if(identifier.equals("version")){
         	return getVersion();
         	
+        }else if(identifier.startsWith("isinside_")){
+        	String text = identifier.replace("isinside_","");
+        	String[] split = text.split("_");
+        	String[] split2 = split[0].split(",");
+        	String[] split3 = split[1].split(",");
+        	
+        	GameConditions c = new GameConditions(plugin);
+        	
+        	Location loc1 = new Location(Bukkit.getWorld(split2[0]),Double.valueOf(split2[1]),Double.valueOf(split2[2]),Double.valueOf(split2[3]));
+        	Location loc2 = new Location(Bukkit.getWorld(split3[0]),Double.valueOf(split3[1]),Double.valueOf(split3[2]),Double.valueOf(split3[3]));
+
+        	
+        	return 	String.valueOf(c.isInsideOfLocations(player.getLocation(), loc1, loc2));
+ 
         }
         
         // We return null if an invalid placeholder (f.e. %someplugin_placeholder3%) 

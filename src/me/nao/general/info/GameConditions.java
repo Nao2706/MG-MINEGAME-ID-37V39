@@ -3676,17 +3676,19 @@ public class GameConditions {
 	
 	public boolean isInsideOfLocations(Location player , Location point1 , Location point2) {
 		
-		double minX = Math.min(point1.getX(),point2.getX());
-		double minY = Math.min(point1.getY(),point2.getY());
-		double minZ = Math.min(point1.getZ(),point2.getZ());
+		if(!(point1.getWorld().getName().equals(point2.getWorld().getName()))) return false;
 		
-		double maxX = Math.max(point1.getX(), point2.getX())+1;
-		double maxY = Math.max(point1.getY(), point2.getY());//quite un +1 
-		double maxZ = Math.max(point1.getZ(), point2.getZ())+1;
+			double minX = Math.min(point1.getX(),point2.getX());
+			double minY = Math.min(point1.getY(),point2.getY());
+			double minZ = Math.min(point1.getZ(),point2.getZ());
+			
+			double maxX = Math.max(point1.getX(), point2.getX())+1;
+			double maxY = Math.max(point1.getY(), point2.getY());//quite un +1 
+			double maxZ = Math.max(point1.getZ(), point2.getZ())+1;
 
-		return (maxX >= player.getX() && player.getX() >= minX) &&
-			   (maxY >= player.getY() && player.getY() >= minY) &&
-			   (maxZ >= player.getZ() && player.getZ() >= minZ);
+			return (maxX >= player.getX() && player.getX() >= minX) &&
+				   (maxY >= player.getY() && player.getY() >= minY) &&
+				   (maxZ >= player.getZ() && player.getZ() >= minZ);
 		
 	}
 	
