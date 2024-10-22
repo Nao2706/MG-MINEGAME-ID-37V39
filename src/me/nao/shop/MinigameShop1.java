@@ -61,14 +61,6 @@ public class MinigameShop1 implements Listener{
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
 	@EventHandler
 	public void clickEventItem(InventoryDragEvent e) {
 	    //Player player = (Player) e.getWhoClicked();

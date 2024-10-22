@@ -165,11 +165,11 @@ public class FlareActions {
 		  while(y < 320) {
 			  
 			  if(new Location(loc.getWorld(),loc.getX(),y,loc.getZ()).getBlock().getType() == Material.BARRIER) {
-					 
 				  return new Location(loc.getWorld(),loc.getX(),y,loc.getZ());
-			  }else if(new Location(loc.getWorld(),loc.getX(),y,loc.getZ()).getBlock().getType() != Material.AIR) {
 				  
+			  }else if(new Location(loc.getWorld(),loc.getX(),y,loc.getZ()).getBlock().getType() != Material.AIR) {
 				  return new Location(loc.getWorld(),loc.getX(),y,loc.getZ());
+				  
 			  }
 			  y++;
 			 

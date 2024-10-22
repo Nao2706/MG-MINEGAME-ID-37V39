@@ -44,6 +44,8 @@ import me.nao.general.info.GameInfo;
 import me.nao.general.info.PlayerInfo;
 import me.nao.main.game.Minegame;
 import me.nao.manager.MapIntoGame;
+import me.nao.revive.PlayerRevive;
+import me.nao.revive.ReviveStatus;
 
 
 
@@ -599,8 +601,8 @@ public class SourceOfDamage implements Listener{
 			MapIntoGame ci = new MapIntoGame(plugin);
 			GameConditions gc = new GameConditions(plugin);
 		
-			
-			
+			if(!gc.isPlayerinGame(player)) return;
+			PlayerInfo pi = plugin.getPlayerInfoPoo().get(player);
 			// TIPO DE DA�O COMO PROJECTILE O DRAWNING  ENTITY ETC
 			//player.sendMessage("Motivo de da�o recibido de "+e.getCause().toString());
 		
@@ -609,11 +611,19 @@ public class SourceOfDamage implements Listener{
 					Entity damager = ((EntityDamageByEntityEvent)e).getDamager();
 					
 					if(e.getFinalDamage() >= player.getHealth()) {
-						if(gc.isPlayerinGame(player)) {
 							e.setCancelled(true);
-							ci.GameMobDamagerCause(player, damager);
+						
 							
-						}	
+							if(gc.isEnabledReviveSystem(pi.getMapName())) {
+								PlayerRevive pr = new PlayerRevive(player,0,30,ReviveStatus.BLEEDING,damager,null,plugin);
+								pr.Knocked();
+								plugin.getPlayerKnocked().put(player, pr);
+							}else {
+								ci.GameMobDamagerCauses(player, damager);
+							}
+							
+							
+							
 					}
 								
 						return;
@@ -621,11 +631,15 @@ public class SourceOfDamage implements Listener{
 				}else {
 					//bloque de da�o por causas externas
 					if(e.getFinalDamage() >= player.getHealth()) {
-						if(gc.isPlayerinGame(player)) {
 							e.setCancelled(true);
-							ci.GameDamageCause(player, e.getCause());
-							
-						}
+							if(gc.isEnabledReviveSystem(pi.getMapName())) {
+								PlayerRevive pr = new PlayerRevive(player,0,30,ReviveStatus.BLEEDING,null,e.getCause(),plugin);
+								pr.Knocked();
+								plugin.getPlayerKnocked().put(player, pr);
+							}else {
+								ci.GameDamageCauses(player, e.getCause());
+							}
+						
 					}
 					return;
 				}

@@ -95,6 +95,8 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
+import com.google.common.base.Strings;
+
 import me.nao.cosmetics.fireworks.RankPlayer;
 import me.nao.flare.actions.Flare;
 import me.nao.general.info.GameInfo;
@@ -104,6 +106,8 @@ import me.nao.general.info.GameConditions;
 import me.nao.general.info.PlayerInfo;
 import me.nao.main.game.Minegame;
 import me.nao.manager.EstadoPartida;
+import me.nao.revive.PlayerRevive;
+import me.nao.revive.ReviveStatus;
 import me.nao.shop.Items;
 import me.nao.shop.MinigameShop1;
 import net.md_5.bungee.api.ChatMessageType;
@@ -155,11 +159,32 @@ public class EventRandoms implements Listener{
 		
 		if(gc.isPlayerinGame(player)) {
 			
+			
 			PlayerInfo pi = plugin.getPlayerInfoPoo().get(player);
 			GameInfo gi = plugin.getGameInfoPoo().get(pi.getMapName());
 			if(gi.getEstopartida() == EstadoPartida.JUGANDO) {
 				
 				Entity ent = e.getRightClicked();
+				
+				if(ent instanceof Player) {
+					Player target = (Player) ent;
+					
+					if(plugin.getPlayerKnocked().containsKey(target)) {
+						PlayerRevive pr = plugin.getPlayerKnocked().get(target);
+						int value = pr.getValue();
+						if(value != 100) {
+							pr.setValue(pr.getValue()+1);
+							target.sendTitle("Reviviendo", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 20, 20, 20);
+							player.sendTitle("Reviviendo", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 20, 20, 20);
+							pr.setReviveStatus(ReviveStatus.HEALING);
+						}else {
+							player.sendMessage(ChatColor.GOLD+"Ayudaste a levantar a "+ChatColor.GREEN+target.getName());
+							target.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.GOLD+" te ayudo a levantarte.");
+						}
+						
+					}
+					
+				}
 				
 				if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
 					
@@ -2849,9 +2874,6 @@ public class EventRandoms implements Listener{
 		 
 		 
 			public void SpawnArrowsDispenser(Location l,BlockFace bf,float addy ,float addp , boolean iswithfire) {
-				
-				
-				
 				Location loc = l;
 				Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc, EntityType.ARROW);
 				
@@ -2874,23 +2896,20 @@ public class EventRandoms implements Listener{
 			}
 		 
 		 
+			public String Porcentage(int current , int max ) {
+				float percent = (float) current/max*100;
+				NumberFormat nf = NumberFormat.getInstance();
+				nf.setMaximumFractionDigits(0);
+				return nf.format(percent)+"%";
+			}
 		 
 		 
+			public String getProgressBar(int current, int max, int totalBars, char symbol, ChatColor completedColor,ChatColor notCompletedColor) {
+		        float percent = (float) current/max;
+		        int progressBars = (int) (totalBars * percent);
 		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
-		 
+		        return Strings.repeat(""+ completedColor +ChatColor.BOLD + symbol, progressBars) + Strings.repeat("" + notCompletedColor +ChatColor.BOLD+ symbol, totalBars - progressBars);
+		   }
 		 
 					
 					

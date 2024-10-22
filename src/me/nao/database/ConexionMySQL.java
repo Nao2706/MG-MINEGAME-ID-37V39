@@ -24,9 +24,6 @@ public class ConexionMySQL {
 		this.usuario = usuario;
 		this.password = password;
 		
-		
-		
-		
 		try {
 			  Logger logger = Logger.getLogger(ConexionMySQL.class.getName());
 			synchronized(this) {

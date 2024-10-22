@@ -11,12 +11,9 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-//import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import me.nao.main.game.Minegame;
 
@@ -33,68 +30,33 @@ public class SQLInfo {
 	
 	public String Host() {
 		FileConfiguration config = plugin.getConfig();
-		String host = config.getString("Data-Base.Host");
-		return host;
+		return config.getString("Data-Base.Host");
 	}
 	
 	public int Puerto() throws NumberFormatException{
 		FileConfiguration config = plugin.getConfig();
 		
-		int puerto = config.getInt("Data-Base.Puerto");
-		
-		
-		return puerto;
+		return config.getInt("Data-Base.Puerto");
 	}
 	
 	public String BaseDeDatos() {
 		FileConfiguration config = plugin.getConfig();
-		String db = config.getString("Data-Base.BaseDeDatos");
-		return db;
+		return config.getString("Data-Base.BaseDeDatos");
 	}
 	
 	public String Usuario() {
 		FileConfiguration config = plugin.getConfig();
-		String user = config.getString("Data-Base.Usuario");
-		return user;
+		return config.getString("Data-Base.Usuario");
 	}
 	
 	public String Clave() {
 		FileConfiguration config = plugin.getConfig();
-		String clave = config.getString("Data-Base.Clave");
-		return clave;
+		return config.getString("Data-Base.Clave");
 	}
 	
 	
-	public static boolean isPlayerinDB(Connection connection,UUID uuid) {
-	try {
-			PreparedStatement statement = connection.prepareStatement("SELECT * FROM Inventory WHERE (UUID=?)");
-			statement.setString(1,uuid.toString());
-			ResultSet resultado = statement.executeQuery();
-			if(resultado.next()) {
-				return true;
-			}
-			
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
 	
 	
-	public static boolean isPlayerVanish(Connection connection,UUID uuid) {
-	try {
-			PreparedStatement statement = connection.prepareStatement("SELECT * FROM Vanish WHERE (UUID=?)");
-			statement.setString(1,uuid.toString());
-			ResultSet resultado = statement.executeQuery();
-			if(resultado.next()) {
-				return true;
-			}
-			
-		}catch(SQLException e) {
-			e.printStackTrace();
-		}
-		return false;
-	}
 	
 	//set info 
 	public static void createtable(Connection connection) {
@@ -110,8 +72,6 @@ public class SQLInfo {
 						");");
 			
 				statement.executeUpdate();
-			
-			
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
@@ -139,18 +99,38 @@ public class SQLInfo {
 		
 	}
 	
+	
+	public static boolean isPlayerinDB(Connection connection,UUID uuid) {
+		try {
+				PreparedStatement statement = connection.prepareStatement("SELECT * FROM Inventory WHERE (UUID=?)");
+				statement.setString(1,uuid.toString());
+				ResultSet resultado = statement.executeQuery();
+				if(resultado.next()) {
+					return true;
+				}
+				
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+			return false;
+		}
+	
+	
 	//TODO SAVE
-	public static void SavePlayerInventory(Connection connection , UUID uuid , String name,String inv) {
+	public static void SavePlayerInventory(Connection connection , UUID uuid , String name,String inv,Player player) {
 		
 		try {	
-			System.out.println("Inv: "+inv);
+		
 			if(!isPlayerinDB(connection, uuid)) {
 				PreparedStatement statement = connection.prepareStatement("INSERT INTO Inventory VALUE (?,?,?)");
 				statement.setString(1, uuid.toString());
 				statement.setString(2, name);
 				statement.setString(3,inv);
 			    statement.executeUpdate();
-			  
+			    
+			  player.sendMessage(ChatColor.GREEN+"Inventario Salvado con Exito ...");
+			}else{
+				setNewInventory(connection, uuid, inv,player);
 			}
 			
 			
@@ -161,7 +141,7 @@ public class SQLInfo {
 	}
 	
 	
-	public static void getInventorySave(Connection connection,UUID uuid,Player player) throws IllegalArgumentException, IOException ,ClassNotFoundException{
+	public static void GetPlayerInventory(Connection connection,UUID uuid,Player player) throws IllegalArgumentException, IOException ,ClassNotFoundException{
 		try {
 			//VanishManager v = new VanishManager(null);
 		
@@ -181,59 +161,65 @@ public class SQLInfo {
 					//String name = resultado.getString("Nombre");
 					//si deseas puedes mandar un mensaje al jugador
 					
-					
-					
 				}
-			
-			
-			
 			
 		}catch(SQLException e) {
 			e.printStackTrace();
 		}
 		
 	}
+	
+	public static void setNewInventory(Connection connection,UUID uuid,String inv,Player player) {
+		try {
+				PreparedStatement statement = connection.prepareStatement("UPDATE Inventory SET Inventario=? WHERE (UUID=?)");
+				statement.setString(1,inv);
+				statement.setString(2, uuid.toString());
+				statement.executeUpdate();
+				player.sendMessage(ChatColor.GREEN+"Inventario Salvado con Exito .");
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+			
+		}
+	
+	
+	public static void DeleteUserInventory(Connection connection,UUID uuid,Player player) {
+		try {
+			
+			if(!isPlayerinDB(connection, uuid)) {
+				PreparedStatement statement = connection.prepareStatement("DELETE FROM Inventory WHERE (UUID=?)");
+				statement.setString(1,uuid.toString());
+				statement.executeUpdate();
+			
+			}else {
+				
+			}
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	
 	
 	//TODO END
 	public static boolean TableExist(Connection connection){
 		
 			//Name:"{\"text\":\"ESPADA NICHIRIN\"}"}}}}] 
-	try {	
-			PreparedStatement statement = connection.prepareStatement("SHOW TABLES LIKE \"Vanish2\"");
-			
-			statement.executeUpdate();
-			return true;
-	}catch(SQLException e) {
-		e.printStackTrace();
-		return false;
-	}
-			
-			
-		
-		
-		
-	}
-		
-	
-	public static void createPlayer(Connection connection , UUID uuid , String name) {
-		
 		try {	
-		
-			if(!isPlayerinDB(connection, uuid)) {
-				PreparedStatement statement = connection.prepareStatement("INSERT INTO Inventory VALUE (?,?,?)");
-				statement.setString(1, uuid.toString());
-				statement.setString(2, name);
-				statement.setBoolean(3,true);
-			    statement.executeUpdate();
-			  
-			}
-			
-			
+				PreparedStatement statement = connection.prepareStatement("SHOW TABLES LIKE \"Vanish2\"");
+				
+				statement.executeUpdate();
+				return true;
 		}catch(SQLException e) {
 			e.printStackTrace();
+			return false;
 		}
 		
 	}
+		
 	
 	public static void getAllTrue2(Connection connection) {
 		try {
@@ -247,11 +233,6 @@ public class SQLInfo {
 				boolean value = resultado.getBoolean("Value");
 				String id = resultado.getString("UUID");
 				String name = resultado.getString("Nombre");
-				
-				
-				
-				
-				
 				
 				//si deseas puedes mandar un mensaje al jugador
 				Bukkit.getConsoleSender().sendMessage("\nID: "+id+" Nombre: "+name+" Value: "+value);
@@ -415,7 +396,7 @@ public class SQLInfo {
 	
 	
 	public static void setValue(Connection connection,UUID uuid,boolean value) {
-		try {
+	try {
 			PreparedStatement statement = connection.prepareStatement("UPDATE Vanish SET Value=? WHERE (UUID=?)");
 			statement.setBoolean(1,value);
 			statement.setString(2, uuid.toString());
@@ -443,75 +424,8 @@ public class SQLInfo {
 		
 	}
 	
-	public void Vanish(Connection connection,UUID uuid,Player player) {
-		createPlayer(connection, uuid, player.getName());
-		
-//		if(plugin.getHidePlayers().containsKey(player)) {
-//			if(plugin.getHidePlayers().get(player)) {
-//				UnhideYou(player);
-//			}else {
-//				HideYou(player);
-//			}
-//			
-//			
-//		}else {
-//			HideYou(player);
-//		}
-//		
-//		getValueChange(connection, uuid, player);
-//		
-	}
+
 	
-	public void HideYou(Player player) {
-		
-//		
-//			for(Player players : Bukkit.getOnlinePlayers()) {
-//				
-//		//		players.hidePlayer(player);
-//				//players.hidePlayer(plugin,player);
-//				
-//				
-//			}
-			
-			//plugin.getHidePlayers().put(player, true);
-		
-			    player.sendMessage(ChatColor.GREEN+"Tu eres invisible ahora.");
-				//player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 20.0F,1F);
-				PotionEffect inv = new PotionEffect(PotionEffectType.INVISIBILITY,/*duration*/ 99999,/*amplifier:*/5, true ,true );
-				PotionEffect vis = new PotionEffect(PotionEffectType.NIGHT_VISION,/*duration*/ 99999,/*amplifier:*/5, true ,true );
-				player.addPotionEffect(inv);
-				player.addPotionEffect(vis);
-				
-				FileConfiguration message = plugin.getMessage();
-				String texto = message.getString("Message.fake-leave");
-				Bukkit.broadcastMessage(ChatColor.translateAlternateColorCodes('&', texto.replaceAll("%player%",player.getName())));
-		
-		
-	}
-	
-	
-	public  void UnhideYou(Player player) {
-		
-		
-		
-//			for(Player players : Bukkit.getOnlinePlayers()) {
-//				players.showPlayer(player);
-//
-//				//players.showPlayer(plugin,player);
-//				
-//			}
-//			plugin.getHidePlayers().replace(player, false);
-//				
-			    player.sendMessage(ChatColor.GREEN+"Tu eres visible ahora.");
-				//player.playSound(player.getLocation(), Sound.LEVEL_UP, 20.0F,1F); 1.8
-			   // player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 20.0F,1F);
-				player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-				player.removePotionEffect(PotionEffectType.INVISIBILITY);
-			
-		
-		
-	
-	}
 	
 	
 	

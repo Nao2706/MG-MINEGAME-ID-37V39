@@ -29,6 +29,7 @@ import me.nao.events.EventRandoms;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
 import me.nao.general.info.PlayerInfo;
+import me.nao.revive.PlayerRevive;
 import me.nao.shop.MinigameShop1;
 import me.nao.yamlfile.game.YamlFile;
 import me.top.users.PHMiniGame;
@@ -67,6 +68,7 @@ public class Minegame extends JavaPlugin{
     private Map<Player, PlayerInfo> playerinfopoo;
     private Map<String, GameInfo> misioninfopoo;
     private Map<Player,Entity> credit;
+    private Map<Player, PlayerRevive> playerrevive;
     
    //==================================== 
 	public Map<String,YamlFile>getAllYmls ; // YML Manager
@@ -330,7 +332,7 @@ public class Minegame extends JavaPlugin{
 	   playerinfopoo = new HashMap<>();
 	   misioninfopoo = new HashMap<>();
 	   credit = new HashMap<>();
-	    
+	   playerrevive = new HashMap<>();
 	
 		checkpoint = new HashMap<Player,Location>();
 		getAllYmls = new HashMap<>();
@@ -407,6 +409,10 @@ public class Minegame extends JavaPlugin{
    
    public Map<Player,Entity> CreditKill(){
 	   return credit;
+   }
+   
+   public Map<Player,PlayerRevive> getPlayerKnocked(){
+	   return playerrevive;
    }
    
    

@@ -64,6 +64,7 @@ public class MapManager {
 			plugin.NewYml(name, player);
 			FileConfiguration ym = plugin.getCacheSpecificYML(name);
 			ym.set("Type-Mission","Adventure");
+			ym.set("Revive-System",false);
 			ym.set("Max-Player", 5);
 			ym.set("Min-Player", 2);
 			ym.set("Timer-H-M-S", "1,5,10");

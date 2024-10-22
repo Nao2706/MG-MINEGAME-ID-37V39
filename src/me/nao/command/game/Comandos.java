@@ -2254,22 +2254,75 @@ public class Comandos implements CommandExecutor{
 				}else if(args[0].equalsIgnoreCase("dbsave")) {
 					
 					try {
-						SQLInfo.SavePlayerInventory(plugin.getMySQL(), player.getUniqueId(), player.getName(), BukkitSerialization.serializar(player.getInventory().getContents()));
+						SQLInfo.SavePlayerInventory(plugin.getMySQL(), player.getUniqueId(), player.getName(), BukkitSerialization.serializar(player.getInventory().getContents()),player);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					player.sendMessage(ChatColor.GREEN+"Inventario salvado. 1");
+					
 					
 					return true;
 				}else if(args[0].equalsIgnoreCase("dbget")) {
 					
 					try {
-						SQLInfo.getInventorySave(plugin.getMySQL(), player.getUniqueId(), player);
-						player.sendMessage(ChatColor.GREEN+"Inventario salvado recuperado. 1");
+						SQLInfo.GetPlayerInventory(plugin.getMySQL(), player.getUniqueId(), player);
+						player.sendMessage(ChatColor.GREEN+"Inventario salvado recuperado.");
 					} catch (IllegalArgumentException | IOException | ClassNotFoundException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
+					}
+					
+					return true;
+				}else if(args[0].equalsIgnoreCase("dbcheck")) {
+					
+					try {
+						if(args.length == 2) { 
+							String user = args[1];
+							
+							Player target = Bukkit.getPlayerExact(user);
+							if(target != null) {
+							
+								if(SQLInfo.isPlayerinDB(plugin.getMySQL(), target.getUniqueId())) {
+									player.sendMessage(ChatColor.RED+"El jugador esta en la base de datos.");
+								}else {
+									player.sendMessage(ChatColor.RED+"El jugador no esta en la base de datos.");
+								}
+								
+								
+							}else {
+								player.sendMessage(ChatColor.RED+"El jugador no esta conectado o no existe.");
+							}
+						}else {
+							if(SQLInfo.isPlayerinDB(plugin.getMySQL(), player.getUniqueId())) {
+								player.sendMessage(ChatColor.RED+"El jugador esta en la base de datos.");
+							}else {
+								player.sendMessage(ChatColor.RED+"El jugador no esta en la base de datos.");
+							}
+						}
+						
+					
+					} catch (IllegalArgumentException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					return true;
+				}else if(args[0].equalsIgnoreCase("dbdelete")) {
+					
+					//mg dbdelete NAO
+					if(args.length == 2) { 
+						String user = args[1];
+						
+						Player target = Bukkit.getPlayerExact(user);
+						if(target != null) {
+							SQLInfo.DeleteUserInventory(plugin.getMySQL(),target.getUniqueId(), target);
+						}else {
+							player.sendMessage(ChatColor.RED+"El jugador no esta conectado o no existe.");
+						}
+						
+						
+					}else {
+						SQLInfo.DeleteUserInventory(plugin.getMySQL(),player.getUniqueId(), player);
 					}
 					
 					return true;
@@ -2335,9 +2388,14 @@ public class Comandos implements CommandExecutor{
 					
 				
 				return true;
-				}else if(args[0].equalsIgnoreCase("ascore")) {
+				}else if(args[0].equalsIgnoreCase("block")) {
 					
-				//	MgScore mg = new MgScore(plugin);
+					
+					Block b = player.getLocation().getBlock();
+					Block r = b.getRelative(0, 1, 0);
+					
+					player.sendBlockChange(r.getLocation(), Material.STONE.createBlockData());
+							//	MgScore mg = new MgScore(plugin);
 					//mg.ShowProgressObjetive(player);
 					return true;
 				}else if(args[0].equalsIgnoreCase("dscore")) {

@@ -649,21 +649,16 @@ public class MapIntoGame {
 	}
 	
 	
-	public void GameMobDamagerCause(Player player ,Entity e) {
+	public void GameMobDamagerCauses(Player player ,Entity e) {
 	
 		
-		if (player.getInventory().getItemInMainHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING)) || player.getInventory().getItemInOffHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING))) {
+		if (player.getInventory().getItemInMainHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING)) || player.getInventory().getItemInOffHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING))) return;
 			 
-			return;
-		}else {
-	
+			
 			GameConditions gmc = new GameConditions(plugin);
 			
 			
-			if(gmc.hasPlayerACheckPoint(player)) {
-				return;
-			}
-		
+			if(gmc.hasPlayerACheckPoint(player)) return;
 			
 			//SI TE MATA UN JUGADOR
 			if(e instanceof Player) {
@@ -747,21 +742,18 @@ public class MapIntoGame {
 			}
 			
 			
-		}
+		
 		
 		
 	}
 	
-	public void GameDamageCause(Player player, EntityDamageEvent.DamageCause c) {
-		if (player.getInventory().getItemInMainHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING)) || player.getInventory().getItemInOffHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING))) {
-			 
-			return;
-		}else {
+	public void GameDamageCauses(Player player, EntityDamageEvent.DamageCause c) {
+		if (player.getInventory().getItemInMainHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING)) || player.getInventory().getItemInOffHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING))) return;
+			
+	
 			GameConditions gmc = new GameConditions(plugin);
-			if(gmc.hasPlayerACheckPoint(player)) {
-				return;
-				
-			}else{
+			if(gmc.hasPlayerACheckPoint(player)) return;
+			
 				HealPlayer(player);
 			
 				GamePlayerDeadInMap(player);
@@ -959,9 +951,9 @@ public class MapIntoGame {
 					
 				}
 				
-			}
 			
-		}
+			
+		
 		//colocar abajo condicion reformada de checkpoint
 		
 	}

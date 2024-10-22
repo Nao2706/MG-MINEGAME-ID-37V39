@@ -976,10 +976,11 @@ public class GameConditions {
 			    		List<String> vivos = new ArrayList<>();
 					    List<String> muertos = new ArrayList<>();
 					    List<String> arrivo = new ArrayList<>();
+					    List<String> knocked = new ArrayList<>();
 					
-			    	GameAdventure mis = new GameAdventure(map ,maxplayers,minplayers,misiontype ,EstadoPartida.ESPERANDO,StopMotivo.NINGUNO,boss,time,LoadObjetivesOfGames(map),participantes,espectador,vivos,muertos,arrivo,false,false);
+			    	GameAdventure mis = new GameAdventure(map ,maxplayers,minplayers,misiontype ,EstadoPartida.ESPERANDO,StopMotivo.NINGUNO,boss,time,LoadObjetivesOfGames(map),participantes,espectador,vivos,muertos,arrivo,knocked,false,false);
 					System.out.println("LOG-1 MISION: "+mis.ShowGame());
-					
+					 
 					plugin.getGameInfoPoo().put(map, mis);
 			    }else if(misiontype == GameType.NEXO) {
 //			    	List<String> t1 = new ArrayList<>();
@@ -1193,9 +1194,14 @@ public class GameConditions {
 		return mision.getString("Start.Tittle-of-Mision");
 	}
 	
-	public Integer getMaxPlayerMap(String map) {
+	public int getMaxPlayerMap(String map) {
 		FileConfiguration mision = getGameConfig(map);
 		return mision.getInt("Max-Player");
+	}
+	
+	public boolean isEnabledReviveSystem(String map) {
+		FileConfiguration mision = getGameConfig(map);
+		return mision.getBoolean("Revive-System");
 	}
 	
 	/**
@@ -1227,6 +1233,26 @@ public class GameConditions {
 		 return;
 	}
 	
+	public boolean isMapRanked(String map) {
+		List<String> are = plugin.getConfig().getStringList("Maps-Points.List");
+		return are.contains(map);
+	}
+	
+	public FileConfiguration getGameConfig(String name) {
+		YamlFilePlus file = new YamlFilePlus(plugin);
+		FileConfiguration config = file.getSpecificYamlFile("Maps",name);
+		//u.saveSpecificl(name);
+	    return config;
+	}
+	
+	public FileConfiguration getDialogueConfig(String name) {
+		YamlFilePlus file = new YamlFilePlus(plugin);
+		FileConfiguration config = file.getSpecificYamlFile("Maps-Dialogues",name);
+		//u.saveSpecificl(name);
+	    return config;
+	}
+	
+	
 	public boolean isMessageFromActions(String map,String message) {
 		
 		String keyword = "(P)";
@@ -1248,25 +1274,6 @@ public class GameConditions {
 			 }
 		}
 		return false;
-	}
-	
-	public boolean isMapRanked(String map) {
-		List<String> are = plugin.getConfig().getStringList("Maps-Points.List");
-		return are.contains(map);
-	}
-	
-	public FileConfiguration getGameConfig(String name) {
-		YamlFilePlus file = new YamlFilePlus(plugin);
-		FileConfiguration config = file.getSpecificYamlFile("Maps",name);
-		//u.saveSpecificl(name);
-	    return config;
-	}
-	
-	public FileConfiguration getDialogueConfig(String name) {
-		YamlFilePlus file = new YamlFilePlus(plugin);
-		FileConfiguration config = file.getSpecificYamlFile("Maps-Dialogues",name);
-		//u.saveSpecificl(name);
-	    return config;
 	}
 
 	
