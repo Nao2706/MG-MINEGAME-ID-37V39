@@ -2300,7 +2300,7 @@ public class GameConditions {
 		 }
 	}
 	
-	
+	//TODO MESSAGE
 	//LA DIFERENCIA ES QUE EN ESTE OMITE TU NOMBRE EN EL ALL PLAYERS ES UN MENSAJE GLOBAL PARA TODOS LOS JUGADORES INCLUYENDOTE
 	public void SendMessageToUsersOfSameMap(Player player ,String text) {
 		
@@ -2710,18 +2710,18 @@ public class GameConditions {
    	 
    	
    	public int getReviveInfo(String name) {
-   	 return plugin.getPlayerInfoPoo().get(ConvertStringToPlayer(name)).getGamePoints().getRevive();
+   	 return plugin.getPlayerInfoPoo().get(ConvertStringToPlayerAlone(name)).getGamePoints().getRevive();
    	}
    	
  	public int getDeadsInfo(String name) {
- 	   	 return plugin.getPlayerInfoPoo().get(ConvertStringToPlayer(name)).getGamePoints().getDeads();
+ 	   	 return plugin.getPlayerInfoPoo().get(ConvertStringToPlayerAlone(name)).getGamePoints().getDeads();
  	}
  	public int getReviveAsistenceInfo(String name) {
- 	   	 return plugin.getPlayerInfoPoo().get(ConvertStringToPlayer(name)).getGamePoints().getHelpRevive();
+ 	   	 return plugin.getPlayerInfoPoo().get(ConvertStringToPlayerAlone(name)).getGamePoints().getHelpRevive();
  	}
  	
  	public int getDamageInfo(String name) {
-	   	 return TransformPosOrNeg(plugin.getPlayerInfoPoo().get(ConvertStringToPlayer(name)).getGamePoints().getDamage());
+	   	 return TransformPosOrNeg(plugin.getPlayerInfoPoo().get(ConvertStringToPlayerAlone(name)).getGamePoints().getDamage());
 	}
  	
 	public int TransformPosOrNeg(int i) {
@@ -3552,11 +3552,6 @@ public class GameConditions {
 		
 		
 	}
-	
-	
-	
-	
-	
    
    	//mg objetive-primary complete 1
     //mg objetive-secondary complete 1
@@ -3580,14 +3575,19 @@ public class GameConditions {
    		return actual ;
 	}
 	
+	//TODO CONVERT STRING TO PLAYER IF IS ONLY ONE 
+	public Player ConvertStringToPlayerAlone(String name) {return Bukkit.getPlayerExact(name);}
 	
 	//TODO STRING TO PLAYER
-	public List<Player> ConvertStringToPlayer(List<String> point1){
+	public List<Player> ConvertStringToPlayer(List<String> list){
 		List<Player> l = new ArrayList<>();
-		for(int i = 0;i<point1.size();i++) {
-   			Player user = Bukkit.getServer().getPlayerExact(point1.get(i));
-   			l.add(user);
-   		}
+		if(!list.isEmpty()) {
+			for(int i = 0;i < list.size();i++) {
+	   			Player user = Bukkit.getServer().getPlayerExact(list.get(i));
+	   			l.add(user);
+	   		}
+		}
+		
 		return l ;
 	}
 	
@@ -3677,7 +3677,7 @@ public class GameConditions {
 		
 	}
 	
-	public Player ConvertStringToPlayer(String name) {return Bukkit.getPlayerExact(name);}
+
 	
 	//TODO NEXO
 	

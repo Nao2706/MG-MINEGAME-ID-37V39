@@ -618,6 +618,7 @@ public class SourceOfDamage implements Listener{
 								PlayerRevive pr = new PlayerRevive(player,0,30,ReviveStatus.BLEEDING,damager,null,plugin);
 								pr.Knocked();
 								plugin.getPlayerKnocked().put(player, pr);
+								return;
 							}else {
 								ci.GameMobDamagerCauses(player, damager);
 							}
@@ -636,6 +637,7 @@ public class SourceOfDamage implements Listener{
 								PlayerRevive pr = new PlayerRevive(player,0,30,ReviveStatus.BLEEDING,null,e.getCause(),plugin);
 								pr.Knocked();
 								plugin.getPlayerKnocked().put(player, pr);
+								return;
 							}else {
 								ci.GameDamageCauses(player, e.getCause());
 							}

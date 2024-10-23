@@ -70,7 +70,7 @@ public class AdventureTemp {
 	  
 	
 	   private Minegame plugin;
-	   int taskID;
+	   private int taskID;
 	  
 	
 	  

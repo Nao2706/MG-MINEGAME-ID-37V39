@@ -152,6 +152,8 @@ public class EventRandoms implements Listener{
 		
 	}
 	
+	
+	//TODO INTERACT
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void ClickEntity(PlayerInteractAtEntityEvent e) {
 		Player player = (Player) e.getPlayer();
@@ -168,16 +170,19 @@ public class EventRandoms implements Listener{
 				
 				if(ent instanceof Player) {
 					Player target = (Player) ent;
-					
+					 
 					if(plugin.getPlayerKnocked().containsKey(target)) {
 						PlayerRevive pr = plugin.getPlayerKnocked().get(target);
 						int value = pr.getValue();
 						if(value != 100) {
 							pr.setValue(pr.getValue()+1);
-							target.sendTitle("Reviviendo", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 20, 20, 20);
-							player.sendTitle("Reviviendo", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 20, 20, 20);
+							target.sendTitle(""+ChatColor.WHITE+ChatColor.BOLD+"REVIVIENDO"+ChatColor.GREEN+ChatColor.BOLD+" + ", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 0, 20, 0);
+							player.sendTitle(""+ChatColor.WHITE+ChatColor.BOLD+"REVIVIENDO"+ChatColor.GREEN+ChatColor.BOLD+" + ", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 0, 20, 0);
 							pr.setReviveStatus(ReviveStatus.HEALING);
 						}else {
+							target.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+"REVIVIDO", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(100,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 20, 20, 20);
+							player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+"REVIVIDO", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(100,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 20, 20, 20);
+						
 							player.sendMessage(ChatColor.GOLD+"Ayudaste a levantar a "+ChatColor.GREEN+target.getName());
 							target.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.GOLD+" te ayudo a levantarte.");
 						}
@@ -447,15 +452,34 @@ public class EventRandoms implements Listener{
 					if (e.getItem() != null) {
 						
 						
-						if (e.getItem().isSimilar(Items.TEST.getValue())) {
-							
-							FallingBlock f =  player.getWorld().spawnFallingBlock(player.getEyeLocation().add(0.5, 0, 0.5) ,Material.GREEN_STAINED_GLASS.createBlockData());
-							f.setGravity(true);
-							f.setInvulnerable(true);
-							f.setMaxDamage(20);
-							f.setDropItem(false);
-							f.setVelocity(player.getLocation().getDirection().multiply(3).setY(1));
-				       }
+//						if(e.getItem().isSimilar(Items.TEST.getValue())) {
+//							
+//							FallingBlock f =  player.getWorld().spawnFallingBlock(player.getEyeLocation().add(0.5, 0, 0.5) ,Material.GREEN_STAINED_GLASS.createBlockData());
+//							f.setGravity(true);
+//							f.setInvulnerable(true);
+//							f.setMaxDamage(20);
+//							f.setDropItem(false);
+//							f.setVelocity(player.getLocation().getDirection().multiply(3).setY(1));
+//				       }
+						//TODO REVIVE
+						if(e.getItem().isSimilar(Items.REVIVE.getValue())) {
+							if(plugin.getPlayerKnocked().containsKey(player)) {
+								PlayerRevive pr = plugin.getPlayerKnocked().get(player);
+								int value = pr.getValue();
+								if(value != 100) {
+									pr.setValue(pr.getValue()+1);
+									player.sendTitle(""+ChatColor.WHITE+ChatColor.BOLD+"REVIVIENDO"+ChatColor.GREEN+ChatColor.BOLD+" + ", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 0, 20, 0);
+									pr.setReviveStatus(ReviveStatus.HEALING);
+								}else {
+									player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+"REVIVIDO" ,""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(100,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 20, 20, 20);
+									player.sendMessage(ChatColor.GOLD+"Te has autorevivido ");
+									removeItemstackCustom(player,e.getItem());
+								}
+							}else {
+								player.sendMessage(ChatColor.RED+"Solo sirve cuando eres Derribado ");
+
+							}
+						}
 						
 						if(e.getItem().isSimilar( Items.JEDIP.getValue())) {
 							player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 20.0F, 1F);

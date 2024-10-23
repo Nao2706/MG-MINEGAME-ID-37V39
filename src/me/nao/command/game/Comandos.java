@@ -2369,6 +2369,7 @@ public class Comandos implements CommandExecutor{
 					
 					player.getInventory().addItem(Items.ARROWDIS.getValue());
 					player.getInventory().addItem(Items.ARROWDIS2.getValue());
+					player.getInventory().addItem(Items.REVIVE.getValue());
 					
 					return true;
 				}else if(args[0].equalsIgnoreCase("maintenance")) {

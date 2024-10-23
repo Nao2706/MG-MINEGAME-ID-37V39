@@ -2,6 +2,10 @@ package me.nao.revive;
 
 
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Material;
@@ -9,18 +13,19 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitScheduler;
 
 import me.nao.general.info.GameAdventure;
+import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
 import me.nao.general.info.PlayerInfo;
 import me.nao.main.game.Minegame;
 import me.nao.manager.MapIntoGame;
+import me.nao.shop.Items;
 
-public class PlayerRevive extends BukkitRunnable{
+public class PlayerRevive{
 
 	private Player player;
 	private int value ;
@@ -29,6 +34,7 @@ public class PlayerRevive extends BukkitRunnable{
 	private DamageCause cause;
 	private Minegame plugin;
 	private ReviveStatus rv;
+	private int taskID;
 	
 	public PlayerRevive(Player player, int value, int time,ReviveStatus rv, Entity e, DamageCause cause,Minegame plugin) {
 		this.player = player;
@@ -38,7 +44,7 @@ public class PlayerRevive extends BukkitRunnable{
 		this.cause = cause;
 		this.plugin = plugin;
 		this.rv = rv;
-		runTaskTimer(JavaPlugin.getPlugin(Minegame.class),0,3);
+		//runTaskTimer(JavaPlugin.getPlugin(Minegame.class),0,3);
 
 	}
 
@@ -77,7 +83,8 @@ public class PlayerRevive extends BukkitRunnable{
 		
 		if(gi instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) gi;
-			if(ga.getVivo().size() == ga.getKnockedPlayers().size()) {
+			System.out.println("CHECK");
+			if(ga.getVivo().size() == ga.getKnockedPlayers().size() && !hasPlayersAutoreviveItem()) {
 				return true;
 			}
 		}
@@ -101,19 +108,26 @@ public class PlayerRevive extends BukkitRunnable{
 	}
 	
 	public void Knocked() {
+		
+		
 		Block b = player.getLocation().getBlock();
 		Block r = b.getRelative(0, 1, 0);
 		
 		player.sendBlockChange(r.getLocation(), Material.BARRIER.createBlockData());
 		player.setInvulnerable(true);
-		PotionEffect lent = new PotionEffect(PotionEffectType.JUMP,/*duration*/ 10 * 20,/*amplifier:*/150, true ,true,true );
-		PotionEffect jump = new PotionEffect(PotionEffectType.SLOW,/*duration*/ 10 * 20,/*amplifier:*/100, true ,true,true );
+		PotionEffect lent = new PotionEffect(PotionEffectType.JUMP,/*duration*/ 999 * 20,/*amplifier:*/150, true ,true,true );
+		PotionEffect jump = new PotionEffect(PotionEffectType.SLOW,/*duration*/ 999 * 20,/*amplifier:*/100, true ,true,true );
+		
 		player.addPotionEffect(lent);
 		player.addPotionEffect(jump);
 		addToRevive();
+		System.out.println("TODOS NOQUEADOS: "+isAllKnocked()+ " TIENE ITEM DE REVIVIR: "+hasPlayersAutoreviveItem());
+		Start();
+		player.sendMessage(ChatColor.YELLOW+"Has sido Derribado.");
 	}
 	
 	public void StandUp() {
+		
 		Block b = player.getLocation().getBlock();
 		Block r = b.getRelative(0, 1, 0);
 		
@@ -144,6 +158,7 @@ public class PlayerRevive extends BukkitRunnable{
 				GameAdventure ga = (GameAdventure) gi;
 				if(ga.getKnockedPlayers().contains(player.getName())) return;
 				ga.getKnockedPlayers().add(player.getName());
+				System.out.println(ga.getKnockedPlayers());
 			}
 		
 	}
@@ -172,28 +187,82 @@ public class PlayerRevive extends BukkitRunnable{
 		return false;
 	}
 	
-	@Override
-	public void run() {
+	public boolean hasPlayersAutoreviveItem() {
 		
-		if(value == 100) {
-			this.cancel();
-			StandUp();
-		}else if(time == 0 || isAllKnocked() || player == null || !player.isOnline() || isDangerZone()) {
-			this.cancel();
-			Dead(e, cause);
-		}else if(getReviveStatus() == ReviveStatus.BLEEDING) {
-			time--;
-			player.sendTitle(ChatColor.YELLOW+"Moriras en ",""+ChatColor.RED+time, 20, 20, 20);
-			player.playEffect(player.getLocation().add(0,0,0), Effect.STEP_SOUND, Material.REDSTONE_BLOCK); 
-		}else if(getReviveStatus() == ReviveStatus.HEALING) {
-			setReviveStatus(ReviveStatus.BLEEDING);
+		
+		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+		GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
+		List<Player> hasitem = new ArrayList<>();
+		
+		
+		if(gi instanceof GameAdventure) {
+			GameAdventure ga = (GameAdventure) gi;
+			GameConditions gc = new GameConditions(plugin);
+			
+			List<Player> pr = gc.ConvertStringToPlayer(ga.getKnockedPlayers());
+		
+			if(!pr.isEmpty()) {
+				for(Player targets  : pr) {
+					if(targets.getInventory().containsAtLeast(Items.REVIVE.getValue(),1)) {
+						hasitem.add(targets);
+						return true;
+					}
+				}
+			}
 		}
 		
-		
-		
-	
-		
+		return false;
 	}
+	
+	
+	
+	public boolean reviveStoped() {
+		 if(time == 0) {
+			System.out.println("TIEMPO 0");
+			return true;
+		}else if(isAllKnocked()) {
+			System.out.println("TODOS NOQUEADOS");
+			return true;
+		}else if(isDangerZone()) {
+			System.out.println("ZONA PELIGROSA");
+			return true;
+		}
+		return false;
+	}
+	
+	public void Start() {
+		
+		BukkitScheduler sh = Bukkit.getServer().getScheduler();
+	    
+		taskID = sh.scheduleSyncRepeatingTask(plugin,new Runnable(){
+			@Override
+			public void run() {
+				
+				if(value == 100) {
+					Bukkit.getScheduler().cancelTask(taskID);	
+					StandUp();
+				}else if(reviveStoped() || player == null || !player.isOnline()) {
+					Bukkit.getScheduler().cancelTask(taskID);	
+					Dead(e, cause);
+				}else if(getReviveStatus() == ReviveStatus.BLEEDING) {
+					time--;
+					player.sendTitle(ChatColor.YELLOW+"Moriras en ",""+ChatColor.RED+time, 20, 20, 20);
+					player.playEffect(player.getLocation().add(0,0,0), Effect.STEP_SOUND, Material.REDSTONE_BLOCK); 
+				}else if(getReviveStatus() == ReviveStatus.HEALING) {
+					setReviveStatus(ReviveStatus.BLEEDING);
+				}
+				
+				
+				
+			
+				
+			}
+		},0L,20);
+	}
+	
+
+	
+
 	
 	
 	
