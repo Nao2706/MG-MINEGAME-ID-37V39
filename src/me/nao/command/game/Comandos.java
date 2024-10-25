@@ -2372,6 +2372,10 @@ public class Comandos implements CommandExecutor{
 					player.getInventory().addItem(Items.REVIVE.getValue());
 					
 					return true;
+				}else if(args[0].equalsIgnoreCase("craw")) {
+					
+					player.setSwimming(true);			
+					return true;
 				}else if(args[0].equalsIgnoreCase("maintenance")) {
 					FileConfiguration config = plugin.getConfig();
 					if(config.getBoolean("Maintenance")) {

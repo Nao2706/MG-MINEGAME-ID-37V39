@@ -28,6 +28,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityToggleGlideEvent;
+import org.bukkit.event.entity.EntityToggleSwimEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -152,6 +154,35 @@ public class SourceOfDamage implements Listener{
 		
 	}
 
+	//@EventHandler
+	public void Agachado(EntityToggleGlideEvent e) {
+		
+		if(e instanceof Player) {
+			Player player = (Player) e;
+			Block block = player.getLocation().getBlock();
+			Block b2 = block.getRelative(0, -1, 0);
+			if(b2.getType() == Material.COBBLESTONE){
+				e.setCancelled(true);
+			}
+			
+		}
+		
+	}
+	
+	//@EventHandler
+	public void AgachadoSwing(EntityToggleSwimEvent e) {
+			
+			if(e instanceof Player) {
+				Player player = (Player) e;
+				Block block = player.getLocation().getBlock();
+				Block b2 = block.getRelative(0, -1, 0);
+				if(!e.isSwimming() && b2.getType() == Material.STONE){
+					e.setCancelled(true);
+				}
+				
+			}
+			
+		}
 	
 	//TODO MOVE EVNT
 	@EventHandler  //METODO
@@ -178,6 +209,19 @@ public class SourceOfDamage implements Listener{
 					}
 				}
 				
+				if(plugin.getPlayerKnocked().containsKey(player)) {
+					
+					Block b = player.getLocation().getBlock();
+					Block r = b.getRelative(0, 1, 0);
+					if(r.getType() == Material.LADDER) return;
+				    player.sendBlockChange(r.getLocation(), Material.BARRIER.createBlockData());
+					PlayerRevive pr = plugin.getPlayerKnocked().get(player);
+					pr.addLocation(r.getLocation());
+					System.out.println("tamaño "+pr.getLocationsChange().size());	
+					
+					
+				}
+				
 			}
 			
 			
@@ -185,13 +229,14 @@ public class SourceOfDamage implements Listener{
 			
 			
 			Block block = player.getLocation().getBlock();
+			
 			Block b = block.getRelative(0, -2, 0);
 			//Block b1 = block.getRelative(0, -1, 0);
 			//Block b2 = block.getRelative(0, -3, 0);
 			Block b3 = block.getRelative(0, -4, 0);
 			//Block bx = block.getRelative(0, 0, 0);
 			
-			
+		
 //			if(plugin.PlayerisArena(player)) {
 //				
 //					//DetectDoor(player);
@@ -615,7 +660,8 @@ public class SourceOfDamage implements Listener{
 						
 							
 							if(gc.isEnabledReviveSystem(pi.getMapName())) {
-								PlayerRevive pr = new PlayerRevive(player,0,30,ReviveStatus.BLEEDING,damager,null,plugin);
+								List<Location> l = new ArrayList<>();
+								PlayerRevive pr = new PlayerRevive(player,0,30,ReviveStatus.BLEEDING,damager,null,l ,plugin);
 								pr.Knocked();
 								plugin.getPlayerKnocked().put(player, pr);
 								return;
@@ -634,7 +680,8 @@ public class SourceOfDamage implements Listener{
 					if(e.getFinalDamage() >= player.getHealth()) {
 							e.setCancelled(true);
 							if(gc.isEnabledReviveSystem(pi.getMapName())) {
-								PlayerRevive pr = new PlayerRevive(player,0,30,ReviveStatus.BLEEDING,null,e.getCause(),plugin);
+								List<Location> l = new ArrayList<>();
+								PlayerRevive pr = new PlayerRevive(player,0,30,ReviveStatus.BLEEDING,null,e.getCause(),l,plugin);
 								pr.Knocked();
 								plugin.getPlayerKnocked().put(player, pr);
 								return;

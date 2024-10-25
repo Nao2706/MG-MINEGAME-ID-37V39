@@ -8,6 +8,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -35,8 +36,9 @@ public class PlayerRevive{
 	private Minegame plugin;
 	private ReviveStatus rv;
 	private int taskID;
+	private List<Location> loc ;
 	
-	public PlayerRevive(Player player, int value, int time,ReviveStatus rv, Entity e, DamageCause cause,Minegame plugin) {
+	public PlayerRevive(Player player, int value, int time,ReviveStatus rv, Entity e,DamageCause cause,List<Location> loc,Minegame plugin) {
 		this.player = player;
 		this.value = value;
 		this.time = time;
@@ -44,6 +46,7 @@ public class PlayerRevive{
 		this.cause = cause;
 		this.plugin = plugin;
 		this.rv = rv;
+		this.loc = loc;
 		//runTaskTimer(JavaPlugin.getPlugin(Minegame.class),0,3);
 
 	}
@@ -67,6 +70,10 @@ public class PlayerRevive{
 	public ReviveStatus getReviveStatus() {
 		return rv;
 	}
+	
+	public List<Location> getLocationsChange() {
+		return loc;
+	}
 
 	public void setReviveStatus(ReviveStatus rv) {
 		this.rv = rv;
@@ -77,13 +84,28 @@ public class PlayerRevive{
 	}
 
 	
+	public void addLocation(Location l) {
+		List<Location> list = getLocationsChange();
+		
+		if(!list.contains(l)) {
+			list.add(l);
+		}
+	}
+	
+	public void Restore() {
+		List<Location> list = getLocationsChange();
+		
+		for(Location locs : list) {
+			player.sendBlockChange(locs, locs.getBlock().getBlockData());
+		}
+	}
+	
 	public boolean isAllKnocked() {
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
 		
 		if(gi instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) gi;
-			System.out.println("CHECK");
 			if(ga.getVivo().size() == ga.getKnockedPlayers().size() && !hasPlayersAutoreviveItem()) {
 				return true;
 			}
@@ -99,12 +121,14 @@ public class PlayerRevive{
 		}else {
 			mig.GameDamageCauses(player,cause);
 		}
-		plugin.getPlayerKnocked().remove(player);
+		
 		if(player.hasPotionEffect(PotionEffectType.JUMP)) {
 			player.removePotionEffect(PotionEffectType.SLOW);
 			player.removePotionEffect(PotionEffectType.JUMP);
 		}
+		
 		removeToRevive();
+		
 	}
 	
 	public void Knocked() {
@@ -113,17 +137,21 @@ public class PlayerRevive{
 		Block b = player.getLocation().getBlock();
 		Block r = b.getRelative(0, 1, 0);
 		
-		player.sendBlockChange(r.getLocation(), Material.BARRIER.createBlockData());
+	    player.sendBlockChange(r.getLocation(), Material.BARRIER.createBlockData());
+		
+		
 		player.setInvulnerable(true);
 		PotionEffect lent = new PotionEffect(PotionEffectType.JUMP,/*duration*/ 999 * 20,/*amplifier:*/150, true ,true,true );
-		PotionEffect jump = new PotionEffect(PotionEffectType.SLOW,/*duration*/ 999 * 20,/*amplifier:*/100, true ,true,true );
+		PotionEffect jump = new PotionEffect(PotionEffectType.SLOW,/*duration*/ 999 * 20,/*amplifier:*/20, true ,true,true );
 		
 		player.addPotionEffect(lent);
 		player.addPotionEffect(jump);
 		addToRevive();
 		System.out.println("TODOS NOQUEADOS: "+isAllKnocked()+ " TIENE ITEM DE REVIVIR: "+hasPlayersAutoreviveItem());
 		Start();
+		player.sendMessage("");
 		player.sendMessage(ChatColor.YELLOW+"Has sido Derribado.");
+		player.sendMessage("");
 	}
 	
 	public void StandUp() {
@@ -131,7 +159,7 @@ public class PlayerRevive{
 		Block b = player.getLocation().getBlock();
 		Block r = b.getRelative(0, 1, 0);
 		
-		player.sendBlockChange(r.getLocation(), Material.AIR.createBlockData());
+		player.sendBlockChange(r.getLocation(),r.getLocation().getBlock().getBlockData());
 		player.setInvulnerable(false);
 		PotionEffect vid = new PotionEffect(PotionEffectType.REGENERATION,/*duration*/ 10 * 20,/*amplifier:*/10, true ,true,true );
 		PotionEffect comida = new PotionEffect(PotionEffectType.SATURATION,/*duration*/ 10 * 20,/*amplifier:*/10, true ,true,true );
@@ -144,9 +172,10 @@ public class PlayerRevive{
 			player.removePotionEffect(PotionEffectType.SLOW);
 			player.removePotionEffect(PotionEffectType.JUMP);
 		}
+		removeToRevive();
 		
-		plugin.getPlayerKnocked().remove(player);
 	}
+	
 	
 	
 	public void addToRevive() {
@@ -156,9 +185,11 @@ public class PlayerRevive{
 			
 			if(gi instanceof GameAdventure) {
 				GameAdventure ga = (GameAdventure) gi;
-				if(ga.getKnockedPlayers().contains(player.getName())) return;
-				ga.getKnockedPlayers().add(player.getName());
-				System.out.println(ga.getKnockedPlayers());
+				if(!ga.getKnockedPlayers().contains(player.getName())) {
+					ga.getKnockedPlayers().add(player.getName());
+				} 
+				
+				System.out.println("L1: "+ga.getKnockedPlayers());
 			}
 		
 	}
@@ -170,8 +201,10 @@ public class PlayerRevive{
 		
 		if(gi instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) gi;
-			if(ga.getKnockedPlayers().remove(player.getName())) return;
-		
+			Restore();
+			if(ga.getKnockedPlayers().remove(player.getName()));
+			System.out.println("L2: "+ga.getKnockedPlayers());
+			plugin.getPlayerKnocked().remove(player);
 		}
 	
 }
@@ -217,16 +250,20 @@ public class PlayerRevive{
 	
 	
 	public boolean reviveStoped() {
-		 if(time == 0) {
-			System.out.println("TIEMPO 0");
-			return true;
-		}else if(isAllKnocked()) {
-			System.out.println("TODOS NOQUEADOS");
-			return true;
-		}else if(isDangerZone()) {
-			System.out.println("ZONA PELIGROSA");
-			return true;
+		
+		if(getReviveStatus() != ReviveStatus.REVIVED) {
+			 if(time == 0) {
+					System.out.println("TIEMPO 0");
+					return true;
+				}else if(isAllKnocked()) {
+					System.out.println("TODOS NOQUEADOS");
+					return true;
+				}else if(isDangerZone()) {
+					System.out.println("ZONA PELIGROSA");
+					return true;
+				}
 		}
+	
 		return false;
 	}
 	
@@ -238,15 +275,18 @@ public class PlayerRevive{
 			@Override
 			public void run() {
 				
-				if(value == 100) {
+				
+				if(getReviveStatus() == ReviveStatus.REVIVED) {
 					Bukkit.getScheduler().cancelTask(taskID);	
 					StandUp();
-				}else if(reviveStoped() || player == null || !player.isOnline()) {
+				}
+				
+			   if(reviveStoped() || player == null || !player.isOnline()) {
 					Bukkit.getScheduler().cancelTask(taskID);	
 					Dead(e, cause);
 				}else if(getReviveStatus() == ReviveStatus.BLEEDING) {
 					time--;
-					player.sendTitle(ChatColor.YELLOW+"Moriras en ",""+ChatColor.RED+time, 20, 20, 20);
+					player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"SANGRANDO",""+ChatColor.YELLOW+ChatColor.BOLD+"Moriras en "+ChatColor.RED+ChatColor.BOLD+time, 0, 20, 0);
 					player.playEffect(player.getLocation().add(0,0,0), Effect.STEP_SOUND, Material.REDSTONE_BLOCK); 
 				}else if(getReviveStatus() == ReviveStatus.HEALING) {
 					setReviveStatus(ReviveStatus.BLEEDING);

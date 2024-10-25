@@ -180,11 +180,15 @@ public class EventRandoms implements Listener{
 							player.sendTitle(""+ChatColor.WHITE+ChatColor.BOLD+"REVIVIENDO"+ChatColor.GREEN+ChatColor.BOLD+" + ", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 0, 20, 0);
 							pr.setReviveStatus(ReviveStatus.HEALING);
 						}else {
-							target.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+"REVIVIDO", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(100,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 20, 20, 20);
-							player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+"REVIVIDO", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(100,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 20, 20, 20);
-						
-							player.sendMessage(ChatColor.GOLD+"Ayudaste a levantar a "+ChatColor.GREEN+target.getName());
-							target.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.GOLD+" te ayudo a levantarte.");
+							if(pr.getReviveStatus() != ReviveStatus.REVIVED) {
+								target.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+"REVIVIDO", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(100,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 20, 20, 20);
+								player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+"REVIVIDO", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(100,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 20, 20, 20);
+							
+								player.sendMessage(ChatColor.GOLD+"Ayudaste a levantar a "+ChatColor.GREEN+target.getName());
+								target.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.GOLD+" te ayudo a levantarte.");
+								pr.setReviveStatus(ReviveStatus.REVIVED);
+							}
+							
 						}
 						
 					}
@@ -198,6 +202,10 @@ public class EventRandoms implements Listener{
 						return;
 					}else if(ent.getType() == EntityType.PLAYER) {
 						Player target = (Player) ent;
+						if(plugin.getPlayerKnocked().containsKey(target)){
+							return;
+						}
+						
 						if(target.getGameMode() != GameMode.SPECTATOR) {
 								player.addPassenger(target);
 						}
@@ -471,6 +479,7 @@ public class EventRandoms implements Listener{
 									player.sendTitle(""+ChatColor.WHITE+ChatColor.BOLD+"REVIVIENDO"+ChatColor.GREEN+ChatColor.BOLD+" + ", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 0, 20, 0);
 									pr.setReviveStatus(ReviveStatus.HEALING);
 								}else {
+									pr.setReviveStatus(ReviveStatus.REVIVED);
 									player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+"REVIVIDO" ,""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(100,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 20, 20, 20);
 									player.sendMessage(ChatColor.GOLD+"Te has autorevivido ");
 									removeItemstackCustom(player,e.getItem());
