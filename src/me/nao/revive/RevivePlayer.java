@@ -116,6 +116,9 @@ public class RevivePlayer{
 	
 	public void Dead(Entity e, DamageCause cause) {
 		GameIntoMap mig = new GameIntoMap(plugin);
+		
+		removeToRevive();
+		
 		if(e != null) {
 			mig.GameMobDamagerCauses(player, e);
 			return;
@@ -123,12 +126,12 @@ public class RevivePlayer{
 			mig.GameDamageCauses(player,cause);
 		}
 		
-		if(player.hasPotionEffect(PotionEffectType.JUMP)) {
+		if(player.hasPotionEffect(PotionEffectType.JUMP) || player.hasPotionEffect(PotionEffectType.SLOW) ) {
 			player.removePotionEffect(PotionEffectType.SLOW);
 			player.removePotionEffect(PotionEffectType.JUMP);
 		}
 		
-		removeToRevive();
+		
 		
 	}
 	
@@ -139,11 +142,9 @@ public class RevivePlayer{
 		Block r = b.getRelative(0, 1, 0);
 		
 	    player.sendBlockChange(r.getLocation(), Material.BARRIER.createBlockData());
-		
-		
 		player.setInvulnerable(true);
-		PotionEffect lent = new PotionEffect(PotionEffectType.JUMP,/*duration*/ 999 * 20,/*amplifier:*/150, true ,true,true );
-		PotionEffect jump = new PotionEffect(PotionEffectType.SLOW,/*duration*/ 999 * 20,/*amplifier:*/20, true ,true,true );
+		PotionEffect lent = new PotionEffect(PotionEffectType.JUMP,/*duration*/ 999 * 20,/*amplifier:*/3, true ,true,true );
+		PotionEffect jump = new PotionEffect(PotionEffectType.SLOW,/*duration*/ 999 * 20,/*amplifier:*/100, true ,true,true );
 		
 		player.addPotionEffect(lent);
 		player.addPotionEffect(jump);
@@ -196,16 +197,16 @@ public class RevivePlayer{
 	}
 	
 	public void removeToRevive() {
-		
+		 
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
-		
+		plugin.getPlayerKnocked().remove(player);
 		if(gi instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) gi;
 			Restore();
 			if(ga.getKnockedPlayers().remove(player.getName()));
 			System.out.println("L2: "+ga.getKnockedPlayers());
-			plugin.getPlayerKnocked().remove(player);
+			
 		}
 	
 }
@@ -237,7 +238,7 @@ public class RevivePlayer{
 		
 			if(!pr.isEmpty()) {
 				for(Player targets  : pr) {
-					if(targets.getInventory().containsAtLeast(Items.REVIVE.getValue(),1)) {
+					if(targets.getInventory().containsAtLeast(Items.REVIVE.getValue(),1) || targets.getInventory().getItemInOffHand().isSimilar(Items.REVIVE.getValue())) {
 						hasitem.add(targets);
 						return true;
 					}
