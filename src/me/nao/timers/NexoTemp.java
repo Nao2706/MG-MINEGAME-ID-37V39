@@ -46,14 +46,12 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.RayTraceResult;
 
+import me.nao.enums.GameStatus;
+import me.nao.enums.StopMotivo;
 //import me.nao.gamemode.DestroyNexo;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameNexo;
 import me.nao.main.game.Minegame;
-import me.nao.manager.EstadoPartida;
-import me.nao.manager.StopMotivo;
-//import net.md_5.bungee.api.ChatMessageType;
-//import net.md_5.bungee.api.chat.TextComponent;
 
 
 
@@ -120,7 +118,7 @@ public class NexoTemp {
 			
 			List<String> joins = ms.getParticipantes();
 		
-			EstadoPartida part = ms.getEstopartida();
+			GameStatus part = ms.getGameStatus();
 			StopMotivo motivo = ms.getMotivo();
 
 			//SI TODOS SE SALEN MIENTRAS COMIENZA
@@ -142,7 +140,7 @@ public class NexoTemp {
 			
 		
 			
-			if(part == EstadoPartida.COMENZANDO) {
+			if(part == GameStatus.COMENZANDO) {
 				
 				//GameModeConditions gm = new GameModeConditions(plugin);
 		  		
@@ -168,9 +166,9 @@ public class NexoTemp {
 				    		 // Bukkit.getScheduler().cancelTask(taskID);	
 				    		 // DeleteAllArmor(target);
 				    		
-				    		  if(part == EstadoPartida.COMENZANDO) {
+				    		  if(part == GameStatus.COMENZANDO) {
 				    		  
-				    			ms.setEstadopartida(EstadoPartida.JUGANDO);
+				    			ms.setGameStatus(GameStatus.JUGANDO);
 				    			
 				    		
 				    			//dn.TpAllTeamsToSpawn(name);
@@ -183,7 +181,7 @@ public class NexoTemp {
 				
 			      startm --;
 			}//TODO EN PROGRESO
-			else if(part == EstadoPartida.JUGANDO) {
+			else if(part == GameStatus.JUGANDO) {
 				
 				
 				
@@ -295,7 +293,7 @@ public class NexoTemp {
 					    			//RemoveArmorStandsAndItemsInMap(target);
 									//Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Jugadores que ganaron "+ChatColor.GREEN+arrive+ChatColor.RED+" mapa: "+ChatColor.GREEN+name);
 
-									ms.setEstadopartida(EstadoPartida.TERMINANDO);
+									ms.setGameStatus(GameStatus.TERMINANDO);
 							
   								
 									
@@ -314,7 +312,7 @@ public class NexoTemp {
 						  	//		 gc.Top(target,name);
 						  		 }
 						  		
-						  		ms.setEstadopartida(EstadoPartida.TERMINANDO);
+						  		ms.setGameStatus(GameStatus.TERMINANDO);
 						  		System.out.println("STOP MOMENT");
 					     }
 //				    	}else if(ms.getBlueTeamMg().isEmpty()) {
@@ -349,7 +347,7 @@ public class NexoTemp {
 				//colocar terminando
 			}
 			//TODO TERMINANDO
-			else if(part == EstadoPartida.TERMINANDO) {
+			else if(part == GameStatus.TERMINANDO) {
 				 
 
 			 	

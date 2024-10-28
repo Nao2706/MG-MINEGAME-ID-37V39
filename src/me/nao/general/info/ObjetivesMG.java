@@ -4,16 +4,26 @@ import java.util.HashMap;
 
 import org.bukkit.entity.Player;
 
+import me.nao.enums.ObjetiveStatusType;
+
 public class ObjetivesMG {
 	
 	
-	private String nombre ,description;
+	private String name ,description;
 	private int priority ,valuestart, valueinitial, valuecomplete,valueincomplete;
 	private ObjetiveStatusType status;
-	private HashMap<Player,Integer> value;
+	private HashMap<Player,Integer> playerinteractions;
 	
-	public ObjetivesMG(String nombre,  int priority, int valuestart, int valueinitial, int valuecomplete,int valueincomplete,String description, ObjetiveStatusType status,HashMap<Player,Integer> value) {
-		this.nombre = nombre;
+	
+	/**
+	 * Crear Objetivo 
+	 * 
+	 * @param String name,  int priority, int valuestart, int valueinitial, int valuecomplete,int valueincomplete,String description, ObjetiveStatusType status,HashMap<Player,Integer> playerinteractions
+	 * 
+	 */
+	
+	public ObjetivesMG(String name,  int priority, int valuestart, int valueinitial, int valuecomplete,int valueincomplete,String description, ObjetiveStatusType status,HashMap<Player,Integer> playerinteractions) {
+		this.name = name;
 		this.valuestart = valuestart;
 		this.valueinitial = valueinitial;
 		this.valuecomplete = valuecomplete;
@@ -21,11 +31,11 @@ public class ObjetivesMG {
 		this.description = description;
 		this.status = status;
 		this.priority = priority;
-		this.value = value;
+		this.playerinteractions = playerinteractions;
 	}
 
-	public String getNombre() {
-		return nombre;
+	public String getName() {
+		return name;
 	}
 
 	public int getPriority() {
@@ -57,7 +67,7 @@ public class ObjetivesMG {
 	}
 	
 	public HashMap<Player,Integer> getParticipants(){
-		return value;
+		return playerinteractions;
 	}
 
 	public void setValue(int valueinitial) {

@@ -15,8 +15,8 @@ public class PlayerInfo {
 	
 	private Minegame plugin;
 	private boolean isinventorysave;
-	private Player player ;
-	private Collection<PotionEffect> potion ;
+	private Player player;
+	private Collection<PotionEffect> potions;
 	private ItemStack[] inv;
 	private GameMode gamemode;
 	private boolean fly;
@@ -26,16 +26,22 @@ public class PlayerInfo {
 	private int lvlxp;
 	private float xp;
 	private Location l;
-	private boolean isMision;
 	private String namemision;
 	private GamePoints gp;
 	
-	public PlayerInfo(Minegame plugin ,boolean isinventorysave,Player player, Collection<PotionEffect> potion, ItemStack[] inv, GameMode gamemode, boolean fly, double vida, double maxvida,int comida, int lvlxp, float xp,Location l,boolean ismision,String nameMision,GamePoints gp) {
+	/** 
+	 *Crear Objeto PlayerInfo para poder definir si en un juego este entrara sin sus cosas(inventario , vida , posiones , exp ) variante que guarda su inventario y otra informacion.
+	 *
+	 *@param Minegame plugin ,boolean isinventorysave,Player player, Collection<PotionEffect> potions, ItemStack[] inv, GameMode gamemode, boolean fly, double vida, double maxvida,int comida, int lvlxp, float xp,Location l,String nameMision,GamePoints gp
+	 *
+	 * */
+	
+	public PlayerInfo(Minegame plugin ,boolean isinventorysave,Player player, Collection<PotionEffect> potions, ItemStack[] inv, GameMode gamemode, boolean fly, double vida, double maxvida,int comida, int lvlxp, float xp,Location l,String nameMision,GamePoints gp) {
 	
 		this.plugin = plugin;
 		this.isinventorysave = isinventorysave;
 		this.player = player;
-		this.potion = potion;
+		this.potions = potions;
 		this.inv = inv;
 		this.gamemode = gamemode;
 		this.fly = fly;
@@ -45,13 +51,20 @@ public class PlayerInfo {
 		this.lvlxp = lvlxp;
 		this.xp = xp;
 		this.l = l;
-		this.isMision = ismision;
 		this.namemision = nameMision;
 		this.gp = gp;
 		
 	}
 	
-	public PlayerInfo(Minegame plugin ,boolean isinventorysave,Player player, GameMode gamemode, boolean fly,Location l,boolean ismision,String nameMision,GamePoints gp) {
+	/** 
+	 * Crear Objeto PlayerInfo para poder definir si en un juego este entrara sin sus cosas(inventario , vida , posiones , exp ) variante en la cual no guarda su inventario pero si guarda otra informacion mas pequeña.
+	 * 
+	 * 
+	 * @param Minegame plugin ,boolean isinventorysave,Player player, GameMode gamemode, boolean fly,Location l,String nameMision,GamePoints gp
+	 * 
+	 * */
+	
+	public PlayerInfo(Minegame plugin ,boolean isinventorysave,Player player, GameMode gamemode, boolean fly,Location l,String nameMision,GamePoints gp) {
 		
 		this.plugin = plugin;
 		this.isinventorysave = isinventorysave;
@@ -59,7 +72,6 @@ public class PlayerInfo {
 		this.gamemode = gamemode;
 		this.fly = fly;
 		this.l = l;
-		this.isMision = ismision;
 		this.namemision = nameMision;
 		this.gp = gp;
 		
@@ -75,10 +87,10 @@ public class PlayerInfo {
 	}
 	
 	public Collection<PotionEffect> getPlayerPottionsMg() {
-		return potion;
+		return potions;
 	}
 
-	public ItemStack[] getInvMG() {
+	public ItemStack[] getInventoryMG() {
 		return inv;
 	}
 
@@ -90,19 +102,19 @@ public class PlayerInfo {
 		return fly;
 	}
 
-	public double getVidaMG() {
+	public double getLifeMG() {
 		return vida;
 	}
 
-	public double getMaxvidaMG() {
+	public double getMaxLifeMG() {
 		return maxvida;
 	}
 
-	public int getComidaMG() {
+	public int getFoodMG() {
 		return comida;
 	}
 
-	public int getLvlxpMG() {
+	public int getLvlXpMG() {
 		return lvlxp;
 	}
 
@@ -112,10 +124,6 @@ public class PlayerInfo {
 	
 	public Location getLocationMG() {
 		return l;
-	}
-	
-	public boolean isStillPlayerInMision() {
-		return isMision;
 	}
 	
 	public String getMapName() {
@@ -166,10 +174,6 @@ public class PlayerInfo {
 		this.l = lo;
 	}
 	
-	public void setPlayerMision(boolean mision) {
-		this.isMision = mision;
-	}
-	
 	public void setMisionName(String nameMision) {
 		this.namemision = nameMision;
 	}
@@ -202,13 +206,13 @@ public class PlayerInfo {
 		 
 		 player.setGameMode(pl.getGamemodeMG());
 		 player.setFlying(pl.isFlyMG());
-		 player.getInventory().setContents(pl.getInvMG());
-		 player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(pl.getMaxvidaMG());
-		 player.setFoodLevel(pl.getComidaMG());
+		 player.getInventory().setContents(pl.getInventoryMG());
+		 player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(pl.getMaxLifeMG());
+		 player.setFoodLevel(pl.getFoodMG());
 		 player.addPotionEffects(pl.getPlayerPottionsMg());
 		 player.setExp(pl.getXpMG());
-		 player.setLevel(pl.getLvlxpMG());
-		 player.setHealth(pl.getVidaMG());
+		 player.setLevel(pl.getLvlXpMG());
+		 player.setHealth(pl.getLifeMG());
 	}
 	
 	public void RestoreGamemodePlayerMg(Player playermg) {

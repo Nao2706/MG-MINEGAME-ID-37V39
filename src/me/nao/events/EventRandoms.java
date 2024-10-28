@@ -98,6 +98,9 @@ import org.bukkit.util.Vector;
 import com.google.common.base.Strings;
 
 import me.nao.cosmetics.fireworks.RankPlayer;
+import me.nao.enums.GameStatus;
+import me.nao.enums.Items;
+import me.nao.enums.ReviveStatus;
 import me.nao.flare.actions.Flare;
 import me.nao.general.info.GameInfo;
 //import me.nao.general.info.GameNexo;
@@ -105,10 +108,7 @@ import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.PlayerInfo;
 import me.nao.main.game.Minegame;
-import me.nao.manager.EstadoPartida;
-import me.nao.revive.PlayerRevive;
-import me.nao.revive.ReviveStatus;
-import me.nao.shop.Items;
+import me.nao.revive.RevivePlayer;
 import me.nao.shop.MinigameShop1;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -164,7 +164,7 @@ public class EventRandoms implements Listener{
 			
 			PlayerInfo pi = plugin.getPlayerInfoPoo().get(player);
 			GameInfo gi = plugin.getGameInfoPoo().get(pi.getMapName());
-			if(gi.getEstopartida() == EstadoPartida.JUGANDO) {
+			if(gi.getGameStatus() == GameStatus.JUGANDO) {
 				
 				Entity ent = e.getRightClicked();
 				
@@ -172,7 +172,7 @@ public class EventRandoms implements Listener{
 					Player target = (Player) ent;
 					 
 					if(plugin.getPlayerKnocked().containsKey(target)) {
-						PlayerRevive pr = plugin.getPlayerKnocked().get(target);
+						RevivePlayer pr = plugin.getPlayerKnocked().get(target);
 						int value = pr.getValue();
 						if(value != 100) {
 							pr.setValue(pr.getValue()+1);
@@ -305,25 +305,26 @@ public class EventRandoms implements Listener{
 						
 					}
 					
-					if(e.getClickedBlock().getType() == Material.OAK_PRESSURE_PLATE) {
-						//Bukkit.broadcastMessage("3");
-						DetectChestAndJump(player);
+					if(!plugin.getPlayerKnocked().containsKey(player)) {
 						
+						if(e.getClickedBlock().getType() == Material.OAK_PRESSURE_PLATE) {
+							DetectChestAndJump(player);
+						}
+						
+						if(e.getClickedBlock().getType() == Material.LIGHT_WEIGHTED_PRESSURE_PLATE) {
+							player.getWorld().createExplosion(player.getLocation(), 5, false, false);
+							
+						}
+						
+						if(e.getClickedBlock().getType() == Material.HEAVY_WEIGHTED_PRESSURE_PLATE) {
+							player.getWorld().createExplosion(player.getLocation(), 10, false, false);
+							
+						}
+						
+						return;
 					}
 					
-					if(e.getClickedBlock().getType() == Material.LIGHT_WEIGHTED_PRESSURE_PLATE) {
-						//Bukkit.broadcastMessage("3");
-						//locacion , poder de explosion , genera fuego? , rompe bloques?
-						player.getWorld().createExplosion(player.getLocation(), 5, false, false);
-						
-					}
-					
-					if(e.getClickedBlock().getType() == Material.HEAVY_WEIGHTED_PRESSURE_PLATE) {
-						//Bukkit.broadcastMessage("3");
-						//locacion , poder de explosion , genera fuego? , rompe bloques?
-						player.getWorld().createExplosion(player.getLocation(), 10, false, false);
-						
-					}
+			
 					
 			
 					
@@ -472,7 +473,7 @@ public class EventRandoms implements Listener{
 						//TODO REVIVE
 						if(e.getItem().isSimilar(Items.REVIVE.getValue())) {
 							if(plugin.getPlayerKnocked().containsKey(player)) {
-								PlayerRevive pr = plugin.getPlayerKnocked().get(player);
+								RevivePlayer pr = plugin.getPlayerKnocked().get(player);
 								int value = pr.getValue();
 								if(value != 100) {
 									pr.setValue(pr.getValue()+1);
@@ -917,9 +918,9 @@ public class EventRandoms implements Listener{
 				if(gi instanceof GameAdventure) {
 					GameAdventure ga = (GameAdventure) gi;
 					
-					List<String> alive1 = ga.getVivo();
-					List<String> deads1 = ga.getMuerto();
-					List<String> spec = ga.getSpectator();
+					List<String> alive1 = ga.getAlivePlayers();
+					List<String> deads1 = ga.getDeadPlayers();
+					List<String> spec = ga.getSpectators();
 				 
 					
 					if(cm.isPlayerinGame(player)) {
@@ -2558,7 +2559,7 @@ public class EventRandoms implements Listener{
 			
 			List<Entity> e = getNearbyEntitesPlayers(b.getLocation(), 10);
 			List<Entity> e3 = new ArrayList<Entity>();
-			List<Player> alive1 = gc.ConvertStringToPlayer(ga.getVivo());
+			List<Player> alive1 = gc.ConvertStringToPlayer(ga.getAlivePlayers());
 			
 			for(Entity e2 : e) {
 				if(e2.getType() == EntityType.PLAYER) {

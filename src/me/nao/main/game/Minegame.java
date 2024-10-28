@@ -24,12 +24,12 @@ import me.nao.command.game.Comandos;
 import me.nao.command.game.TabComplete1;
 import me.nao.database.ConexionMySQL;
 import me.nao.database.SQLInfo;
-import me.nao.event.game.SourceOfDamage;
 import me.nao.events.EventRandoms;
+import me.nao.events.SourceOfDamage;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
 import me.nao.general.info.PlayerInfo;
-import me.nao.revive.PlayerRevive;
+import me.nao.revive.RevivePlayer;
 import me.nao.shop.MinigameShop1;
 import me.nao.yamlfile.game.YamlFile;
 import me.top.users.PHMiniGame;
@@ -68,7 +68,7 @@ public class Minegame extends JavaPlugin{
     private Map<Player, PlayerInfo> playerinfopoo;
     private Map<String, GameInfo> misioninfopoo;
     private Map<Player,Entity> credit;
-    private Map<Player, PlayerRevive> playerrevive;
+    private Map<Player, RevivePlayer> playerrevive;
     
    //==================================== 
 	public Map<String,YamlFile>getAllYmls ; // YML Manager
@@ -296,7 +296,7 @@ public class Minegame extends JavaPlugin{
 	   // MgTeams t = new MgTeams(this);
 	    for(Player players : Bukkit.getOnlinePlayers()) {
 	    	if(c.isPlayerinGame(players)) {
-	    		c.LeaveOfTheGame(players);
+	    		c.mgLeaveOfTheGame(players);
 	    	}
 	    }
 	   
@@ -411,7 +411,7 @@ public class Minegame extends JavaPlugin{
 	   return credit;
    }
    
-   public Map<Player,PlayerRevive> getPlayerKnocked(){
+   public Map<Player,RevivePlayer> getPlayerKnocked(){
 	   return playerrevive;
    }
    

@@ -33,16 +33,18 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import com.google.common.base.Strings;
 
+import me.nao.enums.GameStatus;
+import me.nao.enums.Items;
+import me.nao.enums.ObjetiveStatusType;
+import me.nao.enums.Posion;
 import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
-import me.nao.general.info.ObjetiveStatusType;
 import me.nao.general.info.ObjetivesMG;
 import me.nao.general.info.PlayerInfo;
 import me.nao.main.game.Minegame;
-import me.nao.manager.MapManager;
-import me.nao.manager.MapIntoGame;
-import me.nao.manager.EstadoPartida;
+import me.nao.manager.MapSettings;
+import me.nao.manager.GameIntoMap;
 import me.nao.yamlfile.game.YamlFilePlus;
 
 
@@ -489,7 +491,7 @@ public class MinigameShop1 implements Listener{
 			if(ob.getObjetiveType() == ObjetiveStatusType.COMPLETE) {
 				ItemStack item = new ItemStack(Material.LIME_STAINED_GLASS);
 				ItemMeta meta = item.getItemMeta();
-				meta.setDisplayName(""+ChatColor.GREEN+ChatColor.BOLD+ob.getNombre());
+				meta.setDisplayName(""+ChatColor.GREEN+ChatColor.BOLD+ob.getName());
 				List<String> descrip = new ArrayList<>();
 				descrip.add(ChatColor.YELLOW+ob.getDescription());
 				descrip.add(ChatColor.GREEN+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
@@ -512,7 +514,7 @@ public class MinigameShop1 implements Listener{
 			}if(ob.getObjetiveType() == ObjetiveStatusType.INCOMPLETE) {
 				ItemStack item = new ItemStack(Material.RED_STAINED_GLASS);
 				ItemMeta meta = item.getItemMeta();
-				meta.setDisplayName(""+ChatColor.RED+ChatColor.BOLD+ob.getNombre());
+				meta.setDisplayName(""+ChatColor.RED+ChatColor.BOLD+ob.getName());
 				List<String> descrip = new ArrayList<>();
 				descrip.add(ChatColor.YELLOW+ob.getDescription());
 				descrip.add(ChatColor.GREEN+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
@@ -526,7 +528,7 @@ public class MinigameShop1 implements Listener{
 			}if(ob.getObjetiveType() == ObjetiveStatusType.WAITING) {
 				ItemStack item = new ItemStack(Material.GRAY_STAINED_GLASS);
 				ItemMeta meta = item.getItemMeta();
-				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ob.getNombre());
+				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ob.getName());
 				List<String> descrip = new ArrayList<>();
 				descrip.add(ChatColor.RED+ob.getDescription());
 				descrip.add(ChatColor.AQUA+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
@@ -548,7 +550,7 @@ public class MinigameShop1 implements Listener{
 			}if(ob.getObjetiveType() == ObjetiveStatusType.UNKNOW) {
 				ItemStack item = new ItemStack(Material.WHITE_STAINED_GLASS);
 				ItemMeta meta = item.getItemMeta();
-				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ChatColor.MAGIC+ob.getNombre());
+				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ChatColor.MAGIC+ob.getName());
 				List<String> descrip = new ArrayList<>();
 				descrip.add(""+ChatColor.RED+ChatColor.MAGIC+ob.getDescription());
 				descrip.add(""+ChatColor.AQUA+ChatColor.MAGIC+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
@@ -560,7 +562,7 @@ public class MinigameShop1 implements Listener{
 			}if(ob.getObjetiveType() == ObjetiveStatusType.CANCELLED) {
 				ItemStack item = new ItemStack(Material.RED_STAINED_GLASS);
 				ItemMeta meta = item.getItemMeta();
-				meta.setDisplayName(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+ob.getNombre());
+				meta.setDisplayName(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+ob.getName());
 				List<String> descrip = new ArrayList<>();
 				descrip.add(""+ChatColor.GRAY+ChatColor.BOLD+ob.getDescription());
 				descrip.add(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
@@ -616,7 +618,7 @@ public class MinigameShop1 implements Listener{
 			if(ob.getObjetiveType() == ObjetiveStatusType.COMPLETE) {
 				ItemStack item = new ItemStack(Material.LIME_STAINED_GLASS);
 				ItemMeta meta = item.getItemMeta();
-				meta.setDisplayName(""+ChatColor.GREEN+ChatColor.BOLD+ob.getNombre());
+				meta.setDisplayName(""+ChatColor.GREEN+ChatColor.BOLD+ob.getName());
 				List<String> descrip = new ArrayList<>();
 				descrip.add(ChatColor.YELLOW+ob.getDescription());
 				descrip.add(ChatColor.GREEN+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
@@ -637,7 +639,7 @@ public class MinigameShop1 implements Listener{
 			}if(ob.getObjetiveType() == ObjetiveStatusType.INCOMPLETE) {
 				ItemStack item = new ItemStack(Material.RED_STAINED_GLASS);
 				ItemMeta meta = item.getItemMeta();
-				meta.setDisplayName(""+ChatColor.RED+ChatColor.BOLD+ob.getNombre());
+				meta.setDisplayName(""+ChatColor.RED+ChatColor.BOLD+ob.getName());
 				List<String> descrip = new ArrayList<>();
 				descrip.add(ChatColor.YELLOW+ob.getDescription());
 				descrip.add(ChatColor.GREEN+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
@@ -651,7 +653,7 @@ public class MinigameShop1 implements Listener{
 			}if(ob.getObjetiveType() == ObjetiveStatusType.WAITING) {
 				ItemStack item = new ItemStack(Material.GRAY_STAINED_GLASS);
 				ItemMeta meta = item.getItemMeta();
-				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ob.getNombre());
+				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ob.getName());
 				List<String> descrip = new ArrayList<>();
 				descrip.add(ChatColor.RED+ob.getDescription());
 				descrip.add(ChatColor.AQUA+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
@@ -672,7 +674,7 @@ public class MinigameShop1 implements Listener{
 			}if(ob.getObjetiveType() == ObjetiveStatusType.UNKNOW) {
 				ItemStack item = new ItemStack(Material.WHITE_STAINED_GLASS);
 				ItemMeta meta = item.getItemMeta();
-				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ChatColor.MAGIC+ob.getNombre());
+				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ChatColor.MAGIC+ob.getName());
 				List<String> descrip = new ArrayList<>();
 				descrip.add(""+ChatColor.RED+ChatColor.MAGIC+ob.getDescription());
 				descrip.add(""+ChatColor.AQUA+ChatColor.MAGIC+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
@@ -684,7 +686,7 @@ public class MinigameShop1 implements Listener{
 			}if(ob.getObjetiveType() == ObjetiveStatusType.CANCELLED) {
 				ItemStack item = new ItemStack(Material.RED_STAINED_GLASS);
 				ItemMeta meta = item.getItemMeta();
-				meta.setDisplayName(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+ob.getNombre());
+				meta.setDisplayName(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+ob.getName());
 				List<String> descrip = new ArrayList<>();
 				descrip.add(""+ChatColor.GRAY+ChatColor.BOLD+ob.getDescription());
 				descrip.add(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
@@ -742,7 +744,7 @@ public class MinigameShop1 implements Listener{
 			if(ob.getObjetiveType() == ObjetiveStatusType.UNKNOW) {
 				ItemStack item = new ItemStack(Material.WHITE_STAINED_GLASS);
 				ItemMeta meta = item.getItemMeta();
-				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ChatColor.MAGIC+ob.getNombre());
+				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ChatColor.MAGIC+ob.getName());
 				List<String> descrip = new ArrayList<>();
 				descrip.add(""+ChatColor.RED+ChatColor.MAGIC+ob.getDescription());
 				descrip.add(""+ChatColor.AQUA+ChatColor.MAGIC+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
@@ -757,7 +759,7 @@ public class MinigameShop1 implements Listener{
 			if(ob.getObjetiveType() == ObjetiveStatusType.WARNING) {
 				ItemStack item = new ItemStack(Material.YELLOW_STAINED_GLASS);
 				ItemMeta meta = item.getItemMeta();
-				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ob.getNombre());
+				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ob.getName());
 				List<String> descrip = new ArrayList<>();
 				descrip.add(ChatColor.RED+ob.getDescription());
 				descrip.add(ChatColor.AQUA+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
@@ -771,7 +773,7 @@ public class MinigameShop1 implements Listener{
 			}if(ob.getObjetiveType() == ObjetiveStatusType.DANGER) {
 				ItemStack item = new ItemStack(Material.RED_STAINED_GLASS);
 				ItemMeta meta = item.getItemMeta();
-				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ob.getNombre());
+				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ob.getName());
 				List<String> descrip = new ArrayList<>();
 				descrip.add(""+ChatColor.DARK_RED+ChatColor.BOLD+ob.getDescription());
 				descrip.add(""+ChatColor.AQUA+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
@@ -785,7 +787,7 @@ public class MinigameShop1 implements Listener{
 			}if(ob.getObjetiveType() == ObjetiveStatusType.CONCLUDED) {
 				ItemStack item = new ItemStack(Material.GRAY_STAINED_GLASS);
 				ItemMeta meta = item.getItemMeta();
-				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ChatColor.MAGIC+ob.getNombre());
+				meta.setDisplayName(""+ChatColor.WHITE+ChatColor.BOLD+ChatColor.MAGIC+ob.getName());
 				List<String> descrip = new ArrayList<>();
 				descrip.add(""+ChatColor.GRAY+ChatColor.BOLD+ob.getDescription());
 				descrip.add(""+ChatColor.AQUA+ChatColor.BOLD+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
@@ -799,7 +801,7 @@ public class MinigameShop1 implements Listener{
 			}if(ob.getObjetiveType() == ObjetiveStatusType.CANCELLED) {
 				ItemStack item = new ItemStack(Material.RED_STAINED_GLASS);
 				ItemMeta meta = item.getItemMeta();
-				meta.setDisplayName(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+ob.getNombre());
+				meta.setDisplayName(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+ob.getName());
 				List<String> descrip = new ArrayList<>();
 				descrip.add(""+ChatColor.GRAY+ChatColor.BOLD+ob.getDescription());
 				descrip.add(""+ChatColor.RED+ChatColor.BOLD+"("+ob.getValue()+"/"+ob.getCompleteValue()+")");
@@ -833,7 +835,7 @@ public class MinigameShop1 implements Listener{
 		GameInfo gm = plugin.getGameInfoPoo().get(mapa);
 		if(gm instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) gm;
-			List<String> dead = ga.getMuerto();
+			List<String> dead = ga.getDeadPlayers();
 			if(dead.isEmpty()) {
 				player.sendMessage(ChatColor.RED+"No hay ningun jugador que revivir.");
 				return;
@@ -961,7 +963,7 @@ public class MinigameShop1 implements Listener{
 		if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("MENU DE MAPAS")) {
 			FileConfiguration config = plugin.getConfig();
 			FileConfiguration menu = plugin.getMenuItems();
-			MapManager ca = new MapManager(plugin);
+			MapSettings ca = new MapSettings(plugin);
 			Inventory inv = player.getOpenInventory().getTopInventory();
 			 List<String> ac = config.getStringList("Maps-Created.List");
 		
@@ -1071,11 +1073,11 @@ public class MinigameShop1 implements Listener{
 									
 									list2.add("");
 									if(plugin.getGameInfoPoo().get(name) != null) {
-										list2.add(""+ChatColor.GREEN+ChatColor.BOLD+"JUGADORES: "+ChatColor.RED+ChatColor.BOLD+plugin.getGameInfoPoo().get(name).getParticipantes().size());
-										list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESPECTADORES: "+ChatColor.RED+ChatColor.BOLD+plugin.getGameInfoPoo().get(name).getSpectator().size());
-										list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESTADO: "+plugin.getGameInfoPoo().get(name).getEstopartida().toString().replace(EstadoPartida.ESPERANDO.toString(),ChatColor.WHITE+EstadoPartida.ESPERANDO.toString())
-												.replace(EstadoPartida.COMENZANDO.toString(),ChatColor.YELLOW+EstadoPartida.COMENZANDO.toString()).replace(EstadoPartida.JUGANDO.toString(),ChatColor.GREEN+EstadoPartida.JUGANDO.toString())
-												.replace(EstadoPartida.DESACTIVADA.toString(),ChatColor.GRAY+EstadoPartida.DESACTIVADA.toString()).replace(EstadoPartida.TERMINANDO.toString(),ChatColor.RED+EstadoPartida.TERMINANDO.toString())
+										list2.add(""+ChatColor.GREEN+ChatColor.BOLD+"JUGADORES: "+ChatColor.RED+ChatColor.BOLD+plugin.getGameInfoPoo().get(name).getParticipants().size());
+										list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESPECTADORES: "+ChatColor.RED+ChatColor.BOLD+plugin.getGameInfoPoo().get(name).getSpectators().size());
+										list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESTADO: "+plugin.getGameInfoPoo().get(name).getGameStatus().toString().replace(GameStatus.ESPERANDO.toString(),ChatColor.WHITE+GameStatus.ESPERANDO.toString())
+												.replace(GameStatus.COMENZANDO.toString(),ChatColor.YELLOW+GameStatus.COMENZANDO.toString()).replace(GameStatus.JUGANDO.toString(),ChatColor.GREEN+GameStatus.JUGANDO.toString())
+												.replace(GameStatus.DESACTIVADA.toString(),ChatColor.GRAY+GameStatus.DESACTIVADA.toString()).replace(GameStatus.TERMINANDO.toString(),ChatColor.RED+GameStatus.TERMINANDO.toString())
 												);
 
 									}else {
@@ -1119,7 +1121,7 @@ public class MinigameShop1 implements Listener{
 		 }
 		 
 			 FileConfiguration menu = plugin.getMenuItems();
-			 MapManager ca = new MapManager(plugin);
+			 MapSettings ca = new MapSettings(plugin);
 			 Inventory inv = Bukkit.createInventory(null,54,""+ChatColor.DARK_GREEN+ChatColor.BOLD+"MENU DE MAPAS");
 			 List<String> l = new ArrayList<String>();
 			 
@@ -1256,11 +1258,11 @@ public class MinigameShop1 implements Listener{
 								
 								list2.add("");
 								if(plugin.getGameInfoPoo().get(name) != null) {
-									list2.add(""+ChatColor.GREEN+ChatColor.BOLD+"JUGADORES: "+ChatColor.RED+ChatColor.BOLD+plugin.getGameInfoPoo().get(name).getParticipantes().size());
-									list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESPECTADORES: "+ChatColor.RED+ChatColor.BOLD+plugin.getGameInfoPoo().get(name).getSpectator().size());
-									list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESTADO: "+plugin.getGameInfoPoo().get(name).getEstopartida().toString().replace(EstadoPartida.ESPERANDO.toString(),ChatColor.WHITE+EstadoPartida.ESPERANDO.toString())
-											.replace(EstadoPartida.COMENZANDO.toString(),ChatColor.YELLOW+EstadoPartida.COMENZANDO.toString()).replace(EstadoPartida.JUGANDO.toString(),ChatColor.GREEN+EstadoPartida.JUGANDO.toString())
-											.replace(EstadoPartida.DESACTIVADA.toString(),ChatColor.GRAY+EstadoPartida.DESACTIVADA.toString()).replace(EstadoPartida.TERMINANDO.toString(),ChatColor.RED+EstadoPartida.TERMINANDO.toString())
+									list2.add(""+ChatColor.GREEN+ChatColor.BOLD+"JUGADORES: "+ChatColor.RED+ChatColor.BOLD+plugin.getGameInfoPoo().get(name).getParticipants().size());
+									list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESPECTADORES: "+ChatColor.RED+ChatColor.BOLD+plugin.getGameInfoPoo().get(name).getSpectators().size());
+									list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESTADO: "+plugin.getGameInfoPoo().get(name).getGameStatus().toString().replace(GameStatus.ESPERANDO.toString(),ChatColor.WHITE+GameStatus.ESPERANDO.toString())
+											.replace(GameStatus.COMENZANDO.toString(),ChatColor.YELLOW+GameStatus.COMENZANDO.toString()).replace(GameStatus.JUGANDO.toString(),ChatColor.GREEN+GameStatus.JUGANDO.toString())
+											.replace(GameStatus.DESACTIVADA.toString(),ChatColor.GRAY+GameStatus.DESACTIVADA.toString()).replace(GameStatus.TERMINANDO.toString(),ChatColor.RED+GameStatus.TERMINANDO.toString())
 											);
 
 								}else {
@@ -1345,7 +1347,7 @@ public class MinigameShop1 implements Listener{
 					
 					if(gc.ExistMap(name)) {
 						player.closeInventory();
-						gc.JoinToTheGames(player, name);
+						gc.mgJoinToTheGames(player, name);
 						
 					}else {
 						player.sendMessage(ChatColor.RED+"Ese Mapa no existe.");
@@ -1370,7 +1372,7 @@ public class MinigameShop1 implements Listener{
 				// @SuppressWarnings("deprecation")
 				 String name = meta.getOwningPlayer().getName();
 				
-				MapIntoGame c = new MapIntoGame(plugin);
+				GameIntoMap c = new GameIntoMap(plugin);
 				c.GameRevivePlayer(player, name);
 			}
 		
@@ -2074,7 +2076,7 @@ public class MinigameShop1 implements Listener{
 		inv.setItem(40, Items.CERRAR.getValue());
 		
 		List<ObjetivesMG> l = gi.getGameObjetivesMg().getObjetives();
-		if(!l.stream().filter(o -> o.getNombre().equals("Mapa Con Objetivos Borrados")).findFirst().isPresent()) {
+		if(!l.stream().filter(o -> o.getName().equals("Mapa Con Objetivos Borrados")).findFirst().isPresent()) {
 			inv.setItem(31, Items.OBJETIVOS.getValue());
 		}
 		//31
@@ -2262,28 +2264,29 @@ public class MinigameShop1 implements Listener{
 			meta.setDisplayName(Nombre);
 			for(int i=0;i<l.size();i++) {
 				if(l.get(i).getObjetiveType() == ObjetiveStatusType.COMPLETE) {
-					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+l.get(i).getNombre()+ChatColor.DARK_GRAY+" Completo "+ChatColor.GREEN+ChatColor.STRIKETHROUGH+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
+					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+l.get(i).getName()+ChatColor.DARK_GRAY+" Completo "+ChatColor.GREEN+ChatColor.STRIKETHROUGH+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveStatusType.INCOMPLETE) {
-					l2.add(""+ChatColor.RED+ChatColor.BOLD+l.get(i).getNombre()+ChatColor.DARK_GRAY+" Incompleto "+ChatColor.RED+ChatColor.STRIKETHROUGH+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
+					l2.add(""+ChatColor.RED+ChatColor.BOLD+l.get(i).getName()+ChatColor.DARK_GRAY+" Incompleto "+ChatColor.RED+ChatColor.STRIKETHROUGH+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveStatusType.WAITING) {
-					l2.add(""+ChatColor.WHITE+ChatColor.BOLD+l.get(i).getNombre()+ChatColor.DARK_GRAY+" En Espera "+ChatColor.GOLD+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
+					l2.add(""+ChatColor.WHITE+ChatColor.BOLD+l.get(i).getName()+ChatColor.DARK_GRAY+" En Espera "+ChatColor.GOLD+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveStatusType.UNKNOW) {
-					l2.add(""+ChatColor.WHITE+ChatColor.MAGIC+l.get(i).getNombre()+ChatColor.DARK_GRAY+" Desconocido "+ChatColor.GOLD+ChatColor.MAGIC+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
+					l2.add(""+ChatColor.WHITE+ChatColor.MAGIC+l.get(i).getName()+ChatColor.DARK_GRAY+" Desconocido "+ChatColor.GOLD+ChatColor.MAGIC+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveStatusType.WARNING) {
-					l2.add(""+ChatColor.YELLOW+ChatColor.BOLD+l.get(i).getNombre()+ChatColor.DARK_GRAY+" Advertencia "+ChatColor.GOLD+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
+					l2.add(""+ChatColor.YELLOW+ChatColor.BOLD+l.get(i).getName()+ChatColor.DARK_GRAY+" Advertencia "+ChatColor.GOLD+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveStatusType.DANGER) {
-					l2.add(""+ChatColor.DARK_RED+ChatColor.BOLD+l.get(i).getNombre()+ChatColor.DARK_GRAY+" Peligro "+ChatColor.GOLD+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
+					l2.add(""+ChatColor.DARK_RED+ChatColor.BOLD+l.get(i).getName()+ChatColor.DARK_GRAY+" Peligro "+ChatColor.GOLD+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveStatusType.CONCLUDED) {
-					l2.add(""+ChatColor.DARK_GRAY+ChatColor.BOLD+l.get(i).getNombre()+ChatColor.DARK_GRAY+" Concluido "+ChatColor.GOLD+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
+					l2.add(""+ChatColor.DARK_GRAY+ChatColor.BOLD+l.get(i).getName()+ChatColor.DARK_GRAY+" Concluido "+ChatColor.GOLD+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveStatusType.CANCELLED) {
-					l2.add(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+l.get(i).getNombre()+ChatColor.DARK_GRAY+" Cancelado "+ChatColor.GOLD+ChatColor.STRIKETHROUGH+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
+					l2.add(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+l.get(i).getName()+ChatColor.DARK_GRAY+" Cancelado "+ChatColor.GOLD+ChatColor.STRIKETHROUGH+"("+l.get(i).getValue()+"/"+l.get(i).getCompleteValue()+")");
 				}
 				
 			}
+			
 			if(l2.isEmpty()) {
 				l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"Cargando...");
  
-			  }
+			 }
 			
 				GameConditions gc = new GameConditions(plugin);
 				l2.add("");

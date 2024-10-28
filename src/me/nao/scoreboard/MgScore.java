@@ -18,10 +18,10 @@ import org.bukkit.scoreboard.ScoreboardManager;
 
 import com.google.common.base.Strings;
 
+import me.nao.enums.ObjetiveStatusType;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
 import me.nao.general.info.GamePoints;
-import me.nao.general.info.ObjetiveStatusType;
 import me.nao.general.info.ObjetivesMG;
 import me.nao.general.info.PlayerInfo;
 import me.nao.main.game.Minegame;
@@ -360,21 +360,21 @@ public class MgScore {
 		
 			for(int i=0;i<l.size();i++) {
 				if(l.get(i).getObjetiveType() == ObjetiveStatusType.COMPLETE) {
-					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.GREEN+ChatColor.BOLD+""+ChatColor.GREEN+ChatColor.BOLD+ChatColor.STRIKETHROUGH+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.GREEN+l.get(i).getValue()+"/"+ChatColor.GREEN+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
+					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.GREEN+ChatColor.BOLD+""+ChatColor.GREEN+ChatColor.BOLD+ChatColor.STRIKETHROUGH+l.get(i).getName()+" "+ChatColor.GOLD+"("+ChatColor.GREEN+l.get(i).getValue()+"/"+ChatColor.GREEN+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveStatusType.INCOMPLETE) {
-					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.RED+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.RED+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.RED+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
+					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.RED+ChatColor.BOLD+l.get(i).getName()+" "+ChatColor.GOLD+"("+ChatColor.RED+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.RED+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveStatusType.WAITING) {
-					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.WHITE+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.AQUA+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.AQUA+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
+					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.WHITE+ChatColor.BOLD+l.get(i).getName()+" "+ChatColor.GOLD+"("+ChatColor.AQUA+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.AQUA+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveStatusType.UNKNOW) {
-					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.WHITE+ChatColor.MAGIC+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.WHITE+ChatColor.STRIKETHROUGH+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.WHITE+ChatColor.STRIKETHROUGH+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
+					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.WHITE+ChatColor.MAGIC+l.get(i).getName()+" "+ChatColor.GOLD+"("+ChatColor.WHITE+ChatColor.STRIKETHROUGH+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.WHITE+ChatColor.STRIKETHROUGH+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveStatusType.WARNING) {
-					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.YELLOW+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.YELLOW+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.YELLOW+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
+					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.YELLOW+ChatColor.BOLD+l.get(i).getName()+" "+ChatColor.GOLD+"("+ChatColor.YELLOW+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.YELLOW+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveStatusType.DANGER) {
-					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.DARK_RED+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.RED+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.RED+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
+					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.DARK_RED+ChatColor.BOLD+l.get(i).getName()+" "+ChatColor.GOLD+"("+ChatColor.RED+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.RED+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveStatusType.CONCLUDED) {
-					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.DARK_GRAY+ChatColor.BOLD+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.RED+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.RED+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
+					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.DARK_GRAY+ChatColor.BOLD+l.get(i).getName()+" "+ChatColor.GOLD+"("+ChatColor.RED+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.RED+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
 				}else if(l.get(i).getObjetiveType() == ObjetiveStatusType.CANCELLED) {
-					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+l.get(i).getNombre()+" "+ChatColor.GOLD+"("+ChatColor.RED+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.RED+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
+					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+l.get(i).getName()+" "+ChatColor.GOLD+"("+ChatColor.RED+l.get(i).getValue()+ChatColor.GOLD+"/"+ChatColor.RED+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
 				}
 				
 			}

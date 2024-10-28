@@ -43,13 +43,15 @@ import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.ViaAPI;
 
 import me.nao.cooldown.ReportsManager;
+import me.nao.enums.GameStatus;
+import me.nao.enums.GameType;
+import me.nao.enums.Items;
+import me.nao.enums.ObjetiveStatusType;
+import me.nao.enums.StopMotivo;
 //import me.nao.gamemode.DestroyNexo;
 import me.nao.main.game.Minegame;
-import me.nao.manager.MapIntoGame;
-import me.nao.manager.EstadoPartida;
-import me.nao.manager.StopMotivo;
+import me.nao.manager.GameIntoMap;
 import me.nao.scoreboard.MgScore;
-import me.nao.shop.Items;
 import me.nao.teamsmg.MgTeams;
 import me.nao.timers.DialogRun;
 import me.nao.timers.InfectedTemp;
@@ -73,7 +75,7 @@ public class GameConditions {
 	
 	//TODO JOIN
 	 
-	public void JoinToTheGames(Player player,String map) {
+	public void mgJoinToTheGames(Player player,String map) {
 		LoadDataMap(map);
 		
 		if(CanJoinToTheMap(player,map)){
@@ -94,7 +96,7 @@ public class GameConditions {
 	 
 	  
 	//TODO LEAVE
-	public void LeaveOfTheGame(Player player) {
+	public void mgLeaveOfTheGame(Player player) {
 		  
 		if(!isPlayerinGame(player)) {
 			player.sendMessage(ChatColor.RED+"No estas en Ningun Juego.");
@@ -105,17 +107,17 @@ public class GameConditions {
 		FileConfiguration mision = getGameConfig(pl.getMapName());
 		GameInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
 		
-		EstadoPartida part = ms.getEstopartida();
+		GameStatus part = ms.getGameStatus();
 		MgScore sco = new MgScore(plugin);
 		sco.ClearScore(player);
 		
 		if(ms instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) ms;
-			List<String> spectador = ga.getSpectator();
-			List<String> join = ga.getParticipantes();
+			List<String> spectador = ga.getSpectators();
+			List<String> join = ga.getParticipants();
 			
 			
-			if(part == EstadoPartida.ESPERANDO || part == EstadoPartida.COMENZANDO) {
+			if(part == GameStatus.ESPERANDO || part == GameStatus.COMENZANDO) {
 				if(join.size() < getMinPlayerMap(pl.getMapName())) {
 					
 					 
@@ -136,7 +138,7 @@ public class GameConditions {
 				SendMessageToUsersOfSameMap(player, ChatColor.WHITE+"El jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" salio del Modo Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size() - 1)+ChatColor.RED+"]");
 			}else {
 				SendMessageToUsersOfSameMap(player,
-							ChatColor.YELLOW+"A Salido "+ChatColor.GREEN+player.getName()+ChatColor.RED+" ("+ChatColor.GOLD+(ga.getParticipantes().size()-1)+ChatColor.YELLOW+"/"+ChatColor.GOLD+getMaxPlayerMap(pl.getMapName())+ChatColor.RED+")");			
+							ChatColor.YELLOW+"A Salido "+ChatColor.GREEN+player.getName()+ChatColor.RED+" ("+ChatColor.GOLD+(ga.getParticipants().size()-1)+ChatColor.YELLOW+"/"+ChatColor.GOLD+getMaxPlayerMap(pl.getMapName())+ChatColor.RED+")");			
 			}
 			
 			
@@ -150,7 +152,7 @@ public class GameConditions {
 			GameNexo gn = (GameNexo) ms;
 			List<String> spectador = gn.getSpectator();
 			List<String> join = gn.getParticipantes();
-			if(part == EstadoPartida.ESPERANDO || part == EstadoPartida.COMENZANDO) {
+			if(part == GameStatus.ESPERANDO || part == GameStatus.COMENZANDO) {
 				if(join.size() < getMinPlayerMap(pl.getMapName())) {
 					
 					 
@@ -185,17 +187,17 @@ public class GameConditions {
 	}
 	
 	
-	public void LeaveMapCommandIlegal(Player player) {
+	public void mgLeaveMapCommandIlegal(Player player) {
 		
 		if(!isPlayerinGame(player)) {
 			return;
 		}
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		GameAdventure ga = (GameAdventure) plugin.getGameInfoPoo().get(pl.getMapName());
-		if(CanJoinWithYourInventory(pl.getMapName()) && !ga.getSpectator().contains(player.getName())) {
+		if(CanJoinWithYourInventory(pl.getMapName()) && !ga.getSpectators().contains(player.getName())) {
 			
-			if(ga.getMuerto().contains(player.getName())) {
-				LeaveOfTheGame(player);
+			if(ga.getDeadPlayers().contains(player.getName())) {
+				mgLeaveOfTheGame(player);
 			}else{
 				Block block = player.getLocation().getBlock();
 				Block b = block.getRelative(0, -2, 0);
@@ -204,12 +206,12 @@ public class GameConditions {
 					 player.sendMessage(ChatColor.RED+"Si te Desconectas fuera de una Zona segura tu Inventario se Borrara.");
 					 
 				}else {
-					LeaveOfTheGame(player);
+					mgLeaveOfTheGame(player);
 				}
 				return;
 			}
 		}else {
-			LeaveOfTheGame(player);
+			mgLeaveOfTheGame(player);
 		}
 		return;
 	}
@@ -224,29 +226,29 @@ public class GameConditions {
 		
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		GameAdventure ga = (GameAdventure) plugin.getGameInfoPoo().get(pl.getMapName());
-		if(CanJoinWithYourInventory(pl.getMapName()) && !ga.getSpectator().contains(player.getName())) {
+		if(CanJoinWithYourInventory(pl.getMapName()) && !ga.getSpectators().contains(player.getName())) {
 			
-			if(ga.getMuerto().contains(player.getName())) {
-				LeaveOfTheGame(player);
+			if(ga.getDeadPlayers().contains(player.getName())) {
+				mgLeaveOfTheGame(player);
 			
 			}else{
 				Block block = player.getLocation().getBlock();
 				Block b = block.getRelative(0, -2, 0);
 				if(b.getType() != Material.STRUCTURE_BLOCK) {
-					MapIntoGame ci = new MapIntoGame(plugin);
+					GameIntoMap ci = new GameIntoMap(plugin);
 					ci.PlayerDropAllItems(player);
-					LeaveOfTheGame(player);
+					mgLeaveOfTheGame(player);
 				
 					 return;
 				}else{
 					
-					LeaveOfTheGame(player);
+					mgLeaveOfTheGame(player);
 				}
 				
 			}
 		}else{
 			
-			LeaveOfTheGame(player);
+			mgLeaveOfTheGame(player);
 		}
 	
 		return;
@@ -254,12 +256,12 @@ public class GameConditions {
 	
 	
 	
-	public void EndTheGame(String  name) {
+	public void mgEndTheGame(String  name) {
 		GameInfo gi = plugin.getGameInfoPoo().get(name);
 		
 		if(gi instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) gi;
-			List<Player> player = ConvertStringToPlayer(ga.getParticipantes());
+			List<Player> player = ConvertStringToPlayer(ga.getParticipants());
 			MgScore sco = new MgScore(plugin);
 		
 			for(Player target : player) {
@@ -267,7 +269,7 @@ public class GameConditions {
 				RestorePlayer(target);
 			}
 			
-			List<Player> spec = ConvertStringToPlayer(ga.getSpectator());
+			List<Player> spec = ConvertStringToPlayer(ga.getSpectators());
 			
 			for(Player target : spec) {
 				sco.ClearScore(target);
@@ -339,6 +341,7 @@ public class GameConditions {
 	   
 	   //TODO TpDeathSpawn
 	   public void DeathTptoSpawn(Player player ,String arenaName){
+		   
 		   GameConditions gc = new GameConditions(plugin);
 		   FileConfiguration ym = gc.getGameConfig(arenaName);
 		   if(ym.contains("Spawn-Spectator")) {
@@ -498,9 +501,9 @@ public class GameConditions {
 		if(game instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) game;
 			
-			List<String> vivo = ga.getVivo();
-			List<String> arrivo = ga.getArrivo();
-			List<String> spectador = ga.getSpectator();
+			List<String> vivo = ga.getDeadPlayers();
+			List<String> arrivo = ga.getArrivePlayers();
+			List<String> spectador = ga.getSpectators();
 			
 			
 			
@@ -585,9 +588,9 @@ public class GameConditions {
 			GameInfo mis = plugin.getGameInfoPoo().get(mision);
 			if(mis instanceof GameAdventure) {
 				GameAdventure ga = (GameAdventure) mis;
-				if(!ga.getParticipantes().contains(player.getName())) {
-					ga.getParticipantes().add(player.getName());
-					ga.getVivo().add(player.getName());
+				if(!ga.getParticipants().contains(player.getName())) {
+					ga.getParticipants().add(player.getName());
+					ga.getAlivePlayers().add(player.getName());
 				}
 			}
 	}
@@ -598,10 +601,10 @@ public class GameConditions {
 		GameInfo mis = plugin.getGameInfoPoo().get(mision);
 		if(mis instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) mis;
-			if(!ga.getVivo().contains(player.getName())) {
-				ga.getVivo().add(player.getName());
+			if(!ga.getAlivePlayers().contains(player.getName())) {
+				ga.getAlivePlayers().add(player.getName());
 			}
-			if(ga.getMuerto().remove(player.getName()));
+			if(ga.getDeadPlayers().remove(player.getName()));
 		}
 	}
 	
@@ -612,10 +615,10 @@ public class GameConditions {
 		GameInfo mis = plugin.getGameInfoPoo().get(mision);
 		if(mis instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) mis;
-			if(!ga.getMuerto().contains(player.getName())) {
-				ga.getMuerto().add(player.getName());
+			if(!ga.getDeadPlayers().contains(player.getName())) {
+				ga.getDeadPlayers().add(player.getName());
 			}
-			if(ga.getVivo().remove(player.getName()));
+			if(ga.getAlivePlayers().remove(player.getName()));
 		}
 	}
 	
@@ -624,8 +627,8 @@ public class GameConditions {
 		GameInfo mis = plugin.getGameInfoPoo().get(mision);
 		if(mis instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) mis;
-			if(!ga.getSpectator().contains(player.getName())) {
-				ga.getSpectator().add(player.getName());
+			if(!ga.getSpectators().contains(player.getName())) {
+				ga.getSpectators().add(player.getName());
 			}
 		}
 	}
@@ -635,8 +638,8 @@ public class GameConditions {
 		GameInfo mis = plugin.getGameInfoPoo().get(mision);
 		if(mis instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) mis;
-			if(!ga.getArrivo().contains(player.getName())) {
-				ga.getArrivo().add(player.getName());
+			if(!ga.getArrivePlayers().contains(player.getName())) {
+				ga.getArrivePlayers().add(player.getName());
 			}
 		}
 	}
@@ -650,11 +653,11 @@ public class GameConditions {
 			if(mis.getGameType() == GameType.ADVENTURE || mis.getGameType() == GameType.RESISTENCE ) {
 				MgTeams t = new MgTeams(plugin);
 				plugin.CreditKill().remove(player);
-				if(ga.getParticipantes().remove(player.getName()));
-				if(ga.getVivo().remove(player.getName()));
-				if(ga.getMuerto().remove(player.getName()));
-				if(ga.getArrivo().remove(player.getName()));
-				if(ga.getSpectator().remove(player.getName()));
+				if(ga.getParticipants().remove(player.getName()));
+				if(ga.getAlivePlayers().remove(player.getName()));
+				if(ga.getDeadPlayers().remove(player.getName()));
+				if(ga.getArrivePlayers().remove(player.getName()));
+				if(ga.getSpectators().remove(player.getName()));
 				plugin.getPlayerInfoPoo().remove(player);
 				plugin.getCheckPoint().remove(player);
 				t.RemoveAllPlayer(player);
@@ -682,8 +685,8 @@ public class GameConditions {
 		if(ms instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) ms;
 			if(ms.getGameType() == GameType.ADVENTURE) {
-				List<String> arrivo = ga.getArrivo();
-				List<String> spectador = ga.getSpectator();
+				List<String> arrivo = ga.getArrivePlayers();
+				List<String> spectador = ga.getSpectators();
 				
 				if(spectador.contains(player.getName())) {
 					return;
@@ -694,8 +697,8 @@ public class GameConditions {
 			}
 			
 			if(ms.getGameType() == GameType.RESISTENCE) {
-				List<String> vivo = ga.getVivo();
-				List<String> spectador = ga.getSpectator();
+				List<String> vivo = ga.getAlivePlayers();
+				List<String> spectador = ga.getSpectators();
 				
 				if(spectador.contains(player.getName())) {
 					return;
@@ -774,8 +777,8 @@ public class GameConditions {
 		if(ms instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) ms;
 			if(ms.getGameType() == GameType.ADVENTURE) {
-				List<String> arrivo = ga.getArrivo();
-				List<String> spectador = ga.getSpectator();
+				List<String> arrivo = ga.getArrivePlayers();
+				List<String> spectador = ga.getSpectators();
 				
 				if(spectador.contains(player.getName())) {
 					return;
@@ -787,8 +790,8 @@ public class GameConditions {
 			
 			
 			if(ms.getGameType() == GameType.RESISTENCE) {
-				List<String> vivo = ga.getVivo();
-				List<String> spectador = ga.getSpectator();
+				List<String> vivo = ga.getAlivePlayers();
+				List<String> spectador = ga.getSpectators();
 				
 				if(spectador.contains(player.getName())) {
 					return;
@@ -917,13 +920,13 @@ public class GameConditions {
 				
 				
 				if(ExistLobbyMg()) {
-					PlayerInfo pl = new PlayerInfo(plugin,false,player, player.getGameMode(), player.isFlying(), GetLocationOfLobby(), true, map,new GamePoints(0,0,0,0,0));
+					PlayerInfo pl = new PlayerInfo(plugin,false,player, player.getGameMode(), player.isFlying(), GetLocationOfLobby(), map,new GamePoints(0,0,0,0,0));
 					plugin.getPlayerInfoPoo().put(player, pl);
 					pl.ClearGamemodePlayerMg();
 				
 					
 				}else {
-					PlayerInfo pl = new PlayerInfo(plugin,false,player, player.getGameMode(), player.isFlying(), player.getLocation(), true, map,new GamePoints(0,0,0,0,0));
+					PlayerInfo pl = new PlayerInfo(plugin,false,player, player.getGameMode(), player.isFlying(), player.getLocation(), map,new GamePoints(0,0,0,0,0));
 					plugin.getPlayerInfoPoo().put(player, pl);
 					pl.ClearGamemodePlayerMg();
 					
@@ -933,13 +936,13 @@ public class GameConditions {
 				//LO SALVAS
 				
 				if(ExistLobbyMg()) {
-					PlayerInfo pl = new PlayerInfo(plugin,true,player,player.getActivePotionEffects(), player.getInventory().getContents(), player.getGameMode(), player.isFlying(),player.getHealth(), player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), player.getFoodLevel(), player.getLevel(),player.getExp(), GetLocationOfLobby(), true, map,new GamePoints(0,0,0,0,0));
+					PlayerInfo pl = new PlayerInfo(plugin,true,player,player.getActivePotionEffects(), player.getInventory().getContents(), player.getGameMode(), player.isFlying(),player.getHealth(), player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), player.getFoodLevel(), player.getLevel(),player.getExp(), GetLocationOfLobby(), map,new GamePoints(0,0,0,0,0));
 					plugin.getPlayerInfoPoo().put(player, pl);
 					pl.ClearAllPlayerMg();
 					
 				}else {
 				
-					PlayerInfo pl = new PlayerInfo(plugin,true,player,player.getActivePotionEffects(), player.getInventory().getContents(), player.getGameMode(), player.isFlying(),player.getHealth(), player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), player.getFoodLevel(), player.getLevel(),player.getExp(), player.getLocation(), true, map,new GamePoints(0,0,0,0,0));
+					PlayerInfo pl = new PlayerInfo(plugin,true,player,player.getActivePotionEffects(), player.getInventory().getContents(), player.getGameMode(), player.isFlying(),player.getHealth(), player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), player.getFoodLevel(), player.getLevel(),player.getExp(), player.getLocation(), map,new GamePoints(0,0,0,0,0));
 					plugin.getPlayerInfoPoo().put(player, pl);
 					pl.ClearAllPlayerMg();
 				}
@@ -978,7 +981,7 @@ public class GameConditions {
 					    List<String> arrivo = new ArrayList<>();
 					    List<String> knocked = new ArrayList<>();
 					
-			    	GameAdventure mis = new GameAdventure(map ,maxplayers,minplayers,misiontype ,EstadoPartida.ESPERANDO,StopMotivo.NINGUNO,boss,time,LoadObjetivesOfGames(map),participantes,espectador,vivos,muertos,arrivo,knocked,false,false);
+			    	GameAdventure mis = new GameAdventure(map ,maxplayers,minplayers,misiontype ,GameStatus.ESPERANDO,StopMotivo.NINGUNO,boss,time,LoadObjetivesOfGames(map),participantes,espectador,vivos,muertos,arrivo,knocked,false,false);
 					System.out.println("LOG-1 MISION: "+mis.ShowGame());
 					 
 					plugin.getGameInfoPoo().put(map, mis);
@@ -1025,17 +1028,17 @@ public class GameConditions {
 				 System.out.println("LOG-2 CANSTART MISION: "+ms.ShowGame());
 				 player.sendMessage(ChatColor.GREEN+"Has Entrado en el Mapa "+ChatColor.translateAlternateColorCodes('&',getNameOfTheMap(map).replace("%player%",player.getName())));
 
-				 player.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.YELLOW+" Te has unido"+ChatColor.RED+" ("+ChatColor.GOLD+ga.getParticipantes().size()+ChatColor.YELLOW+"/"+ChatColor.GOLD+ getMaxPlayerMap(map)+ChatColor.RED+")");
+				 player.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.YELLOW+" Te has unido"+ChatColor.RED+" ("+ChatColor.GOLD+ga.getParticipants().size()+ChatColor.YELLOW+"/"+ChatColor.GOLD+ getMaxPlayerMap(map)+ChatColor.RED+")");
 
 				 SendMessageToUsersOfSameMap(player,
-				ChatColor.YELLOW+"Se a unido "+ChatColor.GREEN+player.getName()+ChatColor.RED+" ("+ChatColor.GOLD+ga.getParticipantes().size()+ChatColor.YELLOW+"/"+ChatColor.GOLD+getMaxPlayerMap(map)+ChatColor.RED+")");
+				ChatColor.YELLOW+"Se a unido "+ChatColor.GREEN+player.getName()+ChatColor.RED+" ("+ChatColor.GOLD+ga.getParticipants().size()+ChatColor.YELLOW+"/"+ChatColor.GOLD+getMaxPlayerMap(map)+ChatColor.RED+")");
 				MgScore sc = new MgScore(plugin);
 				sc.LoadScore(player);
 				
-				 if(getMinPlayerMap(map) > ga.getParticipantes().size()) {
+				 if(getMinPlayerMap(map) > ga.getParticipants().size()) {
 					 
 					 int min1 = getMinPlayerMap(map);
-					 min1 = min1 - ga.getParticipantes().size();
+					 min1 = min1 - ga.getParticipants().size();
 					 //TEXTO 
 					 if(min1 == 1) {
 						 player.sendMessage(ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugador para empezar.");
@@ -1047,9 +1050,9 @@ public class GameConditions {
 					 } 
 			   }
 				 
-			if(getMinPlayerMap(map) == ga.getParticipantes().size()){
-				ms.setEstadopartida(EstadoPartida.COMENZANDO);
-				if(ms.getEstopartida() == EstadoPartida.COMENZANDO) {
+			if(getMinPlayerMap(map) == ga.getParticipants().size()){
+				ms.setGameStatus(GameStatus.COMENZANDO);
+				if(ms.getGameStatus() == GameStatus.COMENZANDO) {
 				     int  segundo = config.getInt("CountDownPreLobby");
 				
 					 SendMessageToAllUsersOfSameMap(player, ChatColor.GREEN+"\nSe a alcanzado el minimo de Jugadores necesarios.\n"+ChatColor.GOLD+"La partida Comenzara en: "+ChatColor.RED+segundo+ChatColor.GREEN+" segundos.\n ");
@@ -1261,8 +1264,8 @@ public class GameConditions {
 			
 			 if(ms instanceof GameAdventure) {
 					GameAdventure ga = (GameAdventure) ms;
-					List<String> play = ga.getParticipantes();
-					List<String> vivos = ga.getVivo();
+					List<String> play = ga.getParticipants();
+					List<String> vivos = ga.getAlivePlayers();
 					
 					
 						for(String target : play) {
@@ -1294,7 +1297,7 @@ public class GameConditions {
 		 GameInfo ms = plugin.getGameInfoPoo().get(map);
 		 if(ms instanceof GameAdventure) {
 				GameAdventure ga = (GameAdventure) ms;
-				 List<String> spectador = ga.getSpectator();
+				 List<String> spectador = ga.getSpectators();
 				 player.sendMessage(ChatColor.GREEN+"Estas como Espectador en el Mapa: "+ChatColor.GOLD+map);
 				 SendMessageToUsersOfSameMap(player, ChatColor.WHITE+"El Jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" se Unio como Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size())+ChatColor.RED+"]");
 				 TptoSpawnSpectator(player, map);
@@ -1379,15 +1382,15 @@ public class GameConditions {
 						 return false;
 					 }
 					 
-					 if(minfo.getEstopartida() == EstadoPartida.TERMINANDO) {
+					 if(minfo.getGameStatus() == GameStatus.TERMINANDO) {
 						 player.sendMessage(ChatColor.RED+"La Partida esta terminando. ");
 						 return false;
 					 }
 					 
-					 if(ga.getParticipantes().size() == maxplayers && minfo.getEstopartida() == EstadoPartida.COMENZANDO) {
+					 if(ga.getParticipants().size() == maxplayers && minfo.getGameStatus() == GameStatus.COMENZANDO) {
 						 player.sendMessage(ChatColor.RED+"La Partida esta llena espera un rato para entrar como Espectador."); 
 						 return false;
-					 }if(minfo.getEstopartida() == EstadoPartida.JUGANDO && !isPlayerinGame(player)) {
+					 }if(minfo.getGameStatus() == GameStatus.JUGANDO && !isPlayerinGame(player)) {
 						 if(cooldown.HasSancionPlayer(player)) {
 							 //MODO ESPECTADOR no te uniras como jugador
 							 player.sendMessage(ChatColor.YELLOW+"Estas Baneado o tienes un TempBan pero puedes Observar.");
@@ -1468,15 +1471,15 @@ public class GameConditions {
 					 }
 					 
 					 
-					 if(minfo.getEstopartida() == EstadoPartida.TERMINANDO) {
+					 if(minfo.getGameStatus() == GameStatus.TERMINANDO) {
 						 player.sendMessage(ChatColor.RED+"La Partida esta terminando. ");
 						 return false;
 					 }
 					 
-					 if(ga.getParticipantes().size() == maxplayers && minfo.getEstopartida() == EstadoPartida.COMENZANDO) {
+					 if(ga.getParticipants().size() == maxplayers && minfo.getGameStatus() == GameStatus.COMENZANDO) {
 						 player.sendMessage(ChatColor.RED+"La Partida esta llena espera un rato para entrar como Espectador."); 
 						 return false;
-					 }if(minfo.getEstopartida() == EstadoPartida.JUGANDO && !isPlayerinGame(player)) {
+					 }if(minfo.getGameStatus() == GameStatus.JUGANDO && !isPlayerinGame(player)) {
 						 if(cooldown.HasSancionPlayer(player)) {
 							 //MODO ESPECTADOR no te uniras como jugador
 							 player.sendMessage(ChatColor.YELLOW+"Estas Baneado o tienes un TempBan pero puedes Observar.");
@@ -1557,15 +1560,15 @@ public class GameConditions {
 					 }
 					 
 					 
-					 if(minfo.getEstopartida() == EstadoPartida.TERMINANDO) {
+					 if(minfo.getGameStatus() == GameStatus.TERMINANDO) {
 						 player.sendMessage(ChatColor.RED+"La Partida esta terminando. ");
 						 return false;
 					 }
 					 
-					 if(ga.getParticipantes().size() == maxplayers && minfo.getEstopartida() == EstadoPartida.COMENZANDO) {
+					 if(ga.getParticipants().size() == maxplayers && minfo.getGameStatus() == GameStatus.COMENZANDO) {
 						 player.sendMessage(ChatColor.RED+"La Partida esta llena espera un rato para entrar como Espectador."); 
 						 return false;
-					 }if(minfo.getEstopartida() == EstadoPartida.JUGANDO && !isPlayerinGame(player)) {
+					 }if(minfo.getGameStatus() == GameStatus.JUGANDO && !isPlayerinGame(player)) {
 						 if(cooldown.HasSancionPlayer(player)) {
 							 //MODO ESPECTADOR no te uniras como jugador
 							 player.sendMessage(ChatColor.YELLOW+"Estas Baneado o tienes un TempBan pero puedes Observar.");
@@ -1668,15 +1671,15 @@ public class GameConditions {
 						 }
 						 return false;
 					 }
-					 if(minfo.getEstopartida() == EstadoPartida.TERMINANDO) {
+					 if(minfo.getGameStatus() == GameStatus.TERMINANDO) {
 						 player.sendMessage(ChatColor.RED+"La Partida esta terminando. ");
 						 return false;
 					 }
 					 
-					 if(ga.getParticipantes().size() == maxplayers && minfo.getEstopartida() == EstadoPartida.COMENZANDO) {
+					 if(ga.getParticipantes().size() == maxplayers && minfo.getGameStatus() == GameStatus.COMENZANDO) {
 						 player.sendMessage(ChatColor.RED+"La Partida esta llena espera un rato para entrar como Espectador."); 
 						 return false;
-					 }if(minfo.getEstopartida() == EstadoPartida.JUGANDO && !isPlayerinGame(player)) {
+					 }if(minfo.getGameStatus() == GameStatus.JUGANDO && !isPlayerinGame(player)) {
 						 if(cooldown.HasSancionPlayer(player)) {
 							 //MODO ESPECTADOR no te uniras como jugador
 							 player.sendMessage(ChatColor.YELLOW+"Estas Baneado o tienes un TempBan pero puedes Observar.");
@@ -1752,7 +1755,7 @@ public class GameConditions {
 			
 			if(gi instanceof GameAdventure) {
 				GameAdventure ga = (GameAdventure) gi;
-				List<Player> targets = ConvertStringToPlayer(ga.getVivo());
+				List<Player> targets = ConvertStringToPlayer(ga.getAlivePlayers());
 				for(Player players : targets) {
 					players.teleport(player.getLocation());
 				}
@@ -1769,7 +1772,7 @@ public class GameConditions {
 			GameInfo gi = plugin.getGameInfoPoo().get(p.getMapName());
 			 if(gi instanceof GameAdventure) {
 					GameAdventure ga = (GameAdventure) gi;
-					List<Player> targets = ConvertStringToPlayer(ga.getVivo());
+					List<Player> targets = ConvertStringToPlayer(ga.getAlivePlayers());
 					for(Player players : targets) {
 						if(players.getName().equals(name)) {
 							players.teleport(player.getLocation());
@@ -1788,7 +1791,7 @@ public class GameConditions {
 				if(gi instanceof GameAdventure) {
 					GameAdventure ga = (GameAdventure) gi;
 					Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch);
-					List<Player> targets = ConvertStringToPlayer(ga.getVivo());
+					List<Player> targets = ConvertStringToPlayer(ga.getAlivePlayers());
 					for(Player players : targets) {
 						players.teleport(l);
 					}
@@ -1805,7 +1808,7 @@ public class GameConditions {
 			if(gi instanceof GameAdventure) {
 				GameAdventure ga = (GameAdventure) gi;
 				Location l = new Location(Bukkit.getWorld(world), x, y, z);
-				List<Player> targets = ConvertStringToPlayer(ga.getVivo());
+				List<Player> targets = ConvertStringToPlayer(ga.getAlivePlayers());
 				for(Player players : targets) {
 					l.setYaw(players.getLocation().getYaw());
 					l.setPitch(players.getLocation().getPitch());
@@ -1828,7 +1831,7 @@ public class GameConditions {
 				GameAdventure ga = (GameAdventure) gi;
 				
 				Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch);
-				List<Player> targets = ConvertStringToPlayer(ga.getVivo());
+				List<Player> targets = ConvertStringToPlayer(ga.getAlivePlayers());
 				for(Player players : targets) {
 					if(players.getName().equals(target)) {
 						players.teleport(l);
@@ -1851,7 +1854,7 @@ public class GameConditions {
 				
 				
 				Location l = new Location(Bukkit.getWorld(world), x, y, z);
-				List<Player> targets = ConvertStringToPlayer(ga.getVivo());
+				List<Player> targets = ConvertStringToPlayer(ga.getAlivePlayers());
 				for(Player players : targets) {
 					if(players.getName().equals(target)) {
 						l.setYaw(players.getLocation().getYaw());
@@ -2186,8 +2189,8 @@ public class GameConditions {
 				GameAdventure ga = (GameAdventure) ms;
 				
 				
-				List<Player> play = ConvertStringToPlayer(ga.getParticipantes());
-				List<Player> spect = ConvertStringToPlayer(ga.getSpectator());
+				List<Player> play = ConvertStringToPlayer(ga.getParticipants());
+				List<Player> spect = ConvertStringToPlayer(ga.getSpectators());
 				
 				for(Player target : play) {
 					
@@ -2229,8 +2232,8 @@ public class GameConditions {
 				GameAdventure ga = (GameAdventure) ms;
 				
 				
-				List<Player> play = ConvertStringToPlayer(ga.getParticipantes());
-				List<Player> spect = ConvertStringToPlayer(ga.getSpectator());
+				List<Player> play = ConvertStringToPlayer(ga.getParticipants());
+				List<Player> spect = ConvertStringToPlayer(ga.getSpectators());
 				
 				for(Player target : play) {
 					
@@ -2282,8 +2285,8 @@ public class GameConditions {
 					message2 = ""; 
 				}
 				
-				List<Player> play = ConvertStringToPlayer(ga.getParticipantes());
-				List<Player> spect = ConvertStringToPlayer(ga.getSpectator());
+				List<Player> play = ConvertStringToPlayer(ga.getParticipants());
+				List<Player> spect = ConvertStringToPlayer(ga.getSpectators());
 				
 				
 				for(Player target : play) {
@@ -2305,12 +2308,12 @@ public class GameConditions {
 	public void SendMessageToUsersOfSameMap(Player player ,String text) {
 		
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
-		String arenaName = pl.getMapName();
-		GameInfo ms = plugin.getGameInfoPoo().get(arenaName);
+		String mapname = pl.getMapName();
+		GameInfo ms = plugin.getGameInfoPoo().get(mapname);
 		//MisionInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
 		 if(ms instanceof GameAdventure) {
 				GameAdventure ga = (GameAdventure) ms;
-				List<Player> play = ConvertStringToPlayer(ga.getParticipantes());
+				List<Player> play = ConvertStringToPlayer(ga.getParticipants());
 				
 					for(Player target : play) {
 						
@@ -2318,7 +2321,7 @@ public class GameConditions {
 						   target.sendMessage(ChatColor.translateAlternateColorCodes('&', text));
 					}
 					
-					List<Player> spect = ConvertStringToPlayer(ga.getSpectator());
+					List<Player> spect = ConvertStringToPlayer(ga.getSpectators());
 					if(!spect.isEmpty()) {
 						for(Player target : spect) {
 							
@@ -2335,7 +2338,7 @@ public class GameConditions {
 		//MisionInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
 		 if(ms instanceof GameAdventure) {
 				GameAdventure ga = (GameAdventure) ms;
-				List<String> play = ga.getParticipantes();
+				List<String> play = ga.getParticipants();
 				
 				if(!play.isEmpty()) {
 					for(String target : play) {
@@ -2353,7 +2356,7 @@ public class GameConditions {
 		//MisionInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
 		 if(ms instanceof GameAdventure) {
 				GameAdventure ga = (GameAdventure) ms;
-				List<String> play = ga.getParticipantes();
+				List<String> play = ga.getParticipants();
 				
 				if(!play.isEmpty()) {
 					for(String target : play) {
@@ -2372,7 +2375,7 @@ public class GameConditions {
 		//MisionInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
 		 if(ms instanceof GameAdventure) {
 				GameAdventure ga = (GameAdventure) ms;
-				List<String> play = ga.getParticipantes();
+				List<String> play = ga.getParticipants();
 				
 				if(!play.isEmpty()) {
 					for(String target : play) {
@@ -2413,7 +2416,7 @@ public class GameConditions {
 					if(pl.hasPlayerMoreInfo()) {
 						player.teleport(pl.getLocationMG());
 						pl.RestoreAllPlayerMg(player);
-						if(ms.getEstopartida() == EstadoPartida.TERMINANDO) {
+						if(ms.getGameStatus() == GameStatus.TERMINANDO) {
 							PlayerWinnerReward(player);
 							PlayerLoserReward(player);
 						}
@@ -2423,7 +2426,7 @@ public class GameConditions {
 					}else {
 						player.teleport(pl.getLocationMG());
 						pl.RestoreGamemodePlayerMg(player);
-						if(ms.getEstopartida() == EstadoPartida.TERMINANDO) {
+						if(ms.getGameStatus() == GameStatus.TERMINANDO) {
 							PlayerWinnerReward(player);
 							PlayerLoserReward(player);
 						}
@@ -2487,8 +2490,8 @@ public class GameConditions {
 						
 						 if(ms instanceof GameAdventure) {
 								GameAdventure ga = (GameAdventure) ms;
-								 joins = ConvertStringToPlayer(ga.getParticipantes());
-								 spectador = ConvertStringToPlayer(ga.getSpectator());
+								 joins = ConvertStringToPlayer(ga.getParticipants());
+								 spectador = ConvertStringToPlayer(ga.getSpectators());
 								for(Player user : joins) {
 									PlayerInfo pl = plugin.getPlayerInfoPoo().get(user);
 									
@@ -2608,7 +2611,7 @@ public class GameConditions {
 						GameInfo ms = plugin.getGameInfoPoo().get(map);
 						 if(ms instanceof GameAdventure) {
 								GameAdventure ga = (GameAdventure) ms;
-								List<Player> joins = ConvertStringToPlayer(ga.getParticipantes());
+								List<Player> joins = ConvertStringToPlayer(ga.getParticipants());
 								
 								for(Player user : joins) {
 									PlayerInfo pl = plugin.getPlayerInfoPoo().get(user);
@@ -2742,8 +2745,8 @@ public class GameConditions {
 						GameInfo ms = plugin.getGameInfoPoo().get(arenaName);
 						if(ms instanceof GameAdventure) {
 							GameAdventure ga = (GameAdventure) ms;
-							List<Player> joins = ConvertStringToPlayer(ga.getParticipantes());
-							List<Player> spectador = ConvertStringToPlayer(ga.getSpectator());
+							List<Player> joins = ConvertStringToPlayer(ga.getParticipants());
+							List<Player> spectador = ConvertStringToPlayer(ga.getSpectators());
 							List<String> winreward = mision.getStringList("Win-Rewards.Commands");
 							for(Player user : joins) {
 								PlayerInfo pl = plugin.getPlayerInfoPoo().get(user);
@@ -2804,12 +2807,12 @@ public class GameConditions {
 				GameInfo ms = plugin.getGameInfoPoo().get(name);
 				if(ms instanceof GameAdventure) {
 					GameAdventure ga = (GameAdventure) ms;
-					EstadoPartida estadoPartida = ms.getEstopartida();
-					if(estadoPartida == EstadoPartida.JUGANDO) {
-						MapIntoGame ci = new MapIntoGame(plugin);
+					GameStatus estadoPartida = ms.getGameStatus();
+					if(estadoPartida == GameStatus.JUGANDO) {
+						GameIntoMap ci = new GameIntoMap(plugin);
 						
 						ms.setMotivo(motivo);
-						List<String> vivos = ga.getVivo();
+						List<String> vivos = ga.getAlivePlayers();
 						List<Player> players = gc.ConvertStringToPlayer(vivos);
 						if(motivo == StopMotivo.WIN) {
 							
@@ -2962,7 +2965,7 @@ public class GameConditions {
    	   		}}
    			
    			if(l.size() >= 1) {
-   				if(l.stream().filter(o -> o.getNombre().equals("Mapa Con Objetivos Borrados")).findFirst().isPresent()) {
+   				if(l.stream().filter(o -> o.getName().equals("Mapa Con Objetivos Borrados")).findFirst().isPresent()) {
    					l.remove(ghost);
    				}
    		     }
@@ -3012,7 +3015,7 @@ public class GameConditions {
 	   		}}
 	   		
 	   		if(l.size() > 1) {
-   				if(l.stream().filter(o -> o.getNombre().equals("Mapa Con Objetivos Borrados")).findFirst().isPresent()) {
+   				if(l.stream().filter(o -> o.getName().equals("Mapa Con Objetivos Borrados")).findFirst().isPresent()) {
    					l.remove(ghost);
    				}
    		     }
@@ -3022,7 +3025,7 @@ public class GameConditions {
    		
    		GameObjetivesMG go = new GameObjetivesMG(l);
    		for(ObjetivesMG o : go.getObjetives()) {
-   			System.out.println("LOG DE OBJETIVOS LISTA "+o.getNombre()+" "+o.getPriority()+" "+o.getValue()+" "+o.getCompleteValue()+" "+o.getObjetiveType().toString());
+   			System.out.println("LOG DE OBJETIVOS LISTA "+o.getName()+" "+o.getPriority()+" "+o.getValue()+" "+o.getCompleteValue()+" "+o.getObjetiveType().toString());
    		}
    	
    		
@@ -3064,7 +3067,7 @@ public class GameConditions {
 		  	
 			if(gi instanceof GameAdventure) {
 				GameAdventure ga = (GameAdventure) gi;
-				List<Player> players = ConvertStringToPlayer(ga.getVivo());
+				List<Player> players = ConvertStringToPlayer(ga.getAlivePlayers());
 				
 				
 				for(Player player : players) {
@@ -3115,7 +3118,7 @@ public class GameConditions {
 		  	
 		  	if(gi instanceof GameAdventure) {
 				GameAdventure ga = (GameAdventure) gi;
-				List<Player> players = ConvertStringToPlayer(ga.getParticipantes());
+				List<Player> players = ConvertStringToPlayer(ga.getParticipants());
 				
 				for(Player player : players) {
 					if(!rewardpm.isEmpty()) {
@@ -3150,7 +3153,7 @@ public class GameConditions {
    		
    		if(!p.isEmpty()) {
    			for(int i = 0 ; i < p.size();i++) {
-   				player.sendMessage(ChatColor.RED+"El Objetivo Primario "+p.get(i).getNombre()+" no esta Completado "+p.get(i).getValue()+"/"+p.get(i).getCompleteValue());
+   				player.sendMessage(ChatColor.RED+"El Objetivo Primario "+p.get(i).getName()+" no esta Completado "+p.get(i).getValue()+"/"+p.get(i).getCompleteValue());
    			}
    			return false;
    		}
@@ -3174,7 +3177,7 @@ public class GameConditions {
    		
    		if(!p.isEmpty()) {
    			for(int i = 0 ; i < p.size();i++) {
-   				player.sendMessage(ChatColor.RED+"El Objetivo Secundario "+p.get(i).getNombre()+" no esta Completado "+p.get(i).getValue()+"/"+p.get(i).getCompleteValue());
+   				player.sendMessage(ChatColor.RED+"El Objetivo Secundario "+p.get(i).getName()+" no esta Completado "+p.get(i).getValue()+"/"+p.get(i).getCompleteValue());
    			}
    			return false;
    		}
@@ -3193,12 +3196,12 @@ public class GameConditions {
 		List<ObjetivesMG> l = gi.getGameObjetivesMg().getObjetives();
 		GameConditions gc = new GameConditions(plugin);
 		
-		if(!l.stream().filter(o -> o.getNombre().equals(name)).findFirst().isPresent()) {
+		if(!l.stream().filter(o -> o.getName().equals(name)).findFirst().isPresent()) {
 			SendMessageToUserAndConsole(null,ChatColor.RED+"El Objetivo  "+name+" no Existe");
 			return;
 		}else {
 			
-			ObjetivesMG obj = l.stream().filter(o -> o.getNombre().equals(name)).findFirst().get();
+			ObjetivesMG obj = l.stream().filter(o -> o.getName().equals(name)).findFirst().get();
 			
 			if(obj.getObjetiveType() == ObjetiveStatusType.COMPLETE) {
 				SendMessageToUserAndConsole(null,ChatColor.GOLD+map+" "+ChatColor.GREEN+"El Objetivo "+name+" alcanzo el Estado Completo.");
@@ -3241,7 +3244,7 @@ public class GameConditions {
 							Player target = Bukkit.getPlayerExact(player);
 							if(target != null && gc.isPlayerinGame(target)) {
 								//SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Completado gracias a "+target.getName()+" "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
-								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" Completado por "+target.getName()+" "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
+								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+ChatColor.GREEN+" Completado por "+target.getName()+" "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
 
 								if(obj.getParticipants().containsKey(target)) {
 									obj.getParticipants().put(target,obj.getParticipants().get(target)+value);
@@ -3250,11 +3253,11 @@ public class GameConditions {
 								}
 							}else {
 								//SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
-								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
+								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
 							}
 						}else {
 							//SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
-							SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
+							SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
 
 						}
 						
@@ -3275,7 +3278,7 @@ public class GameConditions {
 							Player target = Bukkit.getPlayerExact(player);
 							if(target != null && gc.isPlayerinGame(target)) {
 								//SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado gracias a "+target.getName()+" "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
-								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" Cambio por "+target.getName()+" "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
+								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+ChatColor.GREEN+" Cambio por "+target.getName()+" "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
 
 								if(obj.getParticipants().containsKey(target)) {
 									obj.getParticipants().put(target,obj.getParticipants().get(target)+value);
@@ -3284,12 +3287,12 @@ public class GameConditions {
 								}
 							}else {
 								//SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
-								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+" cambio "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
+								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+" cambio "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
 
 							}
 						}else {
 							//SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
-							SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+" cambio "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
+							SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+" cambio "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
 
 						}
 						
@@ -3312,7 +3315,7 @@ public class GameConditions {
 							Player target = Bukkit.getPlayerExact(player);
 							if(target != null && gc.isPlayerinGame(target)) {
 								//SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Completado gracias a "+target.getName()+" "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
-								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" Completado por "+target.getName()+" "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
+								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+ChatColor.GREEN+" Completado por "+target.getName()+" "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
 
 								if(obj.getParticipants().containsKey(target)) {
 									obj.getParticipants().put(target,obj.getParticipants().get(target)+value);
@@ -3321,12 +3324,12 @@ public class GameConditions {
 								}
 							}else {
 								//SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
-								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
+								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
 
 							}
 						}else {
 							//SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
-							SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
+							SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
 
 						}
 						
@@ -3344,7 +3347,7 @@ public class GameConditions {
 							Player target = Bukkit.getPlayerExact(player);
 							if(target != null && gc.isPlayerinGame(target)) {
 								//SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado gracias a "+target.getName()+" "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
-								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" Cambio por "+target.getName()+" "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
+								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+ChatColor.GREEN+" Cambio por "+target.getName()+" "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
 
 								
 								if(obj.getParticipants().containsKey(target)) {
@@ -3354,12 +3357,12 @@ public class GameConditions {
 								}
 							}else {
 								//SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
-								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+" cambio "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
+								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+" cambio "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
 
 							}
 						}else {
 							//SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
-							SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+" cambio "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
+							SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+" cambio "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
 
 						}
 					}
@@ -3383,17 +3386,17 @@ public class GameConditions {
 	public void ObjetiveGeneralActionsComplete(String map,ObjetivesMG oj,GameInfo gi) {
 		
 		FileConfiguration game = getGameConfig(map);
-		List<String> objetivesmg = game.getStringList("Game-Objetives."+oj.getNombre()+".ObjetiveCompleteMessage");
-   		List<String> objetivesaction = game.getStringList("Game-Objetives."+oj.getNombre()+".ObjetiveCompleteActions");
-   		List<String> objetivesactionpl = game.getStringList("Game-Objetives."+oj.getNombre()+".ObjetiveCompletePlayerActions");
+		List<String> objetivesmg = game.getStringList("Game-Objetives."+oj.getName()+".ObjetiveCompleteMessage");
+   		List<String> objetivesaction = game.getStringList("Game-Objetives."+oj.getName()+".ObjetiveCompleteActions");
+   		List<String> objetivesactionpl = game.getStringList("Game-Objetives."+oj.getName()+".ObjetiveCompletePlayerActions");
 		
    		 
    		if(gi instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) gi;
-			List<Player> players = ConvertStringToPlayer(ga.getVivo());
+			List<Player> players = ConvertStringToPlayer(ga.getAlivePlayers());
 				for(Player p : players) {
 		   			if(!objetivesmg.isEmpty()) {
-		   				p.sendMessage(ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+oj.getNombre()+ChatColor.GREEN+" fue Completado.");
+		   				p.sendMessage(ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+oj.getName()+ChatColor.GREEN+" fue Completado.");
 		   				for(String text : objetivesmg) {
 		   	   				p.sendMessage(ChatColor.translateAlternateColorCodes('&',text));
 		   		}}
@@ -3402,22 +3405,22 @@ public class GameConditions {
 			ExecuteMultipleCommandsInConsole(null,objetivesaction);
    		}	
 		
-   		SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+oj.getNombre()+ChatColor.GREEN+" a sido Completado "+ChatColor.GOLD+oj.getCompleteValue()+"/"+oj.getCompleteValue());
+   		SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+oj.getName()+ChatColor.GREEN+" a sido Completado "+ChatColor.GOLD+oj.getCompleteValue()+"/"+oj.getCompleteValue());
 	}
 	
 	public void ObjetiveGeneralActionsIncomplete(String map,ObjetivesMG oj,GameInfo gi)  {
 		FileConfiguration game = getGameConfig(map);
-		List<String> objetivesmg = game.getStringList("Game-Objetives."+oj.getNombre()+".ObjetiveIncompleteMessage");
-   		List<String> objetivesaction = game.getStringList("Game-Objetives."+oj.getNombre()+".ObjetiveIncompleteActions");
-   		List<String> objetivesactionpl = game.getStringList("Game-Objetives."+oj.getNombre()+".ObjetiveIncompletePlayerActions");
+		List<String> objetivesmg = game.getStringList("Game-Objetives."+oj.getName()+".ObjetiveIncompleteMessage");
+   		List<String> objetivesaction = game.getStringList("Game-Objetives."+oj.getName()+".ObjetiveIncompleteActions");
+   		List<String> objetivesactionpl = game.getStringList("Game-Objetives."+oj.getName()+".ObjetiveIncompletePlayerActions");
 		
    		
    		if(gi instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) gi;
-			List<Player> players = ConvertStringToPlayer(ga.getVivo());
+			List<Player> players = ConvertStringToPlayer(ga.getAlivePlayers());
 				for(Player p : players) {
 		   			if(!objetivesmg.isEmpty()) {
-		   				p.sendMessage(ChatColor.RED+"Objetivo "+ChatColor.GOLD+oj.getNombre()+ChatColor.RED+" no fue Completado.");
+		   				p.sendMessage(ChatColor.RED+"Objetivo "+ChatColor.GOLD+oj.getName()+ChatColor.RED+" no fue Completado.");
 		   				for(String text : objetivesmg) {
 		   	   				p.sendMessage(ChatColor.translateAlternateColorCodes('&',text));
 		   		}}
@@ -3425,7 +3428,7 @@ public class GameConditions {
 			}
 			ExecuteMultipleCommandsInConsole(null,objetivesaction);
    		}
-   		SendMessageToAllPlayersInMap(map, ChatColor.RED+"El progreso del Ojetivo "+ChatColor.GOLD+oj.getNombre()+ChatColor.RED+" no fue Completado "+ChatColor.GOLD+oj.getIncompleteValue()+"/"+oj.getIncompleteValue());
+   		SendMessageToAllPlayersInMap(map, ChatColor.RED+"El progreso del Ojetivo "+ChatColor.GOLD+oj.getName()+ChatColor.RED+" no fue Completado "+ChatColor.GOLD+oj.getIncompleteValue()+"/"+oj.getIncompleteValue());
 	}
 	
 
@@ -3443,11 +3446,11 @@ public class GameConditions {
 		List<ObjetivesMG> l = gi.getGameObjetivesMg().getObjetives();
 		
 		
-		if(!l.stream().filter(o -> o.getNombre().equals(name)).findFirst().isPresent()) {
+		if(!l.stream().filter(o -> o.getName().equals(name)).findFirst().isPresent()) {
 			SendMessageToUserAndConsole(null,ChatColor.RED+"El Objetivo "+ChatColor.GOLD+name+ChatColor.RED+" no Existe.");
 			return;
 		}else{
-			ObjetivesMG mo = (ObjetivesMG) l.stream().filter(o -> o.getNombre().equals(name)).findFirst().get();
+			ObjetivesMG mo = (ObjetivesMG) l.stream().filter(o -> o.getName().equals(name)).findFirst().get();
 			GameConditions gc = new GameConditions(plugin);
 			switch(ob) {
 			case WAITING:
@@ -3457,7 +3460,7 @@ public class GameConditions {
 				if(player != null) {
 					Player target = Bukkit.getPlayerExact(player);
 					if(target != null && gc.isPlayerinGame(target)) {
-						SendMessageToAllPlayersOpInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getNombre()+ChatColor.GREEN+" cambio a Esperando gracias a "+target.getName());
+						SendMessageToAllPlayersOpInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getName()+ChatColor.GREEN+" cambio a Esperando gracias a "+target.getName());
 
 					}
 				}
@@ -3474,7 +3477,7 @@ public class GameConditions {
 				if(player != null) {
 					Player target = Bukkit.getPlayerExact(player);
 					if(target != null && gc.isPlayerinGame(target)) {
-						SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getNombre()+ChatColor.GREEN+" fue Completado gracias a "+target.getName()+" "+ChatColor.GOLD+mo.getCompleteValue()+"/"+mo.getCompleteValue());
+						SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getName()+ChatColor.GREEN+" fue Completado gracias a "+target.getName()+" "+ChatColor.GOLD+mo.getCompleteValue()+"/"+mo.getCompleteValue());
 
 						mo.getParticipants().put(target,mo.getParticipants().get(target)+1);
 						
@@ -3491,7 +3494,7 @@ public class GameConditions {
 				if(player != null) {
 					Player target = Bukkit.getPlayerExact(player);
 					if(target != null && gc.isPlayerinGame(target)) {
-						SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getNombre()+ChatColor.GREEN+" cambio a Incompleto gracias a "+target.getName());
+						SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getName()+ChatColor.GREEN+" cambio a Incompleto gracias a "+target.getName());
 
 						mo.getParticipants().put(target,mo.getIncompleteValue());
 						
@@ -3510,7 +3513,7 @@ public class GameConditions {
 				if(player != null) {
 					Player target = Bukkit.getPlayerExact(player);
 					if(target != null && gc.isPlayerinGame(target)) {
-						SendMessageToAllPlayersOpInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getNombre()+ChatColor.GREEN+" cambio a Desconocido gracias a "+target.getName());
+						SendMessageToAllPlayersOpInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getName()+ChatColor.GREEN+" cambio a Desconocido gracias a "+target.getName());
 
 					}
 				}
@@ -3567,7 +3570,7 @@ public class GameConditions {
    		if(!l.isEmpty()) {
    			for(int i = 0;i<l.size();i++) {
    				if(l.get(i).getObjetiveType() == ObjetiveStatusType.COMPLETE) {
-   					complete.add(l.get(i).getNombre());
+   					complete.add(l.get(i).getName());
    		  }}}
    		
    		actual = complete.size();

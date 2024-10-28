@@ -8,12 +8,12 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 
+import me.nao.enums.GameStatus;
 import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameDialogs;
 import me.nao.general.info.GameInfo;
 import me.nao.main.game.Minegame;
-import me.nao.manager.EstadoPartida;
 
 
 
@@ -59,7 +59,7 @@ public class DialogRun {
 				
 //				if(value != repeat) {
 				
-				if(start == l.size() || gi.getEstopartida() != EstadoPartida.JUGANDO) {
+				if(start == l.size() || gi.getGameStatus() != GameStatus.JUGANDO) {
 					Bukkit.getScheduler().cancelTask(taskID);//se cancela
 					System.out.println("Dialogo detenido");
 				}	
@@ -129,7 +129,7 @@ public class DialogRun {
 			if(gi instanceof GameAdventure) {
 				GameAdventure ga = (GameAdventure) gi;
 				
-				List<Player> l = gc.ConvertStringToPlayer(ga.getVivo());
+				List<Player> l = gc.ConvertStringToPlayer(ga.getAlivePlayers());
 				for(Player player : l) {
 					Bukkit.dispatchCommand(console,text.replace("<action>", "").replace("%player%", player.getName()));
 				}
@@ -149,7 +149,7 @@ public class DialogRun {
 			if(gi instanceof GameAdventure) {
 				GameAdventure ga = (GameAdventure) gi;
 				
-				List<Player> l = gc.ConvertStringToPlayer(ga.getVivo());
+				List<Player> l = gc.ConvertStringToPlayer(ga.getAlivePlayers());
 				for(Player player : l) {
 					player.sendMessage(ChatColor.translateAlternateColorCodes('&',text.replace("%player%", player.getName())));
 				}

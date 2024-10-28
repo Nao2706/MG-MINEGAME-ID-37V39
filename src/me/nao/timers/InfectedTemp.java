@@ -45,15 +45,13 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
 
+import me.nao.enums.GameStatus;
+import me.nao.enums.StopMotivo;
 import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
 import me.nao.main.game.Minegame;
-import me.nao.manager.MapIntoGame;
-import me.nao.manager.EstadoPartida;
-import me.nao.manager.StopMotivo;
-//import net.md_5.bungee.api.ChatMessageType;
-//import net.md_5.bungee.api.chat.TextComponent;
+import me.nao.manager.GameIntoMap;
 
 
 
@@ -118,10 +116,10 @@ public class InfectedTemp {
 		@Override
 		public void run() {
 			
-			List<String> joins = ms.getParticipantes();
-			List<String> alive = ga.getVivo();
-			List<String> dead = ga.getMuerto();
-			EstadoPartida part = ms.getEstopartida();
+			List<String> joins = ms.getParticipants();
+			List<String> alive = ga.getAlivePlayers();
+			List<String> dead = ga.getDeadPlayers();
+			GameStatus part = ms.getGameStatus();
 			StopMotivo motivo = ms.getMotivo();
 
 			//SI TODOS SE SALEN MIENTRAS COMIENZA
@@ -143,7 +141,7 @@ public class InfectedTemp {
 			
 		
 			
-			if(part == EstadoPartida.COMENZANDO) {
+			if(part == GameStatus.COMENZANDO) {
 				
 				//GameModeConditions gm = new GameModeConditions(plugin);
 		  		
@@ -169,9 +167,9 @@ public class InfectedTemp {
 				    		 // Bukkit.getScheduler().cancelTask(taskID);	
 				    		 // DeleteAllArmor(target);
 				    		
-				    		  if(part == EstadoPartida.COMENZANDO) {
+				    		  if(part == GameStatus.COMENZANDO) {
 				    		  
-				    			ms.setEstadopartida(EstadoPartida.JUGANDO);
+				    			ms.setGameStatus(GameStatus.JUGANDO);
 							    gc.TptoSpawnMap(target, name);
 				    			
 				    		  	}
@@ -181,7 +179,7 @@ public class InfectedTemp {
 				
 			      startm --;
 			}//TODO EN PROGRESO
-			else if(part == EstadoPartida.JUGANDO) {
+			else if(part == GameStatus.JUGANDO) {
 				
 				
 				
@@ -269,8 +267,8 @@ public class InfectedTemp {
 					    			//RemoveArmorStandsAndItemsInMap(target);
 									Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Jugadores que ganaron Infectado "+ChatColor.GREEN+alive+ChatColor.RED+" mapa: "+ChatColor.GREEN+name);
 
-									 ms.setEstadopartida(EstadoPartida.TERMINANDO);
-									MapIntoGame cig = new MapIntoGame(plugin);
+									 ms.setGameStatus(GameStatus.TERMINANDO);
+									GameIntoMap cig = new GameIntoMap(plugin);
 									cig.ObjetivesInGame(target, name);
   								
 									
@@ -286,14 +284,14 @@ public class InfectedTemp {
 						  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN..");
 						  		//RemoveArmorStandsAndItemsInMap(target);
 
-						  		ms.setEstadopartida(EstadoPartida.TERMINANDO);
+						  		ms.setGameStatus(GameStatus.TERMINANDO);
 						  		
 				    	}else if(dead.size() == joins.size()) {
 				  		GameInfo ms = plugin.getGameInfoPoo().get(name);
 				  		System.out.println("ANTES MISION MISION: "+ms.ShowGame());
 				  		//GameConditions gm = new GameConditions(plugin);
 					   // gm.Top(target,name);
-				  		ms.setEstadopartida(EstadoPartida.TERMINANDO);
+				  		ms.setGameStatus(GameStatus.TERMINANDO);
 				  		 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"( FIN. )");
 						 // Bukkit.getScheduler().cancelTask(taskID);
@@ -340,7 +338,7 @@ public class InfectedTemp {
 				//colocar terminando
 			}
 			//TODO TERMINANDO
-			else if(part == EstadoPartida.TERMINANDO) {
+			else if(part == GameStatus.TERMINANDO) {
 				 
 				
 					for(String players : joins) {
@@ -368,7 +366,7 @@ public class InfectedTemp {
 			    			 GameConditions gm = new GameConditions(plugin);
 //					   		
 //								//RemoveArmorStandsAndItemsInMap(target);
-								gm.EndTheGame(name);
+								gm.mgEndTheGame(name);
 					   		
 				    	
 				    		 boss.setTitle(""+ChatColor.GREEN+ChatColor.BOLD+"Bienvenido a la Resistencia");

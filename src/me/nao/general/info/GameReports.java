@@ -1,8 +1,6 @@
 package me.nao.general.info;
 
-
-
-
+import me.nao.enums.GameReportType;
 
 public class GameReports {
 

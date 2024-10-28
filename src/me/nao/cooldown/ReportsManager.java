@@ -7,7 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import me.nao.general.info.GameReportType;
+import me.nao.enums.GameReportType;
 import me.nao.general.info.GameReports;
 import me.nao.main.game.Minegame;
 

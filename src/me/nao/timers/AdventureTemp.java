@@ -50,14 +50,13 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.RayTraceResult;
 
-
+import me.nao.enums.GameStatus;
+import me.nao.enums.StopMotivo;
 import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
 import me.nao.main.game.Minegame;
-import me.nao.manager.MapIntoGame;
-import me.nao.manager.EstadoPartida;
-import me.nao.manager.StopMotivo;
+import me.nao.manager.GameIntoMap;
 //import net.md_5.bungee.api.ChatMessageType;
 //import net.md_5.bungee.api.chat.TextComponent;
 import me.nao.scoreboard.MgScore;
@@ -86,7 +85,7 @@ public class AdventureTemp {
 		
 		FileConfiguration config = plugin.getConfig();
 		GameConditions gc = new GameConditions(plugin);
-		MapIntoGame c = new MapIntoGame(plugin);
+		GameIntoMap c = new GameIntoMap(plugin);
 		BukkitScheduler sh = Bukkit.getServer().getScheduler();
        
 		taskID = sh.scheduleSyncRepeatingTask(plugin,new Runnable(){
@@ -128,12 +127,12 @@ public class AdventureTemp {
 		@Override
 		public void run() {
 			
-			List<String> joins = ms.getParticipantes();
-			List<String> arrive = ga.getArrivo();
-			List<String> alive = ga.getVivo();
-			List<String> dead = ga.getMuerto();
-			List<String> spect = ga.getSpectator();
-			EstadoPartida part = ms.getEstopartida();
+			List<String> joins = ms.getParticipants();
+			List<String> arrive = ga.getArrivePlayers();
+			List<String> alive = ga.getAlivePlayers();
+			List<String> dead = ga.getDeadPlayers();
+			List<String> spect = ga.getSpectators();
+			GameStatus part = ms.getGameStatus();
 			StopMotivo motivo = ms.getMotivo();
 
 			//SI TODOS SE SALEN MIENTRAS COMIENZA
@@ -155,7 +154,7 @@ public class AdventureTemp {
 			
 		
 			
-			if(part == EstadoPartida.COMENZANDO) {
+			if(part == GameStatus.COMENZANDO) {
 				
 				//GameModeConditions gm = new GameModeConditions(plugin);
 				
@@ -187,9 +186,9 @@ public class AdventureTemp {
 				    		 // Bukkit.getScheduler().cancelTask(taskID);	
 				    		 // DeleteAllArmor(target);
 				    		
-				    		  if(part == EstadoPartida.COMENZANDO) {
+				    		  if(part == GameStatus.COMENZANDO) {
 				    		  
-				    			ms.setEstadopartida(EstadoPartida.JUGANDO);
+				    			ms.setGameStatus(GameStatus.JUGANDO);
 				    			
 				    			
 							    gc.TptoSpawnMap(players, name);
@@ -201,7 +200,7 @@ public class AdventureTemp {
 				
 			      startm --;
 			}//TODO EN PROGRESO
-			else if(part == EstadoPartida.JUGANDO) {
+			else if(part == GameStatus.JUGANDO) {
 				
 				
 				
@@ -302,7 +301,7 @@ public class AdventureTemp {
 						 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Jugadores que ganaron "+ChatColor.GREEN+arrive+ChatColor.RED+" mapa: "+ChatColor.GREEN+name);
 						 gc.TopConsole(name);
 						 gc.Top(name);
-						 ms.setEstadopartida(EstadoPartida.TERMINANDO);
+						 ms.setGameStatus(GameStatus.TERMINANDO);
 						
 				  		 
 				  		 //STOP
@@ -311,7 +310,7 @@ public class AdventureTemp {
 						 gc.Top(name);
 						 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN..");
-						 ms.setEstadopartida(EstadoPartida.TERMINANDO);
+						 ms.setGameStatus(GameStatus.TERMINANDO);
 						 
 						 //ALL DEADS
 					}else if(dead.size() == joins.size()) {
@@ -327,7 +326,7 @@ public class AdventureTemp {
 						 gc.Top(name);
 						 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"( FIN. )");
-						 ms.setEstadopartida(EstadoPartida.TERMINANDO);
+						 ms.setGameStatus(GameStatus.TERMINANDO);
 						
 						 
 						 //WIN
@@ -348,7 +347,7 @@ public class AdventureTemp {
 
 						 gc.TopConsole(name);
 						 gc.Top(name);
-						 ms.setEstadopartida(EstadoPartida.TERMINANDO);
+						 ms.setGameStatus(GameStatus.TERMINANDO);
 						
 				  		
 					}
@@ -392,11 +391,11 @@ public class AdventureTemp {
 				//colocar terminando
 			}
 			//TODO TERMINANDO
-			else if(part == EstadoPartida.TERMINANDO) {
+			else if(part == GameStatus.TERMINANDO) {
 				 
 					   	if(end == 0) {
 					   			System.out.println("ANTES ADVENTURE RUN : "+ms.ShowGame());
-								gc.EndTheGame(name);
+								gc.mgEndTheGame(name);
 								gc.EndGameActions(name);
 								Bukkit.getScheduler().cancelTask(taskID);	
 								System.out.println("SE DETUVO ;)");

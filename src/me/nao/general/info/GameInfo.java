@@ -5,8 +5,9 @@ import java.util.List;
 
 import org.bukkit.boss.BossBar;
 
-import me.nao.manager.EstadoPartida;
-import me.nao.manager.StopMotivo;
+import me.nao.enums.GameStatus;
+import me.nao.enums.GameType;
+import me.nao.enums.StopMotivo;
 
 public class GameInfo {
 	
@@ -19,7 +20,7 @@ public class GameInfo {
 	private List<String> participantes;
 	private List<String> spectator;
 	private GameType mision;
-	private EstadoPartida estpart;
+	private GameStatus estpart;
 	private StopMotivo motivo;
 	private BossBar boss;
 	private String time;
@@ -30,11 +31,11 @@ public class GameInfo {
 	
 	// @param GameInfo Sirve para modo aventura y resistencia
 	/**
-	 * Este metodo sirve siempre que no uses nexo
-	 
+	 * Constructor Base para futuros tipos de Juegos 
+	 * 
 	 */
-	public GameInfo(String name,int maxplayers,int minplayers, GameType mision, EstadoPartida estpart, StopMotivo motivo, BossBar boss,
-			String time,GameObjetivesMG objetives,List<String> participantes,List<String> spectator,boolean o1 , boolean o2) {
+	public GameInfo(String name,int maxplayers,int minplayers, GameType mision, GameStatus estpart, StopMotivo motivo, BossBar boss,
+			String time,GameObjetivesMG objetives,List<String> participantes,List<String> spectator,boolean objetivesprimary , boolean objetivessecondary) {
 	
 		this.name = name;
 		this.maxplayers = maxplayers;
@@ -47,8 +48,8 @@ public class GameInfo {
 		this.objetives = objetives;
 		this.participantes = participantes;
 		this.spectator = spectator;
-		this.objetivesprimary = o1;
-		this.objetivessecondary = o2;
+		this.objetivesprimary = objetivesprimary;
+		this.objetivessecondary = objetivessecondary;
 	}
 	
 	
@@ -68,7 +69,7 @@ public class GameInfo {
 		return mision;
 	}
 
-	public EstadoPartida getEstopartida() {
+	public GameStatus getGameStatus() {
 		return estpart;
 	}
 
@@ -89,11 +90,11 @@ public class GameInfo {
 		return objetives;
 	}
 
-	public List<String> getParticipantes(){
+	public List<String> getParticipants(){
 		return participantes;
 	}
 	
-	public List<String> getSpectator(){
+	public List<String> getSpectators(){
 		return spectator;
 	}
 	
@@ -106,7 +107,7 @@ public class GameInfo {
 		return objetivessecondary;
 	}
 	
-	public void setEstadopartida(EstadoPartida estpart) {
+	public void setGameStatus(GameStatus estpart) {
 		this.estpart = estpart;
 	}
 
@@ -125,7 +126,7 @@ public class GameInfo {
 
 
 	public String ShowGame() {
-		return getName()+" "+getMaxPlayers()+" "+getMinPlayers()+" "+getGameType().toString()+" "+getEstopartida().toString()+" "+
+		return getName()+" "+getMaxPlayers()+" "+getMinPlayers()+" "+getGameType().toString()+" "+getGameStatus().toString()+" "+
 	getMotivo().toString()+" "+getBoss().getTitle()+" "+getTimeMg();
 	}
 	

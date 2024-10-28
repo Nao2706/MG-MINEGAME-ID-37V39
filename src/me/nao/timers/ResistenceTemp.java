@@ -50,13 +50,13 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.RayTraceResult;
 
+import me.nao.enums.GameStatus;
+import me.nao.enums.StopMotivo;
 import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
 import me.nao.main.game.Minegame;
-import me.nao.manager.MapIntoGame;
-import me.nao.manager.EstadoPartida;
-import me.nao.manager.StopMotivo;
+import me.nao.manager.GameIntoMap;
 //import net.md_5.bungee.api.ChatMessageType;
 //import net.md_5.bungee.api.chat.TextComponent;
 import me.nao.scoreboard.MgScore;
@@ -127,11 +127,11 @@ public class ResistenceTemp {
 		public void run() {
 		
 				
-			List<Player> joins = gc.ConvertStringToPlayer(ms.getParticipantes());
-			List<Player> alive = gc.ConvertStringToPlayer(ga.getVivo());
-			List<Player> dead = gc.ConvertStringToPlayer(ga.getMuerto());
-			List<Player> spect = gc.ConvertStringToPlayer(ga.getSpectator());
-			EstadoPartida part = ms.getEstopartida();
+			List<Player> joins = gc.ConvertStringToPlayer(ms.getParticipants());
+			List<Player> alive = gc.ConvertStringToPlayer(ga.getArrivePlayers());
+			List<Player> dead = gc.ConvertStringToPlayer(ga.getDeadPlayers());
+			List<Player> spect = gc.ConvertStringToPlayer(ga.getSpectators());
+			GameStatus part = ms.getGameStatus();
 			StopMotivo motivo = ms.getMotivo();
 
 			//SI TODOS SE SALEN MIENTRAS COMIENZA
@@ -153,7 +153,7 @@ public class ResistenceTemp {
 			
 		
 			
-			if(part == EstadoPartida.COMENZANDO) {
+			if(part == GameStatus.COMENZANDO) {
 				
 				//GameModeConditions gm = new GameModeConditions(plugin);
 				if(startm == 0) {
@@ -182,9 +182,9 @@ public class ResistenceTemp {
 				    		 // Bukkit.getScheduler().cancelTask(taskID);	
 				    		 // DeleteAllArmor(target);
 				    		
-				    		  if(part == EstadoPartida.COMENZANDO) {
+				    		  if(part == GameStatus.COMENZANDO) {
 				    		  
-				    			ms.setEstadopartida(EstadoPartida.JUGANDO);
+				    			ms.setGameStatus(GameStatus.JUGANDO);
 				    			
 							    gc.TptoSpawnMap(players, name);
 				    		
@@ -195,7 +195,7 @@ public class ResistenceTemp {
 				
 			      startm --;
 			}//TODO EN PROGRESO
-			else if(part == EstadoPartida.JUGANDO) {
+			else if(part == GameStatus.JUGANDO) {
 				
 				boss.setVisible(true);
 	            boss.setProgress(pro);
@@ -264,7 +264,7 @@ public class ResistenceTemp {
 				 
 				  
 				  if(segundo == 0 && minuto == 0 && hora == 0) {
-					  MapIntoGame cig = new MapIntoGame(plugin);
+					  GameIntoMap cig = new GameIntoMap(plugin);
 						 for(Player players : alive) {
 							 cig.ObjetivesInGame(players, name);
 						 }
@@ -273,14 +273,14 @@ public class ResistenceTemp {
 						 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Jugadores que ganaron Resistencia "+ChatColor.GREEN+ConvertPlayerToString(alive)+ChatColor.RED+" mapa: "+ChatColor.GREEN+name);
 						 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN...");
-				  		 ms.setEstadopartida(EstadoPartida.TERMINANDO);
+				  		 ms.setGameStatus(GameStatus.TERMINANDO);
 				  		 
 					}else if(motivo == StopMotivo.WIN || motivo == StopMotivo.LOSE || motivo == StopMotivo.ERROR || motivo == StopMotivo.FORCE) {
 						 gc.TopConsole(name);
 						 gc.Top(name);
 						 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN..");
-				  		 ms.setEstadopartida(EstadoPartida.TERMINANDO);
+				  		 ms.setGameStatus(GameStatus.TERMINANDO);
 				  		
 					}else if(dead.size() == joins.size()) {
 						 for(Player players : joins) {
@@ -291,7 +291,7 @@ public class ResistenceTemp {
 						 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"( FIN. )");
 						 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Todos perdieron Resistencia "+ChatColor.GREEN+ConvertPlayerToString(joins)+ChatColor.RED+" mapa: "+ChatColor.GREEN+name+"\n");
-						 ms.setEstadopartida(EstadoPartida.TERMINANDO);
+						 ms.setGameStatus(GameStatus.TERMINANDO);
 						 // Bukkit.getScheduler().cancelTask(taskID);
 					}
 					
@@ -323,7 +323,7 @@ public class ResistenceTemp {
 				//colocar terminando
 			}
 			//TODO TERMINANDO
-			else if(part == EstadoPartida.TERMINANDO) {
+			else if(part == GameStatus.TERMINANDO) {
 				 
 				
 					   	if(end == 0) {
@@ -334,7 +334,7 @@ public class ResistenceTemp {
 			    			
 		//			   		
 		//						//RemoveArmorStandsAndItemsInMap(target);
-								gc.EndTheGame(name);
+								gc.mgEndTheGame(name);
 								gc.EndGameActions(name);
 				    	
 				    	

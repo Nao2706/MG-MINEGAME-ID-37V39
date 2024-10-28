@@ -45,21 +45,21 @@ import org.bukkit.util.Vector;
 import me.nao.cooldown.ReportsManager;
 import me.nao.database.BukkitSerialization;
 import me.nao.database.SQLInfo;
+import me.nao.enums.GameReportType;
+import me.nao.enums.Items;
+import me.nao.enums.ObjetiveStatusType;
+import me.nao.enums.StopMotivo;
 //import de.tr7zw.nbtapi.NBTItem;
 import me.nao.events.ItemNBT;
 //import me.nao.events.ItemNBT2;
 import me.nao.fillareas.Data;
 import me.nao.gamemode.InfectedGame;
 import me.nao.general.info.GameConditions;
-import me.nao.general.info.GameReportType;
 import me.nao.general.info.GameReports;
-import me.nao.general.info.ObjetiveStatusType;
 import me.nao.main.game.Minegame;
-import me.nao.manager.MapManager;
-import me.nao.manager.MapIntoGame;
-import me.nao.manager.StopMotivo;
+import me.nao.manager.MapSettings;
+import me.nao.manager.GameIntoMap;
 import me.nao.scoreboard.MgScore;
-import me.nao.shop.Items;
 import me.nao.shop.MinigameShop1;
 import me.nao.timers.Countdown2;
 import me.nao.yamlfile.game.YamlFilePlus;
@@ -614,7 +614,7 @@ public class Comandos implements CommandExecutor{
 						
 						//plugin.yml = new YamlFile(plugin,name, new File(plugin.getDataFolder().getAbsolutePath()+carpeta));;
 						
-						MapManager ca = new MapManager(plugin);
+						MapSettings ca = new MapSettings(plugin);
 						ca.CreateNewGame(name,null);
 						
 						
@@ -632,7 +632,7 @@ public class Comandos implements CommandExecutor{
 							String name = args[1];
 							String path = args[2];
 							//mg creaete lol
-							MapManager ca = new MapManager(plugin);
+							MapSettings ca = new MapSettings(plugin);
 							ca.CreateDialog(name, path, null);
 						
 						 }else {
@@ -652,7 +652,7 @@ public class Comandos implements CommandExecutor{
 					String name = args[1];
 					String path = args[2];
 					//mg creaete lol
-					MapManager ca = new MapManager(plugin);
+					MapSettings ca = new MapSettings(plugin);
 					ca.CreateDialog(name, path, null);
 				
 				 }else {
@@ -732,7 +732,7 @@ public class Comandos implements CommandExecutor{
 				   
 				    
 					if(target != null) {
-						MapIntoGame ci = new MapIntoGame(plugin);
+						GameIntoMap ci = new GameIntoMap(plugin);
 						ci.GameRevivePlayerByCommand(null, target.getName());
 						//target.setMaxHealth(target.getMaxHealth());
 						
@@ -800,7 +800,7 @@ public class Comandos implements CommandExecutor{
 			
 			//TODO PLAYER
 			GameConditions gc = new GameConditions(plugin);
-			MapManager c = new MapManager(plugin);
+			MapSettings c = new MapSettings(plugin);
 			Player player = (Player) sender ;
 	
 			
@@ -1786,7 +1786,7 @@ public class Comandos implements CommandExecutor{
 					   
 					    
 						if(target != null) {
-							MapIntoGame ci = new MapIntoGame(plugin);
+							GameIntoMap ci = new GameIntoMap(plugin);
 							ci.GameRevivePlayerByCommand(player, target.getName());
 							//target.setMaxHealth(target.getMaxHealth());
 							
@@ -1872,10 +1872,10 @@ public class Comandos implements CommandExecutor{
 						 }else if(al.contains(name) && player.isOp()){
 							 player.sendMessage(plugin.nombre+ChatColor.RED+" Has Entrado a "+ChatColor.GOLD+name+ChatColor.RED+" es un Mapa que esta Bloqueado.");
 						
-							 gc.JoinToTheGames(player, name);
+							 gc.mgJoinToTheGames(player, name);
 							 return true;
 						 }else {
-							 gc.JoinToTheGames(player, name);
+							 gc.mgJoinToTheGames(player, name);
 							 return true;
 						 }
 				
@@ -1889,7 +1889,7 @@ public class Comandos implements CommandExecutor{
 				 
 				}else if(args[0].equalsIgnoreCase("leave")) {
 					
-					gc.LeaveMapCommandIlegal(player);
+					gc.mgLeaveMapCommandIlegal(player);
 				
 					return true;
 				
@@ -2638,7 +2638,7 @@ public class Comandos implements CommandExecutor{
 					
 					return true;
 				}else if(args[0].equalsIgnoreCase("dropentity")){
-					MapIntoGame ci = new MapIntoGame(plugin);
+					GameIntoMap ci = new GameIntoMap(plugin);
 					ci.ItemDropEntity(player);
 					
 					return true;
@@ -2717,7 +2717,7 @@ public class Comandos implements CommandExecutor{
 				}else if (args[0].equalsIgnoreCase("points")) {
 					if(gc.isPlayerinGame(player)) {
 					//	String arena = plugin.getArenaPlayerInfo().get(player);
-						MapIntoGame cs = new MapIntoGame(plugin);
+						GameIntoMap cs = new GameIntoMap(plugin);
 						cs.getPointsOfPlayerGame(player);
 						
 					}else {
@@ -3069,7 +3069,7 @@ public class Comandos implements CommandExecutor{
 							Player target1 = Bukkit.getServer().getPlayerExact(target);
 							if(!type.startsWith("warn")) {
 								if(target1 != null && gc.isPlayerinGame(target1)) {
-									gc.LeaveOfTheGame(target1);
+									gc.mgLeaveOfTheGame(target1);
 
 								}	
 							}
