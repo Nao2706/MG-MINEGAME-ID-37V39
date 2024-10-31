@@ -8,15 +8,22 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
-import org.bukkit.Location;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitScheduler;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
+import org.bukkit.scoreboard.Team;
+import org.bukkit.util.EulerAngle;
 
 import me.nao.enums.Items;
 import me.nao.enums.ReviveStatus;
@@ -37,9 +44,9 @@ public class RevivePlayer{
 	private Minegame plugin;
 	private ReviveStatus rv;
 	private int taskID;
-	private List<Location> loc ;
+	private ArmorStand armor ;
 	
-	public RevivePlayer(Player player, int value, int time,ReviveStatus rv, Entity e,DamageCause cause,List<Location> loc,Minegame plugin) {
+	public RevivePlayer(Player player, int value, int time,ReviveStatus rv, Entity e,DamageCause cause,ArmorStand armor,Minegame plugin) {
 		this.player = player;
 		this.value = value;
 		this.time = time;
@@ -47,8 +54,8 @@ public class RevivePlayer{
 		this.cause = cause;
 		this.plugin = plugin;
 		this.rv = rv;
-		this.loc = loc;
-		//runTaskTimer(JavaPlugin.getPlugin(Minegame.class),0,3);
+		this.armor = armor;
+	
 
 	}
 
@@ -72,8 +79,8 @@ public class RevivePlayer{
 		return rv;
 	}
 	
-	public List<Location> getLocationsChange() {
-		return loc;
+	public ArmorStand getArmorStand() {
+		return armor;
 	}
 
 	public void setReviveStatus(ReviveStatus rv) {
@@ -82,23 +89,6 @@ public class RevivePlayer{
 
 	public void setValue(int value) {
 		this.value = value;
-	}
-
-	
-	public void addLocation(Location l) {
-		List<Location> list = getLocationsChange();
-		
-		if(!list.contains(l)) {
-			list.add(l);
-		}
-	}
-	
-	public void Restore() {
-		List<Location> list = getLocationsChange();
-		
-		for(Location locs : list) {
-			player.sendBlockChange(locs, locs.getBlock().getBlockData());
-		}
 	}
 	
 	public boolean isAllKnocked() {
@@ -117,40 +107,65 @@ public class RevivePlayer{
 	public void Dead(Entity e, DamageCause cause) {
 		GameIntoMap mig = new GameIntoMap(plugin);
 		
-		removeToRevive();
-		
 		if(e != null) {
 			mig.GameMobDamagerCauses(player, e);
 			return;
 		}else {
 			mig.GameDamageCauses(player,cause);
 		}
-		
-		if(player.hasPotionEffect(PotionEffectType.JUMP) || player.hasPotionEffect(PotionEffectType.SLOW) ) {
-			player.removePotionEffect(PotionEffectType.SLOW);
-			player.removePotionEffect(PotionEffectType.JUMP);
-		}
-		
-		
+		getArmorStand().remove();
+		removeToRevive();
 		
 	}
 	
 	public void Knocked() {
 		
+		GameConditions gc = new GameConditions(plugin);
+		//Block b = player.getLocation().getBlock();
+		//Block r = b.getRelative(0, 1, 0);
 		
-		Block b = player.getLocation().getBlock();
-		Block r = b.getRelative(0, 1, 0);
+	    //player.sendBlockChange(r.getLocation(), Material.BARRIER.createBlockData());
 		
-	    player.sendBlockChange(r.getLocation(), Material.BARRIER.createBlockData());
-		player.setInvulnerable(true);
-		PotionEffect lent = new PotionEffect(PotionEffectType.JUMP,/*duration*/ 999 * 20,/*amplifier:*/3, true ,true,true );
-		PotionEffect jump = new PotionEffect(PotionEffectType.SLOW,/*duration*/ 999 * 20,/*amplifier:*/100, true ,true,true );
+		ItemStack head = new ItemStack(Material.PLAYER_HEAD,1);
+		SkullMeta meta = (SkullMeta) head.getItemMeta();
+		meta.setOwningPlayer(player);
+		head.setItemMeta(meta);
 		
-		player.addPotionEffect(lent);
-		player.addPotionEffect(jump);
+		PotionEffect glow = new PotionEffect(PotionEffectType.GLOWING,/*duration*/ 30 * 20,/*amplifier:*/10, true ,true,true );
+
+		ArmorStand as = getArmorStand();
+		as.setCustomName(""+ChatColor.RED+ChatColor.BOLD+"CADAVER DE "+ChatColor.GREEN+ChatColor.BOLD+player.getName());
+		as.setCustomNameVisible(true);
+		as.setBasePlate(false);
+		as.setArms(true);
+		//as.setRotation(player.getLocation().getYaw(), player.getLocation().getPitch());
+		//as.setBodyPose(new EulerAngle(360,0,0));
+		as.setHeadPose(new EulerAngle(90,0,0));
+		as.setLeftArmPose(new EulerAngle(295,360,0));
+		as.setRightArmPose(new EulerAngle(299,360,0));
+		as.setLeftLegPose(new EulerAngle(279,346,0));
+		as.setRightLegPose(new EulerAngle(281,23,0));
+		as.getEquipment().setHelmet(head);
+		as.getEquipment().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
+		as.getEquipment().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
+		as.getEquipment().setBoots(new ItemStack(Material.IRON_BOOTS));
+		as.getEquipment().setItemInMainHand(new ItemStack(Material.DIAMOND_SWORD));
+		as.setGravity(false);
+		if(player.getInventory().containsAtLeast(Items.REVIVEP.getValue(),1) || player.getInventory().getItemInOffHand().isSimilar(Items.REVIVEP.getValue())) {
+			player.sendMessage(ChatColor.AQUA+"AutoRevive: "+ChatColor.GREEN+"Manten pulsado el Click Derecho sobre tu Cadaver para Autorevivirte o espera a un Compañero.");
+			as.getEquipment().setItemInOffHand(Items.REVIVEP.getValue());
+		}else {
+			player.sendMessage(ChatColor.RED+"Nota: "+ChatColor.YELLOW+"Debes esperar a que un Compañero tuyo te reviva.");
+			as.getEquipment().setItemInOffHand(new ItemStack(Material.SHIELD));
+		}
+		as.addPotionEffect(glow);
+		setColor(as);
+		
+		player.setGameMode(GameMode.SPECTATOR);
 		addToRevive();
 		System.out.println("TODOS NOQUEADOS: "+isAllKnocked()+ " TIENE ITEM DE REVIVIR: "+hasPlayersAutoreviveItem());
 		Start();
+		gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+ player.getName()+ChatColor.YELLOW+" fue Derribado. (Ayudalo a levantarse tiene solo %time%)".replace("%time%",time+"s"));
 		player.sendMessage("");
 		player.sendMessage(ChatColor.YELLOW+"Has sido Derribado.");
 		player.sendMessage("");
@@ -158,11 +173,13 @@ public class RevivePlayer{
 	
 	public void StandUp() {
 		
-		Block b = player.getLocation().getBlock();
-		Block r = b.getRelative(0, 1, 0);
+		//Block b = player.getLocation().getBlock();
+		//Block r = b.getRelative(0, 1, 0);
 		
-		player.sendBlockChange(r.getLocation(),r.getLocation().getBlock().getBlockData());
-		player.setInvulnerable(false);
+		//player.sendBlockChange(r.getLocation(),r.getLocation().getBlock().getBlockData());
+		player.setGameMode(GameMode.ADVENTURE);
+		player.teleport(getArmorStand().getLocation());
+		getArmorStand().remove();
 		PotionEffect vid = new PotionEffect(PotionEffectType.REGENERATION,/*duration*/ 10 * 20,/*amplifier:*/10, true ,true,true );
 		PotionEffect comida = new PotionEffect(PotionEffectType.SATURATION,/*duration*/ 10 * 20,/*amplifier:*/10, true ,true,true );
 		PotionEffect abso = new PotionEffect(PotionEffectType.ABSORPTION,/*duration*/ 10 * 20,/*amplifier:*/10, true ,true,true );
@@ -203,7 +220,6 @@ public class RevivePlayer{
 		plugin.getPlayerKnocked().remove(player);
 		if(gi instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) gi;
-			Restore();
 			if(ga.getKnockedPlayers().remove(player.getName()));
 			System.out.println("L2: "+ga.getKnockedPlayers());
 			
@@ -212,7 +228,7 @@ public class RevivePlayer{
 }
 	
 	public boolean isDangerZone() {
-		Block b = player.getLocation().getBlock();
+		Block b = getArmorStand().getLocation().getBlock();
 		Block r = b.getRelative(0, 0, 0);
 		Block r2 = b.getRelative(0, -1, 0);
 		
@@ -238,7 +254,7 @@ public class RevivePlayer{
 		
 			if(!pr.isEmpty()) {
 				for(Player targets  : pr) {
-					if(targets.getInventory().containsAtLeast(Items.REVIVE.getValue(),1) || targets.getInventory().getItemInOffHand().isSimilar(Items.REVIVE.getValue())) {
+					if(targets.getInventory().containsAtLeast(Items.REVIVEP.getValue(),1) || targets.getInventory().getItemInOffHand().isSimilar(Items.REVIVEP.getValue())) {
 						hasitem.add(targets);
 						return true;
 					}
@@ -289,7 +305,7 @@ public class RevivePlayer{
 				}else if(getReviveStatus() == ReviveStatus.BLEEDING) {
 					time--;
 					player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"SANGRANDO",""+ChatColor.YELLOW+ChatColor.BOLD+"Moriras en "+ChatColor.RED+ChatColor.BOLD+time, 0, 20, 0);
-					player.playEffect(player.getLocation().add(0,0,0), Effect.STEP_SOUND, Material.REDSTONE_BLOCK); 
+					player.playEffect(getArmorStand().getLocation().add(0,0,0), Effect.STEP_SOUND, Material.REDSTONE_BLOCK); 
 				}else if(getReviveStatus() == ReviveStatus.HEALING) {
 					setReviveStatus(ReviveStatus.BLEEDING);
 				}
@@ -303,7 +319,18 @@ public class RevivePlayer{
 	}
 	
 
+	public void setColor(Entity e) {
+		ScoreboardManager manager = Bukkit.getScoreboardManager();
+		Scoreboard scoreboard = manager.getNewScoreboard();
+		scoreboard.registerNewTeam("Example");
+		Team team = scoreboard.getTeam("Example");
+		team.setColor(ChatColor.YELLOW);
+		team.addEntry(e.getUniqueId().toString());
 	
+		return;
+	}
+	
+
 
 	
 	

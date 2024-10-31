@@ -1,4 +1,4 @@
-	package me.nao.events;
+package me.nao.events;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +19,7 @@ import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Mob;
@@ -159,10 +160,12 @@ public class SourceOfDamage implements Listener{
 		
 		if(e instanceof Player) {
 			Player player = (Player) e;
-			Block block = player.getLocation().getBlock();
-			Block b2 = block.getRelative(0, -1, 0);
-			if(b2.getType() == Material.COBBLESTONE){
-				e.setCancelled(true);
+
+			if(plugin.getPlayerKnocked().containsKey(player)) {
+				if(!player.isGliding()) {
+					e.setCancelled(true);
+				}
+				
 			}
 			
 		}
@@ -209,18 +212,18 @@ public class SourceOfDamage implements Listener{
 					}
 				}
 				
-				if(plugin.getPlayerKnocked().containsKey(player)) {
-					
-					Block b = player.getLocation().getBlock();
-					Block r = b.getRelative(0, 1, 0);
-					if(b.getType() == Material.LADDER) return;
-				    player.sendBlockChange(r.getLocation(), Material.BARRIER.createBlockData());
-					RevivePlayer pr = plugin.getPlayerKnocked().get(player);
-					pr.addLocation(r.getLocation());
-					System.out.println("tamaño "+pr.getLocationsChange().size());	
-					
-					
-				}
+//				if(plugin.getPlayerKnocked().containsKey(player)) {
+//					
+//					Block b = player.getLocation().getBlock();
+//					Block r = b.getRelative(0, 1, 0);
+//					if(b.getType() == Material.LADDER) return;
+//				    player.sendBlockChange(r.getLocation(), Material.BARRIER.createBlockData());
+//					RevivePlayer pr = plugin.getPlayerKnocked().get(player);
+//					pr.addLocation(r.getLocation());
+//					System.out.println("tamaño "+pr.getLocationsChange().size());	
+//					
+//					
+//				}
 				
 			}
 			
@@ -557,7 +560,7 @@ public class SourceOfDamage implements Listener{
 						 target.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"INSTAKILL DE AREA", 40, 80, 40);
 						 target.sendMessage(ChatColor.RED+"Moriste por "+ChatColor.YELLOW+"Instakill de Area.");
 											 
-					    gc.SendMessageToUsersOfSameMap(target,ChatColor.GOLD+target.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"InstaKill de Area");
+					    gc.sendMessageToUsersOfSameMapLessPlayer(target,ChatColor.GOLD+target.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"InstaKill de Area");
 						 
 						 
 						 /*
@@ -603,7 +606,7 @@ public class SourceOfDamage implements Listener{
 						 target.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"INSTAKILL POR COMANDO", 40, 80, 40);
 						 target.sendMessage(ChatColor.RED+"Moriste por "+ChatColor.YELLOW+"Instakill por Comando.");
 						 
-					  gc.SendMessageToUsersOfSameMap(target,ChatColor.GOLD+target.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"InstaKill por Comando.");
+					  gc.sendMessageToUsersOfSameMapLessPlayer(target,ChatColor.GOLD+target.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"InstaKill por Comando.");
 								     	
 								     		 //esto lo veran los que estan en arena
 								 
@@ -660,8 +663,9 @@ public class SourceOfDamage implements Listener{
 						
 							
 							if(gc.isEnabledReviveSystem(pi.getMapName())) {
-								List<Location> l = new ArrayList<>();
-								RevivePlayer pr = new RevivePlayer(player,0,30,ReviveStatus.BLEEDING,damager,null,l ,plugin);
+								ArmorStand armor = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
+
+								RevivePlayer pr = new RevivePlayer(player,0,30,ReviveStatus.BLEEDING,damager,null,armor ,plugin);
 								pr.Knocked();
 								plugin.getPlayerKnocked().put(player, pr);
 								return;
@@ -680,8 +684,8 @@ public class SourceOfDamage implements Listener{
 					if(e.getFinalDamage() >= player.getHealth()) {
 							e.setCancelled(true);
 							if(gc.isEnabledReviveSystem(pi.getMapName())) {
-								List<Location> l = new ArrayList<>();
-								RevivePlayer pr = new RevivePlayer(player,0,30,ReviveStatus.BLEEDING,null,e.getCause(),l,plugin);
+								ArmorStand armor = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
+								RevivePlayer pr = new RevivePlayer(player,0,30,ReviveStatus.BLEEDING,null,e.getCause(),armor ,plugin);
 								pr.Knocked();
 								plugin.getPlayerKnocked().put(player, pr);
 								return;

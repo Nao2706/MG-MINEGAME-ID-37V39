@@ -50,6 +50,8 @@ import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Ambient;
 import org.bukkit.entity.AnimalTamer;
 import org.bukkit.entity.Animals;
+import org.bukkit.entity.AreaEffectCloud;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
@@ -92,6 +94,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
@@ -168,33 +171,66 @@ public class EventRandoms implements Listener{
 				
 				Entity ent = e.getRightClicked();
 				
-				if(ent instanceof Player) {
-					Player target = (Player) ent;
-					 
-					if(plugin.getPlayerKnocked().containsKey(target)) {
-						RevivePlayer pr = plugin.getPlayerKnocked().get(target);
-						int value = pr.getValue();
-						if(value != 100) {
-							pr.setValue(pr.getValue()+1);
-							target.sendTitle(""+ChatColor.WHITE+ChatColor.BOLD+"REVIVIENDO"+ChatColor.GREEN+ChatColor.BOLD+" + ", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 0, 20, 0);
-							player.sendTitle(""+ChatColor.WHITE+ChatColor.BOLD+"REVIVIENDO"+ChatColor.GREEN+ChatColor.BOLD+" + ", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 0, 20, 0);
-							pr.setReviveStatus(ReviveStatus.HEALING);
-						}else {
-							if(pr.getReviveStatus() != ReviveStatus.REVIVED) {
-								target.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+"REVIVIDO", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(100,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 20, 20, 20);
-								player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+"REVIVIDO", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(100,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 20, 20, 20);
-							
-								player.sendMessage(ChatColor.GOLD+"Ayudaste a levantar a "+ChatColor.GREEN+target.getName());
-								target.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.GOLD+" te ayudo a levantarte.");
-								pr.setReviveStatus(ReviveStatus.REVIVED);
+				if(ent instanceof ArmorStand) {
+					ArmorStand as = (ArmorStand) ent;
+					if(as.getCustomName() != null) {
+						String name = ChatColor.stripColor(as.getCustomName());
+						if(name.startsWith("CADAVER DE ")){
+							Player target = Bukkit.getPlayer(name.replace("CADAVER DE ","").replace(" ",""));
+							if(gc.isPlayerKnocked(target)) {
+								
+								if(target.getName().equals(player.getName())) {
+									
+									if(player.getInventory().containsAtLeast(Items.REVIVEP.getValue(), 1)){
+										
+										RevivePlayer pr = plugin.getPlayerKnocked().get(player);
+										int value = pr.getValue();
+										if(value != 100) {
+											pr.setValue(pr.getValue()+1);
+											player.sendTitle(""+ChatColor.WHITE+ChatColor.BOLD+"REVIVIENDO"+ChatColor.GREEN+ChatColor.BOLD+" + ", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 0, 20, 0);
+											pr.setReviveStatus(ReviveStatus.HEALING);
+											
+										}else {
+											pr.setReviveStatus(ReviveStatus.REVIVED);
+											player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+"REVIVIDO" ,""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(100,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 20, 20, 20);
+											player.sendMessage(ChatColor.GOLD+"Te has autorevivido ");
+											gc.sendMessageToUsersOfSameMapLessPlayer(player,""+ChatColor.GREEN+ChatColor.BOLD+player.getName()+" consiguio Autorevivirse.");
+											removeItemstackCustom(player,Items.REVIVEP.getValue());
+										}
+									}
+									
+								}else{
+									RevivePlayer pr = plugin.getPlayerKnocked().get(target);
+									int value = pr.getValue();
+									if(value != 100) {
+										pr.setValue(pr.getValue()+1);
+										target.sendTitle(""+ChatColor.WHITE+ChatColor.BOLD+"REVIVIENDO"+ChatColor.GREEN+ChatColor.BOLD+" + ", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 0, 20, 0);
+										player.sendTitle(""+ChatColor.WHITE+ChatColor.BOLD+"REVIVIENDO"+ChatColor.GREEN+ChatColor.BOLD+" + ", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 0, 20, 0);
+										pr.setReviveStatus(ReviveStatus.HEALING);
+									}else {
+										if(pr.getReviveStatus() != ReviveStatus.REVIVED) {
+											target.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+"REVIVIDO", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(100,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 20, 20, 20);
+											player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+"REVIVIDO", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(100,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 20, 20, 20);
+										
+											player.sendMessage(ChatColor.GOLD+"Ayudaste a levantar a "+ChatColor.GREEN+target.getName());
+											target.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.GOLD+" te ayudo a levantarte.");
+											gc.sendMessageToUsersOfSameMapLessTwoPlayers(player, target, ChatColor.GOLD+target.getName()+ChatColor.AQUA+" ayudo a "+ChatColor.GREEN+player.getName()+ChatColor.AQUA+" a Levantarse.");
+											
+											 
+											pr.setReviveStatus(ReviveStatus.REVIVED);
+										}
+										
+									}
+									
+								}
+								
+								
 							}
-							
 						}
 						
 					}
 					
 				}
-				
 				if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
 					
 					if(!player.getPassengers().isEmpty()) {
@@ -310,17 +346,11 @@ public class EventRandoms implements Listener{
 						if(e.getClickedBlock().getType() == Material.OAK_PRESSURE_PLATE) {
 							DetectChestAndJump(player);
 						}
-						
-						if(e.getClickedBlock().getType() == Material.LIGHT_WEIGHTED_PRESSURE_PLATE) {
-							player.getWorld().createExplosion(player.getLocation(), 5, false, false);
+						 
+						if(e.getClickedBlock().getType() == Material.LIGHT_WEIGHTED_PRESSURE_PLATE || e.getClickedBlock().getType() == Material.HEAVY_WEIGHTED_PRESSURE_PLATE) {
+							landMine(player);
 							
 						}
-						
-						if(e.getClickedBlock().getType() == Material.HEAVY_WEIGHTED_PRESSURE_PLATE) {
-							player.getWorld().createExplosion(player.getLocation(), 10, false, false);
-							
-						}
-						
 						return;
 					}
 					
@@ -470,27 +500,7 @@ public class EventRandoms implements Listener{
 //							f.setDropItem(false);
 //							f.setVelocity(player.getLocation().getDirection().multiply(3).setY(1));
 //				       }
-						//TODO REVIVE
-						if(e.getItem().isSimilar(Items.REVIVE.getValue())) {
-							if(plugin.getPlayerKnocked().containsKey(player)) {
-								RevivePlayer pr = plugin.getPlayerKnocked().get(player);
-								int value = pr.getValue();
-								if(value != 100) {
-									pr.setValue(pr.getValue()+1);
-									player.sendTitle(""+ChatColor.WHITE+ChatColor.BOLD+"REVIVIENDO"+ChatColor.GREEN+ChatColor.BOLD+" + ", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 0, 20, 0);
-									pr.setReviveStatus(ReviveStatus.HEALING);
-								}else {
-									pr.setReviveStatus(ReviveStatus.REVIVED);
-									player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+"REVIVIDO" ,""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(100,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 20, 20, 20);
-									player.sendMessage(ChatColor.GOLD+"Te has autorevivido ");
-									removeItemstackCustom(player,e.getItem());
-								}
-							}else {
-								player.sendMessage(ChatColor.RED+"Solo sirve cuando eres Derribado ");
-
-							}
-						}
-						
+						 
 						if(e.getItem().isSimilar( Items.JEDIP.getValue())) {
 							player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 20.0F, 1F);
 							for(Entity e1 : getNearbyEntites(player.getLocation(),20)) {
@@ -615,7 +625,7 @@ public class EventRandoms implements Listener{
 							v.setTicksLived(1200);
 							removeItemstackCustom(player,e.getItem());
 							
-							gc.SendMessageToUsersOfSameMap(player, ChatColor.AQUA+"El Jugador "+ChatColor.GREEN+player.getName()+ChatColor.AQUA+" a un Medico");
+							gc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.AQUA+"El Jugador "+ChatColor.GREEN+player.getName()+ChatColor.AQUA+" a un Medico");
 							
 							
 							
@@ -1234,7 +1244,7 @@ public class EventRandoms implements Listener{
 				List<Entity> list = getNearbyEntitesItems(l, 5);
 				//System.out.println("Lista 2 "+list.size());
 				if(list.size() >= config.getInt("Loot-Table-Limit")) {
-					gc.SendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+ChatColor.RED+" Tu ambicion sera tu perdicion.\nAnti-Looter-2 y Suicida Invocados");
+					gc.sendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+ChatColor.RED+" Tu ambicion sera tu perdicion.\nAnti-Looter-2 y Suicida Invocados");
 					l.getWorld().spawnParticle(Particle.FLAME, l.add(0.5, 1, 0.5),	/* N DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
 					player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 20.0F, 0F);
 					LivingEntity entidad = (LivingEntity) l.getWorld().spawnEntity(l.add(0.5,1,0.5), EntityType.ZOMBIE);
@@ -1267,7 +1277,7 @@ public class EventRandoms implements Listener{
 					
 				}else if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND), 100)) {
 					
-					gc.SendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+ChatColor.RED+" recibio un Castigo por tener muchos Diamantes.\nAnti-Looter y Guardia del Loot Invocados");
+					gc.sendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+ChatColor.RED+" recibio un Castigo por tener muchos Diamantes.\nAnti-Looter y Guardia del Loot Invocados");
 					l.getWorld().spawnParticle(Particle.FLAME, l.add(0.5, 1, 0.5),	/* N DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
 					player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 20.0F, 0F);
 					LivingEntity entidad = (LivingEntity) l.getWorld().spawnEntity(l.add(0.5,1,0.5), EntityType.ZOMBIE);
@@ -1297,7 +1307,7 @@ public class EventRandoms implements Listener{
 					
 				}else if(player.getInventory().containsAtLeast(new ItemStack(Material.GOLD_INGOT), 100)) {
 					
-					gc.SendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+ChatColor.RED+" recibio un Castigo por tener mucho Oro.\nGuardias del Loot Invocados");
+					gc.sendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+ChatColor.RED+" recibio un Castigo por tener mucho Oro.\nGuardias del Loot Invocados");
 
 					l.getWorld().spawnParticle(Particle.FLAME, l.add(0.5, 1, 0.5),	/* N DE PARTICULAS */5, 0.5, 1, 0.5, /* velocidad */0, null, true);
 
@@ -2601,7 +2611,7 @@ public class EventRandoms implements Listener{
 														player.sendMessage(ChatColor.YELLOW+"Necesitas que todos los jugadores vivos esten cerca para avanzar.");
 														
 														
-														gc.SendMessageToUsersOfSameMap(player, ChatColor.GREEN+player.getName()+ChatColor.RED+" Solicita una reunion para poder activar un Evento.");
+														gc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GREEN+player.getName()+ChatColor.RED+" Solicita una reunion para poder activar un Evento.");
 														return;
 												   }else if(!chest.getInventory().isEmpty()) {
 														for (ItemStack itemStack : chest.getInventory().getContents()) {
@@ -2927,6 +2937,45 @@ public class EventRandoms implements Listener{
 				//aw.setFireTicks(1200);
 				aw.setShooter(null);
 				//((Arrow) h1).setShooter(player);
+			}
+			
+			
+			public void landMine(Player player) {
+				
+				Block b = player.getLocation().getBlock();
+				Block r = b.getRelative(0, -2, 0);
+				
+				
+				if(r.getType() == Material.GREEN_CONCRETE) {
+						
+					AreaPotion(player.getLocation(),Color.GREEN,PotionType.LONG_POISON);;
+					return;
+				}else if(r.getType() == Material.RED_CONCRETE) {
+					AreaPotion(player.getLocation(),Color.RED,PotionType.INSTANT_DAMAGE);
+					return;
+
+				}else if(r.getType() == Material.GRAY_CONCRETE) {
+					AreaPotion(player.getLocation(),Color.BLACK,PotionType.WEAKNESS);
+					return;
+
+				}else {
+					player.getWorld().createExplosion(player.getLocation(), 10, false, false);
+					return;
+				}
+			 	
+			}
+			
+			public void AreaPotion(Location l,Color color,PotionType type) {
+				AreaEffectCloud aec = (AreaEffectCloud) l.getWorld().spawnEntity(l,  EntityType.AREA_EFFECT_CLOUD);
+				aec.setBasePotionType(type);
+				aec.setColor(color);
+				aec.setDuration(30*20);
+				aec.setRadius(10);
+				aec.setRadiusOnUse(1);
+				aec.setRadiusPerTick(10);
+				aec.setReapplicationDelay(10);
+				aec.setDurationOnUse(10);
+				aec.setParticle(Particle.SPELL);				
 			}
 		 
 		 

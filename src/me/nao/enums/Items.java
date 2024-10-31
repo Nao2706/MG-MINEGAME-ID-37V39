@@ -39,7 +39,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 
             
             TEST(""+ChatColor.RED+ChatColor.BOLD+"TEST", Material.STICK,null, 1, ChatColor.GREEN+"Falling Block"),
-            REVIVE(""+ChatColor.RED+ChatColor.BOLD+"AUTO REVIVIR", Material.END_CRYSTAL,null, 1, ChatColor.GREEN+"Mantenlo pulsado.", ChatColor.GREEN+"Usalo cuando te Noqueen"),
+            REVIVE(""+ChatColor.RED+ChatColor.BOLD+"AUTO REVIVIR", Material.BREWING_STAND,null, 1, ChatColor.GREEN+"Llevalo contigo para AutorevivirteMantenlo pulsado.", ChatColor.GREEN+"Usalo cuando te Noqueen. (Click Derecho sobre tu Cadaver)", ChatColor.GREEN+"Precio: "+ChatColor.RED+"25 Diamantes"),
+            REVIVEP(""+ChatColor.RED+ChatColor.BOLD+"AUTO REVIVIR", Material.BREWING_STAND,null, 1, ChatColor.GREEN+"Llevalo contigo para Autorevivirte.", ChatColor.GREEN+"Usalo cuando te Noqueen. (Click Derecho sobre tu Cadaver)"),
 
 
             

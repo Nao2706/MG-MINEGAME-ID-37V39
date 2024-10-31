@@ -126,18 +126,19 @@ public class GameConditions {
 					 min1 = min1 - join.size();
 					  
 					 if(min1 == 1) {
-						 SendMessageToUsersOfSameMap(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugador para empezar.");
+						 sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugador para empezar.");
 					 }else {
-						 SendMessageToUsersOfSameMap(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugadores para empezar.");
+						 sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugadores para empezar.");
 
 						
 			 }}}
 			 
 			
 			if(spectador.contains(player.getName())) {
-				SendMessageToUsersOfSameMap(player, ChatColor.WHITE+"El jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" salio del Modo Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size() - 1)+ChatColor.RED+"]");
+				sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.WHITE+"El jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" salio del Modo Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size() - 1)+ChatColor.RED+"]");
+				ga.getBoss().removePlayer(player);
 			}else {
-				SendMessageToUsersOfSameMap(player,
+				sendMessageToUsersOfSameMapLessPlayer(player,
 							ChatColor.YELLOW+"A Salido "+ChatColor.GREEN+player.getName()+ChatColor.RED+" ("+ChatColor.GOLD+(ga.getParticipants().size()-1)+ChatColor.YELLOW+"/"+ChatColor.GOLD+getMaxPlayerMap(pl.getMapName())+ChatColor.RED+")");			
 			}
 			
@@ -161,9 +162,9 @@ public class GameConditions {
 					 min1 = min1 - join.size();
 					  
 					 if(min1 == 1) {
-						 SendMessageToUsersOfSameMap(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugador para empezar.");
+						 sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugador para empezar.");
 					 }else {
-						 SendMessageToUsersOfSameMap(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugadores para empezar.");
+						 sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugadores para empezar.");
 
 			}}}			
 			
@@ -171,9 +172,10 @@ public class GameConditions {
 			
 			
 			if(spectador.contains(player.getName())) {
-				SendMessageToUsersOfSameMap(player, ChatColor.WHITE+"El jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" salio del Modo Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size() - 1)+ChatColor.RED+"]");
+				sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.WHITE+"El jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" salio del Modo Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size() - 1)+ChatColor.RED+"]");
+			
 			}else {
-				 SendMessageToUsersOfSameMap(player,
+				sendMessageToUsersOfSameMapLessPlayer(player,
 							ChatColor.YELLOW+"A Salido "+ChatColor.GREEN+player.getName()+ChatColor.RED+" ("+ChatColor.GOLD+(gn.getParticipantes().size()-1)+ChatColor.YELLOW+"/"+ChatColor.GOLD+getMaxPlayerMap(pl.getMapName())+ChatColor.RED+")");			
 			}
 			 String mt = mision.getString("Start.Tittle-of-Mision"); 
@@ -495,28 +497,38 @@ public class GameConditions {
 	   }   
 	
 	public void ForceGameModePlayerRol(Player player) {
+		
+		if(isPlayerKnocked(player)) return;
+		
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		String mapa = pl.getMapName();
 		GameInfo game = plugin.getGameInfoPoo().get(mapa);
 		if(game instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) game;
 			
-			List<String> vivo = ga.getDeadPlayers();
+			List<String> vivo = ga.getAlivePlayers();
 			List<String> arrivo = ga.getArrivePlayers();
 			List<String> spectador = ga.getSpectators();
+			List<String> deads = ga.getDeadPlayers();
 			
 			
-			
-			if(vivo.contains(player.getName()) && !arrivo.contains(player.getName())) {
-				if(player.getGameMode() != GameMode.ADVENTURE && !player.isOp()) {
-					player.setGameMode(GameMode.ADVENTURE);
+			if(!player.isOp()) {
+				if(vivo.contains(player.getName()) && !arrivo.contains(player.getName())) {
+					if(player.getGameMode() != GameMode.ADVENTURE) {
+						player.setGameMode(GameMode.ADVENTURE);
+					}
+				}else if(deads.contains(player.getName())) {
+					if(player.getGameMode() != GameMode.SPECTATOR) {
+						player.setGameMode(GameMode.SPECTATOR);
+					}
+				}else if(spectador.contains(player.getName())) {
+					if(player.getGameMode() != GameMode.SPECTATOR) {
+						player.setGameMode(GameMode.SPECTATOR);
+					}
 				}
 			}
-			if(spectador.contains(player.getName())) {
-				if(player.getGameMode() != GameMode.SPECTATOR && !player.isOp()) {
-					player.setGameMode(GameMode.SPECTATOR);
-				}
-			}
+			
+		
 			
 		}
 		
@@ -1030,7 +1042,7 @@ public class GameConditions {
 
 				 player.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.YELLOW+" Te has unido"+ChatColor.RED+" ("+ChatColor.GOLD+ga.getParticipants().size()+ChatColor.YELLOW+"/"+ChatColor.GOLD+ getMaxPlayerMap(map)+ChatColor.RED+")");
 
-				 SendMessageToUsersOfSameMap(player,
+				 sendMessageToUsersOfSameMapLessPlayer(player,
 				ChatColor.YELLOW+"Se a unido "+ChatColor.GREEN+player.getName()+ChatColor.RED+" ("+ChatColor.GOLD+ga.getParticipants().size()+ChatColor.YELLOW+"/"+ChatColor.GOLD+getMaxPlayerMap(map)+ChatColor.RED+")");
 				MgScore sc = new MgScore(plugin);
 				sc.LoadScore(player);
@@ -1042,10 +1054,10 @@ public class GameConditions {
 					 //TEXTO 
 					 if(min1 == 1) {
 						 player.sendMessage(ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugador para empezar.");
-						 SendMessageToUsersOfSameMap(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugador para empezar.");
+						 sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugador para empezar.");
 					 }else {
 						 player.sendMessage(ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugadores para empezar.");
-						 SendMessageToUsersOfSameMap(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugadores para empezar.");
+						 sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugadores para empezar.");
 
 					 } 
 			   }
@@ -1082,7 +1094,9 @@ public class GameConditions {
 		return true;
 	}
 	
-	
+	public boolean isPlayerKnocked(Player player) {
+		return plugin.getPlayerKnocked().containsKey(player);
+	}
 	
 	//TODO BOOLEAN
 	public boolean isPlayerinGame(Player player) {
@@ -1299,7 +1313,8 @@ public class GameConditions {
 				GameAdventure ga = (GameAdventure) ms;
 				 List<String> spectador = ga.getSpectators();
 				 player.sendMessage(ChatColor.GREEN+"Estas como Espectador en el Mapa: "+ChatColor.GOLD+map);
-				 SendMessageToUsersOfSameMap(player, ChatColor.WHITE+"El Jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" se Unio como Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size())+ChatColor.RED+"]");
+				 ga.getBoss().addPlayer(player);
+				 sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.WHITE+"El Jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" se Unio como Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size())+ChatColor.RED+"]");
 				 TptoSpawnSpectator(player, map);
 		 }
 	}
@@ -1759,7 +1774,7 @@ public class GameConditions {
 				for(Player players : targets) {
 					players.teleport(player.getLocation());
 				}
-				SendMessageToUserAndConsole(player, ChatColor.GREEN+"Los Jugadores fueron Teletransportado a "+player.getName());
+				sendMessageToUserAndConsole(player, ChatColor.GREEN+"Los Jugadores fueron Teletransportado a "+player.getName());
 			}
 		
 
@@ -1779,7 +1794,7 @@ public class GameConditions {
 							break;
 						}
 					}
-					SendMessageToUserAndConsole(player, ChatColor.GREEN+name+" fue Teletransportado a "+player.getName());
+					sendMessageToUserAndConsole(player, ChatColor.GREEN+name+" fue Teletransportado a "+player.getName());
 			 }
 		}
 	}
@@ -1795,7 +1810,7 @@ public class GameConditions {
 					for(Player players : targets) {
 						players.teleport(l);
 					}
-					SendMessageToUserAndConsole(player, ChatColor.GREEN+"Los Jugadores fueron Teletransportados a "+l.toString());
+					sendMessageToUserAndConsole(player, ChatColor.GREEN+"Los Jugadores fueron Teletransportados a "+l.toString());
 				}
 			}
 	}
@@ -1815,7 +1830,7 @@ public class GameConditions {
 					players.teleport(l);
 				}
 				
-				SendMessageToUserAndConsole(player, ChatColor.GREEN+"Los Jugadores fueron Teletransportados a "+l.toString());
+				sendMessageToUserAndConsole(player, ChatColor.GREEN+"Los Jugadores fueron Teletransportados a "+l.toString());
 			
 			}
 		}
@@ -1839,7 +1854,7 @@ public class GameConditions {
 					}
 					
 				}
-				SendMessageToUserAndConsole(player, ChatColor.GREEN+target+" fue Teletransportado a "+l.toString());
+				sendMessageToUserAndConsole(player, ChatColor.GREEN+target+" fue Teletransportado a "+l.toString());
 			}
 		}
 	
@@ -1865,7 +1880,7 @@ public class GameConditions {
 					
 				}
 				
-				SendMessageToUserAndConsole(player, ChatColor.GREEN+target+" fue Teletransportado a "+l.toString());
+				sendMessageToUserAndConsole(player, ChatColor.GREEN+target+" fue Teletransportado a "+l.toString());
 				
 			}
 		}
@@ -2305,7 +2320,13 @@ public class GameConditions {
 	
 	//TODO MESSAGE
 	//LA DIFERENCIA ES QUE EN ESTE OMITE TU NOMBRE EN EL ALL PLAYERS ES UN MENSAJE GLOBAL PARA TODOS LOS JUGADORES INCLUYENDOTE
-	public void SendMessageToUsersOfSameMap(Player player ,String text) {
+	
+	/**
+	 * Envia un mensaje a otros jugadores del mapa menos al Jugador inicial
+	 * 
+	 */
+	
+	public void sendMessageToUsersOfSameMapLessPlayer(Player player ,String text) {
 		
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		String mapname = pl.getMapName();
@@ -2331,7 +2352,44 @@ public class GameConditions {
 		 } 
 	}
 	
-	public void SendMessageToAllPlayersInMap(String map,String text) {
+	/**
+	 * Envia un mensaje a todos los Jugadores menos a 2 que esten especificados
+	 * Orientado a revivir 
+	 * 
+	 */
+	public void sendMessageToUsersOfSameMapLessTwoPlayers(Player player,Player player2 ,String text) {
+		
+		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+		String mapname = pl.getMapName();
+		GameInfo ms = plugin.getGameInfoPoo().get(mapname);
+		//MisionInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
+		 if(ms instanceof GameAdventure) {
+				GameAdventure ga = (GameAdventure) ms;
+				List<Player> play = ConvertStringToPlayer(ga.getParticipants());
+				
+					for(Player target : play) {
+						
+						   if(target.getName().equals(player.getName())) continue;
+						   if(target.getName().equals(player2.getName())) continue;
+						   target.sendMessage(ChatColor.translateAlternateColorCodes('&', text));
+					}
+					
+					List<Player> spect = ConvertStringToPlayer(ga.getSpectators());
+					if(!spect.isEmpty()) {
+						for(Player target : spect) {
+							
+							target.sendMessage(ChatColor.translateAlternateColorCodes('&',text));
+						
+					}}
+		 } 
+	}
+	 
+	
+	/**
+	 * Envia un mensaje a todos los jugadores del mapa 
+	 * 
+	 */
+	public void sendMessageToAllPlayersInMap(String map,String text) {
 		
 		
 		GameInfo ms = plugin.getGameInfoPoo().get(map);
@@ -2350,7 +2408,13 @@ public class GameConditions {
 		 }
 	}
 	
-	public void SendMessageToAllPlayersOpInMap(String map,String text) {
+	
+	/**
+	 * Envia un mensaje a todos los jugadores Op del mapa 
+	 * 
+	 */
+	
+	public void sendMessageToAllPlayersOpInMap(String map,String text) {
 		
 		GameInfo ms = plugin.getGameInfoPoo().get(map);
 		//MisionInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
@@ -2368,7 +2432,12 @@ public class GameConditions {
 		 }
 	}
 	
-	public void SendTittleToAllPlayersInMap(String map,String text,String text2) {
+	/**
+	 * Envia un titulo a todos los jugadores del mapa 
+	 * 
+	 */
+	
+	public void sendTittleToAllPlayersInMap(String map,String text,String text2) {
 		
 		
 		GameInfo ms = plugin.getGameInfoPoo().get(map);
@@ -2389,7 +2458,7 @@ public class GameConditions {
 	
 	
 	//TODO CONSOLE AND PLAYER FOR OP OR DEBUG
-	public void SendMessageToUserAndConsole(Player player ,String text) {
+	public void sendMessageToUserAndConsole(Player player ,String text) {
 		
 		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&',text));
 		if(player != null) {
@@ -2645,7 +2714,7 @@ public class GameConditions {
 						for (int j1 = 0; j1 < messagep1.size(); j1++) {
 							String texto2 = messagep1.get(j1);
 							 
-							SendMessageToUserAndConsole(null, texto2);
+							sendMessageToUserAndConsole(null, texto2);
 					  }}			
 							
 					if(!list.isEmpty()) {
@@ -2667,7 +2736,7 @@ public class GameConditions {
 											// String time = plugin.getPlayerCronomet().get(e.getKey());
 									
 										if(i == 1) {
-												SendMessageToUserAndConsole(null,texto
+												sendMessageToUserAndConsole(null,texto
 														 .replace("%mvp%",""+ChatColor.GREEN+ChatColor.BOLD+"MVP")
 														 .replace("%player%", e.getKey())
 														 .replace("%place%", Integer.toString(i))
@@ -2681,7 +2750,7 @@ public class GameConditions {
 														
 														 );
 										}else {
-											SendMessageToUserAndConsole(null,texto
+											sendMessageToUserAndConsole(null,texto
 													 .replace("%mvp%","")
 													 .replace("%player%", e.getKey())
 													 .replace("%place%", Integer.toString(i))
@@ -2698,7 +2767,7 @@ public class GameConditions {
 								}}}}
 						
 					}else {
-						SendMessageToUserAndConsole(null, "Vacio");
+						sendMessageToUserAndConsole(null, "Vacio");
 					}
 					
 					
@@ -2707,7 +2776,7 @@ public class GameConditions {
 							for (int j3 = 0; j3 < messagep3.size(); j3++) {
 								String texto3 = messagep3.get(j3);
 							
-								SendMessageToUserAndConsole(null,texto3);
+								sendMessageToUserAndConsole(null,texto3);
 					  }}
    	}
    	 
@@ -2953,6 +3022,7 @@ public class GameConditions {
    	   			for (String key : game.getConfigurationSection("Game-Objetives").getKeys(false)) {
    	   				int priority = game.getInt("Game-Objetives."+key+".Priority");
    	   				String status = game.getString("Game-Objetives."+key+".Status");
+   	   				//String objetivescope = game.getString("Game-Objetives."+key+".ObjetiveScope");
 	   	   			int values = game.getInt("Game-Objetives."+key+".Start-Value");
 	   				int valueinit = values;
 	   				int valuec = game.getInt("Game-Objetives."+key+".Complete-Value");
@@ -3033,7 +3103,7 @@ public class GameConditions {
    	}
  	
 	
-	
+	 
 	//para reclamar recompensa y comprobar
  	public void isCompleteAllPrimaryObjetiveForReward(String map) {
  		GameInfo gi = plugin.getGameInfoPoo().get(map);
@@ -3188,7 +3258,7 @@ public class GameConditions {
 	public void ObjetivesValue(String map, String name ,int value,String player) {
 		
 		if(!isMapinGame(map)) {
-			SendMessageToUserAndConsole(null,"El Mapa "+map+" no esta en Juego no puedes editar Objetivos.");
+			sendMessageToUserAndConsole(null,"El Mapa "+map+" no esta en Juego no puedes editar Objetivos.");
 			return;
 		}
 		
@@ -3197,23 +3267,23 @@ public class GameConditions {
 		GameConditions gc = new GameConditions(plugin);
 		
 		if(!l.stream().filter(o -> o.getName().equals(name)).findFirst().isPresent()) {
-			SendMessageToUserAndConsole(null,ChatColor.RED+"El Objetivo  "+name+" no Existe");
+			sendMessageToUserAndConsole(null,ChatColor.RED+"El Objetivo  "+name+" no Existe");
 			return;
 		}else {
 			
 			ObjetivesMG obj = l.stream().filter(o -> o.getName().equals(name)).findFirst().get();
 			
 			if(obj.getObjetiveType() == ObjetiveStatusType.COMPLETE) {
-				SendMessageToUserAndConsole(null,ChatColor.GOLD+map+" "+ChatColor.GREEN+"El Objetivo "+name+" alcanzo el Estado Completo.");
+				sendMessageToUserAndConsole(null,ChatColor.GOLD+map+" "+ChatColor.GREEN+"El Objetivo "+name+" alcanzo el Estado Completo.");
 				return;
 			}else if(obj.getObjetiveType() == ObjetiveStatusType.INCOMPLETE) {
-				SendMessageToUserAndConsole(null,ChatColor.GOLD+map+" "+ChatColor.GREEN+"El Objetivo "+name+" alcanzo el Estado Incompleto.");
+				sendMessageToUserAndConsole(null,ChatColor.GOLD+map+" "+ChatColor.GREEN+"El Objetivo "+name+" alcanzo el Estado Incompleto.");
 				return;
 			}else if(obj.getObjetiveType() == ObjetiveStatusType.CONCLUDED) {
-				SendMessageToUserAndConsole(null,ChatColor.GOLD+map+" "+ChatColor.GREEN+"El Objetivo "+name+" alcanzo el Estado Concluido.");
+				sendMessageToUserAndConsole(null,ChatColor.GOLD+map+" "+ChatColor.GREEN+"El Objetivo "+name+" alcanzo el Estado Concluido.");
 				return;
 			}else if(obj.getObjetiveType() == ObjetiveStatusType.CANCELLED) {
-				SendMessageToUserAndConsole(null,ChatColor.GOLD+map+" "+ChatColor.GREEN+"El Objetivo "+name+" alcanzo el Estado Cancelado.");
+				sendMessageToUserAndConsole(null,ChatColor.GOLD+map+" "+ChatColor.GREEN+"El Objetivo "+name+" alcanzo el Estado Cancelado.");
 				return;
 			}else if(obj.getObjetiveType() == ObjetiveStatusType.WAITING || obj.getObjetiveType() == ObjetiveStatusType.WARNING || obj.getObjetiveType() == ObjetiveStatusType.DANGER) {
 				int vals = obj.getStartValue();
@@ -3244,7 +3314,7 @@ public class GameConditions {
 							Player target = Bukkit.getPlayerExact(player);
 							if(target != null && gc.isPlayerinGame(target)) {
 								//SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Completado gracias a "+target.getName()+" "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
-								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+ChatColor.GREEN+" Completado por "+target.getName()+" "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
+								sendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+ChatColor.GREEN+" Completado por "+target.getName()+" "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
 
 								if(obj.getParticipants().containsKey(target)) {
 									obj.getParticipants().put(target,obj.getParticipants().get(target)+value);
@@ -3253,11 +3323,11 @@ public class GameConditions {
 								}
 							}else {
 								//SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
-								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
+								sendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
 							}
 						}else {
 							//SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
-							SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
+							sendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
 
 						}
 						
@@ -3278,7 +3348,7 @@ public class GameConditions {
 							Player target = Bukkit.getPlayerExact(player);
 							if(target != null && gc.isPlayerinGame(target)) {
 								//SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado gracias a "+target.getName()+" "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
-								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+ChatColor.GREEN+" Cambio por "+target.getName()+" "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
+								sendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+ChatColor.GREEN+" Cambio por "+target.getName()+" "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
 
 								if(obj.getParticipants().containsKey(target)) {
 									obj.getParticipants().put(target,obj.getParticipants().get(target)+value);
@@ -3287,12 +3357,12 @@ public class GameConditions {
 								}
 							}else {
 								//SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
-								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+" cambio "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
+								sendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+" cambio "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
 
 							}
 						}else {
 							//SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
-							SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+" cambio "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
+							sendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+" cambio "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
 
 						}
 						
@@ -3315,7 +3385,7 @@ public class GameConditions {
 							Player target = Bukkit.getPlayerExact(player);
 							if(target != null && gc.isPlayerinGame(target)) {
 								//SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Completado gracias a "+target.getName()+" "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
-								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+ChatColor.GREEN+" Completado por "+target.getName()+" "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
+								sendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+ChatColor.GREEN+" Completado por "+target.getName()+" "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
 
 								if(obj.getParticipants().containsKey(target)) {
 									obj.getParticipants().put(target,obj.getParticipants().get(target)+value);
@@ -3324,12 +3394,12 @@ public class GameConditions {
 								}
 							}else {
 								//SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
-								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
+								sendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
 
 							}
 						}else {
 							//SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
-							SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
+							sendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+" Completado "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
 
 						}
 						
@@ -3347,7 +3417,7 @@ public class GameConditions {
 							Player target = Bukkit.getPlayerExact(player);
 							if(target != null && gc.isPlayerinGame(target)) {
 								//SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado gracias a "+target.getName()+" "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
-								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+ChatColor.GREEN+" Cambio por "+target.getName()+" "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
+								sendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+ChatColor.GREEN+" Cambio por "+target.getName()+" "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
 
 								
 								if(obj.getParticipants().containsKey(target)) {
@@ -3357,12 +3427,12 @@ public class GameConditions {
 								}
 							}else {
 								//SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
-								SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+" cambio "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
+								sendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+" cambio "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
 
 							}
 						}else {
 							//SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
-							SendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+" cambio "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
+							sendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getName()+" cambio "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
 
 						}
 					}
@@ -3371,7 +3441,7 @@ public class GameConditions {
 			   		isCompleteAllPrimaryObjetiveForReward(map);
 					isCompleteAllSecondaryObjetiveForReward(map);
 			}else {
-				SendMessageToUserAndConsole(null,ChatColor.GOLD+map+" "+ChatColor.GREEN+"El Objetivo "+ChatColor.RED+name+ChatColor.GREEN+" fue Activado pero no genera Cambios.");
+				sendMessageToUserAndConsole(null,ChatColor.GOLD+map+" "+ChatColor.GREEN+"El Objetivo "+ChatColor.RED+name+ChatColor.GREEN+" fue Activado pero no genera Cambios.");
 
 			}
 			
@@ -3405,7 +3475,7 @@ public class GameConditions {
 			ExecuteMultipleCommandsInConsole(null,objetivesaction);
    		}	
 		
-   		SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+oj.getName()+ChatColor.GREEN+" a sido Completado "+ChatColor.GOLD+oj.getCompleteValue()+"/"+oj.getCompleteValue());
+   		sendMessageToAllPlayersInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+oj.getName()+ChatColor.GREEN+" a sido Completado "+ChatColor.GOLD+oj.getCompleteValue()+"/"+oj.getCompleteValue());
 	}
 	
 	public void ObjetiveGeneralActionsIncomplete(String map,ObjetivesMG oj,GameInfo gi)  {
@@ -3428,7 +3498,7 @@ public class GameConditions {
 			}
 			ExecuteMultipleCommandsInConsole(null,objetivesaction);
    		}
-   		SendMessageToAllPlayersInMap(map, ChatColor.RED+"El progreso del Ojetivo "+ChatColor.GOLD+oj.getName()+ChatColor.RED+" no fue Completado "+ChatColor.GOLD+oj.getIncompleteValue()+"/"+oj.getIncompleteValue());
+   		sendMessageToAllPlayersInMap(map, ChatColor.RED+"El progreso del Ojetivo "+ChatColor.GOLD+oj.getName()+ChatColor.RED+" no fue Completado "+ChatColor.GOLD+oj.getIncompleteValue()+"/"+oj.getIncompleteValue());
 	}
 	
 
@@ -3438,7 +3508,7 @@ public class GameConditions {
 	public void ObjetiveChangeType(String map, String name, ObjetiveStatusType ob,String player) {
 		
 		if(!isMapinGame(map)) {
-			SendMessageToUserAndConsole(null,"El Mapa "+map+" no esta en Juego no puedes editar el tipo de Objetivos.");
+			sendMessageToUserAndConsole(null,"El Mapa "+map+" no esta en Juego no puedes editar el tipo de Objetivos.");
 			return;
 		}
 		
@@ -3447,7 +3517,7 @@ public class GameConditions {
 		
 		
 		if(!l.stream().filter(o -> o.getName().equals(name)).findFirst().isPresent()) {
-			SendMessageToUserAndConsole(null,ChatColor.RED+"El Objetivo "+ChatColor.GOLD+name+ChatColor.RED+" no Existe.");
+			sendMessageToUserAndConsole(null,ChatColor.RED+"El Objetivo "+ChatColor.GOLD+name+ChatColor.RED+" no Existe.");
 			return;
 		}else{
 			ObjetivesMG mo = (ObjetivesMG) l.stream().filter(o -> o.getName().equals(name)).findFirst().get();
@@ -3455,12 +3525,12 @@ public class GameConditions {
 			switch(ob) {
 			case WAITING:
 				mo.setObjetiveType(ObjetiveStatusType.WAITING);
-				SendMessageToAllPlayersInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Esperando.");
+				sendMessageToAllPlayersInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Esperando.");
 				
 				if(player != null) {
 					Player target = Bukkit.getPlayerExact(player);
 					if(target != null && gc.isPlayerinGame(target)) {
-						SendMessageToAllPlayersOpInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getName()+ChatColor.GREEN+" cambio a Esperando gracias a "+target.getName());
+						sendMessageToAllPlayersOpInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getName()+ChatColor.GREEN+" cambio a Esperando gracias a "+target.getName());
 
 					}
 				}
@@ -3468,7 +3538,7 @@ public class GameConditions {
 				break;
 			case COMPLETE:
 				mo.setObjetiveType(ObjetiveStatusType.COMPLETE);
-				SendMessageToAllPlayersInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" fue Completado.");
+				sendMessageToAllPlayersInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" fue Completado.");
 				mo.setValue(mo.getCompleteValue());
 				ObjetiveGeneralActionsComplete(map,mo,gi);
 				isCompleteAllPrimaryObjetiveForReward(map);
@@ -3477,7 +3547,7 @@ public class GameConditions {
 				if(player != null) {
 					Player target = Bukkit.getPlayerExact(player);
 					if(target != null && gc.isPlayerinGame(target)) {
-						SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getName()+ChatColor.GREEN+" fue Completado gracias a "+target.getName()+" "+ChatColor.GOLD+mo.getCompleteValue()+"/"+mo.getCompleteValue());
+						sendMessageToAllPlayersInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getName()+ChatColor.GREEN+" fue Completado gracias a "+target.getName()+" "+ChatColor.GOLD+mo.getCompleteValue()+"/"+mo.getCompleteValue());
 
 						mo.getParticipants().put(target,mo.getParticipants().get(target)+1);
 						
@@ -3487,14 +3557,14 @@ public class GameConditions {
 				break;
 			case INCOMPLETE:
 				mo.setObjetiveType(ObjetiveStatusType.INCOMPLETE);
-				SendMessageToAllPlayersInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Incompleto.");
+				sendMessageToAllPlayersInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Incompleto.");
 				mo.setValue(mo.getIncompleteValue());
 				ObjetiveGeneralActionsIncomplete(map,mo,gi);
 				
 				if(player != null) {
 					Player target = Bukkit.getPlayerExact(player);
 					if(target != null && gc.isPlayerinGame(target)) {
-						SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getName()+ChatColor.GREEN+" cambio a Incompleto gracias a "+target.getName());
+						sendMessageToAllPlayersInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getName()+ChatColor.GREEN+" cambio a Incompleto gracias a "+target.getName());
 
 						mo.getParticipants().put(target,mo.getIncompleteValue());
 						
@@ -3504,27 +3574,27 @@ public class GameConditions {
 				break;
 			case DANGER:
 				mo.setObjetiveType(ObjetiveStatusType.DANGER);
-				SendMessageToAllPlayersOpInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Peligro.");
+				sendMessageToAllPlayersOpInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Peligro.");
 				break;
 			case UNKNOW:
 				mo.setObjetiveType(ObjetiveStatusType.UNKNOW);
-				SendMessageToAllPlayersOpInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Desconocido.");
+				sendMessageToAllPlayersOpInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Desconocido.");
 				
 				if(player != null) {
 					Player target = Bukkit.getPlayerExact(player);
 					if(target != null && gc.isPlayerinGame(target)) {
-						SendMessageToAllPlayersOpInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getName()+ChatColor.GREEN+" cambio a Desconocido gracias a "+target.getName());
+						sendMessageToAllPlayersOpInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getName()+ChatColor.GREEN+" cambio a Desconocido gracias a "+target.getName());
 
 					}
 				}
 				break;
 			case WARNING:
 				mo.setObjetiveType(ObjetiveStatusType.WARNING);
-				SendMessageToAllPlayersOpInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Advertencia.");
+				sendMessageToAllPlayersOpInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" cambio a Modo Advertencia.");
 				break;
 			case RESET:
 				mo.setObjetiveType(ObjetiveStatusType.WAITING);
-				SendMessageToAllPlayersOpInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" se Reseteo.");
+				sendMessageToAllPlayersOpInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" se Reseteo.");
 				mo.setValue(mo.getStartValue());
 				if(mo.getPriority() == 1) {
 					gi.setObjetivesPrimaryComplete(false);
@@ -3535,20 +3605,20 @@ public class GameConditions {
 				break;
 			case CONCLUDED:
 				mo.setObjetiveType(ObjetiveStatusType.CONCLUDED);
-				SendMessageToAllPlayersOpInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" a Concluido.");
+				sendMessageToAllPlayersOpInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" a Concluido.");
 				mo.setValue(mo.getCompleteValue());
 				ObjetiveGeneralActionsComplete(map,mo,gi);
 				break;
 			case HIDE:
 				mo.setObjetiveType(ObjetiveStatusType.HIDE);
-				SendMessageToAllPlayersInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" esta Oculto.");
+				sendMessageToAllPlayersInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" esta Oculto.");
 				break;
 			case CANCELLED:
 				mo.setObjetiveType(ObjetiveStatusType.CANCELLED);
-				SendMessageToAllPlayersOpInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" esta Cancelado.");
+				sendMessageToAllPlayersOpInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" esta Cancelado.");
 				break;
 			default:
-				SendMessageToAllPlayersOpInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" no tuvo Cambios.");
+				sendMessageToAllPlayersOpInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" no tuvo Cambios.");
 			}
 		}
 		 

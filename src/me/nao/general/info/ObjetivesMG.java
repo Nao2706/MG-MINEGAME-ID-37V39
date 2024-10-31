@@ -14,7 +14,6 @@ public class ObjetivesMG {
 	private ObjetiveStatusType status;
 	private HashMap<Player,Integer> playerinteractions;
 	
-	
 	/**
 	 * Crear Objetivo 
 	 * 
@@ -61,7 +60,7 @@ public class ObjetivesMG {
 	public String getDescription() {
 		return description;
 	}
-
+	
 	public ObjetiveStatusType getObjetiveType() {
 		return status;
 	}

@@ -16,6 +16,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import me.nao.enums.ObjetiveScope;
 import me.nao.enums.ObjetiveStatusType;
 import me.nao.general.info.GameConditions;
 import me.nao.main.game.Minegame;
@@ -175,13 +176,14 @@ public class MapSettings {
    public void SetObjetiveInfoDefault(FileConfiguration ym, String objetive) {
 	   
 	   
-	   for(int i = 0 ;i<5;i++) {
+	   for(int i = 0 ;i < 5;i++) {
 		   	ym.set("Game-Objetives."+objetive+i+".Priority",i);
 		 	ym.set("Game-Objetives."+objetive+i+".Status",ObjetiveStatusType.WAITING.toString());
 		 	ym.set("Game-Objetives."+objetive+i+".Start-Value",0);
 			ym.set("Game-Objetives."+objetive+i+".Complete-Value",10);
 			ym.set("Game-Objetives."+objetive+i+".Incomplete-Value",0);
 			ym.set("Game-Objetives."+objetive+i+".Description","Busca una palanca");
+			ym.set("Game-Objetives."+objetive+i+".ObjetiveScope",ObjetiveScope.GLOBAL.toString());
 			
 			List<String> objetivesmg = ym.getStringList("Game-Objetives."+objetive+i+".ObjetiveCompleteMessage");
 			ym.set("Game-Objetives."+objetive+i+".ObjetiveCompleteMessage",objetivesmg);

@@ -160,7 +160,7 @@ public class Comandos implements CommandExecutor{
 							 }
 							gc.SendMessageToAllUsersOfSameMapCommand(null, name, mensaje);
 						}else {
-							gc.SendMessageToUserAndConsole(null,plugin.nombre+ChatColor.GREEN+" Usa /mg message <map> <message>");
+							gc.sendMessageToUserAndConsole(null,plugin.nombre+ChatColor.GREEN+" Usa /mg message <map> <message>");
 						}
 					return true;
 					
@@ -175,7 +175,7 @@ public class Comandos implements CommandExecutor{
 							 }
 							gc.SendTittleToAllUsersOfSameMapCommand(null, name, mensaje);
 						}else {
-							gc.SendMessageToUserAndConsole(null,plugin.nombre+ChatColor.GREEN+" Usa /mg tittle <map> <message1 ; message2>");
+							gc.sendMessageToUserAndConsole(null,plugin.nombre+ChatColor.GREEN+" Usa /mg tittle <map> <message1 ; message2>");
 						}
 					return true;
 					
@@ -197,8 +197,8 @@ public class Comandos implements CommandExecutor{
 								if(obj != null) {
 									gc.ObjetiveChangeType(map, name, obj,null);
 								}else {
-									gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
-					 				gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
+									gc.sendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
+					 				gc.sendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
 								}
 							}catch(IllegalArgumentException e) {
 								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No existe el tipo "+ChatColor.GOLD+numberoenum);
@@ -221,20 +221,20 @@ public class Comandos implements CommandExecutor{
 								if(obj != null) {
 									gc.ObjetiveChangeType(map, name, obj,target);
 								}else {
-									gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning> <player>");
-									gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1 <player>");
-									gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
-					 				gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
+									gc.sendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning> <player>");
+									gc.sendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1 <player>");
+									gc.sendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
+					 				gc.sendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
 								}
 							}catch(IllegalArgumentException e) {
 								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No existe el tipo "+ChatColor.GOLD+numberoenum);
 							}
 						}
 					}else {
-						gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning> <player>");
-						gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
-		 				gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
-		 				gc.SendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1 <player>");
+						gc.sendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning> <player>");
+						gc.sendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
+		 				gc.sendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
+		 				gc.sendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1 <player>");
 					}
 					return true;
 					
@@ -2464,8 +2464,8 @@ public class Comandos implements CommandExecutor{
 						gc.TpPlayerOfGameToLocationSpecific(player, target, map, world, x, y, z);
 						
 					}else {
-					 gc.SendMessageToUserAndConsole(player, ChatColor.GREEN+"1) Usa /mg tp <map> <world> <x> <y> <z> <yaw> <pitch>");
-					 gc.SendMessageToUserAndConsole(player,ChatColor.GREEN+"2) Usa /mg tp <map> <world> <x> <y> <z>");
+					 gc.sendMessageToUserAndConsole(player, ChatColor.GREEN+"1) Usa /mg tp <map> <world> <x> <y> <z> <yaw> <pitch>");
+					 gc.sendMessageToUserAndConsole(player,ChatColor.GREEN+"2) Usa /mg tp <map> <world> <x> <y> <z>");
 					}
 					
 					
@@ -2498,8 +2498,8 @@ public class Comandos implements CommandExecutor{
 
 						
 					}else {
-					 gc.SendMessageToUserAndConsole(player, ChatColor.GREEN+"1) Usa /mg tp-all <target> <map> <world> <x> <y> <z> <yaw> <pitch>");
-					 gc.SendMessageToUserAndConsole(player,ChatColor.GREEN+"2) Usa /mg tp-all <target> <map> <world> <x> <y> <z>");
+					 gc.sendMessageToUserAndConsole(player, ChatColor.GREEN+"1) Usa /mg tp-all <target> <map> <world> <x> <y> <z> <yaw> <pitch>");
+					 gc.sendMessageToUserAndConsole(player,ChatColor.GREEN+"2) Usa /mg tp-all <target> <map> <world> <x> <y> <z>");
 					}
 					
 					
@@ -2578,8 +2578,8 @@ public class Comandos implements CommandExecutor{
 									
 								}else {
 									player.sendMessage(ChatColor.RED+"Ese no es un Tipo de Objetivo");
-									gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
-					 				gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
+									gc.sendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
+					 				gc.sendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
 								}
 							}catch(IllegalArgumentException e) {
 								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No existe el tipo "+ChatColor.GOLD+nmberorenum );
@@ -2606,10 +2606,10 @@ public class Comandos implements CommandExecutor{
 									gc.ObjetiveChangeType(map, name, obj,target);
 									
 								}else {
-									gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning> <player>");
-									gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1 <player>");
-									gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
-					 				gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
+									gc.sendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning> <player>");
+									gc.sendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1 <player>");
+									gc.sendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
+					 				gc.sendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
 								}
 							
 							}catch(IllegalArgumentException e) {
@@ -2617,10 +2617,10 @@ public class Comandos implements CommandExecutor{
 							}
 						}
 					}else {
-						gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning> <player>");
-						gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
-		 				gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
-		 				gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1 <player>");
+						gc.sendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning> <player>");
+						gc.sendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
+		 				gc.sendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
+		 				gc.sendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1 <player>");
 					}
 						 
 					
@@ -2639,7 +2639,7 @@ public class Comandos implements CommandExecutor{
 					return true;
 				}else if(args[0].equalsIgnoreCase("dropentity")){
 					GameIntoMap ci = new GameIntoMap(plugin);
-					ci.ItemDropEntity(player);
+					ci.ItemDropEntity(player,player.getLocation());
 					
 					return true;
 				}else if(args[0].equalsIgnoreCase("top") ){
@@ -2976,11 +2976,11 @@ public class Comandos implements CommandExecutor{
 			if(gc.ExistMapDialog(args[1])) {
 				gc.LoadDialogues(args[1], args[2], args[3]);
 			}else {
-				gc.SendMessageToUserAndConsole(player, ChatColor.RED+"El Dialogo "+args[1]+" no Existe.");
+				gc.sendMessageToUserAndConsole(player, ChatColor.RED+"El Dialogo "+args[1]+" no Existe.");
 			}
  			
  		}else {
- 			gc.SendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg dialogue <nombreyml> <Seccion> <Mapa>.");
+ 			gc.sendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg dialogue <nombreyml> <Seccion> <Mapa>.");
  		}
  		return;
  	}

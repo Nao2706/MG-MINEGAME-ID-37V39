@@ -1981,6 +1981,17 @@ public class MinigameShop1 implements Listener{
 				}
 			}
 			
+			if(item.isSimilar(Items.REVIVE.getValue())) {
+				if(!HasSpaceinInventory(player)) return;
+				if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND),25)) {
+					player.getInventory().addItem(Items.REVIVEP.getValue());
+					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
+					player.getInventory().removeItem(new ItemStack(Material.DIAMOND,25));
+				}else {
+					player.sendMessage(ChatColor.RED+"Necesitas 25 Diamantes");
+				}
+			}
+			
 			if(item.isSimilar(Items.ARMAS.getValue())) {
 				StoreCreateWeaponsMelee(player);
 			}
@@ -2207,6 +2218,7 @@ public class MinigameShop1 implements Listener{
 		inv.setItem(24, Items.BENGALAROJA.getValue());
 		inv.setItem(25, Items.BENGALAVERDE.getValue());
 		inv.setItem(28, Items.RAINARROW.getValue());
+		inv.setItem(29, Items.REVIVE.getValue());
 		inv.setItem(40, Items.CERRAR.getValue());
 		inv.setItem(41, Items.VOLVER.getValue());
 		

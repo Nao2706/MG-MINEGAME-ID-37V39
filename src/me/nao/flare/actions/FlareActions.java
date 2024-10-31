@@ -42,7 +42,7 @@ public class FlareActions {
 		Block b = isOutside(loc).getBlock();
 		//System.out.println("top es "+b.getType()+" loc: "+loc);
 		if(b.getType() == Material.BARRIER) {
-			gc.SendMessageToAllPlayersInMap(map,""+ChatColor.RED+ChatColor.BOLD+"AC 130: "+ChatColor.GREEN+"Paquete de ayuda solicitado por "+ChatColor.GOLD+player.getName()+ChatColor.GREEN+" suerte.");
+			gc.sendMessageToAllPlayersInMap(map,""+ChatColor.RED+ChatColor.BOLD+"AC 130: "+ChatColor.GREEN+"Paquete de ayuda solicitado por "+ChatColor.GOLD+player.getName()+ChatColor.GREEN+" suerte.");
 
 			StorageMinecart ent = (StorageMinecart) b.getWorld().spawnEntity(b.getLocation().add(0.5, -3, 0.5), EntityType.MINECART_CHEST);
 			ent.setCustomName(""+ChatColor.GREEN+ChatColor.BOLD+"PAQUETE DE AYUDA");
@@ -82,7 +82,7 @@ public class FlareActions {
 		//System.out.println("top es "+b.getType()+" loc: "+loc);
 		
 		if(b.getType() == Material.BARRIER) {
-			gc.SendMessageToAllPlayersInMap(map,""+ChatColor.RED+ChatColor.BOLD+"A10 WARTHOG: "+ChatColor.GREEN+"Ataque Aereo Solicitado por "+ChatColor.GOLD+player.getName()+ChatColor.GREEN+" en Camino.");
+			gc.sendMessageToAllPlayersInMap(map,""+ChatColor.RED+ChatColor.BOLD+"A10 WARTHOG: "+ChatColor.GREEN+"Ataque Aereo Solicitado por "+ChatColor.GOLD+player.getName()+ChatColor.GREEN+" en Camino.");
 
 			Entity fb = b.getWorld().spawnEntity(b.getLocation().add(0.5, -1, 0.5), EntityType.FIREBALL);
 			//fb.setCustomName("Mortero");
