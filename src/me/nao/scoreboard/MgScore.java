@@ -286,12 +286,6 @@ public class MgScore {
 				
 				 
 			}
-			
-			
-		
-		
-			
-			
 		
 		
 			for(int i = 0; i< show.size();i++) {

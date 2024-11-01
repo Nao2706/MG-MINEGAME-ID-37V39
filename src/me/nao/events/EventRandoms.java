@@ -171,15 +171,18 @@ public class EventRandoms implements Listener{
 				
 				Entity ent = e.getRightClicked();
 				
+				
 				if(ent instanceof ArmorStand) {
 					ArmorStand as = (ArmorStand) ent;
 					if(as.getCustomName() != null) {
 						String name = ChatColor.stripColor(as.getCustomName());
 						if(name.startsWith("CADAVER DE ")){
+							e.setCancelled(true);
 							Player target = Bukkit.getPlayer(name.replace("CADAVER DE ","").replace(" ",""));
 							if(gc.isPlayerKnocked(target)) {
 								
 								if(target.getName().equals(player.getName())) {
+									
 									
 									if(player.getInventory().containsAtLeast(Items.REVIVEP.getValue(), 1)){
 										
@@ -198,39 +201,49 @@ public class EventRandoms implements Listener{
 											removeItemstackCustom(player,Items.REVIVEP.getValue());
 										}
 									}
-									
+									return;
 								}else{
-									RevivePlayer pr = plugin.getPlayerKnocked().get(target);
-									int value = pr.getValue();
-									if(value != 100) {
-										pr.setValue(pr.getValue()+1);
-										target.sendTitle(""+ChatColor.WHITE+ChatColor.BOLD+"REVIVIENDO"+ChatColor.GREEN+ChatColor.BOLD+" + ", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 0, 20, 0);
-										player.sendTitle(""+ChatColor.WHITE+ChatColor.BOLD+"REVIVIENDO"+ChatColor.GREEN+ChatColor.BOLD+" + ", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 0, 20, 0);
-										pr.setReviveStatus(ReviveStatus.HEALING);
-									}else {
-										if(pr.getReviveStatus() != ReviveStatus.REVIVED) {
-											target.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+"REVIVIDO", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(100,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 20, 20, 20);
-											player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+"REVIVIDO", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(100,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 20, 20, 20);
-										
-											player.sendMessage(ChatColor.GOLD+"Ayudaste a levantar a "+ChatColor.GREEN+target.getName());
-											target.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.GOLD+" te ayudo a levantarte.");
-											gc.sendMessageToUsersOfSameMapLessTwoPlayers(player, target, ChatColor.GOLD+target.getName()+ChatColor.AQUA+" ayudo a "+ChatColor.GREEN+player.getName()+ChatColor.AQUA+" a Levantarse.");
+									if(!player.isSneaking()) {
+										RevivePlayer pr = plugin.getPlayerKnocked().get(target);
+										int value = pr.getValue();
+										if(value != 100) {
+											pr.setValue(pr.getValue()+1);
+											target.sendTitle(""+ChatColor.WHITE+ChatColor.BOLD+"REVIVIENDO"+ChatColor.GREEN+ChatColor.BOLD+" + ", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 0, 20, 0);
+											player.sendTitle(""+ChatColor.WHITE+ChatColor.BOLD+"REVIVIENDO"+ChatColor.GREEN+ChatColor.BOLD+" + ", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 0, 20, 0);
+											pr.setReviveStatus(ReviveStatus.HEALING);
+										}else {
+											if(pr.getReviveStatus() != ReviveStatus.REVIVED) {
+												target.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+"REVIVIDO", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(100,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 20, 20, 20);
+												player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+"REVIVIDO", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(100,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 20, 20, 20);
 											
-											 
-											pr.setReviveStatus(ReviveStatus.REVIVED);
+												player.sendMessage(ChatColor.GOLD+"Ayudaste a levantar a "+ChatColor.GREEN+target.getName());
+												target.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.GOLD+" te ayudo a levantarte.");
+												gc.sendMessageToUsersOfSameMapLessTwoPlayers(player, target, ChatColor.GOLD+target.getName()+ChatColor.AQUA+" ayudo a "+ChatColor.GREEN+player.getName()+ChatColor.AQUA+" a Levantarse.");
+												
+												 
+												pr.setReviveStatus(ReviveStatus.REVIVED);
+											}
+											
 										}
 										
+										return;
+									}else {
+										if(player.getPassengers().isEmpty()) {
+											
+											player.addPassenger(as);
+										}
+										
+										return;
 									}
-									
 								}
-								
-								
 							}
 						}
-						
 					}
-					
 				}
+				
+				
+				
+
 				if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
 					
 					if(!player.getPassengers().isEmpty()) {
@@ -2941,7 +2954,7 @@ public class EventRandoms implements Listener{
 			
 			
 			public void landMine(Player player) {
-				
+				 
 				Block b = player.getLocation().getBlock();
 				Block r = b.getRelative(0, -2, 0);
 				
@@ -2958,7 +2971,8 @@ public class EventRandoms implements Listener{
 					AreaPotion(player.getLocation(),Color.BLACK,PotionType.WEAKNESS);
 					return;
 
-				}else {
+				}else if(r.getType() == Material.AIR) {
+					System.out.println("BOOM");
 					player.getWorld().createExplosion(player.getLocation(), 10, false, false);
 					return;
 				}
@@ -2966,16 +2980,19 @@ public class EventRandoms implements Listener{
 			}
 			
 			public void AreaPotion(Location l,Color color,PotionType type) {
+				System.out.println("TYPE: "+type.toString());
 				AreaEffectCloud aec = (AreaEffectCloud) l.getWorld().spawnEntity(l,  EntityType.AREA_EFFECT_CLOUD);
 				aec.setBasePotionType(type);
 				aec.setColor(color);
 				aec.setDuration(30*20);
 				aec.setRadius(10);
-				aec.setRadiusOnUse(1);
-				aec.setRadiusPerTick(10);
-				aec.setReapplicationDelay(10);
-				aec.setDurationOnUse(10);
-				aec.setParticle(Particle.SPELL);				
+				aec.setReapplicationDelay(20);
+				aec.setDurationOnUse(20);
+				//aec.setParticle(Particle.SPELL);
+			
+				//aec.setRadiusOnUse(10);
+				//aec.setRadiusPerTick(30*20);
+						
 			}
 		 
 		 

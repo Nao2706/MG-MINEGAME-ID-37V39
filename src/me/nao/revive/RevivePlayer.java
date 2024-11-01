@@ -134,23 +134,27 @@ public class RevivePlayer{
 		PotionEffect glow = new PotionEffect(PotionEffectType.GLOWING,/*duration*/ 30 * 20,/*amplifier:*/10, true ,true,true );
 
 		ArmorStand as = getArmorStand();
+		
 		as.setCustomName(""+ChatColor.RED+ChatColor.BOLD+"CADAVER DE "+ChatColor.GREEN+ChatColor.BOLD+player.getName());
 		as.setCustomNameVisible(true);
 		as.setBasePlate(false);
 		as.setArms(true);
-		//as.setRotation(player.getLocation().getYaw(), player.getLocation().getPitch());
+		as.setRotation(player.getLocation().getYaw(), player.getLocation().getPitch());
 		//as.setBodyPose(new EulerAngle(360,0,0));
-		as.setHeadPose(new EulerAngle(90,0,0));
-		as.setLeftArmPose(new EulerAngle(295,360,0));
-		as.setRightArmPose(new EulerAngle(299,360,0));
-		as.setLeftLegPose(new EulerAngle(279,346,0));
-		as.setRightLegPose(new EulerAngle(281,23,0));
+		as.setHeadPose(new EulerAngle(Math.toRadians(32f),Math.toRadians(0f),Math.toRadians(0f)));
+		as.setLeftArmPose(new EulerAngle(Math.toRadians(295f),Math.toRadians(360f),Math.toRadians(0f)));
+		as.setRightArmPose(new EulerAngle(Math.toRadians(299f),Math.toRadians(360f),Math.toRadians(0f)));
+		as.setLeftLegPose(new EulerAngle(Math.toRadians(279f),Math.toRadians(346f),Math.toRadians(0f)));
+		as.setRightLegPose(new EulerAngle(Math.toRadians(281f),Math.toRadians(23f),Math.toRadians(0f)));
+		
 		as.getEquipment().setHelmet(head);
 		as.getEquipment().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
 		as.getEquipment().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
 		as.getEquipment().setBoots(new ItemStack(Material.IRON_BOOTS));
 		as.getEquipment().setItemInMainHand(new ItemStack(Material.DIAMOND_SWORD));
-		as.setGravity(false);
+		as.setGravity(true);
+		as.setInvulnerable(true);
+		
 		if(player.getInventory().containsAtLeast(Items.REVIVEP.getValue(),1) || player.getInventory().getItemInOffHand().isSimilar(Items.REVIVEP.getValue())) {
 			player.sendMessage(ChatColor.AQUA+"AutoRevive: "+ChatColor.GREEN+"Manten pulsado el Click Derecho sobre tu Cadaver para Autorevivirte o espera a un Compañero.");
 			as.getEquipment().setItemInOffHand(Items.REVIVEP.getValue());
@@ -159,7 +163,7 @@ public class RevivePlayer{
 			as.getEquipment().setItemInOffHand(new ItemStack(Material.SHIELD));
 		}
 		as.addPotionEffect(glow);
-		setColor(as);
+		
 		
 		player.setGameMode(GameMode.SPECTATOR);
 		addToRevive();
@@ -169,14 +173,11 @@ public class RevivePlayer{
 		player.sendMessage("");
 		player.sendMessage(ChatColor.YELLOW+"Has sido Derribado.");
 		player.sendMessage("");
+
 	}
 	
 	public void StandUp() {
-		
-		//Block b = player.getLocation().getBlock();
-		//Block r = b.getRelative(0, 1, 0);
-		
-		//player.sendBlockChange(r.getLocation(),r.getLocation().getBlock().getBlockData());
+	
 		player.setGameMode(GameMode.ADVENTURE);
 		player.teleport(getArmorStand().getLocation());
 		getArmorStand().remove();
@@ -292,7 +293,7 @@ public class RevivePlayer{
 		taskID = sh.scheduleSyncRepeatingTask(plugin,new Runnable(){
 			@Override
 			public void run() {
-				
+				setColor(getArmorStand());
 				
 				if(getReviveStatus() == ReviveStatus.REVIVED) {
 					Bukkit.getScheduler().cancelTask(taskID);	
@@ -318,14 +319,17 @@ public class RevivePlayer{
 		},0L,20);
 	}
 	
-
+	// METODO SIN USAR PERO DE EJEMPLO 
 	public void setColor(Entity e) {
 		ScoreboardManager manager = Bukkit.getScoreboardManager();
 		Scoreboard scoreboard = manager.getNewScoreboard();
-		scoreboard.registerNewTeam("Example");
-		Team team = scoreboard.getTeam("Example");
+		scoreboard.registerNewTeam("yellow");
+		Team team = scoreboard.getTeam("yellow");
 		team.setColor(ChatColor.YELLOW);
 		team.addEntry(e.getUniqueId().toString());
+		for(Player players : Bukkit.getOnlinePlayers()) {
+			players.setScoreboard(scoreboard);
+		}
 	
 		return;
 	}
