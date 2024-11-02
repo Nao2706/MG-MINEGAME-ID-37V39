@@ -63,6 +63,10 @@ public class RevivePlayer{
 		return player;
 	}
 
+	public int getRemainingTimeLife() {
+		return time;
+	}
+	
 	public int getValue() {
 		return value;
 	}
@@ -293,7 +297,7 @@ public class RevivePlayer{
 		taskID = sh.scheduleSyncRepeatingTask(plugin,new Runnable(){
 			@Override
 			public void run() {
-				setColor(getArmorStand());
+				//setColor(getArmorStand());
 				
 				if(getReviveStatus() == ReviveStatus.REVIVED) {
 					Bukkit.getScheduler().cancelTask(taskID);	
@@ -319,7 +323,8 @@ public class RevivePlayer{
 		},0L,20);
 	}
 	
-	// METODO SIN USAR PERO DE EJEMPLO 
+	// METODO SIN USAR PERO DE EJEMPLO , SI TIENES SETEANDO OTRO SCOREBOARD ESTE NO SE VERA BIEN O LO COLOCAS DENTRO DEL MISMO
+	// SCOREBOARD O LE DAS UN DELAY PARA QUE SE PUEDA APRECIAR
 	public void setColor(Entity e) {
 		ScoreboardManager manager = Bukkit.getScoreboardManager();
 		Scoreboard scoreboard = manager.getNewScoreboard();

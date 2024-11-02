@@ -15,16 +15,19 @@ import org.bukkit.scoreboard.RenderType;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
+import org.bukkit.scoreboard.Team;
 
 import com.google.common.base.Strings;
 
 import me.nao.enums.ObjetiveStatusType;
+import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
 import me.nao.general.info.GamePoints;
 import me.nao.general.info.ObjetivesMG;
 import me.nao.general.info.PlayerInfo;
 import me.nao.main.game.Minegame;
+import me.nao.revive.RevivePlayer;
 
 
 
@@ -148,23 +151,57 @@ public class MgScore {
 		
 		GameConditions gc = new GameConditions(plugin);
 		
-		if(!gc.isPlayerinGame(player)) {
-			return;
-		}
+		if(!gc.isPlayerinGame(player)) return;
+		
+		ScoreboardManager manager = Bukkit.getScoreboardManager();
+		Scoreboard scoreboard = manager.getNewScoreboard();
+		scoreboard.registerNewTeam("green");
+		scoreboard.registerNewTeam("yellow");
+		scoreboard.registerNewTeam("red");
+		Team green = scoreboard.getTeam("green");
+		Team yellow = scoreboard.getTeam("yellow");
+		Team red = scoreboard.getTeam("red");
+		green.setColor(ChatColor.GREEN);
+		yellow.setColor(ChatColor.YELLOW);
+		red.setColor(ChatColor.RED);
+		
 		
 		
 		PlayerInfo p = plugin.getPlayerInfoPoo().get(player);
 		GamePoints gp = (GamePoints) p.getGamePoints();
+		GameInfo gi = plugin.getGameInfoPoo().get(p.getMapName());
+		GameAdventure ga = (GameAdventure) gi;
+		
+		if(!ga.getKnockedPlayers().isEmpty()) {
+			
+			for(Player target : gc.ConvertStringToPlayer(ga.getKnockedPlayers())) {
+				
+				//COLOCADO PARA QUE AL ITERAR SOBRE EL MAP DE JUGADORES NOQUEADOS NO ESTE SETANDO EL SCOREBOARD A OTRO JUGADOR DE OTRO MAPA (TESTEAR Y CAMBIAR SI ES NECESARIO)
+				PlayerInfo pl = plugin.getPlayerInfoPoo().get(target);
+				if(pl.getMapName().equals(p.getMapName())) {
+					RevivePlayer rp = plugin.getPlayerKnocked().get(target);
+					int timelife = rp.getRemainingTimeLife();
+					
+					if(timelife >= 21 && timelife <= 30) {
+						green.addEntry(rp.getArmorStand().toString());
+					}else if(timelife >= 11 && timelife <= 20) {
+						yellow.addEntry(rp.getArmorStand().toString());
+					}else if(timelife >= 1 && timelife <= 10) {
+						red.addEntry(rp.getArmorStand().toString());
+					}
+				}
+				
+			}
+		}
+		
+		
 		
 		if(gc.HasObjetives(p.getMapName())) {
-			GameInfo gi = plugin.getGameInfoPoo().get(p.getMapName());
+			
 			
 			List<ObjetivesMG> l1 = gi.getGameObjetivesMg().getObjetives();
 			
-			if(l1.isEmpty()) {
-				return;
-			}
-			
+			if(l1.isEmpty()) return;
 			
 			List<ObjetivesMG> pr = new ArrayList<>();
 			List<ObjetivesMG> se = new ArrayList<>();
@@ -183,8 +220,7 @@ public class MgScore {
 			}
 			
 		
-			ScoreboardManager manager = Bukkit.getScoreboardManager();
-			Scoreboard scoreboard = manager.getNewScoreboard();
+			
 			Objective ob = scoreboard.registerNewObjective("Anuncio",Criteria.DUMMY,"");
 		
 			ob.setDisplaySlot(DisplaySlot.SIDEBAR);
@@ -294,9 +330,9 @@ public class MgScore {
 				score.setScore((show.size()-i));
 			}
 			player.setScoreboard(scoreboard);
+			return;
 		}else{
-			ScoreboardManager manager = Bukkit.getScoreboardManager();
-			Scoreboard scoreboard = manager.getNewScoreboard();
+			
 			Objective ob = scoreboard.registerNewObjective("Anuncio",Criteria.DUMMY,"");
 		
 			ob.setDisplaySlot(DisplaySlot.SIDEBAR);
@@ -335,10 +371,10 @@ public class MgScore {
 					Score score = ob.getScore(show.get(i));
 					score.setScore((show.size()-i));
 				}
-		 player.setScoreboard(scoreboard);
+		 
 			 
 		}
-		
+		player.setScoreboard(scoreboard);
 	}
 	
 	

@@ -29,8 +29,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityToggleGlideEvent;
-import org.bukkit.event.entity.EntityToggleSwimEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -69,8 +67,6 @@ public class SourceOfDamage implements Listener{
 	
 		
 		if(player.getGameMode() == GameMode.SPECTATOR) {
-			
-			
 			if(e.getCause() == PlayerTeleportEvent.TeleportCause.SPECTATE) {
 				GameConditions gc = new GameConditions(plugin);
 				if(gc.isPlayerinGame(player)) {
@@ -154,38 +150,6 @@ public class SourceOfDamage implements Listener{
 		
 		
 	}
-
-	//@EventHandler
-	public void Agachado(EntityToggleGlideEvent e) {
-		
-		if(e instanceof Player) {
-			Player player = (Player) e;
-
-			if(plugin.getPlayerKnocked().containsKey(player)) {
-				if(!player.isGliding()) {
-					e.setCancelled(true);
-				}
-				
-			}
-			
-		}
-		
-	}
-	
-	//@EventHandler
-	public void AgachadoSwing(EntityToggleSwimEvent e) {
-			
-			if(e instanceof Player) {
-				Player player = (Player) e;
-				Block block = player.getLocation().getBlock();
-				Block b2 = block.getRelative(0, -1, 0);
-				if(!e.isSwimming() && b2.getType() == Material.STONE){
-					e.setCancelled(true);
-				}
-				
-			}
-			
-		}
 	
 	//TODO MOVE EVNT
 	@EventHandler  //METODO

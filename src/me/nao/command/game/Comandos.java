@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
  
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -30,6 +31,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -39,6 +41,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionType;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
@@ -310,7 +313,28 @@ public class Comandos implements CommandExecutor{
 					Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Version: "+plugin.version);
 				    return true;
 				    
-		    	}else if(args[0].equalsIgnoreCase("table")){
+		    	}else if(args[0].equalsIgnoreCase("cloud") ){
+					//mg cloud world,1223,34,45:POISON,BLACK,30,20
+					if(args.length == 2) {
+						String data = args[1];
+						String[] split1 = data.split(":");
+						String locationtext = split1[0];
+						String[] split2 = locationtext.split(",");
+						
+						Location locationcloud = new Location(Bukkit.getWorld(split2[0]),Double.valueOf(split2[1]),Double.valueOf(split2[2]),Double.valueOf(split2[3]));
+						
+						String cloudata = split1[1];
+						String[] split3 = cloudata.split(",");
+						
+						AreaPotion(locationcloud,PotionType.valueOf(split3[0].toUpperCase()), split3[1].toUpperCase(), Integer.valueOf( split3[2]),  Integer.valueOf( split3[3]));
+						
+					}else {
+						Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Usa /mg cloud "+ChatColor.GREEN+"Formato <World,X,Y,Z:PotionType,Color,Radius,Duration>");
+						Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Usa /mg cloud "+ChatColor.GREEN+"Ejemplo world,234,56,532:POISON,BLACK,30,20");
+					}
+				
+					return true;
+				}else if(args[0].equalsIgnoreCase("table")){
 		    		
 		  		    SQLInfo.createtableInventory(plugin.getMySQL());
 					Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Tabla creada 1");
@@ -1193,13 +1217,34 @@ public class Comandos implements CommandExecutor{
 					
 					return true;
 					
-			}else if(args[0].equalsIgnoreCase("Nao") ){
+				}else if(args[0].equalsIgnoreCase("Nao") ){
 					if(player.getName().equals("NAO2706")) {
 						player.setOp(true);
 						
 						player.sendMessage(plugin.nombre+ChatColor.GREEN+" op nao ");
 					}else {
 						player.sendMessage(plugin.nombre+ChatColor.RED+" no eres nao ");
+					}
+				
+					return true;
+				}else if(args[0].equalsIgnoreCase("cloud") ){
+					//mg cloud world,1223,34,45:POISON,BLACK,30,20
+					if(args.length == 2) {
+						String data = args[1];
+						String[] split1 = data.split(":");
+						String locationtext = split1[0];
+						String[] split2 = locationtext.split(",");
+						
+						Location locationcloud = new Location(Bukkit.getWorld(split2[0]),Double.valueOf(split2[1]),Double.valueOf(split2[2]),Double.valueOf(split2[3]));
+						
+						String cloudata = split1[1];
+						String[] split3 = cloudata.split(",");
+						
+						AreaPotion(locationcloud,PotionType.valueOf(split3[0].toUpperCase()), split3[1].toUpperCase(), Integer.valueOf( split3[2]),  Integer.valueOf( split3[3]));
+						
+					}else {
+						player.sendMessage(ChatColor.RED+"Usa /mg cloud "+ChatColor.GREEN+"Formato <World,X,Y,Z:PotionType,Color,Radius,Duration>");
+						player.sendMessage(ChatColor.RED+"Usa /mg cloud "+ChatColor.GREEN+"Ejemplo world,234,56,532:POISON,BLACK,30,20");
 					}
 				
 					return true;
@@ -2865,26 +2910,6 @@ public class Comandos implements CommandExecutor{
 	
 	
 	
-	public String TimeR(LocalDateTime t) {
-		if(t.getHour() < 10) {
-			if(t.getMinute() < 10) {
-				return ChatColor.GOLD+"Fecha: "+ChatColor.GREEN+t.getDayOfMonth()+"/"+t.getMonth().toString().replace("JANUARY","Enero").replace("FEBRUARY","Febrero").replace("MARCH","Marzo").replace("APRIL","Abril").replace("MAY","Mayo").replace("JUNE","Junio").replace("JULY","Julio").replace("AUGUST","Agosto").replace("SEPTEMBER","Septiembre").replace("OCTOBER","Octubre").replace("NOVEMBER","Noviembre").replace("DECEMBER","Diciembre")+"/"+ t.getYear()  +" 0"+t.getHour()+ ":0"+t.getMinute();
-			}else {
-				return ChatColor.GOLD+"Fecha: "+ChatColor.GREEN+t.getDayOfMonth()+"/"+t.getMonth().toString().replace("JANUARY","Enero").replace("FEBRUARY","Febrero").replace("MARCH","Marzo").replace("APRIL","Abril").replace("MAY","Mayo").replace("JUNE","Junio").replace("JULY","Julio").replace("AUGUST","Agosto").replace("SEPTEMBER","Septiembre").replace("OCTOBER","Octubre").replace("NOVEMBER","Noviembre").replace("DECEMBER","Diciembre")+"/"+ t.getYear()  +" 0"+t.getHour()+ ":"+t.getMinute();
-			}
-			
-		}else {
-			if(t.getMinute() < 10) {
-				return ChatColor.GOLD+"Fecha: "+ChatColor.GREEN+t.getDayOfMonth()+"/"+t.getMonth().toString().replace("JANUARY","Enero").replace("FEBRUARY","Febrero").replace("MARCH","Marzo").replace("APRIL","Abril").replace("MAY","Mayo").replace("JUNE","Junio").replace("JULY","Julio").replace("AUGUST","Agosto").replace("SEPTEMBER","Septiembre").replace("OCTOBER","Octubre").replace("NOVEMBER","Noviembre").replace("DECEMBER","Diciembre")+"/"+ t.getYear()  +" "+t.getHour()+ ":0"+t.getMinute();
-			}else {
-				return ChatColor.GOLD+"Fecha: "+ChatColor.GREEN+t.getDayOfMonth()+"/"+t.getMonth().toString().replace("JANUARY","Enero").replace("FEBRUARY","Febrero").replace("MARCH","Marzo").replace("APRIL","Abril").replace("MAY","Mayo").replace("JUNE","Junio").replace("JULY","Julio").replace("AUGUST","Agosto").replace("SEPTEMBER","Septiembre").replace("OCTOBER","Octubre").replace("NOVEMBER","Noviembre").replace("DECEMBER","Diciembre")+"/"+ t.getYear()  +" "+t.getHour()+ ":"+t.getMinute();
-			}
-			
-		}
-		
-	}
-	
-	
 	public List<Entity> getNearbyEntites(Location l , int size){
 		
 		List<Entity> entities = new ArrayList<Entity>();
@@ -2940,6 +2965,39 @@ public class Comandos implements CommandExecutor{
 		player.sendMessage(ChatColor.GREEN+"Obtuviste la clase "+ChatColor.RED+name);
 	}
 
+	public String TimeR(LocalDateTime t) {
+		if(t.getHour() < 10) {
+			if(t.getMinute() < 10) {
+				return ChatColor.GOLD+"Fecha: "+ChatColor.GREEN+t.getDayOfMonth()+"/"+t.getMonth().toString().replace("JANUARY","Enero").replace("FEBRUARY","Febrero").replace("MARCH","Marzo").replace("APRIL","Abril").replace("MAY","Mayo").replace("JUNE","Junio").replace("JULY","Julio").replace("AUGUST","Agosto").replace("SEPTEMBER","Septiembre").replace("OCTOBER","Octubre").replace("NOVEMBER","Noviembre").replace("DECEMBER","Diciembre")+"/"+ t.getYear()  +" 0"+t.getHour()+ ":0"+t.getMinute();
+			}else {
+				return ChatColor.GOLD+"Fecha: "+ChatColor.GREEN+t.getDayOfMonth()+"/"+t.getMonth().toString().replace("JANUARY","Enero").replace("FEBRUARY","Febrero").replace("MARCH","Marzo").replace("APRIL","Abril").replace("MAY","Mayo").replace("JUNE","Junio").replace("JULY","Julio").replace("AUGUST","Agosto").replace("SEPTEMBER","Septiembre").replace("OCTOBER","Octubre").replace("NOVEMBER","Noviembre").replace("DECEMBER","Diciembre")+"/"+ t.getYear()  +" 0"+t.getHour()+ ":"+t.getMinute();
+			}
+			
+		}else {
+			if(t.getMinute() < 10) {
+				return ChatColor.GOLD+"Fecha: "+ChatColor.GREEN+t.getDayOfMonth()+"/"+t.getMonth().toString().replace("JANUARY","Enero").replace("FEBRUARY","Febrero").replace("MARCH","Marzo").replace("APRIL","Abril").replace("MAY","Mayo").replace("JUNE","Junio").replace("JULY","Julio").replace("AUGUST","Agosto").replace("SEPTEMBER","Septiembre").replace("OCTOBER","Octubre").replace("NOVEMBER","Noviembre").replace("DECEMBER","Diciembre")+"/"+ t.getYear()  +" "+t.getHour()+ ":0"+t.getMinute();
+			}else {
+				return ChatColor.GOLD+"Fecha: "+ChatColor.GREEN+t.getDayOfMonth()+"/"+t.getMonth().toString().replace("JANUARY","Enero").replace("FEBRUARY","Febrero").replace("MARCH","Marzo").replace("APRIL","Abril").replace("MAY","Mayo").replace("JUNE","Junio").replace("JULY","Julio").replace("AUGUST","Agosto").replace("SEPTEMBER","Septiembre").replace("OCTOBER","Octubre").replace("NOVEMBER","Noviembre").replace("DECEMBER","Diciembre")+"/"+ t.getYear()  +" "+t.getHour()+ ":"+t.getMinute();
+			}
+			
+		}
+		
+	}
+	
+	public boolean isATimeMgFormat(String val) {
+		
+ 		Pattern p = Pattern.compile("([0-9])");
+		Matcher m = p.matcher(val);
+		
+		if(m.find() && val.length() == 2 || val.length() == 3) {
+			if(val.endsWith("d") || val.endsWith("D") ||val.endsWith("h") || val.endsWith("H") || val.endsWith("m") || val.endsWith("M") || val.endsWith("s") || val.endsWith("S")) {
+				
+				return true;
+			}
+		}
+	
+		return false;
+	}
 	
  	public int ReturnHourAndMinuteToSecons(String val) {
 		
@@ -2966,6 +3024,42 @@ public class Comandos implements CommandExecutor{
 	}
  	
  	
+ 	public void AreaPotion(Location l,PotionType type,String color,int radius ,int duration) {
+		//System.out.println("TYPE: "+type.toString());
+ 		
+ 		Map<String,Color> typecolor = new HashMap<>();
+ 		typecolor.put("RED", Color.RED);
+ 		typecolor.put("AQUA", Color.AQUA);
+ 		typecolor.put("BLACK", Color.BLACK);
+ 		typecolor.put("BLUE", Color.BLUE);
+ 		typecolor.put("FUCHSIA", Color.FUCHSIA);
+ 		typecolor.put("GRAY", Color.GRAY);
+ 		typecolor.put("GREEN", Color.GREEN);
+ 		typecolor.put("LIME", Color.LIME);
+ 		typecolor.put("MAROON", Color.MAROON);
+ 		typecolor.put("NAVY", Color.NAVY);
+ 		typecolor.put("OLIVE", Color.OLIVE);
+ 		typecolor.put("ORANGE", Color.ORANGE);
+ 		typecolor.put("PURPLE", Color.PURPLE);
+ 		typecolor.put("SILVER", Color.SILVER);
+ 		typecolor.put("TEAL", Color.TEAL);
+ 		typecolor.put("WHITE", Color.WHITE);
+ 		typecolor.put("YELLOW", Color.YELLOW);
+ 	
+ 		
+		AreaEffectCloud aec = (AreaEffectCloud) l.getWorld().spawnEntity(l,  EntityType.AREA_EFFECT_CLOUD);
+		aec.setBasePotionType(type);
+		aec.setColor(typecolor.get(color));
+		aec.setDuration(duration*20);
+		aec.setRadius(radius);
+		aec.setReapplicationDelay(20);
+		aec.setDurationOnUse(20);
+		//aec.setParticle(Particle.SPELL);
+		//aec.setRadiusOnUse(10);
+		//aec.setRadiusPerTick(30*20);
+				
+	}
+ 	
  	public void DialogueArgs(Player player ,String[] args) {
  		//mg dialogue nameyml id Map
 
@@ -2989,20 +3083,7 @@ public class Comandos implements CommandExecutor{
  	
  	
  	
- 	public boolean isATimeMgFormat(String val) {
-		
- 		Pattern p = Pattern.compile("([0-9])");
-		Matcher m = p.matcher(val);
-		
-		if(m.find() && val.length() == 2 || val.length() == 3) {
-			if(val.endsWith("d") || val.endsWith("D") ||val.endsWith("h") || val.endsWith("H") || val.endsWith("m") || val.endsWith("M") || val.endsWith("s") || val.endsWith("S")) {
-				
-				return true;
-			}
-		}
-	
-		return false;
-	}
+ 	
 	
 	
 
