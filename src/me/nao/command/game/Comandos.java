@@ -2798,9 +2798,8 @@ public class Comandos implements CommandExecutor{
 						
 							
 						 }else {
-							player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg stop <mapa> ");
-							Bukkit.getConsoleSender()
-							.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg stop <mapa> ");
+							player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg stop <mapa> <motivo Win , Lose , Error o Force>");
+							
 						 }
 						
 				}else {

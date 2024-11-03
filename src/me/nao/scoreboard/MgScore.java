@@ -71,22 +71,12 @@ public class MgScore {
 		
 		GameConditions gc = new GameConditions(plugin);
 		
-		if(!gc.isPlayerinGame(player)) {
-			return;
-		}
-		
-
-		
+		if(!gc.isPlayerinGame(player)) return;
 	
 		ScoreboardManager manager = Bukkit.getScoreboardManager();
 		Scoreboard scoreboard = manager.getNewScoreboard();
 		Objective ob = scoreboard.registerNewObjective("Anuncio",Criteria.DUMMY,"");
-	
 		ob.setDisplaySlot(DisplaySlot.SIDEBAR);
-		
-		
-		
-		
 		
 		List<String> show = new ArrayList<>();
 		
@@ -155,12 +145,9 @@ public class MgScore {
 		
 		ScoreboardManager manager = Bukkit.getScoreboardManager();
 		Scoreboard scoreboard = manager.getNewScoreboard();
-		scoreboard.registerNewTeam("green");
-		scoreboard.registerNewTeam("yellow");
-		scoreboard.registerNewTeam("red");
-		Team green = scoreboard.getTeam("green");
-		Team yellow = scoreboard.getTeam("yellow");
-		Team red = scoreboard.getTeam("red");
+		Team green = scoreboard.registerNewTeam("green");
+		Team yellow = scoreboard.registerNewTeam("yellow");
+		Team red = scoreboard.registerNewTeam("red");
 		green.setColor(ChatColor.GREEN);
 		yellow.setColor(ChatColor.YELLOW);
 		red.setColor(ChatColor.RED);
@@ -173,21 +160,25 @@ public class MgScore {
 		GameAdventure ga = (GameAdventure) gi;
 		
 		if(!ga.getKnockedPlayers().isEmpty()) {
-			
+			System.out.println("NO ESTA VACIO");
 			for(Player target : gc.ConvertStringToPlayer(ga.getKnockedPlayers())) {
 				
 				//COLOCADO PARA QUE AL ITERAR SOBRE EL MAP DE JUGADORES NOQUEADOS NO ESTE SETANDO EL SCOREBOARD A OTRO JUGADOR DE OTRO MAPA (TESTEAR Y CAMBIAR SI ES NECESARIO)
 				PlayerInfo pl = plugin.getPlayerInfoPoo().get(target);
 				if(pl.getMapName().equals(p.getMapName())) {
-					RevivePlayer rp = plugin.getPlayerKnocked().get(target);
+				
+					RevivePlayer rp = plugin.getKnockedPlayer().get(target);
 					int timelife = rp.getRemainingTimeLife();
-					
+				
 					if(timelife >= 21 && timelife <= 30) {
-						green.addEntry(rp.getArmorStand().toString());
+					
+						green.addEntry(rp.getArmorStand().getUniqueId().toString());
 					}else if(timelife >= 11 && timelife <= 20) {
-						yellow.addEntry(rp.getArmorStand().toString());
+					
+						yellow.addEntry(rp.getArmorStand().getUniqueId().toString());
 					}else if(timelife >= 1 && timelife <= 10) {
-						red.addEntry(rp.getArmorStand().toString());
+						
+						red.addEntry(rp.getArmorStand().getUniqueId().toString());
 					}
 				}
 				
@@ -371,7 +362,6 @@ public class MgScore {
 					Score score = ob.getScore(show.get(i));
 					score.setScore((show.size()-i));
 				}
-		 
 			 
 		}
 		player.setScoreboard(scoreboard);

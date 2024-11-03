@@ -1095,7 +1095,7 @@ public class GameConditions {
 	}
 	
 	public boolean isPlayerKnocked(Player player) {
-		return plugin.getPlayerKnocked().containsKey(player);
+		return plugin.getKnockedPlayer().containsKey(player);
 	}
 	
 	//TODO BOOLEAN
@@ -2891,7 +2891,7 @@ public class GameConditions {
 								return;
 							}
 							
-							Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+ms.getGameType().toString()+ChatColor.GREEN+"AVENTURA: Ganaron en la Arena: "+ChatColor.GOLD+name+ChatColor.GREEN+" por Condiciones varias , Terminando.");
+							Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+ms.getGameType().toString()+ChatColor.GREEN+": Ganaron en la Arena: "+ChatColor.GOLD+name+ChatColor.GREEN+" por Condiciones varias , Terminando.");
 							
 							
 							if(ms.getGameType() == GameType.ADVENTURE) {

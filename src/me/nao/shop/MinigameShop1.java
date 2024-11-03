@@ -56,6 +56,7 @@ public class MinigameShop1 implements Listener{
 
 	private Minegame plugin;
 	private int TaskID;
+	private int TaskID2;
 	
 
 	public MinigameShop1(Minegame plugin) {
@@ -877,15 +878,11 @@ public class MinigameShop1 implements Listener{
 		GameConditions gc = new GameConditions(plugin);
 		TaskID = sh.scheduleSyncRepeatingTask(plugin, new Runnable() {
 			public void run() {
-				if(!isUpdateable(player) || gc.isPlayerinGame(player)) {
+				if(player.getOpenInventory() == null || !isUpdateable(player) || gc.isPlayerinGame(player)) {
 					Bukkit.getScheduler().cancelTask(TaskID);
 					return;
 				}
-			
-			
 			}
-			
-			
 		}, 0L, 20L);
 		
 		
@@ -908,10 +905,10 @@ public class MinigameShop1 implements Listener{
 		  }
 		BukkitScheduler sh = Bukkit.getServer().getScheduler();
 	
-		TaskID = sh.scheduleSyncRepeatingTask(plugin, new Runnable() {
+		TaskID2 = sh.scheduleSyncRepeatingTask(plugin, new Runnable() {
 			public void run() {
 				if(!UpdateObjetivesMenu(player)) {
-					Bukkit.getScheduler().cancelTask(TaskID);
+					Bukkit.getScheduler().cancelTask(TaskID2);
 					//plugin.getPlayerReading().remove(player.getName());
 					return;
 				}
@@ -1100,7 +1097,6 @@ public class MinigameShop1 implements Listener{
 				PagsCreation(player,inv,itemlist);
 					
 				//}
-				
 				player.openInventory(inv);
 			return true;
 		}

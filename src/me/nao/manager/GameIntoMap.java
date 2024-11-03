@@ -619,7 +619,7 @@ public class GameIntoMap {
 		 
 		
 		if(gm.isPlayerKnocked(player)) {
-			Location l = plugin.getPlayerKnocked().get(player).getArmorStand().getLocation();
+			Location l = plugin.getKnockedPlayer().get(player).getArmorStand().getLocation();
 			if(gm.CanJoinWithYourInventory(pi.getMapName())) {
 				ItemDropEntity(player,l);
 			}else {
@@ -674,10 +674,6 @@ public class GameIntoMap {
 	
 	
 	public void GameMobDamagerCauses(Player player ,Entity e) {
-	
-		
-		if (player.getInventory().getItemInMainHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING)) || player.getInventory().getItemInOffHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING))) return;
-			 
 			
 			GameConditions gmc = new GameConditions(plugin);
 			
@@ -772,9 +768,7 @@ public class GameIntoMap {
 	}
 	
 	public void GameDamageCauses(Player player, EntityDamageEvent.DamageCause c) {
-		if (player.getInventory().getItemInMainHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING)) || player.getInventory().getItemInOffHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING))) return;
-			
-	
+		
 			GameConditions gmc = new GameConditions(plugin);
 			if(gmc.hasPlayerACheckPoint(player)) return;
 			
@@ -998,7 +992,6 @@ public class GameIntoMap {
 		if(e.getCustomName() != null) {
 			return true;
 		}
-		
 		return false;
 	}
 	
@@ -1007,14 +1000,14 @@ public class GameIntoMap {
 		if(e != null) {
 			return true;
 		}
-		
 		return false;
-	}	public boolean ProjectileHasName(Projectile e) {
+	}	
+	
+	public boolean ProjectileHasName(Projectile e) {
 		
 		if(e.getCustomName() != null) {
 			return true;
 		}
-		
 		return false;
 	}
 	

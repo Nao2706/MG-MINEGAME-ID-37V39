@@ -411,7 +411,7 @@ public class Minegame extends JavaPlugin{
 	   return credit;
    }
    
-   public Map<Player,RevivePlayer> getPlayerKnocked(){
+   public Map<Player,RevivePlayer> getKnockedPlayer(){
 	   return playerrevive;
    }
    

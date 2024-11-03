@@ -135,7 +135,7 @@ public class RevivePlayer{
 		meta.setOwningPlayer(player);
 		head.setItemMeta(meta);
 		
-		PotionEffect glow = new PotionEffect(PotionEffectType.GLOWING,/*duration*/ 30 * 20,/*amplifier:*/10, true ,true,true );
+		PotionEffect glow = new PotionEffect(PotionEffectType.GLOWING,/*duration*/ 300 * 20,/*amplifier:*/10, true ,true,true );
 
 		ArmorStand as = getArmorStand();
 		
@@ -222,7 +222,7 @@ public class RevivePlayer{
 		 
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
-		plugin.getPlayerKnocked().remove(player);
+		plugin.getKnockedPlayer().remove(player);
 		if(gi instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) gi;
 			if(ga.getKnockedPlayers().remove(player.getName()));
@@ -314,9 +314,6 @@ public class RevivePlayer{
 				}else if(getReviveStatus() == ReviveStatus.HEALING) {
 					setReviveStatus(ReviveStatus.BLEEDING);
 				}
-				
-				
-				
 			
 				
 			}

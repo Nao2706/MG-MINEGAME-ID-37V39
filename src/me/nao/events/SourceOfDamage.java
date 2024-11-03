@@ -618,49 +618,43 @@ public class SourceOfDamage implements Listener{
 			// TIPO DE DA�O COMO PROJECTILE O DRAWNING  ENTITY ETC
 			//player.sendMessage("Motivo de da�o recibido de "+e.getCause().toString());
 		
-			
+			if(e.getFinalDamage() >= player.getHealth()) {
+				
+				if (player.getInventory().getItemInMainHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING)) || player.getInventory().getItemInOffHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING))) { 
+					return;
+				}
+				
+				e.setCancelled(true);
 				if(e instanceof EntityDamageByEntityEvent){
 					Entity damager = ((EntityDamageByEntityEvent)e).getDamager();
-					
-					if(e.getFinalDamage() >= player.getHealth()) {
-							e.setCancelled(true);
-						
-							
 							if(gc.isEnabledReviveSystem(pi.getMapName())) {
 								ArmorStand armor = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
 
 								RevivePlayer pr = new RevivePlayer(player,0,30,ReviveStatus.BLEEDING,damager,null,armor ,plugin);
 								pr.Knocked();
-								plugin.getPlayerKnocked().put(player, pr);
+								plugin.getKnockedPlayer().put(player, pr);
 								return;
 							}else {
 								ci.GameMobDamagerCauses(player, damager);
 							}
-							
-							
-							
-					}
-								
+						
 						return;
 					
 				}else {
-					//bloque de da�o por causas externas
-					if(e.getFinalDamage() >= player.getHealth()) {
-							e.setCancelled(true);
+					//bloque de daño por causas externas
 							if(gc.isEnabledReviveSystem(pi.getMapName())) {
 								ArmorStand armor = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
 								RevivePlayer pr = new RevivePlayer(player,0,30,ReviveStatus.BLEEDING,null,e.getCause(),armor ,plugin);
 								pr.Knocked();
-								plugin.getPlayerKnocked().put(player, pr);
+								plugin.getKnockedPlayer().put(player, pr);
 								return;
 							}else {
 								ci.GameDamageCauses(player, e.getCause());
 							}
-						
-					}
 					return;
 				}
-			
+					
+			}
 			
 		}
 		

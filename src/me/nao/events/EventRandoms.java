@@ -139,11 +139,11 @@ public class EventRandoms implements Listener{
 	}
 	
 	
-
+ 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void shifting(PlayerToggleSneakEvent e) {
 		Player player = (Player) e.getPlayer();
-		if(!player.getPassengers().isEmpty() && player.isSneaking() ) {
+		if(!player.getPassengers().isEmpty() && player.isSneaking()) {
 			Entity ent = (Entity) player.getPassengers().get(0);
 			player.removePassenger(ent);
 			if(ent.getType() == EntityType.PRIMED_TNT || ent.getType() == EntityType.FIREBALL) {
@@ -176,17 +176,18 @@ public class EventRandoms implements Listener{
 					ArmorStand as = (ArmorStand) ent;
 					if(as.getCustomName() != null) {
 						String name = ChatColor.stripColor(as.getCustomName());
+						
 						if(name.startsWith("CADAVER DE ")){
 							e.setCancelled(true);
+							
 							Player target = Bukkit.getPlayer(name.replace("CADAVER DE ","").replace(" ",""));
 							if(gc.isPlayerKnocked(target)) {
 								
 								if(target.getName().equals(player.getName())) {
 									
-									
 									if(player.getInventory().containsAtLeast(Items.REVIVEP.getValue(), 1)){
 										
-										RevivePlayer pr = plugin.getPlayerKnocked().get(player);
+										RevivePlayer pr = plugin.getKnockedPlayer().get(player);
 										int value = pr.getValue();
 										if(value != 100) {
 											pr.setValue(pr.getValue()+1);
@@ -201,10 +202,11 @@ public class EventRandoms implements Listener{
 											removeItemstackCustom(player,Items.REVIVEP.getValue());
 										}
 									}
+									
 									return;
 								}else{
-									if(!player.isSneaking()) {
-										RevivePlayer pr = plugin.getPlayerKnocked().get(target);
+									if(player.isSneaking()) {
+										RevivePlayer pr = plugin.getKnockedPlayer().get(target);
 										int value = pr.getValue();
 										if(value != 100) {
 											pr.setValue(pr.getValue()+1);
@@ -229,7 +231,6 @@ public class EventRandoms implements Listener{
 										return;
 									}else {
 										if(player.getPassengers().isEmpty()) {
-											
 											player.addPassenger(as);
 										}
 										
@@ -251,7 +252,7 @@ public class EventRandoms implements Listener{
 						return;
 					}else if(ent.getType() == EntityType.PLAYER) {
 						Player target = (Player) ent;
-						if(plugin.getPlayerKnocked().containsKey(target)){
+						if(gc.isPlayerKnocked(player)){
 							return;
 						}
 						
@@ -277,7 +278,9 @@ public class EventRandoms implements Listener{
 		}
 		
 	}
-	
+	 
+	 
+	//TODO TROW ENTITY
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void Playerheld(PlayerItemHeldEvent e) {
 		Player player = (Player) e.getPlayer();
@@ -291,13 +294,12 @@ public class EventRandoms implements Listener{
 					player.removePassenger(ent2);
 					Location loc = player.getLocation();
 					if(ent2 instanceof Mob) {
-						
-						
 						ent2.setVelocity(loc.getDirection().multiply(3).setY(1));
+						
 					}else if(ent2 instanceof Player) {
 						Player target = (Player) ent2;
 						target.setVelocity(loc.getDirection().multiply(3).setY(1));
-						
+						System.out.println("THROW PLAYER");
 					}
 					
 				
@@ -354,7 +356,7 @@ public class EventRandoms implements Listener{
 						
 					}
 					
-					if(!plugin.getPlayerKnocked().containsKey(player)) {
+					if(!gc.isPlayerKnocked(player)) {
 						
 						if(e.getClickedBlock().getType() == Material.OAK_PRESSURE_PLATE) {
 							DetectChestAndJump(player);
