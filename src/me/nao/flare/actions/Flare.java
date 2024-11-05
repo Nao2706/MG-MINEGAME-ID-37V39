@@ -41,20 +41,25 @@ public class Flare extends BukkitRunnable{
 	
 		if(item.getItemStack().isSimilar(Items.BENGALAROJA.getValue()) || item.getItemStack().isSimilar(Items.BENGALAROJAP.getValue())) {
 			new InstantFirework(FireworkEffect.builder().with(Type.BURST).withColor(Color.RED).build(),item.getLocation());
+			
 		}else if(item.getItemStack().isSimilar(Items.BENGALAVERDE.getValue())  || item.getItemStack().isSimilar(Items.BENGALAVERDEP.getValue()) ) {
 			new InstantFirework(FireworkEffect.builder().with(Type.BURST).withColor(Color.GREEN).build(),item.getLocation());
+			
+		}else if(item.getItemStack().isSimilar(Items.BENGALAMARCADORAP.getValue()) ) {
+			new InstantFirework(FireworkEffect.builder().with(Type.BURST).withColor(Color.YELLOW).build(),item.getLocation());
 		}
 		
 	 
 		if(item == null || item.isOnGround() || item.isDead() || item.isInWater()) {
 			FlareActions fl = new FlareActions(plugin);
 			if(item.getItemStack().isSimilar(Items.BENGALAROJA.getValue()) || item.getItemStack().isSimilar(Items.BENGALAROJAP.getValue()) ) {
-				
 				fl.SendAirStrike(player,item.getLocation());
 			
 			}else if(item.getItemStack().isSimilar(Items.BENGALAVERDE.getValue()) || item.getItemStack().isSimilar(Items.BENGALAVERDEP.getValue()) ) {
-				
 				fl.SendAirDrop(player,item.getLocation());
+			 
+			}else if(item.getItemStack().isSimilar(Items.BENGALAMARCADORA.getValue()) || item.getItemStack().isSimilar(Items.BENGALAMARCADORAP.getValue()) ) {
+				fl.getEntitiesFromFlare(player, item.getLocation());
 			
 			}
 			

@@ -128,7 +128,7 @@ public class ResistenceTemp {
 		
 				
 			List<Player> joins = gc.ConvertStringToPlayer(ms.getParticipants());
-			List<Player> alive = gc.ConvertStringToPlayer(ga.getArrivePlayers());
+			List<Player> alive = gc.ConvertStringToPlayer(ga.getAlivePlayers());
 			List<Player> dead = gc.ConvertStringToPlayer(ga.getDeadPlayers());
 			List<Player> spect = gc.ConvertStringToPlayer(ga.getSpectators());
 			GameStatus part = ms.getGameStatus();
@@ -268,6 +268,7 @@ public class ResistenceTemp {
 						 for(Player players : alive) {
 							 cig.ObjetivesInGame(players, name);
 						 }
+						
 						 gc.TopConsole(name);
 						 gc.Top(name);
 						 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Jugadores que ganaron Resistencia "+ChatColor.GREEN+ConvertPlayerToString(alive)+ChatColor.RED+" mapa: "+ChatColor.GREEN+name);
@@ -1141,6 +1142,29 @@ public class ResistenceTemp {
 			s.setMaxFuseTicks(1);
 			s.setCustomName(""+ChatColor.RED+ChatColor.BOLD+"Zombi Super Suicida");
 			s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+			zombi1.addPassenger(s);
+		}else if(n == 10) {
+			LivingEntity entidad1 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
+			Zombie zombi1 = (Zombie) entidad1;
+			zombi1.setCustomName(""+ChatColor.WHITE+ChatColor.BOLD+"Zombi Super Suicida");
+			zombi1.addPotionEffect(rapido);
+			zombi1.addPotionEffect(salto);
+		
+			zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+			zombi1.getEquipment().setHelmet(new ItemStack(Material.DIAMOND_HELMET));
+			zombi1.getEquipment().setChestplate(new ItemStack(Material.NETHERITE_CHESTPLATE));
+			zombi1.getEquipment().setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
+			zombi1.getEquipment().setBoots(new ItemStack(Material.DIAMOND_BOOTS));
+			zombi1.getEquipment().setItemInMainHand(new ItemStack(Material.TNT));
+			
+			
+			LivingEntity ce = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.CREEPER);
+			Creeper s = (Creeper) ce;
+			s.setExplosionRadius(10);
+			s.setMaxFuseTicks(1);
+			s.setCustomName(""+ChatColor.RED+ChatColor.BOLD+"Zombi Super Suicida");
+			s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+			zombi1.addPassenger(s);
 		}else if(n == 11) {
 			LivingEntity entidad1 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
 			Zombie zombi1 = (Zombie) entidad1;
@@ -1148,7 +1172,6 @@ public class ResistenceTemp {
 			
 			
 			zombi1.addPotionEffect(rapido);
-			
 			zombi1.addPotionEffect(salto);
 		
 			zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
@@ -1163,6 +1186,52 @@ public class ResistenceTemp {
 			Blaze s = (Blaze) ce;
 			s.setCustomName(""+ChatColor.YELLOW+ChatColor.BOLD+"LANZALLAMAS");
 			s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+			zombi1.addPassenger(s);
+		}else if(n == 12) {
+			
+			for(int i = 0 ; i< 15;i++) {
+				 LivingEntity entidad1 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
+					Zombie zombi1 = (Zombie) entidad1;
+				
+					zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+					zombi1.setBaby();
+	  				zombi1.addPotionEffect(rapido);
+	  				zombi1.addPotionEffect(salto);
+			}
+		   
+				
+				
+				
+		}else if(n == 13) {
+			LivingEntity entidad1 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
+			Zombie zombi1 = (Zombie) entidad1;
+			zombi1.setCustomName(ChatColor.RED+"Speed");
+			
+			
+			zombi1.addPotionEffect(rapido);
+			zombi1.addPotionEffect(salto);
+	
+		}else if(n == 14) {
+			LivingEntity entidad1 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
+			Zombie zombi1 = (Zombie) entidad1;
+			zombi1.setCustomName(ChatColor.RED+"Summon");
+			
+			
+			zombi1.addPotionEffect(rapido);
+			zombi1.addPotionEffect(salto);
+		
+	
+		}else if(n == 15) {
+			LivingEntity entidad1 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
+			Zombie zombi1 = (Zombie) entidad1;
+			zombi1.setCustomName(ChatColor.RED+"Screamer");
+			
+			
+			zombi1.addPotionEffect(rapido);
+			zombi1.addPotionEffect(salto);
+		
+		
+			
 		}
 		
 		/*

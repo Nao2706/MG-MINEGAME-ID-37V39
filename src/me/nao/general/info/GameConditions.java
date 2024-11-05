@@ -33,6 +33,7 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -277,6 +278,8 @@ public class GameConditions {
 				sco.ClearScore(target);
 				RestorePlayer(target);
 			}
+				System.out.println("ENTIDADES MARCADAS: "+plugin.getEntitiesFromFlare().size());
+				plugin.getEntitiesFromFlare().remove(name);
 				plugin.getGameInfoPoo().remove(name);
 				System.out.println("LOG END GAME DESPUES MAP OBJECT BORRADO: "+plugin.getGameInfoPoo().toString());
 
@@ -664,12 +667,13 @@ public class GameConditions {
 			GameAdventure ga = (GameAdventure) mis;
 			if(mis.getGameType() == GameType.ADVENTURE || mis.getGameType() == GameType.RESISTENCE ) {
 				MgTeams t = new MgTeams(plugin);
-				plugin.CreditKill().remove(player);
+			
 				if(ga.getParticipants().remove(player.getName()));
 				if(ga.getAlivePlayers().remove(player.getName()));
 				if(ga.getDeadPlayers().remove(player.getName()));
 				if(ga.getArrivePlayers().remove(player.getName()));
 				if(ga.getSpectators().remove(player.getName()));
+				plugin.CreditKill().remove(player);
 				plugin.getPlayerInfoPoo().remove(player);
 				plugin.getCheckPoint().remove(player);
 				t.RemoveAllPlayer(player);
@@ -992,10 +996,13 @@ public class GameConditions {
 					    List<String> muertos = new ArrayList<>();
 					    List<String> arrivo = new ArrayList<>();
 					    List<String> knocked = new ArrayList<>();
-					
+					    List<Entity> entities = new ArrayList<>();
+					    
+					    
 			    	GameAdventure mis = new GameAdventure(map ,maxplayers,minplayers,misiontype ,GameStatus.ESPERANDO,StopMotivo.NINGUNO,boss,time,LoadObjetivesOfGames(map),participantes,espectador,vivos,muertos,arrivo,knocked,false,false);
 					System.out.println("LOG-1 MISION: "+mis.ShowGame());
-					 
+					
+					plugin.getEntitiesFromFlare().put(map,entities);
 					plugin.getGameInfoPoo().put(map, mis);
 			    }else if(misiontype == GameType.NEXO) {
 //			    	List<String> t1 = new ArrayList<>();
@@ -1251,7 +1258,7 @@ public class GameConditions {
 	}
 	
 	public boolean isMapRanked(String map) {
-		List<String> are = plugin.getConfig().getStringList("Maps-Points.List");
+		List<String> are = plugin.getConfig().getStringList("Maps-Ranked.List");
 		return are.contains(map);
 	}
 	
@@ -2479,7 +2486,7 @@ public class GameConditions {
 				BossBar boss = ms.getBoss();
 				boss.removePlayer(player);
 				
-				System.out.println("LOG-1 RESTORE ANTES MISION: "+ms.ShowGame());
+				System.out.println("LOG-1 RESTORE ANTES MAP: "+ms.ShowGame());
 				
 					//SE SECCIONA POR QUE HAY QUE VER SI SE SALVO O NO SU INVENTARIO
 					if(pl.hasPlayerMoreInfo()) {

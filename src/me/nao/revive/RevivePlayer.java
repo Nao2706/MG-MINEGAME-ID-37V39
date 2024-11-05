@@ -222,8 +222,10 @@ public class RevivePlayer{
 		 
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
-		plugin.getKnockedPlayer().remove(player);
+	
 		if(gi instanceof GameAdventure) {
+			System.out.println("REMOVIDO "+player.getName());
+			plugin.getKnockedPlayer().remove(player);
 			GameAdventure ga = (GameAdventure) gi;
 			if(ga.getKnockedPlayers().remove(player.getName()));
 			System.out.println("L2: "+ga.getKnockedPlayers());

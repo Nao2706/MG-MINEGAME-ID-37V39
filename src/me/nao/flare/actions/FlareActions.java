@@ -12,9 +12,12 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fireball;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import me.nao.enums.Items;
@@ -133,6 +136,30 @@ public class FlareActions {
 		
 	}
 	
+	
+	public void getEntitiesFromFlare(Player player , Location l) {
+		
+		String map = plugin.getPlayerInfoPoo().get(player).getMapName();
+		List<Entity> list = new ArrayList<>(getNearbyEntities(l,50));
+		List<Entity> list2 = plugin.getEntitiesFromFlare().get(map);
+		player.sendMessage(ChatColor.YELLOW+"Marcando a todas las entidades en el area.");
+		PotionEffect glow = new PotionEffect(PotionEffectType.GLOWING,/*duration*/ 30 * 20,/*amplifier:*/10, false ,false,true );
+		
+		
+		for(Entity e : list) {
+			if(e instanceof LivingEntity) {
+				LivingEntity le = (LivingEntity) e;
+				le.addPotionEffect(glow);
+				if(!list2.contains(e)) {
+					list2.add(e);
+				}
+			}
+			
+		}
+		
+	}
+	
+	
 	private ItemStack ChanceItemStack(int probab,ItemStack m) {
 		
 		  Random r = new Random();
@@ -146,24 +173,23 @@ public class FlareActions {
 		
 	}
 	
-	  public void Probability(int n) {
-		  Random r = new Random();
-		  int number = r.nextInt(100+1);
-		  if(number <= n) {
-			  System.out.println("Se cumplio la probabilidad :))))))"+n);
-		  }else {
-			  System.out.println("No se cumplio la probabilidad "+n);
-		  }
-		  System.out.println("Random probabilidad "+number);
-	  }
-	  
+//	  public void Probability(int n) {
+//		  Random r = new Random();
+//		  int number = r.nextInt(100+1);
+//		  if(number <= n) {
+//			  System.out.println("Se cumplio la probabilidad :))))))"+n);
+//		  }else {
+//			  System.out.println("No se cumplio la probabilidad "+n);
+//		  }
+//		  System.out.println("Random probabilidad "+number);
+//	  }
+//	  
 	  public Location isOutside(Location l) {
 		  
 		  Location loc = l;
 		
 		  int y = loc.getBlockY();
 		  while(y < 320) {
-			  
 			  if(new Location(loc.getWorld(),loc.getX(),y,loc.getZ()).getBlock().getType() == Material.BARRIER) {
 				  return new Location(loc.getWorld(),loc.getX(),y,loc.getZ());
 				  
@@ -172,11 +198,23 @@ public class FlareActions {
 				  
 			  }
 			  y++;
-			 
 		  }
 		  return l;
 		
 	  }
+	  
+		public List<Entity> getNearbyEntities(Location l , int size){
+			
+			List<Entity> entities = new ArrayList<Entity>();
+			for(Entity e : l.getWorld().getEntities()) {
+			
+				if(l.distance(e.getLocation()) <= size) {
+					entities.add(e);
+				 }
+			}
+			return entities;
+			
+		}
 	
 
 }

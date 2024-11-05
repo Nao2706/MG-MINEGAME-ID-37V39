@@ -70,6 +70,9 @@ public class Minegame extends JavaPlugin{
     private Map<Player,Entity> credit;
     private Map<Player, RevivePlayer> playerrevive;
     
+    //ITEMS ACTION
+    private Map<String,List<Entity>> entitys;
+    
    //==================================== 
 	public Map<String,YamlFile>getAllYmls ; // YML Manager
 	public Map<String,YamlFile>getAllYmlsdialog ; 
@@ -329,10 +332,14 @@ public class Minegame extends JavaPlugin{
 
    public void InitializerMg() {
 	   
-	   playerinfopoo = new HashMap<>();
-	   misioninfopoo = new HashMap<>();
-	   credit = new HashMap<>();
-	   playerrevive = new HashMap<>();
+	    playerinfopoo = new HashMap<>();
+	    misioninfopoo = new HashMap<>();
+	    credit = new HashMap<>();
+	    playerrevive = new HashMap<>();
+	    
+	    
+	    //items
+	    entitys = new HashMap<>();
 	
 		checkpoint = new HashMap<Player,Location>();
 		getAllYmls = new HashMap<>();
@@ -414,7 +421,11 @@ public class Minegame extends JavaPlugin{
    public Map<Player,RevivePlayer> getKnockedPlayer(){
 	   return playerrevive;
    }
+   ////////////ITEMS
    
+   public Map<String ,List<Entity>> getEntitiesFromFlare(){
+	   return entitys;
+   }
    
    //TODO TEAMS
    

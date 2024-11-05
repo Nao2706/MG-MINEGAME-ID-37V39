@@ -7,6 +7,11 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Criteria;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -146,12 +151,13 @@ public class MgScore {
 		ScoreboardManager manager = Bukkit.getScoreboardManager();
 		Scoreboard scoreboard = manager.getNewScoreboard();
 		Team green = scoreboard.registerNewTeam("green");
+		Team aqua = scoreboard.registerNewTeam("aqua");
 		Team yellow = scoreboard.registerNewTeam("yellow");
 		Team red = scoreboard.registerNewTeam("red");
 		green.setColor(ChatColor.GREEN);
 		yellow.setColor(ChatColor.YELLOW);
 		red.setColor(ChatColor.RED);
-		
+		aqua.setColor(ChatColor.AQUA);
 		
 		
 		PlayerInfo p = plugin.getPlayerInfoPoo().get(player);
@@ -159,8 +165,42 @@ public class MgScore {
 		GameInfo gi = plugin.getGameInfoPoo().get(p.getMapName());
 		GameAdventure ga = (GameAdventure) gi;
 		
+		
+		if(!plugin.getEntitiesFromFlare().isEmpty()) {
+			
+		
+			List<Entity> entlist = plugin.getEntitiesFromFlare().get(p.getMapName());
+		
+				for(Entity ent : entlist) {
+					if(ent instanceof LivingEntity) {
+						if(ent.isDead() || ent == null) continue;
+						if(ent instanceof Player) {
+							Player pla = (Player) ent;
+							if(pla.getGameMode() == GameMode.ADVENTURE) {
+								green.addEntry(pla.getUniqueId().toString());
+							}
+						
+							
+						}else if(ent instanceof Monster) {
+						  if(ent.getType() == EntityType.CREEPER) {
+								aqua.addEntry(ent.getUniqueId().toString());
+								
+							}else if(ent.getType() == EntityType.PILLAGER || ent.getType() == EntityType.VINDICATOR || ent.getType() == EntityType.EVOKER) {
+								yellow.addEntry(ent.getUniqueId().toString());
+								
+							}else{
+								red.addEntry(ent.getUniqueId().toString());
+								
+							}
+						}
+					}
+				}
+			
+		}
+		
+		
 		if(!ga.getKnockedPlayers().isEmpty()) {
-			System.out.println("NO ESTA VACIO");
+			//System.out.println("NO ESTA VACIO");
 			for(Player target : gc.ConvertStringToPlayer(ga.getKnockedPlayers())) {
 				
 				//COLOCADO PARA QUE AL ITERAR SOBRE EL MAP DE JUGADORES NOQUEADOS NO ESTE SETANDO EL SCOREBOARD A OTRO JUGADOR DE OTRO MAPA (TESTEAR Y CAMBIAR SI ES NECESARIO)

@@ -31,6 +31,10 @@ import org.bukkit.inventory.meta.ItemMeta;
             MANZANA(""+ChatColor.GREEN+ChatColor.BOLD+"MANZANA", Material.APPLE,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"1 Lingote de Hierro",ChatColor.YELLOW+ "Evitara que mueras de Hambre"),
             
             
+            BENGALAMARCADORA(""+ChatColor.YELLOW+ChatColor.BOLD+"BENGALA MARCADORA", Material.REDSTONE_TORCH,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"10 Netherite",ChatColor.YELLOW+"Marca a las Entidades Cercanas. ",ChatColor.GREEN+"Click Derecho para Lanzar. "),
+            BENGALAMARCADORAP(""+ChatColor.YELLOW+ChatColor.BOLD+"BENGALA MARCADORA", Material.REDSTONE_TORCH,null, 1,ChatColor.YELLOW+"Marca a las Entidades Cercanas. ",ChatColor.GREEN+"Click Derecho para Lanzar. "),
+
+            
             BENGALAROJA(""+ChatColor.RED+ChatColor.BOLD+"BENGALA ROJA", Material.REDSTONE_TORCH,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"30 Netherite",ChatColor.YELLOW+"Bombardea el Area donde cae. ",ChatColor.RED+"Debes estar en un Sitio despejado.. ",ChatColor.GREEN+"Click Derecho para Lanzar. "),
             BENGALAROJAP(""+ChatColor.RED+ChatColor.BOLD+"BENGALA ROJA", Material.REDSTONE_TORCH,null, 1,ChatColor.YELLOW+"Bombardea el Area donde cae. ",ChatColor.RED+"Debes estar en un Sitio despejado.. ",ChatColor.GREEN+"Click Derecho para Lanzar. "),
 

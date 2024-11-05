@@ -111,6 +111,7 @@ import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.PlayerInfo;
 import me.nao.main.game.Minegame;
+import me.nao.mobs.MobsActions;
 import me.nao.revive.RevivePlayer;
 import me.nao.shop.MinigameShop1;
 import net.md_5.bungee.api.ChatMessageType;
@@ -125,6 +126,10 @@ public class EventRandoms implements Listener{
 		this.plugin = plugin;
 	}
 	
+	
+	
+	
+	
 	//@EventHandler(priority = EventPriority.LOWEST)
 	public void runev(PlayerToggleSprintEvent e) {
 	
@@ -137,6 +142,7 @@ public class EventRandoms implements Listener{
 		}
 		
 	}
+	
 	
 	
  
@@ -168,11 +174,16 @@ public class EventRandoms implements Listener{
 			PlayerInfo pi = plugin.getPlayerInfoPoo().get(player);
 			GameInfo gi = plugin.getGameInfoPoo().get(pi.getMapName());
 			if(gi.getGameStatus() == GameStatus.JUGANDO) {
+
+				if(gi.getSpectators().contains(player.getName())) {
+					player.sendMessage(ChatColor.RED+"No puedes interactuar con Entidades siendo Espectador.");
+					return;
+				}
 				
 				Entity ent = e.getRightClicked();
 				
-				
 				if(ent instanceof ArmorStand) {
+					
 					ArmorStand as = (ArmorStand) ent;
 					if(as.getCustomName() != null) {
 						String name = ChatColor.stripColor(as.getCustomName());
@@ -518,7 +529,7 @@ public class EventRandoms implements Listener{
 						 
 						if(e.getItem().isSimilar( Items.JEDIP.getValue())) {
 							player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 20.0F, 1F);
-							for(Entity e1 : getNearbyEntites(player.getLocation(),20)) {
+							for(Entity e1 : getNearbyEntities(player.getLocation(),20)) {
 								if(!(e1.getType() == EntityType.PLAYER)) {
 									e1.setVelocity(e1.getLocation().getDirection().multiply(-3).setY(1));
 								}
@@ -624,6 +635,11 @@ public class EventRandoms implements Listener{
 					}	
 					
 						if(e.getItem().isSimilar(Items.BENGALAROJAP.getValue()) || e.getItem().isSimilar(Items.BENGALAVERDEP.getValue())) {
+							new Flare(player, player.getInventory().getItemInMainHand(),player.getEyeLocation(),plugin);
+							removeItemstackCustom(player,e.getItem());
+						}
+						
+						if(e.getItem().isSimilar(Items.BENGALAMARCADORAP.getValue())) {
 							new Flare(player, player.getInventory().getItemInMainHand(),player.getEyeLocation(),plugin);
 							removeItemstackCustom(player,e.getItem());
 						}
@@ -865,13 +881,16 @@ public class EventRandoms implements Listener{
 	 public void onDamage(EntityDamageByEntityEvent e) {
 		 
 		 
-		 Entity entidad = e.getDamager();
+		 Entity atacante = e.getDamager();
 		 Entity entidadAtacada = e.getEntity();
 		 
+		 MobsActions ma = new MobsActions();
+		 ma.getAttackedZombie(atacante, entidadAtacada);
+		 ma.getZombiettack(atacante, entidadAtacada);
 		 
 	
-		  if(entidad instanceof Player) {
-				Player player = (Player) entidad;
+		  if(atacante instanceof Player) {
+				Player player = (Player) atacante;
 		  
 				GameConditions gc = new GameConditions(plugin);
 				
@@ -907,12 +926,14 @@ public class EventRandoms implements Listener{
 				
 			
 			  
-		  }else if(entidad instanceof Monster) {
+		  }else if(atacante instanceof Monster) {
+			  
+			  
 			  if(entidadAtacada instanceof Player) {
 				    Player player = (Player) entidadAtacada;
 					GameConditions gc = new GameConditions(plugin);
 					if(gc.isPlayerinGame(player)) {
-						plugin.CreditKill().put(player, entidad);
+						plugin.CreditKill().put(player, atacante);
 					}
 			  }
 		  }
@@ -1097,7 +1118,7 @@ public class EventRandoms implements Listener{
 		
 		
 		
-		@EventHandler  //METODO
+		//@EventHandler  //METODO
 	    public void tab(TabCompleteEvent e){
 			String tab = e.getBuffer();
 			Player player = (Player) e.getSender();
@@ -1212,7 +1233,7 @@ public class EventRandoms implements Listener{
 						Location hookl = e.getHook().getLocation();
 						Location ch = hookl.subtract(pl);
 						 
-						player.setVelocity(ch.toVector().multiply(0.3).setY(1));
+						player.setVelocity(ch.toVector().setY(1).multiply(0.3));
 						
 					}
 					
@@ -1379,14 +1400,18 @@ public class EventRandoms implements Listener{
 			 
 			  if(projectile.getShooter() instanceof Player) {
 				 
-				  Player player = (Player)projectile.getShooter();
+				  Player player = (Player) projectile.getShooter();
 				  Entity entidadhit = e.getHitEntity();
 				  
+				 
 				
 				 
 				  if(entidadhit != null) {
 					    if(!gc.isPlayerinGame(player)) return;
 					    
+					    
+					     MobsActions ma = new MobsActions();
+						 ma.getAttackedZombie(player, entidadhit);
 					    //AUMENTO DE PUNTO POR ELIMINAR MOBS VIVOS , 
 					  	PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 					  	if(entidadhit instanceof LivingEntity) {
@@ -1409,6 +1434,14 @@ public class EventRandoms implements Listener{
 					 	}}
 							return;
 					 }
+				  
+				  
+				  
+				  	
+				  
+
+
+				  
 				  
 				  
 				  if(e.getHitBlock() != null) {
@@ -1541,7 +1574,7 @@ public class EventRandoms implements Listener{
 		}
 		
 		
-		public List<Entity> getNearbyEntites(Location l , int size){
+		public List<Entity> getNearbyEntities(Location l , int size){
 			
 			List<Entity> entities = new ArrayList<Entity>();
 			for(Entity e : l.getWorld().getEntities()) {
@@ -2666,13 +2699,13 @@ public class EventRandoms implements Listener{
 					
 	//TODO DOUBLE TO INT
 					
-					public int ConvertDoubleToInt(double damage) {
-						NumberFormat nf = NumberFormat.getInstance();
-						nf.setMaximumFractionDigits(0);
-						
-						return Integer.parseInt(nf.format(damage));
-					}
-					
+		public int ConvertDoubleToInt(double damage) {
+			NumberFormat nf = NumberFormat.getInstance();
+			nf.setMaximumFractionDigits(0);
+			
+			return Integer.parseInt(nf.format(damage));
+		}
+		
 					
 					
 					 //TODO HEADSHOOT revisar
@@ -2823,10 +2856,8 @@ public class EventRandoms implements Listener{
 				loc.setPitch(loc.getPitch()+addp);
 				Vector v = loc.getDirection();
 				
-				Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
-				
-				h1.setVelocity(v.multiply(5));
-				Arrow aw = (Arrow) h1;
+				Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
+				aw.setVelocity(v.multiply(5));
 				aw.setCritical(true);
 				aw.setKnockbackStrength(2);
 				//aw.setFireTicks(1200);
@@ -2841,10 +2872,8 @@ public class EventRandoms implements Listener{
 				loc.setPitch(loc.getPitch()+addp);
 				Vector v = loc.getDirection();
 				
-				Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
-				
-				h1.setVelocity(v.multiply(5));
-				Arrow aw = (Arrow) h1;
+				Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
+				aw.setVelocity(v.multiply(5));
 				aw.setCritical(true);
 				aw.setKnockbackStrength(2);
 				aw.setFireTicks(1200);
@@ -2859,10 +2888,8 @@ public class EventRandoms implements Listener{
 				loc.setPitch(loc.getPitch()+addp);
 				Vector v = loc.getDirection();
 				
-				Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
-				
-				h1.setVelocity(v.multiply(5));
-				Arrow aw = (Arrow) h1;
+				Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
+				aw.setVelocity(v.multiply(5));
 				aw.setCritical(true);
 				aw.setColor(Color.GREEN);
 				aw.setKnockbackStrength(2);
@@ -2880,10 +2907,8 @@ public class EventRandoms implements Listener{
 				loc.setPitch(loc.getPitch()+addp);
 				Vector v = loc.getDirection();
 				
-				Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
-				
-				h1.setVelocity(v.multiply(5));
-				Arrow aw = (Arrow) h1;
+				Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
+				aw.setVelocity(v.multiply(5));
 				aw.setCritical(true);
 				aw.setColor(Color.RED);
 				aw.setKnockbackStrength(2);
@@ -2899,11 +2924,11 @@ public class EventRandoms implements Listener{
 				loc.setYaw(loc.getYaw()+addy);
 				loc.setPitch(loc.getPitch()+addp);
 				Vector v = loc.getDirection();
+		
 				
-				Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
 				
-				h1.setVelocity(v.multiply(5));
-				Arrow aw = (Arrow) h1;
+				Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
+				aw.setVelocity(v.multiply(5));
 				aw.setCritical(true);
 				aw.setKnockbackStrength(2);
 				aw.setCustomName("ArrowTNT");
@@ -2920,11 +2945,9 @@ public class EventRandoms implements Listener{
 				loc.setYaw(loc.getYaw()+addy);
 				loc.setPitch(loc.getPitch()+addp);
 				Vector v = loc.getDirection();
-				
-				Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
-				
-				h1.setVelocity(v.multiply(5));
-				Arrow aw = (Arrow) h1;
+			
+				Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
+				aw.setVelocity(v.multiply(5));
 				aw.setCritical(true);
 				aw.setKnockbackStrength(2);
 				aw.setFireTicks(1200);
