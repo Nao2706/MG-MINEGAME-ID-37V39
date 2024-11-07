@@ -28,7 +28,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
@@ -625,18 +624,15 @@ public class SourceOfDamage implements Listener{
 				player.setGameMode(GameMode.SPECTATOR);
 				return;
 			}
-			// TIPO DE DA�O COMO PROJECTILE O DRAWNING  ENTITY ETC
-			//player.sendMessage("Motivo de da�o recibido de "+e.getCause().toString());
-			
-			if(e.getCause() == DamageCause.POISON){
-				if(player.getInventory().getHelmet() != null && player.getInventory().getItemInMainHand().isSimilar(new ItemStack(Material.CREEPER_HEAD))) {
-					e.setCancelled(true);
-					return;
-				}
-			}
+		
 			
 		
+			
 			if(e.getFinalDamage() >= player.getHealth()) {
+				
+				if(player.getInventory().getItemInMainHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING)) || player.getInventory().getItemInOffHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING))) {
+					return;
+				}
 				
 				e.setCancelled(true);
 				if(e instanceof EntityDamageByEntityEvent){

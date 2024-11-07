@@ -2235,7 +2235,7 @@ public class MinigameShop1 implements Listener{
 		if(gc.isEnabledReviveSystem(pi.getMapName())) {
 			inv.setItem(29, Items.REVIVE.getValue());
 		}
-		inv.setItem(29, Items.BENGALAMARCADORA.getValue());
+		inv.setItem(30, Items.BENGALAMARCADORA.getValue());
 		inv.setItem(40, Items.CERRAR.getValue());
 		inv.setItem(41, Items.VOLVER.getValue());
 		

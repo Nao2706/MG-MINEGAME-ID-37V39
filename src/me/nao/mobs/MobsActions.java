@@ -6,25 +6,36 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.AreaEffectCloud;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
+import org.bukkit.entity.AbstractArrow.PickupStatus;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
+
+import me.nao.main.game.Minegame;
+import me.nao.manager.GameIntoMap;
 
 public class MobsActions {
 
+	private Minegame plugin;
 	
+	public MobsActions(Minegame plugin) {
+		this.plugin = plugin;
+	}
 	
 	
 	public void getAttackedZombie(Entity atacante ,Entity atacada) {
@@ -79,9 +90,9 @@ public class MobsActions {
 				  
 			    }if(z.getCustomName().contains(ChatColor.RED+"HARDCORE VIRUS")) {
 			    	
+			    	  AreaPotion(z,z.getLocation(),PotionEffectType.HUNGER,"ORANGE",30,10,20,5);
 					  AreaPotion(z,z.getLocation(),PotionEffectType.POISON,"GREEN",30,10,20,50);
 					  AreaPotion(z,z.getLocation(),PotionEffectType.HARM,"RED",25,10,20,2);
-					  AreaPotion(z,z.getLocation(),PotionEffectType.HARM,"RED",5,10,20,2);
 					  AreaPotion(z,z.getLocation(),PotionEffectType.HARM,"RED",5,10,20,2);
 					  AreaPotion(z,z.getLocation(),PotionEffectType.SLOW,"PURPLE",35,10,20,2);
 					  AreaPotion(z,z.getLocation(),PotionEffectType.SLOW,"PURPLE",35,10,20,2);
@@ -89,8 +100,6 @@ public class MobsActions {
 				 }if(z.getCustomName().contains(ChatColor.RED+"Summon")) {
 					for(int i =0 ; i< 10;i++) {
 						Location loc = z.getLocation();
-		
-						
 						Zombie z1 = (Zombie) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ZOMBIE);
 						z1.addPotionEffect(speed);
 						z1.addPotionEffect(jump);
@@ -200,6 +209,11 @@ public class MobsActions {
 
 				    player.addPotionEffect(poison);
 				    player.addPotionEffect(hunger);
+			  } if(z.getCustomName().contains(ChatColor.RED+"DROPPER")) {
+				  GameIntoMap gim = new GameIntoMap(plugin);
+				  gim.PlayerDropAllItems(player);
+				  player.setVelocity(player.getLocation().getDirection().multiply(-3).setY(2));
+			  
 			  }
 					
 			 
@@ -252,8 +266,8 @@ public class MobsActions {
 		aec.setDuration(duration*20);
 		aec.setRadius(radius);
 		aec.setReapplicationDelay(5*20);
-		aec.setDurationOnUse(20);
-		aec.setRadiusOnUse(aec.getRadiusOnUse()-(15*20));
+//		aec.setDurationOnUse(1);
+//		aec.setRadiusOnUse(0.1f);
 		//aec.setRadiusPerTick(aec.getRadiusPerTick()-(15*20));
 		
 		//aec.setParticle(Particle.SPELL);
@@ -262,7 +276,31 @@ public class MobsActions {
 				
 	}
 	
+ 	//en limbo
+	public void ShootAgainstEntity(Entity attacker ,Entity target) {
+		
+		
+		Location pl = target.getLocation();
+		Location sl = new Location(Bukkit.getWorld(pl.getWorld().getName()), pl.getX(), pl.getY()+1, pl.getZ());
 	
+	
+		
+		Arrow aw = (Arrow)  attacker.getLocation().getWorld().spawnEntity(attacker.getLocation().add(0,1,0), EntityType.ARROW);
+		
+		
+		//LINE BETWEEN TO ENTITYS 
+		Vector v = sl.toVector().subtract(aw.getLocation().toVector());
+		Location en = aw.getLocation();
+		en.setDirection(v);
+		aw.teleport(en);
+		
+		aw.setVelocity(aw.getLocation().getDirection().multiply(6));
+		aw.setCritical(true);
+		aw.setFireTicks(1200);
+		//aw.setKnockbackStrength(10);
+		aw.setCustomName("Torreta Anti Aerea");
+		aw.setPickupStatus(PickupStatus.CREATIVE_ONLY);
+	}
 	
 	
 	

@@ -175,6 +175,7 @@ public class MgScore {
 					if(ent instanceof LivingEntity) {
 						if(ent.isDead() || ent == null) continue;
 						if(ent instanceof Player) {
+							
 							Player pla = (Player) ent;
 							if(pla.getGameMode() == GameMode.ADVENTURE) {
 								green.addEntry(pla.getUniqueId().toString());

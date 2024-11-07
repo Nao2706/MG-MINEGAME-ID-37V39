@@ -72,6 +72,9 @@ public class Minegame extends JavaPlugin{
     
     //ITEMS ACTION
     private Map<String,List<Entity>> entitys;
+    private Map<Player,Long> tempcooldown;
+
+    
     
    //==================================== 
 	public Map<String,YamlFile>getAllYmls ; // YML Manager
@@ -340,6 +343,7 @@ public class Minegame extends JavaPlugin{
 	    
 	    //items
 	    entitys = new HashMap<>();
+	    tempcooldown = new HashMap<>();
 	
 		checkpoint = new HashMap<Player,Location>();
 		getAllYmls = new HashMap<>();
@@ -425,6 +429,10 @@ public class Minegame extends JavaPlugin{
    
    public Map<String ,List<Entity>> getEntitiesFromFlare(){
 	   return entitys;
+   }
+   
+   public Map<Player,Long> getTempCooldown(){
+	   return tempcooldown;
    }
    
    //TODO TEAMS

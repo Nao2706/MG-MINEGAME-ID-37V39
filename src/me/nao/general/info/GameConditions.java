@@ -3938,6 +3938,24 @@ public class GameConditions {
 	}
 	
 	
+	public boolean hasPlayerTempCooldown(Player player , int time) {
+		if(plugin.getTempCooldown().containsKey(player)){
+			long timeleft = plugin.getTempCooldown().get(player) / 1000 + time - System.currentTimeMillis() / 1000;
+			if(timeleft > 0) {
+				player.sendMessage(ChatColor.RED+"Cooldown: "+ChatColor.YELLOW+"Debes esperar "+ChatColor.GREEN+timeleft+ChatColor.YELLOW+" para volver a usarlo.");
+				return true;
+			}
+			plugin.getTempCooldown().remove(player);
+		}
+		
+		return false;
+				
+ 	}
+	
+	public void setPlayerTempCooldown(Player player) {
+		plugin.getTempCooldown().put(player,  System.currentTimeMillis());
+		return;
+	}
 	
 	//TODO NEXO
 	public Location RedNexo(String name) {

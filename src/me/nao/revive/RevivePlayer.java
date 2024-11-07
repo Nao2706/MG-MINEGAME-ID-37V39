@@ -2,8 +2,6 @@ package me.nao.revive;
 
 
 
-import java.util.ArrayList;
-import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -25,6 +23,7 @@ import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.util.EulerAngle;
 
+import me.nao.enums.GameStatus;
 import me.nao.enums.Items;
 import me.nao.enums.ReviveStatus;
 import me.nao.general.info.GameAdventure;
@@ -95,19 +94,6 @@ public class RevivePlayer{
 		this.value = value;
 	}
 	
-	public boolean isAllKnocked() {
-		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
-		GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
-		
-		if(gi instanceof GameAdventure) {
-			GameAdventure ga = (GameAdventure) gi;
-			if(ga.getAlivePlayers().size() == ga.getKnockedPlayers().size() && !hasPlayersAutoreviveItem()) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
 	public void Dead(Entity e, DamageCause cause) {
 		GameIntoMap mig = new GameIntoMap(plugin);
 		
@@ -117,7 +103,6 @@ public class RevivePlayer{
 		}else {
 			mig.GameDamageCauses(player,cause);
 		}
-		getArmorStand().remove();
 		removeToRevive();
 		
 	}
@@ -171,7 +156,7 @@ public class RevivePlayer{
 		
 		player.setGameMode(GameMode.SPECTATOR);
 		addToRevive();
-		System.out.println("TODOS NOQUEADOS: "+isAllKnocked()+ " TIENE ITEM DE REVIVIR: "+hasPlayersAutoreviveItem());
+		//System.out.println("TODOS NOQUEADOS: "+isAllKnocked()+ " TIENE ITEM DE REVIVIR: "+hasPlayersAutoreviveItem());
 		Start();
 		gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+ player.getName()+ChatColor.YELLOW+" fue Derribado. (Ayudalo a levantarse tiene solo %time%)".replace("%time%",time+"s"));
 		player.sendMessage("");
@@ -181,10 +166,11 @@ public class RevivePlayer{
 	}
 	
 	public void StandUp() {
-	
+		
 		player.setGameMode(GameMode.ADVENTURE);
 		player.teleport(getArmorStand().getLocation());
-		getArmorStand().remove();
+	
+		removeToRevive();
 		PotionEffect vid = new PotionEffect(PotionEffectType.REGENERATION,/*duration*/ 10 * 20,/*amplifier:*/10, true ,true,true );
 		PotionEffect comida = new PotionEffect(PotionEffectType.SATURATION,/*duration*/ 10 * 20,/*amplifier:*/10, true ,true,true );
 		PotionEffect abso = new PotionEffect(PotionEffectType.ABSORPTION,/*duration*/ 10 * 20,/*amplifier:*/10, true ,true,true );
@@ -196,7 +182,7 @@ public class RevivePlayer{
 			player.removePotionEffect(PotionEffectType.SLOW);
 			player.removePotionEffect(PotionEffectType.JUMP);
 		}
-		removeToRevive();
+		
 		
 	}
 	
@@ -224,6 +210,7 @@ public class RevivePlayer{
 		GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
 	
 		if(gi instanceof GameAdventure) {
+			getArmorStand().remove();
 			System.out.println("REMOVIDO "+player.getName());
 			plugin.getKnockedPlayer().remove(player);
 			GameAdventure ga = (GameAdventure) gi;
@@ -245,32 +232,7 @@ public class RevivePlayer{
 		return false;
 	}
 	
-	public boolean hasPlayersAutoreviveItem() {
-		
-		
-		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
-		GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
-		List<Player> hasitem = new ArrayList<>();
-		
-		
-		if(gi instanceof GameAdventure) {
-			GameAdventure ga = (GameAdventure) gi;
-			GameConditions gc = new GameConditions(plugin);
-			
-			List<Player> pr = gc.ConvertStringToPlayer(ga.getKnockedPlayers());
-		
-			if(!pr.isEmpty()) {
-				for(Player targets  : pr) {
-					if(targets.getInventory().containsAtLeast(Items.REVIVEP.getValue(),1) || targets.getInventory().getItemInOffHand().isSimilar(Items.REVIVEP.getValue())) {
-						hasitem.add(targets);
-						return true;
-					}
-				}
-			}
-		}
-		
-		return false;
-	}
+
 	
 	
 	
@@ -280,10 +242,12 @@ public class RevivePlayer{
 			 if(time == 0) {
 					System.out.println("TIEMPO 0");
 					return true;
-				}else if(isAllKnocked()) {
-					System.out.println("TODOS NOQUEADOS");
-					return true;
-				}else if(isDangerZone()) {
+				}
+//			 	else if(isAllKnocked()) {
+//					System.out.println("TODOS NOQUEADOS");
+//					return true;
+//				}
+				else if(isDangerZone()) {
 					System.out.println("ZONA PELIGROSA");
 					return true;
 				}
@@ -293,6 +257,8 @@ public class RevivePlayer{
 	}
 	
 	public void Start() {
+		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+		GameInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
 		
 		BukkitScheduler sh = Bukkit.getServer().getScheduler();
 	    
@@ -305,8 +271,11 @@ public class RevivePlayer{
 					Bukkit.getScheduler().cancelTask(taskID);	
 					StandUp();
 				}
-				
-			   if(reviveStoped() || player == null || !player.isOnline()) {
+				if(ms.getGameStatus() == GameStatus.TERMINANDO) {
+					Bukkit.getScheduler().cancelTask(taskID);	
+				    Dead(e, cause);
+				   
+				}else if(reviveStoped() || player == null || !player.isOnline()) {
 					Bukkit.getScheduler().cancelTask(taskID);	
 					Dead(e, cause);
 				}else if(getReviveStatus() == ReviveStatus.BLEEDING) {

@@ -615,61 +615,33 @@ public class GameIntoMap {
 	//TODO DROP
 	public void PlayerDropAllItems(Player player) {
 		GameConditions gm = new GameConditions(plugin);
-		PlayerInfo pi = plugin.getPlayerInfoPoo().get(player);
-		 
+		
+		Location l = null;
 		
 		if(gm.isPlayerKnocked(player)) {
-			Location l = plugin.getKnockedPlayer().get(player).getArmorStand().getLocation();
-			if(gm.CanJoinWithYourInventory(pi.getMapName())) {
-				ItemDropEntity(player,l);
-			}else {
-				if(player.getInventory().getContents().length >= 1) {
-					for (ItemStack itemStack : player.getInventory().getContents()) {
-						if(itemStack == null) continue;
-								
-							l.getWorld().dropItemNaturally(l, itemStack);
-		                    player.getInventory().removeItem(itemStack);
-		              }
-						player.getInventory().clear(); 
-				}
-			}
-			return;
-		}
-		
-		if(gm.CanJoinWithYourInventory(pi.getMapName())) {
-			ItemDropEntity(player,player.getLocation());
+			 l = plugin.getKnockedPlayer().get(player).getArmorStand().getLocation();
 		}else {
-			if(player.getInventory().getContents().length >= 1) {
-				for (ItemStack itemStack : player.getInventory().getContents()) {
-					if(itemStack == null) continue;
-							
-						player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
-	                    player.getInventory().removeItem(itemStack);
-	              }
-					player.getInventory().clear(); 
-			}
+			 l = player.getLocation();
 		}
-	
-		
-		return;
-	}
-	
-	
-	public void ItemDropEntity(Player player,Location l) {
 		
 		if(player.getInventory().getContents().length >= 1) {
 			for (ItemStack itemStack : player.getInventory().getContents()) {
 				if(itemStack == null) continue;
 				
-					Entity ent = (Entity) l.getWorld().spawnEntity(l,EntityType.DROPPED_ITEM);
-					Item it = (Item) ent;
-					it.setItemStack(itemStack);
-					it.setOwner(player.getUniqueId());
-				
+					if(gm.isPlayerinGame(player) && gm.CanJoinWithYourInventory(plugin.getPlayerInfoPoo().get(player).getMapName())) {
+						Item it = (Item) l.getWorld().spawnEntity(l,EntityType.DROPPED_ITEM);
+						it.setItemStack(itemStack);
+						it.setOwner(player.getUniqueId());
+					}else {
+						l.getWorld().dropItemNaturally(l, itemStack);
+					}	
+					
                     player.getInventory().removeItem(itemStack);
               }
 				player.getInventory().clear(); 
 		}
+
+		return;
 	}
 	
 	

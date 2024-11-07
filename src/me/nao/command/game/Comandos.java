@@ -2684,7 +2684,7 @@ public class Comandos implements CommandExecutor{
 					return true;
 				}else if(args[0].equalsIgnoreCase("dropentity")){
 					GameIntoMap ci = new GameIntoMap(plugin);
-					ci.ItemDropEntity(player,player.getLocation());
+					ci.PlayerDropAllItems(player);
 					
 					return true;
 				}else if(args[0].equalsIgnoreCase("top") ){

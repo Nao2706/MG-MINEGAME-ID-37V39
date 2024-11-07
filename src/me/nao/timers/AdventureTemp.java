@@ -53,12 +53,14 @@ import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
 import me.nao.enums.GameStatus;
+import me.nao.enums.Items;
 import me.nao.enums.StopMotivo;
 import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
 import me.nao.main.game.Minegame;
 import me.nao.manager.GameIntoMap;
+import me.nao.revive.RevivePlayer;
 //import net.md_5.bungee.api.ChatMessageType;
 //import net.md_5.bungee.api.chat.TextComponent;
 import me.nao.scoreboard.MgScore;
@@ -312,8 +314,8 @@ public class AdventureTemp {
 						 ms.setGameStatus(GameStatus.TERMINANDO);
 						 
 						 //ALL DEADS
-					}else if(dead.size() == joins.size()) {
-						
+					}else if(dead.size() == joins.size() || isAllKnocked(name)) {
+						System.out.println("ESTADO "+isAllKnocked(name)+" HAS PLAYER ITEM: "+hasPlayersAutoreviveItem(name));
 						for(String target : joins) {
 								 Player players = Bukkit.getPlayerExact(target);
 							 players.sendMessage(ChatColor.GREEN+"Todos los jugadores fueron eliminados F ");
@@ -487,7 +489,7 @@ public class AdventureTemp {
 					
 								if(a.getType() == Material.GREEN_CONCRETE && b.getType() == Material.BEDROCK) {
 								
-									zombi(a.getWorld(),a.getLocation().getBlockX(),a.getLocation().getBlockY(),a.getLocation().getBlockZ());
+									zombis(a.getWorld(),a.getLocation().getBlockX(),a.getLocation().getBlockY(),a.getLocation().getBlockZ());
 								}
 								
 								if(a.getType() == Material.BLUE_CONCRETE && b.getType() == Material.BEDROCK) {
@@ -933,7 +935,7 @@ public class AdventureTemp {
     }
 	
 	//TODO ZOMBI
-    public void zombi(World world , int x , int y , int z) {
+    public void zombis(World world , int x , int y , int z) {
     	
     	
     		
@@ -1222,6 +1224,17 @@ public class AdventureTemp {
 				
 				
 					
+				}else if(n == 15) {
+				
+					Zombie zombi1 = (Zombie)  world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
+					zombi1.setCustomName(ChatColor.RED+"Screamer");
+					
+					
+					zombi1.addPotionEffect(rapido);
+					zombi1.addPotionEffect(salto);
+				
+				
+					
 				}else if(n == 16) {
 					
 					PotionEffect rapido2 = new PotionEffect(PotionEffectType.SPEED,/*duration*/ 99999,/*amplifier:*/6, false ,false,true );
@@ -1250,12 +1263,12 @@ public class AdventureTemp {
 
 					
 			
-				}else if(n == 17) {
+				}else if(n == 18) {
 					
 				
 					
 					Zombie zombi1 = (Zombie) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
-					zombi1.setCustomName(ChatColor.RED+"HARDCORE VIRUS");
+					zombi1.setCustomName(ChatColor.RED+"DROPPER");
 					
 					zombi1.addPotionEffect(rapido);
 					zombi1.addPotionEffect(salto);
@@ -1316,26 +1329,28 @@ public class AdventureTemp {
               					Location loc = z.getLocation();
             					Location loc2 = z.getLocation();
               					
-              					Entity h1 = z.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
-        						Entity h2 = z.getWorld().spawnEntity(loc2.add(0, 1.6, 0), EntityType.ARROW);
-        						h1.setVelocity(loc.getDirection().multiply(6).rotateAroundY(Math.toRadians(1)));
-        						h2.setVelocity(loc2.getDirection().multiply(6).rotateAroundY(Math.toRadians(-1)));
-        						Arrow aw = (Arrow) h1;
-        						Arrow aw2 = (Arrow) h2;
+              					
+        						
+        						Arrow aw = (Arrow) z.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
+        						Arrow aw2 = (Arrow) z.getWorld().spawnEntity(loc2.add(0, 1.6, 0), EntityType.ARROW);
         						aw.setCritical(true);
         						aw.setKnockbackStrength(2);
         						aw.setFireTicks(1200);
         						aw.setShooter(z);
+        						aw.setVelocity(loc.getDirection().multiply(6).rotateAroundY(Math.toRadians(1)));
         						aw2.setCritical(true);
         						aw2.setKnockbackStrength(2);
         						aw2.setFireTicks(1200);
         						aw2.setShooter(z);
+        						aw2.setVelocity(loc2.getDirection().multiply(6).rotateAroundY(Math.toRadians(-1)));
                   			}
               			}
               			if(ChatColor.stripColor(z.getCustomName()).equals("NEMESIS")) {
               				if(ra.getHitEntity().getType() == EntityType.PLAYER) {
-                  				
-              					SpawnArrowsFireMob(e,RandomPosOrNeg(10),RandomPosOrNeg(5));
+                  				for(int i = 0 ; i < 10;i++) {
+                  					SpawnArrowsFireMob(e,RandomPosOrNeg(10),RandomPosOrNeg(5));
+                  				}
+              					
                   			}
               			}
               			
@@ -1418,7 +1433,9 @@ public class AdventureTemp {
         				if(ite.getOwner() != null) continue;
         					e.remove();
         			    }else {
-        			    	e.remove();
+        			    	if(e.getType() != EntityType.ARMOR_STAND) {
+        			    		e.remove();
+        			    	}
         			    }
         			
         			
@@ -1568,6 +1585,53 @@ public class AdventureTemp {
 		
 	}
 	
+	
+	public boolean isAllKnocked(String name) {
+		
+		GameInfo gi = plugin.getGameInfoPoo().get(name);
+		
+		if(gi instanceof GameAdventure) {
+			GameAdventure ga = (GameAdventure) gi;
+			if(ga.getAlivePlayers().size() == ga.getKnockedPlayers().size() && !hasPlayersAutoreviveItem(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean hasPlayersAutoreviveItem(String name) {
+		
+		
+	
+		GameInfo gi = plugin.getGameInfoPoo().get(name);
+		List<Player> hasitem = new ArrayList<>();
+		if(gi instanceof GameAdventure) {
+			GameAdventure ga = (GameAdventure) gi;
+			GameConditions gc = new GameConditions(plugin);
+			
+			List<Player> pr = gc.ConvertStringToPlayer(ga.getKnockedPlayers());
+			
+			if(!pr.isEmpty()) {
+				for(Player targets  : pr) {
+					if(gc.isPlayerKnocked(targets) && targets.getInventory().containsAtLeast(Items.REVIVEP.getValue(),1) || targets.getInventory().getItemInOffHand().isSimilar(Items.REVIVEP.getValue())){
+						hasitem.add(targets);
+						return true;
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+	public void removeArmorStandsKnocked(Player player) {
+		if(plugin.getKnockedPlayer().containsKey(player)) {
+			RevivePlayer rp = plugin.getKnockedPlayer().get(player);
+			
+			rp.getArmorStand().remove();
+		}
+		
+	}
 	  
 	
 }
