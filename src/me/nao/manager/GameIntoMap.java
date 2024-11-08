@@ -365,7 +365,7 @@ public class GameIntoMap {
 		GameConditions gmc = new GameConditions(plugin);
 		GameInfo gm = plugin.getGameInfoPoo().get(mapa);
 		
-		if(gmc.isNecesaryObjetivePrimary(mapa) && !gmc.isNecesaryObjetiveSedondary(mapa)) {
+		if(gm.isNecessaryObjetivePrimary() && !gm.isNecessaryObjetiveSedondary()) {
 			if(gmc.isAllPrimaryObjetivesComplete(player, mapa)) {
 				
 				if(gm.getGameType() == GameType.ADVENTURE) {
@@ -392,7 +392,7 @@ public class GameIntoMap {
 				
 			}
 			return;
-		}else if(!gmc.isNecesaryObjetivePrimary(mapa) && gmc.isNecesaryObjetiveSedondary(mapa)) {
+		}else if(!gm.isNecessaryObjetivePrimary() && gm.isNecessaryObjetiveSedondary()) {
 			if(gmc.isAllSecondaryObjetivesComplete(player, mapa)) {
 				if(gm.getGameType() == GameType.ADVENTURE) {
 					gmc.PlayerArriveToTheWin(player, mapa);
@@ -419,7 +419,7 @@ public class GameIntoMap {
 				
 			}
 			return;
-		}else if(gmc.isNecesaryObjetivePrimary(mapa) && gmc.isNecesaryObjetiveSedondary(mapa)) {
+		}else if(gm.isNecessaryObjetivePrimary() && gm.isNecessaryObjetiveSedondary()) {
 			if(gmc.isAllPrimaryObjetivesComplete(player, mapa) && gmc.isAllSecondaryObjetivesComplete(player, mapa)) {
 				if(gm.getGameType() == GameType.ADVENTURE) {
 					gmc.PlayerArriveToTheWin(player, mapa);

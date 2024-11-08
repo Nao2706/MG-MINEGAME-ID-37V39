@@ -292,7 +292,13 @@ public class EventRandoms implements Listener{
 						}
 						
 						if(target.getGameMode() != GameMode.SPECTATOR) {
+							if(player.isSneaking() && ent.getPassengers().isEmpty()) {
+								target.addPassenger(player);
+							}else {
 								player.addPassenger(target);
+							}
+							
+							
 						}
 					}else if(ent.getType() == EntityType.MINECART_CHEST) {
 						
@@ -304,7 +310,12 @@ public class EventRandoms implements Listener{
 						}
 						
 					}else {
-						player.addPassenger(ent);
+						if(player.isSneaking() && ent.getPassengers().isEmpty()) {
+							ent.addPassenger(player);
+						 }else {
+							 player.addPassenger(ent); 
+						 }
+						
 					}
 				}
 				
@@ -550,7 +561,11 @@ public class EventRandoms implements Listener{
 //							f.setDropItem(false);
 //							f.setVelocity(player.getLocation().getDirection().multiply(3).setY(1));
 //				       }
-						 
+						
+						if(!e.getItem().isSimilar(new ItemStack(Material.AIR))) {
+							 gc.turret(player);
+						}
+					
 						if(e.getItem().isSimilar( Items.JEDIP.getValue())) {
 							player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 20.0F, 1F);
 							for(Entity e1 : getNearbyEntities(player.getLocation(),20)) {
@@ -636,21 +651,22 @@ public class EventRandoms implements Listener{
 									Location loc2 = player.getLocation();
 									player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 20.0F, 1F);
 			
-									Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
-									Entity h2 = loc2.getWorld().spawnEntity(loc2.add(0, 1.6, 0), EntityType.ARROW);
-									h1.setVelocity(loc.getDirection().multiply(6).rotateAroundY(Math.toRadians(1)));
-									h2.setVelocity(loc2.getDirection().multiply(6).rotateAroundY(Math.toRadians(-1)));
-									Arrow aw = (Arrow) h1;
-									Arrow aw2 = (Arrow) h2;
+								
+								
+									Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
+									Arrow aw2 = (Arrow) loc2.getWorld().spawnEntity(loc2.add(0, 1.6, 0), EntityType.ARROW);
 									aw.setCritical(true);
 									aw.setKnockbackStrength(1);
 									aw.setFireTicks(1200);
+									aw.setVelocity(loc.getDirection().multiply(6).rotateAroundY(Math.toRadians(1)));
+									
 									aw2.setCritical(true);
 									aw2.setKnockbackStrength(1);
 									aw2.setFireTicks(1200);
+									aw2.setVelocity(loc2.getDirection().multiply(6).rotateAroundY(Math.toRadians(-1)));
 			
-									((Arrow) h1).setShooter(player);
-									((Arrow) h2).setShooter(player);
+									aw.setShooter(player);
+									aw2.setShooter(player);
 									
 									player.getInventory().removeItem(new ItemStack(Material.ARROW,2));
 								}else {

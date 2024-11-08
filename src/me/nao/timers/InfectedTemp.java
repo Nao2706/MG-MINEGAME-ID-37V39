@@ -123,20 +123,14 @@ public class InfectedTemp {
 			StopMotivo motivo = ms.getMotivo();
 
 			//SI TODOS SE SALEN MIENTRAS COMIENZA
-			if(joins.size() == 0) {
-					boss.setProgress(1.0);
-			  		boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN");
-			  		boss.setVisible(false);
-			  		
-			  		
-			  		
-					Bukkit.getScheduler().cancelTask(taskID);	
-	   			    Bukkit.getConsoleSender().sendMessage("No hay jugadores ");
-	   			    plugin.getGameInfoPoo().remove(name);
-					// TempEndGame2 t = new TempEndGame2(plugin);
-		     	     //t.Inicio(allPlayer,arenaName);
-		     	    // t.Inicio(name);
-   		     }
+			if(joins.size() == 0 && part == GameStatus.COMENZANDO || part == GameStatus.JUGANDO || part == GameStatus.PAUSE) {
+				boss.setProgress(1.0);
+		  		boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN");
+		  		boss.setVisible(false);
+		  		ms.setGameStatus(GameStatus.TERMINANDO);
+   			    Bukkit.getConsoleSender().sendMessage("No hay jugadores terminando en "+end+"s");
+   		
+		     }
 			//TODO EMPEZANDO
 			
 		

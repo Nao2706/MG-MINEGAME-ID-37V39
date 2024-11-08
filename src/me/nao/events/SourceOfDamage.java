@@ -159,6 +159,7 @@ public class SourceOfDamage implements Listener{
 			
 			GameConditions gc = new GameConditions(plugin);
 			if(gc.isPlayerinGame(player)) {
+				gc.blockPotion(player);
 				gc.ForceGameModePlayerRol(player);
 				gc.TryToScapeInSpectatorMode(player);
 				GameIntoMap ci = new GameIntoMap(plugin);

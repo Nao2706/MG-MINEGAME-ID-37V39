@@ -5,6 +5,7 @@ public enum GameStatus {
 
 	ESPERANDO,
 	COMENZANDO,
+	PAUSE,
 	JUGANDO,
 	TERMINANDO,
 	DESACTIVADA,

@@ -41,7 +41,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionType;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
@@ -243,7 +244,7 @@ public class Comandos implements CommandExecutor{
 					
 				}else if(args[0].equalsIgnoreCase("showobjetive")) {
 					
-					gc.LoadObjetivesOfGameDebug("Tutorial");
+					gc.loadObjetivesOfGameDebug("Tutorial");
 					return true;
 					
 				}else if(args[0].equalsIgnoreCase("list-fa") ) {
@@ -326,11 +327,11 @@ public class Comandos implements CommandExecutor{
 						String cloudata = split1[1];
 						String[] split3 = cloudata.split(",");
 						
-						AreaPotion(locationcloud,PotionType.valueOf(split3[0].toUpperCase()), split3[1].toUpperCase(), Integer.valueOf( split3[2]),  Integer.valueOf( split3[3]));
+							AreaPotion(null,locationcloud,split3[0].toUpperCase(), split3[1].toUpperCase(),Integer.valueOf(split3[2]), Integer.valueOf(split3[3]),Integer.valueOf(split3[4]), Integer.valueOf(split3[5]));
 						
 					}else {
-						Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Usa /mg cloud "+ChatColor.GREEN+"Formato <World,X,Y,Z:PotionType,Color,Radius,Duration>");
-						Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Usa /mg cloud "+ChatColor.GREEN+"Ejemplo world,234,56,532:POISON,BLACK,30,20");
+						Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Usa /mg cloud "+ChatColor.GREEN+"Formato <World,X,Y,Z:PotionType,Color,Radius,Duration,PotionDuration,Amplifier>");
+						Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Usa /mg cloud "+ChatColor.GREEN+"Ejemplo world,234,56,532:POISON,BLACK,30,20,60,3");
 					}
 				
 					return true;
@@ -1240,11 +1241,11 @@ public class Comandos implements CommandExecutor{
 						String cloudata = split1[1];
 						String[] split3 = cloudata.split(",");
 						
-						AreaPotion(locationcloud,PotionType.valueOf(split3[0].toUpperCase()), split3[1].toUpperCase(), Integer.valueOf( split3[2]),  Integer.valueOf( split3[3]));
+						AreaPotion(player,locationcloud,split3[0].toUpperCase(), split3[1].toUpperCase(),Integer.valueOf(split3[2]), Integer.valueOf(split3[3]),Integer.valueOf(split3[4]), Integer.valueOf(split3[5]));
 						
 					}else {
-						player.sendMessage(ChatColor.RED+"Usa /mg cloud "+ChatColor.GREEN+"Formato <World,X,Y,Z:PotionType,Color,Radius,Duration>");
-						player.sendMessage(ChatColor.RED+"Usa /mg cloud "+ChatColor.GREEN+"Ejemplo world,234,56,532:POISON,BLACK,30,20");
+						player.sendMessage(ChatColor.RED+"Usa /mg cloud "+ChatColor.GREEN+"Formato <World,X,Y,Z:PotionType,Color,Radius,Duration,PotionDuration,Amplifier>");
+						player.sendMessage(ChatColor.RED+"Usa /mg cloud "+ChatColor.GREEN+"Ejemplo world,234,56,532:POISON,BLACK,30,20,60,3");
 					}
 				
 					return true;
@@ -3022,10 +3023,10 @@ public class Comandos implements CommandExecutor{
 		return total;
 	}
  	
- 	
- 	public void AreaPotion(Location l,PotionType type,String color,int radius ,int duration) {
+ 	 
+ 	public void AreaPotion(Player player ,Location l,String type,String color,int radius ,int duration,int effectduration, int amplifier) {
 		//System.out.println("TYPE: "+type.toString());
- 		
+ 		String comments = "";
  		Map<String,Color> typecolor = new HashMap<>();
  		typecolor.put("RED", Color.RED);
  		typecolor.put("AQUA", Color.AQUA);
@@ -3044,18 +3045,93 @@ public class Comandos implements CommandExecutor{
  		typecolor.put("TEAL", Color.TEAL);
  		typecolor.put("WHITE", Color.WHITE);
  		typecolor.put("YELLOW", Color.YELLOW);
- 	
  		
+ 		Map<String,PotionEffectType> typepotion = new HashMap<>();
+ 	
+ 		typepotion.put("ABSORTION", PotionEffectType.ABSORPTION);
+ 		typepotion.put("BAD_OMEN", PotionEffectType.BAD_OMEN);
+ 		typepotion.put("BLINDNESS", PotionEffectType.BLINDNESS);
+ 		typepotion.put("CONDUIT_POWER", PotionEffectType.CONDUIT_POWER);
+ 		typepotion.put("CONFUSION", PotionEffectType.CONFUSION);
+ 		typepotion.put("DAMAGE_RESISTANCE", PotionEffectType.DAMAGE_RESISTANCE);
+ 		typepotion.put("DARKNESS", PotionEffectType.DARKNESS);
+ 		typepotion.put("DOLPHINS_GRACE", PotionEffectType.DOLPHINS_GRACE);
+ 		typepotion.put("FAST_DIGGING", PotionEffectType.FAST_DIGGING);
+ 		typepotion.put("FIRE_RESISTANCE", PotionEffectType.FIRE_RESISTANCE);
+ 		typepotion.put("GLOWING", PotionEffectType.GLOWING);
+ 		typepotion.put("HARM", PotionEffectType.HARM);
+ 		typepotion.put("HEAL", PotionEffectType.HEAL);
+ 		typepotion.put("HEALTH_BOOST", PotionEffectType.HEALTH_BOOST);
+ 		typepotion.put("HERO_OF_THE_VILLAGE", PotionEffectType.HERO_OF_THE_VILLAGE);
+ 		typepotion.put("HUNGER", PotionEffectType.HUNGER);
+ 		typepotion.put("INCREASE_DAMAGE", PotionEffectType.INCREASE_DAMAGE);
+ 		typepotion.put("INVISIBILITY", PotionEffectType.INVISIBILITY);
+ 		typepotion.put("JUMP", PotionEffectType.JUMP);
+ 		typepotion.put("LEVITATION", PotionEffectType.LEVITATION);
+ 		typepotion.put("LUCK", PotionEffectType.LUCK);
+ 		typepotion.put("NIGHT_VISION", PotionEffectType.NIGHT_VISION);
+ 		typepotion.put("POISON", PotionEffectType.POISON);
+ 		typepotion.put("REGENERATION", PotionEffectType.REGENERATION);
+ 		typepotion.put("SATURATION", PotionEffectType.SATURATION);
+ 		typepotion.put("SLOW", PotionEffectType.SLOW);
+ 		typepotion.put("SLOW_DIGGING", PotionEffectType.SLOW_DIGGING);
+ 		typepotion.put("SLOW_FALLING", PotionEffectType.SLOW_FALLING);
+ 		typepotion.put("SPEED", PotionEffectType.SPEED);
+ 		typepotion.put("UNLUCK", PotionEffectType.UNLUCK);
+ 		typepotion.put("WATER_BREATHING", PotionEffectType.WATER_BREATHING);
+ 		typepotion.put("WEAKNESS", PotionEffectType.WEAKNESS);
+ 		typepotion.put("WITHER", PotionEffectType.WITHER);
+ 		
+ 		if(!typepotion.containsKey(type)) {
+ 			
+ 			comments = ChatColor.RED+"Tipos de Posiones: ";
+ 			
+ 			List<Map.Entry<String,PotionEffectType>> list = new ArrayList<>(typepotion.entrySet());
+ 			for (Map.Entry<String,PotionEffectType> e : list) {
+ 					comments = comments+ChatColor.GREEN+e.getKey()+ChatColor.RED+",";
+				}
+ 			comments = comments+ChatColor.RED+" Revisa bien la escritura.";
+ 			if(player != null) {
+ 				player.sendMessage(comments);
+ 			}else{
+ 				Bukkit.getConsoleSender().sendMessage(comments);
+ 			}
+ 			return;
+ 		}
+ 		
+ 		if(!typecolor.containsKey(color)) {
+ 			
+ 			comments = ChatColor.RED+"Colores: ";
+ 			
+ 			List<Map.Entry<String,Color>> list = new ArrayList<>(typecolor.entrySet());
+ 			for (Map.Entry<String,Color> e : list) {
+ 					comments = comments+ChatColor.GREEN+e.getKey()+ChatColor.RED+",";
+				}
+ 			comments = comments+ChatColor.RED+" Revisa bien la escritura.";
+ 			if(player != null) {
+ 				player.sendMessage(comments);
+ 			}else{
+ 				Bukkit.getConsoleSender().sendMessage(comments);
+ 			}
+ 			return;
+ 		}
+ 		
+ 		PotionEffect effect = new PotionEffect(typepotion.get(type),/*duration*/ effectduration*20,/*amplifier:*/amplifier, false ,false,true );
 		AreaEffectCloud aec = (AreaEffectCloud) l.getWorld().spawnEntity(l,  EntityType.AREA_EFFECT_CLOUD);
-		aec.setBasePotionType(type);
+		aec.addCustomEffect(effect, true);
+		//aec.setBasePotionType(type);
+		//aec.setCustomName(""+ChatColor.DARK_GREEN+ChatColor.BOLD+"GAS TOXICO");
 		aec.setColor(typecolor.get(color));
 		aec.setDuration(duration*20);
 		aec.setRadius(radius);
-		aec.setReapplicationDelay(20);
-		aec.setDurationOnUse(20);
+		aec.setReapplicationDelay(5*20);
+//		aec.setDurationOnUse(1);
+//		aec.setRadiusOnUse(0.1f);
+		//aec.setRadiusPerTick(aec.getRadiusPerTick()-(15*20));
+		
 		//aec.setParticle(Particle.SPELL);
-		//aec.setRadiusOnUse(10);
-		//aec.setRadiusPerTick(30*20);
+		
+		
 				
 	}
  	
@@ -3161,8 +3237,6 @@ public class Comandos implements CommandExecutor{
 						
 						
 				 }else if(type.startsWith("tempban")) {
-					 
-					 
 					       //0    1    2 3  4   5  6
 					 //mg tempban nao 1h 1h 1h com
 					 	String comments = "";

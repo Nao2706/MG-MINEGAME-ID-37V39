@@ -33,7 +33,10 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -152,8 +155,8 @@ public class GameConditions {
 			
 		}else if(ms instanceof GameNexo) {
 			GameNexo gn = (GameNexo) ms;
-			List<String> spectador = gn.getSpectator();
-			List<String> join = gn.getParticipantes();
+			List<String> spectador = gn.getSpectators();
+			List<String> join = gn.getParticipants();
 			if(part == GameStatus.ESPERANDO || part == GameStatus.COMENZANDO) {
 				if(join.size() < getMinPlayerMap(pl.getMapName())) {
 					
@@ -177,7 +180,7 @@ public class GameConditions {
 			
 			}else {
 				sendMessageToUsersOfSameMapLessPlayer(player,
-							ChatColor.YELLOW+"A Salido "+ChatColor.GREEN+player.getName()+ChatColor.RED+" ("+ChatColor.GOLD+(gn.getParticipantes().size()-1)+ChatColor.YELLOW+"/"+ChatColor.GOLD+getMaxPlayerMap(pl.getMapName())+ChatColor.RED+")");			
+							ChatColor.YELLOW+"A Salido "+ChatColor.GREEN+player.getName()+ChatColor.RED+" ("+ChatColor.GOLD+(gn.getParticipants().size()-1)+ChatColor.YELLOW+"/"+ChatColor.GOLD+getMaxPlayerMap(pl.getMapName())+ChatColor.RED+")");			
 			}
 			 String mt = mision.getString("Start.Tittle-of-Mision"); 
 			 player.sendMessage(ChatColor.GREEN+"Has salido del Mapa "+ChatColor.translateAlternateColorCodes('&',mt.replaceAll("%player%",player.getName())));
@@ -424,7 +427,7 @@ public class GameConditions {
 					    Float grade = Float.valueOf(sts[2]);
 						player.playSound(player.getLocation(), soundtype, volumen,grade);
 			       }catch(IllegalArgumentException e) {
-			    	   Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Error de Argumentos en Start Sound of Mision en la arena: "+ChatColor.GOLD+map);
+			    	   Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Error de Argumentos en Start Sound of Mision en el Mapa: "+ChatColor.GOLD+map);
 			       }
 			
 			    player.setInvulnerable(false);
@@ -681,8 +684,8 @@ public class GameConditions {
 		}else if(mis instanceof GameNexo) {
 			GameNexo ga = (GameNexo) mis;
 			if(ga.getGameType() == GameType.NEXO ) {
-				if(ga.getParticipantes().remove(player.getName()));
-				if(ga.getSpectator().remove(player.getName()));
+				if(ga.getParticipants().remove(player.getName()));
+				if(ga.getSpectators().remove(player.getName()));
 //				if(ga.getBlueTeamMg().remove(player.getName()))
 //				if(ga.getRedTeamMg().remove(player.getName()))
 				plugin.getPlayerInfoPoo().remove(player);
@@ -971,40 +974,46 @@ public class GameConditions {
 		
 		if(!plugin.getGameInfoPoo().containsKey(map)) {
 			try {
-				FileConfiguration mision = getGameConfig(map);
-				String time = mision.getString("Timer-H-M-S");
-				GameType misiontype = GameType.valueOf(mision.getString("Type-Mission").toUpperCase());
-				int maxplayers = mision.getInt("Max-Player");
-				int minplayers = mision.getInt("Min-Player");
+				FileConfiguration game = getGameConfig(map);
+				String time = game.getString("Timer-H-M-S");
+				GameType type = GameType.valueOf(game.getString("Type-Mission").toUpperCase());
+				int maxplayers = game.getInt("Max-Player");
+				int minplayers = game.getInt("Min-Player");
 				
 				BossBar boss = null ;
-				if(misiontype == GameType.ADVENTURE) {
+				if(type == GameType.ADVENTURE) {
 					boss = Bukkit.createBossBar(""+ChatColor.GREEN+ChatColor.BOLD+"Bienvenido al Mapa "+ChatColor.GOLD+ChatColor.BOLD+map+ChatColor.RED+ChatColor.BOLD+" Modo: "+ChatColor.GREEN+ChatColor.BOLD+"Aventura",BarColor.GREEN, BarStyle.SOLID,  null ,null);
-				}else if(misiontype == GameType.RESISTENCE) {
+				}else if(type == GameType.RESISTENCE) {
 					boss = Bukkit.createBossBar(""+ChatColor.GREEN+ChatColor.BOLD+"Bienvenido al Mapa "+ChatColor.GOLD+ChatColor.BOLD+map+ChatColor.RED+ChatColor.BOLD+" Modo: "+ChatColor.DARK_RED+ChatColor.BOLD+"Resistencia",BarColor.GREEN, BarStyle.SOLID,  null ,null);
 				}
-				
-			
 			    boss.setVisible(true);
-			    List<String> participantes = new ArrayList<>();
-			    List<String> espectador = new ArrayList<>();
 			   
-			    if(misiontype == GameType.ADVENTURE || misiontype == GameType.RESISTENCE) {
+			   
+			    if(type == GameType.ADVENTURE || type == GameType.RESISTENCE) {
 			    	  //pasar solo una lista para los 4 espacios ojo
 				  
-			    		List<String> vivos = new ArrayList<>();
-					    List<String> muertos = new ArrayList<>();
-					    List<String> arrivo = new ArrayList<>();
-					    List<String> knocked = new ArrayList<>();
-					    List<Entity> entities = new ArrayList<>();
+			    	
+				  List<Entity> entities = new ArrayList<>();
 					    
 					    
-			    	GameAdventure mis = new GameAdventure(map ,maxplayers,minplayers,misiontype ,GameStatus.ESPERANDO,StopMotivo.NINGUNO,boss,time,LoadObjetivesOfGames(map),participantes,espectador,vivos,muertos,arrivo,knocked,false,false);
-					System.out.println("LOG-1 MISION: "+mis.ShowGame());
+			    	GameAdventure ga = new GameAdventure();
+			    	ga.setMapName(map);
+			    	ga.setTimeMg(time);
+			    	ga.setGameType(type);
+			    	ga.setMaxPlayersinMap(maxplayers);
+			    	ga.setMinPlayersinMap(minplayers);
+			    	ga.setBossbar(boss);	    	ga.setObjetivesMg(loadObjetivesOfGames(map));
+			    	ga.setMapObjetives(HasObjetives(map));
+			    	ga.setNecessaryObjetivesPrimaryCompletes(isNecessaryObjetivePrimary(map));
+			    	ga.setNecessaryObjetivesSecondaryCompletes(isNecessaryObjetiveSedondary(map));
+			    	ga.setGameTimeActions(loadGameTimeActions(map));
+			    	
+			    	
+			    	System.out.println("LOG-1 MISION: "+ga.ShowGame());
 					
 					plugin.getEntitiesFromFlare().put(map,entities);
-					plugin.getGameInfoPoo().put(map, mis);
-			    }else if(misiontype == GameType.NEXO) {
+					plugin.getGameInfoPoo().put(map, ga);
+			    }else if(type == GameType.NEXO) {
 //			    	List<String> t1 = new ArrayList<>();
 //				    List<String> t2 = new ArrayList<>();
 //			    	
@@ -1080,21 +1089,18 @@ public class GameConditions {
 				
 				if(ms.getGameType() == GameType.ADVENTURE) {
 					AdventureTemp t = new AdventureTemp(plugin);
-					t.Inicio(map);
+					t.Inicio(ms.getMapName());
 				}else if(ms.getGameType() == GameType.RESISTENCE) {
 					ResistenceTemp t = new ResistenceTemp(plugin);
-					t.Inicio(map);
+					t.Inicio(ms.getMapName());
 				}else if(ms.getGameType() == GameType.INFECTED) {
 					InfectedTemp t = new InfectedTemp(plugin);
-					t.Inicio(map);
+					t.Inicio(ms.getMapName());
 				}else if(ms.getGameType() == GameType.NEXO) {
-					 
-				
 					//DestroyNexo dn = new DestroyNexo(plugin);
 					//dn.RandomTeam(map);
-					
 					NexoTemp t = new NexoTemp(plugin);
-					t.Inicio(map);
+					t.Inicio(ms.getMapName());
 				}
 			}
 		 }
@@ -1203,12 +1209,12 @@ public class GameConditions {
 	    return game.getBoolean("Has-Objetives");
 	}
 	
-	public boolean isNecesaryObjetivePrimary(String map) {
+	public boolean isNecessaryObjetivePrimary(String map) {
 		FileConfiguration game = getGameConfig(map);
 	    return game.getBoolean("Primary-Objetive-Opcional");
 	}
 	
-	public boolean isNecesaryObjetiveSedondary(String map) {
+	public boolean isNecessaryObjetiveSedondary(String map) {
 		FileConfiguration game = getGameConfig(map);
 	    return game.getBoolean("Secondary-Objetive-Opcional");
 	}
@@ -1239,24 +1245,29 @@ public class GameConditions {
 	
 	//TODO TIME 
 	public void HasTimePath(String time ,String map) {
-		 FileConfiguration game = getGameConfig(map);
+				  
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
+		List<GameTimeActions> list = gi.getGameTimeActionsMg();
+		if(!list.stream().filter(o -> o.getDisplayTime().equals(time)).findFirst().isPresent()) {
+			return;
+		}
+		
+		GameTimeActions gta = list.stream().filter(o -> o.getDisplayTime().equals(time)).findFirst().get();
 		 
-		 if(game.contains("Time-Actions."+time)) {
 			 	ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 				
-				List<String> actions = game.getStringList("Time-Actions."+time+".List");
+				List<String> actions = gta.getActions();
 				if(!actions.isEmpty()) {
-					
 					for(int i = 0 ;i<actions.size();i++) {
 						String texto = actions.get(i);
 						if(!isMessageFromActions(map,texto)) {
 							Bukkit.dispatchCommand(console, ChatColor.translateAlternateColorCodes('&', texto));	
 						} 
-		 }}}		
+		 }}		
 		 
 		 return;
 	}
-	
+	 
 	public boolean isMapRanked(String map) {
 		List<String> are = plugin.getConfig().getStringList("Maps-Ranked.List");
 		return are.contains(map);
@@ -1698,7 +1709,7 @@ public class GameConditions {
 						 return false;
 					 }
 					 
-					 if(ga.getParticipantes().size() == maxplayers && minfo.getGameStatus() == GameStatus.COMENZANDO) {
+					 if(ga.getParticipants().size() == maxplayers && minfo.getGameStatus() == GameStatus.COMENZANDO) {
 						 player.sendMessage(ChatColor.RED+"La Partida esta llena espera un rato para entrar como Espectador."); 
 						 return false;
 					 }if(minfo.getGameStatus() == GameStatus.JUGANDO && !isPlayerinGame(player)) {
@@ -3015,9 +3026,25 @@ public class GameConditions {
 				
 				
 	   }
-	
+	  
+	   
+	public List<GameTimeActions> loadGameTimeActions(String map) {
+		FileConfiguration game = getGameConfig(map);
+		List<GameTimeActions> list = new ArrayList<>();
+			if(game.contains("Time-Actions")) { 
+				for (String key : game.getConfigurationSection("Time-Actions").getKeys(false)) {
+					List<String> actions = game.getStringList("Time-Actions."+key+".List");
+					GameTimeActions gta = new GameTimeActions(key,actions);
+					list.add(gta);
+				}
+			    
+			}
+			
+		return list;
+	}   
+	   
    	//TODO OBJETIVOS
- 	public GameObjetivesMG LoadObjetivesOfGames(String map) {
+ 	public GameObjetivesMG loadObjetivesOfGames(String map) {
    		FileConfiguration game = getGameConfig(map);
    		
    		List<ObjetivesMG> l = new ArrayList<>();   		
@@ -3025,7 +3052,7 @@ public class GameConditions {
    			
    			ObjetivesMG ghost = new ObjetivesMG("Mapa Con Objetivos Borrados",1,0,0,0,0,"Habilitaron los Objetivos pero no hay ninguno en la Config del Mapa.",ObjetiveStatusType.WAITING,new HashMap<Player,Integer>());
    			l.add(ghost);
-   			if(game.contains("Game-Objetives")) {
+   			if(game.contains("Game-Objetives")) { 
    	   			for (String key : game.getConfigurationSection("Game-Objetives").getKeys(false)) {
    	   				int priority = game.getInt("Game-Objetives."+key+".Priority");
    	   				String status = game.getString("Game-Objetives."+key+".Status");
@@ -3054,7 +3081,7 @@ public class GameConditions {
    	}
  	
  	
-	public void LoadObjetivesOfGameDebug(String map) {
+	public void loadObjetivesOfGameDebug(String map) {
    		FileConfiguration game = getGameConfig(map);
    		
    		List<ObjetivesMG> l = new ArrayList<>();
@@ -3135,7 +3162,7 @@ public class GameConditions {
    			}else if(gi.isObjetivesPrimaryComplete()) {
    			 return;	
    			}
-   			
+   			 
    			gi.setObjetivesPrimaryComplete(true);
    			FileConfiguration game = getGameConfig(map);
 			List<String> rewardpm = game.getStringList("Complete-All-Objetives-Primary.Message");
@@ -3954,6 +3981,111 @@ public class GameConditions {
 	
 	public void setPlayerTempCooldown(Player player) {
 		plugin.getTempCooldown().put(player,  System.currentTimeMillis());
+		return;
+	}
+	
+	
+	public void turret(Player player) {
+		Block b = player.getLocation().getBlock();
+		Block under = b.getRelative(0,-1,0);
+		Block under2 = b.getRelative(0,-2,0);
+		Block under3 = b.getRelative(0,-3,0);
+		
+		
+		if(under.getType() == Material.LODESTONE && under2.getType() == Material.BEACON && under3.getType() == Material.WHITE_CONCRETE) {
+		
+			Location loc = player.getLocation();
+			Location loc2 = player.getLocation();
+			
+			player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 20.0F, 1F);
+			
+		
+			Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
+			Arrow aw2 = (Arrow) loc2.getWorld().spawnEntity(loc2.add(0, 1.6, 0), EntityType.ARROW);
+			aw.setCritical(true);
+			aw.setKnockbackStrength(1);
+			aw.setFireTicks(1200);
+			aw.setVelocity(loc.getDirection().multiply(6).rotateAroundY(Math.toRadians(1)));
+			
+			aw2.setCritical(true);
+			aw2.setKnockbackStrength(1);
+			aw2.setFireTicks(1200);
+			aw2.setVelocity(loc2.getDirection().multiply(6).rotateAroundY(Math.toRadians(-1)));
+
+			aw.setShooter(player);
+			aw2.setShooter(player);
+		}
+	}
+	
+	
+	public void blockPotion(LivingEntity e) {
+		Block b = e.getLocation().getBlock();
+		Block under = b.getRelative(0,-1,0);
+		Block under2 = b.getRelative(0,-2,0);
+		
+		
+		if(under.getType() == Material.GREEN_CONCRETE && under2.getType() == Material.BEACON) {
+			e.addPotionEffect(new PotionEffect(PotionEffectType.POISON,/*duration*/ 15*20,/*amplifier:*/20, false ,false,true));
+			
+		}else if(under.getType() == Material.RED_CONCRETE && under2.getType() == Material.BEACON) {
+			e.addPotionEffect(new PotionEffect(PotionEffectType.HARM,/*duration*/ 15*20,/*amplifier:*/25, false ,false,true));
+			
+		}else if(under.getType() == Material.LIME_CONCRETE && under2.getType() == Material.BEACON) {
+			e.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,/*duration*/ 15*20,/*amplifier:*/25, false ,false,true));
+			
+		}else if(under.getType() == Material.LIGHT_BLUE_CONCRETE && under2.getType() == Material.BEACON) {
+			e.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,/*duration*/ 15*20,/*amplifier:*/15, false ,false,true));
+
+		}else if(under.getType() == Material.BLUE_CONCRETE && under2.getType() == Material.BEACON) {
+			e.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION,/*duration*/ 15*20,/*amplifier:*/15, false ,false,true));
+
+		}else if(under.getType() == Material.WHITE_CONCRETE && under2.getType() == Material.BEACON) {
+			e.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION,/*duration*/ 20*20,/*amplifier:*/3, false ,false,true));
+
+		}else if(under.getType() == Material.PINK_CONCRETE && under2.getType() == Material.BEACON) {
+			e.addPotionEffect(new PotionEffect(PotionEffectType.HEAL,/*duration*/ 20*20,/*amplifier:*/25, false ,false,true));
+
+		}else if(under.getType() == Material.YELLOW_CONCRETE && under2.getType() == Material.BEACON) {
+			e.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER,/*duration*/ 20*20,/*amplifier:*/25, false ,false,true));
+
+		}else if(under.getType() == Material.GRAY_CONCRETE && under2.getType() == Material.BEACON) {
+			e.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,/*duration*/ 25*20,/*amplifier:*/25, false ,false,true));
+			
+		}else if(under.getType() == Material.LIGHT_GRAY_CONCRETE && under2.getType() == Material.BEACON) {
+			e.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING,/*duration*/ 25*20,/*amplifier:*/10, false ,false,true));
+			
+		}else if(under.getType() == Material.ORANGE_CONCRETE && under2.getType() == Material.BEACON) {
+			e.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,/*duration*/ 25*20,/*amplifier:*/10, false ,false,true));
+			
+		}else if(under.getType() == Material.BLACK_CONCRETE && under2.getType() == Material.BEACON) {
+			e.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,/*duration*/ 25*20,/*amplifier:*/10, false ,false,true));
+
+		}else if(under.getType() == Material.RED_TERRACOTTA && under2.getType() == Material.BEACON) {
+			e.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION,/*duration*/ 25*20,/*amplifier:*/25, false ,false,true));
+
+		}else if(under.getType() == Material.WHITE_TERRACOTTA && under2.getType() == Material.BEACON) {
+			e.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY,/*duration*/ 35*20,/*amplifier:*/25, false ,false,true));
+
+		}else if(under.getType() == Material.YELLOW_TERRACOTTA && under2.getType() == Material.BEACON) {
+			e.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,/*duration*/ 35*20,/*amplifier:*/25, false ,false,true));
+
+		}else if(under.getType() == Material.GRAY_TERRACOTTA && under2.getType() == Material.BEACON) {
+			e.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,/*duration*/ 35*20,/*amplifier:*/25, false ,false,true));
+
+		}else if(under.getType() == Material.PINK_TERRACOTTA && under2.getType() == Material.BEACON) {
+			e.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,/*duration*/ 10*20,/*amplifier:*/25, false ,false,true));
+
+		}else if(under.getType() == Material.BLUE_TERRACOTTA && under2.getType() == Material.BEACON) {
+			e.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,/*duration*/ 15*20,/*amplifier:*/25, false ,false,true));
+
+		}else if(under.getType() == Material.GREEN_TERRACOTTA && under2.getType() == Material.BEACON) {
+			e.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,/*duration*/ 15*20,/*amplifier:*/25, false ,false,true));
+
+		}else if(under.getType() == Material.ORANGE_TERRACOTTA && under2.getType() == Material.BEACON) {
+			e.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION,/*duration*/ 15*20,/*amplifier:*/25, false ,false,true));
+
+		}
+		
 		return;
 	}
 	

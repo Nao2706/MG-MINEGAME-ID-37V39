@@ -135,20 +135,14 @@ public class ResistenceTemp {
 			StopMotivo motivo = ms.getMotivo();
 
 			//SI TODOS SE SALEN MIENTRAS COMIENZA
-			if(joins.size() == 0) {
-					boss.setProgress(1.0);
-			  		boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN");
-			  		boss.setVisible(false);
-			  		
-			  		
-			  		
-					Bukkit.getScheduler().cancelTask(taskID);	
-	   			    Bukkit.getConsoleSender().sendMessage("No hay jugadores ");
-	   			    plugin.getGameInfoPoo().remove(name);
-					// TempEndGame2 t = new TempEndGame2(plugin);
-		     	     //t.Inicio(allPlayer,arenaName);
-		     	    // t.Inicio(name);
-   		     }
+			if(joins.size() == 0 && part == GameStatus.COMENZANDO || part == GameStatus.JUGANDO || part == GameStatus.PAUSE) {
+				boss.setProgress(1.0);
+		  		boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN");
+		  		boss.setVisible(false);
+		  		ms.setGameStatus(GameStatus.TERMINANDO);
+   			    Bukkit.getConsoleSender().sendMessage("No hay jugadores terminando en "+end+"s");
+   		
+		     }
 			//TODO EMPEZANDO
 			
 		
@@ -304,7 +298,7 @@ public class ResistenceTemp {
 						  removeTrapArrows(players);
 						  getGeneratorsOfOres(players);
 						  getNearbyBlocks3(players);
-						  JumpMob(players);
+						  mobLocation(players);
 						  
 						  
 						  if(anuncios >= 0 && anuncios <= 5) {
@@ -820,23 +814,44 @@ public class ResistenceTemp {
 		
     }
     
-    public void JumpMob(Player player) {
-    	List<Entity> entities = getNearbyEntites(player.getLocation(), 50);
-    	for(int i = 0;i< entities.size();i++) {
-    		Block block = entities.get(i).getLocation().getBlock();
-    		Block r = block.getRelative(0, 0, 0);
-    		
-    		if(entities.get(i).getType() == EntityType.PLAYER) continue;
-    		
-    		if(r.getType() == Material.OAK_PRESSURE_PLATE) {
-    			 entities.get(i).setVelocity(entities.get(i).getLocation().getDirection().multiply(3).setY(2));
-    		}
-    		if(r.getType() == Material.STONE_PRESSURE_PLATE) {
-   			   entities.get(i).setVelocity(entities.get(i).getLocation().getDirection().multiply(3).setY(1));
-    		}
-    		
-    	}
-    }
+    
+	public List<Entity> getNearbyEntities(Location l , int size){
+			
+			List<Entity> entities = new ArrayList<Entity>();
+			for(Entity e : l.getWorld().getEntities()) {
+			
+				if(l.distance(e.getLocation()) <= size) {
+					if(e.getType() == EntityType.PLAYER) continue;
+					entities.add(e);
+				}
+			}
+			return entities;
+			
+			
+		}
+    
+	  public void mobLocation(Player player) {
+		  	GameConditions gc = new GameConditions(plugin);
+	    	List<Entity> entities = getNearbyEntities(player.getLocation(), 50);
+	    	for(int i = 0;i< entities.size();i++) {
+	    		if(!(entities.get(i) instanceof LivingEntity))continue;
+	    		
+	    		LivingEntity lve = (LivingEntity) entities.get(i);
+	    		Block block = lve.getLocation().getBlock();
+	    		Block r = block.getRelative(0, 0, 0);
+	    		
+	    		if(lve.getType() == EntityType.PLAYER) continue;
+	    		
+	    		gc.blockPotion(lve);
+	    		if(r.getType() == Material.OAK_PRESSURE_PLATE) {
+	    			lve.setVelocity(lve.getLocation().getDirection().multiply(3).setY(2));
+	    		}
+	    		if(r.getType() == Material.STONE_PRESSURE_PLATE) {
+	    			lve.setVelocity(lve.getLocation().getDirection().multiply(3).setY(1));
+	    		}
+	    		
+	    	}
+	    }
 	
 	//TODO vindicator
     public void vindicador(World world , int x , int y , int z) {

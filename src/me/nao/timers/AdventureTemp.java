@@ -137,19 +137,13 @@ public class AdventureTemp {
 			StopMotivo motivo = ms.getMotivo();
 
 			//SI TODOS SE SALEN MIENTRAS COMIENZA
-			if(joins.size() == 0) {
+			if(joins.isEmpty() && part != GameStatus.TERMINANDO) {
 					boss.setProgress(1.0);
 			  		boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN");
 			  		boss.setVisible(false);
-			  		
-			  		
-			  		
-					Bukkit.getScheduler().cancelTask(taskID);	
-	   			    Bukkit.getConsoleSender().sendMessage("No hay jugadores ");
-	   			    plugin.getGameInfoPoo().remove(name);
-					// TempEndGame2 t = new TempEndGame2(plugin);
-		     	     //t.Inicio(allPlayer,arenaName);
-		     	    // t.Inicio(name);
+			  		ms.setGameStatus(GameStatus.TERMINANDO);
+	   			    Bukkit.getConsoleSender().sendMessage("No hay jugadores terminando en "+end+"s");
+	   		
    		     }
 			//TODO EMPEZANDO
 			
@@ -225,17 +219,6 @@ public class AdventureTemp {
 	      //  players.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.DARK_GREEN+ChatColor.BOLD+"Tiempo Remanente:"+ChatColor.DARK_RED+ChatColor.BOLD+" "+hora+"h "+minuto+"m "+segundo+"s " ));
 		//        players.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.GREEN+ChatColor.BOLD+"KILLS:"+ChatColor.DARK_RED+ChatColor.BOLD+" "+hora+"h "+minuto+"m "+segundo+"s " ));
 
-			   
-	          //reduccion de tiempo en boss bar
-			    
-			//	if(pro <= 0) {
-			//		pro = 1.0;
-			//	}
-			  
-			 
-			
-			
-
 				//HORA> MINUTO
 				//MINUTO > SEGUND
 				
@@ -275,7 +258,7 @@ public class AdventureTemp {
 					}
 				 	
 				  boss.setTitle(""+ChatColor.DARK_RED+ChatColor.BOLD+"Tiempo Remanente:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+hora+"h "+minuto+"m "+segundo+"s " );
-				 
+				  gc.HasTimePath("Time-"+hora+"-"+minuto+"-"+segundo, name);
 				
 				  
 				 //boss = Bukkit.createBossBar("Hello",BarColor.GREEN, BarStyle.SOLID,  null ,null);
@@ -364,7 +347,7 @@ public class AdventureTemp {
 							  removeTrapArrows(players);
 							  getGeneratorsOfOres(players);
 							  getNearbyBlocks3(players);
-							  JumpMob(players);
+							  mobLocation(players);
 							  
 							  if(anuncios >= 0 && anuncios <= 5) {
 								  sco.ShowObjetives(players,1);
@@ -388,7 +371,7 @@ public class AdventureTemp {
 					
 					anuncios ++;
 					
-					 gc.HasTimePath("Time-"+hora+"-"+minuto+"-"+segundo, name);
+					
 				//colocar terminando
 			}
 			//TODO TERMINANDO
@@ -437,23 +420,10 @@ public class AdventureTemp {
 				    		}
 						RemoveEntitysAfterGame(players);
 					}
-					
-					
-			
-					
-				
 				end--;
 			
 				//colocar esperando 
 			}
-			
-			
-
-		
-
-	
-		  
-			
 		  
 		 //  System.out.println("Cuenta atras : "+hora+"h "+minuto+"m "+segundo+"s " );
 			
@@ -667,20 +637,26 @@ public class AdventureTemp {
     	 }
     	return l;
     }
-	
-	  public void JumpMob(Player player) {
+	 
+	 
+	  public void mobLocation(Player player) {
+		  	GameConditions gc = new GameConditions(plugin);
 	    	List<Entity> entities = getNearbyEntities(player.getLocation(), 50);
 	    	for(int i = 0;i< entities.size();i++) {
-	    		Block block = entities.get(i).getLocation().getBlock();
+	    		if(!(entities.get(i) instanceof LivingEntity))continue;
+	    		
+	    		LivingEntity lve = (LivingEntity) entities.get(i);
+	    		Block block = lve.getLocation().getBlock();
 	    		Block r = block.getRelative(0, 0, 0);
 	    		
-	    		if(entities.get(i).getType() == EntityType.PLAYER) continue;
+	    		if(lve.getType() == EntityType.PLAYER) continue;
 	    		
+	    		gc.blockPotion(lve);
 	    		if(r.getType() == Material.OAK_PRESSURE_PLATE) {
-	    			 entities.get(i).setVelocity(entities.get(i).getLocation().getDirection().multiply(3).setY(2));
+	    			lve.setVelocity(lve.getLocation().getDirection().multiply(3).setY(2));
 	    		}
 	    		if(r.getType() == Material.STONE_PRESSURE_PLATE) {
-	   			   entities.get(i).setVelocity(entities.get(i).getLocation().getDirection().multiply(3).setY(1));
+	    			lve.setVelocity(lve.getLocation().getDirection().multiply(3).setY(1));
 	    		}
 	    		
 	    	}

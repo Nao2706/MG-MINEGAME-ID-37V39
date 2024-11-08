@@ -228,7 +228,7 @@ public class MgScore {
 		
 		
 		
-		if(gc.HasObjetives(p.getMapName())) {
+		if(ga.hasMapObjetives()) {
 			
 			
 			List<ObjetivesMG> l1 = gi.getGameObjetivesMg().getObjetives();
@@ -238,8 +238,6 @@ public class MgScore {
 			List<ObjetivesMG> pr = new ArrayList<>();
 			List<ObjetivesMG> se = new ArrayList<>();
 			List<ObjetivesMG> host = new ArrayList<>();
-		
-			
 			
 			for(ObjetivesMG ob : l1) {	
 				if(ob.getPriority() <= 0) {
@@ -288,7 +286,7 @@ public class MgScore {
 		    }else if(priority == 1) {
 		    	 ob.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"OBJETIVOS PRIMARIOS"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
 		    	 if(!pr.isEmpty()) {
-		    		 if(gc.isNecesaryObjetivePrimary(p.getMapName())) {
+		    		 if(gi.isNecessaryObjetivePrimary()) {
 			    		 show.add(ChatColor.GOLD+"Obligatorio:" +ChatColor.RED+" Si");
 			    	 }else {
 			    		 show.add(ChatColor.GOLD+"Obligatorio:" +ChatColor.RED+" No");
@@ -313,7 +311,7 @@ public class MgScore {
 			}else if(priority == 2) {
 				 ob.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"OBJETIVOS SECUNDARIOS"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
 				 if(!se.isEmpty()) {
-		    		 if(gc.isNecesaryObjetiveSedondary(p.getMapName())) {
+		    		 if(gi.isNecessaryObjetiveSedondary()) {
 			    		 show.add(ChatColor.GOLD+"Obligatorio:" +ChatColor.RED+" Si");
 			    	 }else {
 			    		 show.add(ChatColor.GOLD+"Obligatorio:" +ChatColor.RED+" No");
