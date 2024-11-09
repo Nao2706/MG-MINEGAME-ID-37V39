@@ -99,12 +99,11 @@ public class RevivePlayer{
 		
 		if(e != null) {
 			mig.GameMobDamagerCauses(player, e);
-			return;
 		}else {
 			mig.GameDamageCauses(player,cause);
 		}
 		removeToRevive();
-		
+		return;
 	}
 	
 	public void Knocked() {
@@ -268,16 +267,19 @@ public class RevivePlayer{
 				//setColor(getArmorStand());
 				
 				if(getReviveStatus() == ReviveStatus.REVIVED) {
-					Bukkit.getScheduler().cancelTask(taskID);	
+					
 					StandUp();
+					Bukkit.getScheduler().cancelTask(taskID);	
 				}
 				if(ms.getGameStatus() == GameStatus.TERMINANDO) {
-					Bukkit.getScheduler().cancelTask(taskID);	
+					
 				    Dead(e, cause);
+				    Bukkit.getScheduler().cancelTask(taskID);	
 				   
 				}else if(reviveStoped() || player == null || !player.isOnline()) {
-					Bukkit.getScheduler().cancelTask(taskID);	
 					Dead(e, cause);
+					Bukkit.getScheduler().cancelTask(taskID);	
+
 				}else if(getReviveStatus() == ReviveStatus.BLEEDING) {
 					time--;
 					player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"SANGRANDO",""+ChatColor.YELLOW+ChatColor.BOLD+"Moriras en "+ChatColor.RED+ChatColor.BOLD+time, 0, 20, 0);

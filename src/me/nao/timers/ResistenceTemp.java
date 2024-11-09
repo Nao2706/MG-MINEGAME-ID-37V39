@@ -263,30 +263,33 @@ public class ResistenceTemp {
 							 cig.ObjetivesInGame(players, name);
 						 }
 						
-						 gc.TopConsole(name);
-						 gc.Top(name);
+						
 						 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Jugadores que ganaron Resistencia "+ChatColor.GREEN+ConvertPlayerToString(alive)+ChatColor.RED+" mapa: "+ChatColor.GREEN+name);
 						 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN...");
 				  		 ms.setGameStatus(GameStatus.TERMINANDO);
+				  		 gc.TopConsole(name);
+						 gc.Top(name);
 				  		 
 					}else if(motivo == StopMotivo.WIN || motivo == StopMotivo.LOSE || motivo == StopMotivo.ERROR || motivo == StopMotivo.FORCE) {
-						 gc.TopConsole(name);
-						 gc.Top(name);
+						
 						 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN..");
 				  		 ms.setGameStatus(GameStatus.TERMINANDO);
+				  		 gc.TopConsole(name);
+						 gc.Top(name);
 				  		
 					}else if(dead.size() == joins.size()) {
 						 for(Player players : joins) {
 							 players.sendMessage(ChatColor.RED+"Todos los Jugadores fueron eliminados F ...");
 						 }
-						 gc.TopConsole(name);
-						 gc.Top(name);
+						
 						 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"( FIN. )");
 						 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Todos perdieron Resistencia "+ChatColor.GREEN+ConvertPlayerToString(joins)+ChatColor.RED+" mapa: "+ChatColor.GREEN+name+"\n");
 						 ms.setGameStatus(GameStatus.TERMINANDO);
+						 gc.TopConsole(name);
+						 gc.Top(name);
 						 // Bukkit.getScheduler().cancelTask(taskID);
 					}
 					
@@ -329,60 +332,56 @@ public class ResistenceTemp {
 			}
 			//TODO TERMINANDO
 			else if(part == GameStatus.TERMINANDO) {
-				 
+				 		
+						if(end == 10) {
+							 gc.TopConsole(name);
+							 gc.Top(name);
+						}
 				
 					   	if(end == 0) {
-						   	
-				   			
-					   		
-					   		System.out.println("ANTES MISION MISION RUN : "+ms.ShowGame());
-			    			
-		//			   		
-		//						//RemoveArmorStandsAndItemsInMap(target);
+					   			System.out.println("ANTES MISION MISION RUN : "+ms.ShowGame());
+			    	
 								gc.mgEndTheGame(name);
 								gc.EndGameActions(name);
-				    	
-				    	
-					    	 //ms.setEstadopartida(EstadoPartida.ESPERANDO);
-				   		
-			    		Bukkit.getScheduler().cancelTask(taskID);	
-			    		System.out.println("SE DETUVO ;)");
-				     }
+				   
+				    		Bukkit.getScheduler().cancelTask(taskID);	
+				    		System.out.println("SE DETUVO ;)");
+					   	}
 				
-					for(Player players : joins) {
-						if(end <= 5) {
-		 	       		  //  RemoveArmorStandsAndItemsInMap(target);
-							players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 2F);
-							players.sendTitle(""+ChatColor.GOLD+ChatColor.BOLD+String.valueOf(end),""+ChatColor.GOLD+ChatColor.BOLD+"La partida termina en ", 20, 20, 20);
-					    	//	players.sendMessage(ChatColor.RED+"No hay jugadores suficientes para empezar la partida :(");
-				    		}else {
-				    			//RemoveArmorStandsAndItemsInMap(target);
-				    			players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
-				    			players.sendTitle("",ChatColor.GREEN+"La partida termina en "+ChatColor.DARK_PURPLE+end, 20, 20, 20);
-
-				    			//target.sendMessage(ChatColor.GREEN+"La partida termina en "+ChatColor.DARK_PURPLE+end);
-				    		}
+						for(Player players : joins) {
+							if(end <= 5) {
+			 	       		  //  RemoveArmorStandsAndItemsInMap(target);
+								players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 2F);
+								players.sendTitle(""+ChatColor.GOLD+ChatColor.BOLD+String.valueOf(end),""+ChatColor.GOLD+ChatColor.BOLD+"La partida termina en ", 20, 20, 20);
+						    	//	players.sendMessage(ChatColor.RED+"No hay jugadores suficientes para empezar la partida :(");
+					    		}else {
+					    			//RemoveArmorStandsAndItemsInMap(target);
+					    			players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+					    			players.sendTitle("",ChatColor.GREEN+"La partida termina en "+ChatColor.DARK_PURPLE+end, 20, 20, 20);
+	
+					    			//target.sendMessage(ChatColor.GREEN+"La partida termina en "+ChatColor.DARK_PURPLE+end);
+					    		}
+							
+								RemoveEntitysAfterGame(players);
+					 
+						}
+					
+						for(Player players : spect) {
 						
-						RemoveEntitysAfterGame(players);
-				 
-					}
-					
-					for(Player players : spect) {
-					
-						if(end <= 5) {
-		 	       		  //  RemoveArmorStandsAndItemsInMap(target);
-							players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 2F);
-							players.sendTitle(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+String.valueOf(end),""+ChatColor.AQUA+ChatColor.BOLD+"La partida termina en ", 20, 20, 20);
-					    	//	players.sendMessage(ChatColor.RED+"No hay jugadores suficientes para empezar la partida :(");
-				    		}else {
-				    			//RemoveArmorStandsAndItemsInMap(target);
-				    			players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
-				    			players.sendTitle("",ChatColor.GREEN+"La partida termina en "+ChatColor.DARK_PURPLE+end, 20, 20, 20);
-
-				    			//target.sendMessage(ChatColor.GREEN+"La partida termina en "+ChatColor.DARK_PURPLE+end);
-				    		}
-						RemoveEntitysAfterGame(players);
-					}
+							if(end <= 5) {
+			 	       		  //  RemoveArmorStandsAndItemsInMap(target);
+								players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 2F);
+								players.sendTitle(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+String.valueOf(end),""+ChatColor.AQUA+ChatColor.BOLD+"La partida termina en ", 20, 20, 20);
+						    	//	players.sendMessage(ChatColor.RED+"No hay jugadores suficientes para empezar la partida :(");
+					    		}else {
+					    			//RemoveArmorStandsAndItemsInMap(target);
+					    			players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+					    			players.sendTitle("",ChatColor.GREEN+"La partida termina en "+ChatColor.DARK_PURPLE+end, 20, 20, 20);
+	
+					    			//target.sendMessage(ChatColor.GREEN+"La partida termina en "+ChatColor.DARK_PURPLE+end);
+					    		}
+								RemoveEntitysAfterGame(players);
+						}
 					
 				
 					
@@ -842,6 +841,7 @@ public class ResistenceTemp {
 	    		
 	    		if(lve.getType() == EntityType.PLAYER) continue;
 	    		
+	    		gc.turret(lve);
 	    		gc.blockPotion(lve);
 	    		if(r.getType() == Material.OAK_PRESSURE_PLATE) {
 	    			lve.setVelocity(lve.getLocation().getDirection().multiply(3).setY(2));
@@ -1439,11 +1439,11 @@ public void ShootEntityToPlayer(Player player) {
     				}
     				
     				
-    				RayTraceResult ra = z.getWorld().rayTraceEntities(z.getEyeLocation().add(z.getLocation().getDirection()),z.getLocation().getDirection() , 100.0D);
-              		if(ra != null && ra.getHitEntity() != null) {
+    				RayTraceResult rt = z.getWorld().rayTraceEntities(z.getEyeLocation().add(z.getLocation().getDirection()),z.getLocation().getDirection() , 100.0D);
+              		if(rt != null && rt.getHitEntity() != null) {
               			
               			if(z.getCustomName() != null && ChatColor.stripColor(z.getCustomName()).equals("Zombi Artillero")) {
-              				if(ra.getHitEntity().getType() == EntityType.PLAYER) {
+              				if(rt.getHitEntity().getType() == EntityType.PLAYER) {
                   				
               					Location loc = z.getLocation();
             					Location loc2 = z.getLocation();

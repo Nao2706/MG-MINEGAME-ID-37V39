@@ -260,12 +260,7 @@ public class AdventureTemp {
 				  boss.setTitle(""+ChatColor.DARK_RED+ChatColor.BOLD+"Tiempo Remanente:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+hora+"h "+minuto+"m "+segundo+"s " );
 				  gc.HasTimePath("Time-"+hora+"-"+minuto+"-"+segundo, name);
 				
-				  
-				 //boss = Bukkit.createBossBar("Hello",BarColor.GREEN, BarStyle.SOLID,  null ,null);
-//					List<String> alive1 = plugin.getAlive().get(name);
-//					List<String> arrive1 = plugin.getArrive().get(name);
-					//List<String> ends = ym.getStringList("End.Commands");
-					
+	
 				  //TIME OUT
 					
 					//EL ORDEN DEL TERMINADO SIEMPRE DEBE IR AL FINAL SINO PUEDE DAR NULLPOINTER POR Q TRATAS DE ACCEDER A COSAS VIEJAS
@@ -283,37 +278,17 @@ public class AdventureTemp {
 						 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN...");
 						 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Jugadores que ganaron "+ChatColor.GREEN+arrive+ChatColor.RED+" mapa: "+ChatColor.GREEN+name);
-						 gc.TopConsole(name);
-						 gc.Top(name);
-						 ms.setGameStatus(GameStatus.TERMINANDO);
 						
+						 ms.setGameStatus(GameStatus.TERMINANDO);
 				  		 
 				  		 //STOP
 					}else if(motivo == StopMotivo.WIN || motivo == StopMotivo.LOSE || motivo == StopMotivo.ERROR || motivo == StopMotivo.FORCE) {
-						 gc.TopConsole(name);
-						 gc.Top(name);
+						
 						 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN..");
 						 ms.setGameStatus(GameStatus.TERMINANDO);
-						 
-						 //ALL DEADS
-					}else if(dead.size() == joins.size() || isAllKnocked(name)) {
-						System.out.println("ESTADO "+isAllKnocked(name)+" HAS PLAYER ITEM: "+hasPlayersAutoreviveItem(name));
-						for(String target : joins) {
-								 Player players = Bukkit.getPlayerExact(target);
-							 players.sendMessage(ChatColor.GREEN+"Todos los jugadores fueron eliminados F ");
-						 }
-							
-						 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Todos perdieron "+ChatColor.GREEN+joins+ChatColor.RED+" mapa: "+ChatColor.GREEN+name+"\n");
-
-						 gc.TopConsole(name);
-						 gc.Top(name);
-						 boss.setProgress(1.0);
-				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"( FIN. )");
-						 ms.setGameStatus(GameStatus.TERMINANDO);
 						
-						 
-						 //WIN
+						 //ALL DEADS
 					}else if(alive.size() == arrive.size()) {
 						
 						for(String target : joins) {
@@ -329,11 +304,27 @@ public class AdventureTemp {
 				  		 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Participaron "+ChatColor.GREEN+joins+ChatColor.RED+" mapa: "+ChatColor.GREEN+name);
 				  		 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Jugadores que ganaron "+ChatColor.GREEN+arrive+ChatColor.RED+" mapa: "+ChatColor.GREEN+name+"\n");
 
-						 gc.TopConsole(name);
-						 gc.Top(name);
+						
 						 ms.setGameStatus(GameStatus.TERMINANDO);
 						
 				  		
+					}else if(dead.size() == joins.size() || isAllKnocked(name)) {
+						System.out.println("ESTADO "+isAllKnocked(name)+" HAS PLAYER ITEM: "+hasPlayersAutoreviveItem(name));
+						for(String target : joins) {
+								 Player players = Bukkit.getPlayerExact(target);
+							 players.sendMessage(ChatColor.GREEN+"Todos los jugadores fueron eliminados F ");
+						 }
+							
+						 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Todos perdieron "+ChatColor.GREEN+joins+ChatColor.RED+" mapa: "+ChatColor.GREEN+name+"\n");
+
+						
+						 boss.setProgress(1.0);
+				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"( FIN. )");
+						 ms.setGameStatus(GameStatus.TERMINANDO);
+						
+						
+						 
+						 //WIN
 					}
 					
 					for(String target : joins) {
@@ -370,12 +361,14 @@ public class AdventureTemp {
 					  }
 					
 					anuncios ++;
-					
-					
-				//colocar terminando
 			}
 			//TODO TERMINANDO
 			else if(part == GameStatus.TERMINANDO) {
+						
+						if(end == 10) {
+							 gc.TopConsole(name);
+							 gc.Top(name);
+						}
 				 
 					   	if(end == 0) {
 					   			System.out.println("ANTES ADVENTURE RUN : "+ms.ShowGame());
@@ -383,43 +376,43 @@ public class AdventureTemp {
 								gc.EndGameActions(name);
 								Bukkit.getScheduler().cancelTask(taskID);	
 								System.out.println("SE DETUVO ;)");
-				     }
+				        }
 			 	
-					for(String target : joins) {
-						Player players = Bukkit.getPlayerExact(target);
-						if(end <= 5) {
-		 	       		  //  RemoveArmorStandsAndItemsInMap(target);
-							players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 2F);
-							players.sendTitle(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+String.valueOf(end),""+ChatColor.AQUA+ChatColor.BOLD+"La partida termina en ", 20, 20, 20);
-					    	//	players.sendMessage(ChatColor.RED+"No hay jugadores suficientes para empezar la partida :(");
-				    		}else {
-				    			//RemoveArmorStandsAndItemsInMap(target);
-				    			players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
-				    			players.sendTitle("",ChatColor.RED+"La partida termina en "+ChatColor.DARK_PURPLE+end, 20, 20, 20);
-
-				    			//target.sendMessage(ChatColor.RED+"La partida termina en "+ChatColor.DARK_PURPLE+end);
-				    		}
-						RemoveEntitysAfterGame(players);
-					}
+						for(String target : joins) {
+							Player players = Bukkit.getPlayerExact(target);
+							if(end <= 5) {
+			 	       		  //  RemoveArmorStandsAndItemsInMap(target);
+								players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 2F);
+								players.sendTitle(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+String.valueOf(end),""+ChatColor.AQUA+ChatColor.BOLD+"La partida termina en ", 20, 20, 20);
+						    	//	players.sendMessage(ChatColor.RED+"No hay jugadores suficientes para empezar la partida :(");
+					    		}else {
+					    			//RemoveArmorStandsAndItemsInMap(target);
+					    			players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+					    			players.sendTitle("",ChatColor.RED+"La partida termina en "+ChatColor.DARK_PURPLE+end, 20, 20, 20);
+	
+					    			//target.sendMessage(ChatColor.RED+"La partida termina en "+ChatColor.DARK_PURPLE+end);
+					    		}
+							RemoveEntitysAfterGame(players);
+						}
 					
 					
-					for(String target : spect) {
-						Player players = Bukkit.getPlayerExact(target);
-						
-						if(end <= 5) {
-		 	       		  //  RemoveArmorStandsAndItemsInMap(target);
-							players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 2F);
-							players.sendTitle(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+String.valueOf(end),""+ChatColor.AQUA+ChatColor.BOLD+"La partida termina en ", 20, 20, 20);
-					    	//	players.sendMessage(ChatColor.RED+"No hay jugadores suficientes para empezar la partida :(");
-				    		}else {
-				    			//RemoveArmorStandsAndItemsInMap(target);
-				    			players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
-				    			players.sendTitle("",ChatColor.RED+"La partida termina en "+ChatColor.DARK_PURPLE+end, 20, 20, 20);
-
-				    			//target.sendMessage(ChatColor.RED+"La partida termina en "+ChatColor.DARK_PURPLE+end);
-				    		}
-						RemoveEntitysAfterGame(players);
-					}
+						for(String target : spect) {
+							Player players = Bukkit.getPlayerExact(target);
+							
+							if(end <= 5) {
+			 	       		  //  RemoveArmorStandsAndItemsInMap(target);
+								players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 2F);
+								players.sendTitle(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+String.valueOf(end),""+ChatColor.AQUA+ChatColor.BOLD+"La partida termina en ", 20, 20, 20);
+						    	//	players.sendMessage(ChatColor.RED+"No hay jugadores suficientes para empezar la partida :(");
+					    		}else {
+					    			//RemoveArmorStandsAndItemsInMap(target);
+					    			players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+					    			players.sendTitle("",ChatColor.RED+"La partida termina en "+ChatColor.DARK_PURPLE+end, 20, 20, 20);
+	
+					    			//target.sendMessage(ChatColor.RED+"La partida termina en "+ChatColor.DARK_PURPLE+end);
+					    		}
+							RemoveEntitysAfterGame(players);
+						}
 				end--;
 			
 				//colocar esperando 
@@ -650,7 +643,7 @@ public class AdventureTemp {
 	    		Block r = block.getRelative(0, 0, 0);
 	    		
 	    		if(lve.getType() == EntityType.PLAYER) continue;
-	    		
+	    		gc.turret(lve);
 	    		gc.blockPotion(lve);
 	    		if(r.getType() == Material.OAK_PRESSURE_PLATE) {
 	    			lve.setVelocity(lve.getLocation().getDirection().multiply(3).setY(2));
@@ -1292,20 +1285,18 @@ public class AdventureTemp {
     				}
     				
     				
-    				RayTraceResult ra = z.getWorld().rayTraceEntities(z.getEyeLocation().add(z.getLocation().getDirection()),z.getLocation().getDirection() , 100.0D);
-              		if(ra != null && ra.getHitEntity() != null) {
+    				RayTraceResult rt = z.getWorld().rayTraceEntities(z.getEyeLocation().add(z.getLocation().getDirection()),z.getLocation().getDirection() , 100.0D);
+              		if(rt != null && rt.getHitEntity() != null) {
               			
               			if(z.getCustomName() == null) {
               				return;
               			}
               			
               			if(ChatColor.stripColor(z.getCustomName()).equals("Zombi Artillero")) {
-              				if(ra.getHitEntity().getType() == EntityType.PLAYER) {
+              				if(rt.getHitEntity().getType() == EntityType.PLAYER) {
                   				
               					Location loc = z.getLocation();
             					Location loc2 = z.getLocation();
-              					
-              					
         						
         						Arrow aw = (Arrow) z.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
         						Arrow aw2 = (Arrow) z.getWorld().spawnEntity(loc2.add(0, 1.6, 0), EntityType.ARROW);
@@ -1322,7 +1313,7 @@ public class AdventureTemp {
                   			}
               			}
               			if(ChatColor.stripColor(z.getCustomName()).equals("NEMESIS")) {
-              				if(ra.getHitEntity().getType() == EntityType.PLAYER) {
+              				if(rt.getHitEntity().getType() == EntityType.PLAYER) {
                   				for(int i = 0 ; i < 10;i++) {
                   					SpawnArrowsFireMob(e,RandomPosOrNeg(10),RandomPosOrNeg(5));
                   				}

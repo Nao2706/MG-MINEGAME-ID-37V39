@@ -275,7 +275,7 @@ public class MgScore {
 				 show.add(ChatColor.RED+"  ");
 				 show.add(""+ChatColor.RED+ChatColor.BOLD+"------------- ");
 				 if(!host.isEmpty()) {
-					 show.add(""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(gc.getAmountOfObjetivesComplete(host), host.size(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]");
+					 show.add("   "+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(gc.getAmountOfObjetivesComplete(host), host.size(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]");
 					 show.add(ChatColor.GOLD+"Hay un Progreso del "+ChatColor.GREEN+Porcentage(gc.getAmountOfObjetivesComplete(host), host.size()));
 					
 				 }else {
@@ -302,7 +302,7 @@ public class MgScore {
 				 show.add(ChatColor.RED+"  ");
 				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"------------- ");
 				 if(!pr.isEmpty()) {
-					 show.add(""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(gc.getAmountOfObjetivesComplete(pr), pr.size(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]");
+					 show.add("   "+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(gc.getAmountOfObjetivesComplete(pr), pr.size(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]");
 					 show.add(ChatColor.GOLD+"Hay un Progreso del "+ChatColor.GREEN+Porcentage(gc.getAmountOfObjetivesComplete(pr), pr.size()));
 				 }else {
 					 show.add(ChatColor.RED+"Sin Objetivos Primarios");
@@ -327,7 +327,7 @@ public class MgScore {
 				 show.add(ChatColor.RED+"  ");
 				 show.add(""+ChatColor.YELLOW+ChatColor.BOLD+"------------- ");
 				 if(!se.isEmpty()) {
-					 show.add(""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(gc.getAmountOfObjetivesComplete(se), se.size(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]");
+					 show.add("   "+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(gc.getAmountOfObjetivesComplete(se), se.size(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]");
 					 show.add(ChatColor.GOLD+"Hay un Progreso del "+ChatColor.GREEN+Porcentage(gc.getAmountOfObjetivesComplete(se), se.size()));
 				 }else {
 					 show.add(ChatColor.RED+"Sin Objetivos Secundarios");

@@ -28,6 +28,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
@@ -627,6 +628,9 @@ public class SourceOfDamage implements Listener{
 			}
 		
 			
+			if(e.getCause() == DamageCause.FALL) {
+				ci.GamePlayerFallMap(player);
+			}
 		
 			
 			if(e.getFinalDamage() >= player.getHealth()) {

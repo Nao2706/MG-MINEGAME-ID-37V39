@@ -293,11 +293,7 @@ public class GameIntoMap {
 //							
 						}
 				}
-				
-			
 			}
-			
-			  
 			
 		}
 		

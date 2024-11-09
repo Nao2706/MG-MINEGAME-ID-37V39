@@ -1470,7 +1470,10 @@ public class EventRandoms implements Listener{
 						  if(arrow.getCustomName() != null) {
 							  if(arrow.getCustomName().equals("Flecha Trampa") || arrow.getCustomName().equals("Flecha Trampa Mejorada")) {
 								arrow.remove();
+							  }else if(arrow.getCustomName().startsWith("Torreta")) {
+								arrow.remove();
 							  }
+							  
 						  }else{
 							  if(b.getType() == Material.BARRIER) {
 								  arrow.remove();
@@ -1512,6 +1515,26 @@ public class EventRandoms implements Listener{
 						}
 					 
 				  }
+				  
+				  if(e.getHitBlock() != null) {
+					  Block b = e.getHitBlock();
+					  if(projectile instanceof AbstractArrow) {
+						  AbstractArrow arrow = (AbstractArrow) projectile;
+						  if(arrow.getCustomName() != null) {
+							  if(arrow.getCustomName().equals("Flecha Trampa") || arrow.getCustomName().equals("Flecha Trampa Mejorada")) {
+								arrow.remove();
+							  }else if(arrow.getCustomName().startsWith("Torreta")) {
+								arrow.remove();
+							  }
+							  
+						  }else{
+							  if(b.getType() == Material.BARRIER) {
+								  arrow.remove();
+							  }
+						  }
+					  }
+				  }
+				  
 				 
 			  }
 			  

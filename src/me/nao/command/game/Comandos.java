@@ -111,7 +111,7 @@ public class Comandos implements CommandExecutor{
 					FileConfiguration config = plugin.getConfig();
 					List<String> ac = config.getStringList("Maps-Created.List");
 				
-						if (args.length == 2) {
+					if(args.length == 2) {
 							 
 							String name = args[1];
 							if(ac.contains(name)) {
@@ -125,11 +125,11 @@ public class Comandos implements CommandExecutor{
 						}else {
 							AllReload(null);
 						}
+						
 					return true;
-					
 				}else if(args[0].equalsIgnoreCase("isban")) {
 					
-					if (args.length == 2) {
+					if(args.length == 2) {
 							String name = args[1];
 							ReportsManager cool = new ReportsManager(plugin);
 							cool.HasSancionPlayerConsoleOrOp(null, name);
@@ -137,52 +137,52 @@ public class Comandos implements CommandExecutor{
 					}else {
 						Bukkit.getConsoleSender().sendMessage("Usa /mg isban <player>");
 					}
-					return true;
 					
+					return true;
 				}else if(args[0].equalsIgnoreCase("ban") || args[0].equalsIgnoreCase("kick")  || args[0].equalsIgnoreCase("tempban")  || args[0].equalsIgnoreCase("warn") || args[0].equalsIgnoreCase("pardon")){
 					
-					if(args.length >= 3) {
+					  if(args.length >= 3) {
 
 			        	 IdentifierReports(null,args);
 			        
-					}else {
-						Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Usa /mg ban,kick,warn <player> <obligatorio una razon> Para especificar tiempo porfavor usa los siguientes 1D 1H 1M 1S 1d 1h 1m 1s .");
-						Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+"Usa /mg tempban <player> <1DHMS> <obligatorio una razon>");
-						Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+"Usa /mg tempban <player> <1DHMS> <1DHMS> <obligatorio una razon>");
-						Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+"Usa /mg tempban <player> <1DHMS> <1DHMS> <1DHMS> <obligatorio una razon>");
-					}
+						}else {
+							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Usa /mg ban,kick,warn <player> <obligatorio una razon> Para especificar tiempo porfavor usa los siguientes 1D 1H 1M 1S 1d 1h 1m 1s .");
+							Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+"Usa /mg tempban <player> <1DHMS> <obligatorio una razon>");
+							Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+"Usa /mg tempban <player> <1DHMS> <1DHMS> <obligatorio una razon>");
+							Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+"Usa /mg tempban <player> <1DHMS> <1DHMS> <1DHMS> <obligatorio una razon>");
+						}
 					return true;
 					
 				}else if(args[0].equalsIgnoreCase("message") ) {
 					
 						if(args.length >= 2) {
 							String name = args[1];
-					
 							String mensaje = "";
 				        	 for(int i = 2 ;i < args.length; i++) {
 								 mensaje = mensaje+args[i]+" "; 
 							 }
 							gc.SendMessageToAllUsersOfSameMapCommand(null, name, mensaje);
+							
 						}else {
 							gc.sendMessageToUserAndConsole(null,plugin.nombre+ChatColor.GREEN+" Usa /mg message <map> <message>");
 						}
+						
 					return true;
-					
 				}else if(args[0].equalsIgnoreCase("tittle") ) {
 					
 						if (args.length >= 2) {
 							String name = args[1];
-					
 							String mensaje = "";
 				        	 for(int i = 2 ;i < args.length; i++) {
 								 mensaje = mensaje+args[i]+" "; 
 							 }
 							gc.SendTittleToAllUsersOfSameMapCommand(null, name, mensaje);
+							
 						}else {
 							gc.sendMessageToUserAndConsole(null,plugin.nombre+ChatColor.GREEN+" Usa /mg tittle <map> <message1 ; message2>");
 						}
+						
 					return true;
-					
 				}else if(args[0].equalsIgnoreCase("objetive")){
 					
 					if(args.length == 4) {
@@ -245,8 +245,8 @@ public class Comandos implements CommandExecutor{
 				}else if(args[0].equalsIgnoreCase("showobjetive")) {
 					
 					gc.loadObjetivesOfGameDebug("Tutorial");
-					return true;
 					
+					return true;
 				}else if(args[0].equalsIgnoreCase("list-fa") ) {
 					
 					Bukkit.getConsoleSender().sendMessage("Lista de Timers activos");
@@ -257,8 +257,8 @@ public class Comandos implements CommandExecutor{
 					}else {
 						Bukkit.getConsoleSender().sendMessage("No hay datos");
 					}
-					return true;
 					
+					return true;
 				}else if(args[0].equalsIgnoreCase("start-fa") ) {
 				 
 						String group = args[1];
@@ -290,8 +290,8 @@ public class Comandos implements CommandExecutor{
 							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" Ingresa un numero en el 2 Argumento");
 							
 						}
+						
 					return true;
-					
 				}else if(args[0].equalsIgnoreCase("end-fa") ) {
 					
 					String group = args[1];
@@ -307,8 +307,8 @@ public class Comandos implements CommandExecutor{
 					}else {
 						Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa /mg start-fa <nombre-de-grupo>");
 					}
+					
 					return true;
-				   
 		    	}else if(args[0].equalsIgnoreCase("version")){
 				
 					Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Version: "+plugin.version);
@@ -339,8 +339,8 @@ public class Comandos implements CommandExecutor{
 		    		
 		  		    SQLInfo.createtableInventory(plugin.getMySQL());
 					Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Tabla creada 1");
+					
 				    return true;
-				    
 		    	}else if(args[0].equalsIgnoreCase("maintenance")){
 		    		
 					FileConfiguration config = plugin.getConfig();
@@ -355,36 +355,31 @@ public class Comandos implements CommandExecutor{
 					}
 					plugin.getConfig().save();
 					plugin.getConfig().reload();
+					
 					return true;
-					
 		    	}else if (args[0].equalsIgnoreCase("check")) {
-					String name = args[1];
-					if(points1.contains("Players." + name + ".Kills")) {
-						for (String key : points1.getConfigurationSection("Players").getKeys(false)) {
-
-							
-							
-
-							if (name.equals(key) && points1.getString("Players." + name + ".Kills",null) != null) {
-								List<String> messagep = message.getStringList("Message-Check-Player.message");
-								for(int i = 0 ; i<messagep.size();i++) {
-									int puntaje = Integer.valueOf((points1.getString("Players." + key + ".Kills")));
-									String texto = messagep.get(i);
-									Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', texto.replaceAll("%player%",name).replaceAll("%points%",String.valueOf(puntaje))));
-								//player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 50.0F, 1F);
-							
-								
+		    		
+		    		if(args.length == 2){
+			    				String name = args[1];
+								if(points1.contains("Players." + name)) {
+									for (String key : points1.getConfigurationSection("Players").getKeys(false)) {
+									if (name.equals(key)) {
+										List<String> messagep = message.getStringList("Message-Check-Player.message");
+										for(int i = 0 ; i<messagep.size();i++) {
+											int puntaje = Integer.valueOf((points1.getString("Players." + key + ".Kills")));
+											String texto = messagep.get(i);
+											Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', texto.replaceAll("%player%",name).replaceAll("%points%",String.valueOf(puntaje))));
+										//player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 50.0F, 1F);
+									
+										
+										}
+									}
 								}
-							
-							}
-					
-						}
-					}else {
-						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+name+ChatColor.RED+" no existe. ");
-						//player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 50.0F, 1F);
+				    		}else{
+								Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+name+ChatColor.RED+" no existe. ");
+								//player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 50.0F, 1F);
+				    		}
 					}
-				
-					
 				
 					return true;
 				}else if (args[0].equalsIgnoreCase("versionpl")) {
@@ -394,7 +389,6 @@ public class Comandos implements CommandExecutor{
 					}else {
 						gc.getPlayerVersion(null, null);
 					}
-					
 					
 					return true;
 				}else if (args[0].equalsIgnoreCase("set-life") ) {
@@ -453,7 +447,7 @@ public class Comandos implements CommandExecutor{
 						}
 						
 						
-					}else {
+					}else{
 						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg add-points <nombre> <1>");
 					}
 					}catch(NumberFormatException ex) {
@@ -487,8 +481,7 @@ public class Comandos implements CommandExecutor{
 
 
 							}
-						}
-						else {
+						}else{
 							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+name+ChatColor.RED+" no existe. ");
 						}
 					
@@ -627,9 +620,6 @@ public class Comandos implements CommandExecutor{
 						Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_PURPLE+" NO HAY MAPAS ");
 					}
 					
-					
-			
-					
 					return true;
 				}
 				//===================================================================
@@ -648,8 +638,6 @@ public class Comandos implements CommandExecutor{
 						.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg create <nombre-yml> ");
 					}
 					
-			
-					
 					return true;
 				}else if (args[0].equalsIgnoreCase("create-dialogue")) {
 				
@@ -661,12 +649,8 @@ public class Comandos implements CommandExecutor{
 							ca.CreateDialog(name, path, null);
 						
 						 }else {
-						
-							Bukkit.getConsoleSender()
-							.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg create-dialogue <nombre> <path> ");
+							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg create-dialogue <nombre> <path> ");
 						 }
-						
-				
 				
 				return true;
 				
@@ -682,11 +666,8 @@ public class Comandos implements CommandExecutor{
 				
 				 }else {
 				
-					Bukkit.getConsoleSender()
-					.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg create-dialogue <nombre> <path> ");
+					Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg create-dialogue <nombre> <path> ");
 				 }
-				
-		
 		
 				return true;
 		
@@ -708,13 +689,9 @@ public class Comandos implements CommandExecutor{
 							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Ese motivo no existe usa: Win , Lose , Error o Force. ");
 						}
 						
-						
-					
-						
 					 }else {
 					
-						Bukkit.getConsoleSender()
-						.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg stop <mapa> <motivo Win , Lose , Error o Force>");
+						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg stop <mapa> <motivo Win , Lose , Error o Force>");
 					 }
 					
 			
@@ -827,9 +804,6 @@ public class Comandos implements CommandExecutor{
 			GameConditions gc = new GameConditions(plugin);
 			MapSettings c = new MapSettings(plugin);
 			Player player = (Player) sender ;
-	
-			
-			
 			
 			if(args.length > 0 ) {
 				if(args[0].equalsIgnoreCase("version")) {
@@ -928,30 +902,33 @@ public class Comandos implements CommandExecutor{
 					return true;
 						
 			}else if (args[0].equalsIgnoreCase("check") && player.isOp()) {
-					String name = args[1];
-					if(points1.contains("Players." + name + ".Kills")) {
-						for (String key : points1.getConfigurationSection("Players").getKeys(false)) {
+				
+					if(args.length == 2) {
+						String name = args[1];
+						if(points1.contains("Players." + name + ".Kills")) {
+							for (String key : points1.getConfigurationSection("Players").getKeys(false)) {
 
-							if (name.equals(key) && points1.getString("Players." + name + ".Kills",null) != null) {
-								List<String> messagep = message.getStringList("Message-Check-Player.message");
-								for(int i = 0 ; i<messagep.size();i++) {
-									int puntaje = Integer.valueOf((points1.getString("Players." + key + ".Kills")));
-									String texto = messagep.get(i);
-								player.sendMessage(ChatColor.translateAlternateColorCodes('&', texto.replaceAll("%player%",name).replaceAll("%points%",String.valueOf(puntaje))));
-								player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 50.0F, 1F);
-							
+								if (name.equals(key) && points1.getString("Players." + name + ".Kills",null) != null) {
+									List<String> messagep = message.getStringList("Message-Check-Player.message");
+									for(int i = 0 ; i<messagep.size();i++) {
+										int puntaje = Integer.valueOf((points1.getString("Players." + key + ".Kills")));
+										String texto = messagep.get(i);
+									player.sendMessage(ChatColor.translateAlternateColorCodes('&', texto.replaceAll("%player%",name).replaceAll("%points%",String.valueOf(puntaje))));
+									player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 50.0F, 1F);
+								
+									
+									}
 								
 								}
-							
+						
 							}
-					
+						}else {
+							player.sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+name+ChatColor.RED+" no existe. ");
+							player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 50.0F, 1F);
 						}
 					}else {
-						player.sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+name+ChatColor.RED+" no existe. ");
-						player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 50.0F, 1F);
+						player.sendMessage(plugin.nombre+ChatColor.RED+" Usa /mg check <Player> ");
 					}
-				
-					
 				
 					return true;
 					
@@ -1198,12 +1175,11 @@ public class Comandos implements CommandExecutor{
 						
 						//mg message Tuto hola como estan.
 						if (args.length >= 2) {
+							
 							String name = args[1];
-					
 							String mensaje = "";
 				        	 for(int i = 2 ;i < args.length; i++) {
 								 mensaje = mensaje+args[i]+" "; 
-								 
 							 }
 							gc.SendTittleToAllUsersOfSameMapCommand(player, name, mensaje);
 						}else {
@@ -1213,8 +1189,6 @@ public class Comandos implements CommandExecutor{
 						player.sendMessage(plugin.nombre+ChatColor.RED+" No tienes permiso para usar ese comando");
 						
 					}
-					
-			
 					
 					return true;
 					
@@ -1287,10 +1261,6 @@ public class Comandos implements CommandExecutor{
 										if(a.getType() == Material.DIAMOND_BLOCK) {
 											player.sendMessage("Hay un bloque de diamante en las coords X:"+a.getLocation().getBlockX()+" Y:"+a.getLocation().getBlockY()+" Z:"+a.getLocation().getBlockZ());
 										}
-
-									
-
-								
 
 								}
 								;

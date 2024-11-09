@@ -3,6 +3,7 @@ package me.top.users;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
@@ -146,6 +147,34 @@ public class PHMiniGame extends PlaceholderExpansion{
 
         	
         	return 	String.valueOf(c.isInsideOfLocations(player.getLocation(), loc1, loc2));
+ 
+        }else if(identifier.startsWith("isblockinside_")){
+        	
+        	String text = identifier.replace("isblockinside_","");
+        	String[] split = text.split("_");
+        	String[] split1 = text.split(":");
+        	String[] split2 = split[0].split(",");
+        	String[] split3 = split[1].split(",");
+        	
+        	GameConditions c = new GameConditions(plugin);
+        	
+        	Location loc1 = new Location(Bukkit.getWorld(split2[0]),Double.valueOf(split2[1]),Double.valueOf(split2[2]),Double.valueOf(split2[3]));
+        	Location loc2 = new Location(Bukkit.getWorld(split3[0]),Double.valueOf(split3[1]),Double.valueOf(split3[2]),Double.valueOf(split3[3].replaceAll("\\D",""))); // \\D remplaza todo lo que nosea numero 
+
+        	
+        	return 	String.valueOf(c.isBlockInside(Material.valueOf(split1[1].toUpperCase()), loc1, loc2));
+ 
+        }else if(identifier.startsWith("isblock_")){
+        	
+        	String text = identifier.replace("isblock_","");
+        	String[] split = text.split("_");
+        	String[] split1 = text.split(":");
+        	String[] split2 = split[0].split(",");
+   
+        	//mg isblock_world,23,45,67:AIR
+        	GameConditions c = new GameConditions(plugin);
+        	Location loc1 = new Location(Bukkit.getWorld(split2[0]),Double.valueOf(split2[1]),Double.valueOf(split2[2]),Double.valueOf(split2[3].replaceAll("\\D","")));
+        	return 	String.valueOf(c.isBlock(Material.valueOf(split1[1].toUpperCase()), loc1));
  
         }
         

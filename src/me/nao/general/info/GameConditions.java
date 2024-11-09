@@ -42,6 +42,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Team;
+import org.bukkit.util.RayTraceResult;
 
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.ViaAPI;
@@ -281,10 +282,11 @@ public class GameConditions {
 				sco.ClearScore(target);
 				RestorePlayer(target);
 			}
+				System.out.println("LOG END GAME RESULT: "+plugin.getGameInfoPoo().get(name).ShowGame());
 				System.out.println("ENTIDADES MARCADAS: "+plugin.getEntitiesFromFlare().size());
 				plugin.getEntitiesFromFlare().remove(name);
 				plugin.getGameInfoPoo().remove(name);
-				System.out.println("LOG END GAME DESPUES MAP OBJECT BORRADO: "+plugin.getGameInfoPoo().toString());
+				System.out.println("LOG MAP OF GAMES: "+plugin.getGameInfoPoo().toString());
 
 		}
 		
@@ -3806,7 +3808,37 @@ public class GameConditions {
 		
 	}
 	
+	public boolean isBlockInside(Material m , Location point1 , Location point2) {
+		
+		if(point1.distance(point2) > 50) return false;
+		if(!(point1.getWorld().getName().equals(point2.getWorld().getName()))) return false;
+		
+			String world = point1.getWorld().getName();
+			double minX = Math.min(point1.getX(),point2.getX());
+			double minY = Math.min(point1.getY(),point2.getY());
+			double minZ = Math.min(point1.getZ(),point2.getZ());
+			
+			double maxX = Math.max(point1.getX(), point2.getX())+1;
+			double maxY = Math.max(point1.getY(), point2.getY());//quite un +1 
+			double maxZ = Math.max(point1.getZ(), point2.getZ())+1;
+
+			
+			for(int x = (int) minX; x <= maxX;x++) {
+				for(int y = (int) minY; y <= maxY;y++) {
+					for(int z = (int) minZ; z <= maxZ;z++) {
+						Location l = new Location(Bukkit.getWorld(world),x,y,z);
+						if(m == l.getBlock().getType()) return true;
+					}
+				}
+			}
+			return false;
+		
+	}
 	
+	public boolean isBlock(Material m , Location point1) {
+		return point1.getBlock().getType() == m ;
+	
+	}
 	
 	//TODO GET VERSION PLAYER AT MG
 	public void getPlayerVersion(Player player,String targ) {
@@ -3985,36 +4017,47 @@ public class GameConditions {
 	}
 	
 	
-	public void turret(Player player) {
-		Block b = player.getLocation().getBlock();
+	public void turret(LivingEntity ent) {
+		
+		Location loc = ent.getLocation();
+		Location loc2 = ent.getLocation();
+		Block b = ent.getLocation().getBlock();
 		Block under = b.getRelative(0,-1,0);
 		Block under2 = b.getRelative(0,-2,0);
 		Block under3 = b.getRelative(0,-3,0);
 		
 		
 		if(under.getType() == Material.LODESTONE && under2.getType() == Material.BEACON && under3.getType() == Material.WHITE_CONCRETE) {
-		
-			Location loc = player.getLocation();
-			Location loc2 = player.getLocation();
-			
-			player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 20.0F, 1F);
-			
-		
 			Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
 			Arrow aw2 = (Arrow) loc2.getWorld().spawnEntity(loc2.add(0, 1.6, 0), EntityType.ARROW);
 			aw.setCritical(true);
 			aw.setKnockbackStrength(1);
 			aw.setFireTicks(1200);
 			aw.setVelocity(loc.getDirection().multiply(6).rotateAroundY(Math.toRadians(1)));
-			
+			aw.setCustomName("Torreta");
 			aw2.setCritical(true);
 			aw2.setKnockbackStrength(1);
 			aw2.setFireTicks(1200);
 			aw2.setVelocity(loc2.getDirection().multiply(6).rotateAroundY(Math.toRadians(-1)));
-
-			aw.setShooter(player);
-			aw2.setShooter(player);
+			aw2.setCustomName("Torreta");
+			aw.setShooter(ent);
+			aw2.setShooter(ent);
+			if(ent instanceof Player) {
+				Player player = (Player) ent;
+					player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 20.0F, 1F);
+			}else{
+				RayTraceResult rt = ent.getWorld().rayTraceEntities(ent.getEyeLocation().add(ent.getLocation().getDirection()),ent.getLocation().getDirection() , 100.0D);
+          		if(rt != null && rt.getHitEntity() != null) {
+          			if(rt.getHitEntity().getType() == EntityType.PLAYER) {
+          				ent.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,/*duration*/ 30*20,/*amplifier:*/20, false ,false,true));
+        				
+          			}
+          		}
+				
+			}
+			
 		}
+	
 	}
 	
 	
