@@ -219,10 +219,10 @@ public class GameIntoMap {
 	
 	public void GamePlayerFallMap(Player player) {
 		
-		 
 		
 		Block block = player.getLocation().getBlock();
 		Block b = block.getRelative(0, -1, 0);
+		
 		if(b.getType() == Material.BARRIER && player.getGameMode() == GameMode.ADVENTURE) {
 			
 			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
@@ -230,18 +230,16 @@ public class GameIntoMap {
 			GameInfo gi = plugin.getGameInfoPoo().get(mapa);
 			GameConditions gmc = new GameConditions(plugin);
 			
-			
 			if(gmc.hasPlayerACheckPoint(player)) {
 				return;
 			}else if(gmc.hasAntiVoid(player) && gi.getGameType() != GameType.NEXO){
 				
-				
 				gmc.TptoSpawnMapSimple(player);
 				player.sendTitle(ChatColor.GREEN+"Anti Void Activado",ChatColor.GREEN+"No te Caigas",20,60,20);
-
 				player.sendMessage(ChatColor.GREEN+"-Que suerte el Mapa tiene Anti Void pero Siempre Regresaras al Inicio del Mapa Ojo con el Tiempo.");
 				player.sendMessage(ChatColor.GREEN+"-Mmmm no estoy seguro si el Daño por Caida esta Anulado asi que ten Cuidado.");
 				return;
+				
 			}else {
 				pl.getGamePoints().setDeads(pl.getGamePoints().getDeads()+1);
 				player.getInventory().clear(); 
@@ -260,6 +258,7 @@ public class GameIntoMap {
 
 						}
 					}
+					
 				}else {
 					player.sendMessage(ChatColor.RED+"Moriste por que "+ChatColor.YELLOW+"Te caiste fuera del Mapa");
 					gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"Caerse Fuera del Mapa.");
@@ -504,6 +503,7 @@ public class GameIntoMap {
 				/* NUMERO DE PARTICULAS */50, 0, 0, 0, /* velocidad */0, null, true);
 	
 		if(gi instanceof GameAdventure) {
+			GameAdventure ga = (GameAdventure) gi;
 			gmc.DeadPlayerToGame(player, mapa);
 			
 		
@@ -516,8 +516,11 @@ public class GameIntoMap {
 			pl.getGamePoints().setDeads(pl.getGamePoints().getDeads()+1);
 			player.setGameMode(GameMode.SPECTATOR);
 			
-			player.sendMessage(ChatColor.RED+"\nUsa la hotbar para ver a otros jugadores. "+ChatColor.YELLOW+"\n!!!Solo podras ver a los que estan en tu partida");
-			player.sendMessage(ChatColor.GREEN+"Puedes ser revivido por tus compañeros.(Siempre que hayan cofres de Revivir)");
+			if(!ga.getAlivePlayers().isEmpty()) {
+				player.sendMessage(ChatColor.RED+"|Usa la hotbar para Espectear a otros Jugadores. "+ChatColor.YELLOW+"\n|Solo podras ver a los que estan en tu Partida");
+				player.sendMessage(ChatColor.WHITE+"|Puedes ser "+ChatColor.GREEN+"Revivido "+ChatColor.WHITE+"por tus compañeros"+ChatColor.GOLD+"(Siempre que hayan cofres de Revivir)");
+			}
+		
 			
 		}else if(gi instanceof GameNexo) {
 //			GameNexo gn = (GameNexo) gi;
@@ -535,15 +538,6 @@ public class GameIntoMap {
 		
 		
 	}
-	
-	
-	//TODO MALO
-	
-	
-	
-	
-
-
 	
 	//TODO BORDE DE BIEN
 	public void GamePlayerAddPoints(Player player) {
@@ -567,12 +561,12 @@ public class GameIntoMap {
 		int puntos3 = gp.getRevive();
 		int puntos4 = gp.getHelpRevive();
 		int puntos5 = gp.getDamage();
-		player.sendMessage(""+ChatColor.YELLOW+ChatColor.BOLD+"[PUNTUACION ACTUAL]");
-		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"Eliminaciones : "+ChatColor.YELLOW+ChatColor.BOLD+puntos);
-		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"Muertes : "+ChatColor.YELLOW+ChatColor.BOLD+puntos2);
-		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"Revivido : "+ChatColor.YELLOW+ChatColor.BOLD+puntos3);
-		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"Ayudas a Revivir : "+ChatColor.YELLOW+ChatColor.BOLD+puntos4);
-		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"Daño : "+ChatColor.YELLOW+ChatColor.BOLD+TransformPosOrNeg(puntos5));
+		player.sendMessage(""+ChatColor.YELLOW+ChatColor.BOLD+" [PUNTUACION ACTUAL]");
+		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+" Eliminaciones : "+ChatColor.YELLOW+ChatColor.BOLD+puntos);
+		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+" Muertes : "+ChatColor.YELLOW+ChatColor.BOLD+puntos2);
+		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+" Revivido : "+ChatColor.YELLOW+ChatColor.BOLD+puntos3);
+		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+" Ayudas a Revivir : "+ChatColor.YELLOW+ChatColor.BOLD+puntos4);
+		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+" Daño : "+ChatColor.YELLOW+ChatColor.BOLD+TransformPosOrNeg(puntos5));
 		
 	}
 	
@@ -648,6 +642,7 @@ public class GameIntoMap {
 			
 			if(gmc.hasPlayerACheckPoint(player)) return;
 			
+			player.sendMessage("");
 			//SI TE MATA UN JUGADOR
 			if(e instanceof Player) {
 				Player p = (Player) e;
@@ -659,8 +654,7 @@ public class GameIntoMap {
 				}
 			
 				gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+p.getName());
-				GamePlayerDeadInMap(player);
-			
+				
 			//SI TE MATA UN PROYECTIL	
 			}else if(e instanceof Projectile) {
 				Projectile shoot = (Projectile) e;
@@ -685,7 +679,7 @@ public class GameIntoMap {
 				}else if(EntityHasShooter(damager)) {
 					if(EntityHasName(damager)) {
 						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+damager.getCustomName(), 40, 80, 40);
-						player.sendMessage(ChatColor.RED+"Moriste por :"+ChatColor.YELLOW+damager.getCustomName());
+						player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+damager.getCustomName());
 						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+damager.getCustomName());
 
 						
@@ -710,13 +704,10 @@ public class GameIntoMap {
 					}
 				}
 				
-				
-			
-				GamePlayerDeadInMap(player);
 			}else {
 				if(EntityHasName(e)) {
 					player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+e.getCustomName(), 40, 80, 40);
-					player.sendMessage(ChatColor.RED+"Moriste por :"+ChatColor.YELLOW+e.getCustomName());
+					player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+e.getCustomName());
 					gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+e.getType());
 
 				}else {
@@ -725,14 +716,10 @@ public class GameIntoMap {
 					gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+e.getType());
 
 				}
-				
-				GamePlayerDeadInMap(player);
 			}
-			
-			
-		
-		
-		
+			player.sendMessage("");
+			HealPlayer(player);
+			GamePlayerDeadInMap(player);
 	}
 	
 	public void GameDamageCauses(Player player, EntityDamageEvent.DamageCause c) {
@@ -740,10 +727,8 @@ public class GameIntoMap {
 			GameConditions gmc = new GameConditions(plugin);
 			if(gmc.hasPlayerACheckPoint(player)) return;
 			
-				HealPlayer(player);
-			
-				GamePlayerDeadInMap(player);
 				
+				player.sendMessage("");
 				if(plugin.CreditKill().containsKey(player)) {
 					Entity mob = plugin.CreditKill().get(player);
 					if(!mob.isDead()) {
@@ -853,9 +838,9 @@ public class GameIntoMap {
 				
 				if(c == EntityDamageEvent.DamageCause.HOT_FLOOR) {
 					player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"PISO CALIENTE", 40, 80, 40);
-					player.sendMessage(ChatColor.RED+"Moriste por"+ChatColor.YELLOW+"Piso Caliente");
+					player.sendMessage(ChatColor.RED+"Moriste por "+ChatColor.YELLOW+"un Piso Caliente");
 					
-				    gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"PISO CALIENTE");
+				    gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por un "+ChatColor.YELLOW+"PISO CALIENTE");
 					    
 				}
 				
@@ -886,7 +871,7 @@ public class GameIntoMap {
 				}
 				
 				if(c == EntityDamageEvent.DamageCause.POISON) {
-					player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"POSION", 40, 80, 40);
+					player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"ENVENENAMIENTO", 40, 80, 40);
 					player.sendMessage(ChatColor.RED+"Moriste "+ChatColor.YELLOW+"Envenenado");
 					
 		
@@ -930,16 +915,33 @@ public class GameIntoMap {
 				
 				if(c == EntityDamageEvent.DamageCause.FLY_INTO_WALL) {
 					player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"TE ESTRELLASTE", 40, 80, 40);
-					player.sendMessage(ChatColor.RED+"Moriste por "+ChatColor.YELLOW+"TE ESTRELLASTE CONTRA UNA PARED");
+					player.sendMessage(ChatColor.RED+"Moriste por "+ChatColor.YELLOW+"ESTRELLARTE CONTRA UNA PARED");
 					
 					gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"ESTRELLARSE CONTRA UNA PARED");
 					 
 					
 				}
 				
-			
-			
-		
+				if(c == EntityDamageEvent.DamageCause.KILL) {
+					player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"TE HICIERON /KILL", 40, 80, 40);
+					player.sendMessage(ChatColor.RED+"Moriste por "+ChatColor.YELLOW+"QUE TE HICIERON /KILL");
+					
+					gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"QUE LE HICIERON /KILL");
+					 
+					
+				}
+				
+				if(c == EntityDamageEvent.DamageCause.STARVATION) {
+					player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"HAMBRE", 40, 80, 40);
+					player.sendMessage(ChatColor.RED+"Moriste de "+ChatColor.YELLOW+"HAMBRE");
+					
+					gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio de "+ChatColor.YELLOW+"HAMBRE");
+					 
+					
+				}
+				player.sendMessage("");
+				HealPlayer(player);
+				GamePlayerDeadInMap(player);		
 		//colocar abajo condicion reformada de checkpoint
 		
 	}

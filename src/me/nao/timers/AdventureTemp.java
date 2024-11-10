@@ -312,7 +312,7 @@ public class AdventureTemp {
 						System.out.println("ESTADO "+isAllKnocked(name)+" HAS PLAYER ITEM: "+hasPlayersAutoreviveItem(name));
 						for(String target : joins) {
 								 Player players = Bukkit.getPlayerExact(target);
-							 players.sendMessage(ChatColor.GREEN+"Todos los jugadores fueron eliminados F ");
+							 players.sendMessage(ChatColor.RED+"Todos los jugadores fueron eliminados F \n");
 						 }
 							
 						 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Todos perdieron "+ChatColor.GREEN+joins+ChatColor.RED+" mapa: "+ChatColor.GREEN+name+"\n");

@@ -281,7 +281,7 @@ public class ResistenceTemp {
 				  		
 					}else if(dead.size() == joins.size()) {
 						 for(Player players : joins) {
-							 players.sendMessage(ChatColor.RED+"Todos los Jugadores fueron eliminados F ...");
+							 players.sendMessage(ChatColor.RED+"Todos los Jugadores fueron eliminados F ...\n");
 						 }
 						
 						 boss.setProgress(1.0);

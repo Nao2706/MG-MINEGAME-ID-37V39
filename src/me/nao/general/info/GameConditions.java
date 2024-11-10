@@ -3840,6 +3840,58 @@ public class GameConditions {
 	
 	}
 	
+	public boolean isEntityAbove(Location point1) {
+		
+		List<Entity> list = getNearbyEntities(point1, 1);
+		if(list.isEmpty()) {
+			return false;
+		}
+		
+		for(Entity ent : list) {
+		
+			Block block = ent.getLocation().getBlock();
+			Block r = block.getRelative(0,-1, 0);
+			if(r.getLocation() == point1) {
+				return true;
+			}
+			
+		}
+		
+		return false;
+	}
+	
+	public int getAmountOfEntityAboveBlock(Location loc) {
+	
+		List<Entity> list = getNearbyEntities(loc, 2);
+		List<Entity> list2 = new ArrayList<>();
+		if(list.isEmpty()) {
+			return 0;
+		}
+		
+		for(Entity ent : list) {
+			Block block = ent.getLocation().getBlock();
+			Block r = block.getRelative(0,-1, 0);
+			if(r.getLocation() == loc) {
+				list2.add(ent);
+			}
+		}
+		
+		return list2.size();
+	}
+	
+	public List<Entity> getNearbyEntities(Location l , int size){
+			
+			List<Entity> entities = new ArrayList<Entity>();
+			for(Entity e : l.getWorld().getEntities()) {
+			
+				if(l.distance(e.getLocation()) <= size) {
+					if(e.getType() == EntityType.PLAYER) continue;
+					entities.add(e);
+				}
+			}
+			return entities;
+	}
+	
 	//TODO GET VERSION PLAYER AT MG
 	public void getPlayerVersion(Player player,String targ) {
 		

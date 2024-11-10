@@ -12,13 +12,17 @@ import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Drowned;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Husk;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
+import org.bukkit.entity.ZombieVillager;
 import org.bukkit.entity.AbstractArrow.PickupStatus;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -28,6 +32,7 @@ import org.bukkit.util.Vector;
 
 import me.nao.main.game.Minegame;
 import me.nao.manager.GameIntoMap;
+
 
 public class MobsActions {
 
@@ -301,6 +306,150 @@ public class MobsActions {
 		aw.setCustomName("Torreta Anti Aerea");
 		aw.setPickupStatus(PickupStatus.CREATIVE_ONLY);
 	}
+	
+	
+	
+	public void spawnManualBabyZombi(Location l) {
+		PotionEffect salto = new PotionEffect(PotionEffectType.JUMP,/*duration*/ 99999,/*amplifier:*/5, true ,true,true );
+		PotionEffect rapido = new PotionEffect(PotionEffectType.SPEED,/*duration*/ 99999,/*amplifier:*/5, true ,true,true );
+		
+		
+	
+		ZombieVillager zv1 = (ZombieVillager) l.getWorld().spawnEntity(l, EntityType.ZOMBIE_VILLAGER);
+		zv1.setBaby();
+		zv1.addPotionEffect(rapido);
+		zv1.addPotionEffect(salto);
+		zv1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		
+		
+		
+		Zombie zv2 = (Zombie) l.getWorld().spawnEntity(l, EntityType.ZOMBIE);
+		zv2.setBaby();
+		zv2.addPotionEffect(rapido);
+		zv2.addPotionEffect(salto);
+		zv2.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		
+		
+		Drowned zv3 = (Drowned) l.getWorld().spawnEntity(l, EntityType.DROWNED);
+		zv3.setBaby();
+		zv3.addPotionEffect(rapido);
+		zv3.addPotionEffect(salto);
+		zv3.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		
+		
+		
+		Husk husk = (Husk) l.getWorld().spawnEntity(l, EntityType.HUSK);	
+		husk.setBaby();
+		husk.addPotionEffect(rapido);
+		husk.addPotionEffect(salto);
+		husk.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		
+	
+		
+		
+
+
+	}
+	
+	public void spawnManualZombi(Location l) {
+		PotionEffect salto = new PotionEffect(PotionEffectType.JUMP,/*duration*/ 99999,/*amplifier:*/5, true ,true,true );
+		PotionEffect rapido = new PotionEffect(PotionEffectType.SPEED,/*duration*/ 99999,/*amplifier:*/5, true ,true,true );
+		
+		
+	
+		ZombieVillager zv1 = (ZombieVillager) l.getWorld().spawnEntity(l, EntityType.ZOMBIE_VILLAGER);
+	
+		zv1.addPotionEffect(rapido);
+		zv1.addPotionEffect(salto);
+		zv1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		
+		
+		Zombie zv2 = (Zombie) l.getWorld().spawnEntity(l, EntityType.ZOMBIE);
+		zv2.addPotionEffect(rapido);
+		zv2.addPotionEffect(salto);
+		zv2.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		
+		
+		Drowned zv3 = (Drowned) l.getWorld().spawnEntity(l, EntityType.DROWNED);
+		zv3.addPotionEffect(rapido);
+		zv3.addPotionEffect(salto);
+		zv3.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		
+		
+		
+		Husk husk = (Husk) l.getWorld().spawnEntity(l, EntityType.HUSK);	
+		husk.addPotionEffect(rapido);
+		husk.addPotionEffect(salto);
+		husk.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		
+
+	}
+	
+	public void spawnEliteZombi(Location l) {
+		
+		
+		
+		Zombie zombi1 = (Zombie)  l.getWorld().spawnEntity(l, EntityType.ZOMBIE);
+		Zombie zombi2 = (Zombie)  l.getWorld().spawnEntity(l, EntityType.ZOMBIE);
+		Zombie zombi3 = (Zombie)  l.getWorld().spawnEntity(l, EntityType.ZOMBIE);
+		Zombie zombi4 = (Zombie)  l.getWorld().spawnEntity(l, EntityType.ZOMBIE);
+		
+		zombi1.setCustomName(""+ChatColor.DARK_RED+ChatColor.BOLD+"Tank Infectado");
+		zombi3.setCustomName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"Elite Infectado");
+		zombi2.setCustomName(""+ChatColor.WHITE+ChatColor.BOLD+"Soldado Infectado");
+		zombi4.setCustomName(""+ChatColor.GREEN+ChatColor.BOLD+"Superviviente Infectado");
+		zombi1.setCustomNameVisible(true);
+		zombi2.setCustomNameVisible(true);
+		zombi3.setCustomNameVisible(true);
+		zombi4.setCustomNameVisible(true);
+	
+		
+		
+		
+		PotionEffect rapido = new PotionEffect(PotionEffectType.SPEED,/*duration*/ 99999,/*amplifier:*/5, false ,false,true );
+		PotionEffect salto = new PotionEffect(PotionEffectType.JUMP,/*duration*/ 99999,/*amplifier:*/5, false ,false,true );
+		zombi1.addPotionEffect(rapido);
+		zombi1.addPotionEffect(salto);
+		zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		zombi1.getEquipment().setHelmet(new ItemStack(Material.DIAMOND_HELMET));
+		zombi1.getEquipment().setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
+		zombi1.getEquipment().setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
+		zombi1.getEquipment().setBoots(new ItemStack(Material.DIAMOND_BOOTS));
+		zombi1.getEquipment().setItemInMainHand(new ItemStack(Material.DIAMOND_SWORD));
+		
+		
+		
+		
+		zombi2.addPotionEffect(rapido);
+		zombi2.addPotionEffect(salto);
+		zombi2.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		zombi2.getEquipment().setHelmet(new ItemStack(Material.IRON_HELMET));
+		zombi2.getEquipment().setChestplate(new ItemStack(Material.NETHERITE_CHESTPLATE));
+		zombi2.getEquipment().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
+		zombi2.getEquipment().setBoots(new ItemStack(Material.IRON_BOOTS));
+		zombi2.getEquipment().setItemInMainHand(new ItemStack(Material.IRON_SWORD));
+		
+		
+		zombi3.addPotionEffect(rapido);
+		zombi3.addPotionEffect(salto);
+		zombi3.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		zombi3.getEquipment().setHelmet(new ItemStack(Material.NETHERITE_HELMET));
+		zombi3.getEquipment().setChestplate(new ItemStack(Material.NETHERITE_CHESTPLATE));
+		zombi3.getEquipment().setLeggings(new ItemStack(Material.NETHERITE_LEGGINGS));
+		zombi3.getEquipment().setBoots(new ItemStack(Material.NETHERITE_BOOTS));
+		zombi3.getEquipment().setItemInMainHand(new ItemStack(Material.NETHERITE_SWORD));
+		
+		
+		zombi4.addPotionEffect(rapido);
+		zombi4.addPotionEffect(salto);
+		zombi4.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		zombi4.getEquipment().setHelmet(new ItemStack(Material.LEATHER_HELMET));
+		zombi4.getEquipment().setChestplate(new ItemStack(Material.LEATHER_CHESTPLATE));
+		zombi4.getEquipment().setLeggings(new ItemStack(Material.LEATHER_LEGGINGS));
+		zombi4.getEquipment().setBoots(new ItemStack(Material.LEATHER_BOOTS));
+		zombi4.getEquipment().setItemInMainHand(new ItemStack(Material.DIAMOND_AXE));
+	}
+	
 	
 	
 	

@@ -412,10 +412,7 @@ public class SourceOfDamage implements Listener{
 					m.getWorld().dropItem(m.getLocation(), (new ItemStack(Material.NETHERITE_INGOT,1)));
 				}
 				
-				
 				//SoulsArmor(player);
-					
-				
 				
 				 GameIntoMap c = new GameIntoMap(plugin);
 				 c.GamePlayerAddPoints(player);

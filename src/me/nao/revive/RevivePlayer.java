@@ -11,7 +11,9 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -157,9 +159,46 @@ public class RevivePlayer{
 		addToRevive();
 		//System.out.println("TODOS NOQUEADOS: "+isAllKnocked()+ " TIENE ITEM DE REVIVIR: "+hasPlayersAutoreviveItem());
 		Start();
-		gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+ player.getName()+ChatColor.YELLOW+" fue Derribado. (Ayudalo a levantarse tiene solo %time%)".replace("%time%",time+"s"));
+		gc.sendMessageToUsersOfSameMapLessPlayer(player,""+ChatColor.RED+ChatColor.BOLD+ player.getName()+ChatColor.YELLOW+" fue Derribado. (Ayudalo a levantarse tiene solo %time%)".replace("%time%",time+"s"));
+		
 		player.sendMessage("");
-		player.sendMessage(ChatColor.YELLOW+"Has sido Derribado.");
+		if(e != null) {
+			if(e instanceof LivingEntity) {
+				LivingEntity le = (LivingEntity) e;
+				if(le.getCustomName() != null) {
+					player.sendMessage(ChatColor.YELLOW+"Has sido Derribado por: "+ChatColor.GOLD+le.getCustomName());
+					gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+le.getCustomName());
+					
+				}else {
+					player.sendMessage(ChatColor.YELLOW+"Has sido Derribado por: "+ChatColor.GOLD+le.getType());
+					gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+le.getType());
+					
+				}
+			}else if(e instanceof Projectile) {
+				
+				Projectile p =(Projectile) e;
+				if(p.getCustomName() != null) {
+					player.sendMessage(ChatColor.YELLOW+"Has sido Derribado por: "+ChatColor.GOLD+p.getCustomName());
+					gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+p.getCustomName());
+					
+				}else {
+					player.sendMessage(ChatColor.YELLOW+"Has sido Derribado por: "+ChatColor.GOLD+p.getType());
+					gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+p.getType());
+			
+				}
+				
+			}
+
+		}else{
+			if(cause != null) {
+				player.sendMessage(ChatColor.YELLOW+"Has sido Derribado por: "+ChatColor.GOLD+causeToSpanish(cause));
+				gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+causeToSpanish(cause));
+				
+			}
+		}
+
+		
+	
 		player.sendMessage("");
 
 	}
@@ -185,7 +224,43 @@ public class RevivePlayer{
 		
 	}
 	
-	
+	public String causeToSpanish(DamageCause cause) {
+		String causes = "";
+		if(cause == DamageCause.BLOCK_EXPLOSION) {
+			causes = "POR UNA EXPLOSION DE BLOQUE";
+		}else if(cause == DamageCause.CONTACT) {
+			causes = "POR CONTACTO";
+		}else if(cause == DamageCause.CRAMMING) {
+			causes = "POR ASFIXIA ENTRE MUCHAS ENTIDADES";
+		}else if(cause == DamageCause.CUSTOM) {
+			causes = "POR DAÑO CUSTOM";
+		}else if(cause == DamageCause.DROWNING) {
+			causes = "POR AHOGARSE";
+		}else if(cause == DamageCause.FALL) {
+			causes = "POR UNA CAIDA";
+		}else if(cause == DamageCause.FIRE) {
+			causes = "POR FUEGO";
+		}else if(cause == DamageCause.FLY_INTO_WALL) {
+			causes = "POR VOLAR CONTRA UNA PARED";
+		}else if(cause == DamageCause.FREEZE) {
+			causes = "POR CONGELAMIENTO";
+		}else if(cause == DamageCause.HOT_FLOOR) {
+			causes = "POR UN PISO CALIENTE";
+		}else if(cause == DamageCause.KILL) {
+			causes = "POR COMANDO /KILL";
+		}else if(cause == DamageCause.LAVA) {
+			causes = "POR LAVA";
+		}else if(cause == DamageCause.LIGHTNING) {
+			causes = "POR UN RAYO";
+		}else if(cause == DamageCause.MAGIC) {
+			causes = "POR MAGIA";
+		}else if(cause == DamageCause.STARVATION) {
+			causes = "POR HAMBRE";
+		}else if(cause == DamageCause.SUFFOCATION) {
+			causes = "POR SOFOCACION";
+		}
+		return causes;
+	}
 	
 	public void addToRevive() {
 	

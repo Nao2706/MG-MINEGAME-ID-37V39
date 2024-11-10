@@ -24,6 +24,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.type.Piston;
@@ -62,6 +63,7 @@ import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameReports;
 import me.nao.main.game.Minegame;
 import me.nao.manager.MapSettings;
+import me.nao.mobs.MobsActions;
 import me.nao.manager.GameIntoMap;
 import me.nao.scoreboard.MgScore;
 import me.nao.shop.MinigameShop1;
@@ -309,7 +311,53 @@ public class Comandos implements CommandExecutor{
 					}
 					
 					return true;
-		    	}else if(args[0].equalsIgnoreCase("version")){
+		    	}else if(args[0].equalsIgnoreCase("spawnzombi")) {
+			 		//H Z BZ EZ
+					//mg spawnzombi wolrd,12,23,34 50 H
+			 		 if(args.length == 4) {
+			 			 String location = args[1];
+			 			 String amount  = args[2];
+			 			 String type = args[3].toUpperCase();
+			 			 
+			 			 String[] split = location.split(",");
+			 			 
+			 			 World world = Bukkit.getWorld(split[0]);
+			 			 if(world == null) {
+			 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El mundo "+ChatColor.GOLD+split[0]+ChatColor.RED+" no existe.");
+			 				 return true;
+			 			 }
+			 			 Location l = new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3]));
+			 			 
+			 			 int cant = Integer.valueOf(amount);
+			 			 
+			 			 if(cant == 0) {
+			 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No puedes dejar en 0 el monto.");
+			 				 return true;
+			 			 }
+			 			 MobsActions ma = new MobsActions(plugin);
+			 			 
+			 			 for(int i = 0; i < cant; i++) {
+			 				 if(type.equals("H")) {
+			 					 ma.spawnEliteZombi(l.add(0.5,0,0.5));
+			 					 ma.spawnManualBabyZombi(l.add(0.5,0,0.5));
+			 					 ma.spawnManualZombi(l.add(0.5,0,0.5));
+			 				 }if(type.equals("ZB")) {
+			 					 ma.spawnManualBabyZombi(l.add(0.5,0,0.5));
+			 				 }if(type.equals("ZE")) {
+			 					 ma.spawnEliteZombi(l.add(0.5,0,0.5));
+			 				 }if(type.equals("Z")) {
+			 					 ma.spawnManualZombi(l.add(0.5,0,0.5));
+			 				 }
+			 			 }
+			 			 
+			 		 }else{
+			 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa mg spawnzombi <world,x,y,z> <amount> <H: Horde of all zombies, ZE:zombie elite, ZB:zombie baby, Z:zombie>");
+			 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Ejemplo mg spawnzombi world,12,23,34 50 H");
+			 		 }
+			 		  
+					return true;
+				
+				  }else if(args[0].equalsIgnoreCase("version")){
 				
 					Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Version: "+plugin.version);
 				    return true;
@@ -1830,86 +1878,129 @@ public class Comandos implements CommandExecutor{
 					return true;
 					
 				}else if(args[0].equalsIgnoreCase("spectator")) {
-					if (args.length == 2) {
-						String name = args[1];
-						
-						if(!plugin.getGameInfoPoo().containsKey(name)) {
-							player.sendMessage(ChatColor.RED+"Ese Mapa no esta en Juego por lo cual no puedes Espectearlo.");
-							return true;
+						if (args.length == 2) {
+							String name = args[1];
+							
+							if(!plugin.getGameInfoPoo().containsKey(name)) {
+								player.sendMessage(ChatColor.RED+"Ese Mapa no esta en Juego por lo cual no puedes Espectearlo.");
+								return true;
+							}
+							
+							FileConfiguration config = plugin.getConfig();
+							 List<String> al = config.getStringList("Maps-Locked.List");
+							 if(al.contains(name) && !player.isOp()) {
+								 player.sendMessage(plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+name+ChatColor.RED+" esta Bloqueado.");
+								 return true;
+							 }else if(al.contains(name) && player.isOp()){
+								 player.sendMessage(plugin.nombre+ChatColor.RED+" Has Entrado como Op a "+ChatColor.GOLD+name+ChatColor.RED+" es un Mapa que esta Bloqueado.");
+							
+								 gc.JoinSpectator(player,name);
+								 return true;
+							 }else {
+								 gc.JoinSpectator(player,name);
+								 return true;
+							 }
+					
+							
+					
+						}else {
+							player.sendMessage(plugin.nombre+ChatColor.GREEN+"escribe /mg spectator <mapa>");
+						}
+				
+						return true;
+				 
+					}else if(args[0].equalsIgnoreCase("head")) {
+						if (args.length == 2) {
+							 Material m = Material.matchMaterial(args[1].toUpperCase());
+							 if(m == null) {
+	                             player.sendMessage(args[1]+ChatColor.RED+" Ese item no es un material");
+	                               return false;
+							 }
+							 
+							 ItemStack ite = new ItemStack(m);
+							 player.getInventory().setHelmet(ite);
+							
+						}else {
+							player.sendMessage(ChatColor.RED+"/mg head <material>");
 						}
 						
-						FileConfiguration config = plugin.getConfig();
-						 List<String> al = config.getStringList("Maps-Locked.List");
-						 if(al.contains(name) && !player.isOp()) {
-							 player.sendMessage(plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+name+ChatColor.RED+" esta Bloqueado.");
-							 return true;
-						 }else if(al.contains(name) && player.isOp()){
-							 player.sendMessage(plugin.nombre+ChatColor.RED+" Has Entrado como Op a "+ChatColor.GOLD+name+ChatColor.RED+" es un Mapa que esta Bloqueado.");
-						
-							 gc.JoinSpectator(player,name);
-							 return true;
-						 }else {
-							 gc.JoinSpectator(player,name);
-							 return true;
-						 }
+						return true;
+					}else if(args[0].equalsIgnoreCase("join")) {
+						if(args.length == 2) {
+							String name = args[1];
+							FileConfiguration config = plugin.getConfig();
+							 List<String> al = config.getStringList("Maps-Locked.List");
+							 if(al.contains(name) && !player.isOp()) {
+								 player.sendMessage(plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+name+ChatColor.RED+" esta Bloqueado.");
+								 return true;
+							 }else if(al.contains(name) && player.isOp()){
+								 player.sendMessage(plugin.nombre+ChatColor.RED+" Has Entrado a "+ChatColor.GOLD+name+ChatColor.RED+" es un Mapa que esta Bloqueado.");
+							
+								 gc.mgJoinToTheGames(player, name);
+								 return true;
+							 }else {
+								 gc.mgJoinToTheGames(player, name);
+								 return true;
+							 }
+						}else {
+							player.sendMessage(plugin.nombre+ChatColor.GREEN+"escribe /mg join <mapa>");
+						}
 				
-						
-				
-					}else {
-						player.sendMessage(plugin.nombre+ChatColor.GREEN+"escribe /mg spectator <mapa>");
-					}
-				
-				 return true;
+						return true;
 				 
-				}else if(args[0].equalsIgnoreCase("head")) {
-					if (args.length == 2) {
-						 Material m = Material.matchMaterial(args[1].toUpperCase());
-						 if(m == null) {
-                             player.sendMessage(args[1]+ChatColor.RED+" Ese item no es un material");
-                               return false;
-						 }
-						 
-						 ItemStack ite = new ItemStack(m);
-						 player.getInventory().setHelmet(ite);
-						
-					}else {
-						player.sendMessage(ChatColor.RED+"/mg head <material>");
-					}
+					  }else if(args[0].equalsIgnoreCase("leave")) {
 					
-					return true;
-				}else if(args[0].equalsIgnoreCase("join")) {
-					if (args.length == 2) {
-						String name = args[1];
-						FileConfiguration config = plugin.getConfig();
-						 List<String> al = config.getStringList("Maps-Locked.List");
-						 if(al.contains(name) && !player.isOp()) {
-							 player.sendMessage(plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+name+ChatColor.RED+" esta Bloqueado.");
-							 return true;
-						 }else if(al.contains(name) && player.isOp()){
-							 player.sendMessage(plugin.nombre+ChatColor.RED+" Has Entrado a "+ChatColor.GOLD+name+ChatColor.RED+" es un Mapa que esta Bloqueado.");
-						
-							 gc.mgJoinToTheGames(player, name);
-							 return true;
-						 }else {
-							 gc.mgJoinToTheGames(player, name);
-							 return true;
-						 }
+						gc.mgLeaveMapCommandIlegal(player);
 				
-						
+						return true;
 				
-					}else {
-						player.sendMessage(plugin.nombre+ChatColor.GREEN+"escribe /mg join <mapa>");
-					}
-				
-				 return true;
-				 
-				}else if(args[0].equalsIgnoreCase("leave")) {
+				 	  }else if(args[0].equalsIgnoreCase("spawnzombi")) {
+				 		//H Z BZ EZ
+						//mg spawnzombi wolrd,12,23,34 50 H
+				 		 if(args.length == 4) {
+				 			 String location = args[1];
+				 			 String amount  = args[2];
+				 			 String type = args[3].toUpperCase();
+				 			 
+				 			 String[] split = location.split(",");
+				 			 
+				 			 World world = Bukkit.getWorld(split[0]);
+				 			 if(world == null) {
+				 				 player.sendMessage(ChatColor.RED+"El mundo "+ChatColor.GOLD+split[0]+ChatColor.RED+" no existe.");
+				 				 return true;
+				 			 }
+				 			 Location l = new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3]));
+				 			 
+				 			 int cant = Integer.valueOf(amount);
+				 			 
+				 			 if(cant == 0) {
+				 				 player.sendMessage(ChatColor.RED+"No puedes dejar en 0 el monto.");
+				 				 return true;
+				 			 }
+				 			 MobsActions ma = new MobsActions(plugin);
+				 			 
+				 			 for(int i = 0; i < cant; i++) {
+				 				 if(type.equals("H")) {
+				 					 ma.spawnEliteZombi(l.add(0.5,1,0.5));
+				 					 ma.spawnManualBabyZombi(l.add(0.5,1,0.5));
+				 					 ma.spawnManualZombi(l.add(0.5,1,0.5));
+				 				 }if(type.equals("ZB")) {
+				 					 ma.spawnManualBabyZombi(l.add(0.5,1,0.5));
+				 				 }if(type.equals("ZE")) {
+				 					 ma.spawnEliteZombi(l.add(0.5,1,0.5));
+				 				 }if(type.equals("Z")) {
+				 					 ma.spawnManualZombi(l.add(0.5,1,0.5));
+				 				 }
+				 			 }
+				 			 
+				 		 }else{
+				 			 player.sendMessage(ChatColor.GREEN+"Usa mg spawnzombi <world,x,y,z> <amount> <H: Horde of all zombies, ZE:zombie elite, ZB:zombie baby, Z:zombie>");
+				 			 player.sendMessage(ChatColor.GREEN+"Ejemplo mg spawnzombi world,12,23,34 50 H");
+				 		 }
+				 		  
+						return true;
 					
-					gc.mgLeaveMapCommandIlegal(player);
-				
-					return true;
-				
-				  }else if(args[0].equalsIgnoreCase("setlobby")) {
+					  }else if(args[0].equalsIgnoreCase("setlobby")) {
 							
 							if(player.isOp()) {
 						
@@ -2263,9 +2354,11 @@ public class Comandos implements CommandExecutor{
 				
 					
 					return true;
-				}else if(args[0].equalsIgnoreCase("flare")) {
-					player.getInventory().addItem(Items.BENGALAROJA.getValue());
-					player.getInventory().addItem(Items.BENGALAVERDE.getValue());
+				}else if(args[0].equalsIgnoreCase("zombi")) {
+					player.getInventory().addItem(Items.SPAWNBABYZOMBI.getValue());
+					player.getInventory().addItem(Items.SPAWNELITEZOMBI.getValue());
+					player.getInventory().addItem(Items.SPAWNZOMBI.getValue());
+					player.getInventory().addItem(Items.SPAWNHORDEZOMBI.getValue());
 					return true;
 				}else if(args[0].equalsIgnoreCase("dbsave")) {
 					

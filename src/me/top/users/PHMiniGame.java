@@ -176,6 +176,28 @@ public class PHMiniGame extends PlaceholderExpansion{
         	Location loc1 = new Location(Bukkit.getWorld(split2[0]),Double.valueOf(split2[1]),Double.valueOf(split2[2]),Double.valueOf(split2[3].replaceAll("\\D","")));
         	return 	String.valueOf(c.isBlock(Material.valueOf(split1[1].toUpperCase()), loc1));
  
+        }else if(identifier.startsWith("getentitysamountaboveblock_")){
+        	
+        	String text = identifier.replace("getentitysamountaboveblock_","");
+        	String[] split = text.split("_");
+        	String[] split2 = split[0].split(",");
+   
+        	//mg isblock_world,23,45,67:AIR
+        	GameConditions c = new GameConditions(plugin);
+        	Location loc1 = new Location(Bukkit.getWorld(split2[0]),Double.valueOf(split2[1]),Double.valueOf(split2[2]),Double.valueOf(split2[3]));
+        	return String.valueOf(c.getAmountOfEntityAboveBlock(loc1));
+ 
+        }else if(identifier.startsWith("isentityaboveblock")){
+        	
+        	String text = identifier.replace("isentityaboveblock_","");
+        	String[] split = text.split("_");
+        	String[] split2 = split[0].split(",");
+   
+        	//mg isblock_world,23,45,67:AIR
+        	GameConditions c = new GameConditions(plugin);
+        	Location loc1 = new Location(Bukkit.getWorld(split2[0]),Double.valueOf(split2[1]),Double.valueOf(split2[2]),Double.valueOf(split2[3]));
+        	return 	String.valueOf(c.isEntityAbove(loc1));
+ 
         }
         
         // We return null if an invalid placeholder (f.e. %someplugin_placeholder3%) 
