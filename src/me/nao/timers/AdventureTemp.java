@@ -60,9 +60,6 @@ import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
 import me.nao.main.game.Minegame;
 import me.nao.manager.GameIntoMap;
-import me.nao.revive.RevivePlayer;
-//import net.md_5.bungee.api.ChatMessageType;
-//import net.md_5.bungee.api.chat.TextComponent;
 import me.nao.scoreboard.MgScore;
 
 
@@ -178,17 +175,13 @@ public class AdventureTemp {
 						
 						
 						if(startm == 0) {
-				    		 // Bukkit.getScheduler().cancelTask(taskID);	
-				    		 // DeleteAllArmor(target);
-				    		
+				   
 				    		  if(part == GameStatus.COMENZANDO) {
 				    		  
 				    			ms.setGameStatus(GameStatus.JUGANDO);
-				    			
-				    			
 							    gc.TptoSpawnMap(players, name);
 				    			
-				    		}
+				    		  }
 						  
 					     }
 				}
@@ -265,6 +258,7 @@ public class AdventureTemp {
 					
 					//EL ORDEN DEL TERMINADO SIEMPRE DEBE IR AL FINAL SINO PUEDE DAR NULLPOINTER POR Q TRATAS DE ACCEDER A COSAS VIEJAS
 					if(segundo == 0 && minuto == 0 && hora == 0) {
+						
 						for(String target : joins) {
 							 Player players = Bukkit.getPlayerExact(target);
 							if(!arrive.contains(players.getName()) && alive.contains(players.getName())) {
@@ -277,54 +271,55 @@ public class AdventureTemp {
 						
 						 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN...");
-						 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Jugadores que ganaron "+ChatColor.GREEN+arrive+ChatColor.RED+" mapa: "+ChatColor.GREEN+name);
 						
 						 ms.setGameStatus(GameStatus.TERMINANDO);
-				  		 
+						 gc.sendResultsOfGame(ga,hor+"h "+min+"m "+seg+"s ",hora+"h "+minuto+"m "+segundo+"s ");
 				  		 //STOP
 					}else if(motivo == StopMotivo.WIN || motivo == StopMotivo.LOSE || motivo == StopMotivo.ERROR || motivo == StopMotivo.FORCE) {
 						
+
 						 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN..");
 						 ms.setGameStatus(GameStatus.TERMINANDO);
-						
+						 gc.sendResultsOfGame(ga,hor+"h "+min+"m "+seg+"s ",hora+"h "+minuto+"m "+segundo+"s ");
 						 //ALL DEADS
-					}else if(alive.size() == arrive.size()) {
+					}else if(alive.isEmpty() || isAllKnocked(name)) {
 						
+						
+
 						for(String target : joins) {
 							 Player players = Bukkit.getPlayerExact(target);
-								if(arrive.contains(players.getName())) {
-									  players.sendMessage(ChatColor.GREEN+"Todos los jugadores con vida han llegado a la meta "+arrive);
-								}
-								players.sendMessage(ChatColor.GREEN+"Todos los Jugadores con Vida llegaron.");
-						 }
-						
-						 boss.setProgress(1.0);
-				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"[ FIN ]");
-				  		 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Participaron "+ChatColor.GREEN+joins+ChatColor.RED+" mapa: "+ChatColor.GREEN+name);
-				  		 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Jugadores que ganaron "+ChatColor.GREEN+arrive+ChatColor.RED+" mapa: "+ChatColor.GREEN+name+"\n");
-
-						
-						 ms.setGameStatus(GameStatus.TERMINANDO);
-						
-				  		
-					}else if(dead.size() == joins.size() || isAllKnocked(name)) {
-						System.out.println("ESTADO "+isAllKnocked(name)+" HAS PLAYER ITEM: "+hasPlayersAutoreviveItem(name));
-						for(String target : joins) {
-								 Player players = Bukkit.getPlayerExact(target);
 							 players.sendMessage(ChatColor.RED+"Todos los jugadores fueron eliminados F \n");
 						 }
-							
-						 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Todos perdieron "+ChatColor.GREEN+joins+ChatColor.RED+" mapa: "+ChatColor.GREEN+name+"\n");
-
 						
 						 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"( FIN. )");
 						 ms.setGameStatus(GameStatus.TERMINANDO);
-						
+						 gc.sendResultsOfGame(ga,hor+"h "+min+"m "+seg+"s ",hora+"h "+minuto+"m "+segundo+"s ");
 						
 						 
 						 //WIN
+					}else if(alive.size() == arrive.size()) {
+					
+
+						for(String target : joins) {
+							 Player players = Bukkit.getPlayerExact(target);
+								if(arrive.contains(players.getName())) {
+									  players.sendMessage(ChatColor.GREEN+"Todos los jugadores con vida han llegado a la Meta. "+ChatColor.GOLD+"\nGanadores: "+ChatColor.GREEN+arrive.toString().replace("[","").replace("]","")+".");
+								}
+								if(dead.contains(players.getName()) && !arrive.isEmpty()) {
+									players.sendMessage(ChatColor.GREEN+"Todos los Jugadores Vivos llegaron a la meta.");
+								}
+								
+						 }
+						
+						 boss.setProgress(1.0);
+				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"[ FIN ]");
+				  
+						
+						 ms.setGameStatus(GameStatus.TERMINANDO);
+						 gc.sendResultsOfGame(ga,hor+"h "+min+"m "+seg+"s ",hora+"h "+minuto+"m "+segundo+"s ");
+				  		
 					}
 					
 					for(String target : joins) {
@@ -366,6 +361,7 @@ public class AdventureTemp {
 			else if(part == GameStatus.TERMINANDO) {
 						
 						if(end == 10) {
+						   
 							 gc.TopConsole(name);
 							 gc.Top(name);
 						}
@@ -1591,14 +1587,7 @@ public class AdventureTemp {
 		return false;
 	}
 	
-	public void removeArmorStandsKnocked(Player player) {
-		if(plugin.getKnockedPlayer().containsKey(player)) {
-			RevivePlayer rp = plugin.getKnockedPlayer().get(player);
-			
-			rp.getArmorStand().remove();
-		}
-		
-	}
+
 	  
 	
 }

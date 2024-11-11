@@ -258,6 +258,8 @@ public class RevivePlayer{
 			causes = "POR HAMBRE";
 		}else if(cause == DamageCause.SUFFOCATION) {
 			causes = "POR SOFOCACION";
+		}else {
+			causes = "ALGO QUE NO ESTA EN LISTA "+cause.toString()+" (SI VES ESTO REPORTALO)";
 		}
 		return causes;
 	}

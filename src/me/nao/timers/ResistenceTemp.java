@@ -51,6 +51,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.RayTraceResult;
 
 import me.nao.enums.GameStatus;
+import me.nao.enums.Items;
 import me.nao.enums.StopMotivo;
 import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
@@ -129,7 +130,7 @@ public class ResistenceTemp {
 				
 			List<Player> joins = gc.ConvertStringToPlayer(ms.getParticipants());
 			List<Player> alive = gc.ConvertStringToPlayer(ga.getAlivePlayers());
-			List<Player> dead = gc.ConvertStringToPlayer(ga.getDeadPlayers());
+			//List<Player> dead = gc.ConvertStringToPlayer(ga.getDeadPlayers());
 			List<Player> spect = gc.ConvertStringToPlayer(ga.getSpectators());
 			GameStatus part = ms.getGameStatus();
 			StopMotivo motivo = ms.getMotivo();
@@ -258,13 +259,17 @@ public class ResistenceTemp {
 				 
 				  
 				  if(segundo == 0 && minuto == 0 && hora == 0) {
-					  GameIntoMap cig = new GameIntoMap(plugin);
+					  	 gc.sendResultsOfGame(ga,hor+"h "+min+"m "+seg+"s ",hora+"h "+minuto+"m "+segundo+"s ");
+
+					  	 //String result = alive.isEmpty() ? alive.toString().replace("[","").replace("]","") :"";
+					  	 
+					     GameIntoMap cig = new GameIntoMap(plugin);
 						 for(Player players : alive) {
+							 players.sendMessage(ChatColor.GREEN+"Todos los jugadores con vida han llegado a la Meta. "+ChatColor.GOLD+"\nSobrevivieron: "+ChatColor.GREEN+alive.toString().replace("[","").replace("]","")+".");
 							 cig.ObjetivesInGame(players, name);
+
 						 }
 						
-						
-						 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Jugadores que ganaron Resistencia "+ChatColor.GREEN+ConvertPlayerToString(alive)+ChatColor.RED+" mapa: "+ChatColor.GREEN+name);
 						 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN...");
 				  		 ms.setGameStatus(GameStatus.TERMINANDO);
@@ -272,18 +277,20 @@ public class ResistenceTemp {
 						 gc.Top(name);
 				  		 
 					}else if(motivo == StopMotivo.WIN || motivo == StopMotivo.LOSE || motivo == StopMotivo.ERROR || motivo == StopMotivo.FORCE) {
-						
+						 gc.sendResultsOfGame(ga,hor+"h "+min+"m "+seg+"s ",hora+"h "+minuto+"m "+segundo+"s ");
+
 						 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN..");
 				  		 ms.setGameStatus(GameStatus.TERMINANDO);
 				  		 gc.TopConsole(name);
 						 gc.Top(name);
 				  		
-					}else if(dead.size() == joins.size()) {
+					}else if(alive.isEmpty() ||  isAllKnocked(name)) {
 						 for(Player players : joins) {
 							 players.sendMessage(ChatColor.RED+"Todos los Jugadores fueron eliminados F ...\n");
 						 }
-						
+						 gc.sendResultsOfGame(ga,hor+"h "+min+"m "+seg+"s ",hora+"h "+minuto+"m "+segundo+"s ");
+
 						 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"( FIN. )");
 						 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Todos perdieron Resistencia "+ChatColor.GREEN+ConvertPlayerToString(joins)+ChatColor.RED+" mapa: "+ChatColor.GREEN+name+"\n");
@@ -1288,12 +1295,50 @@ public class ResistenceTemp {
         		}
         	}
     	}
-    
-    	
+ 
     }
     
     
-    
+	
+	public boolean isAllKnocked(String name) {
+		
+		GameInfo gi = plugin.getGameInfoPoo().get(name);
+		
+		if(gi instanceof GameAdventure) {
+			GameAdventure ga = (GameAdventure) gi;
+			if(ga.getAlivePlayers().size() == ga.getKnockedPlayers().size() && !hasPlayersAutoreviveItem(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean hasPlayersAutoreviveItem(String name) {
+		
+		
+	
+		GameInfo gi = plugin.getGameInfoPoo().get(name);
+		List<Player> hasitem = new ArrayList<>();
+		if(gi instanceof GameAdventure) {
+			GameAdventure ga = (GameAdventure) gi;
+			GameConditions gc = new GameConditions(plugin);
+			
+			List<Player> pr = gc.ConvertStringToPlayer(ga.getKnockedPlayers());
+			
+			if(!pr.isEmpty()) {
+				for(Player targets  : pr) {
+					if(gc.isPlayerKnocked(targets) && targets.getInventory().containsAtLeast(Items.REVIVEP.getValue(),1) || targets.getInventory().getItemInOffHand().isSimilar(Items.REVIVEP.getValue())){
+						hasitem.add(targets);
+						return true;
+					}
+				}
+			}
+		}
+		
+		return false;
+	}
+	
+
     
 //    public void RemoveArmorStandsAndItemsInMap(Player players) {
 //	    FileConfiguration config = plugin.getConfig();

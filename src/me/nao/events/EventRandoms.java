@@ -103,11 +103,13 @@ import org.bukkit.util.Vector;
 import com.google.common.base.Strings;
 
 import me.nao.cosmetics.fireworks.RankPlayer;
+import me.nao.enums.GameInteractions;
 import me.nao.enums.GameStatus;
 import me.nao.enums.Items;
 import me.nao.enums.ReviveStatus;
 import me.nao.flare.actions.Flare;
 import me.nao.general.info.GameInfo;
+import me.nao.general.info.CuboidZone;
 //import me.nao.general.info.GameNexo;
 import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
@@ -199,10 +201,7 @@ public class EventRandoms implements Listener{
 			GameInfo gi = plugin.getGameInfoPoo().get(pi.getMapName());
 			if(gi.getGameStatus() == GameStatus.JUGANDO) {
 
-				if(gi.getSpectators().contains(player.getName())) {
-					player.sendMessage(ChatColor.RED+"No puedes interactuar con Entidades siendo Espectador.");
-					return;
-				}
+				
 				
 				Entity ent = e.getRightClicked();
 				
@@ -282,6 +281,7 @@ public class EventRandoms implements Listener{
 
 				if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
 					
+					
 					if(!player.getPassengers().isEmpty()) {
 						 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.RED+ChatColor.BOLD+"YA TIENES ENCIMA A UNA ENTIDAD"));
 						return;
@@ -291,7 +291,18 @@ public class EventRandoms implements Listener{
 							return;
 						}
 						
-						if(target.getGameMode() != GameMode.SPECTATOR) {
+						if(player.getGameMode() == GameMode.SPECTATOR) {
+							e.setCancelled(true);
+							player.sendMessage(ChatColor.RED+"No puedes interactuar con Entidades siendo Espectador.");
+							return;
+						}
+						
+						if(target.getGameMode() == GameMode.SPECTATOR) {
+							e.setCancelled(true);
+							player.sendMessage(ChatColor.RED+"No puedes interactuar con Espectadores.");
+							return;
+						}
+					
 							if(player.isSneaking() && ent.getPassengers().isEmpty()) {
 								target.addPassenger(player);
 							}else {
@@ -299,7 +310,7 @@ public class EventRandoms implements Listener{
 							}
 							
 							
-						}
+						
 					}else if(ent.getType() == EntityType.MINECART_CHEST) {
 						
 						StorageMinecart mc = (StorageMinecart) ent;
@@ -767,6 +778,8 @@ public class EventRandoms implements Listener{
 		
 		    GameConditions gc = new GameConditions(plugin);
 			gc.LeaveMapConexionIlegal(player);
+			
+			
 		    //gc.LeaveOfTheGame(player);
 		if(player.isOp()) {
 		//	e.setQuitMessage(ChatColor.GRAY+"["+ChatColor.RED+"!"+ChatColor.GRAY+"]"+ChatColor.RED+" El Admin Salio al server de Test "+ChatColor.GOLD+player.getName());
@@ -781,6 +794,35 @@ public class EventRandoms implements Listener{
 	 
 	 	@EventHandler(priority = EventPriority.LOWEST)
 		public void PlayerBreakMG(BlockBreakEvent e) {
+	 		
+	 		Player player = e.getPlayer();
+	 		GameConditions gc = new GameConditions(plugin);
+	 		if(!gc.isPlayerinGame(player)) return;
+	 		
+	 		if(player.getGameMode() == GameMode.ADVENTURE) {
+	 			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+	 			GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
+	 			
+	 			List<CuboidZone> zones = gi.getCuboidZones();
+	 			
+	 			if(zones.isEmpty())return;
+	 			
+	 			
+	 			for(CuboidZone zone : zones) {
+	 				if(zone.getGameInteractionType() == GameInteractions.CANBREAK) {
+	 					if(!zone.isinsideOfCuboidZone(e.getBlock().getLocation(), zone.getLocation1(), zone.getLocation2())) {
+		 					e.setCancelled(true);
+		 					player.sendMessage(ChatColor.RED+"No puedes Romper esa Zona.");
+		 					return;
+		 				}
+	 				}
+	 				
+	 			}
+	 			
+	 		}
+	 		
+	 		
+	 		
 //	 		Player player = e.getPlayer();
 //	 		GameConditions gm = new GameConditions(plugin);
 //	 		if(gm.isPlayerinGame(player)) {
@@ -841,9 +883,34 @@ public class EventRandoms implements Listener{
 	 
 	
 
-	 @EventHandler
-	 public void PlayerPlace(BlockPlaceEvent event) {
+	 @EventHandler(priority = EventPriority.LOWEST)
+	 public void PlayerPlace(BlockPlaceEvent e) {
 		 
+			Player player = e.getPlayer();
+	 		GameConditions gc = new GameConditions(plugin);
+	 		if(!gc.isPlayerinGame(player)) return;
+	 		
+	 		if(player.getGameMode() == GameMode.ADVENTURE) {
+	 			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+	 			GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
+	 			
+	 			List<CuboidZone> zones = gi.getCuboidZones();
+	 			
+	 			if(zones.isEmpty()) return;
+	 			
+	 			for(CuboidZone zone : zones) {
+	 				
+	 				if(zone.getGameInteractionType() == GameInteractions.CANPLACE) {
+	 					if(!zone.isinsideOfCuboidZone(e.getBlockPlaced().getLocation(), zone.getLocation1(), zone.getLocation2())) {
+		 					e.setCancelled(true);
+		 					player.sendMessage(ChatColor.RED+"No puedes Colocar Bloques en esa Zona.");
+		 					return;
+		 				}
+	 				}
+	 				
+	 			}
+	 			
+	 		}
 	//	 if(event.getBlock().getLocation().subtract(0,1,0).getBlock().getType() != Material.AIR) 
 		//	 return;
 			// event.getBlock().getWorld().spawnFallingBlock(event.getBlock().getLocation(),event.getBlock().getType() ,event.getBlock().getData());

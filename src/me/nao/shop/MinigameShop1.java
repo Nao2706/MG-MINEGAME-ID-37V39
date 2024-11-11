@@ -364,8 +364,7 @@ public class MinigameShop1 implements Listener{
 		plugin.getPags().put(player, 1);
 		PlayerInfo p = plugin.getPlayerInfoPoo().get(player);
 		GameInfo gi = plugin.getGameInfoPoo().get(p.getMapName());
-		GameConditions gmc = new GameConditions(plugin);
-		if(!gmc.HasObjetives(p.getMapName())) {
+		if(!gi.hasMapObjetives()) {
 			player.sendMessage(ChatColor.RED+"El Mapa no tiene Habilitado los Objetivos.");
 			return;
 		}

@@ -26,6 +26,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.boss.BarColor;
@@ -48,6 +49,7 @@ import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.ViaAPI;
 
 import me.nao.cooldown.ReportsManager;
+import me.nao.enums.GameInteractions;
 import me.nao.enums.GameStatus;
 import me.nao.enums.GameType;
 import me.nao.enums.Items;
@@ -196,9 +198,8 @@ public class GameConditions {
 	
 	public void mgLeaveMapCommandIlegal(Player player) {
 		
-		if(!isPlayerinGame(player)) {
-			return;
-		}
+		if(!isPlayerinGame(player)) return;
+		
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		GameAdventure ga = (GameAdventure) plugin.getGameInfoPoo().get(pl.getMapName());
 		if(CanJoinWithYourInventory(pl.getMapName()) && !ga.getSpectators().contains(player.getName())) {
@@ -227,9 +228,8 @@ public class GameConditions {
 	
 	public void LeaveMapConexionIlegal(Player player) {
 		
-		if(!isPlayerinGame(player)) {
-			return;
-		}
+		if(!isPlayerinGame(player)) return;
+	
 		
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		GameAdventure ga = (GameAdventure) plugin.getGameInfoPoo().get(pl.getMapName());
@@ -248,13 +248,11 @@ public class GameConditions {
 				
 					 return;
 				}else{
-					
 					mgLeaveOfTheGame(player);
 				}
 				
 			}
 		}else{
-			
 			mgLeaveOfTheGame(player);
 		}
 	
@@ -343,7 +341,7 @@ public class GameConditions {
 				player.sendMessage(point1.get(r.nextInt(point1.size())));
 				player.teleport(l);
 			
-					return;
+				return;
 				  
 			} 
 	   }
@@ -459,7 +457,7 @@ public class GameConditions {
 				
 			     	 
 					gc.setKitMg(player);
-					if(gc.HasObjetives(map)) {
+					if(gm.hasMapObjetives()) {
 						if(player.getInventory().getItemInMainHand() != null) {
 							if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
 								player.getInventory().setItemInMainHand(Items.OBJETIVOSP.getValue());
@@ -1005,10 +1003,11 @@ public class GameConditions {
 			    	ga.setMaxPlayersinMap(maxplayers);
 			    	ga.setMinPlayersinMap(minplayers);
 			    	ga.setBossbar(boss);	    	ga.setObjetivesMg(loadObjetivesOfGames(map));
-			    	ga.setMapObjetives(HasObjetives(map));
+			    	ga.setMapObjetives(hasObjetives(map));
 			    	ga.setNecessaryObjetivesPrimaryCompletes(isNecessaryObjetivePrimary(map));
 			    	ga.setNecessaryObjetivesSecondaryCompletes(isNecessaryObjetiveSedondary(map));
 			    	ga.setGameTimeActions(loadGameTimeActions(map));
+			    	ga.setCuboidZones(loadCuboidZones(map));
 			    	
 			    	
 			    	System.out.println("LOG-1 MISION: "+ga.ShowGame());
@@ -1206,7 +1205,7 @@ public class GameConditions {
 		return ac.contains(map);
 	}
 	
-	public boolean HasObjetives(String map) {
+	public boolean hasObjetives(String map) {
 		FileConfiguration game = getGameConfig(map);
 	    return game.getBoolean("Has-Objetives");
 	}
@@ -1234,6 +1233,11 @@ public class GameConditions {
 	public boolean isEnabledReviveSystem(String map) {
 		FileConfiguration mision = getGameConfig(map);
 		return mision.getBoolean("Revive-System");
+	}
+	
+	public boolean hasCuboidZones(String map) {
+		FileConfiguration game = getGameConfig(map);
+	    return game.contains("Cuboid-Zones.List");
 	}
 	
 	/**
@@ -2345,7 +2349,7 @@ public class GameConditions {
 	 * Envia un mensaje a otros jugadores del mapa menos al Jugador inicial
 	 * 
 	 */
-	
+	 
 	public void sendMessageToUsersOfSameMapLessPlayer(Player player ,String text) {
 		
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
@@ -2353,11 +2357,12 @@ public class GameConditions {
 		GameInfo ms = plugin.getGameInfoPoo().get(mapname);
 		//MisionInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
 		 if(ms instanceof GameAdventure) {
-				GameAdventure ga = (GameAdventure) ms;
-				List<Player> play = ConvertStringToPlayer(ga.getParticipants());
-				
+					GameAdventure ga = (GameAdventure) ms;
+					List<Player> play = ConvertStringToPlayer(ga.getParticipants());
+					
+					sendMessageToConsole(text);
+					
 					for(Player target : play) {
-						
 						   if(target.getName().equals(player.getName())) continue;
 						   target.sendMessage(ChatColor.translateAlternateColorCodes('&', text));
 					}
@@ -2384,22 +2389,20 @@ public class GameConditions {
 		GameInfo ms = plugin.getGameInfoPoo().get(mapname);
 		//MisionInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
 		 if(ms instanceof GameAdventure) {
-				GameAdventure ga = (GameAdventure) ms;
-				List<Player> play = ConvertStringToPlayer(ga.getParticipants());
+					GameAdventure ga = (GameAdventure) ms;
+					List<Player> play = ConvertStringToPlayer(ga.getParticipants());
 				
+					sendMessageToConsole(text);
+					
 					for(Player target : play) {
-						
-						   if(target.getName().equals(player.getName())) continue;
-						   if(target.getName().equals(player2.getName())) continue;
+						   if(target.getName().equals(player.getName()) || target.getName().equals(player2.getName())) continue;
 						   target.sendMessage(ChatColor.translateAlternateColorCodes('&', text));
 					}
 					
 					List<Player> spect = ConvertStringToPlayer(ga.getSpectators());
 					if(!spect.isEmpty()) {
 						for(Player target : spect) {
-							
 							target.sendMessage(ChatColor.translateAlternateColorCodes('&',text));
-						
 					}}
 		 } 
 	}
@@ -2459,7 +2462,6 @@ public class GameConditions {
 	
 	public void sendTittleToAllPlayersInMap(String map,String text,String text2) {
 		
-		
 		GameInfo ms = plugin.getGameInfoPoo().get(map);
 		//MisionInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
 		 if(ms instanceof GameAdventure) {
@@ -2485,6 +2487,96 @@ public class GameConditions {
 			player.sendMessage(ChatColor.translateAlternateColorCodes('&',text.replace("%player%", player.getName())));
 		}
 		return;
+	}
+	
+	public void sendMessageToConsole(String text) {
+		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&',text));
+		return;
+	}
+	
+	public void sendResultsOfGame(GameInfo map,String cronomet,String timer ) {
+		
+		if(map instanceof GameAdventure) {
+			GameAdventure ga = (GameAdventure) map;
+			
+			
+			List<String> participants = ga.getParticipants(); 
+			List<String> alive = ga.getAlivePlayers();  
+			List<String> deads = ga.getDeadPlayers();
+			List<String> spectator = ga.getSpectators();
+			List<String> arrives = ga.getArrivePlayers();
+			
+			LocalDateTime ldt = LocalDateTime.now();
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss a",Locale.ENGLISH);
+			sendMessageToConsole("");	
+			sendMessageToConsole(""+ChatColor.GRAY+"MAPA: "+ChatColor.WHITE+ga.getMapName());
+			sendMessageToConsole(""+ChatColor.GRAY+"FECHA: "+ChatColor.WHITE+ldt.format(formatter));
+			sendMessageToConsole(""+ChatColor.GRAY+"DURACION: "+ChatColor.WHITE+cronomet);
+			sendMessageToConsole(""+ChatColor.GRAY+"TIMER: "+ChatColor.WHITE+timer);
+
+			if(participants.isEmpty()) {
+				sendMessageToConsole(""+ChatColor.GRAY+ChatColor.BOLD+"PARTICIPANTES: "+ChatColor.WHITE+"SIN PARTICIPANTES");
+			}else {
+				String comments =  ""+ChatColor.GREEN+ChatColor.BOLD+"PARTICIPANTES: ";
+				for(int i = 0 ; i < participants.size();i++) {
+					comments = comments+ChatColor.GREEN+participants.get(i)+ChatColor.GOLD+",";
+				}
+				comments = comments+ChatColor.GRAY+ChatColor.BOLD+" PARTICIPANRON.";
+				sendMessageToConsole(comments);
+			}
+			
+			if(alive.isEmpty()) {
+				sendMessageToConsole(""+ChatColor.GREEN+ChatColor.BOLD+"VIVOS: "+ChatColor.WHITE+"NINGUNO SOBREVIVIO");
+			}else {
+				String comments =  ""+ChatColor.GREEN+ChatColor.BOLD+"VIVOS: ";
+				for(int i = 0 ; i < alive.size();i++) {
+					comments = comments+ChatColor.GREEN+alive.get(i)+ChatColor.GOLD+",";
+				}
+				comments = comments+ChatColor.GREEN+ChatColor.BOLD+" SOBREVIVIERON.";
+				sendMessageToConsole(comments);
+
+			}
+			
+			if(deads.isEmpty()) {
+				sendMessageToConsole(""+ChatColor.RED+ChatColor.BOLD+"MUERTOS:"+ChatColor.WHITE+" NINGUNO MURIO");
+			}else {
+				String comments = ""+ChatColor.RED+ChatColor.BOLD+"MUERTOS: ";
+				for(int i = 0 ; i < deads.size();i++) {
+					comments = comments+ChatColor.YELLOW+deads.get(i)+ChatColor.GOLD+",";
+				}
+				comments = comments+ChatColor.RED+ChatColor.BOLD+" MURIERON.";
+				sendMessageToConsole(comments);
+
+			}
+			
+			if(spectator.isEmpty()) {
+				sendMessageToConsole(""+ChatColor.AQUA+ChatColor.BOLD+"ESPECTADORES: "+ChatColor.WHITE+"NO HUBO ESPECTADORES");
+			}else {
+				String comments = ""+ChatColor.AQUA+ChatColor.BOLD+"ESPECTADORES: ";
+				for(int i = 0 ; i < spectator.size();i++) {
+					comments = comments+ChatColor.WHITE+spectator.get(i)+ChatColor.GOLD+",";
+				}
+				comments = comments+ChatColor.AQUA+ChatColor.BOLD+" VIERON LA PARTIDA.";
+				sendMessageToConsole(comments);
+
+			}
+			
+			if(arrives.isEmpty()) {
+				sendMessageToConsole(""+ChatColor.GOLD+ChatColor.BOLD+"GANADORES:"+ChatColor.WHITE+" NO HUBO GANADORES");
+			}else {
+				String comments = ""+ChatColor.GOLD+ChatColor.BOLD+"GANADORES: ";
+				for(int i = 0 ; i < arrives.size();i++) {
+					comments = comments+ChatColor.DARK_PURPLE+arrives.get(i)+ChatColor.DARK_GREEN+",";
+				}
+				comments = comments+ChatColor.GOLD+ChatColor.BOLD+" GANARON LA PARTIDA.";
+				sendMessageToConsole(comments);
+
+			}
+			sendMessageToConsole("");	
+
+			
+		}
+		
 	}
 	
 	//TODO RESTORE
@@ -3044,13 +3136,36 @@ public class GameConditions {
 			
 		return list;
 	}   
-	   
+	
+	public List<CuboidZone> loadCuboidZones(String map){
+		FileConfiguration game = getGameConfig(map);
+		List<CuboidZone> zones = new ArrayList<>();
+		if(hasCuboidZones(map)) {
+			List<String> list = game.getStringList("Cuboid-Zones.List");
+			if(!list.isEmpty()) {
+				for(String data : list) {
+					String[] split = data.split(";");
+					String coord1 = split[0];
+					String coord2 = split[1];
+					String status = split[2];
+					 
+					CuboidZone cz = new CuboidZone(convertStringLocationToLocation(coord1),convertStringLocationToLocation(coord2),convertStringToGameInteractions(status));
+					zones.add(cz);
+				}
+			}
+		}
+		
+		
+	
+		return zones;
+	}
+	
    	//TODO OBJETIVOS
  	public GameObjetivesMG loadObjetivesOfGames(String map) {
    		FileConfiguration game = getGameConfig(map);
    		
    		List<ObjetivesMG> l = new ArrayList<>();   		
-   		if(HasObjetives(map)) {
+   		if(hasObjetives(map)) {
    			
    			ObjetivesMG ghost = new ObjetivesMG("Mapa Con Objetivos Borrados",1,0,0,0,0,"Habilitaron los Objetivos pero no hay ninguno en la Config del Mapa.",ObjetiveStatusType.WAITING,new HashMap<Player,Integer>());
    			l.add(ghost);
@@ -3088,7 +3203,7 @@ public class GameConditions {
    		
    		List<ObjetivesMG> l = new ArrayList<>();
    		
-   		if(HasObjetives(map)) {
+   		if(hasObjetives(map)) {
    			ObjetivesMG ghost = new ObjetivesMG("Mapa Con Objetivos Borrados",1,0,0,0,0,"Habilitaron los Objetivos pero no hay ninguno en la Config del Mapa.",ObjetiveStatusType.WAITING,new HashMap<Player,Integer>());
    			l.add(ghost);
 	   		if(game.contains("Game-Objetives")) {
@@ -3786,10 +3901,38 @@ public class GameConditions {
 		
 	}
 	
+	public GameInteractions convertStringToGameInteractions(String text) {
+		GameInteractions gi = null;
+		Map<String,GameInteractions> map = new HashMap<>();
+		map.put("CANPLACE", GameInteractions.CANPLACE);
+		map.put("CANBREAK", GameInteractions.CANBREAK);
+		if(!map.containsKey(text.toUpperCase())) {
+			sendMessageToConsole("No existe "+text+" usa CANPLACE o CANBREAK colocando CANPLACE por default.");
+			gi = GameInteractions.CANPLACE;
+		}else {
+			gi = map.get(text.toUpperCase());
+		}
+		
+		return gi;
+	} 
+	
+	public Location convertStringLocationToLocation(String location) {
+		String[] split = location.split(",");
+		String m = split[0];
+		World world = Bukkit.getWorld(m);
+		if(world == null) {
+			world = Bukkit.getServer().getWorlds().get(0);
+			sendMessageToConsole("El Mundo "+m+" no existe , se procede a colocar el Primer mundo del servidor como reemplazo junto con las coordenadas Otorgadas.");
+		}
+		double x = Double.valueOf(split[1]);
+		double y = Double.valueOf(split[2]);
+		double z = Double.valueOf(split[3]);
+		return new Location(world,x,y,z);
+	}
 
 	
 	//TODO NEXO
-	
+	//PLAYER VERSION
 	public boolean isInsideOfLocations(Location player , Location point1 , Location point2) {
 		
 		if(!(point1.getWorld().getName().equals(point2.getWorld().getName()))) return false;

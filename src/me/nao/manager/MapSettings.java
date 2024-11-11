@@ -136,6 +136,12 @@ public class MapSettings {
 			SetObjetiveInfoDefault(ym,"Objetivo");
 			SetInfoItemOfMision(name);
 			
+			
+			List<String> zones = ym.getStringList("Cuboid-Zones.List");
+			ym.set("Cuboid-Zones.List",zones);
+			zones.add("world,123,34,56;world,124,34,58;CANPLACE");
+			zones.add("world,123,34,56;world,124,34,58;CANBREAK");
+			
 			plugin.getCacheSpecificYML(name).save();
 			plugin.getCacheSpecificYML(name).reload();
 			

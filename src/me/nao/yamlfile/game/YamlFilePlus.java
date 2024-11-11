@@ -336,14 +336,13 @@ public class YamlFilePlus extends YamlConfiguration {
 			              }
 		        	}
 		        	
-			}
-		
+			}else{
+		           
+		           Bukkit.getConsoleSender().sendMessage(ChatColor.RED+" El archivo no existe o su nombre esta mal escrito Nombre: "+ChatColor.GOLD+name);
+		            
+		      }
 			
-		}else{
-	           
-	           Bukkit.getConsoleSender().sendMessage(ChatColor.RED+" El archivo no existe o su nombre esta mal escrito ");
-	            
-	      }
+		}
     }
 	
 	

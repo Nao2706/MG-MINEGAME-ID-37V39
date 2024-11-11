@@ -23,6 +23,7 @@ public class GameInfo {
 	private GameObjetivesMG objetives;
 	private boolean hasobjetives,isNecessaryObjetivePrimary,isNecessaryObjetiveSedondary, iscopmpleteobjetivesprimary, iscompleteobjetivessecondary;
 	private List<GameTimeActions> gametimeactions;
+	private List<CuboidZone> cuboidzones;
 
 	
 	// @param GameInfo Sirve para modo aventura y resistencia
@@ -48,6 +49,7 @@ public class GameInfo {
 		this.iscopmpleteobjetivesprimary = false;
 		this.iscompleteobjetivessecondary = false;
 		this.gametimeactions = new ArrayList<>();
+		this.cuboidzones = new ArrayList<>();;
 	}
 	
 	
@@ -97,6 +99,10 @@ public class GameInfo {
 	
 	public List<String> getSpectators(){
 		return spectators;
+	}
+	
+	public List<CuboidZone> getCuboidZones(){
+		return cuboidzones;
 	}
 	
 	public boolean hasMapObjetives() {
@@ -149,6 +155,10 @@ public class GameInfo {
 	
 	public void setGameType(GameType type) {
 		this.type = type;
+	}
+	
+	public void setCuboidZones(List<CuboidZone> cuboidzones) {
+		this.cuboidzones = cuboidzones;
 	}
 	
 	public void setGameTimeActions(List<GameTimeActions> gametimeactions) {

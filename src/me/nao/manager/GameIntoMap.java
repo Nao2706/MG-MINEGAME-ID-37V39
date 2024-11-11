@@ -80,7 +80,7 @@ public class GameIntoMap {
 			 Location l = new Location(Bukkit.getWorld(world), x, y, z);
 			
 		
-				Player target = Bukkit.getServer().getPlayerExact(name);
+				   Player target = Bukkit.getServer().getPlayerExact(name);
 				
 				
 					GameConditions cm = new GameConditions(plugin);
@@ -88,15 +88,15 @@ public class GameIntoMap {
 					cm.RevivePlayerToGame(target, mapa);
 				
 					cm.setKitMg(target);
-					if(cm.HasObjetives(mapa)) {
-						if(player.getInventory().getItemInMainHand() != null) {
-							if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
-								player.getInventory().setItemInMainHand(Items.OBJETIVOSP.getValue());
+					if(ga.hasMapObjetives()) {
+						if(target.getInventory().getItemInMainHand() != null) {
+							if(target.getInventory().getItemInMainHand().getType() == Material.AIR) {
+								target.getInventory().setItemInMainHand(Items.OBJETIVOSP.getValue());
 								
 							}else {
-								ItemStack item = player.getInventory().getItemInMainHand();
-								player.getWorld().dropItem(player.getLocation(),item);
-								player.getInventory().setItemInMainHand(Items.OBJETIVOSP.getValue());
+								ItemStack item = target.getInventory().getItemInMainHand();
+								target.getWorld().dropItem(target.getLocation(),item);
+								target.getInventory().setItemInMainHand(Items.OBJETIVOSP.getValue());
 							}
 							
 						}
@@ -359,7 +359,7 @@ public class GameIntoMap {
 	public void ObjetivesInGame(Player player,String mapa) {
 		GameConditions gmc = new GameConditions(plugin);
 		GameInfo gm = plugin.getGameInfoPoo().get(mapa);
-		
+	
 		if(gm.isNecessaryObjetivePrimary() && !gm.isNecessaryObjetiveSedondary()) {
 			if(gmc.isAllPrimaryObjetivesComplete(player, mapa)) {
 				
@@ -424,7 +424,7 @@ public class GameIntoMap {
 					f.spawnFireballGreenLarge();
 					gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.GREEN+" llego a la Meta.");
 				}if(gm.getGameType() == GameType.RESISTENCE) {
-			       
+
 					gmc.EndTptoSpawn(player, mapa);
 				}
 				isTheGameRanked(player,mapa);
