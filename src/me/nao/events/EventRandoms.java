@@ -809,7 +809,7 @@ public class EventRandoms implements Listener{
 	 			
 	 			
 	 			for(CuboidZone zone : zones) {
-	 				if(zone.getGameInteractionType() == GameInteractions.CANBREAK) {
+	 				if(zone.getGameInteractionType() == GameInteractions.CANMODIFY || zone.getGameInteractionType() == GameInteractions.CANBREAK) {
 	 					if(!zone.isinsideOfCuboidZone(e.getBlock().getLocation(), zone.getLocation1(), zone.getLocation2())) {
 		 					e.setCancelled(true);
 		 					player.sendMessage(ChatColor.RED+"No puedes Romper esa Zona.");
@@ -900,7 +900,7 @@ public class EventRandoms implements Listener{
 	 			
 	 			for(CuboidZone zone : zones) {
 	 				
-	 				if(zone.getGameInteractionType() == GameInteractions.CANPLACE) {
+	 				if(zone.getGameInteractionType() == GameInteractions.CANMODIFY || zone.getGameInteractionType() == GameInteractions.CANPLACE) {
 	 					if(!zone.isinsideOfCuboidZone(e.getBlockPlaced().getLocation(), zone.getLocation1(), zone.getLocation2())) {
 		 					e.setCancelled(true);
 		 					player.sendMessage(ChatColor.RED+"No puedes Colocar Bloques en esa Zona.");
@@ -1377,7 +1377,7 @@ public class EventRandoms implements Listener{
 		
 		public void spawnLootEnchantedTable(Player player,Location l) {
 			
-				FileConfiguration config = plugin.getConfig();
+				
 				Random ra = new Random();
 				GameConditions gc = new GameConditions(plugin);
 				
@@ -1386,6 +1386,7 @@ public class EventRandoms implements Listener{
 				
 				PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 				String map = pl.getMapName();
+				GameInfo gi = plugin.getGameInfoPoo().get(map);
 				// hierro oro diamante esmeralda netherite creeper zombi
 				int r = ra.nextInt(7+1);
 				int low = 20;
@@ -1397,8 +1398,8 @@ public class EventRandoms implements Listener{
 				 
 				List<Entity> list = getNearbyEntitesItems(l1, 5);
 				//System.out.println("Lista 2 "+list.size());
-				if(list.size() >= config.getInt("Loot-Table-Limit")) {
-					gc.sendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+ChatColor.RED+" Tu ambicion sera tu perdicion.\nAnti-Looter-2 y Suicida Invocados");
+				if(list.size() >= gi.getLootTableLimit()) {
+					gc.sendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+ChatColor.RED+" Tu ambicion sera tu perdicion.\nAnti-Looter-2 y Suicida Invocados (Dejo tirados muchos items cerca de la Mesa)");
 					l1.getWorld().spawnParticle(Particle.FLAME, l1,	/* N DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
 					player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 20.0F, 0F);
 					LivingEntity entidad = (LivingEntity) l1.getWorld().spawnEntity(l1, EntityType.ZOMBIE);
@@ -1431,7 +1432,7 @@ public class EventRandoms implements Listener{
 					gc.setPlayerTempCooldown(player);
 				}else if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND), 100)) {
 					
-					gc.sendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+ChatColor.RED+" recibio un Castigo por tener muchos Diamantes.\nAnti-Looter y Guardia del Loot Invocados");
+					gc.sendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+ChatColor.RED+" recibio un Castigo por tener muchos Diamantes. (Tiene mas de 100 de Diamantes)\nAnti-Looter y Guardia del Loot Invocados");
 					l1.getWorld().spawnParticle(Particle.FLAME, l1,	/* N DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
 					player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 20.0F, 0F);
 					LivingEntity entidad = (LivingEntity) l1.getWorld().spawnEntity(l1, EntityType.ZOMBIE);
@@ -1461,7 +1462,7 @@ public class EventRandoms implements Listener{
 					gc.setPlayerTempCooldown(player);
 				}else if(player.getInventory().containsAtLeast(new ItemStack(Material.GOLD_INGOT), 100)) {
 					
-					gc.sendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+ChatColor.RED+" recibio un Castigo por tener mucho Oro.\nGuardias del Loot Invocados");
+					gc.sendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+ChatColor.RED+" recibio un Castigo por tener mucho Oro. (Tiene mas de 100 de Oro)\nGuardias del Loot Invocados");
 
 					l1.getWorld().spawnParticle(Particle.FLAME, l1.add(0.5, 1, 0.5),	/* N DE PARTICULAS */5, 0.5, 1, 0.5, /* velocidad */0, null, true);
 

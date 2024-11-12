@@ -136,11 +136,6 @@ public class YamlFilePlus extends YamlConfiguration {
 					              					
 					              					break;
 					              				}
-					              				
-					              				
-					              				
-					              				   
-					              			
 					              		
 					              		 }
 					              	  
@@ -324,12 +319,6 @@ public class YamlFilePlus extends YamlConfiguration {
 			              					
 			              					break;
 			              				}
-			              				
-			              				
-			              				
-			              				   
-			              			
-			              		
 			              		 }
 			              	  
 			              	 }

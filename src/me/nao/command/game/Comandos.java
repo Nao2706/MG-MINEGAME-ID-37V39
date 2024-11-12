@@ -60,6 +60,7 @@ import me.nao.events.ItemNBT;
 import me.nao.fillareas.Data;
 import me.nao.gamemode.InfectedGame;
 import me.nao.general.info.GameConditions;
+import me.nao.general.info.GameInfo;
 import me.nao.general.info.GameReports;
 import me.nao.main.game.Minegame;
 import me.nao.manager.MapSettings;
@@ -119,6 +120,11 @@ public class Comandos implements CommandExecutor{
 							if(ac.contains(name)) {
 								plugin.ChargedYml(name, null);
 								plugin.getCacheSpecificYML(name).reload();
+								if(gc.isMapinGame(name)) {
+									GameInfo gi = plugin.getGameInfoPoo().get(name);
+									gi.setObjetivesMg(gc.loadObjetivesOfGames(name));
+								}
+								
 								Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Se ha recargado correctamente el Mapa "+name);
 							}else {
 								Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" No existe ese mapa.");
@@ -196,12 +202,12 @@ public class Comandos implements CommandExecutor{
 						Matcher m = p.matcher(numberoenum);
 						if(m.find()) {
 							int value = Integer.valueOf(numberoenum);
-							gc.ObjetivesValue(map, name, value,null);
+							gc.ObjetivesValue(map, name.replaceAll("-"," ").replaceAll("_"," "), value,null);
 						}else {
 							try {
 								ObjetiveStatusType obj = ObjetiveStatusType.valueOf(numberoenum.toUpperCase());
 								if(obj != null) {
-									gc.ObjetiveChangeType(map, name, obj,null);
+									gc.ObjetiveChangeType(map, name.replaceAll("-"," ").replaceAll("_"," "), obj,null);
 								}else {
 									gc.sendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning>");
 					 				gc.sendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
@@ -220,12 +226,12 @@ public class Comandos implements CommandExecutor{
 						Matcher m = p.matcher(numberoenum);
 						if(m.find()) {
 							int value = Integer.valueOf(numberoenum);
-							gc.ObjetivesValue(map, name, value,target);
+							gc.ObjetivesValue(map, name.replaceAll("-"," ").replaceAll("_"," "), value,target);
 						}else {
 							try {
 								ObjetiveStatusType obj = ObjetiveStatusType.valueOf(numberoenum.toUpperCase());
 								if(obj != null) {
-									gc.ObjetiveChangeType(map, name, obj,target);
+									gc.ObjetiveChangeType(map, name.replaceAll("-"," ").replaceAll("_"," "), obj,target);
 								}else {
 									gc.sendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning> <player>");
 									gc.sendMessageToUserAndConsole(null, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1 <player>");
@@ -832,6 +838,14 @@ public class Comandos implements CommandExecutor{
 					
 					if (args.length == 2) {
 						String name = args[1];
+						FileConfiguration menu = plugin.getMenuItems();
+						if(menu.contains(name)) {
+							   
+							   
+								menu.set(name,null);
+							   plugin.getMenuItems().save();
+							   plugin.getMenuItems().reload();
+						}
 						YamlFilePlus y = new YamlFilePlus(plugin);
 						y.deleteSpecificConsole(name);
 					
@@ -1179,11 +1193,15 @@ public class Comandos implements CommandExecutor{
 								plugin.ChargedYml(name, player);	
 								plugin.getCacheSpecificYML(name).reload();
 							
+								if(gc.isMapinGame(name)) {
+									GameInfo gi = plugin.getGameInfoPoo().get(name);
+									gi.setObjetivesMg(gc.loadObjetivesOfGames(name));
+								}
 								
 								player.sendMessage(plugin.nombre+ChatColor.GREEN+" Se ha recargado correctamente el Mapa "+name);
 								
 							}else {
-								player.sendMessage(plugin.nombre+ChatColor.RED+" No existe esa arena");
+								player.sendMessage(plugin.nombre+ChatColor.RED+" No existe ese Mapa");
 							}
 						}else {
 							AllReload(player);
@@ -1797,8 +1815,16 @@ public class Comandos implements CommandExecutor{
           	}else if (args[0].equalsIgnoreCase("delete")) {
 					if(player.isOp()) {
 						if (args.length == 2) {
-							
 							String name = args[1];
+							FileConfiguration menu = plugin.getMenuItems();
+
+							if(menu.contains(name)) {
+								   
+								   menu.set(name,null);
+								   plugin.getMenuItems().save();
+								   plugin.getMenuItems().reload();
+							}
+							
 							YamlFilePlus y = new YamlFilePlus(plugin);
 							y.deleteSpecificPlayer(player, name);
 							//plugin.yml = new YamlFile(plugin,name, new File(plugin.getDataFolder().getAbsolutePath()+carpeta));;
@@ -2678,12 +2704,12 @@ public class Comandos implements CommandExecutor{
 						Matcher m = p.matcher(nmberorenum);
 						if(m.find()) {
 							int value = Integer.valueOf(nmberorenum);
-							gc.ObjetivesValue(map, name, value,null);
+							gc.ObjetivesValue(map, name.replaceAll("-"," ").replaceAll("_"," "), value,null);
 						}else {
 							try {
 								ObjetiveStatusType obj = ObjetiveStatusType.valueOf(nmberorenum.toUpperCase());
 								if(obj != null) {
-									gc.ObjetiveChangeType(map, name, obj,null);
+									gc.ObjetiveChangeType(map, name.replaceAll("-"," ").replaceAll("_"," "), obj,null);
 									
 								}else {
 									player.sendMessage(ChatColor.RED+"Ese no es un Tipo de Objetivo");
@@ -2707,12 +2733,12 @@ public class Comandos implements CommandExecutor{
 						Matcher m = p.matcher(nmberorenum);
 						if(m.find()) {
 							int value = Integer.valueOf(nmberorenum);
-							gc.ObjetivesValue(map, name, value,target);
+							gc.ObjetivesValue(map, name.replaceAll("-"," ").replaceAll("_"," "), value,target);
 						}else {
 							 try {
 								ObjetiveStatusType obj = ObjetiveStatusType.valueOf(nmberorenum.toUpperCase());
 								if(obj != null) {
-									gc.ObjetiveChangeType(map, name, obj,target);
+									gc.ObjetiveChangeType(map, name.replaceAll("-"," ").replaceAll("_"," "), obj,target);
 									
 								}else {
 									gc.sendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> <complete-incomplete-waiting-unknow-danger-warning> <player>");

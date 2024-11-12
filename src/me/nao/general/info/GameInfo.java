@@ -14,7 +14,7 @@ public class GameInfo {
 	
 	
 	private String name , time;
-	private int maxplayers,minplayers;
+	private int maxplayers,minplayers, loottablemax , itemspawnrange , spawnmobrange;
 	private List<String> participants,spectators;
 	private GameType type;
 	private GameStatus estpart;
@@ -33,6 +33,9 @@ public class GameInfo {
 	 */
 	public GameInfo() {
 		this.name = "DESCONOCIDO";
+		this.spawnmobrange = 0;
+		this.itemspawnrange = 0;
+		this.loottablemax = 0;
 		this.maxplayers = 10;
 		this.minplayers = 1;
 		this.type = null;
@@ -57,6 +60,18 @@ public class GameInfo {
 		return name;
 	}
 
+	public int getSpawnMobRange() {
+		return spawnmobrange;
+	}
+	
+	public int getSpawnItemRange() {
+		return itemspawnrange;
+	}
+	
+	public int getLootTableLimit() {
+		return loottablemax;
+	}
+	
 	public int getMaxPlayers() {
 		return maxplayers;
 	}
@@ -127,6 +142,18 @@ public class GameInfo {
 	
 	public void setMapName(String name) {
 		this.name = name;
+	}
+	
+	public void setSpawnMobRange(int spawnmobrange) {
+		this.spawnmobrange = spawnmobrange ;
+	}
+	
+	public void setSpawnItemRange(int itemspawnrange) {
+		this.itemspawnrange = itemspawnrange ;
+	}
+	
+	public void setLootTableLimit(int amount) {
+		this.loottablemax = amount;
 	}
 	
 	public void setMaxPlayersinMap(int maxplayers) {

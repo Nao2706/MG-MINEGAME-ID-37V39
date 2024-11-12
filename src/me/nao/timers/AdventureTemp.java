@@ -58,6 +58,7 @@ import me.nao.enums.StopMotivo;
 import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
+import me.nao.general.info.PlayerInfo;
 import me.nao.main.game.Minegame;
 import me.nao.manager.GameIntoMap;
 import me.nao.scoreboard.MgScore;
@@ -428,10 +429,14 @@ public class AdventureTemp {
 
 	//TODO NERBYBLOCK
 	public void getNearbyBlocks(Player player) {
-		FileConfiguration config = plugin.getConfig();
+		
 		Block block = player.getLocation().getBlock();
 		Block r = block.getRelative(0, 0, 0);
-		int rango = config.getInt("Mob-Spawn-Range") ;
+		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+		String map = pl.getMapName();
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
+		int rango = gi.getSpawnMobRange();
+		
 		
 		if (r.getType() == Material.AIR) {
 			for (int x = -rango; x < rango+1; x++) {
@@ -497,9 +502,6 @@ public class AdventureTemp {
 								//player.sendMessage("Hay un bloque de diamante en las coords Z:"+a.getLocation().getBlockX()+" Y:"+a.getLocation().getBlockY()+" Z:"+a.getLocation().getBlockZ());
 							}
 
-						
-
-					
 
 					}
 					;
@@ -517,10 +519,14 @@ public class AdventureTemp {
 	
 	//TODO NERBYBLOCK 2
 	public void getGeneratorsOfOres(Player player) {
-		FileConfiguration config = plugin.getConfig();
+		
 		Block block = player.getLocation().getBlock();
 		Block r = block.getRelative(0, 0, 0);
-		int rango = config.getInt("Item-Spawn-Range") ;
+		
+		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+		String map = pl.getMapName();
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
+		int rango = gi.getSpawnItemRange();
 		
 		if (r.getType() == Material.AIR) {
 			for (int x = -rango; x < rango+1; x++) {
