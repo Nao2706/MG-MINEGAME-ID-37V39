@@ -28,6 +28,7 @@ import me.nao.enums.ObjetiveStatusType;
 import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
+import me.nao.general.info.GameObjetivesMG;
 import me.nao.general.info.GamePoints;
 import me.nao.general.info.ObjetivesMG;
 import me.nao.general.info.PlayerInfo;
@@ -163,6 +164,7 @@ public class MgScore {
 		PlayerInfo p = plugin.getPlayerInfoPoo().get(player);
 		GamePoints gp = (GamePoints) p.getGamePoints();
 		GameInfo gi = plugin.getGameInfoPoo().get(p.getMapName());
+		GameObjetivesMG gomg = gi.getGameObjetivesMg();
 		GameAdventure ga = (GameAdventure) gi;
 		
 		
@@ -228,7 +230,7 @@ public class MgScore {
 		
 		
 		
-		if(ga.hasMapObjetives()) {
+		if(gomg.hasMapObjetives()) {
 			
 			
 			List<ObjetivesMG> l1 = gi.getGameObjetivesMg().getObjetives();
@@ -286,7 +288,7 @@ public class MgScore {
 		    }else if(priority == 1) {
 		    	 ob.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"OBJETIVOS PRIMARIOS"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
 		    	 if(!pr.isEmpty()) {
-		    		 if(gi.isNecessaryObjetivePrimary()) {
+		    		 if(gomg.isNecessaryObjetivePrimary()) {
 			    		 show.add(ChatColor.GOLD+"Obligatorio:" +ChatColor.RED+" Si");
 			    	 }else {
 			    		 show.add(ChatColor.GOLD+"Obligatorio:" +ChatColor.RED+" No");
@@ -311,7 +313,7 @@ public class MgScore {
 			}else if(priority == 2) {
 				 ob.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"OBJETIVOS SECUNDARIOS"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
 				 if(!se.isEmpty()) {
-		    		 if(gi.isNecessaryObjetiveSedondary()) {
+		    		 if(gomg.isNecessaryObjetiveSedondary()) {
 			    		 show.add(ChatColor.GOLD+"Obligatorio:" +ChatColor.RED+" Si");
 			    	 }else {
 			    		 show.add(ChatColor.GOLD+"Obligatorio:" +ChatColor.RED+" No");

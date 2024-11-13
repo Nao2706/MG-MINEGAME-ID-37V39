@@ -83,7 +83,7 @@ public class GameConditions {
 	//TODO JOIN
 	 
 	public void mgJoinToTheGames(Player player,String map) {
-		LoadDataMap(map);
+		loadDataMap(map);
 		
 		if(CanJoinToTheMap(player,map)){
 			
@@ -400,6 +400,7 @@ public class GameConditions {
 			   
 			   
 			   GameInfo gm = plugin.getGameInfoPoo().get(map);
+			   GameObjetivesMG gomg = gm.getGameObjetivesMg();
 			   plugin.getFirstLogMg().put(map, gm.ShowGame());
 			   
 			   List<String> startc = ym.getStringList("Start.Chat-Message");
@@ -457,7 +458,7 @@ public class GameConditions {
 				
 			     	 
 					gc.setKitMg(player);
-					if(gm.hasMapObjetives()) {
+					if(gomg.hasMapObjetives()) {
 						if(player.getInventory().getItemInMainHand() != null) {
 							if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
 								player.getInventory().setItemInMainHand(Items.OBJETIVOSP.getValue());
@@ -969,7 +970,7 @@ public class GameConditions {
 	}
 	
 	//TODO LOAD MAP
-	public boolean LoadDataMap(String map) {
+	public boolean loadDataMap(String map) {
 		
 		
 		if(!plugin.getGameInfoPoo().containsKey(map)) {
@@ -992,8 +993,8 @@ public class GameConditions {
 			    if(type == GameType.ADVENTURE || type == GameType.RESISTENCE) {
 			    	  //pasar solo una lista para los 4 espacios ojo
 				  
-			    	
-				  List<Entity> entities = new ArrayList<>();
+			
+				    List<Entity> entities = new ArrayList<>();
 					    
 					    
 			    	GameAdventure ga = new GameAdventure();
@@ -1002,15 +1003,15 @@ public class GameConditions {
 			    	ga.setGameType(type);
 			    	ga.setMaxPlayersinMap(maxplayers);
 			    	ga.setMinPlayersinMap(minplayers);
-			    	ga.setBossbar(boss);	    	ga.setObjetivesMg(loadObjetivesOfGames(map));
-			    	ga.setMapObjetives(hasObjetives(map));
-			    	ga.setNecessaryObjetivesPrimaryCompletes(isNecessaryObjetivePrimary(map));
-			    	ga.setNecessaryObjetivesSecondaryCompletes(isNecessaryObjetiveSedondary(map));
+			    	ga.setBossbar(boss);	    	
+			    	ga.setObjetivesMg(loadObjetivesOfGames(map));
+			    
 			    	ga.setGameTimeActions(loadGameTimeActions(map));
 			    	ga.setCuboidZones(loadCuboidZones(map));
 			    	ga.setLootTableLimit(getLootTableLimit());
 			    	ga.setSpawnItemRange(getSpawnItemRange());
 			    	ga.setSpawnMobRange(getSpawnMobRange());
+			    	
 			    	
 			    	System.out.println("LOG-1 MISION: "+ga.ShowGame());
 					
@@ -1049,7 +1050,7 @@ public class GameConditions {
 	}
 	
 
-	
+
 	
 	public boolean CanStartTheGame(Player player ,String map) {
 		 FileConfiguration config = plugin.getConfig();
@@ -3180,6 +3181,7 @@ public class GameConditions {
    	//TODO OBJETIVOS
  	public GameObjetivesMG loadObjetivesOfGames(String map) {
    		FileConfiguration game = getGameConfig(map);
+   		GameObjetivesMG go = new GameObjetivesMG();
    		
    		List<ObjetivesMG> l = new ArrayList<>();   		
    		if(hasObjetives(map)) {
@@ -3197,42 +3199,70 @@ public class GameConditions {
    			l.add(ghost);
    			
    			if(game.contains("Game-Objetives")) { 
+   				
    	   			for (String key : game.getConfigurationSection("Game-Objetives").getKeys(false)) {
-   	   			int priority = game.getInt("Game-Objetives."+key+".Priority");
-   				List<String> description = game.getStringList("Game-Objetives."+key+".Description");
-   				String status = game.getString("Game-Objetives."+key+".Status");
-   				int startvalue = game.getInt("Game-Objetives."+key+".Start-Value");
-   				int currentvalue = startvalue;
-   				int completevalue = game.getInt("Game-Objetives."+key+".Complete-Value");
-   				int incompletevalue = game.getInt("Game-Objetives."+key+".Incomplete-Value");
-   	   				
-   				List<String> objetivecompletesmessage = game.getStringList("Game-Objetives."+key+".ObjetiveCompleteMessage");
-   				List<String> objetivecompleteactions = game.getStringList("Game-Objetives."+key+".ObjetiveCompleteActions");
-   		   		List<String> objetivecompleteplayeractions = game.getStringList("Game-Objetives."+key+".ObjetiveCompletePlayerActions");
-
-   				List<String> objetiveincompletesmessage = game.getStringList("Game-Objetives."+key+".ObjetiveIncompleteMessage");
-   				List<String> objetiveincompleteactions = game.getStringList("Game-Objetives."+key+".ObjetiveIncompleteActions");
-   		   		List<String> objetiveincompleteplayeractions = game.getStringList("Game-Objetives."+key+".ObjetiveIncompletePlayerActions");
-	   				
-   		   		ObjetivesMG omg = new ObjetivesMG();
-
-				omg.setObjetiveName(key.replaceAll("-"," ").replaceAll("_"," "));
-				omg.setPriority(priority);
-				omg.setStartValue(startvalue);
-				omg.setCurrentValue(currentvalue);
-				omg.setCompleteValue(completevalue);
-				omg.setInCompleteValue(incompletevalue);
-				omg.setDescription(description);
-				omg.setObjetiveStatusType(ObjetiveStatusType.valueOf(status.toUpperCase()));
-				omg.setObjetiveCompleteMessage(objetivecompletesmessage);
-				omg.setObjetiveCompleteActions(objetivecompleteactions);
-				omg.setObjetiveCompletePlayerActions(objetivecompleteplayeractions);
-				omg.setObjetiveIncompleteMessage(objetiveincompletesmessage);
-				omg.setObjetiveIncompleteActions(objetiveincompleteactions);
-				omg.setObjetiveIncompletePlayerActions(objetiveincompleteplayeractions);
-				
-				l.add(omg);
-   	   		}}
+		   	   			int priority = game.getInt("Game-Objetives."+key+".Priority");
+		   				List<String> description = game.getStringList("Game-Objetives."+key+".Description");
+		   				String status = game.getString("Game-Objetives."+key+".Status");
+		   				int startvalue = game.getInt("Game-Objetives."+key+".Start-Value");
+		   				int currentvalue = startvalue;
+		   				int completevalue = game.getInt("Game-Objetives."+key+".Complete-Value");
+		   				int incompletevalue = game.getInt("Game-Objetives."+key+".Incomplete-Value");
+		   	   				
+		   				List<String> objetivecompletesmessage = game.getStringList("Game-Objetives."+key+".ObjetiveCompleteMessage");
+		   				List<String> objetivecompleteactions = game.getStringList("Game-Objetives."+key+".ObjetiveCompleteActions");
+		   		   		List<String> objetivecompleteplayeractions = game.getStringList("Game-Objetives."+key+".ObjetiveCompletePlayerActions");
+		
+		   				List<String> objetiveincompletesmessage = game.getStringList("Game-Objetives."+key+".ObjetiveIncompleteMessage");
+		   				List<String> objetiveincompleteactions = game.getStringList("Game-Objetives."+key+".ObjetiveIncompleteActions");
+		   		   		List<String> objetiveincompleteplayeractions = game.getStringList("Game-Objetives."+key+".ObjetiveIncompletePlayerActions");
+		   		   		
+		   		   		ObjetivesMG omg = new ObjetivesMG();
+		
+						omg.setObjetiveName(key.replaceAll("-"," ").replaceAll("_"," "));
+						omg.setPriority(priority);
+						omg.setStartValue(startvalue);
+						omg.setCurrentValue(currentvalue);
+						omg.setCompleteValue(completevalue);
+						omg.setInCompleteValue(incompletevalue);
+						omg.setDescription(description);
+						omg.setObjetiveStatusType(ObjetiveStatusType.valueOf(status.toUpperCase()));
+						omg.setObjetiveCompleteMessage(objetivecompletesmessage);
+						omg.setObjetiveCompleteActions(objetivecompleteactions);
+						omg.setObjetiveCompletePlayerActions(objetivecompleteplayeractions);
+						omg.setObjetiveIncompleteMessage(objetiveincompletesmessage);
+						omg.setObjetiveIncompleteActions(objetiveincompleteactions);
+						omg.setObjetiveIncompletePlayerActions(objetiveincompleteplayeractions);
+						
+						l.add(omg);
+   	   				}
+		   	   		List<String> rewardcompleteprimarymessage = game.getStringList("Complete-All-Objetives-Primary.Message");
+				 	List<String> rewardcompleteprimaryactions = game.getStringList("Complete-All-Objetives-Primary.Actions");
+				 	List<String> rewardcompleteprimaryplayeractions = game.getStringList("Complete-All-Objetives-Primary.PlayerActions");
+				  	 
+				 	
+				 	List<String> rewardcompletesecondarymessage = game.getStringList("Complete-All-Objetives-Secondary.Message");
+					List<String> rewardcompletesecondaryactions = game.getStringList("Complete-All-Objetives-Secondary.Actions");
+					List<String> rewardcompletesecondaryplayeractions = game.getStringList("Complete-All-Objetives-Secondary.PlayerActions");
+		    
+					List<List<String>> completeprimary = new ArrayList<>();
+					List<List<String>> completesecondary = new ArrayList<>();
+		
+					completeprimary.add(rewardcompleteprimarymessage);
+					completeprimary.add(rewardcompleteprimaryactions);
+					completeprimary.add(rewardcompleteprimaryplayeractions);
+					
+					completesecondary.add(rewardcompletesecondarymessage);
+					completesecondary.add(rewardcompletesecondaryactions);
+					completesecondary.add(rewardcompletesecondaryplayeractions);
+					
+					go.setMapObjetives(hasObjetives(map));
+					go.setNecessaryObjetivesPrimaryCompletes(isNecessaryObjetivePrimary(map));
+					go.setNecessaryObjetivesSecondaryCompletes(isNecessaryObjetiveSedondary(map));
+					go.setCompleteAllPrimaryObjetiveForReward(completeprimary);
+					go.setCompleteAllSecondaryObjetiveForReward(completesecondary);
+   	   			
+   	   			}
    			
    			if(l.size() >= 1) {
    				if(l.stream().filter(o -> o.getObjetiveName().equals("Mapa Con Objetivos Borrados")).findFirst().isPresent()) {
@@ -3241,8 +3271,9 @@ public class GameConditions {
    		     }
    		}
    		
-   		GameObjetivesMG go = new GameObjetivesMG(l);
-   		
+   			
+   		go.setObjetives(l);
+			
    		return go;
    	}
  	
@@ -3320,7 +3351,7 @@ public class GameConditions {
    		}
    		
    		
-   		GameObjetivesMG go = new GameObjetivesMG(l);
+   		GameObjetivesMG go = new GameObjetivesMG();
    		for(ObjetivesMG o : go.getObjetives()) {
    			System.out.println("LOG DE OBJETIVOS LISTA "+o.getObjetiveName()+" "+o.getPriority()+" "+o.getCurrentValue()+" "+o.getCompleteValue()+" "+o.getObjetiveStatusType().toString());
    		}
@@ -3334,6 +3365,7 @@ public class GameConditions {
 	//para reclamar recompensa y comprobar
  	public void isCompleteAllPrimaryObjetiveForReward(String map) {
  		GameInfo gi = plugin.getGameInfoPoo().get(map);
+ 		GameObjetivesMG gomg = gi.getGameObjetivesMg();
    		List<ObjetivesMG> l = gi.getGameObjetivesMg().getObjetives();
    		List<ObjetivesMG> p = new ArrayList<>();
    		
@@ -3350,32 +3382,32 @@ public class GameConditions {
    		}else {
    			if(!l.stream().filter(o -> o.getPriority() == 1).findFirst().isPresent()) {
    				return;
-   				
    			// condicional para evitar claimear doble 	
-   			}else if(gi.isObjetivesPrimaryComplete()) {
+   			}else if(gomg.isObjetivesPrimaryComplete()) {
    			 return;	
    			}
    			 
-   			gi.setObjetivesPrimaryComplete(true);
-   			FileConfiguration game = getGameConfig(map);
-			List<String> rewardpm = game.getStringList("Complete-All-Objetives-Primary.Message");
-		 	List<String> rewardp = game.getStringList("Complete-All-Objetives-Primary.Actions");
-		 	List<String> rewardpl = game.getStringList("Complete-All-Objetives-Primary.PlayerActions");
-		  	
+   			gomg.setObjetivesPrimaryComplete(true);
+   		
+			List<String> rewardmessage = gomg.getCompleteAllPrimaryObjetiveForReward().get(0);
+		 	List<String> rewardactions = gomg.getCompleteAllPrimaryObjetiveForReward().get(1);
+		 	List<String> rewardplayer = gomg.getCompleteAllPrimaryObjetiveForReward().get(2);
+		  	 
+		 	
 			if(gi instanceof GameAdventure) {
 				GameAdventure ga = (GameAdventure) gi;
 				List<Player> players = ConvertStringToPlayer(ga.getAlivePlayers());
 				
 				
 				for(Player player : players) {
-					if(!rewardpm.isEmpty()) {
-					   for(String text : rewardpm) {
+					if(!rewardmessage.isEmpty()) {
+					   for(String text : rewardmessage) {
 	   	   				player.sendMessage(ChatColor.translateAlternateColorCodes('&',text.replace("%player%", player.getName())));
 					}}
 	   				
-					ExecuteMultipleCommandsInConsole(player, rewardp);
+					ExecuteMultipleCommandsInConsole(player, rewardplayer);
 				}
-				ExecuteMultipleCommandsInConsole(null, rewardpl);
+				ExecuteMultipleCommandsInConsole(null, rewardactions);
 			}	
    		}
    		return;
@@ -3384,6 +3416,9 @@ public class GameConditions {
  	//para reclamar recompensa y comprobar
  	public void isCompleteAllSecondaryObjetiveForReward(String map) {
  		GameInfo gi = plugin.getGameInfoPoo().get(map);
+ 		
+ 		GameObjetivesMG gomg = gi.getGameObjetivesMg();
+
    		List<ObjetivesMG> l = gi.getGameObjetivesMg().getObjetives();
    		List<ObjetivesMG> p = new ArrayList<>();
    		
@@ -3394,23 +3429,21 @@ public class GameConditions {
    					p.add(obj);
    			}}
    		}
-   		
+   		 
    		if(!p.isEmpty()) {
    			return;
    		}else{
    			if(!l.stream().filter(o -> o.getPriority() >= 2).findFirst().isPresent()) {
    				return;
-   			}else if(gi.isObjetivesSecondaryComplete()) {
+   			}else if(gomg.isObjetivesSecondaryComplete()) {
       			 return;	
       		}
 
-   			gi.setObjetivesSecondaryComplete(true);
-      			
-   			
-   			FileConfiguration game = getGameConfig(map);
-			List<String> rewardpm = game.getStringList("Complete-All-Objetives-Secondary.Message");
-			List<String> rewards = game.getStringList("Complete-All-Objetives-Secondary.Actions");
-			List<String> rewardspl = game.getStringList("Complete-All-Objetives-Secondary.PlayerActions");
+   			gomg.setObjetivesSecondaryComplete(true);
+   			 
+   			List<String> rewardmessage = gomg.getCompleteAllPrimaryObjetiveForReward().get(0);
+		 	List<String> rewardactions = gomg.getCompleteAllPrimaryObjetiveForReward().get(1);
+		 	List<String> rewardplayer = gomg.getCompleteAllPrimaryObjetiveForReward().get(2);
 		  	
 		  	
 		  	if(gi instanceof GameAdventure) {
@@ -3418,14 +3451,14 @@ public class GameConditions {
 				List<Player> players = ConvertStringToPlayer(ga.getParticipants());
 				
 				for(Player player : players) {
-					if(!rewardpm.isEmpty()) {
-					   for(String text : rewardpm) {
+					if(!rewardmessage.isEmpty()) {
+					   for(String text : rewardmessage) {
 	   	   				player.sendMessage(ChatColor.translateAlternateColorCodes('&',text.replace("%player%", player.getName())));
 					}}
 	   				
-					ExecuteMultipleCommandsInConsole(player, rewards);
+					ExecuteMultipleCommandsInConsole(player, rewardplayer);
 				}
-				ExecuteMultipleCommandsInConsole(null, rewardspl);
+				ExecuteMultipleCommandsInConsole(null, rewardactions);
 
 		  	}
    		}
@@ -3697,7 +3730,7 @@ public class GameConditions {
 		
    		sendMessageToAllPlayersInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+oj.getObjetiveName()+ChatColor.GREEN+" a sido Completado "+ChatColor.GOLD+oj.getCompleteValue()+"/"+oj.getCompleteValue());
 	}
-	
+	 
 	public void ObjetiveGeneralActionsIncomplete(String map,ObjetivesMG oj,GameInfo gi)  {
 		List<String> objetivesmg = oj.getObjetiveIncompleteMessage();
    		List<String> objetivesaction = oj.getObjetiveIncompleteActions();
@@ -3732,7 +3765,9 @@ public class GameConditions {
 		}
 		
 		GameInfo gi = plugin.getGameInfoPoo().get(map);
-		List<ObjetivesMG> l = gi.getGameObjetivesMg().getObjetives();
+ 		GameObjetivesMG gomg = gi.getGameObjetivesMg();
+
+		List<ObjetivesMG> l = gomg.getObjetives();
 		
 		
 		if(!l.stream().filter(o -> o.getObjetiveName().equals(name)).findFirst().isPresent()) {
@@ -3816,9 +3851,9 @@ public class GameConditions {
 				sendMessageToAllPlayersOpInMap(map, ChatColor.GOLD+"El Objetivo "+ChatColor.GREEN+name+ChatColor.GOLD+" se Reseteo.");
 				mo.setCurrentValue(mo.getStartValue());
 				if(mo.getPriority() == 1) {
-					gi.setObjetivesPrimaryComplete(false);
+					gomg.setObjetivesPrimaryComplete(false);
 				}else if(mo.getPriority() >= 2){
-					gi.setObjetivesSecondaryComplete(false);
+					gomg.setObjetivesSecondaryComplete(false);
 				}
 				
 				break;
@@ -3851,7 +3886,6 @@ public class GameConditions {
     //mg objetive-secondary incomplete 1
 	//X ! >⨉  ?  ✔
 
-//	
 	public int getAmountOfObjetivesComplete(List<ObjetivesMG> l) {
 		int actual = 0;
    		List<String> complete = new ArrayList<>();
@@ -3863,7 +3897,6 @@ public class GameConditions {
    		  }}}
    		
    		actual = complete.size();
-   		
    		return actual ;
 	}
 	
@@ -3882,15 +3915,18 @@ public class GameConditions {
 		
 		return l ;
 	}
-	
+	 
 	public void ExecuteMultipleCommandsInConsole(Player player,List<String> l) {
-		ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+		
 		if(!l.isEmpty()) {
+			ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 			for(int i = 0 ; i < l.size(); i++) {
 				String texto = l.get(i);
-				if(player != null) {
-					Bukkit.dispatchCommand(console, ChatColor.translateAlternateColorCodes('&', texto.replaceAll("%player%",player.getName())));
-				}else {
+				if(texto.contains("%player%")) {
+					if(player != null) {
+						Bukkit.dispatchCommand(console, ChatColor.translateAlternateColorCodes('&', texto.replaceAll("%player%",player.getName())));
+					}
+				}else{
 					Bukkit.dispatchCommand(console, ChatColor.translateAlternateColorCodes('&', texto));
 				}
 			}

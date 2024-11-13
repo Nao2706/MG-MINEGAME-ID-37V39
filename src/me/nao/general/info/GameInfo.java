@@ -21,11 +21,8 @@ public class GameInfo {
 	private StopMotivo motivo;
 	private BossBar boss;
 	private GameObjetivesMG objetives;
-	private boolean hasobjetives,isNecessaryObjetivePrimary,isNecessaryObjetiveSedondary, iscopmpleteobjetivesprimary, iscompleteobjetivessecondary;
 	private List<GameTimeActions> gametimeactions;
-	private List<CuboidZone> cuboidzones;
-
-	
+	private List<CuboidZone> cuboidzones;	
 	// @param GameInfo Sirve para modo aventura y resistencia
 	/**
 	 * Constructor Base para futuros tipos de Juegos 
@@ -46,13 +43,9 @@ public class GameInfo {
 		this.objetives = null;
 		this.participants = new ArrayList<>();
 		this.spectators = new ArrayList<>();
-		this.hasobjetives = false;
-		this.isNecessaryObjetivePrimary = false;
-		this.isNecessaryObjetiveSedondary = false;
-		this.iscopmpleteobjetivesprimary = false;
-		this.iscompleteobjetivessecondary = false;
 		this.gametimeactions = new ArrayList<>();
-		this.cuboidzones = new ArrayList<>();;
+		this.cuboidzones = new ArrayList<>();
+		
 	}
 	
 	
@@ -107,7 +100,7 @@ public class GameInfo {
 	public GameObjetivesMG getGameObjetivesMg() {
 		return objetives;
 	}
-
+	
 	public List<String> getParticipants(){
 		return participants;
 	}
@@ -118,26 +111,6 @@ public class GameInfo {
 	
 	public List<CuboidZone> getCuboidZones(){
 		return cuboidzones;
-	}
-	
-	public boolean hasMapObjetives() {
-		return hasobjetives;
-	}
-	
-	public boolean isNecessaryObjetivePrimary() {
-		return isNecessaryObjetivePrimary;
-	}
-	
-	public boolean isNecessaryObjetiveSedondary() {
-		return isNecessaryObjetiveSedondary;
-	}
-	
-	public boolean isObjetivesPrimaryComplete() {
-		return iscopmpleteobjetivesprimary;
-	}
-	
-	public boolean isObjetivesSecondaryComplete() {
-		return iscompleteobjetivessecondary;
 	}
 	
 	public void setMapName(String name) {
@@ -196,26 +169,6 @@ public class GameInfo {
 		this.objetives = objetives;
 	}
 	
-	public void setMapObjetives(boolean objetives) {
-		hasobjetives = objetives;
-	}
-
-	public void setObjetivesPrimaryComplete(boolean objetivesprimary) {
-		this.iscopmpleteobjetivesprimary = objetivesprimary;
-	}
-
-	public void setObjetivesSecondaryComplete(boolean objetivessecondary) {
-		this.iscompleteobjetivessecondary = objetivessecondary;
-	}
-	
-	public void setNecessaryObjetivesPrimaryCompletes(boolean necessaryobjetivesprimary) {
-		this.isNecessaryObjetivePrimary = necessaryobjetivesprimary;
-	}
-
-	public void setNecessaryObjetivesSecondaryCompletes(boolean necessaryobjetivessecondary) {
-		this.isNecessaryObjetiveSedondary = necessaryobjetivessecondary;
-	}
-
 	public String ShowGame() {
 		return getMapName()+" "+getMaxPlayers()+" "+getMinPlayers()+" "+getGameType().toString()+" "+getGameStatus().toString()+" "+
 	getMotivo().toString()+" "+getBoss().getTitle()+" "+getTimeMg();

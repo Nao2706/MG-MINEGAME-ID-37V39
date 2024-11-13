@@ -29,6 +29,7 @@ import org.bukkit.inventory.meta.ItemMeta;
             TOTEM(""+ChatColor.GREEN+ChatColor.BOLD+"TOTEM DE INMORTALIDAD", Material.TOTEM_OF_UNDYING, null,1, ChatColor.GREEN+"Precio:  "+ChatColor.RED+"30 de Esmeralda",ChatColor.YELLOW+ "Te dara otra oportunidad (pero no si te caes del mapa)"),
             MANZANAORO(""+ChatColor.GREEN+ChatColor.BOLD+"MANZANA DE ORO", Material.GOLDEN_APPLE,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"10 Esmeraldas",ChatColor.YELLOW+ "Te curara al comerla"),
             MANZANA(""+ChatColor.GREEN+ChatColor.BOLD+"MANZANA", Material.APPLE,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"1 Lingote de Hierro",ChatColor.YELLOW+ "Evitara que mueras de Hambre"),
+            MANZANAOROENCANTADA(""+ChatColor.GREEN+ChatColor.BOLD+"MANZANA DE ORO ENCANTADA", Material.ENCHANTED_GOLDEN_APPLE,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"35 Esmeraldas",ChatColor.YELLOW+ "Te curara al comerla y te dara Efectos Positivos"),
             
             
             BENGALAMARCADORA(""+ChatColor.YELLOW+ChatColor.BOLD+"BENGALA MARCADORA", Material.REDSTONE_TORCH,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"10 Netherite",ChatColor.YELLOW+"Marca a las Entidades Cercanas. ",ChatColor.GREEN+"Click Derecho para Lanzar. "),

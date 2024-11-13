@@ -409,7 +409,7 @@ public class SourceOfDamage implements Listener{
 					m.getWorld().dropItem(m.getLocation(), (new ItemStack(Material.IRON_INGOT,20)));
 				}
 				else if(n == 5) {
-					m.getWorld().dropItem(m.getLocation(), (new ItemStack(Material.NETHERITE_INGOT,1)));
+					m.getWorld().dropItem(m.getLocation(), (new ItemStack(Material.NETHERITE_INGOT,2)));
 				}
 				
 				//SoulsArmor(player);
@@ -625,12 +625,9 @@ public class SourceOfDamage implements Listener{
 			}
 		
 			
-			if(e.getCause() == DamageCause.FALL) {
+			if(player.getHealth() > e.getFinalDamage() && e.getCause() == DamageCause.FALL) {
 				ci.GamePlayerFallMap(player);
-			}
-		
-			
-			if(e.getFinalDamage() >= player.getHealth()) {
+			}else if(e.getFinalDamage() >= player.getHealth()) {
 				
 				if(player.getInventory().getItemInMainHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING)) || player.getInventory().getItemInOffHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING))) {
 					return;

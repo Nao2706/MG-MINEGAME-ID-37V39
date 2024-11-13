@@ -196,26 +196,28 @@ public class MapSettings {
 			ym.set("Game-Objetives."+objetive+i+".ObjetiveCompleteMessage",objetivesmg);
 			objetivesmg.add("Vaya completaste el Objetivo Felicidades");
 			
-			List<String> objetivesplayeraction = ym.getStringList("Game-Objetives."+objetive+i+".ObjetiveCompletePlayerActions");
-			ym.set("Game-Objetives."+objetive+i+".ObjetiveCompletePlayerActions",objetivesplayeraction);
-			objetivesplayeraction.add("say felicidades :)");
-			
 			List<String> objetivesaction = ym.getStringList("Game-Objetives."+objetive+i+".ObjetiveCompleteActions");
 			ym.set("Game-Objetives."+objetive+i+".ObjetiveCompleteActions",objetivesaction);
-			objetivesaction.add("say felicidades :) console2");
+			objetivesaction.add("say felicidades :) console2 accion");
+			
+			List<String> objetivesplayeraction = ym.getStringList("Game-Objetives."+objetive+i+".ObjetiveCompletePlayerActions");
+			ym.set("Game-Objetives."+objetive+i+".ObjetiveCompletePlayerActions",objetivesplayeraction);
+			objetivesplayeraction.add("say felicidades :) player accion");
+			
+			
 			
 		//=====================================================================================	
 			List<String> objetives2mg = ym.getStringList("Game-Objetives."+objetive+i+".ObjetiveIncompleteMessage");
 			ym.set("Game-Objetives."+objetive+i+".ObjetiveIncompleteMessage",objetives2mg);
 			objetives2mg.add("Vaya parece que Fracasaste");
 			
-			List<String> objetivesplayeraction2 = ym.getStringList("Game-Objetives."+objetive+i+".ObjetiveIncompletePlayerActions");
-			ym.set("Game-Objetives."+objetive+i+".ObjetiveIncompletePlayerActions",objetivesplayeraction2);
-			objetivesplayeraction2.add("say infelicidades :)");
-			
 			List<String> objetivesaction2 = ym.getStringList("Game-Objetives."+objetive+i+".ObjetiveIncompleteActions");
 			ym.set("Game-Objetives."+objetive+i+".ObjetiveIncompleteActions",objetivesaction2);
-			objetivesaction2.add("say F console2");
+			objetivesaction2.add("say F console Accion");
+			
+			List<String> objetivesplayeraction2 = ym.getStringList("Game-Objetives."+objetive+i+".ObjetiveIncompletePlayerActions");
+			ym.set("Game-Objetives."+objetive+i+".ObjetiveIncompletePlayerActions",objetivesplayeraction2);
+			objetivesplayeraction2.add("say infelicidades :) player accion");
 	   }
 		
 	  	List<String> rewardpm = ym.getStringList("Complete-All-Objetives-Primary.Message");
@@ -224,11 +226,11 @@ public class MapSettings {
 		
 	   	List<String> rewardp = ym.getStringList("Complete-All-Objetives-Primary.Actions");
 		ym.set("Complete-All-Objetives-Primary.Actions",rewardp);
-		rewardp.add("say felicidades 1");
+		rewardp.add("say felicidades 1 accion");
 		
 		List<String> rewardpl = ym.getStringList("Complete-All-Objetives-Primary.PlayerActions");
 		ym.set("Complete-All-Objetives-Primary.PlayerActions",rewardpl);
-		rewardpl.add("say felicidades 11");
+		rewardpl.add("say felicidades 11 player accion");
 		
 		
 		List<String> rewardsm = ym.getStringList("Complete-All-Objetives-Secondary.Message");
@@ -237,11 +239,11 @@ public class MapSettings {
 		
 		List<String> rewards = ym.getStringList("Complete-All-Objetives-Secondary.Actions");
 		ym.set("Complete-All-Objetives-Secondary.Actions",rewards);
-		rewards.add("say felicidades 2");
+		rewards.add("say felicidades 2 accion ");
 		
 		List<String> rewardspl = ym.getStringList("Complete-All-Objetives-Secondary.PlayerActions");
 		ym.set("Complete-All-Objetives-Secondary.PlayerActions",rewardspl);
-		rewardspl.add("say felicidades 22");
+		rewardspl.add("say felicidades 22 player accion");
 	   
    }
    

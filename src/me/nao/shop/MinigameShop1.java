@@ -40,6 +40,7 @@ import me.nao.enums.Posion;
 import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
+import me.nao.general.info.GameObjetivesMG;
 import me.nao.general.info.ObjetivesMG;
 import me.nao.general.info.PlayerInfo;
 import me.nao.main.game.Minegame;
@@ -364,7 +365,8 @@ public class MinigameShop1 implements Listener{
 		plugin.getPags().put(player, 1);
 		PlayerInfo p = plugin.getPlayerInfoPoo().get(player);
 		GameInfo gi = plugin.getGameInfoPoo().get(p.getMapName());
-		if(!gi.hasMapObjetives()) {
+		GameObjetivesMG gomg = gi.getGameObjetivesMg();
+		if(!gomg.hasMapObjetives()) {
 			player.sendMessage(ChatColor.RED+"El Mapa no tiene Habilitado los Objetivos.");
 			return;
 		}
@@ -1108,7 +1110,7 @@ public class MinigameShop1 implements Listener{
 									list2.add("");
 									if(gc.HasMaintenance()) {
 										list2.add("  "+ChatColor.YELLOW+ChatColor.BOLD+ChatColor.ITALIC+"X "+ChatColor.RED+ChatColor.BOLD+ChatColor.UNDERLINE+"EN MANTENIMIENTO "+ChatColor.YELLOW+ChatColor.BOLD+ChatColor.ITALIC+"X");
-										list2.add(ChatColor.GOLD+" Todos los Mapas estan Bloqueados Temporalmente. ");
+										list2.add(ChatColor.GOLD+" Todos los Mapas estan Bloqueados. ");
 									}if(gc.isBlockedTheMap(name)) {
 										list2.add(""+ChatColor.GOLD+ChatColor.BOLD+"MAPA: "+ChatColor.RED+ChatColor.BOLD+"DESHABILITADO.");
 									}if(gc.isMapRanked(name)) {
@@ -1295,7 +1297,7 @@ public class MinigameShop1 implements Listener{
 								list2.add("");
 								if(gc.HasMaintenance()) {
 									list2.add("  "+ChatColor.YELLOW+ChatColor.BOLD+ChatColor.ITALIC+"X "+ChatColor.RED+ChatColor.BOLD+ChatColor.UNDERLINE+"EN MANTENIMIENTO "+ChatColor.YELLOW+ChatColor.BOLD+ChatColor.ITALIC+"X");
-									list2.add(ChatColor.GOLD+" Todos los Mapas estan Bloqueados Temporalmente. ");
+									list2.add(ChatColor.GOLD+" Todos los Mapas estan Bloqueados. ");
 								}
 								if(gc.isBlockedTheMap(name)) {
 									list2.add(""+ChatColor.GOLD+ChatColor.BOLD+"MAPA: "+ChatColor.RED+ChatColor.BOLD+"DESHABILITADO.");
@@ -1835,6 +1837,15 @@ public class MinigameShop1 implements Listener{
 				}else {
 					player.sendMessage(ChatColor.RED+"Necesitas 1 Lingotes de Hierro");
 				}
+			}if(item.isSimilar(Items.MANZANAOROENCANTADA.getValue())) {
+				if(!hasSpaceinInventory(player)) return;
+				if(player.getInventory().containsAtLeast(new ItemStack(Material.EMERALD),35)) {
+					player.getInventory().addItem(new ItemStack(Material.ENCHANTED_GOLDEN_APPLE,3));
+					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
+					player.getInventory().removeItem(new ItemStack(Material.EMERALD,35));
+				}else {
+					player.sendMessage(ChatColor.RED+"Necesitas 35 Esmeraldas");
+				}
 			}
 			
 			if(item.isSimilar(Items.MANZANAORO.getValue())) {
@@ -2261,6 +2272,7 @@ public class MinigameShop1 implements Listener{
 		inv.setItem(14, Posion.SPEED.getValue());
 		inv.setItem(15, Posion.ABSOR.getValue());
 		inv.setItem(16, Posion.RESIS.getValue());
+		inv.setItem(19, Items.MANZANAOROENCANTADA.getValue());
 		inv.setItem(40, Items.CERRAR.getValue());
 		inv.setItem(41, Items.VOLVER.getValue());
 		

@@ -30,6 +30,7 @@ import me.nao.enums.StopMotivo;
 //import me.nao.gamemode.DestroyNexo;
 import me.nao.general.info.GameInfo;
 import me.nao.general.info.GameNexo;
+import me.nao.general.info.GameObjetivesMG;
 import me.nao.general.info.GamePoints;
 import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
@@ -56,6 +57,7 @@ public class GameIntoMap {
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		String mapa = pl.getMapName();
 		GameInfo gm = plugin.getGameInfoPoo().get(mapa);
+		GameObjetivesMG gomg = gm.getGameObjetivesMg();
 		if(gm instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) gm;
 			List<String> deaths = ga.getDeadPlayers();
@@ -88,7 +90,7 @@ public class GameIntoMap {
 					cm.RevivePlayerToGame(target, mapa);
 				
 					cm.setKitMg(target);
-					if(ga.hasMapObjetives()) {
+					if(gomg.hasMapObjetives()) {
 						if(target.getInventory().getItemInMainHand() != null) {
 							if(target.getInventory().getItemInMainHand().getType() == Material.AIR) {
 								target.getInventory().setItemInMainHand(Items.OBJETIVOSP.getValue());
@@ -359,8 +361,9 @@ public class GameIntoMap {
 	public void ObjetivesInGame(Player player,String mapa) {
 		GameConditions gmc = new GameConditions(plugin);
 		GameInfo gm = plugin.getGameInfoPoo().get(mapa);
-	
-		if(gm.isNecessaryObjetivePrimary() && !gm.isNecessaryObjetiveSedondary()) {
+		GameObjetivesMG gomg = gm.getGameObjetivesMg();
+
+		if(gomg.isNecessaryObjetivePrimary() && !gomg.isNecessaryObjetiveSedondary()) {
 			if(gmc.isAllPrimaryObjetivesComplete(player, mapa)) {
 				
 				if(gm.getGameType() == GameType.ADVENTURE) {
@@ -387,7 +390,7 @@ public class GameIntoMap {
 				
 			}
 			return;
-		}else if(!gm.isNecessaryObjetivePrimary() && gm.isNecessaryObjetiveSedondary()) {
+		}else if(!gomg.isNecessaryObjetivePrimary() && gomg.isNecessaryObjetiveSedondary()) {
 			if(gmc.isAllSecondaryObjetivesComplete(player, mapa)) {
 				if(gm.getGameType() == GameType.ADVENTURE) {
 					gmc.PlayerArriveToTheWin(player, mapa);
@@ -414,7 +417,7 @@ public class GameIntoMap {
 				
 			}
 			return;
-		}else if(gm.isNecessaryObjetivePrimary() && gm.isNecessaryObjetiveSedondary()) {
+		}else if(gomg.isNecessaryObjetivePrimary() && gomg.isNecessaryObjetiveSedondary()) {
 			if(gmc.isAllPrimaryObjetivesComplete(player, mapa) && gmc.isAllSecondaryObjetivesComplete(player, mapa)) {
 				if(gm.getGameType() == GameType.ADVENTURE) {
 					gmc.PlayerArriveToTheWin(player, mapa);

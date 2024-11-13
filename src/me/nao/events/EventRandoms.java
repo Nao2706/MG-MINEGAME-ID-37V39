@@ -287,13 +287,12 @@ public class EventRandoms implements Listener{
 						return;
 					}else if(ent.getType() == EntityType.PLAYER) {
 						Player target = (Player) ent;
-						if(gc.isPlayerKnocked(player)){
-							return;
-						}
+						if(gc.isPlayerKnocked(player)) return;
+						
 						
 						if(player.getGameMode() == GameMode.SPECTATOR) {
 							e.setCancelled(true);
-							player.sendMessage(ChatColor.RED+"No puedes interactuar con Entidades siendo Espectador.");
+							player.sendMessage(ChatColor.RED+"No puedes interactuar con Entidades siendo Espectador...");
 							return;
 						}
 						
@@ -321,11 +320,15 @@ public class EventRandoms implements Listener{
 						}
 						
 					}else {
-						if(player.isSneaking() && ent.getPassengers().isEmpty()) {
+						if(player.getGameMode() == GameMode.SPECTATOR) {
+							e.setCancelled(true);
+							player.sendMessage(ChatColor.RED+"No puedes interactuar con Entidades siendo Espectador.");
+							return;
+						}else if(player.isSneaking() && ent.getPassengers().isEmpty()) {
 							ent.addPassenger(player);
-						 }else {
+						}else {
 							 player.addPassenger(ent); 
-						 }
+						}
 						
 					}
 				}
@@ -350,14 +353,15 @@ public class EventRandoms implements Listener{
 					Entity ent2 = (Entity) player.getPassengers().get(0);
 					player.removePassenger(ent2);
 					Location loc = player.getLocation();
-					if(ent2 instanceof Mob) {
-						ent2.setVelocity(loc.getDirection().multiply(3).setY(1));
-						
-					}else if(ent2 instanceof Player) {
+					
+					if(ent2 instanceof Player) {
 						Player target = (Player) ent2;
 						target.setVelocity(loc.getDirection().multiply(3).setY(1));
 						System.out.println("THROW PLAYER");
-					}
+					}else if(ent2 instanceof Mob) {
+						ent2.setVelocity(loc.getDirection().multiply(3).setY(1));
+						
+					} 
 					
 				
 					return;

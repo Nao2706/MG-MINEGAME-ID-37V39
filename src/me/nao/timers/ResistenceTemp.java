@@ -306,7 +306,7 @@ public class ResistenceTemp {
 					
 			    		  ShootEntityToPlayer(players);
 						  RemoveEntitysInBarrier(players);
-						  removeTrapArrows(players);
+						  removeTrapEntitys(players);
 						  getGeneratorsOfOres(players);
 						  getNearbyBlocks3(players);
 						  mobLocation(players);
@@ -1417,43 +1417,25 @@ public class ResistenceTemp {
 //    }
 //    
     
-    public void removeTrapArrows(Player player) {
-    	List<Entity> entities = getNearbyEntites(player.getLocation(), 50);
-    	for(int i = 0;i< entities.size();i++) {
-    		if(entities.get(i).getType() == EntityType.ARROW) {
-    			Arrow f = (Arrow) entities.get(i);
-    			if(f.isOnGround() && f.getCustomName() != null && f.getCustomName().equals("Flecha Trampa")) {
-    				
-    				f.remove();
+    public void removeTrapEntitys(Player player) {
+    	List<Entity> entities = getNearbyEntities(player.getLocation(), 50);
+    	List<Entity> drops = new ArrayList<>();
+    	
+    		for(Entity i : entities) {
+    			if(i.getType() == EntityType.SNOWMAN || i.getType() == EntityType.IRON_GOLEM) {
+     			   Block block = i.getLocation().getBlock();
+     			   Block r = block.getRelative(0, -1, 0);
+     			   if(r.getType() == Material.BARRIER) {
+     				   i.remove();
+ 					}
+    			}else if(i.getType() == EntityType.DROPPED_ITEM) {
+    				drops.add(i);
     			}
-    			Block block = f.getLocation().getBlock();
-    			Block r = block.getRelative(0, 0, 0);
-    			int rango = 2;
-    			for (int x = -rango; x < rango+1; x++) {
-					for (int y = -rango; y < rango+1; y++) {
-						for (int z = -rango; z < rango+1; z++) {
-	
-							Block a = r.getRelative(x, y, z);
-	
-							// setea bloques en esos puntos
-							
-	
-								if(a.getType() == Material.BARRIER) {
-									f.remove();
-								}
-								
-						
-						}}}
-    			
-    			
     		}
     		
-    		if(entities.get(i).getType() == EntityType.SNOWMAN || entities.get(i).getType() == EntityType.IRON_GOLEM) {
-    			   Block block = entities.get(i).getLocation().getBlock();
-    			   Block r = block.getRelative(0, -1, 0);
-    			   if(r.getType() == Material.BARRIER) {
-    				   entities.get(i).remove();
-					}
+    	if(drops.size() >= 50) {
+    		for(Entity i : drops) {
+    			i.remove();
     		}
     	}
     	

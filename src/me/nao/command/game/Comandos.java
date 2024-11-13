@@ -204,7 +204,7 @@ public class Comandos implements CommandExecutor{
 							int value = Integer.valueOf(numberoenum);
 							gc.ObjetivesValue(map, name.replaceAll("-"," ").replaceAll("_"," "), value,null);
 						}else {
-							try {
+							try { 
 								ObjetiveStatusType obj = ObjetiveStatusType.valueOf(numberoenum.toUpperCase());
 								if(obj != null) {
 									gc.ObjetiveChangeType(map, name.replaceAll("-"," ").replaceAll("_"," "), obj,null);
@@ -229,7 +229,7 @@ public class Comandos implements CommandExecutor{
 							gc.ObjetivesValue(map, name.replaceAll("-"," ").replaceAll("_"," "), value,target);
 						}else {
 							try {
-								ObjetiveStatusType obj = ObjetiveStatusType.valueOf(numberoenum.toUpperCase());
+								ObjetiveStatusType obj = convertStringToObjetiveStatusType(null,numberoenum);
 								if(obj != null) {
 									gc.ObjetiveChangeType(map, name.replaceAll("-"," ").replaceAll("_"," "), obj,target);
 								}else {
@@ -758,9 +758,9 @@ public class Comandos implements CommandExecutor{
 						FileConfiguration config = plugin.getConfig();
 					
 				 		if(gc.ExistMap(name)) {
-							 List<String> al = config.getStringList("Maps-Locked.List");
+							 List<String> al = config.getStringList("Maps-Blocked.List");
 							 if(!al.contains(name)) {
-								 config.set("Maps-Locked.List",al);
+								 config.set("Maps-Blocked.List",al);
 								 al.add(name);
 								 plugin.getConfig().save();
 								 plugin.getConfig().reload();
@@ -811,9 +811,9 @@ public class Comandos implements CommandExecutor{
 					
 				 		if(gc.ExistMap(name)) {
 						
-							 List<String> al = config.getStringList("Maps-Locked.List");
+							 List<String> al = config.getStringList("Maps-Blocked.List");
 							 if(al.contains(name)) {
-								 config.set("Maps-Locked.List",al);
+								 config.set("Maps-Blocked.List",al);
 								 al.remove(name);
 								 plugin.getConfig().save();
 								 plugin.getConfig().reload();
@@ -1196,6 +1196,8 @@ public class Comandos implements CommandExecutor{
 								if(gc.isMapinGame(name)) {
 									GameInfo gi = plugin.getGameInfoPoo().get(name);
 									gi.setObjetivesMg(gc.loadObjetivesOfGames(name));
+									
+
 								}
 								
 								player.sendMessage(plugin.nombre+ChatColor.GREEN+" Se ha recargado correctamente el Mapa "+name);
@@ -2232,9 +2234,9 @@ public class Comandos implements CommandExecutor{
 						FileConfiguration config = plugin.getConfig();
 					
 				 		if(gc.ExistMap(name)) {
-							 List<String> al = config.getStringList("Maps-Locked.List");
+							 List<String> al = config.getStringList("Maps-Blocked.List");
 							 if(al.contains(name)) {
-								 config.set("Maps-Locked.List",al);
+								 config.set("Maps-Blocked.List",al);
 								 al.remove(name);
 								 plugin.getConfig().save();
 								 plugin.getConfig().reload();
@@ -2261,9 +2263,9 @@ public class Comandos implements CommandExecutor{
 						String name = args[1];
 						FileConfiguration config = plugin.getConfig();
 						if(gc.ExistMap(name)) {
-							 List<String> al = config.getStringList("Maps-Locked.List");
+							 List<String> al = config.getStringList("Maps-Blocked.List");
 							 if(!al.contains(name)) {
-								 config.set("Maps-Locked.List",al);
+								 config.set("Maps-Blocked.List",al);
 								 al.add(name);
 								 plugin.getConfig().save();
 								 plugin.getConfig().reload();
@@ -2699,15 +2701,15 @@ public class Comandos implements CommandExecutor{
 						
 						String map = args[1];
 						String name = args[2];
-						String nmberorenum = args[3];
+						String numberoenum = args[3];
 						Pattern p = Pattern.compile("([0-9])");
-						Matcher m = p.matcher(nmberorenum);
+						Matcher m = p.matcher(numberoenum);
 						if(m.find()) {
-							int value = Integer.valueOf(nmberorenum);
+							int value = Integer.valueOf(numberoenum);
 							gc.ObjetivesValue(map, name.replaceAll("-"," ").replaceAll("_"," "), value,null);
 						}else {
 							try {
-								ObjetiveStatusType obj = ObjetiveStatusType.valueOf(nmberorenum.toUpperCase());
+								ObjetiveStatusType obj = convertStringToObjetiveStatusType(player,numberoenum);
 								if(obj != null) {
 									gc.ObjetiveChangeType(map, name.replaceAll("-"," ").replaceAll("_"," "), obj,null);
 									
@@ -2717,7 +2719,7 @@ public class Comandos implements CommandExecutor{
 					 				gc.sendMessageToUserAndConsole(player, ChatColor.RED+"usa /mg objetive <map> <objetivo> 1");
 								}
 							}catch(IllegalArgumentException e) {
-								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No existe el tipo "+ChatColor.GOLD+nmberorenum );
+								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No existe el tipo "+ChatColor.GOLD+numberoenum );
 							}
 							
 							
@@ -3112,6 +3114,45 @@ public class Comandos implements CommandExecutor{
 		return total;
 	}
  	
+ 	
+ 	public ObjetiveStatusType convertStringToObjetiveStatusType(Player player,String text) {
+ 		ObjetiveStatusType type = null;
+ 		String comments = "";
+ 		Map<String,ObjetiveStatusType> objetivetype = new HashMap<>();
+ 		objetivetype.put("COMPLETE", ObjetiveStatusType.COMPLETE);
+ 		objetivetype.put("CANCELLED", ObjetiveStatusType.CANCELLED);
+ 		objetivetype.put("CONCLUDED", ObjetiveStatusType.CONCLUDED);
+ 		objetivetype.put("DANGER", ObjetiveStatusType.DANGER);
+ 		objetivetype.put("HIDE", ObjetiveStatusType.HIDE);
+ 		objetivetype.put("INCOMPLETE", ObjetiveStatusType.INCOMPLETE);
+ 		objetivetype.put("RESET", ObjetiveStatusType.RESET);
+ 		objetivetype.put("UNKNOW", ObjetiveStatusType.UNKNOW);
+ 		objetivetype.put("WAITING", ObjetiveStatusType.WAITING);
+ 		objetivetype.put("WARNING", ObjetiveStatusType.WARNING);
+ 	
+ 		if(!objetivetype.containsKey(text.toUpperCase())) {
+ 			
+ 			comments = ChatColor.RED+"Estatus de Objetivos: ";
+ 			
+ 			List<Map.Entry<String,ObjetiveStatusType>> list = new ArrayList<>(objetivetype.entrySet());
+ 			for (Map.Entry<String,ObjetiveStatusType> e : list) {
+ 					comments = comments+ChatColor.GREEN+e.getKey()+ChatColor.RED+",";
+				}
+ 			comments = comments+ChatColor.RED+" Revisa bien la escritura. Fue colocado por default WAITING.";
+ 			if(player != null) {
+ 				player.sendMessage(comments);
+ 			}else{
+ 				Bukkit.getConsoleSender().sendMessage(comments);
+ 			}
+ 			type = objetivetype.get("WAITING");
+ 			
+ 		}else {
+ 			type = objetivetype.get(text.toUpperCase());
+ 		}
+ 		
+ 		return type;
+ 	}
+ 	
  	 
  	public void AreaPotion(Player player ,Location l,String type,String color,int radius ,int duration,int effectduration, int amplifier) {
 		//System.out.println("TYPE: "+type.toString());
@@ -3223,7 +3264,7 @@ public class Comandos implements CommandExecutor{
 		
 				
 	}
- 	
+ 	 
  	public void DialogueArgs(Player player ,String[] args) {
  		//mg dialogue nameyml id Map
 
@@ -3319,11 +3360,7 @@ public class Comandos implements CommandExecutor{
 								}	
 							}
 							
-							
 							return;
-						
-
-						
 						
 				 }else if(type.startsWith("tempban")) {
 					       //0    1    2 3  4   5  6
