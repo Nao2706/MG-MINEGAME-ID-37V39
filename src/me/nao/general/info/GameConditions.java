@@ -280,6 +280,8 @@ public class GameConditions {
 				sco.ClearScore(target);
 				RestorePlayer(target);
 			}
+			
+				checkGenerator(gi);
 				System.out.println("LOG END GAME RESULT: "+plugin.getGameInfoPoo().get(name).ShowGame());
 				System.out.println("ENTIDADES MARCADAS: "+plugin.getEntitiesFromFlare().size());
 				plugin.getEntitiesFromFlare().remove(name);
@@ -1005,12 +1007,14 @@ public class GameConditions {
 			    	ga.setMinPlayersinMap(minplayers);
 			    	ga.setBossbar(boss);	    	
 			    	ga.setObjetivesMg(loadObjetivesOfGames(map));
-			    
+			     
 			    	ga.setGameTimeActions(loadGameTimeActions(map));
 			    	ga.setCuboidZones(loadCuboidZones(map));
 			    	ga.setLootTableLimit(getLootTableLimit());
 			    	ga.setSpawnItemRange(getSpawnItemRange());
 			    	ga.setSpawnMobRange(getSpawnMobRange());
+			    	ga.setGenerators(loadMapGenerators(map));
+			    	ga.setMobsGenerators(loadMapMobsGenerators(map));
 			    	
 			    	
 			    	System.out.println("LOG-1 MISION: "+ga.ShowGame());
@@ -3140,6 +3144,37 @@ public class GameConditions {
 	   }
 	  
 	   
+   public List<Location> loadMapGenerators(String map) {
+		FileConfiguration game = getGameConfig(map);
+		List<Location> l = new ArrayList<>();
+		if(game.contains("Generators.List")) {
+			List<String> generators = game.getStringList("Generators.List");
+			if(!generators.isEmpty()) {
+				for(String loc : generators) {
+					l.add(convertStringLocationToLocations(loc));
+				}
+			}
+    	}
+			
+		return l;
+	}      
+   
+   
+   public List<Location> loadMapMobsGenerators(String map) {
+		FileConfiguration game = getGameConfig(map);
+		List<Location> l = new ArrayList<>();
+		if(game.contains("Mobs-Generators.List")) {
+			List<String> generators = game.getStringList("Mobs-Generators.List");
+			if(!generators.isEmpty()) {
+				for(String loc : generators) {
+					l.add(convertStringLocationToLocations(loc));
+				}
+			}
+    	}
+			
+		return l;
+	}      
+	   
 	public List<GameTimeActions> loadGameTimeActions(String map) {
 		FileConfiguration game = getGameConfig(map);
 		List<GameTimeActions> list = new ArrayList<>();
@@ -3167,7 +3202,7 @@ public class GameConditions {
 					String coord2 = split[1];
 					String status = split[2];
 					 
-					CuboidZone cz = new CuboidZone(convertStringLocationToLocation(coord1),convertStringLocationToLocation(coord2),convertStringToGameInteractions(status));
+					CuboidZone cz = new CuboidZone(convertStringLocationToLocations(coord1),convertStringLocationToLocations(coord2),convertStringToGameInteractions(status));
 					zones.add(cz);
 				}
 			}
@@ -4021,8 +4056,8 @@ public class GameConditions {
 		return gi;
 	} 
 	
-	public Location convertStringLocationToLocation(String location) {
-		String[] split = location.split(",");
+	public Location convertStringLocationToLocations(String location) {
+		String[] split = location.split("/");
 		String m = split[0];
 		World world = Bukkit.getWorld(m);
 		if(world == null) {
@@ -4035,6 +4070,81 @@ public class GameConditions {
 		return new Location(world,x,y,z);
 	}
 
+	
+	public void checkGenerator(GameInfo gi) {
+		
+		
+		List<Location> locations = gi.getGenerators();
+		if(locations.isEmpty()) {
+			sendMessageToConsole(ChatColor.YELLOW+"No hay Generadores en el Mapa.");
+			return;
+		}
+		String comments = ChatColor.AQUA+"GENERADORES DE MAPA "+ ChatColor.GOLD+gi.getMapName()+" ";
+		
+		for(Location loc : locations) {
+			Block a = loc.getBlock();
+			Block b = a.getRelative(0,-1, 0);
+			
+			if(a.getType() == Material.GREEN_CONCRETE && b.getType() == Material.BEDROCK) {
+				comments = comments+ChatColor.GREEN+loc.getWorld().getName()+","+loc.getBlockX()+","+loc.getBlockY()+","+loc.getBlockZ()+ChatColor.YELLOW+"-";
+				
+			}else if(a.getType() == Material.BLUE_CONCRETE && b.getType() == Material.BEDROCK) {
+				comments = comments+ChatColor.GREEN+loc.getWorld().getName()+","+loc.getBlockX()+","+loc.getBlockY()+","+loc.getBlockZ()+ChatColor.YELLOW+"-";
+
+			}else if(a.getType() == Material.ORANGE_CONCRETE && b.getType() == Material.BEDROCK) {
+				comments = comments+ChatColor.GREEN+loc.getWorld().getName()+","+loc.getBlockX()+","+loc.getBlockY()+","+loc.getBlockZ()+ChatColor.YELLOW+"-";
+
+			}else if(a.getType() == Material.LIGHT_GRAY_CONCRETE && b.getType() == Material.BEDROCK) {
+				comments = comments+ChatColor.GREEN+loc.getWorld().getName()+","+loc.getBlockX()+","+loc.getBlockY()+","+loc.getBlockZ()+ChatColor.YELLOW+"-";
+
+			}else if(a.getType() == Material.WHITE_CONCRETE && b.getType() == Material.BEDROCK) {
+				comments = comments+ChatColor.GREEN+loc.getWorld().getName()+","+loc.getBlockX()+","+loc.getBlockY()+","+loc.getBlockZ()+ChatColor.YELLOW+"-";
+
+			}else if(a.getType() == Material.BLACK_CONCRETE && b.getType() == Material.BEDROCK) {
+				comments = comments+ChatColor.GREEN+loc.getWorld().getName()+","+loc.getBlockX()+","+loc.getBlockY()+","+loc.getBlockZ()+ChatColor.YELLOW+"-";
+
+			}else if(a.getType() == Material.GRAY_CONCRETE && b.getType() == Material.BEDROCK) {
+				comments = comments+ChatColor.GREEN+loc.getWorld().getName()+","+loc.getBlockX()+","+loc.getBlockY()+","+loc.getBlockZ()+ChatColor.YELLOW+"-";
+
+			}else if(a.getType() == Material.RED_CONCRETE && b.getType() == Material.BEDROCK) {
+				comments = comments+ChatColor.GREEN+loc.getWorld().getName()+","+loc.getBlockX()+","+loc.getBlockY()+","+loc.getBlockZ()+ChatColor.YELLOW+"-";
+
+			}else if(a.getType() == Material.PURPLE_CONCRETE && b.getType() == Material.BEDROCK) {
+				comments = comments+ChatColor.GREEN+loc.getWorld().getName()+","+loc.getBlockX()+","+loc.getBlockY()+","+loc.getBlockZ()+ChatColor.YELLOW+"-";
+
+			}else if(a.getType() == Material.LIME_CONCRETE && b.getType() == Material.BEDROCK) {
+				comments = comments+ChatColor.GREEN+loc.getWorld().getName()+","+loc.getBlockX()+","+loc.getBlockY()+","+loc.getBlockZ()+ChatColor.YELLOW+"-";
+
+			}else if(a.getType() == Material.MAGENTA_CONCRETE && b.getType() == Material.BEDROCK) {
+				comments = comments+ChatColor.GREEN+loc.getWorld().getName()+","+loc.getBlockX()+","+loc.getBlockY()+","+loc.getBlockZ()+ChatColor.YELLOW+"-";
+
+			}else if(a.getType() == Material.NETHERITE_BLOCK && b.getType() == Material.BEDROCK) {
+				comments = comments+ChatColor.GREEN+loc.getWorld().getName()+","+loc.getBlockX()+","+loc.getBlockY()+","+loc.getBlockZ()+ChatColor.YELLOW+"-";
+
+			}else if(a.getType() == Material.DIAMOND_BLOCK && b.getType() == Material.BEDROCK) {
+				comments = comments+ChatColor.GREEN+loc.getWorld().getName()+","+loc.getBlockX()+","+loc.getBlockY()+","+loc.getBlockZ()+ChatColor.YELLOW+"-";
+
+			}else if(a.getType() == Material.EMERALD_BLOCK && b.getType() == Material.BEDROCK) {
+				comments = comments+ChatColor.GREEN+loc.getWorld().getName()+","+loc.getBlockX()+","+loc.getBlockY()+","+loc.getBlockZ()+ChatColor.YELLOW+"-";
+
+			}else if(a.getType() == Material.IRON_BLOCK && b.getType() == Material.BEDROCK) {
+				comments = comments+ChatColor.GREEN+loc.getWorld().getName()+","+loc.getBlockX()+","+loc.getBlockY()+","+loc.getBlockZ()+ChatColor.YELLOW+"-";
+
+			}else if(a.getType() == Material.GOLD_BLOCK && b.getType() == Material.BEDROCK) {
+				comments = comments+ChatColor.GREEN+loc.getWorld().getName()+","+loc.getBlockX()+","+loc.getBlockY()+","+loc.getBlockZ()+ChatColor.YELLOW+"-";
+
+			}else {
+				comments = comments+ChatColor.RED+loc.getWorld().getName()+","+loc.getBlockX()+","+loc.getBlockY()+","+loc.getBlockZ()+ChatColor.YELLOW+"-";
+
+			}
+		}
+		
+			comments = comments+ChatColor.RED+" las coordenadas en Rojo no tienen los Bloques Correctos.";
+			sendMessageToConsole(comments);
+
+		
+		
+	}
 	
 	//TODO NEXO
 	//PLAYER VERSION
@@ -4088,43 +4198,62 @@ public class GameConditions {
 	
 	}
 	
-	public boolean isEntityAbove(Location point1) {
+	public boolean isEntityAbove(Location loc) {
 		
-		List<Entity> list = getNearbyEntities(point1, 1);
-		if(list.isEmpty()) {
-			return false;
-		}
+		List<Entity> entities = new ArrayList<Entity>();
+		for(Entity e : loc.getWorld().getEntities()) {
 		
-		for(Entity ent : list) {
-		
-			Block block = ent.getLocation().getBlock();
-			Block r = block.getRelative(0,-1, 0);
-			if(r.getLocation() == point1) {
-				return true;
+			Block b = e.getLocation().getBlock();
+			Block r = b.getRelative(0,-1,0);
+			if(r.getLocation() == loc) {
+				if(e.getType() == EntityType.PLAYER) continue;
+				   entities.add(e);
+				   return true;
 			}
-			
 		}
+		
 		
 		return false;
 	}
 	
 	public int getAmountOfEntityAboveBlock(Location loc) {
-	
-		List<Entity> list = getNearbyEntities(loc, 2);
-		List<Entity> list2 = new ArrayList<>();
-		if(list.isEmpty()) {
-			return 0;
-		}
-		
-		for(Entity ent : list) {
-			Block block = ent.getLocation().getBlock();
-			Block r = block.getRelative(0,-1, 0);
+	  
+		List<Entity> entities = new ArrayList<Entity>();
+		for(Entity e : loc.getWorld().getEntities()) {
+			Block b = e.getLocation().getBlock();
+			Block r = b.getRelative(0,-1,0);
 			if(r.getLocation() == loc) {
-				list2.add(ent);
+				if(e.getType() == EntityType.PLAYER) continue;
+				 entities.add(e);
 			}
 		}
+	
 		
-		return list2.size();
+		return entities.size();
+	}
+	
+	
+	public int getEntitysAmountInZone(Location loc1 , Location loc2) {
+		List<Entity> entities = new ArrayList<Entity>();
+		for(Entity e : loc1.getWorld().getEntities()) {
+			if(isInsideOfLocations(e.getLocation(), loc1, loc2)) {
+				if(e.getType() == EntityType.PLAYER) continue;
+				 entities.add(e);
+			}
+		}
+		return entities.size();
+	}
+	
+	
+	public int getSpecifictEntitysAmountInZone(EntityType type ,Location loc1 , Location loc2) {
+		List<Entity> entities = new ArrayList<Entity>();
+		for(Entity e : loc1.getWorld().getEntities()) {
+			if(isInsideOfLocations(e.getLocation(), loc1, loc2)) {
+				if(e.getType() != type) continue; 
+				 entities.add(e);
+			}
+		}
+		return entities.size();
 	}
 	
 	public List<Entity> getNearbyEntities(Location l , int size){

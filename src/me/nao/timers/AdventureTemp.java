@@ -332,9 +332,10 @@ public class AdventureTemp {
 							  ShootEntityToPlayer(players);
 							  RemoveEntitysInBarrier(players);
 							  removeTrapEntitys(players);
-							  getGeneratorsOfOres(players);
-							  getNearbyBlocks3(players);
+							 // getGeneratorsOfOres(players);
+							  //getNearbyBlocks3(players);
 							  mobLocation(players);
+							  spawnOres(players);
 							  
 							  if(anuncios >= 0 && anuncios <= 5) {
 								  sco.ShowObjetives(players,1);
@@ -347,7 +348,8 @@ public class AdventureTemp {
 							  }
 							  String s1 = String.valueOf(segundo);
 							  if(s1.endsWith("0")) {
-								  getNearbyBlocks(players);
+								  //getNearbyBlocks(players);
+								  spawnMobs(players);
 							  }
 						}
 					}
@@ -425,10 +427,147 @@ public class AdventureTemp {
 	
 	
 	
-
+	//TODO NERBYBLOCK
+	public void spawnMobs(Player player) {
+		
+		if(player.getGameMode() != GameMode.ADVENTURE) return;
+		
+	
+		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+		GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
+		int rango = gi.getSpawnMobRange();
+		
+		List<Location> l = gi.getMobsGenerators();
+		
+		if(!l.isEmpty()) {
+			for(Location loc : l) {
+				
+				if(player.getLocation().distance(loc) > rango) continue;
+				
+				Block a = loc.getBlock();
+				Block b = a.getRelative(0,-1, 0);
+				
+				if(a.getType() == Material.GREEN_CONCRETE && b.getType() == Material.BEDROCK) {
+					
+					zombis(a.getWorld(),a.getLocation().getBlockX(),a.getLocation().getBlockY(),a.getLocation().getBlockZ());
+				}
+				
+				if(a.getType() == Material.BLUE_CONCRETE && b.getType() == Material.BEDROCK) {
+					
+					drowned(a.getWorld(),a.getLocation().getBlockX(),a.getLocation().getBlockY(),a.getLocation().getBlockZ());
+				}
+				
+				if(a.getType() == Material.ORANGE_CONCRETE && b.getType() == Material.BEDROCK) {
+					
+					husk(a.getWorld(),a.getLocation().getBlockX(),a.getLocation().getBlockY(),a.getLocation().getBlockZ());
+				}
+				
+				if(a.getType() == Material.LIGHT_GRAY_CONCRETE && b.getType() == Material.BEDROCK) {
+					
+					villagerz(a.getWorld(),a.getLocation().getBlockX(),a.getLocation().getBlockY(),a.getLocation().getBlockZ());
+				}
+				
+				if(a.getType() == Material.WHITE_CONCRETE && b.getType() == Material.BEDROCK) {
+					
+					skeleton(a.getWorld(),a.getLocation().getBlockX(),a.getLocation().getBlockY(),a.getLocation().getBlockZ());
+				}
+				
+				if(a.getType() == Material.BLACK_CONCRETE && b.getType() == Material.BEDROCK) {
+					skeletonDark(a.getWorld(),a.getLocation().getBlockX(),a.getLocation().getBlockY(),a.getLocation().getBlockZ());
+				}
+				
+				if(a.getType() == Material.GRAY_CONCRETE && b.getType() == Material.BEDROCK) {
+					vindicador(a.getWorld(),a.getLocation().getBlockX(),a.getLocation().getBlockY(),a.getLocation().getBlockZ());
+				}
+				
+				if(a.getType() == Material.RED_CONCRETE && b.getType() == Material.BEDROCK) {
+					Pillager(a.getWorld(),a.getLocation().getBlockX(),a.getLocation().getBlockY(),a.getLocation().getBlockZ());
+				}
+				
+				if(a.getType() == Material.PURPLE_CONCRETE && b.getType() == Material.BEDROCK) {
+					evoker(a.getWorld(),a.getLocation().getBlockX(),a.getLocation().getBlockY(),a.getLocation().getBlockZ());
+				}
+				
+				if(a.getType() == Material.LIME_CONCRETE && b.getType() == Material.BEDROCK) {
+					Creeper(a.getWorld(),a.getLocation().getBlockX(),a.getLocation().getBlockY(),a.getLocation().getBlockZ());
+				}
+				
+				if(a.getType() == Material.MAGENTA_CONCRETE && b.getType() == Material.BEDROCK) {
+					Bruja(a.getWorld(),a.getLocation().getBlockX(),a.getLocation().getBlockY(),a.getLocation().getBlockZ());
+				}
+				
+				
+			}
+		}
+	}
+	
+	//TODO NERBYBLOCK
+		public void spawnOres(Player player) {
+			
+			if(player.getGameMode() != GameMode.ADVENTURE) return;
+			
+		
+			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+			GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
+			int rango = gi.getSpawnItemRange();
+			
+			List<Location> l = gi.getGenerators();
+			
+			if(!l.isEmpty()) {
+				for(Location loc : l) {
+					
+					if(player.getLocation().distance(loc) > rango) continue;
+					
+					Block a = loc.getBlock();
+					Block b = a.getRelative(0,-1, 0);
+					
+					
+					if(a.getType() == Material.NETHERITE_BLOCK && b.getType() == Material.BEDROCK) {
+						 player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
+						 a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
+						 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.NETHERITE_INGOT));
+						 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.NETHERITE_BLOCK,RandomBetweenValue(1, 100)));
+						
+					}
+					
+					if(a.getType() == Material.DIAMOND_BLOCK && b.getType() == Material.BEDROCK) {
+						 player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
+						 a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
+					     a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.DIAMOND));
+					     a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.DIAMOND_BLOCK,RandomBetweenValue(1, 100)));
+					}
+					
+					if(a.getType() == Material.EMERALD_BLOCK && b.getType() == Material.BEDROCK) {
+						 player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
+						 a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
+						 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.EMERALD));
+						 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.EMERALD_BLOCK,RandomBetweenValue(1, 100)));
+					}
+					
+					if(a.getType() == Material.IRON_BLOCK && b.getType() == Material.BEDROCK) {
+						 player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
+						 a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
+						 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.IRON_INGOT));
+						 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.IRON_BLOCK,RandomBetweenValue(1, 100)));
+					}
+					
+					if(a.getType() == Material.GOLD_BLOCK && b.getType() == Material.BEDROCK) {
+						 player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
+						 a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
+						 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.GOLD_INGOT));
+						 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.GOLD_BLOCK,RandomBetweenValue(1, 100)));
+					}
+					
+					
+				}
+			}
+		}
+	
 
 	//TODO NERBYBLOCK
 	public void getNearbyBlocks(Player player) {
+		
+		if(player.getGameMode() != GameMode.ADVENTURE) return;
 		
 		Block block = player.getLocation().getBlock();
 		Block r = block.getRelative(0, 0, 0);
@@ -449,7 +588,7 @@ public class AdventureTemp {
 
 						// setea bloques en esos puntos
 						
-						if(player.getGameMode() == GameMode.ADVENTURE) {
+						
 					
 								if(a.getType() == Material.GREEN_CONCRETE && b.getType() == Material.BEDROCK) {
 								
@@ -500,7 +639,7 @@ public class AdventureTemp {
 									Bruja(a.getWorld(),a.getLocation().getBlockX(),a.getLocation().getBlockY(),a.getLocation().getBlockZ());
 								}
 								//player.sendMessage("Hay un bloque de diamante en las coords Z:"+a.getLocation().getBlockX()+" Y:"+a.getLocation().getBlockY()+" Z:"+a.getLocation().getBlockZ());
-							}
+							
 
 
 					}
@@ -520,6 +659,9 @@ public class AdventureTemp {
 	//TODO NERBYBLOCK 2
 	public void getGeneratorsOfOres(Player player) {
 		
+		if(player.getGameMode() != GameMode.ADVENTURE) return;
+		
+		
 		Block block = player.getLocation().getBlock();
 		Block r = block.getRelative(0, 0, 0);
 		
@@ -538,7 +680,7 @@ public class AdventureTemp {
 
 						// setea bloques en esos puntos
 						
-						if(player.getGameMode() == GameMode.ADVENTURE ) {
+						
 							
 								
 							
@@ -589,7 +731,7 @@ public class AdventureTemp {
 								}
 							
 								//player.sendMessage("Hay un bloque de diamante en las coords Z:"+a.getLocation().getBlockX()+" Y:"+a.getLocation().getBlockY()+" Z:"+a.getLocation().getBlockZ());
-							}
+							
 
 					}
 					;

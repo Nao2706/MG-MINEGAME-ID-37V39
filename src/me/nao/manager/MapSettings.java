@@ -248,39 +248,6 @@ public class MapSettings {
    }
    
    
-
-   
-   public void SetObjetiveInfoDefault(Player player , String map, String objetive) {
-	   GameConditions gc = new GameConditions(plugin);
-	   if(gc.ExistMap(map)) {
-			
-			
-			plugin.ChargedYml(map, player);
-			FileConfiguration ym = plugin.getCacheSpecificYML(map);	
-			ym.set("Game-Objetives."+objetive+".Priority",1);
-			ym.set("Game-Objetives."+objetive+".Description","Busca una palanca");
-			List<String> objetivesmg = ym.getStringList("Game-Objetives."+objetive+".ObjetiveCompleteMessage");
-			ym.set("Game-Objetives."+objetive+".ObjetiveCompleteMessage",objetivesmg);
-			objetivesmg.add("Vaya completaste el Objetivo Felicidades");
-			List<String> objetivesaction = ym.getStringList("Game-Objetives."+objetive+".ObjetiveCompleteActions");
-			ym.set("Game-Objetives."+objetive+".ObjetiveCompleteActions",objetivesaction);
-			objetivesaction.add("say felicidades :)");
-			
-			List<String> objetives2mg = ym.getStringList("Game-Objetives."+objetive+".ObjetiveIncompleteMessage");
-			ym.set("Game-Objetives."+objetive+".ObjetiveCompleteMessage",objetives2mg);
-			objetives2mg.add("Vaya parece que Fracasaste");
-			List<String> objetivesaction2 = ym.getStringList("Game-Objetives."+objetive+".ObjetiveIncompleteMessage");
-			ym.set("Game-Objetives."+objetive+".ObjetiveCompleteActions",objetivesaction2);
-			objetivesaction2.add("say F ");
-			
-			
-			plugin.getCacheSpecificYML(map).save();
-			plugin.getCacheSpecificYML(map).reload();
-			player.sendMessage(ChatColor.GREEN+"Objetivo nuevo seteado en el Mapa "+map);
-	   }
-		
-  }
-   
    
    //TODO setArenaLobby
    public void setServerLobby(Player player) {
@@ -308,9 +275,8 @@ public class MapSettings {
 			plugin.ChargedYml(name, player);
 			FileConfiguration ym = plugin.getCacheSpecificYML(name);	
 			NumberFormat nf = NumberFormat.getInstance();
+			nf.setGroupingUsed(false);
 			nf.setMaximumFractionDigits(0);
-			
-			
 		
 			
 				ym.set("Pre-Lobby",player.getLocation().getWorld().getName()+"/"+nf.format(player.getLocation().getX())+"/"+nf.format(player.getLocation().getY())+"/"+nf.format(player.getLocation().getZ())+"/"+nf.format(player.getLocation().getYaw())+"/"+nf.format(player.getLocation().getPitch()));
@@ -340,6 +306,7 @@ public class MapSettings {
 			plugin.ChargedYml(name, player);
 			FileConfiguration ym = plugin.getCacheSpecificYML(name);	
 			NumberFormat nf = NumberFormat.getInstance();
+			nf.setGroupingUsed(false);
 			nf.setMaximumFractionDigits(0);
 				ym.set("Spawn",player.getLocation().getWorld().getName()+"/"+nf.format(player.getLocation().getX())+"/"+nf.format(player.getLocation().getY())+"/"+nf.format(player.getLocation().getZ())+"/"+nf.format(player.getLocation().getYaw())+"/"+nf.format(player.getLocation().getPitch()));
 				
@@ -353,15 +320,166 @@ public class MapSettings {
 		}else {
 			player.sendMessage(ChatColor.YELLOW+"El Mapa "+ChatColor.GREEN+name+ChatColor.YELLOW+" no existe");
 		}
-		
-	
      
 	}
    
-  
+   public void setMapSpawnSimpleGenerators(String name, Player player) {
+	   
+		   Block b = player.getTargetBlock((Set<Material>) null, 3);
+	       if(!b.getType().isSolid()) {
+	              player.sendMessage(ChatColor.RED+"Debes mirar un material Solido [Un Bloque]");
+	               return;
+	         }
+		   
+	   
+	   	GameConditions gc = new GameConditions(plugin);
+		if(gc.ExistMap(name)) {
+				plugin.ChargedYml(name, player);
+				FileConfiguration ym = plugin.getCacheSpecificYML(name);	
+				NumberFormat nf = NumberFormat.getInstance();
+				nf.setGroupingUsed(false);
+				nf.setMaximumFractionDigits(0);
+				
+				List<String> generators = ym.getStringList("Generators.List");
+				ym.set("Generators.List",generators);
+				if(generators.contains(b.getLocation().getWorld().getName()+"/"+nf.format(b.getLocation().getX())+"/"+nf.format(b.getLocation().getY())+"/"+nf.format(b.getLocation().getZ()))){
+					player.sendMessage(ChatColor.RED+"Esa Ubicacion ya esta Guardada.");
+
+					return;
+				}
+				generators.add(b.getLocation().getWorld().getName()+"/"+nf.format(b.getLocation().getX())+"/"+nf.format(b.getLocation().getY())+"/"+nf.format(b.getLocation().getZ()));
+				
+				
+			
+				player.sendMessage(ChatColor.GREEN+"Se a seteado el Generador correctamente en el Mapa: "+ChatColor.GOLD+name);
+				plugin.getCacheSpecificYML(name).save();
+				plugin.getCacheSpecificYML(name).reload();
+				
+				
+		}else {
+			player.sendMessage(ChatColor.YELLOW+"El Mapa "+ChatColor.GREEN+name+ChatColor.YELLOW+" no existe");
+		}
+     
+	}
    
+	   public void deleteMapSpawnSimpleGenerators(String name, Player player) {
+		   
+		   Block b = player.getTargetBlock((Set<Material>) null, 3);
+	       if(!b.getType().isSolid()) {
+	              player.sendMessage(ChatColor.RED+"Debes mirar un material Solido [Un Bloque]");
+	               return;
+	         }
+		   
+	   
+	   	GameConditions gc = new GameConditions(plugin);
+		if(gc.ExistMap(name)) {
+				plugin.ChargedYml(name, player);
+				FileConfiguration ym = plugin.getCacheSpecificYML(name);	
+				NumberFormat nf = NumberFormat.getInstance();
+				nf.setGroupingUsed(false);
+				nf.setMaximumFractionDigits(0);
+				
+				List<String> generators = ym.getStringList("Generators.List");
+				ym.set("Generators.List",generators);
+				if(!generators.contains(b.getLocation().getWorld().getName()+"/"+nf.format(b.getLocation().getX())+"/"+nf.format(b.getLocation().getY())+"/"+nf.format(b.getLocation().getZ()))){
+					player.sendMessage(ChatColor.RED+"Esa Ubicacion no existe.");
+	
+					return;
+				}
+				generators.remove(b.getLocation().getWorld().getName()+"/"+nf.format(b.getLocation().getX())+"/"+nf.format(b.getLocation().getY())+"/"+nf.format(b.getLocation().getZ()));
+				
+				
+			
+				player.sendMessage(ChatColor.GREEN+"Se a eliminado el Generador correctamente en el Mapa: "+ChatColor.GOLD+name);
+				plugin.getCacheSpecificYML(name).save();
+				plugin.getCacheSpecificYML(name).reload();
+				
+				
+		}else {
+			player.sendMessage(ChatColor.YELLOW+"El Mapa "+ChatColor.GREEN+name+ChatColor.YELLOW+" no existe");
+		}
+	 
+	   }
+	   
+	   
+	   public void setMapSpawnSimpleMobsGenerators(String name, Player player) {
+		   
+		   Block b = player.getTargetBlock((Set<Material>) null, 3);
+	       if(!b.getType().isSolid()) {
+	              player.sendMessage(ChatColor.RED+"Debes mirar un material Solido [Un Bloque]");
+	               return;
+	         }
+		   
+	   
+	   	GameConditions gc = new GameConditions(plugin);
+		if(gc.ExistMap(name)) {
+				plugin.ChargedYml(name, player);
+				FileConfiguration ym = plugin.getCacheSpecificYML(name);	
+				NumberFormat nf = NumberFormat.getInstance();
+				nf.setGroupingUsed(false);
+				nf.setMaximumFractionDigits(0);
+				
+				List<String> generators = ym.getStringList("Mobs-Generators.List");
+				ym.set("Mobs-Generators.List",generators);
+				if(generators.contains(b.getLocation().getWorld().getName()+"/"+nf.format(b.getLocation().getX())+"/"+nf.format(b.getLocation().getY())+"/"+nf.format(b.getLocation().getZ()))){
+					player.sendMessage(ChatColor.RED+"Esa Ubicacion ya esta Guardada.");
+
+					return;
+				}
+				generators.add(b.getLocation().getWorld().getName()+"/"+nf.format(b.getLocation().getX())+"/"+nf.format(b.getLocation().getY())+"/"+nf.format(b.getLocation().getZ()));
+				
+				
+			
+				player.sendMessage(ChatColor.GREEN+"Se a seteado el Generador correctamente en el Mapa: "+ChatColor.GOLD+name);
+				plugin.getCacheSpecificYML(name).save();
+				plugin.getCacheSpecificYML(name).reload();
+				
+				
+		}else {
+			player.sendMessage(ChatColor.YELLOW+"El Mapa "+ChatColor.GREEN+name+ChatColor.YELLOW+" no existe");
+		}
+     
+	}
    
-   
+	   
+	   public void deleteMapSpawnSimpleMobsGenerators(String name, Player player) {
+		   
+		   Block b = player.getTargetBlock((Set<Material>) null, 3);
+	       if(!b.getType().isSolid()) {
+	              player.sendMessage(ChatColor.RED+"Debes mirar un material Solido [Un Bloque]");
+	               return;
+	         }
+		   
+	   
+	   	GameConditions gc = new GameConditions(plugin);
+		if(gc.ExistMap(name)) {
+				plugin.ChargedYml(name, player);
+				FileConfiguration ym = plugin.getCacheSpecificYML(name);	
+				NumberFormat nf = NumberFormat.getInstance();
+				nf.setGroupingUsed(false);
+				nf.setMaximumFractionDigits(0);
+				
+				List<String> generators = ym.getStringList("Mobs-Generators.List");
+				ym.set("Mobs-Generators.List",generators);
+				if(generators.contains(b.getLocation().getWorld().getName()+"/"+nf.format(b.getLocation().getX())+"/"+nf.format(b.getLocation().getY())+"/"+nf.format(b.getLocation().getZ()))){
+					player.sendMessage(ChatColor.RED+"Esa Ubicacion no existe.");
+					
+					return;
+				}
+				generators.remove(b.getLocation().getWorld().getName()+"/"+nf.format(b.getLocation().getX())+"/"+nf.format(b.getLocation().getY())+"/"+nf.format(b.getLocation().getZ()));
+				
+				
+			
+				player.sendMessage(ChatColor.GREEN+"Se a eliminado el Generador correctamente en el Mapa: "+ChatColor.GOLD+name);
+				plugin.getCacheSpecificYML(name).save();
+				plugin.getCacheSpecificYML(name).reload();
+				
+				
+		}else {
+			player.sendMessage(ChatColor.YELLOW+"El Mapa "+ChatColor.GREEN+name+ChatColor.YELLOW+" no existe");
+		}
+     
+	}
    
    //TODO setSpawnSpectator
    public void setMapSpawnSpectator(String name, Player player) {
@@ -370,6 +488,7 @@ public class MapSettings {
 			plugin.ChargedYml(name, player);
 			FileConfiguration ym = plugin.getCacheSpecificYML(name);	
 			NumberFormat nf = NumberFormat.getInstance();
+			nf.setGroupingUsed(false);
 			nf.setMaximumFractionDigits(0);
 				ym.set("Spawn-Spectator",player.getLocation().getWorld().getName()+"/"+nf.format(player.getLocation().getX())+"/"+nf.format(player.getLocation().getY())+"/"+nf.format(player.getLocation().getZ())+"/"+nf.format(player.getLocation().getYaw())+"/"+nf.format(player.getLocation().getPitch()));
 
@@ -396,6 +515,7 @@ public class MapSettings {
  			plugin.ChargedYml(name, player);
  			FileConfiguration ym = plugin.getCacheSpecificYML(name);	
  			NumberFormat nf = NumberFormat.getInstance();
+ 			nf.setGroupingUsed(false);
 			nf.setMaximumFractionDigits(0);
  				ym.set("Spawn-End",player.getLocation().getWorld().getName()+"/"+nf.format(player.getLocation().getX())+"/"+nf.format(player.getLocation().getY())+"/"+nf.format(player.getLocation().getZ())+"/"+nf.format(player.getLocation().getYaw())+"/"+nf.format(player.getLocation().getPitch()));
 
@@ -422,6 +542,7 @@ public class MapSettings {
 					plugin.ChargedYml(name, player);
 					FileConfiguration ym = plugin.getCacheSpecificYML(name);	
 					NumberFormat nf = NumberFormat.getInstance();
+					nf.setGroupingUsed(false);
 					nf.setMaximumFractionDigits(0);
 		 				ym.set("Spawn-Red",player.getLocation().getWorld().getName()+"/"+nf.format(player.getLocation().getX())+"/"+nf.format(player.getLocation().getY())+"/"+nf.format(player.getLocation().getZ())+"/"+nf.format(player.getLocation().getYaw())+"/"+nf.format(player.getLocation().getPitch()));
 
@@ -481,6 +602,7 @@ public class MapSettings {
                }
 			
 			NumberFormat nf = NumberFormat.getInstance();
+			nf.setGroupingUsed(false);
 			nf.setMaximumFractionDigits(0);
 				ym.set("Nexo-Blue",b.getLocation().getWorld().getName()+"/"+nf.format(b.getLocation().getX())+"/"+nf.format(b.getLocation().getY())+"/"+nf.format(b.getLocation().getZ()));
 
@@ -513,6 +635,7 @@ public class MapSettings {
                }
 			
 			NumberFormat nf = NumberFormat.getInstance();
+			nf.setGroupingUsed(false);
 			nf.setMaximumFractionDigits(0);
 				ym.set("Nexo-Blue",b.getLocation().getWorld().getName()+"/"+nf.format(b.getLocation().getX())+"/"+nf.format(b.getLocation().getY())+"/"+nf.format(b.getLocation().getZ()));
 

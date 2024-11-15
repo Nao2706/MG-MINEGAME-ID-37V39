@@ -4,6 +4,7 @@ package me.nao.general.info;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Location;
 import org.bukkit.boss.BossBar;
 
 import me.nao.enums.GameStatus;
@@ -23,6 +24,7 @@ public class GameInfo {
 	private GameObjetivesMG objetives;
 	private List<GameTimeActions> gametimeactions;
 	private List<CuboidZone> cuboidzones;	
+	private List<Location> generators,mobsgenerators;	
 	// @param GameInfo Sirve para modo aventura y resistencia
 	/**
 	 * Constructor Base para futuros tipos de Juegos 
@@ -45,7 +47,9 @@ public class GameInfo {
 		this.spectators = new ArrayList<>();
 		this.gametimeactions = new ArrayList<>();
 		this.cuboidzones = new ArrayList<>();
-		
+		this.generators = new ArrayList<>();
+		this.mobsgenerators = new ArrayList<>();
+
 	}
 	
 	
@@ -113,6 +117,14 @@ public class GameInfo {
 		return cuboidzones;
 	}
 	
+	public List<Location> getGenerators(){
+		return generators;
+	}
+	
+	public List<Location> getMobsGenerators(){
+		return mobsgenerators;
+	}
+	
 	public void setMapName(String name) {
 		this.name = name;
 	}
@@ -159,6 +171,14 @@ public class GameInfo {
 	
 	public void setCuboidZones(List<CuboidZone> cuboidzones) {
 		this.cuboidzones = cuboidzones;
+	}
+	
+	public void setGenerators(List<Location> generators) {
+		this.generators = generators;
+	}
+	
+	public void setMobsGenerators(List<Location> mobsgenerators) {
+		this.mobsgenerators = mobsgenerators;
 	}
 	
 	public void setGameTimeActions(List<GameTimeActions> gametimeactions) {

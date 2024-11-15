@@ -123,6 +123,9 @@ public class Comandos implements CommandExecutor{
 								if(gc.isMapinGame(name)) {
 									GameInfo gi = plugin.getGameInfoPoo().get(name);
 									gi.setObjetivesMg(gc.loadObjetivesOfGames(name));
+									gi.setGenerators(gc.loadMapGenerators(name));
+									gi.setMobsGenerators(gc.loadMapMobsGenerators(name));
+									gi.setCuboidZones(gc.loadCuboidZones(name));
 								}
 								
 								Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Se ha recargado correctamente el Mapa "+name);
@@ -1196,7 +1199,9 @@ public class Comandos implements CommandExecutor{
 								if(gc.isMapinGame(name)) {
 									GameInfo gi = plugin.getGameInfoPoo().get(name);
 									gi.setObjetivesMg(gc.loadObjetivesOfGames(name));
-									
+									gi.setGenerators(gc.loadMapGenerators(name));
+									gi.setMobsGenerators(gc.loadMapMobsGenerators(name));
+									gi.setCuboidZones(gc.loadCuboidZones(name));
 
 								}
 								
@@ -2507,6 +2512,54 @@ public class Comandos implements CommandExecutor{
 					player.getInventory().addItem(Items.ARROWDIS.getValue());
 					player.getInventory().addItem(Items.ARROWDIS2.getValue());
 					player.getInventory().addItem(Items.REVIVE.getValue());
+					
+					return true;
+				}else if(args[0].equalsIgnoreCase("generator")) {
+
+					if(args.length == 2) {
+						String name = args[1];
+						MapSettings ms = new MapSettings(plugin);
+						ms.setMapSpawnSimpleGenerators(name, player);
+						
+					}else {
+						player.sendMessage(ChatColor.RED+"/mg generator <Mapa> (Ver un Bloque)");
+					}
+					
+					return true;
+				}else if(args[0].equalsIgnoreCase("delgenerator")) {
+
+					if(args.length == 2) {
+						String name = args[1];
+						MapSettings ms = new MapSettings(plugin);
+						ms.deleteMapSpawnSimpleGenerators(name, player);
+						
+					}else {
+						player.sendMessage(ChatColor.RED+"/mg delgenerator <Mapa> (Ver un Bloque)");
+					}
+					
+					return true;
+				}else if(args[0].equalsIgnoreCase("mobgenerator")) {
+
+					if(args.length == 2) {
+						String name = args[1];
+						MapSettings ms = new MapSettings(plugin);
+						ms.setMapSpawnSimpleMobsGenerators(name, player);
+						
+					}else {
+						player.sendMessage(ChatColor.RED+"/mg mobgenerator <Mapa> (Ver un Bloque)");
+					}
+					
+					return true;
+				}else if(args[0].equalsIgnoreCase("delmobgenerator")) {
+
+					if(args.length == 2) {
+						String name = args[1];
+						MapSettings ms = new MapSettings(plugin);
+						ms.deleteMapSpawnSimpleMobsGenerators(name, player);
+						
+					}else {
+						player.sendMessage(ChatColor.RED+"/mg delmobgenerator <Mapa> (Ver un Bloque)");
+					}
 					
 					return true;
 				}else if(args[0].equalsIgnoreCase("craw")) {

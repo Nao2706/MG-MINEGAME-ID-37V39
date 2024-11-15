@@ -72,6 +72,10 @@ public class TabComplete1 implements TabCompleter{
 			arguments.add("misions");
 			arguments.add("message");
 			arguments.add("tittle");
+			arguments.add("generator");
+			arguments.add("delgenerator");
+			arguments.add("mobgenerator");
+			arguments.add("delmobgenerator");
 			arguments.add("points");
 			
 		}
