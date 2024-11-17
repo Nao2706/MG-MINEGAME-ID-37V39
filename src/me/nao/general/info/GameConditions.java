@@ -1820,7 +1820,7 @@ public class GameConditions {
 				for(Player players : targets) {
 					players.teleport(player.getLocation());
 				}
-				sendMessageToUserAndConsole(player, ChatColor.GREEN+"Los Jugadores fueron Teletransportado a "+player.getName());
+				sendMessageToConsole(ChatColor.GREEN+"Los Jugadores fueron Teletransportado a "+player.getName());
 			}
 		
 
@@ -1840,7 +1840,7 @@ public class GameConditions {
 							break;
 						}
 					}
-					sendMessageToUserAndConsole(player, ChatColor.GREEN+name+" fue Teletransportado a "+player.getName());
+					sendMessageToConsole(ChatColor.GREEN+name+" fue Teletransportado a "+player.getName());
 			 }
 		}
 	}
@@ -1854,10 +1854,14 @@ public class GameConditions {
 					Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch);
 					List<Player> targets = ConvertStringToPlayer(ga.getAlivePlayers());
 					for(Player players : targets) {
-						players.teleport(l);
+						players.teleport(l.add(0.5,0, 0.5));
+
 					}
-					sendMessageToUserAndConsole(player, ChatColor.GREEN+"Los Jugadores fueron Teletransportados a "+l.toString());
+					sendMessageToConsole(ChatColor.GREEN+"Los Jugadores fueron Teletransportados a "+l.toString());
 				}
+			}else {
+				sendMessageToConsole(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no esta en Juego");
+
 			}
 	}
 	
@@ -1873,12 +1877,16 @@ public class GameConditions {
 				for(Player players : targets) {
 					l.setYaw(players.getLocation().getYaw());
 					l.setPitch(players.getLocation().getPitch());
-					players.teleport(l);
+					players.teleport(l.add(0.5,0, 0.5));
+
 				}
-				
-				sendMessageToUserAndConsole(player, ChatColor.GREEN+"Los Jugadores fueron Teletransportados a "+l.toString());
+				 
+				sendMessageToConsole( ChatColor.GREEN+"Los Jugadores fueron Teletransportados a "+l.toString());
 			
 			}
+		}else {
+			sendMessageToConsole(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no esta en Juego");
+
 		}
 	}
 	
@@ -1895,13 +1903,16 @@ public class GameConditions {
 				List<Player> targets = ConvertStringToPlayer(ga.getAlivePlayers());
 				for(Player players : targets) {
 					if(players.getName().equals(target)) {
-						players.teleport(l);
+						players.teleport(l.add(0.5,0, 0.5));
 						break;
 					}
 					
 				}
-				sendMessageToUserAndConsole(player, ChatColor.GREEN+target+" fue Teletransportado a "+l.toString());
+				sendMessageToConsole(ChatColor.GREEN+target+" fue Teletransportado a "+l.toString());
 			}
+		}else {
+			sendMessageToConsole(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no esta en Juego");
+
 		}
 	
 	}
@@ -1920,15 +1931,19 @@ public class GameConditions {
 					if(players.getName().equals(target)) {
 						l.setYaw(players.getLocation().getYaw());
 						l.setPitch(players.getLocation().getPitch());
-						players.teleport(l);
+						players.teleport(l.add(0.5,0, 0.5));
+
 						break;
 					}
 					
 				}
 				
-				sendMessageToUserAndConsole(player, ChatColor.GREEN+target+" fue Teletransportado a "+l.toString());
+				sendMessageToConsole(ChatColor.GREEN+target+" fue Teletransportado a "+l.toString());
 				
 			}
+		}else {
+			sendMessageToConsole(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no esta en Juego");
+
 		}
 	}
 
@@ -4201,28 +4216,28 @@ public class GameConditions {
 	public boolean isEntityAbove(Location loc) {
 		
 		List<Entity> entities = new ArrayList<Entity>();
-		for(Entity e : loc.getWorld().getEntities()) {
+		List<Entity> ner = getNearbyEntities(loc, 5);
+		for(Entity e : ner) {
 		
 			Block b = e.getLocation().getBlock();
 			Block r = b.getRelative(0,-1,0);
-			if(r.getLocation() == loc) {
+			if(r.getLocation().equals(loc)) {
 				if(e.getType() == EntityType.PLAYER) continue;
 				   entities.add(e);
 				   return true;
 			}
 		}
-		
-		
 		return false;
 	}
 	
 	public int getAmountOfEntityAboveBlock(Location loc) {
 	  
 		List<Entity> entities = new ArrayList<Entity>();
-		for(Entity e : loc.getWorld().getEntities()) {
+		List<Entity> ner = getNearbyEntities(loc, 5);
+		for(Entity e : ner) {
 			Block b = e.getLocation().getBlock();
 			Block r = b.getRelative(0,-1,0);
-			if(r.getLocation() == loc) {
+			if(r.getLocation().equals(loc)) {
 				if(e.getType() == EntityType.PLAYER) continue;
 				 entities.add(e);
 			}

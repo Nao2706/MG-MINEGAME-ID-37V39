@@ -134,7 +134,7 @@ public class PointsManager {
 			}else {
 				points.set("Players."+player.getName()+".Xp",xp);
 				player.sendMessage(" "+ChatColor.RED+xp+ChatColor.GOLD+"/"+ChatColor.GREEN+refer);
-				player.sendMessage(getProgressBar(xp, refer,20, '|', ChatColor.GREEN, ChatColor.RED));
+				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+getProgressBar(xp, refer,20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
 				saveAll();
 			}
 			

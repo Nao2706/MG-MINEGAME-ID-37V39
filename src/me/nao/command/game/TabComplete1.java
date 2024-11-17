@@ -66,9 +66,9 @@ public class TabComplete1 implements TabCompleter{
 			arguments.add("objetives");
 			arguments.add("objetive");
 			arguments.add("tp");
-			arguments.add("tp-all");
-			arguments.add("tp-all-toplayer");
-			arguments.add("tp-toplayer");
+			arguments.add("tpall");
+			arguments.add("tpall-to-player");
+			arguments.add("tp-to-player");
 			arguments.add("misions");
 			arguments.add("message");
 			arguments.add("tittle");

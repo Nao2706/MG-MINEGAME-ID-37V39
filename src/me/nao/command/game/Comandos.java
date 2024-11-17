@@ -2654,8 +2654,8 @@ public class Comandos implements CommandExecutor{
 						gc.TpPlayerOfGameToLocationSpecific(player, target, map, world, x, y, z);
 						
 					}else {
-					 gc.sendMessageToUserAndConsole(player, ChatColor.GREEN+"1) Usa /mg tp <map> <world> <x> <y> <z> <yaw> <pitch>");
-					 gc.sendMessageToUserAndConsole(player,ChatColor.GREEN+"2) Usa /mg tp <map> <world> <x> <y> <z>");
+					 gc.sendMessageToUserAndConsole(player, ChatColor.GREEN+"1) Usa /mg tp <target> <map> <world> <x> <y> <z> <yaw> <pitch>");
+					 gc.sendMessageToUserAndConsole(player,ChatColor.GREEN+"2) Usa /mg tp <target> <map> <world> <x> <y> <z>");
 					}
 					
 					
@@ -2665,7 +2665,7 @@ public class Comandos implements CommandExecutor{
 					//mg tp Tutorial NAO World 122 343 34 - 7
 					
 					return true;
-				}else if(args[0].equalsIgnoreCase("tp-all")){
+				}else if(args[0].equalsIgnoreCase("tpall")){
 					
 					if(args.length == 8) {
 		
@@ -2688,8 +2688,8 @@ public class Comandos implements CommandExecutor{
 
 						
 					}else {
-					 gc.sendMessageToUserAndConsole(player, ChatColor.GREEN+"1) Usa /mg tp-all <target> <map> <world> <x> <y> <z> <yaw> <pitch>");
-					 gc.sendMessageToUserAndConsole(player,ChatColor.GREEN+"2) Usa /mg tp-all <target> <map> <world> <x> <y> <z>");
+					 gc.sendMessageToUserAndConsole(player, ChatColor.GREEN+"1) Usa /mg tpall <map> <world> <x> <y> <z> <yaw> <pitch>");
+					 gc.sendMessageToUserAndConsole(player,ChatColor.GREEN+"2) Usa /mg tpall <map> <world> <x> <y> <z>");
 					}
 					
 					
@@ -2699,15 +2699,15 @@ public class Comandos implements CommandExecutor{
 					//mg tp Tutorial NAO World 122 343 34 - 7
 					
 					return true;
-				}else if(args[0].equalsIgnoreCase("tp-all-toplayer")){
+				}else if(args[0].equalsIgnoreCase("tpall-to-player")){
 					gc.TpAllPlayersOfGameToLocation(player);
 					return true;
-				}else if(args[0].equalsIgnoreCase("tp-toplayer")){
+				}else if(args[0].equalsIgnoreCase("tp-to-player")){
 					if(args.length == 2) {
 						String target = args[1];
 						gc.TpPlayerOfGameToLocation(player, target);
 					}else {
-						player.sendMessage(ChatColor.RED+"/mg tp-all-toplayer <target>");
+						player.sendMessage(ChatColor.RED+"/mg tp-all-to-player <target>");
 					}
 					return true;
 				}

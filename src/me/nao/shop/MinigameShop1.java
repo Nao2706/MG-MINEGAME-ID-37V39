@@ -1112,7 +1112,7 @@ public class MinigameShop1 implements Listener{
 										list2.add("  "+ChatColor.YELLOW+ChatColor.BOLD+ChatColor.ITALIC+"X "+ChatColor.RED+ChatColor.BOLD+ChatColor.UNDERLINE+"EN MANTENIMIENTO "+ChatColor.YELLOW+ChatColor.BOLD+ChatColor.ITALIC+"X");
 										list2.add(ChatColor.GOLD+" Todos los Mapas estan Bloqueados. ");
 									}if(gc.isBlockedTheMap(name)) {
-										list2.add(""+ChatColor.GOLD+ChatColor.BOLD+"MAPA: "+ChatColor.RED+ChatColor.BOLD+"DESHABILITADO.");
+										list2.add(" "+ChatColor.GOLD+ChatColor.BOLD+"MAPA: "+ChatColor.RED+ChatColor.BOLD+"DESHABILITADO.");
 									}if(gc.isMapRanked(name)) {
 										list2.add(""+ChatColor.GREEN+ChatColor.MAGIC+"[[["+ChatColor.DARK_PURPLE+ChatColor.BOLD+" RANKED MAP "+ChatColor.GREEN+ChatColor.MAGIC+"]]]");
 									}
@@ -1300,7 +1300,7 @@ public class MinigameShop1 implements Listener{
 									list2.add(ChatColor.GOLD+" Todos los Mapas estan Bloqueados. ");
 								}
 								if(gc.isBlockedTheMap(name)) {
-									list2.add(""+ChatColor.GOLD+ChatColor.BOLD+"MAPA: "+ChatColor.RED+ChatColor.BOLD+"DESHABILITADO.");
+									list2.add(" "+ChatColor.GOLD+ChatColor.BOLD+"MAPA: "+ChatColor.RED+ChatColor.BOLD+"DESHABILITADO.");
 								}if(gc.isMapRanked(name)) {
 									list2.add(""+ChatColor.GREEN+ChatColor.MAGIC+"[[["+ChatColor.DARK_PURPLE+ChatColor.BOLD+" RANKED MAP "+ChatColor.GREEN+ChatColor.MAGIC+"]]]");
 								}
