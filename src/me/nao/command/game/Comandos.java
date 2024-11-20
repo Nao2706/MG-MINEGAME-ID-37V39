@@ -356,6 +356,8 @@ public class Comandos implements CommandExecutor{
 			 					 ma.spawnEliteZombi(l.add(0.5,0,0.5));
 			 				 }if(type.equals("Z")) {
 			 					 ma.spawnManualZombi(l.add(0.5,0,0.5));
+			 				 }if(type.equals("S")) {
+			 					 ma.zombisSpecials(l.add(0.5,0,0.5));
 			 				 }
 			 			 }
 			 			 
