@@ -26,8 +26,9 @@ public class PlayerInfo {
 	private int lvlxp;
 	private float xp;
 	private Location l;
-	private String namemision;
+	private String map;
 	private GamePoints gp;
+	private String teamname;
 	
 	/** 
 	 *Crear Objeto PlayerInfo para poder definir si en un juego este entrara sin sus cosas(inventario , vida , posiones , exp ) variante que guarda su inventario y otra informacion.
@@ -36,7 +37,7 @@ public class PlayerInfo {
 	 *
 	 * */
 	
-	public PlayerInfo(Minegame plugin ,boolean isinventorysave,Player player, Collection<PotionEffect> potions, ItemStack[] inv, GameMode gamemode, boolean fly, double vida, double maxvida,int comida, int lvlxp, float xp,Location l,String nameMision,GamePoints gp) {
+	public PlayerInfo(Minegame plugin ,boolean isinventorysave,Player player, Collection<PotionEffect> potions, ItemStack[] inv, GameMode gamemode, boolean fly, double vida, double maxvida,int comida, int lvlxp, float xp,Location l,String map,GamePoints gp) {
 	
 		this.plugin = plugin;
 		this.isinventorysave = isinventorysave;
@@ -51,8 +52,9 @@ public class PlayerInfo {
 		this.lvlxp = lvlxp;
 		this.xp = xp;
 		this.l = l;
-		this.namemision = nameMision;
+		this.map = map;
 		this.gp = gp;
+		this.teamname = "NINGUNO";
 		
 	}
 	
@@ -64,7 +66,7 @@ public class PlayerInfo {
 	 * 
 	 * */
 	
-	public PlayerInfo(Minegame plugin ,boolean isinventorysave,Player player, GameMode gamemode, boolean fly,Location l,String nameMision,GamePoints gp) {
+	public PlayerInfo(Minegame plugin ,boolean isinventorysave,Player player, GameMode gamemode, boolean fly,Location l,String map,GamePoints gp) {
 		
 		this.plugin = plugin;
 		this.isinventorysave = isinventorysave;
@@ -72,8 +74,9 @@ public class PlayerInfo {
 		this.gamemode = gamemode;
 		this.fly = fly;
 		this.l = l;
-		this.namemision = nameMision;
+		this.map = map;
 		this.gp = gp;
+		this.teamname = "NINGUNO";
 		
 	}
 	
@@ -127,11 +130,15 @@ public class PlayerInfo {
 	}
 	
 	public String getMapName() {
-		return namemision;
+		return map;
 	}
 	
 	public GamePoints getGamePoints() {
 		return gp;
+	}
+	
+	public String getTeamName() {
+		return teamname;
 	}
 
 	public void setPlayerMG(Player player) {
@@ -174,11 +181,13 @@ public class PlayerInfo {
 		this.l = lo;
 	}
 	
-	public void setMisionName(String nameMision) {
-		this.namemision = nameMision;
+	public void setMisionName(String map) {
+		this.map = map;
 	}
 	
-	
+	public void setTeamName(String teamname) {
+		this.teamname = teamname;
+	}
 	
 	public void ClearAllPlayerMg() {
 		player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20);

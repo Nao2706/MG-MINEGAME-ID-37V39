@@ -60,7 +60,6 @@ import me.nao.events.ItemNBT;
 import me.nao.fillareas.Data;
 import me.nao.gamemode.InfectedGame;
 import me.nao.general.info.GameConditions;
-import me.nao.general.info.GameInfo;
 import me.nao.general.info.GameReports;
 import me.nao.main.game.Minegame;
 import me.nao.manager.MapSettings;
@@ -121,11 +120,7 @@ public class Comandos implements CommandExecutor{
 								plugin.ChargedYml(name, null);
 								plugin.getCacheSpecificYML(name).reload();
 								if(gc.isMapinGame(name)) {
-									GameInfo gi = plugin.getGameInfoPoo().get(name);
-									gi.setObjetivesMg(gc.loadObjetivesOfGames(name));
-									gi.setGenerators(gc.loadMapGenerators(name));
-									gi.setMobsGenerators(gc.loadMapMobsGenerators(name));
-									gi.setCuboidZones(gc.loadCuboidZones(name));
+									gc.reloadInfoTheGame(name);
 								}
 								
 								Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Se ha recargado correctamente el Mapa "+name);
@@ -1199,12 +1194,7 @@ public class Comandos implements CommandExecutor{
 								plugin.getCacheSpecificYML(name).reload();
 							
 								if(gc.isMapinGame(name)) {
-									GameInfo gi = plugin.getGameInfoPoo().get(name);
-									gi.setObjetivesMg(gc.loadObjetivesOfGames(name));
-									gi.setGenerators(gc.loadMapGenerators(name));
-									gi.setMobsGenerators(gc.loadMapMobsGenerators(name));
-									gi.setCuboidZones(gc.loadCuboidZones(name));
-
+									gc.reloadInfoTheGame(name);
 								}
 								
 								player.sendMessage(plugin.nombre+ChatColor.GREEN+" Se ha recargado correctamente el Mapa "+name);

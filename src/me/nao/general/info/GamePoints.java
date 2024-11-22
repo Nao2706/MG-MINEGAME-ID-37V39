@@ -13,12 +13,12 @@ public class GamePoints {
 	 * 
 	 */
 	
-	public GamePoints(int kills , int deads ,int revive ,int helprevive,int damage) {
-		this.kills = kills;
-		this.deads = deads;
-		this.revive = revive;
-		this.helprevive = helprevive;
-		this.damage = damage;
+	public GamePoints() {
+		this.kills = 0;
+		this.deads = 0;
+		this.revive = 0;
+		this.helprevive = 0;
+		this.damage = 0;
 	}
 
 

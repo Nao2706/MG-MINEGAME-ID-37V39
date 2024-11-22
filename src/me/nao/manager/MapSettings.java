@@ -62,7 +62,7 @@ public class MapSettings {
  		if(!gc.ExistMap(name)) {
 			plugin.NewYml(name, player);
 			FileConfiguration ym = plugin.getCacheSpecificYML(name);
-			ym.set("Type-Mission","Adventure");
+			ym.set("Type-Map","Adventure");
 			ym.set("Revive-System",false);
 			ym.set("Max-Player", 5);
 			ym.set("Min-Player", 2);

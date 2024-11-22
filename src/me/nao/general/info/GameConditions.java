@@ -42,7 +42,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scoreboard.Team;
 import org.bukkit.util.RayTraceResult;
 
 import com.viaversion.viaversion.api.Via;
@@ -937,38 +936,33 @@ public class GameConditions {
 	
 	 
 	public void SetAndSavePlayer(Player player,String map) {
+		
+		 PlayerInfo pl = null;
 		 if(CanJoinWithYourInventory(map) && !CanUseKit(map)) {
 				//NO SALVAS SU INVENTARIO
-				
+			 	
 				
 				if(ExistLobbyMg()) {
-					PlayerInfo pl = new PlayerInfo(plugin,false,player, player.getGameMode(), player.isFlying(), GetLocationOfLobby(), map,new GamePoints(0,0,0,0,0));
-					plugin.getPlayerInfoPoo().put(player, pl);
-					pl.ClearGamemodePlayerMg();
+				    pl = new PlayerInfo(plugin,false,player, player.getGameMode(), player.isFlying(), GetLocationOfLobby(), map,new GamePoints());
 				
-					
 				}else {
-					PlayerInfo pl = new PlayerInfo(plugin,false,player, player.getGameMode(), player.isFlying(), player.getLocation(), map,new GamePoints(0,0,0,0,0));
-					plugin.getPlayerInfoPoo().put(player, pl);
-					pl.ClearGamemodePlayerMg();
-					
+					pl = new PlayerInfo(plugin,false,player, player.getGameMode(), player.isFlying(), player.getLocation(), map,new GamePoints());
 					
 				}
 			}else{
 				//LO SALVAS
 				
 				if(ExistLobbyMg()) {
-					PlayerInfo pl = new PlayerInfo(plugin,true,player,player.getActivePotionEffects(), player.getInventory().getContents(), player.getGameMode(), player.isFlying(),player.getHealth(), player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), player.getFoodLevel(), player.getLevel(),player.getExp(), GetLocationOfLobby(), map,new GamePoints(0,0,0,0,0));
-					plugin.getPlayerInfoPoo().put(player, pl);
-					pl.ClearAllPlayerMg();
+				    pl = new PlayerInfo(plugin,true,player,player.getActivePotionEffects(), player.getInventory().getContents(), player.getGameMode(), player.isFlying(),player.getHealth(), player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), player.getFoodLevel(), player.getLevel(),player.getExp(), GetLocationOfLobby(), map,new GamePoints());
 					
 				}else {
-				
-					PlayerInfo pl = new PlayerInfo(plugin,true,player,player.getActivePotionEffects(), player.getInventory().getContents(), player.getGameMode(), player.isFlying(),player.getHealth(), player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), player.getFoodLevel(), player.getLevel(),player.getExp(), player.getLocation(), map,new GamePoints(0,0,0,0,0));
-					plugin.getPlayerInfoPoo().put(player, pl);
-					pl.ClearAllPlayerMg();
+					pl = new PlayerInfo(plugin,true,player,player.getActivePotionEffects(), player.getInventory().getContents(), player.getGameMode(), player.isFlying(),player.getHealth(), player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), player.getFoodLevel(), player.getLevel(),player.getExp(), player.getLocation(), map,new GamePoints());
+	
 				}
 			}
+		 
+		 	plugin.getPlayerInfoPoo().put(player, pl);
+			pl.ClearAllPlayerMg();
 	}
 	
 	//TODO LOAD MAP
@@ -979,7 +973,7 @@ public class GameConditions {
 			try {
 				FileConfiguration game = getGameConfig(map);
 				String time = game.getString("Timer-H-M-S");
-				GameType type = GameType.valueOf(game.getString("Type-Mission").toUpperCase());
+				GameType type = GameType.valueOf(game.getString("Type-Map").toUpperCase());
 				int maxplayers = game.getInt("Max-Player");
 				int minplayers = game.getInt("Min-Player");
 				
@@ -997,7 +991,7 @@ public class GameConditions {
 				  
 			
 				    List<Entity> entities = new ArrayList<>();
-					    
+					     
 					    
 			    	GameAdventure ga = new GameAdventure();
 			    	ga.setMapName(map);
@@ -1015,13 +1009,23 @@ public class GameConditions {
 			    	ga.setSpawnMobRange(getSpawnMobRange());
 			    	ga.setGenerators(loadMapGenerators(map));
 			    	ga.setMobsGenerators(loadMapMobsGenerators(map));
-			    	
+			    	ga.setPvpinMap(isPvPAllowed(map));
 			    	
 			    	System.out.println("LOG-1 MISION: "+ga.ShowGame());
 					
 					plugin.getEntitiesFromFlare().put(map,entities);
 					plugin.getGameInfoPoo().put(map, ga);
 			    }else if(type == GameType.NEXO) {
+			    	
+			    	
+			    	GameNexo gn = new GameNexo();
+			    	gn.setMapName(map);
+			    	gn.setTimeMg(time);
+			    	gn.setGameType(type);
+			    	gn.setMaxPlayersinMap(maxplayers);
+			    	gn.setMinPlayersinMap(minplayers);
+			    	gn.setBossbar(boss);	
+			    	gn.setPvpinMap(isPvPAllowed(map));
 //			    	List<String> t1 = new ArrayList<>();
 //				    List<String> t2 = new ArrayList<>();
 //			    	
@@ -1113,6 +1117,15 @@ public class GameConditions {
 			}
 		 }
 		return true;
+	}
+	
+	public void reloadInfoTheGame(String map) {
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
+		gi.setObjetivesMg(loadObjetivesOfGames(map));
+		gi.setGenerators(loadMapGenerators(map));
+		gi.setMobsGenerators(loadMapMobsGenerators(map));
+		gi.setCuboidZones(loadCuboidZones(map));
+		gi.setPvpinMap(isPvPAllowed(map));
 	}
 	
 	public boolean isPlayerKnocked(Player player) {
@@ -2697,12 +2710,12 @@ public class GameConditions {
 	
 	
 	   //TODO TOP
-   	public void Top(String arenaName) {
+   	public void Top(String map) {
    					FileConfiguration message = plugin.getMessage();
 		// PRIMERA PARTE
 					HashMap<String, Integer> scores = new HashMap<>();
 
-						GameInfo ms = plugin.getGameInfoPoo().get(arenaName);
+						GameInfo ms = plugin.getGameInfoPoo().get(map);
 						List<Player> joins = new ArrayList<>();
 						List<Player> spectador = new ArrayList<>();
 						
@@ -3158,6 +3171,10 @@ public class GameConditions {
 				
 	   }
 	  
+	   
+	   //TODO LOAD
+	   
+	
 	   
    public List<Location> loadMapGenerators(String map) {
 		FileConfiguration game = getGameConfig(map);
@@ -4576,61 +4593,7 @@ public class GameConditions {
 		return;
 	}
 	
-	//TODO NEXO
-	public Location RedNexo(String name) {
-		   FileConfiguration ym = getGameConfig(name);
-		   if(!ym.contains("Red-Nexo")) {
-			   
-			return null;   
-		   }
-			    String[] coords = ym.getString("Red-Nexo").split("/");
-			    String world = coords[0];
-			    double x = Double.valueOf(coords[1]);
-			    double y = Double.valueOf(coords[2]);
-			    double z = Double.valueOf(coords[3]);
-				Location l = new Location(Bukkit.getWorld(world), x, y, z);
-
-					return l;
-	}
-	
-	public Location BlueNexo(String name) {
-		   FileConfiguration ym = getGameConfig(name);
-		   if(!ym.contains("Blue-Nexo")) {
-			   
-			return null;   
-		   }
-			    String[] coords = ym.getString("Blue-Nexo").split("/");
-			    String world = coords[0];
-			    double x = Double.valueOf(coords[1]);
-			    double y = Double.valueOf(coords[2]);
-			    double z = Double.valueOf(coords[3]);
-				Location l = new Location(Bukkit.getWorld(world), x, y, z);
-
-			return l;
-	}
-	
-
-	public void TptoSpawnTeam(Player player) {
-		Team t = plugin.BlueNexo();
-		if(t.hasEntry(player.getName())){
-			
-		}
-	}
-	
-
 
 	
-//	public void Team1Win() {
-//		
-//	}
-//	
-//	public void Team2Win() {
-//		
-//	}
-//	
-//	public void TeamsDraw() {
-//		
-//	}
-//	
 	
 }

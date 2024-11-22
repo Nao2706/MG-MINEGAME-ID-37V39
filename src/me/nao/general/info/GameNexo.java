@@ -3,36 +3,53 @@ package me.nao.general.info;
 
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 
 
 
 public class GameNexo extends GameInfo{
 
-
-	private List<List<TeamsMg>> teams;
+	private Map<String,TeamsMg> teams;
 	
 
 
-
-
-	//O1 Y O2 son los objetivos si es que se completaron para evitar doble reclamo o recompensa
 	public GameNexo() {
-	
-		this.teams = null;
-
+		this.teams = new HashMap<>();
 	}
-	
 
-	public List<List<TeamsMg>> getTeams() {
+
+	public Map<String, TeamsMg> getTeams() {
 		return teams;
 	}
 
+
+	public void setTeams(Map<String, TeamsMg> teams) {
+		this.teams = teams;
+	}
 	
+	
+	public boolean existOnlyOneTeam() {
+		
+		List<Map.Entry<String, TeamsMg>> list = new ArrayList<>(this.teams.entrySet());
+		List<String> l = new ArrayList<>();
+		
+		for(Map.Entry<String, TeamsMg> tm : list) {
+			if(!tm.getValue().isAllMembersDead()) {
+				l.add(tm.getKey());
+			}
+		}
+		
+		if(l.size() == 1) {
+			return true;
+		}
+		return false;
+	}
 
 	
-
-
 
 
 	

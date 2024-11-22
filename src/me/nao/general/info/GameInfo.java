@@ -25,6 +25,7 @@ public class GameInfo {
 	private List<GameTimeActions> gametimeactions;
 	private List<CuboidZone> cuboidzones;	
 	private List<Location> generators,mobsgenerators;	
+	private boolean pvp;
 	// @param GameInfo Sirve para modo aventura y resistencia
 	/**
 	 * Constructor Base para futuros tipos de Juegos 
@@ -49,7 +50,7 @@ public class GameInfo {
 		this.cuboidzones = new ArrayList<>();
 		this.generators = new ArrayList<>();
 		this.mobsgenerators = new ArrayList<>();
-
+		this.pvp = false;
 	}
 	
 	
@@ -125,6 +126,10 @@ public class GameInfo {
 		return mobsgenerators;
 	}
 	
+	public boolean isPvpinMap() {
+		return pvp;
+	}
+	
 	public void setMapName(String name) {
 		this.name = name;
 	}
@@ -187,6 +192,10 @@ public class GameInfo {
 	
 	public void setObjetivesMg(GameObjetivesMG objetives) {
 		this.objetives = objetives;
+	}
+	
+	public void setPvpinMap(boolean pvp) {
+		this.pvp = pvp;
 	}
 	
 	public String ShowGame() {
