@@ -65,6 +65,7 @@ public class FlareActions {
 			
 		}else {
 			player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"AC 130: "+ChatColor.YELLOW+"No podemos ver tu bengala lanza otra donde podamos verla.");
+			l.getWorld().dropItem(l, Items.BENGALAVERDEP.getValue());
 			//System.out.println("No hay Barriers");
 			return;
 		}
@@ -100,6 +101,7 @@ public class FlareActions {
 			//((Fireball) fb).setShooter(player);
 		}else {
 			player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"A10 WARTHOG: "+ChatColor.YELLOW+"No podemos ver tu bengala lanza otra donde podamos verla.");
+			l.getWorld().dropItem(l, Items.BENGALAROJAP.getValue());
 			return;
 			//System.out.println("No hay Barriers2");
 		}

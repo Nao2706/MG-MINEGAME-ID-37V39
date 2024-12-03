@@ -305,7 +305,8 @@ public class GameConditions {
 			    float yaw = Float.valueOf(coords[4]);
 			    float pitch = Float.valueOf(coords[5]);
 
-			    
+				player.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, player.getLocation().add(0, 1, 0),
+						/* NUMERO DE PARTICULAS */20, 5, 5, 5, /* velocidad */0, null, true);
 				player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 20.0F, 1F);
 				Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch);
 				player.setInvulnerable(true);
@@ -1120,12 +1121,16 @@ public class GameConditions {
 	}
 	
 	public void reloadInfoTheGame(String map) {
+		
 		GameInfo gi = plugin.getGameInfoPoo().get(map);
-		gi.setObjetivesMg(loadObjetivesOfGames(map));
-		gi.setGenerators(loadMapGenerators(map));
-		gi.setMobsGenerators(loadMapMobsGenerators(map));
-		gi.setCuboidZones(loadCuboidZones(map));
-		gi.setPvpinMap(isPvPAllowed(map));
+	 	gi.setGameTimeActions(loadGameTimeActions(map));
+    	gi.setCuboidZones(loadCuboidZones(map));
+    	gi.setLootTableLimit(getLootTableLimit());
+    	gi.setSpawnItemRange(getSpawnItemRange());
+    	gi.setSpawnMobRange(getSpawnMobRange());
+    	gi.setGenerators(loadMapGenerators(map));
+    	gi.setMobsGenerators(loadMapMobsGenerators(map));
+    	gi.setPvpinMap(isPvPAllowed(map));
 	}
 	
 	public boolean isPlayerKnocked(Player player) {

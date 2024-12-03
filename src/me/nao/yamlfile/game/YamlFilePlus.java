@@ -24,7 +24,7 @@ public class YamlFilePlus extends YamlConfiguration {
 	}
 	
 
-		  public YamlConfiguration getSpecificYamlFile(String folder ,String name ) {
+		  public YamlConfiguration getSpecificYamlFile(String folder ,String name) {
 			  
 		    File file = new File(new File(plugin.getDataFolder().getAbsolutePath() + "/" + folder + "/"), name+".yml");
 		    
@@ -35,7 +35,7 @@ public class YamlFilePlus extends YamlConfiguration {
 			      		if(file.getName().equals(name+".yml")) {
 			      			yaml.load(file);
 			      			//Bukkit.getConsoleSender().sendMessage("ggdefaultnao");
-						       return yaml;
+						    return yaml;
 			      		}
 				      } catch (IOException | InvalidConfigurationException e) {
 				        e.printStackTrace();
@@ -56,6 +56,7 @@ public class YamlFilePlus extends YamlConfiguration {
 				      		if(file.getName().equals(name+".yml")) {
 				      			yaml.load(file);
 				      			yaml.save(file);
+				      	
 				      			Bukkit.getConsoleSender().sendMessage("ggdefaultnao2ojalafunq");
 							    return yaml;
 				      		}
@@ -167,8 +168,7 @@ public class YamlFilePlus extends YamlConfiguration {
 				        try {
 				        	if(file.exists()) {
 				        		 load(file);
-				        	}
-				        	else{
+				        	}else{
 				           
 				            for(int i =0; i < nombre_archivos.length;i++) {
 				              	 File file2 = new File(folder.getAbsolutePath(), nombre_archivos[i]);

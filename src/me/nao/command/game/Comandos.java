@@ -330,7 +330,7 @@ public class Comandos implements CommandExecutor{
 			 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El mundo "+ChatColor.GOLD+split[0]+ChatColor.RED+" no existe.");
 			 				 return true;
 			 			 }
-			 			 Location l = new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3]));
+			 			
 			 			 
 			 			 int cant = Integer.valueOf(amount);
 			 			 
@@ -342,22 +342,22 @@ public class Comandos implements CommandExecutor{
 			 			 
 			 			 for(int i = 0; i < cant; i++) {
 			 				 if(type.equals("H")) {
-			 					 ma.spawnEliteZombi(l.add(0.5,0,0.5));
-			 					 ma.spawnManualBabyZombi(l.add(0.5,0,0.5));
-			 					 ma.spawnManualZombi(l.add(0.5,0,0.5));
+			 					 ma.spawnEliteZombi(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])));
+			 					 ma.spawnManualBabyZombi(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])));
+			 					 ma.spawnManualZombi(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])));
 			 				 }if(type.equals("ZB")) {
-			 					 ma.spawnManualBabyZombi(l.add(0.5,0,0.5));
+			 					 ma.spawnManualBabyZombi(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])));
 			 				 }if(type.equals("ZE")) {
-			 					 ma.spawnEliteZombi(l.add(0.5,0,0.5));
+			 					 ma.spawnEliteZombi(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])));
 			 				 }if(type.equals("Z")) {
-			 					 ma.spawnManualZombi(l.add(0.5,0,0.5));
+			 					 ma.spawnManualZombi(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])));
 			 				 }if(type.equals("S")) {
-			 					 ma.zombisSpecials(l.add(0.5,0,0.5));
+			 					 ma.zombisSpecials(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])));
 			 				 }
 			 			 }
 			 			 
 			 		 }else{
-			 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa mg spawnzombi <world,x,y,z> <amount> <H: Horde of all zombies, ZE:zombie elite, ZB:zombie baby, Z:zombie>");
+			 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa mg spawnzombi <world,x,y,z> <amount> <H: Horde of all zombies, ZE:zombie elite, ZB:zombie baby, Z:zombie , S:Especial>");
 			 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Ejemplo mg spawnzombi world,12,23,34 50 H");
 			 		 }
 			 		  
@@ -1987,6 +1987,7 @@ public class Comandos implements CommandExecutor{
 				 			 String amount  = args[2];
 				 			 String type = args[3].toUpperCase();
 				 			 
+				 			 
 				 			 String[] split = location.split(",");
 				 			 
 				 			 World world = Bukkit.getWorld(split[0]);
@@ -1994,7 +1995,7 @@ public class Comandos implements CommandExecutor{
 				 				 player.sendMessage(ChatColor.RED+"El mundo "+ChatColor.GOLD+split[0]+ChatColor.RED+" no existe.");
 				 				 return true;
 				 			 }
-				 			 Location l = new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3]));
+				 			
 				 			 
 				 			 int cant = Integer.valueOf(amount);
 				 			 
@@ -2006,20 +2007,22 @@ public class Comandos implements CommandExecutor{
 				 			 
 				 			 for(int i = 0; i < cant; i++) {
 				 				 if(type.equals("H")) {
-				 					 ma.spawnEliteZombi(l.add(0.5,1,0.5));
-				 					 ma.spawnManualBabyZombi(l.add(0.5,1,0.5));
-				 					 ma.spawnManualZombi(l.add(0.5,1,0.5));
+				 					 ma.spawnEliteZombi(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])));
+				 					 ma.spawnManualBabyZombi(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])));
+				 					 ma.spawnManualZombi(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])));
 				 				 }if(type.equals("ZB")) {
-				 					 ma.spawnManualBabyZombi(l.add(0.5,1,0.5));
+				 					 ma.spawnManualBabyZombi(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])));
 				 				 }if(type.equals("ZE")) {
-				 					 ma.spawnEliteZombi(l.add(0.5,1,0.5));
+				 					 ma.spawnEliteZombi(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])));
 				 				 }if(type.equals("Z")) {
-				 					 ma.spawnManualZombi(l.add(0.5,1,0.5));
+				 					 ma.spawnManualZombi(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])));
+				 				 }if(type.equals("S")) {
+				 					 ma.zombisSpecials(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])));
 				 				 }
 				 			 }
 				 			 
 				 		 }else{
-				 			 player.sendMessage(ChatColor.GREEN+"Usa mg spawnzombi <world,x,y,z> <amount> <H: Horde of all zombies, ZE:zombie elite, ZB:zombie baby, Z:zombie>");
+				 			 player.sendMessage(ChatColor.GREEN+"Usa mg spawnzombi <world,x,y,z> <amount> <H: Horde of all zombies, ZE:zombie elite, ZB:zombie baby, Z:zombie, S:Especial>");
 				 			 player.sendMessage(ChatColor.GREEN+"Ejemplo mg spawnzombi world,12,23,34 50 H");
 				 		 }
 				 		  
@@ -2714,6 +2717,9 @@ public class Comandos implements CommandExecutor{
 					
 					MinigameShop1 ms = new MinigameShop1(plugin);
 					plugin.getPags().put(player, 1);
+					if(!plugin.getPlayersLookingMgMenu().contains(player.getName())) {
+						plugin.getPlayersLookingMgMenu().add(player.getName());
+					}
 					ms.MissionsMenu(player);
 					
 					return true;

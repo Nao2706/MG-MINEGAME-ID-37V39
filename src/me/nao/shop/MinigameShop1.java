@@ -961,11 +961,7 @@ public class MinigameShop1 implements Listener{
 	
 	public void UpdateInventory2(Player player) {
 		
-//		if(plugin.getPlayerReading().contains(player.getName())) {
-//			
-//			return;
-//		}
-//		plugin.getPlayerReading().add(player.getName());
+
 		
 		  if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("OBJETIVOS")
 			|| player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("OBJETIVOS PRIMARIOS")
@@ -1027,6 +1023,9 @@ public class MinigameShop1 implements Listener{
 	
 	public boolean isUpdateable(Player player) {
 		
+		if(!plugin.getPlayersLookingMgMenu().contains(player.getName())) {
+			return false;
+		}
 		
 		if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("MENU DE MAPAS")) {
 			FileConfiguration config = plugin.getConfig();

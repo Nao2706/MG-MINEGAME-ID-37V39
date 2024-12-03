@@ -77,18 +77,18 @@ public class Minegame extends JavaPlugin{
     
     
    //==================================== 
-	public Map<String,YamlFile>getAllYmls ; // YML Manager
-	public Map<String,YamlFile>getAllYmlsdialog ; 
+	private Map<String,YamlFile>getAllYmls ; // YML Manager
+	private Map<String,YamlFile>getAllYmlsdialog ; 
 	
-	HashMap <String,String> logsmg ; 
-	HashMap <Player,Location> checkpoint ; 
-    HashMap <String,String> cronomet ;
-    HashMap <String,String> aretime ;
-    HashMap<Player,Integer>pags;
+	private HashMap <String,String> logsmg ; 
+	private HashMap <Player,Location> checkpoint ; 
+	private HashMap <String,String> cronomet ;
+	private HashMap <String,String> aretime ;
+	private HashMap<Player,Integer>pags;
 
-    List<String> air;
-    List<String> timeract;
-   
+	private List<String> air;
+	private List<String> timeract;
+	private List<String> playerlookingmgmenu;
     
     //Esto fue un test
   
@@ -110,9 +110,7 @@ public class Minegame extends JavaPlugin{
 	private Team green ;
 	private Team red ;
 	private Team white ;
-	
 	private Team infected ;
-	
 	private Team red1 ;
 	private Team blue1 ;
 	///================================================0
@@ -163,8 +161,6 @@ public class Minegame extends JavaPlugin{
 	    
 		List<String> ac = config.getStringList("Maps-Created.List");
 	
-		 
-		 
 		if(!ac.contains(name)) {
 			this.general = new YamlFile(this,name, new File(this.getDataFolder().getAbsolutePath()+carpeta));
 			this.config.set("Maps-Created.List",ac);
@@ -355,7 +351,7 @@ public class Minegame extends JavaPlugin{
 	
 		air = new ArrayList<String>();
 		timeract = new ArrayList<String>();
-		
+		playerlookingmgmenu = new ArrayList<String>();
 	
 		
 		pags = new HashMap <Player,Integer>();
@@ -526,7 +522,9 @@ public class Minegame extends JavaPlugin{
 	   return timeract;
    }
    
-
+   public List<String> getPlayersLookingMgMenu(){
+	   return playerlookingmgmenu;
+   }
    
   
    public HashMap <Player,Location> getCheckPoint(){

@@ -74,6 +74,7 @@ import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent.Cause;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerFishEvent;
@@ -130,6 +131,14 @@ public class EventRandoms implements Listener{
 		this.plugin = plugin;
 	}
 	
+	
+
+		@EventHandler(priority = EventPriority.LOWEST)
+		public void mgMenu(InventoryCloseEvent e) {
+		   
+			Player player = (Player) e.getPlayer();
+			if(plugin.getPlayersLookingMgMenu().remove(player.getName()));
+	   }
 	
 	
 	   @EventHandler(priority = EventPriority.LOWEST)
