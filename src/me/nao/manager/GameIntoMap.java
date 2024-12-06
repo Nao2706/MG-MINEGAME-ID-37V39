@@ -810,7 +810,6 @@ public class GameIntoMap {
 							
 							
 						}
-						return;
 					}
 				}
 				
@@ -851,17 +850,15 @@ public class GameIntoMap {
 					player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"AHOGADO", 40, 80, 40);
 					player.sendMessage(ChatColor.RED+"Moriste "+ChatColor.YELLOW+"Ahogado");
 					
-					
 					gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio "+ChatColor.YELLOW+"AHOGADO");
 					  
-					
 				}
 				
 				if(c == EntityDamageEvent.DamageCause.CONTACT) {
 					player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"CONTACTO", 40, 80, 40);
 					player.sendMessage(ChatColor.RED+"Moriste por un "+ChatColor.YELLOW+"Cactus");
 					
-				   gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por un "+ChatColor.YELLOW+"CACTUS");
+				    gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por un "+ChatColor.YELLOW+"CACTUS");
 					
 				}
 				
@@ -877,7 +874,6 @@ public class GameIntoMap {
 					player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"ENVENENAMIENTO", 40, 80, 40);
 					player.sendMessage(ChatColor.RED+"Moriste "+ChatColor.YELLOW+"Envenenado");
 					
-		
 				    gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"ENVENENAMIENTO");
 					  
 					
@@ -886,7 +882,6 @@ public class GameIntoMap {
 				if(c == EntityDamageEvent.DamageCause.SUFFOCATION) {
 					player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"SOFOCACION", 40, 80, 40);
 					player.sendMessage(ChatColor.RED+"Moriste por "+ChatColor.YELLOW+"Sofocarte");
-					
 		
 					gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"SOFOCACION");
 					   

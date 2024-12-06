@@ -148,8 +148,7 @@ public class AdventureTemp {
 		
 			
 			if(part == GameStatus.COMENZANDO) {
-				
-				//GameModeConditions gm = new GameModeConditions(plugin);
+		
 				
 				if(startm == 0) {
 					gc.StartGameActions(name);
@@ -157,9 +156,7 @@ public class AdventureTemp {
 			
 				for(String target : joins) {
 					Player players = Bukkit.getPlayerExact(target);
-					//String mision = plugin.getPlayerInfoPoo().get(target).getMisionName();
-					
-					
+				
 						if(startm <= 5) {
 			       	  		if(startm != 0) {
 			       	  			players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 2F);
@@ -379,7 +376,7 @@ public class AdventureTemp {
 			 	
 						for(String target : joins) {
 							Player players = Bukkit.getPlayerExact(target);
-							if(end <= 5) {
+							if(end <= 5 && end >= 1) {
 			 	       		  //  RemoveArmorStandsAndItemsInMap(target);
 								players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 2F);
 								players.sendTitle(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+String.valueOf(end),""+ChatColor.AQUA+ChatColor.BOLD+"La partida termina en ", 20, 20, 20);
@@ -398,7 +395,7 @@ public class AdventureTemp {
 						for(String target : spect) {
 							Player players = Bukkit.getPlayerExact(target);
 							
-							if(end <= 5) {
+							if(end <= 5 && end >= 1) {
 			 	       		  //  RemoveArmorStandsAndItemsInMap(target);
 								players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 2F);
 								players.sendTitle(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+String.valueOf(end),""+ChatColor.AQUA+ChatColor.BOLD+"La partida termina en ", 20, 20, 20);

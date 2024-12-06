@@ -137,7 +137,7 @@ public class ResistenceTemp {
 			StopMotivo motivo = ms.getMotivo();
 
 			//SI TODOS SE SALEN MIENTRAS COMIENZA
-			if(joins.size() == 0 && part == GameStatus.COMENZANDO || part == GameStatus.JUGANDO || part == GameStatus.PAUSE) {
+			if(joins.isEmpty() && part != GameStatus.TERMINANDO) {
 				boss.setProgress(1.0);
 		  		boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN");
 		  		boss.setVisible(false);
@@ -274,17 +274,14 @@ public class ResistenceTemp {
 						 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN...");
 				  		 ms.setGameStatus(GameStatus.TERMINANDO);
-				  		 gc.TopConsole(name);
-						 gc.Top(name);
-				  		 
+				  		
 					}else if(motivo == StopMotivo.WIN || motivo == StopMotivo.LOSE || motivo == StopMotivo.ERROR || motivo == StopMotivo.FORCE) {
 						 gc.sendResultsOfGame(ga,hor+"h "+min+"m "+seg+"s ",hora+"h "+minuto+"m "+segundo+"s ");
 
 						 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN..");
 				  		 ms.setGameStatus(GameStatus.TERMINANDO);
-				  		 gc.TopConsole(name);
-						 gc.Top(name);
+				  		
 				  		
 					}else if(alive.isEmpty() ||  isAllKnocked(name)) {
 						 for(Player players : joins) {
@@ -296,8 +293,7 @@ public class ResistenceTemp {
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"( FIN. )");
 						 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Todos perdieron Resistencia "+ChatColor.GREEN+ConvertPlayerToString(joins)+ChatColor.RED+" mapa: "+ChatColor.GREEN+name+"\n");
 						 ms.setGameStatus(GameStatus.TERMINANDO);
-						 gc.TopConsole(name);
-						 gc.Top(name);
+						
 						 // Bukkit.getScheduler().cancelTask(taskID);
 					}
 					
@@ -358,7 +354,7 @@ public class ResistenceTemp {
 					   	}
 				
 						for(Player players : joins) {
-							if(end <= 5) {
+							if(end <= 5 && end >= 1) {
 			 	       		  //  RemoveArmorStandsAndItemsInMap(target);
 								players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 2F);
 								players.sendTitle(""+ChatColor.GOLD+ChatColor.BOLD+String.valueOf(end),""+ChatColor.GOLD+ChatColor.BOLD+"La partida termina en ", 20, 20, 20);
@@ -377,7 +373,7 @@ public class ResistenceTemp {
 					
 						for(Player players : spect) {
 						
-							if(end <= 5) {
+							if(end <= 5 && end >= 1) {
 			 	       		  //  RemoveArmorStandsAndItemsInMap(target);
 								players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 2F);
 								players.sendTitle(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+String.valueOf(end),""+ChatColor.AQUA+ChatColor.BOLD+"La partida termina en ", 20, 20, 20);
