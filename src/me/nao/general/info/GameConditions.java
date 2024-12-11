@@ -4306,6 +4306,39 @@ public class GameConditions {
 			return entities;
 	}
 	
+	public void mgfill(Material m , Location point1 , Location point2,boolean blockbreak) {
+		
+		
+		
+			String world = point1.getWorld().getName();
+			double minX = Math.min(point1.getX(),point2.getX());
+			double minY = Math.min(point1.getY(),point2.getY());
+			double minZ = Math.min(point1.getZ(),point2.getZ());
+			  
+			double maxX = Math.max(point1.getX(), point2.getX());
+			double maxY = Math.max(point1.getY(), point2.getY());
+			double maxZ = Math.max(point1.getZ(), point2.getZ());
+
+			
+			
+			for(int x = (int) minX; x <= maxX;x++) {
+				for(int y = (int) minY; y <= maxY;y++) {
+					for(int z = (int) minZ; z <= maxZ;z++) {
+						Location l = new Location(Bukkit.getWorld(world),x,y,z);
+						Block b = l.getBlock();
+						b.setType(m);
+						if(blockbreak) {
+							b.getDrops().clear();
+							b.breakNaturally();
+						}
+					}
+				}
+			}
+		
+		
+	}
+	
+	
 	//TODO GET VERSION PLAYER AT MG
 	public void getPlayerVersion(Player player,String targ) {
 		
@@ -4320,8 +4353,6 @@ public class GameConditions {
 			if(target != null) {
 				@SuppressWarnings("unchecked")
 				int version  = api.getPlayerVersion(target); // Get the protocol version; 
-				
-				
 				
 					if(player != null) {
 						if(player == target) {

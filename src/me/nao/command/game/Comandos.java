@@ -726,7 +726,86 @@ public class Comandos implements CommandExecutor{
 				return true;
 		
 				//TODO REWARD
-			}else if (args[0].equalsIgnoreCase("stop")) {
+			}else if(args[0].equalsIgnoreCase("fill")) {
+				
+		   		//mg fill tutorial 123 12 454 45 45 45 Stone replace air
+		   		//mg fill tutorial 123 12 454 45 45 45 destroy
+		   		if(args.length >= 9) {
+		   			
+		   			World mundo = Bukkit.getWorld(args[1]);
+		   			
+		   			
+		   			if(mundo == null) {
+		   				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El mundo "+args[1]+" no existe.");
+		   				return true;
+		   			}
+		   			
+		   			Location point1 = new Location(mundo,Double.valueOf(args[2]),Double.valueOf(args[3]),Double.valueOf(args[4]));
+		   			Location point2 = new Location(mundo,Double.valueOf(args[5]),Double.valueOf(args[6]),Double.valueOf(args[7]));
+
+		   			
+					double minX = Math.min(point1.getX(),point2.getX());
+					double minY = Math.min(point1.getY(),point2.getY());
+					double minZ = Math.min(point1.getZ(),point2.getZ());
+					
+					double maxX = Math.max(point1.getX(), point2.getX());
+					double maxY = Math.max(point1.getY(), point2.getY());
+					double maxZ = Math.max(point1.getZ(), point2.getZ());
+
+					
+					
+					for(int x = (int) minX; x <= maxX;x++) {
+						for(int y = (int) minY; y <= maxY;y++) {
+							for(int z = (int) minZ; z <= maxZ;z++) {
+								Location l = new Location(mundo,x,y,z);
+								Block b = l.getBlock();
+								if(args.length == 11) {
+									Material m2 = Material.matchMaterial(args[10].toUpperCase());
+						   			
+						   			if(m2 == null) {
+						   				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El mundo "+args[10]+" no existe.");
+
+						   				return true;
+						   			}
+						   			
+						   			if(b.getType() == m2) {
+						   				Material m = Material.matchMaterial(args[8].toUpperCase());
+						   				b.setType(m);
+						   			}
+						   			
+						   			
+								}else if(args.length == 9) {
+									if(args[8].equals("destroy")) {
+										
+										b.breakNaturally();
+										b.getDrops().clear();
+									}else {
+										Material m = Material.matchMaterial(args[8].toUpperCase());
+										if(m == null) {
+											Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El mundo "+args[8]+" no existe.");
+
+							   				return true;
+							   			} 
+										
+										b.setType(m);
+									}
+								}
+								
+							}
+						}
+					}
+					
+		   			
+		   		}else {
+		   			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Usa mg fill 123 23 345 345 65 567 stone");
+		   			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Usa mg fill 123 23 345 345 65 567 destroy");
+		   			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Usa mg fill 123 23 345 345 65 567 stone replace air");
+		   		}
+		   		
+		
+		   		return true;
+		
+	   }else if (args[0].equalsIgnoreCase("stop")) {
 				
 					if (args.length == 3) {
 						
@@ -952,18 +1031,95 @@ public class Comandos implements CommandExecutor{
 					player.sendMessage(ChatColor.GREEN+"Usa /mg start-fa <nombre-de-grupo>");
 				}
 			
-			
-			
-			
 			return true;
-		   }else if(args[0].equalsIgnoreCase("difficult") ) {
+		   }else if(args[0].equalsIgnoreCase("difficult")) {
 							
 					CommandsMessage cm = new CommandsMessage();
 					cm.DifficultMessage(player);
 						
 					return true;
 						
-			}else if (args[0].equalsIgnoreCase("check") && player.isOp()) {
+		   }else if(args[0].equalsIgnoreCase("fill")) {
+				
+			   		//mg fill tutorial 123 12 454 45 45 45 Stone replace air
+			   		//mg fill tutorial 123 12 454 45 45 45 destroy
+			   		if(args.length >= 9) {
+			   			
+			   			World mundo = Bukkit.getWorld(args[1]);
+			   			
+			   			
+			   			if(mundo == null) {
+			   				player.sendMessage(ChatColor.RED+"El mundo "+args[1]+" no existe.");
+			   				return true;
+			   			}
+			   			
+			   			Location point1 = new Location(mundo,Double.valueOf(args[2]),Double.valueOf(args[3]),Double.valueOf(args[4]));
+			   			Location point2 = new Location(mundo,Double.valueOf(args[5]),Double.valueOf(args[6]),Double.valueOf(args[7]));
+
+			   			
+						double minX = Math.min(point1.getX(),point2.getX());
+						double minY = Math.min(point1.getY(),point2.getY());
+						double minZ = Math.min(point1.getZ(),point2.getZ());
+						
+						double maxX = Math.max(point1.getX(), point2.getX());
+						double maxY = Math.max(point1.getY(), point2.getY());
+						double maxZ = Math.max(point1.getZ(), point2.getZ());
+
+						
+						
+						for(int x = (int) minX; x <= maxX;x++) {
+							for(int y = (int) minY; y <= maxY;y++) {
+								for(int z = (int) minZ; z <= maxZ;z++) {
+									Location l = new Location(mundo,x,y,z);
+									Block b = l.getBlock();
+									if(args.length == 11) {
+										Material m2 = Material.matchMaterial(args[10].toUpperCase());
+							   			
+							   			if(m2 == null) {
+							   				player.sendMessage(ChatColor.RED+"El mundo "+args[10]+" no existe.");
+
+							   				return true;
+							   			}
+							   			
+							   			if(b.getType() == m2) {
+							   				Material m = Material.matchMaterial(args[8].toUpperCase());
+							   				b.setType(m);
+							   			}
+							   			
+							   			
+									}else if(args.length == 9) {
+										if(args[8].equals("destroy")) {
+											
+											b.breakNaturally();
+											b.getDrops().clear();
+											
+										}else {
+											Material m = Material.matchMaterial(args[8].toUpperCase());
+											if(m == null) {
+								   				player.sendMessage(ChatColor.RED+"El mundo "+args[8]+" no existe.");
+
+								   				return true;
+								   			} 
+											
+											b.setType(m);
+										}
+									}
+									
+								}
+							}
+						}
+						
+			   			
+			   		}else {
+			   			player.sendMessage(ChatColor.RED+"Usa /mg fill 123 23 345 345 65 567 stone");
+			   			player.sendMessage(ChatColor.RED+"Usa /mg fill 123 23 345 345 65 567 destroy");
+			   			player.sendMessage(ChatColor.RED+"Usa /mg fill 123 23 345 345 65 567 stone replace air");
+			   		}
+			   		
+			
+			   		return true;
+			
+		   }else if (args[0].equalsIgnoreCase("check") && player.isOp()) {
 				
 					if(args.length == 2) {
 						String name = args[1];
