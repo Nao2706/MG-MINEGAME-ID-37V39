@@ -25,11 +25,13 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -152,6 +154,20 @@ public class SourceOfDamage implements Listener{
 		
 	}
 	
+	
+	
+	@EventHandler(priority = EventPriority.LOWEST)  //METODO
+    public void mgworld(PlayerChangedWorldEvent e){
+		Player player = e.getPlayer();
+		GameConditions gc = new GameConditions(plugin);
+		if(gc.isPlayerinGame(player)) {
+			gc.ForceGameModePlayerRol(player);
+			
+		}
+	
+	}
+	
+	
 	//TODO MOVE EVNT
 	@EventHandler  //METODO
     public void moving(PlayerMoveEvent e){
@@ -161,7 +177,7 @@ public class SourceOfDamage implements Listener{
 			GameConditions gc = new GameConditions(plugin);
 			if(gc.isPlayerinGame(player)) {
 				gc.blockPotion(player);
-				gc.ForceGameModePlayerRol(player);
+				
 				gc.TryToScapeInSpectatorMode(player);
 				GameIntoMap ci = new GameIntoMap(plugin);
 				ci.GamePlayerFallMap(player);

@@ -521,7 +521,7 @@ public class GameConditions {
 			List<String> deads = ga.getDeadPlayers();
 			
 			
-			if(!player.isOp()) {
+			
 				if(vivo.contains(player.getName()) && !arrivo.contains(player.getName())) {
 					if(player.getGameMode() != GameMode.ADVENTURE) {
 						player.setGameMode(GameMode.ADVENTURE);
@@ -535,7 +535,7 @@ public class GameConditions {
 						player.setGameMode(GameMode.SPECTATOR);
 					}
 				}
-			}
+			
 			
 		
 			
