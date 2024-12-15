@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
+import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -776,9 +777,9 @@ public class Comandos implements CommandExecutor{
 						   			
 								}else if(args.length == 9) {
 									if(args[8].equals("destroy")) {
-										
-										b.breakNaturally();
-										b.getDrops().clear();
+									
+										b.getWorld().playEffect(b.getLocation().add(0.5,0,0.5), Effect.STEP_SOUND,b.getType()); 
+										b.setType(Material.AIR);
 									}else {
 										Material m = Material.matchMaterial(args[8].toUpperCase());
 										if(m == null) {
@@ -797,9 +798,9 @@ public class Comandos implements CommandExecutor{
 					
 		   			
 		   		}else {
-		   			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Usa mg fill 123 23 345 345 65 567 stone");
-		   			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Usa mg fill 123 23 345 345 65 567 destroy");
-		   			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Usa mg fill 123 23 345 345 65 567 stone replace air");
+		   			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Usa mg world fill 123 23 345 345 65 567 stone");
+		   			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Usa mg world fill 123 23 345 345 65 567 destroy");
+		   			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Usa mg world fill 123 23 345 345 65 567 stone replace air");
 		   		}
 		   		
 		
@@ -1090,8 +1091,8 @@ public class Comandos implements CommandExecutor{
 									}else if(args.length == 9) {
 										if(args[8].equals("destroy")) {
 											
-											b.breakNaturally();
-											b.getDrops().clear();
+											b.getWorld().playEffect(b.getLocation().add(0.5,0,0.5), Effect.STEP_SOUND,b.getType()); 
+											b.setType(Material.AIR);
 											
 										}else {
 											Material m = Material.matchMaterial(args[8].toUpperCase());
@@ -1111,9 +1112,9 @@ public class Comandos implements CommandExecutor{
 						
 			   			
 			   		}else {
-			   			player.sendMessage(ChatColor.RED+"Usa /mg fill 123 23 345 345 65 567 stone");
-			   			player.sendMessage(ChatColor.RED+"Usa /mg fill 123 23 345 345 65 567 destroy");
-			   			player.sendMessage(ChatColor.RED+"Usa /mg fill 123 23 345 345 65 567 stone replace air");
+			   			player.sendMessage(ChatColor.RED+"Usa /mg world fill 123 23 345 345 65 567 stone");
+			   			player.sendMessage(ChatColor.RED+"Usa /mg world fill 123 23 345 345 65 567 destroy");
+			   			player.sendMessage(ChatColor.RED+"Usa /mg world fill 123 23 345 345 65 567 stone replace air");
 			   		}
 			   		
 			
