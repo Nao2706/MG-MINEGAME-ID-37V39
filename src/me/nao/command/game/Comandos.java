@@ -474,115 +474,58 @@ public class Comandos implements CommandExecutor{
 				
 							
 					return true;
-				}else if (args[0].equalsIgnoreCase("add-points")) {
-					try {
-					if (args.length == 3) {
-						// /c add n p
-						String name = args[1];
-						if(points1.getString("Players." + name + ".Kills",null) != null) {
-							for (String key : points1.getConfigurationSection("Players").getKeys(false)) {
-
-								
-								int valor = Integer.valueOf(args[2])  ;
-
-								if (name.equals(key)) {
-									int puntaje = points1.getInt("Players." + name + ".Kills");
-									
-									points1.set("Players."+name+".Kills", puntaje+valor);
-									plugin.getPoints().save();
-									plugin.getPoints().reload();
-									Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Se sumo "+ChatColor.GOLD+"+"+ChatColor.GOLD+valor+ChatColor.GREEN+" puntos al Jugador "+ChatColor.GOLD+name);
-									//player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 50.0F, 1F);
-								}
-
-							}
-						}else {
-							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+name+ChatColor.RED+" no existe. ");
-							//player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 50.0F, 1F);
-						}
-						
-						
-					}else{
-						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg add-points <nombre> <1>");
-					}
-					}catch(NumberFormatException ex) {
-						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" Ingresa un numero en el 2 Argumento");
-						//player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 50.0F, 1F);
-					}
-				
-							
-					return true;
-				}else if (args[0].equalsIgnoreCase("rest-points")) {
-					try {
-					if (args.length == 3) {
-						// /c add n p
-						String name = args[1];
-						
-						if(points1.getString("Players." + name + ".Kills",null) != null) {
-							for (String key : points1.getConfigurationSection("Players").getKeys(false)) {
-
-								
-								int valor = Integer.valueOf(args[2])  ;
-
-								if (name.equals(key)) {
-									int puntaje = points1.getInt("Players." + name + ".Kills");
-									
-									points1.set("Players."+name+".Kills", puntaje-valor);
-									plugin.getPoints().save();
-									plugin.getPoints().reload();
-									Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Se resto "+ChatColor.GOLD+"-"+ChatColor.GOLD+valor+ChatColor.GREEN+" puntos al Jugador "+ChatColor.GOLD+name);
-								//	player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 50.0F, 1F);
-								}
-
-
-							}
-						}else{
-							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+name+ChatColor.RED+" no existe. ");
-						}
-					
-						
-					}else {
-						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg rest-points <nombre> <1>");
-					}
-					}catch(NumberFormatException ex) {
-						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" Ingresa un numero en el 2 Argumento");
-						//player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 50.0F, 1F);
-					}
-				
-							
-					return true;
 				}else if (args[0].equalsIgnoreCase("set-points")) {
 					try {
-					if (args.length == 3) {
+						//mg set nao add,set,subtract 1
+					if (args.length == 4) {
 						// /c add n p
 						String name = args[1];
-						if(points1.getString("Players." + name + ".Kills",null) != null) {
+						
+						//				formato viejo		if(points1.getString("Players." + name + ".Kills",null) != null) {
+						if(points1.contains("Players." + name + ".Kills")) {
 							for (String key : points1.getConfigurationSection("Players").getKeys(false)) {
 
 								
-								int valor = Integer.valueOf(args[2])  ;
+								int valor = Integer.valueOf(args[3])  ;
 
 								if (name.equals(key)) {
 									
+									String type = args[2];
 									
-									points1.set("Players."+name+".Kills", valor);
+									if(type.equals("add")) {
+										
+										int puntaje = points1.getInt("Players." + name + ".Kills");
+										
+										points1.set("Players."+name+".Kills", puntaje+valor);
+										Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Se sumo "+ChatColor.GOLD+"+"+ChatColor.GOLD+valor+ChatColor.GREEN+" puntos al Jugador "+ChatColor.GOLD+name);
+
+									}else if(type.equals("subtract")) {
+										int puntaje = points1.getInt("Players." + name + ".Kills");
+										
+										points1.set("Players."+name+".Kills", puntaje-valor);
+										Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Se resto "+ChatColor.GOLD+"-"+ChatColor.GOLD+valor+ChatColor.GREEN+" puntos al Jugador "+ChatColor.GOLD+name);
+
+									}else {
+										points1.set("Players."+name+".Kills", valor);
+										Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Se seteo "+ChatColor.GOLD+valor+ChatColor.GREEN+" puntos al Jugador "+ChatColor.GOLD+name);
+									}
+									
+									
 									plugin.getPoints().save();
 									plugin.getPoints().reload();
-									Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Se seteo "+ChatColor.GOLD+valor+ChatColor.GREEN+" puntos al Jugador "+ChatColor.GOLD+name);
-									//player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 50.0F, 1F);
-
+									
+								
 								}
 
-
+ 
 							}
 						}else {
 							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+name+ChatColor.RED+" no existe. ");
-							//player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 50.0F, 1F);
 						}
 					
 						
 					}else {
-						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg set-points <nombre> <1>");
+						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg set-points <nombre> <add,set,subtract> <1>");
 					}
 					}catch(NumberFormatException ex) {
 						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" Ingresa un numero en el 2 Argumento");
@@ -590,6 +533,7 @@ public class Comandos implements CommandExecutor{
 				
 							
 					return true;
+					
 				}else if(args[0].equalsIgnoreCase("top") ){
 					
 					if(points1.contains("Players")) {
@@ -1151,87 +1095,10 @@ public class Comandos implements CommandExecutor{
 				
 					return true;
 					
-				}else if (args[0].equalsIgnoreCase("add-points") && player.isOp()) {
-					try {
-						if (args.length == 3) {
-							// /c add n p
-							String name = args[1];
-							if(points1.contains("Players." + name + ".Kills")) {
-								for (String key : points1.getConfigurationSection("Players").getKeys(false)) {
-	
-									
-									int valor = Integer.valueOf(args[2])  ;
-	
-									if (name.equals(key)) {
-										int puntaje = points1.getInt("Players." + name + ".Kills");
-										
-										points1.set("Players."+name+".Kills", puntaje+valor);
-										plugin.getPoints().save();
-										plugin.getPoints().reload();
-										player.sendMessage(plugin.nombre+ChatColor.GREEN+" Se sumo "+ChatColor.GOLD+"+"+ChatColor.GOLD+valor+ChatColor.GREEN+" puntos al Jugador "+ChatColor.GOLD+name);
-										player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 50.0F, 1F);
-									}
-	
-								}
-							}else {
-								player.sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+name+ChatColor.RED+" no existe. ");
-								player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 50.0F, 1F);
-							}
-							
-							
-						}else {
-							player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg add-points <nombre> <1>");
-						}
-					}catch(NumberFormatException ex) {
-						player.sendMessage(plugin.nombre+ChatColor.RED+" Ingresa un numero en el 2 Argumento");
-						player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 50.0F, 1F);
-					}
-				
-							
-					return true;
-					
-				}else if (args[0].equalsIgnoreCase("rest-points") && player.isOp()) {
-					try {
-						if (args.length == 3) {
-							// /c add n p
-							String name = args[1];
-							
-							if(points1.contains("Players." + name + ".Kills")) {
-								for (String key : points1.getConfigurationSection("Players").getKeys(false)) {
-	
-									
-									int valor = Integer.valueOf(args[2])  ;
-	
-									if (name.equals(key)) {
-										int puntaje = points1.getInt("Players." + name + ".Kills");
-										
-										points1.set("Players."+name+".Kills", puntaje-valor);
-										plugin.getPoints().save();
-										plugin.getPoints().reload();
-										player.sendMessage(plugin.nombre+ChatColor.GREEN+" Se resto "+ChatColor.GOLD+"-"+ChatColor.GOLD+valor+ChatColor.GREEN+" puntos al Jugador "+ChatColor.GOLD+name);
-										player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 50.0F, 1F);
-									}
-								}
-							}
-							else {
-								player.sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+name+ChatColor.RED+" no existe. ");
-							}
-						
-							
-						}else {
-							player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg rest-points <nombre> <1>");
-						}
-					}catch(NumberFormatException ex) {
-						player.sendMessage(plugin.nombre+ChatColor.RED+" Ingresa un numero en el 2 Argumento");
-						player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 50.0F, 1F);
-					}
-				
-							
-					return true;
 				}else if (args[0].equalsIgnoreCase("set-points") && player.isOp()) {
 					try {
-						//mg set nao 1
-					if (args.length == 3) {
+						//mg set nao add,set,subtract 1
+					if (args.length == 4) {
 						// /c add n p
 						String name = args[1];
 						
@@ -1240,20 +1107,39 @@ public class Comandos implements CommandExecutor{
 							for (String key : points1.getConfigurationSection("Players").getKeys(false)) {
 
 								
-								int valor = Integer.valueOf(args[2])  ;
+								int valor = Integer.valueOf(args[3])  ;
 
 								if (name.equals(key)) {
 									
+									String type = args[2];
 									
-									points1.set("Players."+name+".Kills", valor);
+									if(type.equals("add")) {
+										
+										int puntaje = points1.getInt("Players." + name + ".Kills");
+										
+										points1.set("Players."+name+".Kills", puntaje+valor);
+										player.sendMessage(plugin.nombre+ChatColor.GREEN+" Se sumo "+ChatColor.GOLD+"+"+ChatColor.GOLD+valor+ChatColor.GREEN+" puntos al Jugador "+ChatColor.GOLD+name);
+
+									}else if(type.equals("subtract")) {
+										int puntaje = points1.getInt("Players." + name + ".Kills");
+										
+										points1.set("Players."+name+".Kills", puntaje-valor);
+										player.sendMessage(plugin.nombre+ChatColor.GREEN+" Se resto "+ChatColor.GOLD+"-"+ChatColor.GOLD+valor+ChatColor.GREEN+" puntos al Jugador "+ChatColor.GOLD+name);
+
+									}else {
+										points1.set("Players."+name+".Kills", valor);
+										player.sendMessage(plugin.nombre+ChatColor.GREEN+" Se seteo "+ChatColor.GOLD+valor+ChatColor.GREEN+" puntos al Jugador "+ChatColor.GOLD+name);
+									}
+									
+									
 									plugin.getPoints().save();
 									plugin.getPoints().reload();
-									player.sendMessage(plugin.nombre+ChatColor.GREEN+" Se seteo "+ChatColor.GOLD+valor+ChatColor.GREEN+" puntos al Jugador "+ChatColor.GOLD+name);
+									
 									player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 50.0F, 1F);
 
 								}
 
-
+ 
 							}
 						}else {
 							player.sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+name+ChatColor.RED+" no existe. ");
@@ -1262,7 +1148,7 @@ public class Comandos implements CommandExecutor{
 					
 						
 					}else {
-						player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg set-points <nombre> <1>");
+						player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg set-points <nombre> <add,set,subtract> <1>");
 					}
 					}catch(NumberFormatException ex) {
 						player.sendMessage(plugin.nombre+ChatColor.RED+" Ingresa un numero en el 2 Argumento");

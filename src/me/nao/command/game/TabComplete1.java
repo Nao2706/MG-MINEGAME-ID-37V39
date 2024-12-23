@@ -44,8 +44,6 @@ public class TabComplete1 implements TabCompleter{
 			arguments.add("setspawn-spectator");
 			arguments.add("enabled");
 			arguments.add("disabled");
-			arguments.add("add-points");
-			arguments.add("rest-points");
 			arguments.add("set-points");
 			arguments.add("set-life");
 			arguments.add("top");
