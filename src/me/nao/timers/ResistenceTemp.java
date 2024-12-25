@@ -266,7 +266,7 @@ public class ResistenceTemp {
 					  	 
 					     GameIntoMap cig = new GameIntoMap(plugin);
 						 for(Player players : alive) {
-							 players.sendMessage(ChatColor.GREEN+"Todos los jugadores con vida han llegado a la Meta. "+ChatColor.GOLD+"\nSobrevivieron: "+ChatColor.GREEN+alive.toString().replace("[","").replace("]","")+".");
+							 players.sendMessage(ChatColor.GREEN+"Todos los jugadores con vida han llegado a la Meta. "+ChatColor.GOLD+"\nSobrevivieron: "+ChatColor.GREEN+ga.getAlivePlayers().toString().replace("[","").replace("]","")+".\n");
 							 cig.ObjetivesInGame(players, name);
 
 						 }
@@ -609,7 +609,7 @@ public class ResistenceTemp {
 								
 								if(a.getType() == Material.GREEN_CONCRETE && b.getType() == Material.BEDROCK) {
 								
-									zombi(a.getWorld(),a.getLocation().getBlockX(),a.getLocation().getBlockY(),a.getLocation().getBlockZ());
+									zombis(a.getWorld(),a.getLocation().getBlockX(),a.getLocation().getBlockY(),a.getLocation().getBlockZ());
 								}
 								
 								if(a.getType() == Material.BLUE_CONCRETE && b.getType() == Material.BEDROCK) {
@@ -874,23 +874,11 @@ public class ResistenceTemp {
 	}
 	
 	//TODO Creeper
-    public void Blaze(World world , int x , int y , int z) {
-    	Location l2 = new Location(world, x, y+2, z); 			
-		
-		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.BLAZE);
-		Blaze s = (Blaze) entidad;
-		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-		
-		
-    }
-	
-	
-	//TODO Creeper
     public void Creeper(World world , int x , int y , int z) {
     	Location l2 = new Location(world, x, y+2, z); 			
 		
-		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.CREEPER);
-		Creeper s = (Creeper) entidad;
+		
+		Creeper s = (Creeper) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.CREEPER);
 		s.setExplosionRadius(10);
 		s.setMaxFuseTicks(3);
 		s.setCustomName(""+ChatColor.RED+ChatColor.BOLD+"SUICIDA");
@@ -903,8 +891,8 @@ public class ResistenceTemp {
     public void villagerz(World world , int x , int y , int z) {
     	Location l2 = new Location(world, x, y+2, z); 			
 		
-		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE_VILLAGER);
-		ZombieVillager s = (ZombieVillager) entidad;
+		
+		ZombieVillager s = (ZombieVillager) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE_VILLAGER);
 		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
 		
 		
@@ -914,8 +902,7 @@ public class ResistenceTemp {
     public void drowned(World world , int x , int y , int z) {
     	Location l2 = new Location(world, x, y+2, z); 			
 		
-		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.DROWNED);
-		Drowned s = (Drowned) entidad;
+		Drowned s = (Drowned) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.DROWNED);
 		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
 		
 		
@@ -925,8 +912,8 @@ public class ResistenceTemp {
     public void husk(World world , int x , int y , int z) {
     	Location l2 = new Location(world, x, y+2, z); 			
 		
-		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.HUSK);
-		Husk s = (Husk) entidad;
+		
+		Husk s = (Husk) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.HUSK);
 		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
 		
 		
@@ -936,8 +923,7 @@ public class ResistenceTemp {
     public void evoker(World world , int x , int y , int z) {
     	Location l2 = new Location(world, x, y+2, z); 			
 		
-		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.EVOKER);
-		Evoker s = (Evoker) entidad;
+		Evoker s = (Evoker) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.EVOKER);
 		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
 		
 		
@@ -948,8 +934,8 @@ public class ResistenceTemp {
     public void Pillager(World world , int x , int y , int z) {
     	Location l2 = new Location(world, x, y+2, z); 			
 		
-		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.PILLAGER);
-		Pillager s = (Pillager) entidad;
+		
+		Pillager s = (Pillager) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.PILLAGER);
 		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
 		
 		ItemStack b = new ItemStack(Material.CROSSBOW,1);
@@ -963,6 +949,75 @@ public class ResistenceTemp {
 		
     }
     
+  
+	
+	//TODO vindicator
+    public void vindicador(World world , int x , int y , int z) {
+    	Location l2 = new Location(world, x, y+2, z); 			
+		
+		
+		Vindicator s = (Vindicator) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.VINDICATOR);
+		
+		Random random = new Random();
+
+		int n = random.nextInt(50);
+		
+		if(n == 0) {
+			s.getEquipment().setItemInMainHand(new ItemStack(Material.DIAMOND_SWORD));
+		}
+		
+		if(n == 5) {
+			s.getEquipment().setItemInMainHand(new ItemStack(Material.NETHERITE_SWORD));
+		}
+		
+		if(n == 10) {
+			s.getEquipment().setItemInMainHand(new ItemStack(Material.GOLDEN_SWORD));
+		}
+		
+		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		s.setCanPickupItems(true);
+		
+		
+    }
+	
+	//TODO SkeletomDARK
+    public void skeletonDark(World world , int x , int y , int z) {
+    	Location l2 = new Location(world, x, y+2, z); 			
+		
+	
+		WitherSkeleton s = (WitherSkeleton) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.WITHER_SKELETON);
+		s.getEquipment().setItemInMainHand(new ItemStack(Material.DIAMOND_SWORD));
+		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		s.setCanPickupItems(true);
+		
+		
+    }
+	
+	//TODO Skeletom
+    public void skeleton(World world , int x , int y , int z) {
+    	Location l2 = new Location(world, x, y+2, z); 			
+		
+
+		Skeleton s = (Skeleton) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.SKELETON);
+		s.setCustomName(ChatColor.DARK_PURPLE+"ARQUERO");
+		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		s.setCanPickupItems(true);
+		
+		
+    }
+	
+  //TODO Bruja
+    public void Bruja(World world , int x , int y , int z) {
+    	Location l2 = new Location(world, x, y+2, z); 			
+		
+	
+		Witch s = (Witch) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.WITCH);
+		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		
+		
+    }
+    
+
 	//TODO ZOMBI
     public void zombis(World world , int x , int y , int z) {
     	
@@ -1323,6 +1378,7 @@ public class ResistenceTemp {
     	return;
     }
 
+
     
 	public List<Entity> getNearbyEntities(Location l , int size){
 			
@@ -1363,420 +1419,7 @@ public class ResistenceTemp {
 	    	}
 	    }
 	
-	//TODO vindicator
-    public void vindicador(World world , int x , int y , int z) {
-    	Location l2 = new Location(world, x, y+2, z); 			
-		
-		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.VINDICATOR);
-		Vindicator s = (Vindicator) entidad;
-		
-		Random random = new Random();
 
-		int n = random.nextInt(50);
-		
-		if(n == 0) {
-			s.getEquipment().setItemInMainHand(new ItemStack(Material.DIAMOND_SWORD));
-		}
-		
-		if(n == 5) {
-			s.getEquipment().setItemInMainHand(new ItemStack(Material.NETHERITE_SWORD));
-		}
-		
-		if(n == 10) {
-			s.getEquipment().setItemInMainHand(new ItemStack(Material.GOLDEN_SWORD));
-		}
-		
-		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-		s.setCanPickupItems(true);
-		
-		
-    }
-	
-	//TODO SkeletomDARK
-    public void skeletonDark(World world , int x , int y , int z) {
-    	Location l2 = new Location(world, x, y+2, z); 			
-		
-		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.WITHER_SKELETON);
-		WitherSkeleton s = (WitherSkeleton) entidad;
-		s.getEquipment().setItemInMainHand(new ItemStack(Material.DIAMOND_SWORD));
-		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-		s.setCanPickupItems(true);
-		
-		
-    }
-	
-	//TODO Skeletom
-    public void skeleton(World world , int x , int y , int z) {
-    	Location l2 = new Location(world, x, y+2, z); 			
-		
-		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.SKELETON);
-		Skeleton s = (Skeleton) entidad;
-		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-		
-		
-    }
-	
-  //TODO Bruja
-    public void Bruja(World world , int x , int y , int z) {
-    	Location l2 = new Location(world, x, y+2, z); 			
-		
-		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.WITCH);
-		Witch s = (Witch) entidad;
-		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-		
-		
-    }
-	
-	//TODO ZOMBI
-    public void zombi(World world , int x , int y , int z) {
-    	
-    	
-		
-		Random random = new Random();
-	
-		
-		int n = random.nextInt(50);
-		
-		
-	
-		Location l2 = new Location(world, x, y+2, z); 			
-	
-		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
-		
-		Zombie zombi = (Zombie) entidad;
-		zombi.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-		zombi.getAttribute(Attribute.ZOMBIE_SPAWN_REINFORCEMENTS).setBaseValue(50);
-		
-		
-		PotionEffect rapido = new PotionEffect(PotionEffectType.SPEED,/*duration*/ 99999,/*amplifier:*/4, true ,true,true );
-		PotionEffect salto= new PotionEffect(PotionEffectType.JUMP,/*duration*/ 99999,/*amplifier:*/5, true ,true,true );
-
-		
-	    zombi.addPotionEffect(rapido);
-		zombi.addPotionEffect(salto);
-		
-
-		
-	     	
-		if(n == 0) {
-			LivingEntity entidad10 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE_VILLAGER);
-			ZombieVillager zv = (ZombieVillager) entidad10;
-			zv.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-		
-			
-			
-			LivingEntity entidad8 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.DROWNED);
-			Drowned zombi8 = (Drowned) entidad8;
-			
-			
-			zv.addPotionEffect(salto);
-			zv.addPotionEffect(rapido);
-			
-			
-		    zombi8.addPotionEffect(rapido);
-		   
-			zombi8.addPotionEffect(salto);
-			zombi8.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-			
-			LivingEntity husk1 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.HUSK);	
-			Husk husk = (Husk) husk1;
-			
-			
-			husk.addPotionEffect(rapido);
-		
-			husk.addPotionEffect(rapido);
-		
-			husk.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-			
-			
-
-		}
-		
-		if(n == 1) {
-		    LivingEntity entidad1 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
-			Zombie zombi1 = (Zombie) entidad1;
-		
-			zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-			
-				zombi1.addPotionEffect(rapido);
-				zombi1.addPotionEffect(salto);
-				
-				
-				
-		}else if(n == 2) {
-			LivingEntity entidad1 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
-			Zombie zombi1 = (Zombie) entidad1;
-			zombi1.setCustomName(""+ChatColor.DARK_RED+ChatColor.BOLD+"Tank");
-			
-			
-			zombi1.addPotionEffect(rapido);
-			
-			zombi1.addPotionEffect(salto);
-		
-			zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-			zombi1.getEquipment().setHelmet(new ItemStack(Material.DIAMOND_HELMET));
-			zombi1.getEquipment().setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
-			zombi1.getEquipment().setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
-			zombi1.getEquipment().setBoots(new ItemStack(Material.DIAMOND_BOOTS));
-			zombi1.getEquipment().setItemInMainHand(new ItemStack(Material.DIAMOND_SWORD));
-			
-		}else if(n == 3) {
-		
-			
-				LivingEntity entidad4 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
-				Zombie zombi4 = (Zombie) entidad4;
-
-			
-			    zombi4.addPotionEffect(rapido);
-			    zombi4.addPotionEffect(salto);
-				zombi4.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-			
-				
-		}else if(n == 4) {
-			
-			
-  		    
-				LivingEntity entidad6 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
-				Zombie zombi6 = (Zombie) entidad6;
-				
-				zombi6.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-			    zombi6.addPotionEffect(rapido);
-				zombi6.addPotionEffect(salto);
-				zombi6.setBaby();
-			
-				LivingEntity entidad7 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.SKELETON);
-				Skeleton zombi7 = (Skeleton) entidad7;
-				
-			    zombi7.addPotionEffect(rapido);
-				zombi7.addPotionEffect(salto);
-				entidad6.addPassenger(entidad7);
-				zombi7.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-			
-				
-				
-			
-		}else if(n == 5) {
-			LivingEntity entidad1 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
-			Zombie zombi1 = (Zombie) entidad1;
-			zombi1.setCustomName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"Goliath");
-			
-			
-			zombi1.addPotionEffect(rapido);
-			
-			zombi1.addPotionEffect(salto);
-		
-			zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-			zombi1.getEquipment().setHelmet(new ItemStack(Material.NETHERITE_HELMET));
-			zombi1.getEquipment().setChestplate(new ItemStack(Material.NETHERITE_CHESTPLATE));
-			zombi1.getEquipment().setLeggings(new ItemStack(Material.NETHERITE_LEGGINGS));
-			zombi1.getEquipment().setBoots(new ItemStack(Material.NETHERITE_BOOTS));
-			zombi1.getEquipment().setItemInMainHand(new ItemStack(Material.NETHERITE_SWORD));
-			
-		}else if(n == 6) {
-			
-			for(int i = 0 ; i< 5;i++) {
-				 LivingEntity entidad1 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
-					Zombie zombi1 = (Zombie) entidad1;
-				
-					zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-					
-	  				zombi1.addPotionEffect(rapido);
-	  				zombi1.addPotionEffect(salto);
-			}
-		   
-				
-				
-				
-		}
-		else if(n == 7) {
-			 LivingEntity entidad1 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
-				Zombie zombi1 = (Zombie) entidad1;
-			
-				zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-				
-  				zombi1.addPotionEffect(rapido);
-  				zombi1.addPotionEffect(salto);
-			for(int i = 0 ; i< 10;i++) {
-				 LivingEntity entidad2 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
-					Zombie zombi2 = (Zombie) entidad2;
-				
-					zombi2.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-					
-	  				zombi2.addPotionEffect(rapido);
-	  				zombi2.addPotionEffect(salto);
-			}
-		   
-				
-				
-				
-		}else if(n == 8) {
-			LivingEntity entidad1 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
-			Zombie zombi1 = (Zombie) entidad1;
-			zombi1.setCustomName(""+ChatColor.WHITE+ChatColor.BOLD+"Zombi Armado");
-			
-			
-			zombi1.addPotionEffect(rapido);
-			
-			zombi1.addPotionEffect(salto);
-		
-			zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-			zombi1.getEquipment().setHelmet(new ItemStack(Material.IRON_HELMET));
-			zombi1.getEquipment().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
-			zombi1.getEquipment().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
-			zombi1.getEquipment().setBoots(new ItemStack(Material.IRON_BOOTS));
-			zombi1.getEquipment().setItemInMainHand(new ItemStack(Material.IRON_SWORD));
-			
-		}else if(n == 9) {
-			LivingEntity entidad1 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
-			Zombie zombi1 = (Zombie) entidad1;
-			zombi1.setCustomName(""+ChatColor.WHITE+ChatColor.BOLD+"Zombi Artillero");
-			
-			
-			zombi1.addPotionEffect(rapido);
-			
-			zombi1.addPotionEffect(salto);
-		
-			zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-			zombi1.getEquipment().setHelmet(new ItemStack(Material.IRON_HELMET));
-			zombi1.getEquipment().setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
-			zombi1.getEquipment().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
-			zombi1.getEquipment().setBoots(new ItemStack(Material.IRON_BOOTS));
-			zombi1.getEquipment().setItemInMainHand(new ItemStack(Material.CROSSBOW));
-			
-		}else if(n == 10) {
-			LivingEntity entidad1 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
-			Zombie zombi1 = (Zombie) entidad1;
-			zombi1.setCustomName(""+ChatColor.WHITE+ChatColor.BOLD+"Zombi Super Suicida");
-			
-			
-			zombi1.addPotionEffect(rapido);
-			
-			zombi1.addPotionEffect(salto);
-		
-			zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-			zombi1.getEquipment().setHelmet(new ItemStack(Material.DIAMOND_HELMET));
-			zombi1.getEquipment().setChestplate(new ItemStack(Material.NETHERITE_CHESTPLATE));
-			zombi1.getEquipment().setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
-			zombi1.getEquipment().setBoots(new ItemStack(Material.DIAMOND_BOOTS));
-			zombi1.getEquipment().setItemInMainHand(new ItemStack(Material.TNT));
-			
-			
-			LivingEntity ce = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.CREEPER);
-			Creeper s = (Creeper) ce;
-			s.setExplosionRadius(10);
-			s.setMaxFuseTicks(1);
-			s.setCustomName(""+ChatColor.RED+ChatColor.BOLD+"Zombi Super Suicida");
-			s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-			zombi1.addPassenger(s);
-		}else if(n == 10) {
-			LivingEntity entidad1 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
-			Zombie zombi1 = (Zombie) entidad1;
-			zombi1.setCustomName(""+ChatColor.WHITE+ChatColor.BOLD+"Zombi Super Suicida");
-			zombi1.addPotionEffect(rapido);
-			zombi1.addPotionEffect(salto);
-		
-			zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-			zombi1.getEquipment().setHelmet(new ItemStack(Material.DIAMOND_HELMET));
-			zombi1.getEquipment().setChestplate(new ItemStack(Material.NETHERITE_CHESTPLATE));
-			zombi1.getEquipment().setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
-			zombi1.getEquipment().setBoots(new ItemStack(Material.DIAMOND_BOOTS));
-			zombi1.getEquipment().setItemInMainHand(new ItemStack(Material.TNT));
-			
-			
-			LivingEntity ce = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.CREEPER);
-			Creeper s = (Creeper) ce;
-			s.setExplosionRadius(10);
-			s.setMaxFuseTicks(1);
-			s.setCustomName(""+ChatColor.RED+ChatColor.BOLD+"Zombi Super Suicida");
-			s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-			zombi1.addPassenger(s);
-		}else if(n == 11) {
-			LivingEntity entidad1 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
-			Zombie zombi1 = (Zombie) entidad1;
-			zombi1.setCustomName(""+ChatColor.YELLOW+ChatColor.BOLD+"LANZALLAMAS");
-			
-			
-			zombi1.addPotionEffect(rapido);
-			zombi1.addPotionEffect(salto);
-		
-			zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-			zombi1.getEquipment().setHelmet(new ItemStack(Material.GOLDEN_HELMET));
-			zombi1.getEquipment().setChestplate(new ItemStack(Material.GOLDEN_CHESTPLATE));
-			zombi1.getEquipment().setLeggings(new ItemStack(Material.GOLDEN_LEGGINGS));
-			zombi1.getEquipment().setBoots(new ItemStack(Material.GOLDEN_BOOTS));
-			zombi1.getEquipment().setItemInMainHand(new ItemStack(Material.BLAZE_ROD));
-			
-			
-			LivingEntity ce = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.BLAZE);
-			Blaze s = (Blaze) ce;
-			s.setCustomName(""+ChatColor.YELLOW+ChatColor.BOLD+"LANZALLAMAS");
-			s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-			zombi1.addPassenger(s);
-		}else if(n == 12) {
-			
-			for(int i = 0 ; i< 15;i++) {
-				 LivingEntity entidad1 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
-					Zombie zombi1 = (Zombie) entidad1;
-				
-					zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-					zombi1.setBaby();
-	  				zombi1.addPotionEffect(rapido);
-	  				zombi1.addPotionEffect(salto);
-			}
-		   
-				
-				
-				
-		}else if(n == 13) {
-			LivingEntity entidad1 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
-			Zombie zombi1 = (Zombie) entidad1;
-			zombi1.setCustomName(ChatColor.RED+"Speed");
-			
-			
-			zombi1.addPotionEffect(rapido);
-			zombi1.addPotionEffect(salto);
-	
-		}else if(n == 14) {
-			LivingEntity entidad1 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
-			Zombie zombi1 = (Zombie) entidad1;
-			zombi1.setCustomName(ChatColor.RED+"Summon");
-			
-			
-			zombi1.addPotionEffect(rapido);
-			zombi1.addPotionEffect(salto);
-		
-	
-		}else if(n == 15) {
-			LivingEntity entidad1 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
-			Zombie zombi1 = (Zombie) entidad1;
-			zombi1.setCustomName(ChatColor.RED+"Screamer");
-			
-			
-			zombi1.addPotionEffect(rapido);
-			zombi1.addPotionEffect(salto);
-		
-		
-			
-		}
-		
-		/*
-		 else if(n == 7) {
-			
-			
-  		    
-			 WorldServer world = ((CraftWorld) player.getWorld()).getHandle();
-				CustomZombi giant = new CustomZombi(player.getLocation());
-				
-				world.addEntity(giant);
-			
-		}	
-		*/
-		
-		
-			
-
-		return;
-}
     
     
     public void RemoveEntitysInBarrier(Player player) {

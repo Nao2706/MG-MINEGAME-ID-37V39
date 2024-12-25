@@ -892,8 +892,7 @@ public class AdventureTemp {
     public void Blaze(World world , int x , int y , int z) {
     	Location l2 = new Location(world, x, y+2, z); 			
 		
-		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.BLAZE);
-		Blaze s = (Blaze) entidad;
+		Blaze s = (Blaze) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.BLAZE);
 		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
 		
 		
@@ -904,8 +903,8 @@ public class AdventureTemp {
     public void Creeper(World world , int x , int y , int z) {
     	Location l2 = new Location(world, x, y+2, z); 			
 		
-		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.CREEPER);
-		Creeper s = (Creeper) entidad;
+		
+		Creeper s = (Creeper) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.CREEPER);
 		s.setExplosionRadius(10);
 		s.setMaxFuseTicks(3);
 		s.setCustomName(""+ChatColor.RED+ChatColor.BOLD+"SUICIDA");
@@ -918,8 +917,8 @@ public class AdventureTemp {
     public void villagerz(World world , int x , int y , int z) {
     	Location l2 = new Location(world, x, y+2, z); 			
 		
-		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE_VILLAGER);
-		ZombieVillager s = (ZombieVillager) entidad;
+		
+		ZombieVillager s = (ZombieVillager) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE_VILLAGER);
 		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
 		
 		
@@ -929,8 +928,7 @@ public class AdventureTemp {
     public void drowned(World world , int x , int y , int z) {
     	Location l2 = new Location(world, x, y+2, z); 			
 		
-		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.DROWNED);
-		Drowned s = (Drowned) entidad;
+		Drowned s = (Drowned) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.DROWNED);
 		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
 		
 		
@@ -940,8 +938,8 @@ public class AdventureTemp {
     public void husk(World world , int x , int y , int z) {
     	Location l2 = new Location(world, x, y+2, z); 			
 		
-		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.HUSK);
-		Husk s = (Husk) entidad;
+		
+		Husk s = (Husk) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.HUSK);
 		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
 		
 		
@@ -951,8 +949,7 @@ public class AdventureTemp {
     public void evoker(World world , int x , int y , int z) {
     	Location l2 = new Location(world, x, y+2, z); 			
 		
-		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.EVOKER);
-		Evoker s = (Evoker) entidad;
+		Evoker s = (Evoker) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.EVOKER);
 		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
 		
 		
@@ -963,8 +960,8 @@ public class AdventureTemp {
     public void Pillager(World world , int x , int y , int z) {
     	Location l2 = new Location(world, x, y+2, z); 			
 		
-		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.PILLAGER);
-		Pillager s = (Pillager) entidad;
+		
+		Pillager s = (Pillager) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.PILLAGER);
 		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
 		
 		ItemStack b = new ItemStack(Material.CROSSBOW,1);
@@ -984,8 +981,8 @@ public class AdventureTemp {
     public void vindicador(World world , int x , int y , int z) {
     	Location l2 = new Location(world, x, y+2, z); 			
 		
-		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.VINDICATOR);
-		Vindicator s = (Vindicator) entidad;
+		
+		Vindicator s = (Vindicator) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.VINDICATOR);
 		
 		Random random = new Random();
 
@@ -1013,8 +1010,8 @@ public class AdventureTemp {
     public void skeletonDark(World world , int x , int y , int z) {
     	Location l2 = new Location(world, x, y+2, z); 			
 		
-		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.WITHER_SKELETON);
-		WitherSkeleton s = (WitherSkeleton) entidad;
+	
+		WitherSkeleton s = (WitherSkeleton) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.WITHER_SKELETON);
 		s.getEquipment().setItemInMainHand(new ItemStack(Material.DIAMOND_SWORD));
 		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
 		s.setCanPickupItems(true);
@@ -1026,9 +1023,11 @@ public class AdventureTemp {
     public void skeleton(World world , int x , int y , int z) {
     	Location l2 = new Location(world, x, y+2, z); 			
 		
-		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.SKELETON);
-		Skeleton s = (Skeleton) entidad;
+
+		Skeleton s = (Skeleton) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.SKELETON);
+		s.setCustomName(ChatColor.DARK_PURPLE+"ARQUERO");
 		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		s.setCanPickupItems(true);
 		
 		
     }
@@ -1037,8 +1036,8 @@ public class AdventureTemp {
     public void Bruja(World world , int x , int y , int z) {
     	Location l2 = new Location(world, x, y+2, z); 			
 		
-		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.WITCH);
-		Witch s = (Witch) entidad;
+	
+		Witch s = (Witch) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.WITCH);
 		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
 		
 		

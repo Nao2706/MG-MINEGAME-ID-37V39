@@ -120,7 +120,7 @@ import org.bukkit.inventory.meta.ItemMeta;
             REFUERZOS(""+ChatColor.WHITE+ChatColor.BOLD+"REFUERZOS", Material.NETHER_STAR,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"30 Netherite",ChatColor.YELLOW+ "Llama a un Iron Golem"),
             REFUERZOSP(""+ChatColor.WHITE+ChatColor.BOLD+"REFUERZOS", Material.NETHER_STAR,null, 1),
             
-            REFUERZOS2(""+ChatColor.WHITE+ChatColor.BOLD+"REFUERZOS 2", Material.END_CRYSTAL,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"64 Netherite",ChatColor.YELLOW+ "Llama a una escuadra de Golems de hierro"),
+            REFUERZOS2(""+ChatColor.WHITE+ChatColor.BOLD+"REFUERZOS 2", Material.END_CRYSTAL,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"20 Netherite",ChatColor.YELLOW+ "Llama a una escuadra de Golems de Nieve"),
             REFUERZOS2P(""+ChatColor.WHITE+ChatColor.BOLD+"REFUERZOS 2", Material.END_CRYSTAL,null, 1),
             
             STOREXPRESS(""+ChatColor.BLUE+ChatColor.BOLD+"STORE EXPRESS", Material.ENCHANTED_BOOK,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"3 Stacks Hierro",ChatColor.YELLOW+ "Compra desde donde sea que estes."),

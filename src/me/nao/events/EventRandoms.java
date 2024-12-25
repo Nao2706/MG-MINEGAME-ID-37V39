@@ -95,6 +95,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
@@ -662,15 +663,26 @@ public class EventRandoms implements Listener{
 							Location loc = player.getLocation();
 							Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.IRON_GOLEM);
 							IronGolem ih = (IronGolem) h1;
-							ih.setCustomName(ChatColor.GOLD+player.getName());
+							ih.setCustomName(ChatColor.AQUA+"GUARDIA DE: "+ChatColor.GOLD+player.getName());
 							removeItemstackCustom(player,e.getItem());
 						 }
 					
 						if(e.getItem().isSimilar(Items.REFUERZOS2P.getValue())) {
 							Location loc = player.getLocation();
-							Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.SNOWMAN);
-							Snowman ih = (Snowman) h1;
-							ih.setCustomName(ChatColor.GOLD+player.getName());
+							ItemStack head = new ItemStack(Material.PLAYER_HEAD,1);
+							SkullMeta meta = (SkullMeta) head.getItemMeta();
+							meta.setOwningPlayer(player);
+							head.setItemMeta(meta);
+
+							
+							for(int i = 0 ; i < 4;i++) {
+								Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.SNOWMAN);
+								Snowman ih = (Snowman) h1;
+								ih.getEquipment().setHelmet(head);
+								ih.setCustomName(ChatColor.GREEN+"GUARDIA DE: "+ChatColor.GOLD+player.getName());
+							}
+							
+						
 							
 							removeItemstackCustom(player,e.getItem());
 
@@ -1529,6 +1541,18 @@ public class EventRandoms implements Listener{
 			  Projectile projectile = e.getEntity();
 			  GameConditions gc = new GameConditions(plugin);
 			  
+			  
+			  if(projectile.getShooter() instanceof Snowman) {
+				  
+				  Entity entidadhit = e.getHitEntity();
+				  
+				  
+				  if(entidadhit instanceof Player ||  entidadhit instanceof Snowman  || entidadhit instanceof IronGolem) {
+					  e.setCancelled(true);
+				  }
+				  
+				  
+			  }
 			 
 			  if(projectile.getShooter() instanceof Player) {
 				 

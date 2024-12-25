@@ -19,11 +19,20 @@ import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Blaze;
+import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Mob;
+import org.bukkit.entity.Pillager;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.SmallFireball;
+import org.bukkit.entity.Snowman;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -31,6 +40,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
@@ -41,6 +51,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.projectiles.ProjectileSource;
+import org.bukkit.util.Vector;
 
 import me.nao.enums.ReviveStatus;
 import me.nao.general.info.GameAdventure;
@@ -603,6 +615,189 @@ public class SourceOfDamage implements Listener{
 	}
 	
 	
+	
+	@EventHandler
+	public void shootm(ProjectileLaunchEvent e) {
+		Entity m = (Entity) e.getEntity().getShooter();
+		Random r = new Random();
+
+		int rand = r.nextInt(6);
+		
+		if(m instanceof Snowman) {
+			Snowman s = (Snowman) m;
+			
+			
+			if(s.getCustomName() != null && ChatColor.stripColor(s.getCustomName()).startsWith("GUARDIA DE: ")) {
+				Location loc = s.getLocation();
+				
+				e.setCancelled(true);
+				Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
+				aw.setCritical(true);
+				aw.setKnockbackStrength(2);
+				aw.setFireTicks(1200);
+				aw.setPierceLevel(127);
+				aw.setVelocity(loc.getDirection().multiply(6));
+				((Arrow) aw).setShooter(s);
+				
+			}
+		
+		}
+		
+		if(m instanceof EnderDragon) {
+			
+			EnderDragon d = (EnderDragon) m;
+			
+			Location loc = d.getLocation();
+			Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 10, 0), EntityType.FIREBALL);
+			Fireball f =(Fireball) h1;
+			f.setYield(5);
+			f.setDirection(new Vector(0,-3,0));
+			f.setVelocity(f.getDirection().multiply(3));
+			((Fireball) h1).setShooter(d);
+			
+			
+		}
+		
+		if(m instanceof Blaze) {
+			Blaze b = (Blaze) m;
+			
+			for(int i = 0 ;i < 7 ;i++) {
+			
+			Location loc = b.getLocation();
+			Location loc2 = b.getLocation();
+
+			
+			
+			Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.SMALL_FIREBALL);
+			Entity h2 = loc2.getWorld().spawnEntity(loc2.add(0, 1.6, 0), EntityType.SMALL_FIREBALL);
+			h1.setVelocity(loc.getDirection().multiply(6).rotateAroundY(Math.toRadians(1)));
+			h2.setVelocity(loc2.getDirection().multiply(6).rotateAroundY(Math.toRadians(-1)));
+			SmallFireball f = (SmallFireball) h1;
+			SmallFireball f2 = (SmallFireball) h2;
+			f.setIsIncendiary(true);
+			f.setYield(2);
+			f2.setIsIncendiary(true);
+			f2.setYield(2);
+			
+			((SmallFireball) h1).setShooter(b);
+			((SmallFireball) h2).setShooter(b);
+			
+			}
+		}
+		if(m instanceof Skeleton) {
+			
+			Skeleton s = (Skeleton)m;
+			
+			if(s.getCustomName() != null && ChatColor.stripColor(s.getCustomName()).contains("ARQUERO")) {
+				if(rand == 0) {
+					Location loc = s.getLocation();
+					
+					Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
+					aw.setCritical(true);
+					aw.setKnockbackStrength(2);
+					aw.setFireTicks(1200);
+					aw.setVelocity(loc.getDirection().multiply(6));
+					((Arrow) aw).setShooter(s);
+				}
+			}
+			
+		
+	
+			
+		}
+		if(m instanceof Pillager) {
+			
+			Pillager p = (Pillager) m;
+			
+			
+			ItemStack b = new ItemStack(Material.CROSSBOW,1);
+			ItemMeta meta = b.getItemMeta();
+			meta.addEnchant(Enchantment.QUICK_CHARGE, 5, true);
+			meta.addEnchant(Enchantment.MULTISHOT, 1, true);
+			b.setItemMeta(meta);
+			
+			p.getEquipment().setItemInMainHand(b);
+			
+			
+			if(p.isPatrolLeader()) {
+				
+				if(rand == 0) {
+					PotionEffect damage = new PotionEffect(PotionEffectType.INCREASE_DAMAGE,/*duration*/ 100,/*amplifier:*/1, true ,true,true );
+					Location loc = p.getLocation();
+					Location loc2 = p.getLocation();
+		
+					
+					
+					Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
+					Entity h2 = loc2.getWorld().spawnEntity(loc2.add(0, 1.6, 0), EntityType.ARROW);
+					h1.setVelocity(loc.getDirection().multiply(6).rotateAroundY(Math.toRadians(1)));
+					h2.setVelocity(loc2.getDirection().multiply(6).rotateAroundY(Math.toRadians(-1)));
+					Arrow aw = (Arrow) h1;
+					Arrow aw2 = (Arrow) h2;
+					aw.addCustomEffect(damage,true);
+					aw.setCritical(true);
+					aw.setKnockbackStrength(1);
+					aw.setFireTicks(1200);
+					aw2.addCustomEffect(damage,true);
+					aw2.setCritical(true);
+					aw2.setKnockbackStrength(1);
+					aw2.setFireTicks(1200);
+		
+					((Arrow) h1).setShooter(p);
+					((Arrow) h2).setShooter(p);
+				}
+				if(rand == 1) {
+					
+					for(int i = 0;i<20;i++) {
+						SpawnArrowsFireMob(p, RandomPosOrNeg(10),RandomPosOrNeg(5));
+					}
+				}
+				
+			}else {
+				if(rand == 1) {
+				Location loc = p.getLocation();
+				Location loc2 = p.getLocation();
+	
+				
+				
+				Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
+				Entity h2 = loc2.getWorld().spawnEntity(loc2.add(0, 1.6, 0), EntityType.ARROW);
+				h1.setVelocity(loc.getDirection().multiply(6).rotateAroundY(Math.toRadians(1)));
+				h2.setVelocity(loc2.getDirection().multiply(6).rotateAroundY(Math.toRadians(-1)));
+				Arrow aw = (Arrow) h1;
+				Arrow aw2 = (Arrow) h2;
+				aw.setCritical(true);
+				aw.setKnockbackStrength(1);
+				aw.setFireTicks(1200);
+				aw2.setCritical(true);
+				aw2.setKnockbackStrength(1);
+				aw2.setFireTicks(1200);
+	
+				((Arrow) h1).setShooter(p);
+				((Arrow) h2).setShooter(p);
+				}
+			}
+			
+		}
+		
+	}
+	
+	public void SpawnArrowsFireMob(Entity e,float addy ,float addp ) {
+		
+		Location loc = e.getLocation();
+		loc.setYaw(loc.getYaw()+addy);
+		loc.setPitch(loc.getPitch()+addp);
+		Vector v = loc.getDirection();
+		
+		
+		Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
+		aw.setCritical(true);
+		aw.setKnockbackStrength(2);
+		aw.setFireTicks(1200);
+		aw.setVelocity(v.multiply(5));
+		aw.setShooter((ProjectileSource) e);
+	}
+	
 	@EventHandler  //TODO MUERTES METODO
     public void damageInGame(EntityDamageEvent e){
 		
@@ -997,5 +1192,20 @@ public class SourceOfDamage implements Listener{
 		//}
 	}
 	
+	
+	public int RandomPosOrNeg(int i) {
+		Random r = new Random();
+		int v = r.nextInt(i+1);
+		int r2 = r.nextInt(1+1);
+		if(r2 == 1) {
+			return v;
+		}
+		return TransformPosOrNeg(v);
+		
+	}
+	
+	public int TransformPosOrNeg(int i) {
+		return i =  (~(i -1));
+	}
 	
 }

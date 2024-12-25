@@ -1488,10 +1488,10 @@ public class MinigameShop1 implements Listener{
 				
 				if(!hasSpaceinInventory(player)) return;
 				
-				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 64)) {
+				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 20)) {
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
 					player.getInventory().addItem(Items.REFUERZOS2P.getValue());
-					player.getInventory().removeItem(new ItemStack(Material.NETHERITE_INGOT,64));
+					player.getInventory().removeItem(new ItemStack(Material.NETHERITE_INGOT,20));
 				}else {
 					player.sendMessage(ChatColor.RED+"Necesitas 64 de Lingotes de Netherite");
 				}

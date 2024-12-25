@@ -325,7 +325,7 @@ public class MapSettings {
    
    public void setMapSpawnSimpleGenerators(String name, Player player) {
 	   
-		   Block b = player.getTargetBlock((Set<Material>) null, 3);
+		   Block b = player.getTargetBlock((Set<Material>) null, 5);
 	       if(!b.getType().isSolid()) {
 	              player.sendMessage(ChatColor.RED+"Debes mirar un material Solido [Un Bloque]");
 	               return;
@@ -364,7 +364,7 @@ public class MapSettings {
    
 	   public void deleteMapSpawnSimpleGenerators(String name, Player player) {
 		   
-		   Block b = player.getTargetBlock((Set<Material>) null, 3);
+		   Block b = player.getTargetBlock((Set<Material>) null, 5);
 	       if(!b.getType().isSolid()) {
 	              player.sendMessage(ChatColor.RED+"Debes mirar un material Solido [Un Bloque]");
 	               return;
@@ -382,7 +382,7 @@ public class MapSettings {
 				List<String> generators = ym.getStringList("Generators.List");
 				ym.set("Generators.List",generators);
 				if(!generators.contains(b.getLocation().getWorld().getName()+"/"+nf.format(b.getLocation().getX())+"/"+nf.format(b.getLocation().getY())+"/"+nf.format(b.getLocation().getZ()))){
-					player.sendMessage(ChatColor.RED+"Esa Ubicacion no existe.");
+					player.sendMessage(ChatColor.RED+"Esa Ubicacion no esta guardada...");
 	
 					return;
 				}
@@ -404,7 +404,7 @@ public class MapSettings {
 	   
 	   public void setMapSpawnSimpleMobsGenerators(String name, Player player) {
 		   
-		   Block b = player.getTargetBlock((Set<Material>) null, 3);
+		   Block b = player.getTargetBlock((Set<Material>) null, 5);
 	       if(!b.getType().isSolid()) {
 	              player.sendMessage(ChatColor.RED+"Debes mirar un material Solido [Un Bloque]");
 	               return;
@@ -444,7 +444,7 @@ public class MapSettings {
 	   
 	   public void deleteMapSpawnSimpleMobsGenerators(String name, Player player) {
 		   
-		   Block b = player.getTargetBlock((Set<Material>) null, 3);
+		   Block b = player.getTargetBlock((Set<Material>) null, 5);
 	       if(!b.getType().isSolid()) {
 	              player.sendMessage(ChatColor.RED+"Debes mirar un material Solido [Un Bloque]");
 	               return;
@@ -461,8 +461,8 @@ public class MapSettings {
 				
 				List<String> generators = ym.getStringList("Mobs-Generators.List");
 				ym.set("Mobs-Generators.List",generators);
-				if(generators.contains(b.getLocation().getWorld().getName()+"/"+nf.format(b.getLocation().getX())+"/"+nf.format(b.getLocation().getY())+"/"+nf.format(b.getLocation().getZ()))){
-					player.sendMessage(ChatColor.RED+"Esa Ubicacion no existe.");
+				if(!generators.contains(b.getLocation().getWorld().getName()+"/"+nf.format(b.getLocation().getX())+"/"+nf.format(b.getLocation().getY())+"/"+nf.format(b.getLocation().getZ()))){
+					player.sendMessage(ChatColor.RED+"Esa Ubicacion no esta guardada.");
 					
 					return;
 				}
