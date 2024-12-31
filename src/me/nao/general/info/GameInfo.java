@@ -90,7 +90,7 @@ public class GameInfo {
 		return motivo;
 	}
 
-	public BossBar getBoss() {
+	public BossBar getBossbar() {
 		return boss;
 	}
 	
@@ -200,7 +200,7 @@ public class GameInfo {
 	
 	public String ShowGame() {
 		return getMapName()+" "+getMaxPlayers()+" "+getMinPlayers()+" "+getGameType().toString()+" "+getGameStatus().toString()+" "+
-	getMotivo().toString()+" "+getBoss().getTitle()+" "+getTimeMg();
+	getMotivo().toString()+" "+getBossbar().getTitle()+" "+getTimeMg();
 	}
 	
 

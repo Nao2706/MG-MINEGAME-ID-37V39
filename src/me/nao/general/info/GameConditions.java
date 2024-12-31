@@ -142,7 +142,7 @@ public class GameConditions {
 			
 			if(spectador.contains(player.getName())) {
 				sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.WHITE+"El jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" salio del Modo Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size() - 1)+ChatColor.RED+"]");
-				ga.getBoss().removePlayer(player);
+				ga.getBossbar().removePlayer(player);
 			}else {
 				sendMessageToUsersOfSameMapLessPlayer(player,
 							ChatColor.YELLOW+"A Salido "+ChatColor.GREEN+player.getName()+ChatColor.RED+" ("+ChatColor.GOLD+(ga.getParticipants().size()-1)+ChatColor.YELLOW+"/"+ChatColor.GOLD+getMaxPlayerMap(pl.getMapName())+ChatColor.RED+")");			
@@ -1377,7 +1377,7 @@ public class GameConditions {
 				GameAdventure ga = (GameAdventure) ms;
 				 List<String> spectador = ga.getSpectators();
 				 player.sendMessage(ChatColor.GREEN+"Estas como Espectador en el Mapa: "+ChatColor.GOLD+map);
-				 ga.getBoss().addPlayer(player);
+				 ga.getBossbar().addPlayer(player);
 				 sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.WHITE+"El Jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" se Unio como Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size())+ChatColor.RED+"]");
 				 TptoSpawnSpectator(player, map);
 		 }
@@ -1422,7 +1422,7 @@ public class GameConditions {
 		 
 		 if(minfo instanceof GameAdventure) {
 				GameAdventure ga = (GameAdventure) minfo;
-				 BossBar boss = minfo.getBoss();
+				 BossBar boss = minfo.getBossbar();
 				 GameType misiontype = minfo.getGameType();
 				 int maxplayers = mision.getInt("Max-Player");
 				 ReportsManager cooldown = new ReportsManager(plugin) ;
@@ -1685,7 +1685,7 @@ public class GameConditions {
 		 }else if(minfo instanceof GameNexo) {
 			 
 			 GameNexo ga = (GameNexo) minfo;
-			 BossBar boss = minfo.getBoss();
+			 BossBar boss = minfo.getBossbar();
 			 GameType misiontype = minfo.getGameType();
 			 int maxplayers = mision.getInt("Max-Player");
 			 ReportsManager cooldown = new ReportsManager(plugin) ;
@@ -2643,7 +2643,7 @@ public class GameConditions {
 		 if(ms instanceof GameAdventure) {
 				//GameAdventure ga = (GameAdventure) ms;
 				SetDefaultHeartsInGame(player);
-				BossBar boss = ms.getBoss();
+				BossBar boss = ms.getBossbar();
 				boss.removePlayer(player);
 				
 				System.out.println("LOG-1 RESTORE ANTES MAP: "+ms.ShowGame());
@@ -2672,7 +2672,7 @@ public class GameConditions {
 		 }else if(ms instanceof GameNexo) {
 			// GameNexo gn = (GameNexo) ms;
 			    SetDefaultHeartsInGame(player);
-				BossBar boss = ms.getBoss();
+				BossBar boss = ms.getBossbar();
 				boss.removePlayer(player);
 				System.out.println("LOG 2 RESTORE ANTES NEXO: "+ms.ShowGame());
 				

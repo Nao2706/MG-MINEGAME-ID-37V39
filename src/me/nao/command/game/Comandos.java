@@ -2022,6 +2022,26 @@ public class Comandos implements CommandExecutor{
 				
 						return true;
 				
+				 	  }else if(args[0].equalsIgnoreCase("time")) {
+							//mg time Tutorial set 0-1-2
+				 		  
+				 		 if(args.length == 4) {
+				 			 String map = args[1];
+				 			 String type  = args[2].toUpperCase();
+				 			 String time = args[3];
+				 			 if(type.equals("add")) {
+				 				time = time+"";
+				 			 }else if(type.equals("set")) {
+				 				 map = map +"";
+				 			 }
+				 			 
+				 		 }else {
+				 			 
+				 		 }
+				 			
+					
+							return true;
+					
 				 	  }else if(args[0].equalsIgnoreCase("spawnzombi")) {
 				 		//H Z BZ EZ
 						//mg spawnzombi wolrd,12,23,34 50 H

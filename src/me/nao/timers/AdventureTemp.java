@@ -58,6 +58,7 @@ import me.nao.enums.StopMotivo;
 import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
+import me.nao.general.info.GameTime;
 import me.nao.general.info.PlayerInfo;
 import me.nao.main.game.Minegame;
 import me.nao.manager.GameIntoMap;
@@ -102,6 +103,9 @@ public class AdventureTemp {
 			int minuto = Integer.valueOf(timer[1]);
 			int segundo = Integer.valueOf(timer[2]);
 		
+			GameTime gt = new GameTime(plugin,name,hora,minuto,segundo);
+			
+			
 		    int  segundo2 = 0;
 			int  minuto2 = 0 ;
 			int  hora2 = 0 ;
@@ -120,7 +124,7 @@ public class AdventureTemp {
 		 	//calculo para hacer uba reduccion
 		 	double time = 1.0 / total;
 		 	
-		    BossBar boss = ms.getBoss();
+		    BossBar boss = ms.getBossbar();
 		    
 		
 		@Override
@@ -160,14 +164,14 @@ public class AdventureTemp {
 						if(startm <= 5) {
 			       	  		if(startm != 0) {
 			       	  			players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 2F);
-			       	  			players.sendTitle(""+ChatColor.AQUA+ChatColor.BOLD+String.valueOf(startm),""+ChatColor.GREEN+ChatColor.BOLD+"La partida empieza en ", 20, 20, 20);
+			       	  			players.sendTitle(""+ChatColor.AQUA+ChatColor.BOLD+String.valueOf(startm),""+ChatColor.GREEN+ChatColor.BOLD+"La partida empieza en ", 0, 20, 0);
 			       	  		}
 			    			
 				    	//	players.sendMessage(ChatColor.RED+"No hay jugadores suficientes para empezar la partida :(");
 			    		}else {
 			    			players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 			    			//target.sendMessage(ChatColor.YELLOW+"La partida empieza en "+ChatColor.RED+startm);
-			    			players.sendTitle("",ChatColor.YELLOW+"La partida empieza en "+ChatColor.RED+startm, 20, 20, 20);
+			    			players.sendTitle("",ChatColor.YELLOW+"La partida empieza en "+ChatColor.RED+startm, 0, 20, 0);
 
 			    		}
 						
@@ -206,7 +210,7 @@ public class AdventureTemp {
 				
 			  } 			
 	          pro = pro - time;
-
+/// timer 10 ----------------------->
 	      //  players.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.DARK_GREEN+ChatColor.BOLD+"Tiempo Remanente:"+ChatColor.DARK_RED+ChatColor.BOLD+" "+hora+"h "+minuto+"m "+segundo+"s " ));
 		//        players.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.GREEN+ChatColor.BOLD+"KILLS:"+ChatColor.DARK_RED+ChatColor.BOLD+" "+hora+"h "+minuto+"m "+segundo+"s " ));
 
@@ -247,8 +251,8 @@ public class AdventureTemp {
 						minuto = 60;
 						hora --;
 					}
-				 	
-				  boss.setTitle(""+ChatColor.DARK_RED+ChatColor.BOLD+"Tiempo Remanente:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+hora+"h "+minuto+"m "+segundo+"s " );
+				 	gt.timeRun();
+				 // boss.setTitle(""+ChatColor.DARK_RED+ChatColor.BOLD+"Tiempo Remanente:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+hora+"h "+minuto+"m "+segundo+"s " );
 				  gc.HasTimePath("Time-"+hora+"-"+minuto+"-"+segundo, name);
 				
 	
@@ -379,12 +383,12 @@ public class AdventureTemp {
 							if(end <= 5 && end >= 1) {
 			 	       		  //  RemoveArmorStandsAndItemsInMap(target);
 								players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 2F);
-								players.sendTitle(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+String.valueOf(end),""+ChatColor.AQUA+ChatColor.BOLD+"La partida termina en ", 20, 20, 20);
+								players.sendTitle(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+String.valueOf(end),""+ChatColor.AQUA+ChatColor.BOLD+"La partida termina en ", 0, 20, 0);
 						    	//	players.sendMessage(ChatColor.RED+"No hay jugadores suficientes para empezar la partida :(");
 					    		}else {
 					    			//RemoveArmorStandsAndItemsInMap(target);
 					    			players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
-					    			players.sendTitle("",ChatColor.RED+"La partida termina en "+ChatColor.DARK_PURPLE+end, 20, 20, 20);
+					    			players.sendTitle("",ChatColor.RED+"La partida termina en "+ChatColor.DARK_PURPLE+end, 0, 20, 0);
 	
 					    			//target.sendMessage(ChatColor.RED+"La partida termina en "+ChatColor.DARK_PURPLE+end);
 					    		}
@@ -398,12 +402,12 @@ public class AdventureTemp {
 							if(end <= 5 && end >= 1) {
 			 	       		  //  RemoveArmorStandsAndItemsInMap(target);
 								players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 2F);
-								players.sendTitle(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+String.valueOf(end),""+ChatColor.AQUA+ChatColor.BOLD+"La partida termina en ", 20, 20, 20);
+								players.sendTitle(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+String.valueOf(end),""+ChatColor.AQUA+ChatColor.BOLD+"La partida termina en ", 0, 20, 0);
 						    	//	players.sendMessage(ChatColor.RED+"No hay jugadores suficientes para empezar la partida :(");
 					    		}else {
 					    			//RemoveArmorStandsAndItemsInMap(target);
 					    			players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
-					    			players.sendTitle("",ChatColor.RED+"La partida termina en "+ChatColor.DARK_PURPLE+end, 20, 20, 20);
+					    			players.sendTitle("",ChatColor.RED+"La partida termina en "+ChatColor.DARK_PURPLE+end, 0, 20, 0);
 	
 					    			//target.sendMessage(ChatColor.RED+"La partida termina en "+ChatColor.DARK_PURPLE+end);
 					    		}

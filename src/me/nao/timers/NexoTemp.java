@@ -110,7 +110,7 @@ public class NexoTemp {
 		 	//calculo para hacer uba reduccion
 		 	double time = 1.0 / total;
 		 	
-		    BossBar boss = ms.getBoss();
+		    BossBar boss = ms.getBossbar();
 		    
 		    
 		@Override
