@@ -15,7 +15,7 @@ public class GameInfo {
 	
 	
 	private String name , time;
-	private int maxplayers,minplayers, loottablemax , itemspawnrange , spawnmobrange;
+	private int maxplayers,minplayers, loottablemax , itemspawnrange , spawnmobrange , countdownstart;
 	private List<String> participants,spectators;
 	private GameType type;
 	private GameStatus estpart;
@@ -26,6 +26,7 @@ public class GameInfo {
 	private List<CuboidZone> cuboidzones;	
 	private List<Location> generators,mobsgenerators;	
 	private boolean pvp;
+	private GameTime gt;
 	// @param GameInfo Sirve para modo aventura y resistencia
 	/**
 	 * Constructor Base para futuros tipos de Juegos 
@@ -51,6 +52,8 @@ public class GameInfo {
 		this.generators = new ArrayList<>();
 		this.mobsgenerators = new ArrayList<>();
 		this.pvp = false;
+		this.gt = null;
+		this.countdownstart = 0;
 	}
 	
 	
@@ -130,6 +133,14 @@ public class GameInfo {
 		return pvp;
 	}
 	
+	public GameTime getGameTime() {
+		return gt;
+	}
+	
+	public int getCountDownStart() {
+		return countdownstart;
+	}
+	
 	public void setMapName(String name) {
 		this.name = name;
 	}
@@ -196,6 +207,14 @@ public class GameInfo {
 	
 	public void setPvpinMap(boolean pvp) {
 		this.pvp = pvp;
+	}
+	
+	public void setGameTime(GameTime gt) {
+		this.gt = gt;
+	}
+	
+	public void setCountDownStart(int countdownstart) {
+		this.countdownstart = countdownstart;
 	}
 	
 	public String ShowGame() {

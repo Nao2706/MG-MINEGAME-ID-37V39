@@ -52,6 +52,7 @@ import me.nao.cooldown.ReportsManager;
 import me.nao.database.BukkitSerialization;
 import me.nao.database.SQLInfo;
 import me.nao.enums.GameReportType;
+import me.nao.enums.GameStatus;
 import me.nao.enums.Items;
 import me.nao.enums.ObjetiveStatusType;
 import me.nao.enums.StopMotivo;
@@ -61,7 +62,9 @@ import me.nao.events.ItemNBT;
 import me.nao.fillareas.Data;
 import me.nao.gamemode.InfectedGame;
 import me.nao.general.info.GameConditions;
+import me.nao.general.info.GameInfo;
 import me.nao.general.info.GameReports;
+import me.nao.general.info.GameTime;
 import me.nao.main.game.Minegame;
 import me.nao.manager.MapSettings;
 import me.nao.mobs.MobsActions;
@@ -412,7 +415,82 @@ public class Comandos implements CommandExecutor{
 					plugin.getConfig().reload();
 					
 					return true;
-		    	}else if (args[0].equalsIgnoreCase("check")) {
+		    	}else if(args[0].equalsIgnoreCase("pause")) {
+			 		  //mg pause map
+			 		 if(args.length != 2) {
+			 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"/mg pause <map>");
+			 			 return true;
+			 		 }
+			 		 
+			 		 String map = args[1];
+			 		 if(!gc.ExistMap(map)) {
+			 			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El Mapa "+map+" no existe.");
+		 				 return true;
+		 			 }else if(!gc.isMapinGame(map)) {
+		 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El Mapa "+map+" no esta en Juego.");
+		 				 return true;
+		 			 }
+			 		 GameInfo gi = plugin.getGameInfoPoo().get(map);
+			 		 
+			 		 if(gi.getGameStatus() == GameStatus.JUGANDO) {
+			 			 gi.setGameStatus(GameStatus.PAUSE);
+			 		 }else if(gi.getGameStatus() == GameStatus.PAUSE){
+			 			 gi.setGameStatus(GameStatus.JUGANDO);
+			 		 }
+			 		 
+			 		 return true;
+				  }else if(args[0].equalsIgnoreCase("timegame")) {
+						//mg time Tutorial set 0-1-2
+			 		  
+			 		 if(args.length == 4) {
+			 			 String map = args[1];
+			 			 String type  = args[2].toUpperCase();
+			 			 String time = args[3];
+			 			 
+			 			 if(!gc.ExistMap(map)) {
+			 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El Mapa "+map+" no existe.");
+			 				 return true;
+			 			 }else if(!gc.isMapinGame(map)) {
+			 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El Mapa "+map+" no esta en Juego.");
+			 				 return true;
+			 			 }
+			 			 GameInfo gi = plugin.getGameInfoPoo().get(map);
+			 			 GameTime gt = gi.getGameTime();
+			 			 
+			 			 if(type.equals("add")) {
+			 				 String[] split = time.split("-");
+			 				 int hour = Integer.valueOf(split[0]);
+			 				 int minute = Integer.valueOf(split[1]);
+			 				 int second = Integer.valueOf(split[2]);
+			 				 
+			 				 gt.addTimeToTimer(hour, minute, second);
+			 				Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Fue añadido el Tiempo a +"+hour+"h +"+minute+"m +"+second+"s");
+			 			 }else if(type.equals("set")) {
+			 				 String[] split = time.split("-");
+			 				 int hour = Integer.valueOf(split[0]);
+			 				 int minute = Integer.valueOf(split[1]);
+			 				 int second = Integer.valueOf(split[2]);
+			 				 gt.setTimeToTimer(hour, minute, second);
+			 				 
+			 				Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Fue seteado el Tiempo a "+hour+"h "+minute+"m "+second+"s");
+			 			 }else if(type.equals("remove")) {
+			 				 String[] split = time.split("-");
+			 				 int hour = Integer.valueOf(split[0]);
+			 				 int minute = Integer.valueOf(split[1]);
+			 				 int second = Integer.valueOf(split[2]);
+			 				 gt.removeTimeToTimer(hour, minute, second);
+			 				Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Fue removido el Tiempo a "+hour+"h "+minute+"m "+second+"s");
+			 			 }
+			 			 
+			 		 }else {
+			 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"/mg time <map> <add,set,remove> <time>");
+			 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Example /mg time Tutorial add 0-2-1 (h-m-s)");
+			 		 }
+			 			
+				
+						return true;
+				
+			 	  }else if (args[0].equalsIgnoreCase("check")) {
 		    		
 		    		if(args.length == 2){
 			    				String name = args[1];
@@ -2022,21 +2100,75 @@ public class Comandos implements CommandExecutor{
 				
 						return true;
 				
-				 	  }else if(args[0].equalsIgnoreCase("time")) {
+				 	  }else if(args[0].equalsIgnoreCase("pause")) {
+				 		  //mg pause map
+				 		 if(args.length != 2) {
+				 			 player.sendMessage(ChatColor.GREEN+"/mg pause <map>");
+				 			 return true;
+				 		 }
+				 		 
+				 		 String map = args[1];
+				 		 if(!gc.ExistMap(map)) {
+			 				 player.sendMessage(ChatColor.RED+"El Mapa "+map+" no existe.");
+			 				 return true;
+			 			 }else if(!gc.isMapinGame(map)) {
+			 				 player.sendMessage(ChatColor.RED+"El Mapa "+map+" no esta en Juego.");
+			 				 return true;
+			 			 }
+				 		 GameInfo gi = plugin.getGameInfoPoo().get(map);
+				 		 
+				 		 if(gi.getGameStatus() == GameStatus.JUGANDO) {
+				 			 gi.setGameStatus(GameStatus.PAUSE);
+				 		 }else if(gi.getGameStatus() == GameStatus.PAUSE){
+				 			 gi.setGameStatus(GameStatus.JUGANDO);
+				 		 }
+				 		 
+				 		 return true;
+					  }else if(args[0].equalsIgnoreCase("timegame")) {
 							//mg time Tutorial set 0-1-2
 				 		  
 				 		 if(args.length == 4) {
 				 			 String map = args[1];
-				 			 String type  = args[2].toUpperCase();
+				 			 String type  = args[2];
 				 			 String time = args[3];
+				 			 
+				 			 if(!gc.ExistMap(map)) {
+				 				 player.sendMessage(ChatColor.RED+"El Mapa "+map+" no existe.");
+				 				 return true;
+				 			 }else if(!gc.isMapinGame(map)) {
+				 				 player.sendMessage(ChatColor.RED+"El Mapa "+map+" no esta en Juego.");
+				 				 return true;
+				 			 }
+				 			 GameInfo gi = plugin.getGameInfoPoo().get(map);
+				 			 GameTime gt = gi.getGameTime();
+				 			 
 				 			 if(type.equals("add")) {
-				 				time = time+"";
+				 				 String[] split = time.split("-");
+				 				 int hour = Integer.valueOf(split[0]);
+				 				 int minute = Integer.valueOf(split[1]);
+				 				 int second = Integer.valueOf(split[2]);
+				 				 
+				 				 gt.addTimeToTimer(hour, minute, second);
+				 				player.sendMessage(ChatColor.GREEN+"Fue añadido el Tiempo a +"+hour+"h +"+minute+"m +"+second+"s");
 				 			 }else if(type.equals("set")) {
-				 				 map = map +"";
+				 				 String[] split = time.split("-");
+				 				 int hour = Integer.valueOf(split[0]);
+				 				 int minute = Integer.valueOf(split[1]);
+				 				 int second = Integer.valueOf(split[2]);
+				 				 gt.setTimeToTimer(hour, minute, second);
+				 				player.sendMessage(ChatColor.GREEN+"Fue seteado el Tiempo a "+hour+"h "+minute+"m "+second+"s");
+				 			 }else if(type.equals("remove")) {
+				 				 String[] split = time.split("-");
+				 				 int hour = Integer.valueOf(split[0]);
+				 				 int minute = Integer.valueOf(split[1]);
+				 				 int second = Integer.valueOf(split[2]);
+				 				 gt.removeTimeToTimer(hour, minute, second);
+				 				player.sendMessage(ChatColor.GREEN+"Fue removido el Tiempo a "+hour+"h "+minute+"m "+second+"s");
 				 			 }
 				 			 
 				 		 }else {
-				 			 
+				 			 player.sendMessage(ChatColor.GREEN+"/mg time <map> <add,set,remove> <time>");
+				 			 player.sendMessage(ChatColor.GREEN+"Example /mg time Tutorial add 0-2-1 (h-m-s)");
 				 		 }
 				 			
 					

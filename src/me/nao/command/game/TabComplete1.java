@@ -75,6 +75,9 @@ public class TabComplete1 implements TabCompleter{
 			arguments.add("mobgenerator");
 			arguments.add("delmobgenerator");
 			arguments.add("points");
+			arguments.add("timegame");
+			arguments.add("pause");
+			
 			
 		}
 		

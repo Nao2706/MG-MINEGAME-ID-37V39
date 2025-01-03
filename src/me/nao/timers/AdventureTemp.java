@@ -20,7 +20,6 @@ import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
-import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -98,31 +97,31 @@ public class AdventureTemp {
 			int startm = config.getInt("CountDownPreLobby");
 			int end = 10;
 		
-			String timer[] = ms.getTimeMg().split(",");
-			int hora = Integer.valueOf(timer[0]);
-			int minuto = Integer.valueOf(timer[1]);
-			int segundo = Integer.valueOf(timer[2]);
+			//String timer[] = ms.getTimeMg().split(",");
+			//int hora = Integer.valueOf(timer[0]);
+			//int minuto = Integer.valueOf(timer[1]);
+			//int segundo = Integer.valueOf(timer[2]);
 		
-			GameTime gt = new GameTime(plugin,name,hora,minuto,segundo);
+			GameTime gt = ms.getGameTime();
 			
 			
-		    int  segundo2 = 0;
-			int  minuto2 = 0 ;
-			int  hora2 = 0 ;
+//		    int  segundo2 = 0;
+//			int  minuto2 = 0 ;
+//			int  hora2 = 0 ;
 			int anuncios = 0;																			//APARENTEMENTE ESTOS DOS SON BarFlag. unas flags
 		
 			
 		   
 		    //Transformar minutos - hora a segundos
-		 	double minuto3 = minuto * 60;
-		 	double hora3 = hora * 3600;
-		 	double segundo3 = segundo;
-		 	//todos los seg
-		 	double total = hora3 + minuto3 + segundo3;
-		 	//bossbar al maximo
-		    double pro = 1.0;
-		 	//calculo para hacer uba reduccion
-		 	double time = 1.0 / total;
+//		 	double minuto3 = minuto * 60;
+//		 	double hora3 = hora * 3600;
+//		 	double segundo3 = segundo;
+//		 	//todos los seg
+//		 	double total = hora3 + minuto3 + segundo3;
+//		 	//bossbar al maximo
+//		    double pro = 1.0;
+//		 	//calculo para hacer uba reduccion
+//		 	double time = 1.0 / total;
 		 	
 		    BossBar boss = ms.getBossbar();
 		    
@@ -189,77 +188,17 @@ public class AdventureTemp {
 				}
 				
 			      startm --;
-			}//TODO EN PROGRESO
-			else if(part == GameStatus.JUGANDO) {
+			}else if(part == GameStatus.JUGANDO || part == GameStatus.PAUSE) {
 				
+				     gc.HasTimePath("Time-"+gt.getTimerhour()+"-"+gt.getTimerminute()+"-"+gt.getTimersecond(), name);
+				     gt.timerRunMg();
+					 plugin.getArenaCronometer().put(name,gt.getCronomethour()+":"+gt.getCronometminute()+":"+gt.getCronometsecond());
 				
-				
-				boss.setVisible(true);
-	            boss.setProgress(pro);
-	      	   
-			  if(hora <= 0 && minuto >= 10) {
-				  boss.setColor(BarColor.GREEN);
-			  }
 
-			  if(hora <= 0 && minuto <= 9) {
-				  boss.setColor(BarColor.YELLOW);						  
-				  }
-			  
-	          if(hora <= 0 && minuto <= 1 ) {
-				  boss.setColor(BarColor.RED);
-				
-			  } 			
-	          pro = pro - time;
-/// timer 10 ----------------------->
-	      //  players.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.DARK_GREEN+ChatColor.BOLD+"Tiempo Remanente:"+ChatColor.DARK_RED+ChatColor.BOLD+" "+hora+"h "+minuto+"m "+segundo+"s " ));
-		//        players.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.GREEN+ChatColor.BOLD+"KILLS:"+ChatColor.DARK_RED+ChatColor.BOLD+" "+hora+"h "+minuto+"m "+segundo+"s " ));
-
-				//HORA> MINUTO
-				//MINUTO > SEGUND
-				
-				//CRONOMETRO
-				 if (segundo2 != 60 ){
-						 segundo2++; 
-					}
-				 if (minuto2 != 60 && segundo2 == 60) {
-						segundo2 = 0;
-						minuto2 ++;
-					}
-				 if (hora2 != 60 && minuto2 == 60) {
-						minuto2 = 0;
-						hora2 ++;
-					}
-							 //60:30:00
-				 //String fs = String.format("%02d", numef);
-				 String seg = String.format("%02d", segundo2);
-				 String min = String.format("%02d", minuto2);
-				 String hor = String.format("%02d", hora2);
-				 
-				 plugin.getArenaCronometer().put(name,hor+":"+min+":"+seg);
-				
-				 
-				
-				//TIMER
-				 if (segundo != 0){
-					 segundo--; 
-				 }
-				 if (minuto != 0 && segundo == 0) {
-						segundo = 60;
-						minuto --;
-					}
-				 if (hora != 0 && minuto == 0) {
-						minuto = 60;
-						hora --;
-					}
-				 	gt.timeRun();
-				 // boss.setTitle(""+ChatColor.DARK_RED+ChatColor.BOLD+"Tiempo Remanente:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+hora+"h "+minuto+"m "+segundo+"s " );
-				  gc.HasTimePath("Time-"+hora+"-"+minuto+"-"+segundo, name);
-				
-	
 				  //TIME OUT
 					
 					//EL ORDEN DEL TERMINADO SIEMPRE DEBE IR AL FINAL SINO PUEDE DAR NULLPOINTER POR Q TRATAS DE ACCEDER A COSAS VIEJAS
-					if(segundo == 0 && minuto == 0 && hora == 0) {
+					if(gt.getTimersecond() <= 0 && gt.getTimerminute() <= 0 && gt.getTimerhour() <= 0) {
 						
 						for(String target : joins) {
 							 Player players = Bukkit.getPlayerExact(target);
@@ -275,7 +214,7 @@ public class AdventureTemp {
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN...");
 						
 						 ms.setGameStatus(GameStatus.TERMINANDO);
-						 gc.sendResultsOfGame(ga,hor+"h "+min+"m "+seg+"s ",hora+"h "+minuto+"m "+segundo+"s ");
+						 gc.sendResultsOfGame(ga,gt.getGameCronometForResult(),gt.getGameTimerForResult());
 				  		 //STOP
 					}else if(motivo == StopMotivo.WIN || motivo == StopMotivo.LOSE || motivo == StopMotivo.ERROR || motivo == StopMotivo.FORCE) {
 						
@@ -283,7 +222,7 @@ public class AdventureTemp {
 						 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN..");
 						 ms.setGameStatus(GameStatus.TERMINANDO);
-						 gc.sendResultsOfGame(ga,hor+"h "+min+"m "+seg+"s ",hora+"h "+minuto+"m "+segundo+"s ");
+						 gc.sendResultsOfGame(ga,gt.getGameCronometForResult(),gt.getGameTimerForResult());
 						 //ALL DEADS
 					}else if(alive.isEmpty() || isAllKnocked(name)) {
 						
@@ -297,7 +236,7 @@ public class AdventureTemp {
 						 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"( FIN. )");
 						 ms.setGameStatus(GameStatus.TERMINANDO);
-						 gc.sendResultsOfGame(ga,hor+"h "+min+"m "+seg+"s ",hora+"h "+minuto+"m "+segundo+"s ");
+						 gc.sendResultsOfGame(ga,gt.getGameCronometForResult(),gt.getGameTimerForResult());
 						
 						 
 						 //WIN
@@ -320,7 +259,7 @@ public class AdventureTemp {
 				  
 						
 						 ms.setGameStatus(GameStatus.TERMINANDO);
-						 gc.sendResultsOfGame(ga,hor+"h "+min+"m "+seg+"s ",hora+"h "+minuto+"m "+segundo+"s ");
+						 gc.sendResultsOfGame(ga,gt.getGameCronometForResult(),gt.getGameTimerForResult());
 				  		
 					}
 					
@@ -347,7 +286,7 @@ public class AdventureTemp {
 							  }else if(anuncios >= 18 && anuncios <= 23) {
 								  sco.ShowObjetives(players,3);
 							  }
-							  String s1 = String.valueOf(segundo);
+							  String s1 = String.valueOf(gt.getTimersecond());
 							  if(s1.endsWith("0")) {
 								  //getNearbyBlocks(players);
 								  spawnMobs(players);

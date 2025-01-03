@@ -208,7 +208,7 @@ public class MobsActions {
 			  }
 			  
 			  
-			  if(z.getCustomName().contains(ChatColor.RED+"Goliath")) {
+			  if(z.getCustomName().contains(ChatColor.RED+"Goliath") || z.getCustomName().contains(ChatColor.RED+"Tank")) {
 				  player.setVelocity(player.getLocation().getDirection().multiply(-3).setY(2));
 			  
 			  }if(z.getCustomName().contains(ChatColor.RED+"VIRUS")) {

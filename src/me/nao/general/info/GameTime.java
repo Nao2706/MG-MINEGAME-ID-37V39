@@ -1,5 +1,6 @@
 package me.nao.general.info;
 
+
 import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BossBar;
@@ -12,23 +13,23 @@ public class GameTime {
 	
 	private String map;
 	
-	private int gamehour;
-	private int gameminute;
-	private int gamesecond;
+	private int gamehourmg;
+	private int gameminutemg;
+	private int gamesecondmg;
 	
-	private int timerhour;
-	private int timerminute;
-	private int timersecond;
+	private int timerhourmg;
+	private int timerminutemg;
+	private int timersecondmg;
 	
-	private int cronomethour;
-	private int cronometminute;
-	private int cronometsecond;
+	private int cronomethourmg;
+	private int cronometminutemg;
+	private int cronometsecondmg;
 	
-	private int addedhour;
-	private int addedminute;
-	private int addedsecond;
+	private int addedhour , removehour;
+	private int addedminute, removeminute;
+	private int addedsecond , removesecond;
 	
-	private int showaddedtime; 
+	private int showaddedtime, showremovetime; 
 	
 	private double bossbarhora;
 	private double bossbarminute;
@@ -44,98 +45,196 @@ public class GameTime {
 	public GameTime(Minegame plugin ,String map , int gamehour, int gameminute, int gamesecond) {
 		this.plugin = plugin;
 		this.map = map;
-		this.gamehour = gamehour;
-		this.gameminute = gameminute;
-		this.gamesecond = gamesecond;
-		this.timerhour = gamehour;
-		this.timerminute = gameminute;
-		this.timersecond = gamesecond;
-		this.cronomethour = 0;
-		this.cronometminute = 0;
-		this.cronometsecond = 0;
+		this.gamehourmg = gamehour;
+		this.gameminutemg = gameminute;
+		this.gamesecondmg = gamesecond;
+		this.timerhourmg = gamehour;
+		this.timerminutemg = gameminute;
+		this.timersecondmg = gamesecond;
+		this.cronomethourmg = 0;
+		this.cronometminutemg = 0;
+		this.cronometsecondmg = 0;
 		
-		this.bossbarhora = this.timerhour * 3600;
-		this.bossbarminute = this.timerminute * 60;
-		this.bossbarsecond = this.timersecond;
+		this.addedhour = 0;
+		this.addedminute = 0;
+		this.addedsecond = 0;
+		this.showaddedtime = 0;
+		
+		this.removehour = 0;
+		this.removeminute = 0;
+		this.removesecond = 0;
+		this.showremovetime = 0;
+		
+		this.bossbarhora = this.timerhourmg * 3600;
+		this.bossbarminute = this.timerminutemg * 60;
+		this.bossbarsecond = this.timersecondmg;
 		this.bossbartotal = this.bossbarhora + this.bossbarminute + this.bossbarsecond;
 		this.bossbarpro = 1.0;
 		this.bossbartime = 1.0 / this.bossbartotal;
 	}
 	
-	public void timeRun() {
+	public void timerRunMg() {
 		GameInfo gi = plugin.getGameInfoPoo().get(this.map);
 		
-		if(gi.getGameStatus() != GameStatus.PAUSE) {
-			 if(this.timersecond != 0){
-				 this.timersecond--; 
-			 }
+		if(this.cronometsecondmg != 60 ){
+		   this.cronometsecondmg++;
+			
+		}if(this.cronometminutemg != 60 && this.cronometsecondmg == 60) {
 			 
-			 if(this.timerminute != 0 && this.timersecond == 0) {
-				 this.timersecond = 60;
-					this.timerminute --;
-			 }
-			 
-			 if(this.timerhour != 0 && this.timerminute == 0) {
-				 this.timerminute = 60;
-					this.timerhour --;
-			 }
+			 this.cronometminutemg++;
+			 this.cronometsecondmg = 0;
+			
+		}if(this.cronomethourmg != 60 && this.cronometminutemg == 60) {
+			
+			 this.cronomethourmg++;
+			 this.cronometminutemg = 0;
+		 }
+		
+		
+		updateBossBarTittle();
+		if(gi.getGameStatus() == GameStatus.PAUSE) { 
+			return;
 		}
 		
-		
+		  if(this.timersecondmg != 0){
+			    this.timersecondmg--; 
+			
+		   }if(this.timerminutemg != 0 && this.timersecondmg == 0) {
+			    this.timerminutemg--;
+			    this.timersecondmg = 60;
+				
+		   }if(this.timerhourmg != 0 && this.timerminutemg == 0) {
+			    this.timerhourmg--;
+			    this.timerminutemg = 60;
+				
+			}
 		 
-		 if(this.cronometsecond != 60 ){
-			 this.cronometsecond++; 
-		 }
 		 
-		 if(this.cronometminute != 60 && this.cronometsecond == 60) {
-			 this.cronometsecond = 0;
-			 this.cronometminute ++;
-		 }
-		 
-		 if(this.cronomethour != 60 && this.cronometminute == 60) {
-			 this.cronometminute = 0;
-			 this.cronomethour ++;
-		 }
-		
-		 updateBossBarTittle();
+		  
+		 return;
 	}
 	
 
+	
 	public void addTimeToTimer(int hour , int minute , int seconds) {
 			
+		System.out.println("VIEJO TIEMPO: "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s");
+
+		int totaltimerinseconds = (this.timerhourmg * 3600) + (this.timerminutemg * 60) + this.timersecondmg;
 		
-		this.timersecond = this.timersecond + seconds;
-		this.timerminute = this.timerminute + minute;
-		this.timerhour = this.timerhour + hour;
+		int totaladdedseconds = (hour * 3600) + (minute * 60) + seconds;
 		
-		this.addedhour = hour;
-		this.addedminute = minute;
-		this.addedsecond = seconds;
+		int totaltimertime = totaltimerinseconds + totaladdedseconds;
+		int horas = totaltimertime / 3600;
+		int minutos = (totaltimertime % 3600) / 60;
+		int segundos = totaltimertime % 60;
+		
+		int addedseconds = totaladdedseconds;
+		
+		int ahoras = addedseconds / 3600;
+		int aminutos = (addedseconds % 3600) / 60;
+		int asegundos = addedseconds % 60;
+		
+		
+		
+		this.addedhour = ahoras;
+		this.addedminute = aminutos;
+		this.addedsecond = asegundos;
+		
+		setTimerhourmg(horas);
+		setTimerminutemg(minutos);
+		setTimersecondmg(segundos);
+		
+		System.out.println("NUEVO TIEMPO ADD: "+horas+"h "+minutos+"m "+segundos+"s");
+		
+		this.bossbartime = 1.0 / totaltimertime;
+		
 		this.showaddedtime = 3;
-		
-		if(this.timersecond > 60) {
-			this.timersecond = this.timersecond - 60;
-			this.timerminute ++;
-			
-			if(this.timerminute > 60) {
-				this.timerminute = 0;
-				this.cronomethour ++;
-			}
-		}
-		
-		
+		return;
 	}
 	
 	public void setTimeToTimer(int hour , int minute , int seconds) {
-		this.timersecond = seconds;
-		this.timerminute = minute;
-		this.timerhour = hour;
-		if(this.timersecond > 60) {
-			this.timersecond = 60;
+		
+		
+		System.out.println("VIEJO TIEMPO: "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s");
+		int totalasettedseconds = (hour * 3600) + (minute * 60) + seconds;
+		
+		int totaltimertime = totalasettedseconds;
+		int horas = totaltimertime / 3600;
+		int minutos = (totaltimertime % 3600) / 60;
+		int segundos = totaltimertime % 60;
+
+		
+		setTimerhourmg(horas);
+		setTimerminutemg(minutos);
+		setTimersecondmg(segundos);
+		System.out.println("NUEVO TIEMPO SET: "+horas+"h "+minutos+"m "+segundos+"s");
+		
+		this.bossbartime = 1.0 / totaltimertime;
+		
+	}
+	
+	public void removeTimeToTimer(int hour , int minute , int seconds) {
+			
+		System.out.println("VIEJO TIEMPO: "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s");
+		
+		int totaltimerinseconds = (this.timerhourmg * 3600) + (this.timerminutemg * 60) + this.timersecondmg;
+		
+		int totalremovedseconds = (hour * 3600) + (minute * 60) + seconds;
+		
+		int totaltimertime = totaltimerinseconds - totalremovedseconds;
+		int horas = totaltimertime / 3600;
+		int minutos = (totaltimertime % 3600) / 60;
+		int segundos = totaltimertime % 60;
+		
+		int removedseconds = totalremovedseconds;
+		
+		int rhoras = removedseconds / 3600;
+		int rminutos = (removedseconds % 3600) / 60;
+		int rsegundos = removedseconds % 60;
+		
+	
+		
+		if(totaltimertime > 0) {
+			
+			this.removehour =  rhoras;
+			this.removeminute = rminutos;
+			this.removesecond = rsegundos;
+			
+			
+			setTimerhourmg(horas);
+			setTimerminutemg(minutos);
+			setTimersecondmg(segundos);
+			
+			System.out.println("NUEVO TIEMPO REMOVE: "+horas+"h "+minutos+"m "+segundos+"s");
+
+			
+			this.bossbartime = 1.0 / totaltimertime;
+			
+			this.showremovetime = 3;
+		}else {
+			
+			this.removehour = rhoras;
+			this.removeminute = rminutos;
+			this.removesecond = rsegundos;
+			
+
+			setTimerhourmg(0);
+			setTimerminutemg(0);
+			setTimersecondmg(0);
+			
+			System.out.println("NUEVO TIEMPO REMOVE: 0 0 0 ");
+
+			this.bossbartime = 1.0 / 0.0;
+			
+			
+			this.showremovetime = 3;
 		}
-		if(this.timerminute > 60) {
-			this.timerminute = 60;
-		}
+		
+	
+		
+	
+		return;
 	}
 	
 	public void updateBossBarTittle() {
@@ -156,87 +255,178 @@ public class GameTime {
 //	 	double time = 1.0 / total;
 		
 		boss.setVisible(true);
-        boss.setProgress(this.bossbarpro);
+		
+		if(this.bossbarpro > 0) {
+			 boss.setProgress(this.bossbarpro);
+		}else {
+			 boss.setProgress(0.0);
+		}
+		
+       
   	   
-	  if(this.timerhour <= 0 && this.timerminute >= 10) {
+	  if(this.timerhourmg <= 0 && this.timerminutemg >= 10) {
 		  boss.setColor(BarColor.GREEN);
 	  }
 
-	  if(this.timerhour <= 0 && this.timerminute <= 9) {
+	  if(this.timerhourmg <= 0 && this.timerminutemg <= 9) {
 		  boss.setColor(BarColor.YELLOW);						  
 	  }
 	  
-      if(this.timerhour <= 0 && this.timerminute <= 1 ) {
+      if(this.timerhourmg <= 0 && this.timerminutemg <= 1 ) {
 		  boss.setColor(BarColor.RED);
 	  } 			
       
-      this.bossbarpro = this.bossbarpro - this.bossbartime;
-	  boss.setTitle(getGameTimer());
+      if(gi.getGameStatus() != GameStatus.PAUSE) { 
+    	  this.bossbarpro = this.bossbarpro - this.bossbartime;
+      }
+      
+     
+	  boss.setTitle(getGameTimer(gi.getGameStatus()));
 
       
       
 	}
 
 	public int getGamehour() {
-		return gamehour;
+		return this.gamehourmg;
 	}
 
 	public int getGameminute() {
-		return gameminute;
+		return this.gameminutemg;
 	}
 
 	public int getGamesecond() {
-		return gamesecond;
+		return this.gamesecondmg;
 	}
 
 	public int getTimerhour() {
-		return timerhour;
+		return this.timerhourmg;
 	}
 
 	public int getTimerminute() {
-		return timerminute;
+		return this.timerminutemg;
 	}
 
 	public int getTimersecond() {
-		return timersecond;
+		return this.timersecondmg;
 	}
 
 	public int getCronomethour() {
-		return cronomethour;
+		return this.cronomethourmg;
 	}
 
 	public int getCronometminute() {
-		return cronometminute;
+		return this.cronometminutemg;
 	}
 
 	public int getCronometsecond() {
-		return cronometsecond;
+		return this.cronometsecondmg;
 	}
 	
-	
-	public String getGameTimer() {
-		String text = "";
+	public void setGamehour(int gamehourmg) {
+		this.gamehourmg = gamehourmg;
+	}
+
+	public void setGameminute(int gameminutemg) {
+		this.gameminutemg = gameminutemg;
+	}
+
+	public void setGamesecond(int gamesecondmg) {
+		this.gamesecondmg = gamesecondmg;
+	}
+
+	public void setTimerhourmg(int timerhourmg) {
+		this.timerhourmg = timerhourmg;
+	}
+
+	public void setTimerminutemg(int timerminutemg) {
+		this.timerminutemg = timerminutemg;
+	}
+
+	public void setTimersecondmg(int timersecondmg) {
+		this.timersecondmg = timersecondmg;
+	}
+
+	public void setCronomethour(int cronomethourmg) {
+		this.cronomethourmg = cronomethourmg;
+	}
+
+	public void setCronometminute(int cronometminute) {
+		this.cronometminutemg = cronometminute;
+	}
+
+	public void setCronometsecond(int cronometsecond) {
+		this.cronometsecondmg = cronometsecond;
+	}
+
+	public void setAddedhour(int addedhour) {
+		this.addedhour = addedhour;
+	}
+
+	public void setAddedminute(int addedminute) {
+		this.addedminute = addedminute;
+	}
+
+	public void setAddedsecond(int addedsecond) {
+		this.addedsecond = addedsecond;
+	}
+
+	public String getGameTimer(GameStatus status) {
+		 String text = "";
+		
+		
 		
 		if(this.showaddedtime != 0) {
 			this.showaddedtime -- ;
-			text = ""+ChatColor.DARK_RED+ChatColor.BOLD+"GT Tiempo Remanente:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " ;
+			
+			if(status == GameStatus.PAUSE) { 
+				text = ""+ChatColor.GOLD+ChatColor.BOLD+"Tiempo Remanente Pausado:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s "+ChatColor.GREEN+"+"+showTimerFormat(this.addedhour)+":"+showTimerFormat(this.addedminute)+":"+showTimerFormat(this.addedsecond);
 
-			if(this.addedhour != 0){
-				text = text +ChatColor.GREEN+ChatColor.BOLD+"+"+this.addedhour+"h";
-			}else if(this.addedminute != 0){
-				text = text +ChatColor.GREEN+ChatColor.BOLD+" +"+this.addedminute+"m";
-			}else if(this.addedsecond != 0){
-				text = text +ChatColor.GREEN+ChatColor.BOLD+" + "+this.addedsecond+"s";
+			}else {
+				text = ""+ChatColor.DARK_RED+ChatColor.BOLD+"Tiempo Remanente:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " +ChatColor.GREEN+"+"+showTimerFormat(this.addedhour)+":"+showTimerFormat(this.addedminute)+":"+showTimerFormat(this.addedsecond);
+
 			}
+			
+			return text;
+			
+		}if(this.showremovetime != 0) {
+			this.showremovetime -- ;
+			
+			if(status == GameStatus.PAUSE) { 
+				text = ""+ChatColor.GOLD+ChatColor.BOLD+"Tiempo Remanente Pausado:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s "+ChatColor.RED+"-"+showTimerFormat(this.removehour)+":"+showTimerFormat(this.removeminute)+":"+showTimerFormat(this.removesecond);
 
+			}else {
+				text = ""+ChatColor.DARK_RED+ChatColor.BOLD+"Tiempo Remanente:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " +ChatColor.RED+"-"+showTimerFormat(this.removehour)+":"+showTimerFormat(this.removeminute)+":"+showTimerFormat(this.removesecond);
+
+			}
+			
 			return text;
 		}
 		
-		return ""+ChatColor.DARK_RED+ChatColor.BOLD+"GT Tiempo Remanente:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " ;
+		if(status == GameStatus.PAUSE) { 
+			return ""+ChatColor.GOLD+ChatColor.BOLD+"Tiempo Remanente Pausado:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " ;
+		}
+		
+		return ""+ChatColor.DARK_RED+ChatColor.BOLD+"Tiempo Remanente:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " ;
 	}
 	
 	public String getGameCronomet() {
 		return ""+ChatColor.AQUA+ChatColor.BOLD+"Cronometro:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getCronomethour()+"h "+getCronometminute()+"m "+getCronometsecond()+"s " ;
 	}
+	
+	public String getGameTimerForResult() {
+		return getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s ";
+	}
+	
+	public String getGameCronometForResult() {
+		return getCronomethour()+"h "+getCronometminute()+"m "+getCronometsecond()+"s ";
+	}
+	
+	private String showTimerFormat(int value) {
+		 String val = String.format("%02d", value);
+		 return val;
+	}
+	
+	
 	
 }

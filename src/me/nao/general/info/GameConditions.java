@@ -1011,6 +1011,7 @@ public class GameConditions {
 			    	ga.setGenerators(loadMapGenerators(map));
 			    	ga.setMobsGenerators(loadMapMobsGenerators(map));
 			    	ga.setPvpinMap(isPvPAllowed(map));
+			    	ga.setGameTime(loadMapGameTime(map, time)); 
 			    	
 			    	System.out.println("LOG-1 MISION: "+ga.ShowGame());
 					
@@ -1131,6 +1132,7 @@ public class GameConditions {
     	gi.setGenerators(loadMapGenerators(map));
     	gi.setMobsGenerators(loadMapMobsGenerators(map));
     	gi.setPvpinMap(isPvPAllowed(map));
+    	gi.setGameTime(loadMapGameTime(map, gi.getTimeMg())); 
 	}
 	
 	public boolean isPlayerKnocked(Player player) {
@@ -1558,7 +1560,7 @@ public class GameConditions {
 					 if(ga.getParticipants().size() == maxplayers && minfo.getGameStatus() == GameStatus.COMENZANDO) {
 						 player.sendMessage(ChatColor.RED+"La Partida esta llena espera un rato para entrar como Espectador."); 
 						 return false;
-					 }if(minfo.getGameStatus() == GameStatus.JUGANDO && !isPlayerinGame(player)) {
+					 }if(minfo.getGameStatus() == GameStatus.JUGANDO || minfo.getGameStatus() == GameStatus.PAUSE && !isPlayerinGame(player)) {
 						 if(cooldown.HasSancionPlayer(player)) {
 							 //MODO ESPECTADOR no te uniras como jugador
 							 player.sendMessage(ChatColor.YELLOW+"Estas Baneado o tienes un TempBan pero puedes Observar.");
@@ -1647,7 +1649,7 @@ public class GameConditions {
 					 if(ga.getParticipants().size() == maxplayers && minfo.getGameStatus() == GameStatus.COMENZANDO) {
 						 player.sendMessage(ChatColor.RED+"La Partida esta llena espera un rato para entrar como Espectador."); 
 						 return false;
-					 }if(minfo.getGameStatus() == GameStatus.JUGANDO && !isPlayerinGame(player)) {
+					 }if(minfo.getGameStatus() == GameStatus.JUGANDO  || minfo.getGameStatus() == GameStatus.PAUSE && !isPlayerinGame(player)) {
 						 if(cooldown.HasSancionPlayer(player)) {
 							 //MODO ESPECTADOR no te uniras como jugador
 							 player.sendMessage(ChatColor.YELLOW+"Estas Baneado o tienes un TempBan pero puedes Observar.");
@@ -3179,7 +3181,16 @@ public class GameConditions {
 	   
 	   //TODO LOAD
 	   
+
+   public GameTime loadMapGameTime(String map ,String time) {
 	
+	    String timer[] = time.split(",");
+		int hora = Integer.valueOf(timer[0]);
+		int minuto = Integer.valueOf(timer[1]);
+		int segundo = Integer.valueOf(timer[2]);
+	
+		return new GameTime(plugin,map,hora,minuto,segundo);
+   }	  
 	   
    public List<Location> loadMapGenerators(String map) {
 		FileConfiguration game = getGameConfig(map);
@@ -4557,7 +4568,7 @@ public class GameConditions {
 	
 	}
 	
-	
+
 	public void blockPotion(LivingEntity e) {
 		Block b = e.getLocation().getBlock();
 		Block under = b.getRelative(0,-1,0);
