@@ -33,6 +33,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.SmallFireball;
 import org.bukkit.entity.Snowman;
+import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -61,6 +62,7 @@ import me.nao.general.info.GameInfo;
 import me.nao.general.info.PlayerInfo;
 import me.nao.main.game.Minegame;
 import me.nao.manager.GameIntoMap;
+import me.nao.mobs.MobsActions;
 import me.nao.revive.RevivePlayer;
 
 
@@ -440,6 +442,10 @@ public class SourceOfDamage implements Listener{
 					m.getWorld().dropItem(m.getLocation(), (new ItemStack(Material.NETHERITE_INGOT,2)));
 				}
 				
+				if(m instanceof Zombie) {
+				     MobsActions ma = new MobsActions(plugin);
+					 ma.virus(player, m);
+				}
 				//SoulsArmor(player);
 				
 				 GameIntoMap c = new GameIntoMap(plugin);

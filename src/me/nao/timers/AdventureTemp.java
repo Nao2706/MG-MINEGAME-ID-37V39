@@ -188,7 +188,7 @@ public class AdventureTemp {
 				}
 				
 			      startm --;
-			}else if(part == GameStatus.JUGANDO || part == GameStatus.PAUSE) {
+			}else if(part == GameStatus.JUGANDO || part == GameStatus.PAUSE || part == GameStatus.FREEZE) {
 				
 				     gc.HasTimePath("Time-"+gt.getTimerhour()+"-"+gt.getTimerminute()+"-"+gt.getTimersecond(), name);
 				     gt.timerRunMg();

@@ -13,17 +13,11 @@ public class GameTime {
 	
 	private String map;
 	
-	private int gamehourmg;
-	private int gameminutemg;
-	private int gamesecondmg;
+	private int gamehourmg,gameminutemg,gamesecondmg;	
+	private int timerhourmg,timerminutemg,timersecondmg;
+	private int cronomethourmg,cronometminutemg,cronometsecondmg;
+	private int freezehour,freezeminute,freezesecond;
 	
-	private int timerhourmg;
-	private int timerminutemg;
-	private int timersecondmg;
-	
-	private int cronomethourmg;
-	private int cronometminutemg;
-	private int cronometsecondmg;
 	
 	private int addedhour , removehour;
 	private int addedminute, removeminute;
@@ -65,6 +59,10 @@ public class GameTime {
 		this.removesecond = 0;
 		this.showremovetime = 0;
 		
+		this.freezehour = 0;
+		this.freezeminute = 0;
+		this.freezesecond = 0;
+		
 		this.bossbarhora = this.timerhourmg * 3600;
 		this.bossbarminute = this.timerminutemg * 60;
 		this.bossbarsecond = this.timersecondmg;
@@ -92,9 +90,29 @@ public class GameTime {
 		
 		
 		updateBossBarTittle();
-		if(gi.getGameStatus() == GameStatus.PAUSE) { 
+		if(gi.getGameStatus() == GameStatus.PAUSE)return;
+		
+		
+		if(gi.getGameStatus() == GameStatus.FREEZE) { 
+			  if(this.freezesecond <= 0 && this.freezeminute <= 0 &&  this.freezehour <= 0) {
+				  gi.setGameStatus(GameStatus.JUGANDO);
+			  }
+			
+			  if(this.freezesecond != 0){
+				    this.freezesecond--; 
+				
+			   }if(this.freezeminute != 0 && this.freezesecond == 0) {
+				    this.freezeminute--;
+				    this.freezesecond = 60;
+					
+			   }if(this.freezehour != 0 && this.freezeminute == 0) {
+				    this.freezehour--;
+				    this.freezeminute = 60;
+					
+			   }
 			return;
 		}
+
 		
 		  if(this.timersecondmg != 0){
 			    this.timersecondmg--; 
@@ -107,7 +125,7 @@ public class GameTime {
 			    this.timerhourmg--;
 			    this.timerminutemg = 60;
 				
-			}
+		   }
 		 
 		 
 		  
@@ -237,6 +255,28 @@ public class GameTime {
 		return;
 	}
 	
+	public void freezesetTimeToTimer(int hour , int minute , int seconds) {
+		
+		GameInfo gi = plugin.getGameInfoPoo().get(this.map);
+	
+		int totalasettedseconds = (hour * 3600) + (minute * 60) + seconds;
+		
+		int totaltimertime = totalasettedseconds;
+		int horas = totaltimertime / 3600;
+		int minutos = (totaltimertime % 3600) / 60;
+		int segundos = totaltimertime % 60;
+
+		this.freezehour = horas;
+		this.freezeminute = minutos;
+		this.freezesecond = segundos;
+		gi.setGameStatus(GameStatus.FREEZE);
+		System.out.println("NUEVO TIEMPO FREEZE: "+horas+"h "+minutos+"m "+segundos+"s");
+		
+	
+		
+	}
+	
+		
 	public void updateBossBarTittle() {
 		
 		GameInfo gi = plugin.getGameInfoPoo().get(this.map);
@@ -276,13 +316,14 @@ public class GameTime {
 		  boss.setColor(BarColor.RED);
 	  } 			
       
-      if(gi.getGameStatus() != GameStatus.PAUSE) { 
-    	  this.bossbarpro = this.bossbarpro - this.bossbartime;
-      }
+     
       
      
 	  boss.setTitle(getGameTimer(gi.getGameStatus()));
-
+	  
+	  if(gi.getGameStatus() == GameStatus.JUGANDO) { 
+    	  this.bossbarpro = this.bossbarpro - this.bossbartime;
+      }
       
       
 	}
@@ -401,6 +442,10 @@ public class GameTime {
 			}
 			
 			return text;
+		}
+		
+		if(status == GameStatus.FREEZE) { 
+			return ""+ChatColor.AQUA+ChatColor.BOLD+"FREEZE: "+ChatColor.BLUE+ChatColor.BOLD+ChatColor.STRIKETHROUGH+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s" +ChatColor.AQUA+" "+showTimerFormat(this.freezehour)+":"+showTimerFormat(this.freezeminute)+":"+showTimerFormat(this.freezesecond);
 		}
 		
 		if(status == GameStatus.PAUSE) { 

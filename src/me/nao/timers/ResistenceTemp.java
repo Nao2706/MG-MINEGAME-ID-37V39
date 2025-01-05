@@ -191,7 +191,7 @@ public class ResistenceTemp {
 				
 			      startm --;
 			}//TODO EN PROGRESO
-			else if(part == GameStatus.JUGANDO || part == GameStatus.JUGANDO) {
+			else if(part == GameStatus.JUGANDO || part == GameStatus.PAUSE|| part == GameStatus.FREEZE) {
 
 			    	gc.HasTimePath("Time-"+gt.getTimerhour()+"-"+gt.getTimerminute()+"-"+gt.getTimersecond(), name);
 

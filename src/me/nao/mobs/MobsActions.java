@@ -96,20 +96,7 @@ public class MobsActions {
         				}
         			}
 			   
-				}if(z.getCustomName().contains(ChatColor.RED+"VIRUS")) {
-				  AreaPotion(z,z.getLocation(),PotionEffectType.POISON,"GREEN",15,20,20,2);
-				  AreaPotion(z,z.getLocation(),PotionEffectType.HARM,"RED",15,20,20,2);
-				  
-			    }if(z.getCustomName().contains(ChatColor.RED+"HARDCORE VIRUS")) {
-			    	
-			    	  AreaPotion(z,z.getLocation(),PotionEffectType.HUNGER,"ORANGE",30,10,20,5);
-					  AreaPotion(z,z.getLocation(),PotionEffectType.POISON,"GREEN",30,10,20,50);
-					  AreaPotion(z,z.getLocation(),PotionEffectType.HARM,"RED",25,10,20,2);
-					  AreaPotion(z,z.getLocation(),PotionEffectType.HARM,"RED",5,10,20,2);
-					  AreaPotion(z,z.getLocation(),PotionEffectType.SLOW,"PURPLE",35,10,20,2);
-					  AreaPotion(z,z.getLocation(),PotionEffectType.SLOW,"PURPLE",35,10,20,2);
-					  
-				 }if(z.getCustomName().contains(ChatColor.RED+"Summon")) {
+				}if(z.getCustomName().contains(ChatColor.RED+"Summon")) {
 					for(int i =0 ; i< 10;i++) {
 						Location loc = z.getLocation();
 						Zombie z1 = (Zombie) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ZOMBIE);
@@ -198,6 +185,29 @@ public class MobsActions {
 		
 	}
 	
+	public void virus(Entity atacante ,Entity atacada) {
+		  if(atacante instanceof Player && atacada instanceof Zombie) {
+			  Zombie z = (Zombie) atacada;
+			  
+			    if(z.getCustomName() == null) {
+				  return;
+			    }
+			    if(z.getCustomName().contains(ChatColor.RED+"VIRUS")) {
+				  AreaPotion(z,z.getLocation(),PotionEffectType.POISON,"GREEN",15,20,20,2);
+				  AreaPotion(z,z.getLocation(),PotionEffectType.HARM,"RED",15,20,20,2);
+				  
+			    }if(z.getCustomName().contains(ChatColor.RED+"HARDCORE VIRUS")) {
+			    	
+			    	  AreaPotion(z,z.getLocation(),PotionEffectType.HUNGER,"ORANGE",30,10,20,5);
+					  AreaPotion(z,z.getLocation(),PotionEffectType.POISON,"GREEN",30,10,20,50);
+					  AreaPotion(z,z.getLocation(),PotionEffectType.HARM,"RED",25,10,20,2);
+					  AreaPotion(z,z.getLocation(),PotionEffectType.HARM,"RED",5,10,20,2);
+					  AreaPotion(z,z.getLocation(),PotionEffectType.SLOW,"PURPLE",35,10,20,2);
+					  AreaPotion(z,z.getLocation(),PotionEffectType.SLOW,"PURPLE",35,10,20,2);
+					  
+				 }
+		  }
+	}
 	
 	public void getZombiettack(Entity atacante ,Entity atacada) {
 		 if(atacante instanceof Zombie && atacada instanceof Player) {

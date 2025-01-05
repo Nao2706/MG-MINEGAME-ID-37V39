@@ -177,15 +177,33 @@ public class RevivePlayer{
 			}else if(e instanceof Projectile) {
 				
 				Projectile p =(Projectile) e;
-				if(p.getCustomName() != null) {
-					player.sendMessage(ChatColor.YELLOW+"Has sido Derribado por: "+ChatColor.GOLD+p.getCustomName());
-					gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+p.getCustomName());
+				
+				if(p.getShooter() != null) {
+					Entity e = (Entity) p.getShooter();
+					
+					if(e.getCustomName() != null) {
+						player.sendMessage(ChatColor.YELLOW+"Has sido Derribado por: "+ChatColor.GOLD+p.getCustomName()+".");
+						gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+p.getCustomName()+".");
+						
+					}else {
+						player.sendMessage(ChatColor.YELLOW+"Has sido Derribado por: "+ChatColor.GOLD+p.getType()+".");
+						gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+p.getType()+".");
+				
+					}
 					
 				}else {
-					player.sendMessage(ChatColor.YELLOW+"Has sido Derribado por: "+ChatColor.GOLD+p.getType());
-					gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+p.getType());
-			
+					if(p.getCustomName() != null) {
+						player.sendMessage(ChatColor.YELLOW+"Has sido Derribado por: "+ChatColor.GOLD+p.getCustomName());
+						gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+p.getCustomName());
+						
+					}else {
+						player.sendMessage(ChatColor.YELLOW+"Has sido Derribado por: "+ChatColor.GOLD+p.getType());
+						gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+p.getType());
+				
+					}
 				}
+				
+				
 				
 			}
 
@@ -250,6 +268,8 @@ public class RevivePlayer{
 			causes = "POR COMANDO /KILL";
 		}else if(cause == DamageCause.LAVA) {
 			causes = "POR LAVA";
+		}else if(cause == DamageCause.FIRE_TICK) {
+			causes = "POR ARDER EN LLAMAS";
 		}else if(cause == DamageCause.LIGHTNING) {
 			causes = "POR UN RAYO";
 		}else if(cause == DamageCause.MAGIC) {

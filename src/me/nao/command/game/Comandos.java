@@ -480,6 +480,14 @@ public class Comandos implements CommandExecutor{
 			 				 int second = Integer.valueOf(split[2]);
 			 				 gt.removeTimeToTimer(hour, minute, second);
 			 				Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Fue removido el Tiempo a "+hour+"h "+minute+"m "+second+"s");
+			 			 }else if(type.equals("freeze")) {
+			 				 String[] split = time.split("-");
+			 				 int hour = Integer.valueOf(split[0]);
+			 				 int minute = Integer.valueOf(split[1]);
+			 				 int second = Integer.valueOf(split[2]);
+			 				 gt.freezesetTimeToTimer(hour, minute, second);
+			 				Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA+"Fue Freezeado el Tiempo a "+hour+"h "+minute+"m "+second+"s");
+			 				
 			 			 }
 			 			 
 			 		 }else {
@@ -2157,6 +2165,7 @@ public class Comandos implements CommandExecutor{
 				 				 int second = Integer.valueOf(split[2]);
 				 				 gt.setTimeToTimer(hour, minute, second);
 				 				player.sendMessage(ChatColor.GREEN+"Fue seteado el Tiempo a "+hour+"h "+minute+"m "+second+"s");
+				 				
 				 			 }else if(type.equals("remove")) {
 				 				 String[] split = time.split("-");
 				 				 int hour = Integer.valueOf(split[0]);
@@ -2164,6 +2173,15 @@ public class Comandos implements CommandExecutor{
 				 				 int second = Integer.valueOf(split[2]);
 				 				 gt.removeTimeToTimer(hour, minute, second);
 				 				player.sendMessage(ChatColor.GREEN+"Fue removido el Tiempo a "+hour+"h "+minute+"m "+second+"s");
+				 				
+				 			 }else if(type.equals("freeze")) {
+				 				 String[] split = time.split("-");
+				 				 int hour = Integer.valueOf(split[0]);
+				 				 int minute = Integer.valueOf(split[1]);
+				 				 int second = Integer.valueOf(split[2]);
+				 				 gt.freezesetTimeToTimer(hour, minute, second);
+				 				player.sendMessage(ChatColor.AQUA+"Fue Freezeado el Tiempo a "+hour+"h "+minute+"m "+second+"s");
+				 				
 				 			 }
 				 			 
 				 		 }else {
