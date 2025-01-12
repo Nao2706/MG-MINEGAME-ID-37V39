@@ -24,6 +24,7 @@ import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
@@ -498,6 +499,57 @@ public class Comandos implements CommandExecutor{
 				
 						return true;
 				
+			 	  }else if (args[0].equalsIgnoreCase("lparticle")) {
+			 		  //mg lparticle world 124 34 546 234 67 457 smoke
+			 		  
+			 		  if(args.length == 9) {
+				 			 World mundo = Bukkit.getWorld(args[1]);
+					   			
+					   	 		
+					   			if(mundo == null) {
+					   				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El mundo "+args[1]+" no existe.");
+					   				return true;
+					   			}
+					   			
+					   			Location point1 = new Location(mundo,Double.valueOf(args[2]),Double.valueOf(args[3]),Double.valueOf(args[4]));
+					   			Location point2 = new Location(mundo,Double.valueOf(args[5]),Double.valueOf(args[6]),Double.valueOf(args[7]));
+					   			
+					   			Particle part = Particle.valueOf(args[8].toUpperCase());
+					   			
+					   			
+					   			gc.createLineOfParticle(point1.add(0.5,0,0.5), point2.add(0.5,0,0.5), part);
+					   			
+				 		  }else {
+				 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"mg cparticle world 123 45 345 245 54 367 smoke");
+				 		  }
+			 		  
+			 		  return true;
+			 	  }else if (args[0].equalsIgnoreCase("cparticle")) {
+			 		//mg lparticle world 124 34 546 234 67 457 smoke 5
+			 		  if(args.length == 10) {
+			 			 World mundo = Bukkit.getWorld(args[1]);
+				   			
+				   			
+				   			if(mundo == null) {
+				   				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El mundo "+args[1]+" no existe.");
+				   				return true;
+				   			}
+				   			
+				   			Location point1 = new Location(mundo,Double.valueOf(args[2]),Double.valueOf(args[3]),Double.valueOf(args[4]));
+				   			Location point2 = new Location(mundo,Double.valueOf(args[5]),Double.valueOf(args[6]),Double.valueOf(args[7]));
+				   			
+				   			Particle part = Particle.valueOf(args[8].toUpperCase());
+				   			
+				   			int distance = Integer.valueOf(args[9]);
+				   			
+				   			
+				   			gc.showCuboid(point1, point2, distance, part);
+				   			
+			 		  }else {
+			 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"mg cparticle world 123 45 345 245 54 367 smoke 5");
+			 		  }
+			 		  
+			 		  return true;
 			 	  }else if (args[0].equalsIgnoreCase("check")) {
 		    		
 		    		if(args.length == 2){
@@ -2715,7 +2767,58 @@ public class Comandos implements CommandExecutor{
 					}
 					
 					return true;
-				}else if(args[0].equalsIgnoreCase("arrow")) {
+				}else if (args[0].equalsIgnoreCase("lparticle")) {
+			 		  //mg lparticle world 124 34 546 234 67 457 smoke
+			 		  
+			 		  if(args.length == 9) {
+				 			 World mundo = Bukkit.getWorld(args[1]);
+					   			
+					   	 		
+					   			if(mundo == null) {
+					   				player.sendMessage(ChatColor.RED+"El mundo "+args[1]+" no existe.");
+					   				return true;
+					   			}
+					   			
+					   			Location point1 = new Location(mundo,Double.valueOf(args[2]),Double.valueOf(args[3]),Double.valueOf(args[4]));
+					   			Location point2 = new Location(mundo,Double.valueOf(args[5]),Double.valueOf(args[6]),Double.valueOf(args[7]));
+					   			
+					   			Particle part = Particle.valueOf(args[8].toUpperCase());
+					   			
+					   			
+					   			gc.createLineOfParticle(point1.add(0.5,0,0.5), point2.add(0.5,0,0.5), part);
+					   			
+				 		  }else {
+				 			 player.sendMessage(ChatColor.RED+"mg lparticle world 123 45 345 245 54 367 smoke");
+				 		  }
+			 		  
+			 		  return true;
+			 	  }else if (args[0].equalsIgnoreCase("cparticle")) {
+			 		//mg lparticle world 124 34 546 234 67 457 smoke 5
+			 		  if(args.length == 10) {
+			 			 World mundo = Bukkit.getWorld(args[1]);
+				   			
+				   			
+				   			if(mundo == null) {
+				   				player.sendMessage(ChatColor.RED+"El mundo "+args[1]+" no existe.");
+				   				return true;
+				   			}
+				   			
+				   			Location point1 = new Location(mundo,Double.valueOf(args[2]),Double.valueOf(args[3]),Double.valueOf(args[4]));
+				   			Location point2 = new Location(mundo,Double.valueOf(args[5]),Double.valueOf(args[6]),Double.valueOf(args[7]));
+				   			
+				   			Particle part = Particle.valueOf(args[8].toUpperCase());
+				   			
+				   			int distance = Integer.valueOf(args[9]);
+				   			
+				   		
+				   			gc.showCuboid(point1, point2, distance, part);
+				   			
+			 		  }else {
+			 			 player.sendMessage(ChatColor.RED+"/mg cparticle world 123 45 345 245 54 367 smoke 5");
+			 		  }
+			 		  
+			 		  return true;
+			 	  }else if(args[0].equalsIgnoreCase("arrow")) {
 					
 					player.getInventory().addItem(Items.ARROWDIS.getValue());
 					player.getInventory().addItem(Items.ARROWDIS2.getValue());
@@ -3381,6 +3484,7 @@ public class Comandos implements CommandExecutor{
  	
  	public ObjetiveStatusType convertStringToObjetiveStatusType(Player player,String text) {
  		ObjetiveStatusType type = null;
+ 		
  		String comments = "";
  		Map<String,ObjetiveStatusType> objetivetype = new HashMap<>();
  		objetivetype.put("COMPLETE", ObjetiveStatusType.COMPLETE);

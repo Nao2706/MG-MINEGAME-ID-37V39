@@ -161,7 +161,7 @@ public class GameIntoMap {
 		
 		
 		
-		if(partida != GameStatus.JUGANDO) {
+		if(partida != GameStatus.JUGANDO || partida != GameStatus.PAUSE || partida != GameStatus.FREEZE) {
 			cm.sendMessageToUserAndConsole(player,ChatColor.RED+"Solo puedes usar el Comando de Revivir en una Partida en Progreso");
 			return;
 		}
@@ -190,12 +190,8 @@ public class GameIntoMap {
 			 
 			 Location l = new Location(Bukkit.getWorld(world), x, y, z);
 			
-		
-			
-				
 					
 					cm.RevivePlayerToGame(target, mapa);
-					
 					cm.setKitMg(target);
 					
 					MgTeams te = new MgTeams(plugin);
@@ -501,9 +497,8 @@ public class GameIntoMap {
 		GameInfo gi = plugin.getGameInfoPoo().get(mapa);
 		PlayerDropAllItems(player);
 		player.getWorld().spawnParticle(Particle.CLOUD, player.getLocation().add(0, 0, 0),
-				/* NUMERO DE PARTICULAS */50, 0, 0, 0, /* velocidad */0, null, true);
-		player.getWorld().spawnParticle(Particle.CLOUD, player.getLocation().add(0, 1, 0),
-				/* NUMERO DE PARTICULAS */50, 0, 0, 0, /* velocidad */0, null, true);
+				/* NUMERO DE PARTICULAS */100, 1, 2, 1, /* velocidad */0, null, true);
+		
 	
 		if(gi instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) gi;

@@ -43,6 +43,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.RayTraceResult;
+import org.bukkit.util.Vector;
 
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.ViaAPI;
@@ -4641,6 +4642,43 @@ public class GameConditions {
 	}
 	
 
+	public Vector getDirectionBetweenLocations(Location Start, Location End) {
+        Vector from = Start.toVector();
+        Vector to = End.toVector();
+        return to.subtract(from);
+    }
+	
+	public void createLineOfParticle(Location Start, Location End,Particle part) {
+		 Vector vector = getDirectionBetweenLocations(Start, End);
+         for (double i = 1; i <= Start.distance(End); i += 0.5) {
+             vector.multiply(i);
+             Start.add(vector);
+             Start.getWorld().spawnParticle(part, Start,
+     				/* NUMERO DE PARTICULAS */100, 0, 0, 0, /* velocidad */0, null, true);
+            // Start.getWorld().spigot().playEffect(Start, Effect.FLAME, 0, 0, 0, 0, 0, 1, 0, 100);
+             Start.subtract(vector);
+             vector.normalize();
+         }
+	}
+	
+	public void showCuboid(Location aLoc, Location bLoc, double step,Particle part) {
+		//Step is the distance between particles
+	    World world = aLoc.getWorld();
+
+	    double[] xArr = {Math.min(aLoc.getX(), bLoc.getX()), Math.max(aLoc.getX(), bLoc.getX())};
+	    double[] yArr = {Math.min(aLoc.getY(), bLoc.getY()), Math.max(aLoc.getY(), bLoc.getY())};
+	    double[] zArr = {Math.min(aLoc.getZ(), bLoc.getZ()), Math.max(aLoc.getZ(), bLoc.getZ())};
+
+	    for (double x = xArr[0]; x < xArr[1]; x += step) for (double y : yArr) for (double z : zArr) {
+	        world.spawnParticle(part, x, y, z, 1, 0, 0, 0, 0.1);
+	    }
+	    for (double y = yArr[0]; y < yArr[1]; y += step) for (double x : xArr) for (double z : zArr) {
+	        world.spawnParticle(part, x, y, z, 1, 0, 0, 0, 0.1);
+	    }
+	    for (double z = zArr[0]; z < zArr[1]; z += step) for (double y : yArr) for (double x : xArr) {
+	        world.spawnParticle(part, x, y, z, 1, 0, 0, 0, 0.1);
+	    }
+	}
 	
 	
 }
