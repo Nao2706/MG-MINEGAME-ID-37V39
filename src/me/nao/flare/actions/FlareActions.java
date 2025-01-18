@@ -47,7 +47,7 @@ public class FlareActions {
 		if(b.getType() == Material.BARRIER) {
 			gc.sendMessageToAllPlayersInMap(map,""+ChatColor.RED+ChatColor.BOLD+"AC 130: "+ChatColor.GREEN+"Paquete de ayuda solicitado por "+ChatColor.GOLD+player.getName()+ChatColor.GREEN+" suerte.");
 
-			StorageMinecart ent = (StorageMinecart) b.getWorld().spawnEntity(b.getLocation().add(0.5, -3, 0.5), EntityType.MINECART_CHEST);
+			StorageMinecart ent = (StorageMinecart) b.getWorld().spawnEntity(b.getLocation().add(0.5, -3, 0.5), EntityType.CHEST_MINECART);
 			ent.setCustomName(""+ChatColor.GREEN+ChatColor.BOLD+"PAQUETE DE AYUDA");
 			ent.setCustomNameVisible(true);		
 			ent.getLocation().setYaw(player.getLocation().getYaw());
@@ -96,7 +96,7 @@ public class FlareActions {
 			f.setShooter(null);
 			f.setCustomName(""+ChatColor.RED+ChatColor.BOLD+"Ataque Aereo");
 			f.setDirection(new Vector (0,-3,0));
-			f.setVelocity(f.getDirection().multiply(3));
+			f.setVelocity(f.getAcceleration().multiply(3));
 			return;
 			//((Fireball) fb).setShooter(player);
 		}else {

@@ -617,7 +617,7 @@ public class GameIntoMap {
 				if(itemStack == null) continue;
 				
 					if(gm.isPlayerinGame(player) && gm.CanJoinWithYourInventory(plugin.getPlayerInfoPoo().get(player).getMapName())) {
-						Item it = (Item) l.getWorld().spawnEntity(l,EntityType.DROPPED_ITEM);
+						Item it = (Item) l.getWorld().spawnEntity(l,EntityType.ITEM);
 						it.setItemStack(itemStack);
 						it.setOwner(player.getUniqueId());
 					}else {

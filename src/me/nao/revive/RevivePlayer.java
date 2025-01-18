@@ -234,9 +234,9 @@ public class RevivePlayer{
 		player.addPotionEffect(comida);
 		player.addPotionEffect(abso);
 		
-		if(player.hasPotionEffect(PotionEffectType.JUMP)) {
-			player.removePotionEffect(PotionEffectType.SLOW);
-			player.removePotionEffect(PotionEffectType.JUMP);
+		if(player.hasPotionEffect(PotionEffectType.JUMP_BOOST)) {
+			player.removePotionEffect(PotionEffectType.SLOWNESS);
+			player.removePotionEffect(PotionEffectType.JUMP_BOOST);
 		}
 		
 		

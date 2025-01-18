@@ -306,7 +306,7 @@ public class GameConditions {
 			    float yaw = Float.valueOf(coords[4]);
 			    float pitch = Float.valueOf(coords[5]);
 
-				player.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, player.getLocation().add(0, 1, 0),
+				player.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, player.getLocation().add(0, 1, 0),
 						/* NUMERO DE PARTICULAS */20, 5, 5, 5, /* velocidad */0, null, true);
 				player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 20.0F, 1F);
 				Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch);
@@ -425,7 +425,8 @@ public class GameConditions {
 			    
 			      
 			        String[] sts = ym.getString("Start.Sound-of-Mision").split(";");
-			        try {
+			      try {
+			            @SuppressWarnings("deprecation")
 			    	    Sound soundtype = Sound.valueOf(sts[0].toUpperCase());
 					    Float volumen = Float.valueOf(sts[1]);
 					    Float grade = Float.valueOf(sts[2]);
@@ -753,6 +754,7 @@ public class GameConditions {
 		   String[] sts = mision.getString("Win.Sound-of-Win").split(";");
 		
 		   try {
+			   @SuppressWarnings("deprecation")
 	    	   Sound soundtype = Sound.valueOf(sts[0].toUpperCase());
 			   Float volumen = Float.valueOf(sts[1]);
 			   Float grade = Float.valueOf(sts[2]);
@@ -845,7 +847,8 @@ public class GameConditions {
 	       
 		   String[] sts = mision.getString("Lost.Sound-of-Lost").split(";");
 	       try {
-	    	   Sound soundtype = Sound.valueOf(sts[0].toUpperCase());
+	    	   @SuppressWarnings("deprecation")
+			   Sound soundtype = Sound.valueOf(sts[0].toUpperCase());
 			   Float volumen = Float.valueOf(sts[1]);
 			   Float grade = Float.valueOf(sts[2]);
 				player.playSound(player.getLocation(), soundtype, volumen,grade);
@@ -925,7 +928,7 @@ public class GameConditions {
 				float pitch = Float.valueOf(config.getString("Lobby-Spawn." + key + ".Pitch"));
 	
 				Location l = new Location(Bukkit.getWorld(world1), x, y, z, yaw, pitch);
-				player.getWorld().spawnParticle(Particle.SMOKE_LARGE, player.getLocation().add(0, 1, 0),
+				player.getWorld().spawnParticle(Particle.LARGE_SMOKE, player.getLocation().add(0, 1, 0),
 						/* NUMERO DE PARTICULAS */20, 10, 10, 10, /* velocidad */0, null, true);
 				player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 20.0F, 1F);
 				player.teleport(l);
@@ -955,10 +958,10 @@ public class GameConditions {
 				//LO SALVAS
 				
 				if(ExistLobbyMg()) {
-				    pl = new PlayerInfo(plugin,true,player,player.getActivePotionEffects(), player.getInventory().getContents(), player.getGameMode(), player.isFlying(),player.getHealth(), player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), player.getFoodLevel(), player.getLevel(),player.getExp(), GetLocationOfLobby(), map,new GamePoints());
+				    pl = new PlayerInfo(plugin,true,player,player.getActivePotionEffects(), player.getInventory().getContents(), player.getGameMode(), player.isFlying(),player.getHealth(), player.getAttribute(Attribute.MAX_HEALTH).getValue(), player.getFoodLevel(), player.getLevel(),player.getExp(), GetLocationOfLobby(), map,new GamePoints());
 					
 				}else {
-					pl = new PlayerInfo(plugin,true,player,player.getActivePotionEffects(), player.getInventory().getContents(), player.getGameMode(), player.isFlying(),player.getHealth(), player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue(), player.getFoodLevel(), player.getLevel(),player.getExp(), player.getLocation(), map,new GamePoints());
+					pl = new PlayerInfo(plugin,true,player,player.getActivePotionEffects(), player.getInventory().getContents(), player.getGameMode(), player.isFlying(),player.getHealth(), player.getAttribute(Attribute.MAX_HEALTH).getValue(), player.getFoodLevel(), player.getLevel(),player.getExp(), player.getLocation(), map,new GamePoints());
 	
 				}
 			}
@@ -1173,12 +1176,12 @@ public class GameConditions {
 	public void SetHeartsInGame(Player player , String map) {
 		FileConfiguration game = getGameConfig(map);
 		int vida = game.getInt("Set-Hearts");
-		player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(vida);
+		player.getAttribute(Attribute.MAX_HEALTH).setBaseValue(vida);
 		return;
 	}
 	
 	public void SetDefaultHeartsInGame(Player player) {
-		player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20);
+		player.getAttribute(Attribute.MAX_HEALTH).setBaseValue(20);
 		return;
 	}
 	
@@ -1812,7 +1815,7 @@ public class GameConditions {
 		    PotionEffect vid = new PotionEffect(PotionEffectType.HEALTH_BOOST,/*duration*/ 10 * 20,/*amplifier:*/5, true ,true,true );
 		    PotionEffect reg = new PotionEffect(PotionEffectType.REGENERATION,/*duration*/ 10 * 20,/*amplifier:*/5, true ,true,true );
 			PotionEffect fir = new PotionEffect(PotionEffectType.FIRE_RESISTANCE,/*duration*/ 10 * 20,/*amplifier:*/5, true ,true,true );
-			PotionEffect resis = new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,/*duration*/ 10 * 20,/*amplifier:*/5, true ,true,true );
+			PotionEffect resis = new PotionEffect(PotionEffectType.RESISTANCE,/*duration*/ 10 * 20,/*amplifier:*/5, true ,true,true );
 			player.addPotionEffect(vid);
 			player.addPotionEffect(fir);
 			player.addPotionEffect(reg);
@@ -4526,6 +4529,7 @@ public class GameConditions {
 	}
 	
 	
+	@SuppressWarnings("deprecation")
 	public void turret(LivingEntity ent) {
 		
 		Location loc = ent.getLocation();
@@ -4537,9 +4541,11 @@ public class GameConditions {
 		
 		
 		if(under.getType() == Material.LODESTONE && under2.getType() == Material.BEACON && under3.getType() == Material.WHITE_CONCRETE) {
+		
 			Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
 			Arrow aw2 = (Arrow) loc2.getWorld().spawnEntity(loc2.add(0, 1.6, 0), EntityType.ARROW);
 			aw.setCritical(true);
+			
 			aw.setKnockbackStrength(1);
 			aw.setFireTicks(1200);
 			aw.setVelocity(loc.getDirection().multiply(6).rotateAroundY(Math.toRadians(1)));
@@ -4558,7 +4564,7 @@ public class GameConditions {
 				RayTraceResult rt = ent.getWorld().rayTraceEntities(ent.getEyeLocation().add(ent.getLocation().getDirection()),ent.getLocation().getDirection() , 100.0D);
           		if(rt != null && rt.getHitEntity() != null) {
           			if(rt.getHitEntity().getType() == EntityType.PLAYER) {
-          				ent.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,/*duration*/ 30*20,/*amplifier:*/20, false ,false,true));
+          				ent.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,/*duration*/ 30*20,/*amplifier:*/20, false ,false,true));
         				
           			}
           		}
@@ -4580,10 +4586,10 @@ public class GameConditions {
 			e.addPotionEffect(new PotionEffect(PotionEffectType.POISON,/*duration*/ 15*20,/*amplifier:*/20, false ,false,true));
 			
 		}else if(under.getType() == Material.RED_CONCRETE && under2.getType() == Material.BEACON) {
-			e.addPotionEffect(new PotionEffect(PotionEffectType.HARM,/*duration*/ 15*20,/*amplifier:*/25, false ,false,true));
+			e.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,/*duration*/ 15*20,/*amplifier:*/25, false ,false,true));
 			
 		}else if(under.getType() == Material.LIME_CONCRETE && under2.getType() == Material.BEACON) {
-			e.addPotionEffect(new PotionEffect(PotionEffectType.JUMP,/*duration*/ 15*20,/*amplifier:*/25, false ,false,true));
+			e.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST,/*duration*/ 15*20,/*amplifier:*/25, false ,false,true));
 			
 		}else if(under.getType() == Material.LIGHT_BLUE_CONCRETE && under2.getType() == Material.BEACON) {
 			e.addPotionEffect(new PotionEffect(PotionEffectType.SPEED,/*duration*/ 15*20,/*amplifier:*/15, false ,false,true));
@@ -4595,7 +4601,7 @@ public class GameConditions {
 			e.addPotionEffect(new PotionEffect(PotionEffectType.LEVITATION,/*duration*/ 20*20,/*amplifier:*/3, false ,false,true));
 
 		}else if(under.getType() == Material.PINK_CONCRETE && under2.getType() == Material.BEACON) {
-			e.addPotionEffect(new PotionEffect(PotionEffectType.HEAL,/*duration*/ 20*20,/*amplifier:*/25, false ,false,true));
+			e.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH,/*duration*/ 20*20,/*amplifier:*/25, false ,false,true));
 
 		}else if(under.getType() == Material.YELLOW_CONCRETE && under2.getType() == Material.BEACON) {
 			e.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER,/*duration*/ 20*20,/*amplifier:*/25, false ,false,true));
@@ -4607,7 +4613,7 @@ public class GameConditions {
 			e.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING,/*duration*/ 25*20,/*amplifier:*/10, false ,false,true));
 			
 		}else if(under.getType() == Material.ORANGE_CONCRETE && under2.getType() == Material.BEACON) {
-			e.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,/*duration*/ 25*20,/*amplifier:*/10, false ,false,true));
+			e.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,/*duration*/ 25*20,/*amplifier:*/10, false ,false,true));
 			
 		}else if(under.getType() == Material.BLACK_CONCRETE && under2.getType() == Material.BEACON) {
 			e.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,/*duration*/ 25*20,/*amplifier:*/10, false ,false,true));
@@ -4622,16 +4628,16 @@ public class GameConditions {
 			e.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE,/*duration*/ 35*20,/*amplifier:*/25, false ,false,true));
 
 		}else if(under.getType() == Material.GRAY_TERRACOTTA && under2.getType() == Material.BEACON) {
-			e.addPotionEffect(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE,/*duration*/ 35*20,/*amplifier:*/25, false ,false,true));
+			e.addPotionEffect(new PotionEffect(PotionEffectType.RESISTANCE,/*duration*/ 35*20,/*amplifier:*/25, false ,false,true));
 
 		}else if(under.getType() == Material.PINK_TERRACOTTA && under2.getType() == Material.BEACON) {
-			e.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,/*duration*/ 10*20,/*amplifier:*/25, false ,false,true));
+			e.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH,/*duration*/ 10*20,/*amplifier:*/25, false ,false,true));
 
 		}else if(under.getType() == Material.BLUE_TERRACOTTA && under2.getType() == Material.BEACON) {
 			e.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION,/*duration*/ 15*20,/*amplifier:*/25, false ,false,true));
 
 		}else if(under.getType() == Material.GREEN_TERRACOTTA && under2.getType() == Material.BEACON) {
-			e.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION,/*duration*/ 15*20,/*amplifier:*/25, false ,false,true));
+			e.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA,/*duration*/ 15*20,/*amplifier:*/25, false ,false,true));
 
 		}else if(under.getType() == Material.ORANGE_TERRACOTTA && under2.getType() == Material.BEACON) {
 			e.addPotionEffect(new PotionEffect(PotionEffectType.SATURATION,/*duration*/ 15*20,/*amplifier:*/25, false ,false,true));

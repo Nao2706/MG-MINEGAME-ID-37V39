@@ -464,7 +464,7 @@ public class AdventureTemp {
 					
 					if(a.getType() == Material.NETHERITE_BLOCK && b.getType() == Material.BEDROCK) {
 						 player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
-						 a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
+						 a.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,a.getLocation().add(0.5, 1.5, 0.5), 1);
 						 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.NETHERITE_INGOT));
 						 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.NETHERITE_BLOCK,RandomBetweenValue(1, 100)));
 						
@@ -472,28 +472,28 @@ public class AdventureTemp {
 					
 					if(a.getType() == Material.DIAMOND_BLOCK && b.getType() == Material.BEDROCK) {
 						 player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
-						 a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
+						 a.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,a.getLocation().add(0.5, 1.5, 0.5), 1);
 					     a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.DIAMOND));
 					     a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.DIAMOND_BLOCK,RandomBetweenValue(1, 100)));
 					}
 					
 					if(a.getType() == Material.EMERALD_BLOCK && b.getType() == Material.BEDROCK) {
 						 player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
-						 a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
+						 a.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,a.getLocation().add(0.5, 1.5, 0.5), 1);
 						 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.EMERALD));
 						 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.EMERALD_BLOCK,RandomBetweenValue(1, 100)));
 					}
 					
 					if(a.getType() == Material.IRON_BLOCK && b.getType() == Material.BEDROCK) {
 						 player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
-						 a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
+						 a.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,a.getLocation().add(0.5, 1.5, 0.5), 1);
 						 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.IRON_INGOT));
 						 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.IRON_BLOCK,RandomBetweenValue(1, 100)));
 					}
 					
 					if(a.getType() == Material.GOLD_BLOCK && b.getType() == Material.BEDROCK) {
 						 player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
-						 a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
+						 a.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,a.getLocation().add(0.5, 1.5, 0.5), 1);
 						 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.GOLD_INGOT));
 						 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.GOLD_BLOCK,RandomBetweenValue(1, 100)));
 					}
@@ -627,7 +627,7 @@ public class AdventureTemp {
 								if(a.getType() == Material.NETHERITE_BLOCK && b.getType() == Material.BEDROCK) {
 									if(player.getLocation().distance(a.getLocation()) <= rango) {
 										player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
-										a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
+										a.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,a.getLocation().add(0.5, 1.5, 0.5), 1);
 									}
 									 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.NETHERITE_INGOT));
 									 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.NETHERITE_BLOCK,RandomBetweenValue(1, 100)));
@@ -637,7 +637,7 @@ public class AdventureTemp {
 								if(a.getType() == Material.DIAMOND_BLOCK && b.getType() == Material.BEDROCK) {
 									if(player.getLocation().distance(a.getLocation()) <= rango) {
 										player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
-										a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
+										a.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,a.getLocation().add(0.5, 1.5, 0.5), 1);
 									}
 								     a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.DIAMOND));
 								     a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.DIAMOND_BLOCK,RandomBetweenValue(1, 100)));
@@ -646,7 +646,7 @@ public class AdventureTemp {
 								if(a.getType() == Material.EMERALD_BLOCK && b.getType() == Material.BEDROCK) {
 									if(player.getLocation().distance(a.getLocation()) <= rango) {
 										player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
-										a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
+										a.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,a.getLocation().add(0.5, 1.5, 0.5), 1);
 									}
 									 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.EMERALD));
 									 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.EMERALD_BLOCK,RandomBetweenValue(1, 100)));
@@ -655,7 +655,7 @@ public class AdventureTemp {
 								if(a.getType() == Material.IRON_BLOCK && b.getType() == Material.BEDROCK) {
 									if(player.getLocation().distance(a.getLocation()) <= rango) {
 										player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
-										a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
+										a.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,a.getLocation().add(0.5, 1.5, 0.5), 1);
 									}
 									 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.IRON_INGOT));
 									 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.IRON_BLOCK,RandomBetweenValue(1, 100)));
@@ -664,7 +664,7 @@ public class AdventureTemp {
 								if(a.getType() == Material.GOLD_BLOCK && b.getType() == Material.BEDROCK) {
 									if(player.getLocation().distance(a.getLocation()) <= rango) {
 										player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
-										a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
+										a.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,a.getLocation().add(0.5, 1.5, 0.5), 1);
 									}
 									 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.GOLD_INGOT));
 									 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.GOLD_BLOCK,RandomBetweenValue(1, 100)));
@@ -836,7 +836,7 @@ public class AdventureTemp {
     	Location l2 = new Location(world, x, y+2, z); 			
 		
 		Blaze s = (Blaze) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.BLAZE);
-		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		s.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 		
 		
     }
@@ -851,7 +851,7 @@ public class AdventureTemp {
 		s.setExplosionRadius(10);
 		s.setMaxFuseTicks(3);
 		s.setCustomName(""+ChatColor.RED+ChatColor.BOLD+"SUICIDA");
-		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		s.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 		
 		
     }
@@ -862,7 +862,7 @@ public class AdventureTemp {
 		
 		
 		ZombieVillager s = (ZombieVillager) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE_VILLAGER);
-		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		s.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 		
 		
     }
@@ -872,7 +872,7 @@ public class AdventureTemp {
     	Location l2 = new Location(world, x, y+2, z); 			
 		
 		Drowned s = (Drowned) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.DROWNED);
-		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		s.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 		
 		
     }
@@ -883,7 +883,7 @@ public class AdventureTemp {
 		
 		
 		Husk s = (Husk) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.HUSK);
-		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		s.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 		
 		
     }
@@ -893,7 +893,7 @@ public class AdventureTemp {
     	Location l2 = new Location(world, x, y+2, z); 			
 		
 		Evoker s = (Evoker) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.EVOKER);
-		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		s.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 		
 		
     }
@@ -905,7 +905,7 @@ public class AdventureTemp {
 		
 		
 		Pillager s = (Pillager) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.PILLAGER);
-		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		s.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 		
 		ItemStack b = new ItemStack(Material.CROSSBOW,1);
 		ItemMeta meta = b.getItemMeta();
@@ -943,7 +943,7 @@ public class AdventureTemp {
 			s.getEquipment().setItemInMainHand(new ItemStack(Material.GOLDEN_SWORD));
 		}
 		
-		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		s.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 		s.setCanPickupItems(true);
 		
 		
@@ -956,7 +956,7 @@ public class AdventureTemp {
 	
 		WitherSkeleton s = (WitherSkeleton) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.WITHER_SKELETON);
 		s.getEquipment().setItemInMainHand(new ItemStack(Material.DIAMOND_SWORD));
-		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		s.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 		s.setCanPickupItems(true);
 		
 		
@@ -969,7 +969,7 @@ public class AdventureTemp {
 
 		Skeleton s = (Skeleton) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.SKELETON);
 		s.setCustomName(ChatColor.DARK_PURPLE+"ARQUERO");
-		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		s.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 		s.setCanPickupItems(true);
 		
 		
@@ -981,7 +981,7 @@ public class AdventureTemp {
 		
 	
 		Witch s = (Witch) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.WITCH);
-		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		s.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 		
 		
     }
@@ -1002,12 +1002,12 @@ public class AdventureTemp {
 			
 				Zombie zombi = (Zombie)  world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
 
-				zombi.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-				zombi.getAttribute(Attribute.ZOMBIE_SPAWN_REINFORCEMENTS).setBaseValue(50);
+				zombi.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
+				zombi.getAttribute(Attribute.SPAWN_REINFORCEMENTS).setBaseValue(50);
 				
 				
 				PotionEffect rapido = new PotionEffect(PotionEffectType.SPEED,/*duration*/ 99999,/*amplifier:*/4, false ,false,true );
-				PotionEffect salto= new PotionEffect(PotionEffectType.JUMP,/*duration*/ 99999,/*amplifier:*/5, false ,false,true );
+				PotionEffect salto= new PotionEffect(PotionEffectType.JUMP_BOOST,/*duration*/ 99999,/*amplifier:*/5, false ,false,true );
 
 				
 			    zombi.addPotionEffect(rapido);
@@ -1018,7 +1018,7 @@ public class AdventureTemp {
 			     	
 				if(n == 0) {
 					ZombieVillager zv = (ZombieVillager)  world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE_VILLAGER);
-					zv.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+					zv.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 				
 					
 					
@@ -1033,7 +1033,7 @@ public class AdventureTemp {
 				    zombi8.addPotionEffect(rapido);
 				   
 					zombi8.addPotionEffect(salto);
-					zombi8.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+					zombi8.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 					
 					Husk husk = (Husk) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.HUSK);
 					
@@ -1042,7 +1042,7 @@ public class AdventureTemp {
 				
 					husk.addPotionEffect(rapido);
 				
-					husk.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+					husk.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 					
 					
 
@@ -1052,7 +1052,7 @@ public class AdventureTemp {
 					Zombie zombi1 = (Zombie)  world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
 
 				
-					zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+					zombi1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 					
 	  				zombi1.addPotionEffect(rapido);
 	  				zombi1.addPotionEffect(salto);
@@ -1069,7 +1069,7 @@ public class AdventureTemp {
 					
 					zombi1.addPotionEffect(salto);
 				
-					zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+					zombi1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 					zombi1.getEquipment().setHelmet(new ItemStack(Material.DIAMOND_HELMET));
 					zombi1.getEquipment().setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
 					zombi1.getEquipment().setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
@@ -1085,7 +1085,7 @@ public class AdventureTemp {
 	  			
 	  			    zombi4.addPotionEffect(rapido);
 	  			    zombi4.addPotionEffect(salto);
-	  				zombi4.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+	  				zombi4.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 	  			
 	  				
 				}else if(n == 4) {
@@ -1094,7 +1094,7 @@ public class AdventureTemp {
 		  		    
 					Zombie zombi6 = (Zombie)  world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
 	  				
-	  				zombi6.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+	  				zombi6.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 	  			    zombi6.addPotionEffect(rapido);
 	  				zombi6.addPotionEffect(salto);
 	  				zombi6.setBaby();
@@ -1105,7 +1105,7 @@ public class AdventureTemp {
 	  			    zombi7.addPotionEffect(rapido);
 	  				zombi7.addPotionEffect(salto);
 	  				zombi6.addPassenger(entidad7);
-	  				zombi7.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+	  				zombi7.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 	  			
 	  				
 	  				
@@ -1119,7 +1119,7 @@ public class AdventureTemp {
 					
 					zombi1.addPotionEffect(salto);
 				
-					zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+					zombi1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 					zombi1.getEquipment().setHelmet(new ItemStack(Material.NETHERITE_HELMET));
 					zombi1.getEquipment().setChestplate(new ItemStack(Material.NETHERITE_CHESTPLATE));
 					zombi1.getEquipment().setLeggings(new ItemStack(Material.NETHERITE_LEGGINGS));
@@ -1131,7 +1131,7 @@ public class AdventureTemp {
 					for(int i = 0 ; i< 5;i++) {
 						Zombie zombi1 = (Zombie)  world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
 						
-							zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+							zombi1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 							
 			  				zombi1.addPotionEffect(rapido);
 			  				zombi1.addPotionEffect(salto);
@@ -1144,14 +1144,14 @@ public class AdventureTemp {
 				else if(n == 7) {
 					Zombie zombi1 = (Zombie)  world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
 					
-						zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+						zombi1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 						
 		  				zombi1.addPotionEffect(rapido);
 		  				zombi1.addPotionEffect(salto);
 					for(int i = 0 ; i< 10;i++) {
 						Zombie zombi2 = (Zombie)  world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
 						
-							zombi2.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+							zombi2.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 							
 			  				zombi2.addPotionEffect(rapido);
 			  				zombi2.addPotionEffect(salto);
@@ -1169,7 +1169,7 @@ public class AdventureTemp {
 					
 					zombi1.addPotionEffect(salto);
 				
-					zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+					zombi1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 					zombi1.getEquipment().setHelmet(new ItemStack(Material.IRON_HELMET));
 					zombi1.getEquipment().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
 					zombi1.getEquipment().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
@@ -1185,7 +1185,7 @@ public class AdventureTemp {
 					
 					zombi1.addPotionEffect(salto);
 				
-					zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+					zombi1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 					zombi1.getEquipment().setHelmet(new ItemStack(Material.IRON_HELMET));
 					zombi1.getEquipment().setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
 					zombi1.getEquipment().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
@@ -1198,7 +1198,7 @@ public class AdventureTemp {
 					zombi1.addPotionEffect(rapido);
 					zombi1.addPotionEffect(salto);
 				
-					zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+					zombi1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 					zombi1.getEquipment().setHelmet(new ItemStack(Material.DIAMOND_HELMET));
 					zombi1.getEquipment().setChestplate(new ItemStack(Material.NETHERITE_CHESTPLATE));
 					zombi1.getEquipment().setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
@@ -1211,7 +1211,7 @@ public class AdventureTemp {
 					s.setExplosionRadius(10);
 					s.setMaxFuseTicks(1);
 					s.setCustomName(""+ChatColor.RED+ChatColor.BOLD+"Zombi Super Suicida");
-					s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+					s.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 					zombi1.addPassenger(s);
 				}else if(n == 11) {
 					Zombie zombi1 = (Zombie)  world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
@@ -1221,7 +1221,7 @@ public class AdventureTemp {
 					zombi1.addPotionEffect(rapido);
 					zombi1.addPotionEffect(salto);
 				
-					zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+					zombi1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 					zombi1.getEquipment().setHelmet(new ItemStack(Material.GOLDEN_HELMET));
 					zombi1.getEquipment().setChestplate(new ItemStack(Material.GOLDEN_CHESTPLATE));
 					zombi1.getEquipment().setLeggings(new ItemStack(Material.GOLDEN_LEGGINGS));
@@ -1232,14 +1232,14 @@ public class AdventureTemp {
 					
 					Blaze s = (Blaze) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.BLAZE);
 					s.setCustomName(""+ChatColor.YELLOW+ChatColor.BOLD+"LANZALLAMAS");
-					s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+					s.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 					zombi1.addPassenger(s);
 				}else if(n == 12) {
 					
 					for(int i = 0 ; i< 15;i++) {
 						Zombie zombi1 = (Zombie)  world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
 						
-							zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+							zombi1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 							zombi1.setBaby();
 			  				zombi1.addPotionEffect(rapido);
 			  				zombi1.addPotionEffect(salto);
@@ -1290,7 +1290,7 @@ public class AdventureTemp {
 				}else if(n == 16) {
 					
 					PotionEffect rapido2 = new PotionEffect(PotionEffectType.SPEED,/*duration*/ 99999,/*amplifier:*/6, false ,false,true );
-					PotionEffect salto2= new PotionEffect(PotionEffectType.JUMP,/*duration*/ 99999,/*amplifier:*/6, false ,false,true );
+					PotionEffect salto2= new PotionEffect(PotionEffectType.JUMP_BOOST,/*duration*/ 99999,/*amplifier:*/6, false ,false,true );
 					
 					Zombie zombi1 = (Zombie) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
 					zombi1.setCustomName(ChatColor.GOLD+"NEMESIS");
@@ -1348,7 +1348,7 @@ public class AdventureTemp {
 
 
    
-
+    @SuppressWarnings("deprecation")
     public void ShootEntityToPlayer(Player player) {
     	 
     	List<Entity> l = getNearbyEntities(player.getLocation(),150);
@@ -1415,7 +1415,7 @@ public class AdventureTemp {
     	
     }
     
-    
+    @SuppressWarnings("deprecation")
     public void SpawnArrowsFireMob(Entity e,float addy ,float addp ) {
 		
 		Location loc = e.getLocation();
@@ -1478,7 +1478,7 @@ public class AdventureTemp {
     		for(Entity e : l) {
         		
         		if(e.getType() != EntityType.PLAYER && e.getType() != EntityType.PAINTING) {
-        			if(e.getType() == EntityType.DROPPED_ITEM) {
+        			if(e.getType() == EntityType.ITEM) {
         				Item ite = (Item) e;
         				if(ite.getOwner() != null) continue;
         					e.remove();
@@ -1569,13 +1569,13 @@ public class AdventureTemp {
     	List<Entity> drops = new ArrayList<>();
     	
     		for(Entity i : entities) {
-    			if(i.getType() == EntityType.SNOWMAN || i.getType() == EntityType.IRON_GOLEM) {
+    			if(i.getType() == EntityType.SNOW_GOLEM || i.getType() == EntityType.IRON_GOLEM) {
      			   Block block = i.getLocation().getBlock();
      			   Block r = block.getRelative(0, -1, 0);
      			   if(r.getType() == Material.BARRIER) {
      				   i.remove();
  					}
-    			}else if(i.getType() == EntityType.DROPPED_ITEM) {
+    			}else if(i.getType() == EntityType.ITEM) {
     				drops.add(i);
     			}
     		}

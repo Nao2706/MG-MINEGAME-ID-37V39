@@ -48,12 +48,12 @@ public class Minigunarrow extends BukkitRunnable{
 		Arrow aw = (Arrow) getMonster().getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
 		Arrow aw2 = (Arrow) getMonster().getWorld().spawnEntity(loc2.add(0, 1.6, 0), EntityType.ARROW);
 		aw.setCritical(true);
-		aw.setKnockbackStrength(2);
+		//aw.setKnockbackStrength(2);
 		aw.setFireTicks(1200);
 		aw.setShooter(getMonster());
 		aw.setVelocity(loc.getDirection().multiply(6).rotateAroundY(Math.toRadians(1)));
 		aw2.setCritical(true);
-		aw2.setKnockbackStrength(2);
+		//aw2.setKnockbackStrength(2);
 		aw2.setFireTicks(1200);
 		aw2.setShooter(getMonster());
 		aw2.setVelocity(loc2.getDirection().multiply(6).rotateAroundY(Math.toRadians(-1)));

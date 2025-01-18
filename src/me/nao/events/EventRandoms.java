@@ -188,7 +188,7 @@ public class EventRandoms implements Listener{
 		if(!player.getPassengers().isEmpty() && player.isSneaking()) {
 			Entity ent = (Entity) player.getPassengers().get(0);
 			player.removePassenger(ent);
-			if(ent.getType() == EntityType.PRIMED_TNT || ent.getType() == EntityType.FIREBALL) {
+			if(ent.getType() == EntityType.TNT || ent.getType() == EntityType.FIREBALL) {
 				Location loc = player.getLocation();
 				ent.setVelocity(loc.getDirection().multiply(3).setY(1));
 			}
@@ -320,7 +320,7 @@ public class EventRandoms implements Listener{
 							
 							
 						
-					}else if(ent.getType() == EntityType.MINECART_CHEST) {
+					}else if(ent.getType() == EntityType.CHEST_MINECART) {
 						
 						StorageMinecart mc = (StorageMinecart) ent;
 						if(mc.getCustomName() != null && ChatColor.stripColor(mc.getCustomName()).equals("PAQUETE DE AYUDA")) {
@@ -676,7 +676,7 @@ public class EventRandoms implements Listener{
 
 							
 							for(int i = 0 ; i < 4;i++) {
-								Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.SNOWMAN);
+								Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.SNOW_GOLEM);
 								Snowman ih = (Snowman) h1;
 								ih.getEquipment().setHelmet(head);
 								ih.setCustomName(ChatColor.GREEN+"GUARDIA DE: "+ChatColor.GOLD+player.getName());
@@ -1048,7 +1048,7 @@ public class EventRandoms implements Listener{
 					PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 					 if(entidadAtacada instanceof LivingEntity) {
 						 LivingEntity mob = (LivingEntity) entidadAtacada;
-						  	pl.getGamePoints().setDamage(pl.getGamePoints().getDamage()+ConvertDoubleToInt(mob.getHealth()-mob.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()));
+						  	pl.getGamePoints().setDamage(pl.getGamePoints().getDamage()+ConvertDoubleToInt(mob.getHealth()-mob.getAttribute(Attribute.MAX_HEALTH).getBaseValue()));
 					 }
 					
 					  if(entidadAtacada instanceof Player || entidadAtacada instanceof Villager) {
@@ -1175,7 +1175,7 @@ public class EventRandoms implements Listener{
 				 }
 				 
 				 if(food.isSimilar(new ItemStack(Material.GOLDEN_APPLE))) {
-					 player.getWorld().spawnParticle(Particle.VILLAGER_HAPPY, player.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
+					 player.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, player.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
 				 }	
 			}
 		 
@@ -1429,8 +1429,8 @@ public class EventRandoms implements Listener{
 					player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 20.0F, 0F);
 					LivingEntity entidad = (LivingEntity) l1.getWorld().spawnEntity(l1, EntityType.ZOMBIE);
 					Zombie zombi = (Zombie) entidad;
-					zombi.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-					zombi.getAttribute(Attribute.ZOMBIE_SPAWN_REINFORCEMENTS).setBaseValue(50);
+					zombi.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
+					zombi.getAttribute(Attribute.SPAWN_REINFORCEMENTS).setBaseValue(50);
 					zombi.setCustomName(""+ChatColor.GOLD+ChatColor.BOLD+"Anti-Looter-2");
 					zombi.getEquipment().setHelmet(new ItemStack(Material.DIAMOND_HELMET));
 					zombi.getEquipment().setChestplate(new ItemStack(Material.NETHERITE_CHESTPLATE));
@@ -1441,7 +1441,7 @@ public class EventRandoms implements Listener{
 					
 					
 					PotionEffect rapido = new PotionEffect(PotionEffectType.SPEED,/*duration*/ 120 * 20,/*amplifier:*/2, true ,true,true );
-					PotionEffect salto= new PotionEffect(PotionEffectType.JUMP,/*duration*/ 120 * 20,/*amplifier:*/5, true ,true,true );
+					PotionEffect salto= new PotionEffect(PotionEffectType.JUMP_BOOST,/*duration*/ 120 * 20,/*amplifier:*/5, true ,true,true );
 	
 					
 				    zombi.addPotionEffect(rapido);
@@ -1451,7 +1451,7 @@ public class EventRandoms implements Listener{
 					Creeper c = (Creeper) entidadc;
 					c.setExplosionRadius(15);
 					c.setMaxFuseTicks(1);
-					c.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+					c.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 					c.setCustomName(""+ChatColor.AQUA+ChatColor.BOLD+"SUICIDA");
 					zombi.addPassenger(c);
 					gc.setPlayerTempCooldown(player);
@@ -1462,8 +1462,8 @@ public class EventRandoms implements Listener{
 					player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 20.0F, 0F);
 					LivingEntity entidad = (LivingEntity) l1.getWorld().spawnEntity(l1, EntityType.ZOMBIE);
 					Zombie zombi = (Zombie) entidad;
-					zombi.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-					zombi.getAttribute(Attribute.ZOMBIE_SPAWN_REINFORCEMENTS).setBaseValue(50);
+					zombi.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
+					zombi.getAttribute(Attribute.SPAWN_REINFORCEMENTS).setBaseValue(50);
 					zombi.setCustomName(""+ChatColor.RED+ChatColor.BOLD+"Anti-Looter");
 					zombi.getEquipment().setHelmet(new ItemStack(Material.IRON_HELMET));
 					zombi.getEquipment().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
@@ -1474,7 +1474,7 @@ public class EventRandoms implements Listener{
 					
 				
 					PotionEffect rapido = new PotionEffect(PotionEffectType.SPEED,/*duration*/ 60 * 20,/*amplifier:*/2, true ,true,true );
-					PotionEffect salto= new PotionEffect(PotionEffectType.JUMP,/*duration*/ 60 * 20,/*amplifier:*/5, true ,true,true );
+					PotionEffect salto= new PotionEffect(PotionEffectType.JUMP_BOOST,/*duration*/ 60 * 20,/*amplifier:*/5, true ,true,true );
 	
 					
 				    zombi.addPotionEffect(rapido);
@@ -1482,7 +1482,7 @@ public class EventRandoms implements Listener{
 					
 					LivingEntity entidad1 = (LivingEntity) l1.getWorld().spawnEntity(l1, EntityType.WITCH);
 					Witch c1 = (Witch) entidad1;
-					c1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+					c1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 					c1.setCustomName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"GUARDIA DEL LOOT");	
 					gc.setPlayerTempCooldown(player);
 				}else if(player.getInventory().containsAtLeast(new ItemStack(Material.GOLD_INGOT), 100)) {
@@ -1495,7 +1495,7 @@ public class EventRandoms implements Listener{
 					LivingEntity entidad = (LivingEntity) l1.getWorld().spawnEntity(l1, EntityType.CREEPER);
 					Creeper c = (Creeper) entidad;
 					c.setExplosionRadius(5);
-					c.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+					c.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 					c.setCustomName(""+ChatColor.GREEN+ChatColor.BOLD+"GUARDIA DEL LOOT");
 					
 					//l.getWorld().spawnParticle(Particle.FLAME, l.add(0.5, 1, 0.5),	/* N DE PARTICULAS */5, 0.5, 1, 0.5, /* velocidad */0, null, true);
@@ -1503,12 +1503,12 @@ public class EventRandoms implements Listener{
 					//player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 20.0F, 0F);
 					LivingEntity entidad1 = (LivingEntity) l1.getWorld().spawnEntity(l1, EntityType.WITCH);
 					Witch c1 = (Witch) entidad1;
-					c1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+					c1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 					c1.setCustomName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"GUARDIA DEL LOOT");		
 					gc.setPlayerTempCooldown(player);
 				}else {
 					
-					l1.getWorld().spawnParticle(Particle.FIREWORKS_SPARK, l1,	/* N DE PARTICULAS */1, 0.5, 1, 0.5, /* velocidad */0, null, true);
+					l1.getWorld().spawnParticle(Particle.FIREWORK, l1,	/* N DE PARTICULAS */1, 0.5, 1, 0.5, /* velocidad */0, null, true);
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
 					if(r == 0) {
 						l1.getWorld().dropItem(l1,new ItemStack(Material.LAPIS_LAZULI,r2));
@@ -1573,7 +1573,7 @@ public class EventRandoms implements Listener{
 					  	if(entidadhit instanceof LivingEntity) {
 							    LivingEntity mob = (LivingEntity) entidadhit;
 							 	 
-							  	pl.getGamePoints().setDamage(pl.getGamePoints().getDamage()+ConvertDoubleToInt(mob.getHealth()-mob.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()));
+							  	pl.getGamePoints().setDamage(pl.getGamePoints().getDamage()+ConvertDoubleToInt(mob.getHealth()-mob.getAttribute(Attribute.MAX_HEALTH).getBaseValue()));
 								//isaHeadShot(player, mob, projectile);
 							  	HeadShoot(player, mob, projectile);
 						 }
@@ -1758,7 +1758,7 @@ public class EventRandoms implements Listener{
 				
 				if(l.distance(e.getLocation()) <= size) {
 					//if(e.getType() == EntityType.ARMOR_STAND && e.getCustomName() != null && e.getCustomName().contains(ChatColor.stripColor("RECIPIENTE DE ALMAS"))) {
-						if(e.getType() == EntityType.DROPPED_ITEM) {
+						if(e.getType() == EntityType.ITEM) {
 							entities.add(e);
 							//System.out.println("Lista de entidad "+entities.size());
 						}
@@ -1922,6 +1922,7 @@ public class EventRandoms implements Listener{
 		
 	
 		
+		@SuppressWarnings("deprecation")
 		public void ProyectileShootType(Dispenser d, EntityType type , int option ,Location loc ) {
 					Location loc2 = loc;
 			
@@ -2910,7 +2911,7 @@ public class EventRandoms implements Listener{
 		                				 
 		                				 if(damage.getHealth() > headshoot){
 		                					 
-		 								       damage.getWorld().spawnParticle(Particle.DRIP_LAVA, damage.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
+		 								       damage.getWorld().spawnParticle(Particle.DRIPPING_LAVA, damage.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
 		                					   damage.setHealth((damage.getHealth() - headshoot));
 		                					   player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 		                					 
@@ -2950,7 +2951,7 @@ public class EventRandoms implements Listener{
 		    											 player.getInventory().setHelmet(it);
 		    											 if(vidaitem <= 0) {
 		    												 damage.getEquipment().setHelmet(new ItemStack(Material.AIR));
-		    												 damage.getWorld().spawnParticle(Particle.DRIP_LAVA, damage.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */25, 0.5, 1, 0.5, /* velocidad */0, null, true);
+		    												 damage.getWorld().spawnParticle(Particle.DRIPPING_LAVA, damage.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */25, 0.5, 1, 0.5, /* velocidad */0, null, true);
 
 		        											 player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 20.0F, 1F);
 		        											 if(damage.getCustomName() != null) {
@@ -2963,7 +2964,7 @@ public class EventRandoms implements Listener{
 		        		        	   			                }
 		        											
 		    											 }else {
-		    												 damage.getWorld().spawnParticle(Particle.DRIP_LAVA, damage.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */25, 0.5, 1, 0.5, /* velocidad */0, null, true);
+		    												 damage.getWorld().spawnParticle(Particle.DRIPPING_LAVA, damage.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */25, 0.5, 1, 0.5, /* velocidad */0, null, true);
 		        		    								 player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_PLACE, 20.0F, 1F); 
 		        		    								 if(damage.getCustomName() != null) {
 		           		           			   		             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.YELLOW+"!!! "+ChatColor.GRAY+damage.getName()+ChatColor.YELLOW+" !!!"));
@@ -3012,7 +3013,7 @@ public class EventRandoms implements Listener{
 			public int TransformPosOrNeg(int i){
 				return i =  (~(i -1));
 			}
-			
+			@SuppressWarnings("deprecation")
 			public void SpawnArrows(Player player,float addy ,float addp ) {
 				player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 20.0F, 1F);
 				Location loc = player.getLocation();
@@ -3028,7 +3029,7 @@ public class EventRandoms implements Listener{
 				aw.setShooter(player);
 				//((Arrow) h1).setShooter(player);
 			}
-			
+			@SuppressWarnings("deprecation")
 			public void SpawnArrowsFire(Player player,float addy ,float addp ) {
 				player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 20.0F, 1F);
 				Location loc = player.getLocation();
@@ -3044,6 +3045,7 @@ public class EventRandoms implements Listener{
 				aw.setShooter(player);
 			}
 			
+			@SuppressWarnings("deprecation")
 			public void SpawnArrowsPoison(Player player,float addy ,float addp ) {
 				player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 20.0F, 1F);
 				PotionEffect poison = new PotionEffect(PotionEffectType.POISON,/*duration*/ 20*20,/*amplifier:*/50, false ,false,true );
@@ -3062,9 +3064,10 @@ public class EventRandoms implements Listener{
 				//((Arrow) h1).setShooter(player);
 			}
 			
+			@SuppressWarnings("deprecation")
 			public void SpawnArrowsDamage(Player player,float addy ,float addp ) {
 				player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 20.0F, 1F);
-				PotionEffect damage = new PotionEffect(PotionEffectType.HARM,/*duration*/ 20*20,/*amplifier:*/50, false ,false,true );
+				PotionEffect damage = new PotionEffect(PotionEffectType.INSTANT_DAMAGE,/*duration*/ 20*20,/*amplifier:*/50, false ,false,true );
 
 				Location loc = player.getLocation();
 				loc.setYaw(loc.getYaw()+addy);
@@ -3082,6 +3085,7 @@ public class EventRandoms implements Listener{
 				//((Arrow) h1).setShooter(player);
 			}
 			
+			@SuppressWarnings("deprecation")
 			public void SpawnArrowsExplosive(Player player,float addy ,float addp ) {
 				player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 20.0F, 1F);
 				Location loc = player.getLocation();
@@ -3102,7 +3106,8 @@ public class EventRandoms implements Listener{
 				
 				//((Arrow) h1).setShooter(player);
 			}
-
+			
+			@SuppressWarnings("deprecation")
 			public void SpawnArrowsFireMob(Entity e,float addy ,float addp ) {
 			
 				Location loc = e.getLocation();
@@ -3119,6 +3124,7 @@ public class EventRandoms implements Listener{
 			}
 		 
 		 
+			@SuppressWarnings("deprecation")
 			public void SpawnArrowsDispenser(Location l,BlockFace bf,float addy ,float addp , boolean iswithfire) {
 				Location loc = l;
 				Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc, EntityType.ARROW);
@@ -3153,7 +3159,7 @@ public class EventRandoms implements Listener{
 					AreaPotion(player.getLocation(),Color.GREEN,PotionType.LONG_POISON);;
 					return;
 				}else if(r.getType() == Material.RED_CONCRETE) {
-					AreaPotion(player.getLocation(),Color.RED,PotionType.INSTANT_DAMAGE);
+					AreaPotion(player.getLocation(),Color.RED,PotionType.HARMING);
 					return;
 
 				}else if(r.getType() == Material.GRAY_CONCRETE) {

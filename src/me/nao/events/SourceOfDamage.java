@@ -397,7 +397,7 @@ public class SourceOfDamage implements Listener{
 					Block blocke = e1.getLocation().getBlock();
 					Block be = blocke.getRelative(0, -1, 0);
 					if(be.getType() == Material.BARRIER) {
-						if(e1.getType() == EntityType.DROPPED_ITEM) {
+						if(e1.getType() == EntityType.ITEM) {
 							e1.remove();
 						}
 					}
@@ -418,7 +418,7 @@ public class SourceOfDamage implements Listener{
 		EntityType mob = e.getEntityType();
 		GameConditions gc = new GameConditions(plugin);
 		if(gc.isPlayerinGame(player)) {
-			if(player != null && player.getType() == EntityType.PLAYER && mob != EntityType.ITEM_FRAME && mob != EntityType.DROPPED_ITEM) {
+			if(player != null && player.getType() == EntityType.PLAYER && mob != EntityType.ITEM_FRAME && mob != EntityType.ITEM) {
 				Entity m = e.getEntity();
 				
 
@@ -622,6 +622,7 @@ public class SourceOfDamage implements Listener{
 	
 	
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void shootm(ProjectileLaunchEvent e) {
 		Entity m = (Entity) e.getEntity().getShooter();
@@ -728,7 +729,7 @@ public class SourceOfDamage implements Listener{
 			if(p.isPatrolLeader()) {
 				
 				if(rand == 0) {
-					PotionEffect damage = new PotionEffect(PotionEffectType.INCREASE_DAMAGE,/*duration*/ 100,/*amplifier:*/1, true ,true,true );
+					PotionEffect damage = new PotionEffect(PotionEffectType.STRENGTH,/*duration*/ 100,/*amplifier:*/1, true ,true,true );
 					Location loc = p.getLocation();
 					Location loc2 = p.getLocation();
 		
@@ -788,6 +789,7 @@ public class SourceOfDamage implements Listener{
 		
 	}
 	
+	@SuppressWarnings("deprecation")
 	public void SpawnArrowsFireMob(Entity e,float addy ,float addp ) {
 		
 		Location loc = e.getLocation();
@@ -807,7 +809,7 @@ public class SourceOfDamage implements Listener{
 	@EventHandler  //TODO MUERTES METODO
     public void damageInGame(EntityDamageEvent e){
 		
-		if(e.getEntity().getType() != EntityType.ITEM_FRAME || e.getEntity().getType() != EntityType.GLOW_ITEM_FRAME || e.getEntity().getType() != EntityType.DROPPED_ITEM) {
+		if(e.getEntity().getType() != EntityType.ITEM_FRAME || e.getEntity().getType() != EntityType.GLOW_ITEM_FRAME || e.getEntity().getType() != EntityType.ITEM) {
 			
 			//LINEA DE SANGRE XD
 			
@@ -936,12 +938,12 @@ public class SourceOfDamage implements Listener{
 									  if(chest.getCustomName() != null) {
 										
 										  if(chest.getCustomName().contains("TIENDA")) {
-												chest.getWorld().spawnParticle(Particle.TOTEM, chest.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */1, 0.5, 1, 0.5, /* velocidad */0, null, true);
+												chest.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, chest.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */1, 0.5, 1, 0.5, /* velocidad */0, null, true);
 												
 										  }
 										  
 										  if(chest.getCustomName().contains("REVIVIR")) {
-											  chest.getWorld().spawnParticle(Particle.TOTEM, chest.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */1, 0.5, 1, 0.5, /* velocidad */0, null, true);
+											  chest.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, chest.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */1, 0.5, 1, 0.5, /* velocidad */0, null, true);
 												
 										  }
 										  
@@ -951,7 +953,7 @@ public class SourceOfDamage implements Listener{
 								Block a1 = r.getRelative(x, y-1, z);
 								if(a.getType() == Material.ENCHANTING_TABLE && a1.getType() == Material.BEDROCK) {
 									EnchantingTable t = (EnchantingTable) a.getState();
-									t.getWorld().spawnParticle(Particle.ENCHANTMENT_TABLE, t.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */1, 0.5, 1, 0.5, /* velocidad */0, null, true);
+									t.getWorld().spawnParticle(Particle.ENCHANT, t.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */1, 0.5, 1, 0.5, /* velocidad */0, null, true);
 								}
 								
 								

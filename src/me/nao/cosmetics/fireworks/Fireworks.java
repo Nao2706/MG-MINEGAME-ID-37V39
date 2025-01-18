@@ -44,7 +44,7 @@ public class Fireworks {
 	public void ParticleOfWin() {
 		Location l = player.getLocation();
 		
-		l.getWorld().spawnParticle(Particle.TOTEM, player.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */10, 1, 1, 1, /* velocidad */0, null, true);
+		l.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, player.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */10, 1, 1, 1, /* velocidad */0, null, true);
 		
 		
 	}

@@ -77,7 +77,9 @@ public class TabComplete1 implements TabCompleter{
 			arguments.add("points");
 			arguments.add("timegame");
 			arguments.add("pause");
-			
+			arguments.add("get-scale");
+			arguments.add("set-scale");
+		
 			
 		}
 		

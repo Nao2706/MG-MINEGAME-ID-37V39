@@ -190,7 +190,7 @@ public class PlayerInfo {
 	}
 	
 	public void ClearAllPlayerMg() {
-		player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(20);
+		player.getAttribute(Attribute.MAX_HEALTH).setBaseValue(20);
 		player.setExp(0);
 		player.setLevel(0);
 		player.getInventory().clear();
@@ -216,7 +216,7 @@ public class PlayerInfo {
 		 player.setGameMode(pl.getGamemodeMG());
 		 player.setFlying(pl.isFlyMG());
 		 player.getInventory().setContents(pl.getInventoryMG());
-		 player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(pl.getMaxLifeMG());
+		 player.getAttribute(Attribute.MAX_HEALTH).setBaseValue(pl.getMaxLifeMG());
 		 player.setFoodLevel(pl.getFoodMG());
 		 player.addPotionEffects(pl.getPlayerPottionsMg());
 		 player.setExp(pl.getXpMG());

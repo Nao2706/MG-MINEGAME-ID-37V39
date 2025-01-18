@@ -594,7 +594,7 @@ public class Comandos implements CommandExecutor{
 					int valor = Integer.valueOf(args[2])  ;
 						if(target != null) {
 							//target.setMaxHealth(target.getMaxHealth());
-							target.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(valor);
+							target.getAttribute(Attribute.MAX_HEALTH).setBaseValue(valor);
 							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" El Jugador "+ChatColor.GOLD+target.getName()+ChatColor.GREEN+" fue seteado correctamente. ");
 						}else {
 							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+target+ChatColor.RED+" no existe. ");
@@ -604,6 +604,62 @@ public class Comandos implements CommandExecutor{
 						
 					}else {
 						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg set-life <nombre> <1>");
+					}
+					}catch(NumberFormatException ex) {
+						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" Ingresa un numero en el 2 Argumento");
+						
+					}
+				
+							
+					return true;
+				}else if (args[0].equalsIgnoreCase("set-scale") ) {
+					try {
+					if (args.length == 3) {
+						// /c add n p
+						// mg set nao 10
+						
+						Player target = Bukkit.getServer().getPlayerExact(args[1]);
+						int valor = Integer.valueOf(args[2])  ;
+						if(target != null) {
+							//target.setMaxHealth(target.getMaxHealth());
+							target.getAttribute(Attribute.SCALE).setBaseValue(valor);
+							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" El Jugador "+ChatColor.GOLD+target.getName()+ChatColor.GREEN+" fue seteado correctamente. ");
+						}else {
+							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+target+ChatColor.RED+" no existe. ");
+							
+						}
+						
+						
+					}else {
+						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg set-scale <nombre> <1>");
+					}
+					}catch(NumberFormatException ex) {
+						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" Ingresa un numero en el 2 Argumento");
+						
+					}
+				
+							
+					return true;
+				}else if (args[0].equalsIgnoreCase("get-scale") ) {
+					try {
+					if (args.length == 2) {
+						// /c add n p
+						// mg set nao 10
+						
+						Player target = Bukkit.getServer().getPlayerExact(args[1]);
+						//int valor = Integer.valueOf(args[2])  ;
+						if(target != null) {
+							//target.setMaxHealth(target.getMaxHealth());
+							
+							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" El Jugador "+ChatColor.GOLD+target.getName()+ChatColor.GREEN+" tiene "+target.getAttribute(Attribute.SCALE).getBaseValue()+" de escala");
+						}else {
+							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+target+ChatColor.RED+" no existe. ");
+							
+						}
+						
+						
+					}else {
+						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg get-scale <nombre> <1>");
 					}
 					}catch(NumberFormatException ex) {
 						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" Ingresa un numero en el 2 Argumento");
@@ -2918,7 +2974,7 @@ public class Comandos implements CommandExecutor{
 						    
 							if(target != null) {
 								//target.setMaxHealth(target.getMaxHealth());
-								target.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(valor);
+								target.getAttribute(Attribute.MAX_HEALTH).setBaseValue(valor);
 								player.sendMessage(plugin.nombre+ChatColor.GREEN+" El Jugador "+ChatColor.GOLD+target.getName()+ChatColor.GREEN+" fue seteado correctamente. ");
 							}else {
 								player.sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+target+ChatColor.RED+" no existe. ");
@@ -3550,29 +3606,29 @@ public class Comandos implements CommandExecutor{
  		typepotion.put("BAD_OMEN", PotionEffectType.BAD_OMEN);
  		typepotion.put("BLINDNESS", PotionEffectType.BLINDNESS);
  		typepotion.put("CONDUIT_POWER", PotionEffectType.CONDUIT_POWER);
- 		typepotion.put("CONFUSION", PotionEffectType.CONFUSION);
- 		typepotion.put("DAMAGE_RESISTANCE", PotionEffectType.DAMAGE_RESISTANCE);
+ 		typepotion.put("NAUSEA", PotionEffectType.NAUSEA);
+ 		typepotion.put("RESISTANCE", PotionEffectType.RESISTANCE);
  		typepotion.put("DARKNESS", PotionEffectType.DARKNESS);
  		typepotion.put("DOLPHINS_GRACE", PotionEffectType.DOLPHINS_GRACE);
- 		typepotion.put("FAST_DIGGING", PotionEffectType.FAST_DIGGING);
+ 		typepotion.put("HASTE", PotionEffectType.HASTE);
  		typepotion.put("FIRE_RESISTANCE", PotionEffectType.FIRE_RESISTANCE);
  		typepotion.put("GLOWING", PotionEffectType.GLOWING);
- 		typepotion.put("HARM", PotionEffectType.HARM);
- 		typepotion.put("HEAL", PotionEffectType.HEAL);
+ 		typepotion.put("INSTANT_DAMAGE", PotionEffectType.INSTANT_DAMAGE);
+ 		typepotion.put("INSTANT_HEALTH", PotionEffectType.INSTANT_HEALTH);
  		typepotion.put("HEALTH_BOOST", PotionEffectType.HEALTH_BOOST);
  		typepotion.put("HERO_OF_THE_VILLAGE", PotionEffectType.HERO_OF_THE_VILLAGE);
  		typepotion.put("HUNGER", PotionEffectType.HUNGER);
- 		typepotion.put("INCREASE_DAMAGE", PotionEffectType.INCREASE_DAMAGE);
+ 		typepotion.put("INCREASE_DAMAGE", PotionEffectType.STRENGTH);
  		typepotion.put("INVISIBILITY", PotionEffectType.INVISIBILITY);
- 		typepotion.put("JUMP", PotionEffectType.JUMP);
+ 		typepotion.put("JUMP_BOOST", PotionEffectType.JUMP_BOOST);
  		typepotion.put("LEVITATION", PotionEffectType.LEVITATION);
  		typepotion.put("LUCK", PotionEffectType.LUCK);
  		typepotion.put("NIGHT_VISION", PotionEffectType.NIGHT_VISION);
  		typepotion.put("POISON", PotionEffectType.POISON);
  		typepotion.put("REGENERATION", PotionEffectType.REGENERATION);
  		typepotion.put("SATURATION", PotionEffectType.SATURATION);
- 		typepotion.put("SLOW", PotionEffectType.SLOW);
- 		typepotion.put("SLOW_DIGGING", PotionEffectType.SLOW_DIGGING);
+ 		typepotion.put("SLOWNESS", PotionEffectType.SLOWNESS);
+ 		typepotion.put("MINING_FATIGUE", PotionEffectType.MINING_FATIGUE);
  		typepotion.put("SLOW_FALLING", PotionEffectType.SLOW_FALLING);
  		typepotion.put("SPEED", PotionEffectType.SPEED);
  		typepotion.put("UNLUCK", PotionEffectType.UNLUCK);

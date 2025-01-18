@@ -525,7 +525,7 @@ public class InfectedTemp {
 										player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
 									}
 									 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.NETHERITE_INGOT));
-									 a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
+									 a.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,a.getLocation().add(0.5, 1.5, 0.5), 1);
 			
 								}
 								
@@ -534,7 +534,7 @@ public class InfectedTemp {
 										player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
 									}
 								     a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.DIAMOND));
-									 a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
+									 a.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,a.getLocation().add(0.5, 1.5, 0.5), 1);
 								}
 								
 								if(a.getType() == Material.EMERALD_BLOCK && b.getType() == Material.BEDROCK) {
@@ -542,7 +542,7 @@ public class InfectedTemp {
 										player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
 									}
 									 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.EMERALD));
-									 a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
+									 a.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,a.getLocation().add(0.5, 1.5, 0.5), 1);
 								}
 								
 								if(a.getType() == Material.IRON_BLOCK && b.getType() == Material.BEDROCK) {
@@ -550,7 +550,7 @@ public class InfectedTemp {
 										player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
 									}
 									 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.IRON_INGOT));
-									 a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
+									 a.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,a.getLocation().add(0.5, 1.5, 0.5), 1);
 								}
 								
 								if(a.getType() == Material.GOLD_BLOCK && b.getType() == Material.BEDROCK) {
@@ -558,7 +558,7 @@ public class InfectedTemp {
 										player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
 									}
 									 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.GOLD_INGOT));
-									 a.getWorld().spawnParticle(Particle.TOTEM,a.getLocation().add(0.5, 1.5, 0.5), 1);
+									 a.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,a.getLocation().add(0.5, 1.5, 0.5), 1);
 								}
 							
 							
@@ -677,7 +677,7 @@ public class InfectedTemp {
 		
 		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.BLAZE);
 		Blaze s = (Blaze) entidad;
-		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		s.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 		
 		
     }
@@ -692,7 +692,7 @@ public class InfectedTemp {
 		s.setExplosionRadius(10);
 		s.setMaxFuseTicks(3);
 		s.setCustomName(""+ChatColor.RED+ChatColor.BOLD+"SUICIDA");
-		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		s.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 		
 		
     }
@@ -703,7 +703,7 @@ public class InfectedTemp {
 		
 		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE_VILLAGER);
 		ZombieVillager s = (ZombieVillager) entidad;
-		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		s.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 		
 		
     }
@@ -714,7 +714,7 @@ public class InfectedTemp {
 		
 		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.DROWNED);
 		Drowned s = (Drowned) entidad;
-		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		s.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 		
 		
     }
@@ -725,7 +725,7 @@ public class InfectedTemp {
 		
 		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.HUSK);
 		Husk s = (Husk) entidad;
-		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		s.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 		
 		
     }
@@ -736,7 +736,7 @@ public class InfectedTemp {
 		
 		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.EVOKER);
 		Evoker s = (Evoker) entidad;
-		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		s.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 		
 		
     }
@@ -748,7 +748,7 @@ public class InfectedTemp {
 		
 		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.PILLAGER);
 		Pillager s = (Pillager) entidad;
-		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		s.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 		
 		ItemStack b = new ItemStack(Material.CROSSBOW,1);
 		ItemMeta meta = b.getItemMeta();
@@ -802,7 +802,7 @@ public class InfectedTemp {
 			s.getEquipment().setItemInMainHand(new ItemStack(Material.GOLDEN_SWORD));
 		}
 		
-		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		s.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 		s.setCanPickupItems(true);
 		
 		
@@ -815,7 +815,7 @@ public class InfectedTemp {
 		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.WITHER_SKELETON);
 		WitherSkeleton s = (WitherSkeleton) entidad;
 		s.getEquipment().setItemInMainHand(new ItemStack(Material.DIAMOND_SWORD));
-		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		s.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 		s.setCanPickupItems(true);
 		
 		
@@ -827,7 +827,7 @@ public class InfectedTemp {
 		
 		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.SKELETON);
 		Skeleton s = (Skeleton) entidad;
-		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		s.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 		
 		
     }
@@ -838,7 +838,7 @@ public class InfectedTemp {
 		
 		LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.WITCH);
 		Witch s = (Witch) entidad;
-		s.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+		s.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 		
 		
     }
@@ -860,12 +860,12 @@ public class InfectedTemp {
 				LivingEntity entidad = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
 				
 				Zombie zombi = (Zombie) entidad;
-				zombi.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
-				zombi.getAttribute(Attribute.ZOMBIE_SPAWN_REINFORCEMENTS).setBaseValue(50);
+				zombi.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
+				zombi.getAttribute(Attribute.SPAWN_REINFORCEMENTS).setBaseValue(50);
 				
 				
 				PotionEffect rapido = new PotionEffect(PotionEffectType.SPEED,/*duration*/ 99999,/*amplifier:*/4, true ,true,true );
-				PotionEffect salto= new PotionEffect(PotionEffectType.JUMP,/*duration*/ 99999,/*amplifier:*/5, true ,true,true );
+				PotionEffect salto= new PotionEffect(PotionEffectType.JUMP_BOOST,/*duration*/ 99999,/*amplifier:*/5, true ,true,true );
 
 				
 			    zombi.addPotionEffect(rapido);
@@ -877,7 +877,7 @@ public class InfectedTemp {
 				if(n == 0) {
 					LivingEntity entidad10 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE_VILLAGER);
 					ZombieVillager zv = (ZombieVillager) entidad10;
-					zv.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+					zv.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 				
 					
 					
@@ -892,7 +892,7 @@ public class InfectedTemp {
 				    zombi8.addPotionEffect(rapido);
 				   
 					zombi8.addPotionEffect(salto);
-					zombi8.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+					zombi8.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 					
 					LivingEntity husk1 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.HUSK);	
 					Husk husk = (Husk) husk1;
@@ -902,7 +902,7 @@ public class InfectedTemp {
 				
 					husk.addPotionEffect(rapido);
 				
-					husk.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+					husk.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 					
 					
 
@@ -912,7 +912,7 @@ public class InfectedTemp {
 				    LivingEntity entidad1 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
 					Zombie zombi1 = (Zombie) entidad1;
 				
-					zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+					zombi1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 					
 	  				zombi1.addPotionEffect(rapido);
 	  				zombi1.addPotionEffect(salto);
@@ -929,7 +929,7 @@ public class InfectedTemp {
 					
 					zombi1.addPotionEffect(salto);
 				
-					zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+					zombi1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 					zombi1.getEquipment().setHelmet(new ItemStack(Material.DIAMOND_HELMET));
 					zombi1.getEquipment().setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
 					zombi1.getEquipment().setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
@@ -945,7 +945,7 @@ public class InfectedTemp {
 	  			
 	  			    zombi4.addPotionEffect(rapido);
 	  			    zombi4.addPotionEffect(salto);
-	  				zombi4.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+	  				zombi4.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 	  			
 	  				
 				}else if(n == 4) {
@@ -955,7 +955,7 @@ public class InfectedTemp {
 	  				LivingEntity entidad6 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
 	  				Zombie zombi6 = (Zombie) entidad6;
 	  				
-	  				zombi6.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+	  				zombi6.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 	  			    zombi6.addPotionEffect(rapido);
 	  				zombi6.addPotionEffect(salto);
 	  				zombi6.setBaby();
@@ -966,7 +966,7 @@ public class InfectedTemp {
 	  			    zombi7.addPotionEffect(rapido);
 	  				zombi7.addPotionEffect(salto);
 	  				entidad6.addPassenger(entidad7);
-	  				zombi7.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+	  				zombi7.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 	  			
 	  				
 	  				
@@ -981,7 +981,7 @@ public class InfectedTemp {
 					
 					zombi1.addPotionEffect(salto);
 				
-					zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+					zombi1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 					zombi1.getEquipment().setHelmet(new ItemStack(Material.NETHERITE_HELMET));
 					zombi1.getEquipment().setChestplate(new ItemStack(Material.NETHERITE_CHESTPLATE));
 					zombi1.getEquipment().setLeggings(new ItemStack(Material.NETHERITE_LEGGINGS));
@@ -994,7 +994,7 @@ public class InfectedTemp {
 						 LivingEntity entidad1 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
 							Zombie zombi1 = (Zombie) entidad1;
 						
-							zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+							zombi1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 							
 			  				zombi1.addPotionEffect(rapido);
 			  				zombi1.addPotionEffect(salto);
@@ -1008,7 +1008,7 @@ public class InfectedTemp {
 					 LivingEntity entidad1 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
 						Zombie zombi1 = (Zombie) entidad1;
 					
-						zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+						zombi1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 						
 		  				zombi1.addPotionEffect(rapido);
 		  				zombi1.addPotionEffect(salto);
@@ -1016,7 +1016,7 @@ public class InfectedTemp {
 						 LivingEntity entidad2 = (LivingEntity) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
 							Zombie zombi2 = (Zombie) entidad2;
 						
-							zombi2.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+							zombi2.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 							
 			  				zombi2.addPotionEffect(rapido);
 			  				zombi2.addPotionEffect(salto);
@@ -1035,7 +1035,7 @@ public class InfectedTemp {
 					
 					zombi1.addPotionEffect(salto);
 				
-					zombi1.getAttribute(Attribute.GENERIC_FOLLOW_RANGE).setBaseValue(150);
+					zombi1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 					zombi1.getEquipment().setHelmet(new ItemStack(Material.IRON_HELMET));
 					zombi1.getEquipment().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
 					zombi1.getEquipment().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
@@ -1183,7 +1183,7 @@ public class InfectedTemp {
     			
     		}
     		
-    		if(entities.get(i).getType() == EntityType.SNOWMAN || entities.get(i).getType() == EntityType.IRON_GOLEM) {
+    		if(entities.get(i).getType() == EntityType.SNOW_GOLEM || entities.get(i).getType() == EntityType.IRON_GOLEM) {
     			   Block block = entities.get(i).getLocation().getBlock();
     			   Block r = block.getRelative(0, -1, 0);
     			   if(r.getType() == Material.BARRIER) {
