@@ -35,10 +35,10 @@ import me.nao.general.info.GamePoints;
 import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.PlayerInfo;
-import me.nao.main.game.Minegame;
-import me.nao.shop.MinigameShop1;
+import me.nao.main.mg.Minegame;
+import me.nao.shop.mg.MinigameShop1;
 import me.nao.teamsmg.MgTeams;
-import me.top.users.PointsManager;
+import me.top.users.mg.PointsManager;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 

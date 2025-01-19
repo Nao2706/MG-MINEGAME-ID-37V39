@@ -1,7 +1,7 @@
-version: 1.71.2
+version: 1.75.5
 name: MineGame
-main: me.nao.main.game.Minegame
-api-version: 1.19
+main: me.nao.main.mg.Minegame
+api-version: 1.16
 author: NAO2706
 description: SubGames into Minecraft
 softdepend: [NBTAPI]

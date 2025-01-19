@@ -57,7 +57,7 @@ import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
 import me.nao.general.info.GameTime;
 import me.nao.general.info.PlayerInfo;
-import me.nao.main.game.Minegame;
+import me.nao.main.mg.Minegame;
 import me.nao.manager.GameIntoMap;
 //import net.md_5.bungee.api.ChatMessageType;
 //import net.md_5.bungee.api.chat.TextComponent;
@@ -966,14 +966,15 @@ public class ResistenceTemp {
 				
 				int n = random.nextInt(50);
 				
-				
+				 Attribute attribute = Attribute.FOLLOW_RANGE;
+				 Attribute attributer = Attribute.SPAWN_REINFORCEMENTS;
 			
 				Location l2 = new Location(world, x, y+2, z); 			
 			
 				Zombie zombi = (Zombie)  world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
 
-				zombi.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
-				zombi.getAttribute(Attribute.SPAWN_REINFORCEMENTS).setBaseValue(50);
+				zombi.getAttribute(attribute).setBaseValue(150);
+				zombi.getAttribute(attributer).setBaseValue(50);
 				
 				
 				PotionEffect rapido = new PotionEffect(PotionEffectType.SPEED,/*duration*/ 99999,/*amplifier:*/4, false ,false,true );
@@ -988,7 +989,7 @@ public class ResistenceTemp {
 			     	
 				if(n == 0) {
 					ZombieVillager zv = (ZombieVillager)  world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE_VILLAGER);
-					zv.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
+					zv.getAttribute(attribute).setBaseValue(150);
 				
 					
 					
@@ -1003,7 +1004,7 @@ public class ResistenceTemp {
 				    zombi8.addPotionEffect(rapido);
 				   
 					zombi8.addPotionEffect(salto);
-					zombi8.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
+					zombi8.getAttribute(attribute).setBaseValue(150);
 					
 					Husk husk = (Husk) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.HUSK);
 					
@@ -1012,7 +1013,7 @@ public class ResistenceTemp {
 				
 					husk.addPotionEffect(rapido);
 				
-					husk.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
+					husk.getAttribute(attribute).setBaseValue(150);
 					
 					
 
@@ -1022,7 +1023,7 @@ public class ResistenceTemp {
 					Zombie zombi1 = (Zombie)  world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
 
 				
-					zombi1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
+					zombi1.getAttribute(attribute).setBaseValue(150);
 					
 	  				zombi1.addPotionEffect(rapido);
 	  				zombi1.addPotionEffect(salto);
@@ -1039,7 +1040,7 @@ public class ResistenceTemp {
 					
 					zombi1.addPotionEffect(salto);
 				
-					zombi1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
+					zombi1.getAttribute(attribute).setBaseValue(150);
 					zombi1.getEquipment().setHelmet(new ItemStack(Material.DIAMOND_HELMET));
 					zombi1.getEquipment().setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
 					zombi1.getEquipment().setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
@@ -1055,7 +1056,7 @@ public class ResistenceTemp {
 	  			
 	  			    zombi4.addPotionEffect(rapido);
 	  			    zombi4.addPotionEffect(salto);
-	  				zombi4.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
+	  				zombi4.getAttribute(attribute).setBaseValue(150);
 	  			
 	  				
 				}else if(n == 4) {
@@ -1064,7 +1065,7 @@ public class ResistenceTemp {
 		  		    
 					Zombie zombi6 = (Zombie)  world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
 	  				
-	  				zombi6.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
+	  				zombi6.getAttribute(attribute).setBaseValue(150);
 	  			    zombi6.addPotionEffect(rapido);
 	  				zombi6.addPotionEffect(salto);
 	  				zombi6.setBaby();
@@ -1075,7 +1076,7 @@ public class ResistenceTemp {
 	  			    zombi7.addPotionEffect(rapido);
 	  				zombi7.addPotionEffect(salto);
 	  				zombi6.addPassenger(entidad7);
-	  				zombi7.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
+	  				zombi7.getAttribute(attribute).setBaseValue(150);
 	  			
 	  				
 	  				
@@ -1089,7 +1090,7 @@ public class ResistenceTemp {
 					
 					zombi1.addPotionEffect(salto);
 				
-					zombi1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
+					zombi1.getAttribute(attribute).setBaseValue(150);
 					zombi1.getEquipment().setHelmet(new ItemStack(Material.NETHERITE_HELMET));
 					zombi1.getEquipment().setChestplate(new ItemStack(Material.NETHERITE_CHESTPLATE));
 					zombi1.getEquipment().setLeggings(new ItemStack(Material.NETHERITE_LEGGINGS));
@@ -1101,7 +1102,7 @@ public class ResistenceTemp {
 					for(int i = 0 ; i< 5;i++) {
 						Zombie zombi1 = (Zombie)  world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
 						
-							zombi1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
+							zombi1.getAttribute(attribute).setBaseValue(150);
 							
 			  				zombi1.addPotionEffect(rapido);
 			  				zombi1.addPotionEffect(salto);
@@ -1114,14 +1115,14 @@ public class ResistenceTemp {
 				else if(n == 7) {
 					Zombie zombi1 = (Zombie)  world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
 					
-						zombi1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
+						zombi1.getAttribute(attribute).setBaseValue(150);
 						
 		  				zombi1.addPotionEffect(rapido);
 		  				zombi1.addPotionEffect(salto);
 					for(int i = 0 ; i< 10;i++) {
 						Zombie zombi2 = (Zombie)  world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
 						
-							zombi2.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
+							zombi2.getAttribute(attribute).setBaseValue(150);
 							
 			  				zombi2.addPotionEffect(rapido);
 			  				zombi2.addPotionEffect(salto);
@@ -1139,7 +1140,7 @@ public class ResistenceTemp {
 					
 					zombi1.addPotionEffect(salto);
 				
-					zombi1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
+					zombi1.getAttribute(attribute).setBaseValue(150);
 					zombi1.getEquipment().setHelmet(new ItemStack(Material.IRON_HELMET));
 					zombi1.getEquipment().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
 					zombi1.getEquipment().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
@@ -1155,7 +1156,7 @@ public class ResistenceTemp {
 					
 					zombi1.addPotionEffect(salto);
 				
-					zombi1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
+					zombi1.getAttribute(attribute).setBaseValue(150);
 					zombi1.getEquipment().setHelmet(new ItemStack(Material.IRON_HELMET));
 					zombi1.getEquipment().setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
 					zombi1.getEquipment().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
@@ -1168,7 +1169,7 @@ public class ResistenceTemp {
 					zombi1.addPotionEffect(rapido);
 					zombi1.addPotionEffect(salto);
 				
-					zombi1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
+					zombi1.getAttribute(attribute).setBaseValue(150);
 					zombi1.getEquipment().setHelmet(new ItemStack(Material.DIAMOND_HELMET));
 					zombi1.getEquipment().setChestplate(new ItemStack(Material.NETHERITE_CHESTPLATE));
 					zombi1.getEquipment().setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
@@ -1181,7 +1182,7 @@ public class ResistenceTemp {
 					s.setExplosionRadius(10);
 					s.setMaxFuseTicks(1);
 					s.setCustomName(""+ChatColor.RED+ChatColor.BOLD+"Zombi Super Suicida");
-					s.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
+					s.getAttribute(attribute).setBaseValue(150);
 					zombi1.addPassenger(s);
 				}else if(n == 11) {
 					Zombie zombi1 = (Zombie)  world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
@@ -1191,7 +1192,7 @@ public class ResistenceTemp {
 					zombi1.addPotionEffect(rapido);
 					zombi1.addPotionEffect(salto);
 				
-					zombi1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
+					zombi1.getAttribute(attribute).setBaseValue(150);
 					zombi1.getEquipment().setHelmet(new ItemStack(Material.GOLDEN_HELMET));
 					zombi1.getEquipment().setChestplate(new ItemStack(Material.GOLDEN_CHESTPLATE));
 					zombi1.getEquipment().setLeggings(new ItemStack(Material.GOLDEN_LEGGINGS));
@@ -1202,14 +1203,14 @@ public class ResistenceTemp {
 					
 					Blaze s = (Blaze) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.BLAZE);
 					s.setCustomName(""+ChatColor.YELLOW+ChatColor.BOLD+"LANZALLAMAS");
-					s.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
+					s.getAttribute(attribute).setBaseValue(150);
 					zombi1.addPassenger(s);
 				}else if(n == 12) {
 					
 					for(int i = 0 ; i< 15;i++) {
 						Zombie zombi1 = (Zombie)  world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
 						
-							zombi1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
+							zombi1.getAttribute(attribute).setBaseValue(150);
 							zombi1.setBaby();
 			  				zombi1.addPotionEffect(rapido);
 			  				zombi1.addPotionEffect(salto);

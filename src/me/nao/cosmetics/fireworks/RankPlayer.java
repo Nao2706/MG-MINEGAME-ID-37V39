@@ -3,7 +3,7 @@ package me.nao.cosmetics.fireworks;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import me.nao.main.game.Minegame;
+import me.nao.main.mg.Minegame;
 import net.md_5.bungee.api.ChatColor;
 
 public class RankPlayer {

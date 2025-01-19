@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
-import me.nao.main.game.Minegame;
+import me.nao.main.mg.Minegame;
 
 public class PlayerInfo {
 	
@@ -190,6 +190,8 @@ public class PlayerInfo {
 	}
 	
 	public void ClearAllPlayerMg() {
+		
+		
 		player.getAttribute(Attribute.MAX_HEALTH).setBaseValue(20);
 		player.setExp(0);
 		player.setLevel(0);

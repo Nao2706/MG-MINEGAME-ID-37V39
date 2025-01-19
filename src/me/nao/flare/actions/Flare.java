@@ -11,7 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.nao.enums.Items;
-import me.nao.main.game.Minegame;
+import me.nao.main.mg.Minegame;
 
 public class Flare extends BukkitRunnable{
 

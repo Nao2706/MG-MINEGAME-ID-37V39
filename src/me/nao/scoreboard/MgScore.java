@@ -32,7 +32,7 @@ import me.nao.general.info.GameObjetivesMG;
 import me.nao.general.info.GamePoints;
 import me.nao.general.info.ObjetivesMG;
 import me.nao.general.info.PlayerInfo;
-import me.nao.main.game.Minegame;
+import me.nao.main.mg.Minegame;
 import me.nao.revive.RevivePlayer;
 
 

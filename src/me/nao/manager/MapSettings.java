@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
 
 import me.nao.enums.ObjetiveStatusType;
 import me.nao.general.info.GameConditions;
-import me.nao.main.game.Minegame;
+import me.nao.main.mg.Minegame;
 import me.nao.timers.Countdown;
 
 

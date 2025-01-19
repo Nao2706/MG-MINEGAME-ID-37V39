@@ -5,7 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitScheduler;
 
-import me.nao.main.game.Minegame;
+import me.nao.main.mg.Minegame;
 
 
 

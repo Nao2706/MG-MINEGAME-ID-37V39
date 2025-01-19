@@ -6,7 +6,7 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BossBar;
 
 import me.nao.enums.GameStatus;
-import me.nao.main.game.Minegame;
+import me.nao.main.mg.Minegame;
 
 public class GameTime {
 

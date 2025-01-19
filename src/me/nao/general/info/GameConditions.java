@@ -48,15 +48,14 @@ import org.bukkit.util.Vector;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.ViaAPI;
 
-import me.nao.cooldown.ReportsManager;
+import me.nao.cooldown.mg.ReportsManager;
 import me.nao.enums.GameInteractions;
 import me.nao.enums.GameStatus;
 import me.nao.enums.GameType;
 import me.nao.enums.Items;
 import me.nao.enums.ObjetiveStatusType;
 import me.nao.enums.StopMotivo;
-//import me.nao.gamemode.DestroyNexo;
-import me.nao.main.game.Minegame;
+import me.nao.main.mg.Minegame;
 import me.nao.manager.GameIntoMap;
 import me.nao.scoreboard.MgScore;
 import me.nao.teamsmg.MgTeams;
@@ -66,8 +65,8 @@ import me.nao.timers.NexoTemp;
 import me.nao.timers.AdventureTemp;
 import me.nao.timers.ResistenceTemp;
 import me.nao.utils.Utils;
-import me.nao.yamlfile.game.YamlFilePlus;
-import me.top.users.PointsManager;
+import me.nao.yamlfile.mg.YamlFilePlus;
+import me.top.users.mg.PointsManager;
 
 
 public class GameConditions {
@@ -426,8 +425,9 @@ public class GameConditions {
 			      
 			        String[] sts = ym.getString("Start.Sound-of-Mision").split(";");
 			      try {
-			            @SuppressWarnings("deprecation")
-			    	    Sound soundtype = Sound.valueOf(sts[0].toUpperCase());
+			    	  
+			    	    @SuppressWarnings("deprecation")
+						Sound soundtype = Sound.valueOf(sts[0].toUpperCase());
 					    Float volumen = Float.valueOf(sts[1]);
 					    Float grade = Float.valueOf(sts[2]);
 						player.playSound(player.getLocation(), soundtype, volumen,grade);
@@ -754,7 +754,7 @@ public class GameConditions {
 		   String[] sts = mision.getString("Win.Sound-of-Win").split(";");
 		
 		   try {
-			   @SuppressWarnings("deprecation")
+	    	   @SuppressWarnings("deprecation")
 	    	   Sound soundtype = Sound.valueOf(sts[0].toUpperCase());
 			   Float volumen = Float.valueOf(sts[1]);
 			   Float grade = Float.valueOf(sts[2]);
@@ -847,7 +847,8 @@ public class GameConditions {
 	       
 		   String[] sts = mision.getString("Lost.Sound-of-Lost").split(";");
 	       try {
-	    	   @SuppressWarnings("deprecation")
+	    	  
+			   @SuppressWarnings("deprecation")
 			   Sound soundtype = Sound.valueOf(sts[0].toUpperCase());
 			   Float volumen = Float.valueOf(sts[1]);
 			   Float grade = Float.valueOf(sts[2]);
@@ -943,6 +944,7 @@ public class GameConditions {
 	public void SetAndSavePlayer(Player player,String map) {
 		
 		 PlayerInfo pl = null;
+		 Attribute attribute = Attribute.MAX_HEALTH; 
 		 if(CanJoinWithYourInventory(map) && !CanUseKit(map)) {
 				//NO SALVAS SU INVENTARIO
 			 	
@@ -958,10 +960,10 @@ public class GameConditions {
 				//LO SALVAS
 				
 				if(ExistLobbyMg()) {
-				    pl = new PlayerInfo(plugin,true,player,player.getActivePotionEffects(), player.getInventory().getContents(), player.getGameMode(), player.isFlying(),player.getHealth(), player.getAttribute(Attribute.MAX_HEALTH).getValue(), player.getFoodLevel(), player.getLevel(),player.getExp(), GetLocationOfLobby(), map,new GamePoints());
+				    pl = new PlayerInfo(plugin,true,player,player.getActivePotionEffects(), player.getInventory().getContents(), player.getGameMode(), player.isFlying(),player.getHealth(), player.getAttribute(attribute).getValue(), player.getFoodLevel(), player.getLevel(),player.getExp(), GetLocationOfLobby(), map,new GamePoints());
 					
 				}else {
-					pl = new PlayerInfo(plugin,true,player,player.getActivePotionEffects(), player.getInventory().getContents(), player.getGameMode(), player.isFlying(),player.getHealth(), player.getAttribute(Attribute.MAX_HEALTH).getValue(), player.getFoodLevel(), player.getLevel(),player.getExp(), player.getLocation(), map,new GamePoints());
+					pl = new PlayerInfo(plugin,true,player,player.getActivePotionEffects(), player.getInventory().getContents(), player.getGameMode(), player.isFlying(),player.getHealth(), player.getAttribute(attribute).getValue(), player.getFoodLevel(), player.getLevel(),player.getExp(), player.getLocation(), map,new GamePoints());
 	
 				}
 			}

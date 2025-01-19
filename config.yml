@@ -22,7 +22,7 @@ Data-Base:
 Maps-Created:
     List:
     - example
-Maps-Locked:
+Maps-Blocked:
     List:    
     - example
 HeadShoot-World:
@@ -31,7 +31,7 @@ HeadShoot-World:
 Regen-Explosion:
     List:
     - example    
-Maps-Points:
+Maps-Ranked:
     List:
     - example  
 Random-Reward:

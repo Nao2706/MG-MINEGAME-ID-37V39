@@ -6,7 +6,7 @@ import org.bukkit.scoreboard.Team;
 import org.bukkit.scoreboard.Team.Option;
 import org.bukkit.scoreboard.Team.OptionStatus;
 
-import me.nao.main.game.Minegame;
+import me.nao.main.mg.Minegame;
 
 public class MgTeams {
 	

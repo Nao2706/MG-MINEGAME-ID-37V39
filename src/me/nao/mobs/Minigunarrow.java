@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import me.nao.main.game.Minegame;
+import me.nao.main.mg.Minegame;
 
 public class Minigunarrow extends BukkitRunnable{
 

@@ -18,8 +18,8 @@ import me.nao.general.info.GameInfo;
 import me.nao.general.info.GameNexo;
 import me.nao.general.info.PlayerInfo;
 import me.nao.general.info.TeamsMg;
-import me.nao.main.game.Minegame;
-import me.nao.yamlfile.game.YamlFilePlus;
+import me.nao.main.mg.Minegame;
+import me.nao.yamlfile.mg.YamlFilePlus;
 
 public class DestroyNexo {
 

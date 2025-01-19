@@ -32,7 +32,7 @@ import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
 import me.nao.general.info.PlayerInfo;
-import me.nao.main.game.Minegame;
+import me.nao.main.mg.Minegame;
 import me.nao.manager.GameIntoMap;
 
 public class RevivePlayer{

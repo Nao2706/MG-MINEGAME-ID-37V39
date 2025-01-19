@@ -10,7 +10,7 @@ import me.nao.enums.GameStatus;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
 import me.nao.general.info.PlayerInfo;
-import me.nao.main.game.Minegame;
+import me.nao.main.mg.Minegame;
 
 public class AutoRevivePlayerBeta {
 

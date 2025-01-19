@@ -9,7 +9,7 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import me.nao.main.game.Minegame;
+import me.nao.main.mg.Minegame;
 
 
 

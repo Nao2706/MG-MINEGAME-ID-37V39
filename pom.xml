@@ -3,6 +3,13 @@
   <groupId>NAO-GAMES3-MAVEN1</groupId>
   <artifactId>NAO-GAMES3-MAVEN1</artifactId>
   <version>0.0.1-SNAPSHOT</version>
+  
+  <properties>
+   	<maven.compiler.source>21</maven.compiler.source>
+  	<maven.compiler.target>21</maven.compiler.target>
+  	<java.version>21</java.version>
+  </properties>
+  
   <build> 
     <sourceDirectory>src</sourceDirectory>
     <plugins>
@@ -38,6 +45,11 @@
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
 		
+		<repository>
+		    <id>viaversion-repo</id>
+		    <url>https://repo.viaversion.com</url>
+		</repository>
+		
   
   </repositories>
   
@@ -46,25 +58,32 @@
   
   <dependencies>
   
-   		<dependency>
-         <groupId>me.clip</groupId>
-          <artifactId>placeholderapi</artifactId>
-          <version>2.11.6</version>
-         <scope>provided</scope>
-        </dependency>
+		  <dependency>
+		    <groupId>com.viaversion</groupId>
+		    <artifactId>viaversion-api</artifactId>
+		    <version>[5.0.0,6.0.0)</version>
+		    <scope>provided</scope>
+		  </dependency>
   
-  	<dependency>
-  		<groupId>org.spigotmc</groupId>
-  		<artifactId>spigot-api</artifactId>
-  		<version>1.20.4-R0.1-SNAPSHOT</version>
-  		<scope>provided</scope>
-  	</dependency>
+   	  	 <dependency>
+           <groupId>me.clip</groupId>
+           <artifactId>placeholderapi</artifactId>
+           <version>2.11.6</version>
+           <scope>provided</scope>
+         </dependency>
   
-   <dependency>
-	   <groupId>de.tr7zw</groupId>
-	   <artifactId>item-nbt-api-plugin</artifactId>
-	   <version>2.12.4</version>
-  </dependency>
+	  	<dependency>
+	  		<groupId>org.spigotmc</groupId>
+	  		<artifactId>spigot-api</artifactId>
+	  		<version>1.21.4-R0.1-SNAPSHOT</version>
+	  		<scope>provided</scope>
+	  	</dependency>
+  
+	   <dependency>
+		   <groupId>de.tr7zw</groupId>
+		   <artifactId>item-nbt-api-plugin</artifactId>
+		   <version>2.14.1</version>
+	  </dependency>
   
   
   </dependencies>
