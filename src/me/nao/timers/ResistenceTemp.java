@@ -711,7 +711,7 @@ public class ResistenceTemp {
 			if(value == 3 || value == 2 || value == 1) {
 				return value;
 			}else if(value >= 6){
-				return 0;
+				return 1;
 			}
 		}catch(IllegalArgumentException e) {
 			 Logger logger = Logger.getLogger(AdventureTemp.class.getName());

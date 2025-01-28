@@ -66,7 +66,7 @@ public class MapSettings {
 			ym.set("Revive-System",false);
 			ym.set("Max-Player", 5);
 			ym.set("Min-Player", 2);
-			ym.set("Timer-H-M-S", "1,5,10");
+			ym.set("Game-Timer-H-M-S", "1,5,10");
 			ym.set("Has-Objetives",false); 
 			ym.set("Primary-Objetive-Opcional",false); 
 			ym.set("Secondary-Objetive-Opcional",false); 
@@ -77,9 +77,10 @@ public class MapSettings {
 			ym.set("Has-Kit",false);
 			ym.set("Start-Kit","example");
 			ym.set("Has-Time",false);
-			ym.set("Time","Lunes Viernes");
+			ym.set("Usage-Time","Lunes Viernes");
 			ym.set("Requires-Permission",false);
 			ym.set("Permission-To-Play","my.permission.use");
+			
 			List<String> perm = ym.getStringList("How-Get-Permission.Message");
 			ym.set("How-Get-Permission.Message", perm);
 			perm.add("Hola %player% necesitas un permiso para entrar a este Mapa.");
@@ -91,6 +92,7 @@ public class MapSettings {
 			ym.set("Start.Chat-Message", startc);
 			startc.add("Holax2 %player%");
 			ym.set("Start.Sound-of-Mision", "entity_ender_dragon_ambient;20.0;1");
+			
 			List<String> start = ym.getStringList("Start.Actions");
 			ym.set("Start.Actions", start);
 			start.add("execute at %player% run summon minecraft:item ~ ~1 ~ {Item:{id:diamond,Count:1}}");// summon minecraft:item ~ ~1 ~ {Item:{id:diamond,Count:1}}
@@ -110,10 +112,12 @@ public class MapSettings {
 			ym.set("Lost.Tittle-of-Lost", "Fail %player%");
 			ym.set("Lost.Tittle-Time", "20-40-20");
 			ym.set("Lost.SubTittle-of-Lost", "F %player%");
+			
 			List<String> lost = ym.getStringList("Lost.Chat-Message-Lost");
 			ym.set("Lost.Chat-Message-Lost", lost);
 			startc.add("Perdiste %player%");
 			ym.set("Lost.Sound-of-Lost", "entity_witch_celebrate;20.0;1");
+			
 			List<String> lostr = ym.getStringList("Lost-Rewards.Commands");
 			ym.set("Lost-Rewards.Commands", lostr);
 			lostr.add("summon minecraft:item ~ ~1 ~ {Item:{id:apple,Count:1}}");

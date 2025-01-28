@@ -979,7 +979,7 @@ public class GameConditions {
 		if(!plugin.getGameInfoPoo().containsKey(map)) {
 			try {
 				FileConfiguration game = getGameConfig(map);
-				String time = game.getString("Timer-H-M-S");
+				String time = game.getString("Game-Timer-H-M-S");
 				GameType type = GameType.valueOf(game.getString("Type-Map").toUpperCase());
 				int maxplayers = game.getInt("Max-Player");
 				int minplayers = game.getInt("Min-Player");
@@ -1792,7 +1792,7 @@ public class GameConditions {
 			 					return false;
 			 				}
 			 		 }if(mision.getBoolean("Has-Time")) {
-						 String time = mision.getString("Time");
+						 String time = mision.getString("Usage-Time");
 					    	
 					        if(!PassedTimeMg(player,time)) return false;
 					 }
@@ -1984,6 +1984,24 @@ public class GameConditions {
 	
 	//TODO  TIEMPO PARA ABAJO	
 	//LISTA QUE CONVIERTE DE ESPAÑOL A INGLES DE LA CONFIG
+	
+	public void mgformatsTime() {
+		System.out.println("FORMATOS");
+		System.out.println("1) Lunes Miercoles Viernes");
+		System.out.println("2) Domingo Sabado Viernes 08:35-17:11");
+		System.out.println("3) 10/01/2023 06:14:00 AM-");
+		System.out.println("4) 10/01/2023 06:14:00 AM-13/01/2023 12:14:00 PM");
+		System.out.println("Significado:");
+		System.out.println("1) Dias: coloca los dias que deseas que funcione el mapa.");
+		System.out.println("2) Dias y Hora: coloca los dias y una hora que deseas que funcione el mapa. (la hora va de menor a mayor ver el ejemplo)");
+		System.out.println("3) Fecha Especifica 1: coloca la fecha en la que deseas que empiece a funcionar el mapa. (Guiarse con el ejemplo estrictamente)");
+		System.out.println("4) Fecha Especifica 2: coloca la fecha en la que deseas que funcione el mapa y otra en la que cierre. (Guiarse con el ejemplo estrictamente)");
+
+		
+		return;
+	}
+	
+	
 	public List <DayOfWeek> SpanishToEnglish(String days) {
 		String[] d = days.split(" ");
 		List <DayOfWeek> l = new ArrayList<DayOfWeek>();
@@ -1996,6 +2014,8 @@ public class GameConditions {
 			}
 		}catch(IllegalArgumentException e) {
 			System.out.println("LOG-1 SPANISH El Formato 1 o 2 no es el correcto ");
+			 mgformatsTime();
+			
 		}
 		return l;
 	}
@@ -2076,6 +2096,7 @@ public class GameConditions {
 					    
 					 }catch(DateTimeParseException e) {
 						 e.printStackTrace();
+						 mgformatsTime();
 					 }
 				    
 				}else if (st.countTokens() == 3){
@@ -2105,6 +2126,7 @@ public class GameConditions {
 							}
 					 }catch(DateTimeParseException e) {
 						 e.printStackTrace();
+						 mgformatsTime();
 					 }
 				}
 		}

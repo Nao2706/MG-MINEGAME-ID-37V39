@@ -618,7 +618,7 @@ public class Comandos implements CommandExecutor{
 						// mg set nao 10
 						
 						Player target = Bukkit.getServer().getPlayerExact(args[1]);
-						int valor = Integer.valueOf(args[2])  ;
+						double valor = Double.valueOf(args[2])  ;
 						if(target != null) {
 							//target.setMaxHealth(target.getMaxHealth());
 							target.getAttribute(Attribute.SCALE).setBaseValue(valor);
