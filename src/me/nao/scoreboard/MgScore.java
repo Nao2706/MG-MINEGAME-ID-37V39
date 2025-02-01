@@ -90,7 +90,7 @@ public class MgScore {
 		
 		int val = r.nextInt(3+1); 
 		
-			 ob.setDisplayName(""+ChatColor.YELLOW+ChatColor.BOLD+"NOTAS");
+			 ob.setDisplayName(""+ChatColor.YELLOW+ChatColor.BOLD+"TIPS");
 			 
 			 if(val == 0) {
 				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"-------------");
@@ -213,13 +213,13 @@ public class MgScore {
 					RevivePlayer rp = plugin.getKnockedPlayer().get(target);
 					int timelife = rp.getRemainingTimeLife();
 				
-					if(timelife >= 21 && timelife <= 30) {
+					if(timelife >= 51 && timelife <= 60) {
 					
 						green.addEntry(rp.getArmorStand().getUniqueId().toString());
-					}else if(timelife >= 11 && timelife <= 20) {
+					}else if(timelife >= 41 && timelife <= 50) {
 					
 						yellow.addEntry(rp.getArmorStand().getUniqueId().toString());
-					}else if(timelife >= 1 && timelife <= 10) {
+					}else if(timelife >= 1 && timelife <= 40) {
 						
 						red.addEntry(rp.getArmorStand().getUniqueId().toString());
 					}
@@ -266,7 +266,7 @@ public class MgScore {
 			List<String> show = new ArrayList<>();
 			
 			 if(priority == 0) {
-				 ob.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.RED+ChatColor.BOLD+"OBJETIVOS HOSTILES"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
+				 ob.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.RED+ChatColor.BOLD+"OBJ.HOSTILES"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
 				 show.add(""+ChatColor.RED+ChatColor.BOLD+"-------------");
 				 show.add(ChatColor.RED+" ");
 				 if(!hostilobje.isEmpty()){
@@ -286,7 +286,7 @@ public class MgScore {
 				
 				 show.add(ChatColor.YELLOW+"Revisa el Libro !!!");
 		    }else if(priority == 1) {
-		    	 ob.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"OBJETIVOS PRIMARIOS"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
+		    	 ob.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"OBJ.PRIMARIOS"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
 		    	 if(!pr.isEmpty()) {
 		    		 if(gomg.isNecessaryObjetivePrimary()) {
 			    		 show.add(ChatColor.GOLD+"Obligatorio:" +ChatColor.RED+" Si");
@@ -311,7 +311,7 @@ public class MgScore {
 				 }
 				 show.add(ChatColor.RED+"Revisa el Libro !!!");
 			}else if(priority == 2) {
-				 ob.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"OBJETIVOS SECUNDARIOS"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
+				 ob.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"OBJ.SECUNDARIOS"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
 				 if(!se.isEmpty()) {
 		    		 if(gomg.isNecessaryObjetiveSedondary()) {
 			    		 show.add(ChatColor.GOLD+"Obligatorio:" +ChatColor.RED+" Si");
@@ -391,7 +391,7 @@ public class MgScore {
 			Random r = new Random();
 			
 			List<String> show = new ArrayList<>();
-			 ob.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.RED+ChatColor.BOLD+"CONSEJOS"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
+			 ob.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.RED+ChatColor.BOLD+"TIPS"+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
 			 show.add(""+ChatColor.RED+ChatColor.BOLD+"-------------");
 			 show.add(ChatColor.RED+" ");
 			 show.add(con.get(r.nextInt(con.size())));

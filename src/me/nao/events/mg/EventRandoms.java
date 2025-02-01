@@ -38,6 +38,7 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.entity.SmallFireball;
 import org.bukkit.entity.Snowman;
 import org.bukkit.entity.Spider;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.Villager;
 import org.bukkit.entity.Villager.Profession;
 import org.bukkit.entity.minecart.StorageMinecart;
@@ -209,7 +210,7 @@ public class EventRandoms implements Listener{
 			
 			PlayerInfo pi = plugin.getPlayerInfoPoo().get(player);
 			GameInfo gi = plugin.getGameInfoPoo().get(pi.getMapName());
-			if(gi.getGameStatus() == GameStatus.JUGANDO) {
+			if(gi.getGameStatus() == GameStatus.JUGANDO || gi.getGameStatus() == GameStatus.PAUSE || gi.getGameStatus() == GameStatus.FREEZE) {
 
 				
 				
@@ -224,7 +225,7 @@ public class EventRandoms implements Listener{
 						if(name.startsWith("CADAVER DE ")){
 							e.setCancelled(true);
 							
-							Player target = Bukkit.getPlayer(name.replace("CADAVER DE ","").replace(" ",""));
+							Player target = Bukkit.getPlayer(name.replace("REVIVIR CON (SHIFT + CLICK DERECHO) A: ","").replace(" ",""));
 							if(gc.isPlayerKnocked(target)) {
 								
 								if(target.getName().equals(player.getName())) {
@@ -1106,16 +1107,35 @@ public class EventRandoms implements Listener{
 					
 					if(cm.isPlayerinGame(player)) {
 						
-						if(alive1.contains(player.getName())) {
+						if(plugin.getKnockedPlayer().containsKey(player)) {
+							RevivePlayer rp = plugin.getKnockedPlayer().get(player);
+							int timelife = rp.getRemainingTimeLife();
+							
+							if(timelife >= 41 && timelife <= 60) {
+								cm.SendMessageToAllUsersOfSameMap(player, ""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.GREEN+ChatColor.BOLD+"DERRIBADO"+ChatColor.DARK_GRAY+ChatColor.BOLD+"] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+ChatColor.GRAY+player.getName()+": "+ChatColor.GREEN+message+ChatColor.GOLD+" (Le queda "+ChatColor.RED+rp.getRemainingTimeLife()+"secs"+ChatColor.GOLD+" de vida.)");
+
+							
+							}else if(timelife >= 21 && timelife <= 40) {
+								cm.SendMessageToAllUsersOfSameMap(player, ""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.YELLOW+ChatColor.BOLD+"DERRIBADO"+ChatColor.DARK_GRAY+ChatColor.BOLD+"] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+ChatColor.GRAY+player.getName()+": "+ChatColor.YELLOW+message+ChatColor.GOLD+" (Le queda "+ChatColor.RED+rp.getRemainingTimeLife()+"secs"+ChatColor.GOLD+" de vida.)");
+
+								
+							}else if(timelife >= 1 && timelife <= 20) {
+								cm.SendMessageToAllUsersOfSameMap(player, ""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.RED+ChatColor.BOLD+"DERRIBADO"+ChatColor.DARK_GRAY+ChatColor.BOLD+"] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+ChatColor.GRAY+player.getName()+": "+ChatColor.RED+message+ChatColor.GOLD+" (Le queda "+ChatColor.RED+rp.getRemainingTimeLife()+"secs"+ChatColor.GOLD+" de vida.)");
+
+								
+							}
+							
+
+						}else if(alive1.contains(player.getName())) {
 		
-							cm.SendMessageToAllUsersOfSameMap(player, ""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.GREEN+ChatColor.BOLD+"VIVO"+ChatColor.DARK_GRAY+ChatColor.BOLD+"] "+ra.getRank(player)+ChatColor.WHITE+player.getName()+": "+ChatColor.GREEN+message);
+							cm.SendMessageToAllUsersOfSameMap(player, ""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.GREEN+ChatColor.BOLD+"VIVO"+ChatColor.DARK_GRAY+ChatColor.BOLD+"] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+ChatColor.WHITE+player.getName()+": "+ChatColor.GREEN+message);
 						}else if(deads1.contains(player.getName())) {
 		
-							cm.SendMessageToAllUsersOfSameMap(player, ""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.RED+ChatColor.BOLD+"MUERTO"+ChatColor.DARK_GRAY+ChatColor.BOLD+"] "+ra.getRank(player)+ChatColor.WHITE+player.getName()+": "+ChatColor.YELLOW+message);
+							cm.SendMessageToAllUsersOfSameMap(player, ""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.RED+ChatColor.BOLD+"MUERTO"+ChatColor.DARK_GRAY+ChatColor.BOLD+"] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+ChatColor.WHITE+player.getName()+": "+ChatColor.YELLOW+message);
 		
 						}else if(spec.contains(player.getName())) {
 		
-							cm.SendMessageToAllUsersOfSameMap(player, ""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.WHITE+ChatColor.BOLD+"ESPECTADOR"+ChatColor.DARK_GRAY+ChatColor.BOLD+"] "+ra.getRank(player)+ChatColor.WHITE+player.getName()+": "+ChatColor.GRAY+message);
+							cm.SendMessageToAllUsersOfSameMap(player, ""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.WHITE+ChatColor.BOLD+"ESPECTADOR"+ChatColor.DARK_GRAY+ChatColor.BOLD+"] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+ChatColor.WHITE+player.getName()+": "+ChatColor.GRAY+message);
 						}
 
 					 e.setCancelled(true);
@@ -1295,8 +1315,11 @@ public class EventRandoms implements Listener{
 			
 		}
 		
+	
+		
 		@EventHandler
 		public void onExplodeEntity(EntityExplodeEvent e) {
+			
 				FileConfiguration config = plugin.getConfig();
 			
 				List<String> mundos = config.getStringList("Regen-Explosion.List");
@@ -1304,9 +1327,11 @@ public class EventRandoms implements Listener{
 				String mundo = e.getEntity().getWorld().getName();
 
 				if (mundos.contains(mundo)) {
+				
 					List<Block> blocks = e.blockList();
 					new RegenRun(blocks).runTaskTimer(plugin, 1, 1);
-					e.setYield(0);
+					
+					//e.setYield(0);
 				}
 
 				List<String> w = config.getStringList("Worlds-Animation.List");
@@ -1334,7 +1359,7 @@ public class EventRandoms implements Listener{
 
 		@EventHandler
 		public void onExplodeBlock(BlockExplodeEvent e) {
-			FileConfiguration config = plugin.getConfig();
+				FileConfiguration config = plugin.getConfig();
 			
 				List<String> mundos = config.getStringList("Regen-Explosion.List");
 
@@ -1344,7 +1369,7 @@ public class EventRandoms implements Listener{
 					
 					List<Block> blocks = e.blockList();
 					new RegenRun(blocks).runTaskTimer(plugin, 1, 1);
-					e.setYield(0);
+					//e.setYield(0);
 					
 				}
 
@@ -3155,7 +3180,7 @@ public class EventRandoms implements Listener{
 				 
 				Block b = player.getLocation().getBlock();
 				Block r = b.getRelative(0, -2, 0);
-				
+				Block r2 = b.getRelative(0, 1, 0);
 				
 				if(r.getType() == Material.GREEN_CONCRETE) {
 						
@@ -3171,8 +3196,16 @@ public class EventRandoms implements Listener{
 
 				}else if(r.getType() == Material.AIR) {
 					System.out.println("BOOM");
-					player.getWorld().createExplosion(player.getLocation(), 10, false, false);
-					return;
+					//player.getWorld().createExplosion(r2.getLocation(), 15, false, false);
+					TNTPrimed ptnt = (TNTPrimed) player.getWorld().spawnEntity(r2.getLocation().add(0.5,0,0.5),EntityType.TNT);
+					ptnt.setFuseTicks(0);
+					ptnt.setCustomName(ChatColor.DARK_PURPLE+"Mina Explosiva");
+					ptnt.setYield(5);
+					ptnt.setIsIncendiary(true);
+				
+				
+					
+		 			return;
 				}
 			 	
 			}

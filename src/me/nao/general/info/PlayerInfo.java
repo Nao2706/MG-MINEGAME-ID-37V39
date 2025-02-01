@@ -5,6 +5,7 @@ import java.util.Collection;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -23,7 +24,7 @@ public class PlayerInfo {
 	private double vida;
 	private double maxvida;
 	private int comida;
-	private int lvlxp;
+	private int lvlxp , mglvl;
 	private float xp;
 	private Location l;
 	private String map;
@@ -55,7 +56,7 @@ public class PlayerInfo {
 		this.map = map;
 		this.gp = gp;
 		this.teamname = "NINGUNO";
-		
+		this.mglvl = 0;
 	}
 	
 	/** 
@@ -77,6 +78,7 @@ public class PlayerInfo {
 		this.map = map;
 		this.gp = gp;
 		this.teamname = "NINGUNO";
+		this.mglvl = 0;
 		
 	}
 	
@@ -140,6 +142,10 @@ public class PlayerInfo {
 	public String getTeamName() {
 		return teamname;
 	}
+	
+	public int getMgPlayerLvl() {
+		return mglvl;
+	}
 
 	public void setPlayerMG(Player player) {
 		this.player = player;
@@ -189,9 +195,20 @@ public class PlayerInfo {
 		this.teamname = teamname;
 	}
 	
+	public void setMgPlayerLvl(int value) {
+		this.mglvl = value;
+	}
+	
 	public void ClearAllPlayerMg() {
 		
+		int lvl = 0 ;
+		FileConfiguration points = plugin.getPoints();
+		if(points.contains("Players."+player.getName())) {
+			int lvlplayer = points.getInt("Players."+player.getName()+".Level");
+			lvl = lvlplayer;
+		}
 		
+		setMgPlayerLvl(lvl);
 		player.getAttribute(Attribute.MAX_HEALTH).setBaseValue(20);
 		player.setExp(0);
 		player.setLevel(0);
@@ -205,6 +222,14 @@ public class PlayerInfo {
 	}
 	
 	public void ClearGamemodePlayerMg() {
+		int lvl = 0 ;
+		FileConfiguration points = plugin.getPoints();
+		if(points.contains("Players."+player.getName())) {
+			int lvlplayer = points.getInt("Players."+player.getName()+".Level");
+			lvl = lvlplayer;
+		}
+		
+		setMgPlayerLvl(lvl);
 		player.setFlying(false);
 		player.setGameMode(GameMode.ADVENTURE);
 	}

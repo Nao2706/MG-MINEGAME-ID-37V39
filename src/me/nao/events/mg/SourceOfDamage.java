@@ -860,7 +860,7 @@ public class SourceOfDamage implements Listener{
 							if(gc.isEnabledReviveSystem(pi.getMapName())) {
 								ArmorStand armor = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
 							
-								RevivePlayer pr = new RevivePlayer(player,0,30,ReviveStatus.BLEEDING,damager,null,armor ,plugin);
+								RevivePlayer pr = new RevivePlayer(player,0,60,ReviveStatus.BLEEDING,damager,null,armor ,plugin);
 								pr.Knocked();
 								plugin.getKnockedPlayer().put(player, pr);
 								return;
@@ -874,7 +874,7 @@ public class SourceOfDamage implements Listener{
 					//bloque de daño por causas externas
 							if(gc.isEnabledReviveSystem(pi.getMapName())) {
 								ArmorStand armor = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
-								RevivePlayer pr = new RevivePlayer(player,0,30,ReviveStatus.BLEEDING,null,e.getCause(),armor ,plugin);
+								RevivePlayer pr = new RevivePlayer(player,0,60,ReviveStatus.BLEEDING,null,e.getCause(),armor ,plugin);
 								pr.Knocked();
 								plugin.getKnockedPlayer().put(player, pr);
 								return;

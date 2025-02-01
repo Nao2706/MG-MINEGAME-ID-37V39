@@ -27,8 +27,8 @@ public class RankPlayer {
 		String rank = "";
 		
 			FileConfiguration points = plugin.getPoints();
-			if(points.contains("Players."+player.getName()+".Kills")) {
-				int point = points.getInt("Players."+player.getName()+".Kills");
+			if(points.contains("Players."+player.getName()+".Level")) {
+				int point = points.getInt("Players."+player.getName()+".Level");
 				if(point >= 100) {
 					return rank = ""+ChatColor.GREEN+ChatColor.BOLD+"CORREDOR ";
 				}
@@ -60,6 +60,43 @@ public class RankPlayer {
 	}
 	
 	
+	public String getRankLevelColor(int lvl) {
+		
+		String rank = "";
+		
+			
+				if(lvl >= 10) {
+					return rank = ""+ChatColor.YELLOW+ChatColor.BOLD+lvl+".LVL ";
+					
+				}else if(lvl >= 30) {
+					return rank =  ""+ChatColor.AQUA+ChatColor.BOLD+lvl+".LVL ";
+					
+				}else if(lvl >= 40) {
+					return rank =  ""+ChatColor.RED+ChatColor.BOLD+lvl+".LVL ";
+					
+				}else if(lvl >= 60) {
+					return rank =  ""+ChatColor.DARK_PURPLE+ChatColor.BOLD+lvl+".LVL ";
+					
+				}else if(lvl >= 70) {
+					 rank =  ""+ChatColor.GOLD+ChatColor.BOLD+lvl+".LVL ";
+					 
+				}else if(lvl >= 80) {
+					 rank =  ""+ChatColor.DARK_GREEN+ChatColor.BOLD+lvl+".LVL ";
+					 
+				}else if(lvl >= 90) {
+					 rank =  ""+ChatColor.DARK_RED+ChatColor.BOLD+lvl+".LVL ";
+					 
+				}else if(lvl >= 100) {
+					 rank =  ""+ChatColor.DARK_PURPLE+ChatColor.BOLD+lvl+".LVL ";
+					 
+				}else {
+					rank = ""+ChatColor.GREEN+ChatColor.BOLD+lvl+".LVL ";
+				}
+				
+			
+		
+			return rank;
+	}
 	
 	
 	

@@ -1307,10 +1307,12 @@ public class GameConditions {
 		}
 		
 		GameTimeActions gta = list.stream().filter(o -> o.getDisplayTime().equals(time)).findFirst().get();
-		 
+		
+		if(gta.isActionExecuted()) return;
+		
 			 	ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-				
-				List<String> actions = gta.getActions();
+				gta.setActionExecuted(true);
+				List<String> actions = gta.getTimeActions();
 				if(!actions.isEmpty()) {
 					for(int i = 0 ;i<actions.size();i++) {
 						String texto = actions.get(i);

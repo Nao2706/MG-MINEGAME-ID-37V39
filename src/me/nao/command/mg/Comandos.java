@@ -257,6 +257,36 @@ public class Comandos implements CommandExecutor{
 					gc.loadObjetivesOfGameDebug("Tutorial");
 					
 					return true;
+				}else if(args[0].equalsIgnoreCase("god")) {
+					if (args.length == 2) {
+						// /c add n p
+						// mg set nao 10
+						
+						Player target = Bukkit.getServer().getPlayerExact(args[1]);
+						if(target != null) {
+							target.setInvulnerable(true);
+							Bukkit.getConsoleSender().sendMessage(target.getName()+" modo Invulnerable On");
+						}
+						
+					}
+					
+					
+					return true;
+				}else if(args[0].equalsIgnoreCase("ungod")) {
+					if (args.length == 2) {
+						// /c add n p
+						// mg set nao 10
+						
+						Player target = Bukkit.getServer().getPlayerExact(args[1]);
+						if(target != null) {
+							target.setInvulnerable(false);
+							Bukkit.getConsoleSender().sendMessage(target.getName()+" modo Invulnerable Off");
+
+						}
+					}
+					
+					
+					return true;
 				}else if(args[0].equalsIgnoreCase("list-fa") ) {
 					
 					Bukkit.getConsoleSender().sendMessage("Lista de Timers activos");
@@ -2103,7 +2133,37 @@ public class Comandos implements CommandExecutor{
           		
           		return true;
           		
-          	}else if (args[0].equalsIgnoreCase("delete")) {
+          	}else if(args[0].equalsIgnoreCase("god")) {
+				if (args.length == 2) {
+					// /c add n p
+					// mg set nao 10
+					
+					Player target = Bukkit.getServer().getPlayerExact(args[1]);
+					if(target != null) {
+						target.setInvulnerable(true);
+						Bukkit.getConsoleSender().sendMessage(target.getName()+" modo Invulnerable On");
+					}
+					
+				}
+				
+				
+				return true;
+			}else if(args[0].equalsIgnoreCase("ungod")) {
+				if (args.length == 2) {
+					// /c add n p
+					// mg set nao 10
+					
+					Player target = Bukkit.getServer().getPlayerExact(args[1]);
+					if(target != null) {
+						target.setInvulnerable(false);
+						Bukkit.getConsoleSender().sendMessage(target.getName()+" modo Invulnerable Off");
+
+					}
+				}
+				
+				
+				return true;
+			}else if (args[0].equalsIgnoreCase("delete")) {
 					if(player.isOp()) {
 						if (args.length == 2) {
 							String name = args[1];

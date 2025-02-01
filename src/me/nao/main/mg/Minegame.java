@@ -260,10 +260,10 @@ public class Minegame extends JavaPlugin{
 
 		
 		
-		Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"__________________________________");
-		Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+nombre+ChatColor.GOLD+" Ha sido Activado "+ChatColor.RED+"[Version:"+ChatColor.DARK_GREEN+version+"]");
+		Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"||||||||||||||||||||||||||||||||||");
+		Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+nombre+ChatColor.GOLD+" Ha sido Activado "+ChatColor.RED+"[Version:"+ChatColor.DARK_GREEN+version+ChatColor.RED+"]");
 		Bukkit.getConsoleSender().sendMessage(ChatColor.BLUE+" Hora de Crear Aventuras. ");
-		Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"__________________________________");
+		Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"||||||||||||||||||||||||||||||||||");
 		registrarcomando();
 		registerEvents();
 	
@@ -286,10 +286,10 @@ public class Minegame extends JavaPlugin{
 	    }
 	   
 	   
-	    Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"__________________________________");
-		Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+nombre+ChatColor.GOLD+" Ha sido Desactivado "+ChatColor.RED+"[Version:"+ChatColor.DARK_GREEN+version+"]");
+	    Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"||||||||||||||||||||||||||||||||||");
+		Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+nombre+ChatColor.GOLD+" Ha sido Desactivado "+ChatColor.RED+"[Version:"+ChatColor.DARK_GREEN+version+ChatColor.RED+"]");
 		Bukkit.getConsoleSender().sendMessage(ChatColor.RED+" Hora de Descansar. ");
-		Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"__________________________________");
+		Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"||||||||||||||||||||||||||||||||||");
 		
 	}	
  

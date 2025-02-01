@@ -125,7 +125,7 @@ public class RevivePlayer{
 
 		ArmorStand as = getArmorStand();
 		
-		as.setCustomName(""+ChatColor.RED+ChatColor.BOLD+"CADAVER DE "+ChatColor.GREEN+ChatColor.BOLD+player.getName());
+		as.setCustomName(""+ChatColor.RED+ChatColor.BOLD+"REVIVIR CON (SHIFT + CLICK DERECHO) A: "+ChatColor.GREEN+ChatColor.BOLD+player.getName());
 		as.setCustomNameVisible(true);
 		as.setBasePlate(false);
 		as.setArms(true);
