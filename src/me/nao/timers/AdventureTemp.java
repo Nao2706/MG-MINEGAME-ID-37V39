@@ -82,7 +82,7 @@ public class AdventureTemp {
 	
 	public void Inicio(String name) {
 		
-		FileConfiguration config = plugin.getConfig();
+		
 		GameConditions gc = new GameConditions(plugin);
 		GameIntoMap c = new GameIntoMap(plugin);
 		BukkitScheduler sh = Bukkit.getServer().getScheduler();
@@ -94,7 +94,8 @@ public class AdventureTemp {
 			GameAdventure ga = (GameAdventure) ms;
 		    MgScore sco = new MgScore(plugin);
 		    
-			int startm = config.getInt("CountDownPreLobby");
+			//int startm = config.getInt("CountDownPreLobby");
+		    int startm = ms.getCountDownStart();
 			int end = 10;
 		
 			//String timer[] = ms.getTimeMg().split(",");
@@ -214,7 +215,6 @@ public class AdventureTemp {
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN...");
 						
 						 ms.setGameStatus(GameStatus.TERMINANDO);
-						 gc.sendResultsOfGame(ga,gt.getGameCronometForResult(),gt.getGameTimerForResult());
 				  		 //STOP
 					}else if(motivo == StopMotivo.WIN || motivo == StopMotivo.LOSE || motivo == StopMotivo.ERROR || motivo == StopMotivo.FORCE) {
 						
@@ -222,7 +222,6 @@ public class AdventureTemp {
 						 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN..");
 						 ms.setGameStatus(GameStatus.TERMINANDO);
-						 gc.sendResultsOfGame(ga,gt.getGameCronometForResult(),gt.getGameTimerForResult());
 						 //ALL DEADS
 					}else if(alive.isEmpty() || isAllKnocked(name)) {
 						
@@ -235,9 +234,7 @@ public class AdventureTemp {
 						
 						 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"( FIN. )");
-						 ms.setGameStatus(GameStatus.TERMINANDO);
-						 gc.sendResultsOfGame(ga,gt.getGameCronometForResult(),gt.getGameTimerForResult());
-						
+						 ms.setGameStatus(GameStatus.TERMINANDO);						
 						 
 						 //WIN
 					}else if(alive.size() == arrive.size()) {
@@ -259,7 +256,7 @@ public class AdventureTemp {
 				  
 						
 						 ms.setGameStatus(GameStatus.TERMINANDO);
-						 gc.sendResultsOfGame(ga,gt.getGameCronometForResult(),gt.getGameTimerForResult());
+						
 				  		
 					}
 					
@@ -307,6 +304,7 @@ public class AdventureTemp {
 						   
 							 gc.TopConsole(name);
 							 gc.Top(name);
+							 gc.sendResultsOfGame(ga,gt.getGameCronometForResult(),gt.getGameTimerForResult());
 						}
 				 
 					   	if(end == 0) {
@@ -467,7 +465,7 @@ public class AdventureTemp {
 						 a.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,a.getLocation().add(0.5, 1.5, 0.5), 1);
 						 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.NETHERITE_INGOT));
 						 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.NETHERITE_BLOCK,RandomBetweenValue(1, 100)));
-						
+						 
 					}
 					
 					if(a.getType() == Material.DIAMOND_BLOCK && b.getType() == Material.BEDROCK) {
@@ -701,7 +699,7 @@ public class AdventureTemp {
 	       	 logger.log(Level.WARNING,"Coloca primero un valor menor y despues un mayor. "+max+"/"+min);
 		}
 		
-		return -1;
+		return 1;
 		
 	}
 	

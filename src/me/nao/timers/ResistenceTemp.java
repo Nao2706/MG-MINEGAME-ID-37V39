@@ -85,7 +85,6 @@ public class ResistenceTemp {
 	
 	public void Inicio(String name) {
 		  
-		FileConfiguration config = plugin.getConfig();
 		GameConditions gc = new GameConditions(plugin);
 		BukkitScheduler sh = Bukkit.getServer().getScheduler();
 		
@@ -96,8 +95,8 @@ public class ResistenceTemp {
 			GameAdventure ga = (GameAdventure) ms;
 			 MgScore sco = new MgScore(plugin);
 			
-			int startm = config.getInt("CountDownPreLobby");
-			int end = 10;
+			 int startm = ms.getCountDownStart();
+			 int end = 10;
 		
 //			String timer[] = ms.getTimeMg().split(",");
 //			int hora = Integer.valueOf(timer[0]);
@@ -198,7 +197,6 @@ public class ResistenceTemp {
 					gt.timerRunMg();
 
 				if(gt.getTimersecond() <= 0 && gt.getTimerminute() <= 0 && gt.getTimerhour() <= 0) {
-					  gc.sendResultsOfGame(ga,gt.getGameCronometForResult(),gt.getGameTimerForResult());
 
 					  	 //String result = alive.isEmpty() ? alive.toString().replace("[","").replace("]","") :"";
 					  	 
@@ -214,7 +212,6 @@ public class ResistenceTemp {
 				  		 ms.setGameStatus(GameStatus.TERMINANDO);
 				  		
 					}else if(motivo == StopMotivo.WIN || motivo == StopMotivo.LOSE || motivo == StopMotivo.ERROR || motivo == StopMotivo.FORCE) {
-						 gc.sendResultsOfGame(ga,gt.getGameCronometForResult(),gt.getGameTimerForResult());
 
 						 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN..");
@@ -225,7 +222,6 @@ public class ResistenceTemp {
 						 for(Player players : joins) {
 							 players.sendMessage(ChatColor.RED+"Todos los Jugadores fueron eliminados F ...\n");
 						 }
-						 gc.sendResultsOfGame(ga,gt.getGameCronometForResult(),gt.getGameTimerForResult());
 
 						 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"( FIN. )");
@@ -279,6 +275,8 @@ public class ResistenceTemp {
 						if(end == 10) {
 							 gc.TopConsole(name);
 							 gc.Top(name);
+							 gc.sendResultsOfGame(ga,gt.getGameCronometForResult(),gt.getGameTimerForResult());
+
 						}
 				
 					   	if(end == 0) {

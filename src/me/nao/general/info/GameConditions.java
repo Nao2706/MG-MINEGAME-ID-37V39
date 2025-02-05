@@ -1018,6 +1018,7 @@ public class GameConditions {
 			    	ga.setMobsGenerators(loadMapMobsGenerators(map));
 			    	ga.setPvpinMap(isPvPAllowed(map));
 			    	ga.setGameTime(loadMapGameTime(map, time)); 
+			    	ga.setCountDownStart(loadCountdownMap());
 			    	
 			    	System.out.println("LOG-1 MISION: "+ga.ShowGame());
 					
@@ -2598,6 +2599,7 @@ public class GameConditions {
 			sendMessageToConsole("");	
 			sendMessageToConsole(""+ChatColor.GRAY+"MAPA: "+ChatColor.WHITE+ga.getMapName());
 			sendMessageToConsole(""+ChatColor.GRAY+"FECHA: "+ChatColor.WHITE+ldt.format(formatter));
+			sendMessageToConsole(""+ChatColor.GRAY+"DEFAULT TIMER: "+ChatColor.GREEN+ga.getGameTime().getGameTimerDefaultForResult());
 			sendMessageToConsole(""+ChatColor.GRAY+"DURACION: "+ChatColor.WHITE+cronomet);
 			sendMessageToConsole(""+ChatColor.GRAY+"TIMER: "+ChatColor.WHITE+timer);
 
@@ -3220,7 +3222,15 @@ public class GameConditions {
 		int segundo = Integer.valueOf(timer[2]);
 	
 		return new GameTime(plugin,map,hora,minuto,segundo);
-   }	  
+   }	 
+   
+   
+   public int loadCountdownMap() {
+		
+		FileConfiguration config = plugin.getConfig();
+		return config.getInt("CountDownPreLobby");
+  }	 
+   
 	   
    public List<Location> loadMapGenerators(String map) {
 		FileConfiguration game = getGameConfig(map);

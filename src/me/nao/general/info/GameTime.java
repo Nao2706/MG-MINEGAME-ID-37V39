@@ -467,6 +467,11 @@ public class GameTime {
 		return getCronomethour()+"h "+getCronometminute()+"m "+getCronometsecond()+"s ";
 	}
 	
+	public String getGameTimerDefaultForResult() {
+		return getGamehour()+"h "+getGameminute()+"m "+getGamesecond()+"s ";
+
+	}
+	
 	private String showTimerFormat(int value) {
 		 String val = String.format("%02d", value);
 		 return val;

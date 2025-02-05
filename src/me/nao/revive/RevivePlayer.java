@@ -159,46 +159,36 @@ public class RevivePlayer{
 		addToRevive();
 		//System.out.println("TODOS NOQUEADOS: "+isAllKnocked()+ " TIENE ITEM DE REVIVIR: "+hasPlayersAutoreviveItem());
 		Start();
-		gc.sendMessageToUsersOfSameMapLessPlayer(player,""+ChatColor.RED+ChatColor.BOLD+ player.getName()+ChatColor.YELLOW+" fue Derribado. (Ayudalo a levantarse tiene solo %time%)".replace("%time%",time+"s"));
+		gc.sendMessageToUsersOfSameMapLessPlayer(player,""+ChatColor.RED+ChatColor.BOLD+ player.getName()+ChatColor.YELLOW+" fue Derribado/a. (Ayudalo/a a levantarse tiene solo %time%)".replace("%time%",time+"s"));
 		
 		player.sendMessage("");
 		if(e != null) {
-			if(e instanceof LivingEntity) {
-				LivingEntity le = (LivingEntity) e;
-				if(le.getCustomName() != null) {
-					player.sendMessage(ChatColor.YELLOW+"Has sido Derribado por: "+ChatColor.GOLD+le.getCustomName());
-					gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+le.getCustomName());
-					
-				}else {
-					player.sendMessage(ChatColor.YELLOW+"Has sido Derribado por: "+ChatColor.GOLD+le.getType());
-					gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+le.getType());
-					
-				}
-			}else if(e instanceof Projectile) {
+			
+			if(e instanceof Projectile) {
 				
 				Projectile p =(Projectile) e;
 				
 				if(p.getShooter() != null) {
-					Entity e = (Entity) p.getShooter();
+					Entity ent = (Entity) p.getShooter();
 					
-					if(e.getCustomName() != null) {
-						player.sendMessage(ChatColor.YELLOW+"Has sido Derribado por: "+ChatColor.GOLD+p.getCustomName()+".");
-						gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+p.getCustomName()+".");
+					if(ent.getCustomName() != null) {
+						player.sendMessage(ChatColor.YELLOW+"Has sido Derribado/a por: "+ChatColor.GOLD+ent.getCustomName()+"..");
+						gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+ent.getCustomName()+"..");
 						
 					}else {
-						player.sendMessage(ChatColor.YELLOW+"Has sido Derribado por: "+ChatColor.GOLD+p.getType()+".");
-						gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+p.getType()+".");
+						player.sendMessage(ChatColor.YELLOW+"Has sido Derribado/a por: "+ChatColor.GOLD+ent.getType()+"..");
+						gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+ent.getType()+"..");
 				
 					}
 					
 				}else {
 					if(p.getCustomName() != null) {
-						player.sendMessage(ChatColor.YELLOW+"Has sido Derribado por: "+ChatColor.GOLD+p.getCustomName());
-						gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+p.getCustomName());
+						player.sendMessage(ChatColor.YELLOW+"Has sido Derribado/a por: "+ChatColor.GOLD+p.getCustomName()+"...");
+						gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+p.getCustomName()+"...");
 						
 					}else {
-						player.sendMessage(ChatColor.YELLOW+"Has sido Derribado por: "+ChatColor.GOLD+p.getType());
-						gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+p.getType());
+						player.sendMessage(ChatColor.YELLOW+"Has sido Derribado/a por: "+ChatColor.GOLD+p.getType());
+						gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+p.getType()+"...");
 				
 					}
 				}
@@ -206,10 +196,23 @@ public class RevivePlayer{
 				
 				
 			}
+			
+			if(e instanceof LivingEntity) {
+				LivingEntity le = (LivingEntity) e;
+				if(le.getCustomName() != null) {
+					player.sendMessage(ChatColor.YELLOW+"Has sido Derribado/a por: "+ChatColor.GOLD+le.getCustomName());
+					gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+le.getCustomName());
+					
+				}else {
+					player.sendMessage(ChatColor.YELLOW+"Has sido Derribado/a por: "+ChatColor.GOLD+le.getType());
+					gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+le.getType());
+					
+				}
+			}
 
 		}else{
 			if(cause != null) {
-				player.sendMessage(ChatColor.YELLOW+"Has sido Derribado por: "+ChatColor.GOLD+causeToSpanish(cause));
+				player.sendMessage(ChatColor.YELLOW+"Has sido Derribado/a por: "+ChatColor.GOLD+causeToSpanish(cause));
 				gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+causeToSpanish(cause));
 				
 			}
