@@ -1070,11 +1070,12 @@ public class GameConditions {
 
 	
 	public boolean CanStartTheGame(Player player ,String map) {
-		 FileConfiguration config = plugin.getConfig();
+		
 		 GameInfo ms = plugin.getGameInfoPoo().get(map);
 		 if(ms instanceof GameAdventure) {
 				GameAdventure ga = (GameAdventure) ms;
 				 System.out.println("LOG-2 CANSTART MISION: "+ms.ShowGame());
+				 player.sendMessage("");
 				 player.sendMessage(ChatColor.GREEN+"Has Entrado en el Mapa "+ChatColor.translateAlternateColorCodes('&',getNameOfTheMap(map).replace("%player%",player.getName())));
 
 				 player.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.YELLOW+" Te has unido"+ChatColor.RED+" ("+ChatColor.GOLD+ga.getParticipants().size()+ChatColor.YELLOW+"/"+ChatColor.GOLD+ getMaxPlayerMap(map)+ChatColor.RED+")");
@@ -1102,7 +1103,7 @@ public class GameConditions {
 			if(getMinPlayerMap(map) == ga.getParticipants().size()){
 				ms.setGameStatus(GameStatus.COMENZANDO);
 				if(ms.getGameStatus() == GameStatus.COMENZANDO) {
-				     int  segundo = config.getInt("CountDownPreLobby");
+				     int  segundo = ga.getCountDownStart();
 				
 					 SendMessageToAllUsersOfSameMap(player, ChatColor.GREEN+"\nSe a alcanzado el minimo de Jugadores necesarios.\n"+ChatColor.GOLD+"La partida Comenzara en: "+ChatColor.RED+segundo+ChatColor.GREEN+" segundos.\n ");
 			 
@@ -2585,8 +2586,8 @@ public class GameConditions {
 	public void sendResultsOfGame(GameInfo map,String cronomet,String timer ) {
 		
 		if(map instanceof GameAdventure) {
-			GameAdventure ga = (GameAdventure) map;
 			
+			GameAdventure ga = (GameAdventure) map;
 			
 			List<String> participants = ga.getParticipants(); 
 			List<String> alive = ga.getAlivePlayers();  
@@ -2596,7 +2597,9 @@ public class GameConditions {
 			
 			LocalDateTime ldt = LocalDateTime.now();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss a",Locale.ENGLISH);
+			
 			sendMessageToConsole("");	
+			sendMessageToConsole(ChatColor.GRAY+"=============================");	
 			sendMessageToConsole(""+ChatColor.GRAY+"MAPA: "+ChatColor.WHITE+ga.getMapName());
 			sendMessageToConsole(""+ChatColor.GRAY+"FECHA: "+ChatColor.WHITE+ldt.format(formatter));
 			sendMessageToConsole(""+ChatColor.GRAY+"DEFAULT TIMER: "+ChatColor.GREEN+ga.getGameTime().getGameTimerDefaultForResult());
@@ -2610,59 +2613,60 @@ public class GameConditions {
 				for(int i = 0 ; i < participants.size();i++) {
 					comments = comments+ChatColor.GREEN+participants.get(i)+ChatColor.GOLD+",";
 				}
-				comments = comments+ChatColor.GRAY+ChatColor.BOLD+" PARTICIPANRON.";
+				comments = comments+ChatColor.GRAY+ChatColor.BOLD+" PARTICIPARON: "+ChatColor.GREEN+participants.size();
 				sendMessageToConsole(comments);
 			}
 			
 			if(alive.isEmpty()) {
-				sendMessageToConsole(""+ChatColor.GREEN+ChatColor.BOLD+"VIVOS: "+ChatColor.WHITE+"NINGUNO SOBREVIVIO");
+				sendMessageToConsole(""+ChatColor.GREEN+ChatColor.BOLD+"VIVOS: "+ChatColor.WHITE+"SIN SUPERVIVIENTES");
 			}else {
 				String comments =  ""+ChatColor.GREEN+ChatColor.BOLD+"VIVOS: ";
 				for(int i = 0 ; i < alive.size();i++) {
 					comments = comments+ChatColor.GREEN+alive.get(i)+ChatColor.GOLD+",";
 				}
-				comments = comments+ChatColor.GREEN+ChatColor.BOLD+" SOBREVIVIERON.";
+				comments = comments+ChatColor.GREEN+ChatColor.BOLD+" SOBREVIVIERON: "+ChatColor.GOLD+alive.size();
 				sendMessageToConsole(comments);
 
 			}
 			
 			if(deads.isEmpty()) {
-				sendMessageToConsole(""+ChatColor.RED+ChatColor.BOLD+"MUERTOS:"+ChatColor.WHITE+" NINGUNO MURIO");
+				sendMessageToConsole(""+ChatColor.RED+ChatColor.BOLD+"MUERTOS: "+ChatColor.WHITE+"SIN MUERTOS");
 			}else {
 				String comments = ""+ChatColor.RED+ChatColor.BOLD+"MUERTOS: ";
 				for(int i = 0 ; i < deads.size();i++) {
 					comments = comments+ChatColor.YELLOW+deads.get(i)+ChatColor.GOLD+",";
 				}
-				comments = comments+ChatColor.RED+ChatColor.BOLD+" MURIERON.";
+				comments = comments+ChatColor.RED+ChatColor.BOLD+" MURIERON: "+ChatColor.YELLOW+deads.size();
 				sendMessageToConsole(comments);
 
 			}
 			
 			if(spectator.isEmpty()) {
-				sendMessageToConsole(""+ChatColor.AQUA+ChatColor.BOLD+"ESPECTADORES: "+ChatColor.WHITE+"NO HUBO ESPECTADORES");
+				sendMessageToConsole(""+ChatColor.AQUA+ChatColor.BOLD+"ESPECTADORES: "+ChatColor.WHITE+"SIN ESPECTADORES");
 			}else {
 				String comments = ""+ChatColor.AQUA+ChatColor.BOLD+"ESPECTADORES: ";
 				for(int i = 0 ; i < spectator.size();i++) {
 					comments = comments+ChatColor.WHITE+spectator.get(i)+ChatColor.GOLD+",";
 				}
-				comments = comments+ChatColor.AQUA+ChatColor.BOLD+" VIERON LA PARTIDA.";
+				comments = comments+ChatColor.AQUA+ChatColor.BOLD+" ESPECTADORES: "+ChatColor.WHITE+spectator.size();
 				sendMessageToConsole(comments);
 
 			}
 			
 			if(arrives.isEmpty()) {
-				sendMessageToConsole(""+ChatColor.GOLD+ChatColor.BOLD+"GANADORES:"+ChatColor.WHITE+" NO HUBO GANADORES");
+				sendMessageToConsole(""+ChatColor.GOLD+ChatColor.BOLD+"GANADORES: "+ChatColor.WHITE+"SIN GANADORES");
 			}else {
 				String comments = ""+ChatColor.GOLD+ChatColor.BOLD+"GANADORES: ";
 				for(int i = 0 ; i < arrives.size();i++) {
 					comments = comments+ChatColor.DARK_PURPLE+arrives.get(i)+ChatColor.DARK_GREEN+",";
 				}
-				comments = comments+ChatColor.GOLD+ChatColor.BOLD+" GANARON LA PARTIDA.";
+				comments = comments+ChatColor.GOLD+ChatColor.BOLD+" GANADORES: "+ChatColor.WHITE+arrives.size();
 				sendMessageToConsole(comments);
 
 			}
+			sendMessageToConsole(ChatColor.GRAY+"=============================");	
 			sendMessageToConsole("");	
-
+			
 			
 		}
 		
