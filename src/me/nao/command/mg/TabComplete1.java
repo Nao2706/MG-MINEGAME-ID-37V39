@@ -60,6 +60,7 @@ public class TabComplete1 implements TabCompleter{
 			arguments.add("item");
 			arguments.add("ride");
 			arguments.add("force-revive");
+			arguments.add("force-start");
 			arguments.add("maintenance");
 			arguments.add("objetives");
 			arguments.add("objetive");

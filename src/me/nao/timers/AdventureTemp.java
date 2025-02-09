@@ -152,11 +152,12 @@ public class AdventureTemp {
 		
 			
 			if(part == GameStatus.COMENZANDO) {
-		
+	
 				
 				if(startm == 0) {
-					gc.StartGameActions(name);
+					gc.startGameActions(name);
 				}
+			
 			
 				for(String target : joins) {
 					Player players = Bukkit.getPlayerExact(target);
@@ -175,6 +176,7 @@ public class AdventureTemp {
 
 			    		}
 						
+					
 						
 						if(startm == 0) {
 				   
@@ -310,7 +312,7 @@ public class AdventureTemp {
 					   	if(end == 0) {
 					   			System.out.println("ANTES ADVENTURE RUN : "+ms.ShowGame());
 								gc.mgEndTheGame(name);
-								gc.EndGameActions(name);
+								gc.endGameActions(name);
 								Bukkit.getScheduler().cancelTask(taskID);	
 								System.out.println("SE DETUVO ;)");
 				        }

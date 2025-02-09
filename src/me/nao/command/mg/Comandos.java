@@ -2243,6 +2243,21 @@ public class Comandos implements CommandExecutor{
 					
 					return true;
 					
+				}else if(args[0].equalsIgnoreCase("force-start")) {
+					
+					if (args.length == 2) {
+						// /c add n p
+						//mg setlife nao 2
+						String map =  args[1];
+					   gc.forceGameStart(player, map);
+					    
+						
+					}else {
+						player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg force-start <map>");
+					}
+					
+					return true;
+					
 				}else if(args[0].equalsIgnoreCase("isban")) {
 					if (args.length == 2) {
 						String name = args[1];

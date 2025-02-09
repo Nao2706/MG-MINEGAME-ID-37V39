@@ -87,7 +87,7 @@ public class GameIntoMap {
 				
 					GameConditions cm = new GameConditions(plugin);
 					cm.SetHeartsInGame(player, mapa);
-					cm.RevivePlayerToGame(target, mapa);
+					cm.revivePlayerToGame(target, mapa);
 				
 					cm.setKitMg(target);
 					if(gomg.hasMapObjetives()) {
@@ -161,7 +161,7 @@ public class GameIntoMap {
 		
 		
 		
-		if(partida != GameStatus.JUGANDO || partida != GameStatus.PAUSE || partida != GameStatus.FREEZE) {
+		if(partida == GameStatus.COMENZANDO || partida == GameStatus.TERMINANDO) {
 			cm.sendMessageToUserAndConsole(player,ChatColor.RED+"Solo puedes usar el Comando de Revivir en una Partida en Progreso");
 			return;
 		}
@@ -191,7 +191,7 @@ public class GameIntoMap {
 			 Location l = new Location(Bukkit.getWorld(world), x, y, z);
 			
 					
-					cm.RevivePlayerToGame(target, mapa);
+					cm.revivePlayerToGame(target, mapa);
 					cm.setKitMg(target);
 					
 					MgTeams te = new MgTeams(plugin);
@@ -270,7 +270,7 @@ public class GameIntoMap {
 					
 			
 					GameConditions cm = new GameConditions(plugin);
-					cm.DeadPlayerToGame(player, mapa);
+					cm.deadPlayerToGame(player, mapa);
 				
 					 
 					
@@ -312,7 +312,7 @@ public class GameIntoMap {
 			if(motivo == StopMotivo.WIN && gm.getGameType() == GameType.ADVENTURE && gm.getGameStatus() == GameStatus.JUGANDO) {
 				if(!dead.contains(player.getName()) && !arrivo.contains(player.getName())) {
 					
-					gmc.PlayerArriveToTheWin(player, mapa);
+					gmc.playerArriveToTheWin(player, mapa);
 					player.setGameMode(GameMode.SPECTATOR);
 					Fireworks f = new Fireworks(player);
 					f.spawnFireballGreenLarge();
@@ -363,7 +363,7 @@ public class GameIntoMap {
 			if(gmc.isAllPrimaryObjetivesComplete(player, mapa)) {
 				
 				if(gm.getGameType() == GameType.ADVENTURE) {
-					gmc.PlayerArriveToTheWin(player, mapa);
+					gmc.playerArriveToTheWin(player, mapa);
 					player.sendMessage(ChatColor.GREEN+"Has llegado a la Meta.");
 					player.setGameMode(GameMode.SPECTATOR);
 					Fireworks f = new Fireworks(player);
@@ -389,7 +389,7 @@ public class GameIntoMap {
 		}else if(!gomg.isNecessaryObjetivePrimary() && gomg.isNecessaryObjetiveSedondary()) {
 			if(gmc.isAllSecondaryObjetivesComplete(player, mapa)) {
 				if(gm.getGameType() == GameType.ADVENTURE) {
-					gmc.PlayerArriveToTheWin(player, mapa);
+					gmc.playerArriveToTheWin(player, mapa);
 					player.sendMessage(ChatColor.GREEN+"Has llegado a la Meta.");
 					player.setGameMode(GameMode.SPECTATOR);
 					Fireworks f = new Fireworks(player);
@@ -416,7 +416,7 @@ public class GameIntoMap {
 		}else if(gomg.isNecessaryObjetivePrimary() && gomg.isNecessaryObjetiveSedondary()) {
 			if(gmc.isAllPrimaryObjetivesComplete(player, mapa) && gmc.isAllSecondaryObjetivesComplete(player, mapa)) {
 				if(gm.getGameType() == GameType.ADVENTURE) {
-					gmc.PlayerArriveToTheWin(player, mapa);
+					gmc.playerArriveToTheWin(player, mapa);
 					player.sendMessage(ChatColor.GREEN+"Has llegado a la Meta.");
 					player.setGameMode(GameMode.SPECTATOR);
 					Fireworks f = new Fireworks(player);
@@ -440,7 +440,7 @@ public class GameIntoMap {
 			return;
 		}else {
 			if(gm.getGameType() == GameType.ADVENTURE) {
-				gmc.PlayerArriveToTheWin(player, mapa);
+				gmc.playerArriveToTheWin(player, mapa);
 				player.sendMessage(ChatColor.GREEN+"Has llegado a la Meta.");
 				player.setGameMode(GameMode.SPECTATOR);
 				Fireworks f = new Fireworks(player);
@@ -463,7 +463,7 @@ public class GameIntoMap {
 		GameInfo gm = plugin.getGameInfoPoo().get(mapa);
 		StopMotivo motivo = gm.getMotivo();
 		
-		gmc.DeadPlayerToGame(player, mapa);
+		gmc.deadPlayerToGame(player, mapa);
 		
 		
 		MgTeams t = new MgTeams(plugin);
@@ -502,7 +502,7 @@ public class GameIntoMap {
 	
 		if(gi instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) gi;
-			gmc.DeadPlayerToGame(player, mapa);
+			gmc.deadPlayerToGame(player, mapa);
 			
 		
 			MgTeams t = new MgTeams(plugin);

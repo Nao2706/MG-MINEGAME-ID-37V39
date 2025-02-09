@@ -99,6 +99,13 @@ public class SourceOfDamage implements Listener{
 							if(et.getType() == EntityType.PLAYER) {
 								Player target = (Player) et;
 								
+								if(!gc.isPlayerinGame(target)) {
+									player.sendMessage(ChatColor.RED+"Ese Jugador no esta en tu Juego....");
+									player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 20.0F, 1F);
+									e.setCancelled(true);
+									return;
+								}
+								
 								PlayerInfo pl = plugin.getPlayerInfoPoo().get(target);
 								GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
 								if(gi instanceof GameAdventure) {

@@ -6,6 +6,7 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BossBar;
 
 import me.nao.enums.GameStatus;
+import me.nao.enums.GameType;
 import me.nao.main.mg.Minegame;
 
 public class GameTime {
@@ -413,6 +414,9 @@ public class GameTime {
 	}
 
 	public String getGameTimer(GameStatus status) {
+		
+		
+	     GameInfo gi = plugin.getGameInfoPoo().get(this.map);
 		 String text = "";
 		
 		
@@ -420,39 +424,74 @@ public class GameTime {
 		if(this.showaddedtime != 0) {
 			this.showaddedtime -- ;
 			
-			if(status == GameStatus.PAUSE) { 
-				text = ""+ChatColor.GOLD+ChatColor.BOLD+"Tiempo Remanente Pausado:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s "+ChatColor.GREEN+"+"+showTimerFormat(this.addedhour)+":"+showTimerFormat(this.addedminute)+":"+showTimerFormat(this.addedsecond);
+			if(gi.getGameType() == GameType.ADVENTURE) {
+				
+				if(status == GameStatus.PAUSE) { 
+					text = ""+ChatColor.GOLD+ChatColor.BOLD+"Tiempo Remanente Pausado:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s "+ChatColor.GREEN+"+"+showTimerFormat(this.addedhour)+":"+showTimerFormat(this.addedminute)+":"+showTimerFormat(this.addedsecond);
 
-			}else {
-				text = ""+ChatColor.DARK_RED+ChatColor.BOLD+"Tiempo Remanente:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " +ChatColor.GREEN+"+"+showTimerFormat(this.addedhour)+":"+showTimerFormat(this.addedminute)+":"+showTimerFormat(this.addedsecond);
+				}else {
+					text = ""+ChatColor.DARK_RED+ChatColor.BOLD+"Tiempo Remanente:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " +ChatColor.GREEN+"+"+showTimerFormat(this.addedhour)+":"+showTimerFormat(this.addedminute)+":"+showTimerFormat(this.addedsecond);
 
+				}
+				
+			}else if(gi.getGameType() == GameType.RESISTENCE){
+				if(status == GameStatus.PAUSE) { 
+					text = ""+ChatColor.GOLD+ChatColor.BOLD+"Resistencia Pausado:"+ChatColor.AQUA+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s "+ChatColor.GREEN+"+"+showTimerFormat(this.addedhour)+":"+showTimerFormat(this.addedminute)+":"+showTimerFormat(this.addedsecond);
+
+				}else {
+					text = ""+ChatColor.DARK_RED+ChatColor.BOLD+"Resiste:"+ChatColor.AQUA+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " +ChatColor.GREEN+"+"+showTimerFormat(this.addedhour)+":"+showTimerFormat(this.addedminute)+":"+showTimerFormat(this.addedsecond);
+
+				}
 			}
+			
+			
 			
 			return text;
 			
 		}if(this.showremovetime != 0) {
 			this.showremovetime -- ;
-			
-			if(status == GameStatus.PAUSE) { 
-				text = ""+ChatColor.GOLD+ChatColor.BOLD+"Tiempo Remanente Pausado:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s "+ChatColor.RED+"-"+showTimerFormat(this.removehour)+":"+showTimerFormat(this.removeminute)+":"+showTimerFormat(this.removesecond);
+			if(gi.getGameType() == GameType.ADVENTURE) {
+				if(status == GameStatus.PAUSE) { 
+					text = ""+ChatColor.GOLD+ChatColor.BOLD+"Tiempo Remanente Pausado:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s "+ChatColor.RED+"-"+showTimerFormat(this.removehour)+":"+showTimerFormat(this.removeminute)+":"+showTimerFormat(this.removesecond);
 
-			}else {
-				text = ""+ChatColor.DARK_RED+ChatColor.BOLD+"Tiempo Remanente:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " +ChatColor.RED+"-"+showTimerFormat(this.removehour)+":"+showTimerFormat(this.removeminute)+":"+showTimerFormat(this.removesecond);
+				}else {
+					text = ""+ChatColor.DARK_RED+ChatColor.BOLD+"Tiempo Remanente:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " +ChatColor.RED+"-"+showTimerFormat(this.removehour)+":"+showTimerFormat(this.removeminute)+":"+showTimerFormat(this.removesecond);
 
+				}
+			}else if(gi.getGameType() == GameType.RESISTENCE){
+				if(status == GameStatus.PAUSE) { 
+					text = ""+ChatColor.GOLD+ChatColor.BOLD+"Resistencia Pausado:"+ChatColor.AQUA+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s "+ChatColor.RED+"-"+showTimerFormat(this.removehour)+":"+showTimerFormat(this.removeminute)+":"+showTimerFormat(this.removesecond);
+
+				}else {
+					text = ""+ChatColor.DARK_RED+ChatColor.BOLD+"Resiste:"+ChatColor.AQUA+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " +ChatColor.RED+"-"+showTimerFormat(this.removehour)+":"+showTimerFormat(this.removeminute)+":"+showTimerFormat(this.removesecond);
+
+				}
 			}
+			
 			
 			return text;
 		}
 		
 		if(status == GameStatus.FREEZE) { 
-			return ""+ChatColor.AQUA+ChatColor.BOLD+"FREEZE: "+ChatColor.BLUE+ChatColor.BOLD+ChatColor.STRIKETHROUGH+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s" +ChatColor.AQUA+" "+showTimerFormat(this.freezehour)+":"+showTimerFormat(this.freezeminute)+":"+showTimerFormat(this.freezesecond);
+			text = ""+ChatColor.AQUA+ChatColor.BOLD+"FREEZE: "+ChatColor.BLUE+ChatColor.BOLD+ChatColor.STRIKETHROUGH+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s" +ChatColor.AQUA+" "+showTimerFormat(this.freezehour)+":"+showTimerFormat(this.freezeminute)+":"+showTimerFormat(this.freezesecond);
 		}
 		
 		if(status == GameStatus.PAUSE) { 
-			return ""+ChatColor.GOLD+ChatColor.BOLD+"Tiempo Remanente Pausado:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " ;
+			
+			if(gi.getGameType() == GameType.ADVENTURE) {
+				text =  ""+ChatColor.GOLD+ChatColor.BOLD+"Tiempo Remanente Pausado:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " ;
+			}else if(gi.getGameType() == GameType.RESISTENCE){
+				text = ""+ChatColor.GOLD+ChatColor.BOLD+"Resistencia Pausado:"+ChatColor.AQUA+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " ;
+			}
 		}
 		
-		return ""+ChatColor.DARK_RED+ChatColor.BOLD+"Tiempo Remanente:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " ;
+		//return ""+ChatColor.DARK_RED+ChatColor.BOLD+"Tiempo Remanente:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " ;
+		if(gi.getGameType() == GameType.ADVENTURE) {
+			text = ""+ChatColor.DARK_RED+ChatColor.BOLD+"Tiempo Remanente:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " ;
+		}else if(gi.getGameType() == GameType.RESISTENCE){
+			text = ""+ChatColor.DARK_RED+ChatColor.BOLD+"Resiste:"+ChatColor.AQUA+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " ;
+		}
+		return text;
 	}
 	
 	public String getGameCronomet() {

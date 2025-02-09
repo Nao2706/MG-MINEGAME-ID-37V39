@@ -152,7 +152,7 @@ public class ResistenceTemp {
 				
 				//GameModeConditions gm = new GameModeConditions(plugin);
 				if(startm == 0) {
-					gc.StartGameActions(name);
+					gc.startGameActions(name);
 				}
 				for(Player players : joins) {
 					//String mision = plugin.getPlayerInfoPoo().get(target).getMisionName();
@@ -283,7 +283,7 @@ public class ResistenceTemp {
 					   			System.out.println("ANTES MISION MISION RUN : "+ms.ShowGame());
 			    	
 								gc.mgEndTheGame(name);
-								gc.EndGameActions(name);
+								gc.endGameActions(name);
 				   
 				    		Bukkit.getScheduler().cancelTask(taskID);	
 				    		System.out.println("SE DETUVO ;)");

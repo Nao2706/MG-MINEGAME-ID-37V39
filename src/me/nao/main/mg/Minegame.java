@@ -62,6 +62,7 @@ public class Minegame extends JavaPlugin{
     private YamlFile inventorys;
     private YamlFile itemsmenu;
     private YamlFile reports;
+    private YamlFile mapfrequency;
    
 
     
@@ -256,7 +257,7 @@ public class Minegame extends JavaPlugin{
 		this.levels = new YamlFile(this, "levels");
 		this.commands = new YamlFile(this, "commands");
 		this.inventorys = new YamlFile(this, "inventorys");
-		
+		this.mapfrequency = new YamlFile(this, "mapfrequency");
 
 		
 		
@@ -495,7 +496,11 @@ public class Minegame extends JavaPlugin{
        return reports; 
    }    
   
- 
+   public YamlFile getMapFrequency() {
+       return mapfrequency; 
+   }   
+   
+   
     
    public List<String> getPlayerGround(){
 	   return air;

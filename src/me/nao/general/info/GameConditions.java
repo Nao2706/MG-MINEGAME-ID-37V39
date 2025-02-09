@@ -91,10 +91,10 @@ public class GameConditions {
 				return;
 			}
 				//Salva al Jugador checa si debe setearle un inv
-				SetAndSavePlayer(player, map);
-				AddPlayerToGame(player,map);
-				TptoPreLobbyMap(player, map);
-				CanStartTheGame(player,map);
+				setAndSavePlayer(player, map);
+				addPlayerToGame(player,map);
+				tptoPreLobbyMap(player, map);
+				canStartTheGame(player,map);
 				return;
 		}
 		
@@ -293,7 +293,7 @@ public class GameConditions {
 	
 	
 	 //TODO TP AL PRELOBBY DEL MAPA
-	   public void TptoPreLobbyMap(Player player ,String map){
+	   public void tptoPreLobbyMap(Player player ,String map){
 		   FileConfiguration ym = getGameConfig(map);
 		   if(ym.contains("Pre-Lobby")) {
 			    System.out.println("El jugador "+player.getName()+" fue hacia el prelobby con exito");
@@ -421,8 +421,6 @@ public class GameConditions {
 			    Float yaw = Float.valueOf(coords[4]);
 			    Float pitch = Float.valueOf(coords[5]);
 			    
-			    
-			      
 			        String[] sts = ym.getString("Start.Sound-of-Mision").split(";");
 			      try {
 			    	  
@@ -546,6 +544,35 @@ public class GameConditions {
 	
 	}
 	
+	public void forceGameStart(Player player,String map) {
+		
+		if(!ExistMap(map)) {
+			player.sendMessage(ChatColor.RED+"El mapa "+ChatColor.GOLD+map+ChatColor.RED+" no existe o esta mal escrito.");
+
+		}
+		
+		if(!isMapinGame(map)) {
+			player.sendMessage(ChatColor.RED+"El mapa "+ChatColor.GOLD+map+ChatColor.RED+" no esta en Juego.");
+			return;
+		}
+		
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
+		
+		if(gi.getGameStatus() == GameStatus.ESPERANDO) {
+			 SendMessageToAllUsersOfSameMap(player, ChatColor.GREEN+"\nSe a Forzado a Comenzar el Juego.\n"+ChatColor.GOLD+"La partida Comenzara en: "+ChatColor.RED+gi.getCountDownStart()+ChatColor.GREEN+" segundos.\n ");
+			 if(gi.getGameType() == GameType.ADVENTURE) {
+					AdventureTemp t = new AdventureTemp(plugin);
+					t.Inicio(gi.getMapName());
+				}else if(gi.getGameType() == GameType.RESISTENCE) {
+					ResistenceTemp t = new ResistenceTemp(plugin);
+					t.Inicio(gi.getMapName());
+				}
+		}else {
+			player.sendMessage(ChatColor.RED+"La partida debe estar en Estatus de Esperando para Forzar un Inicio.");
+		}
+		
+	}
+	
 	public void TryToScapeInSpectatorMode(Player player) {
 		PlayerInfo pi = plugin.getPlayerInfoPoo().get(player);
 		Block block = player.getLocation().getBlock();
@@ -606,7 +633,7 @@ public class GameConditions {
 	
 	
 	
-	public void AddPlayerToGame(Player player ,String mision) {
+	public void addPlayerToGame(Player player ,String mision) {
 	
 			GameInfo mis = plugin.getGameInfoPoo().get(mision);
 			if(mis instanceof GameAdventure) {
@@ -619,7 +646,7 @@ public class GameConditions {
 	}
 	
 	//TODO SIN USO
-	public void RevivePlayerToGame(Player player ,String mision) {
+	public void revivePlayerToGame(Player player ,String mision) {
 		
 		GameInfo mis = plugin.getGameInfoPoo().get(mision);
 		if(mis instanceof GameAdventure) {
@@ -632,7 +659,7 @@ public class GameConditions {
 	}
 	
 	//TODO SIN USO
-	public void DeadPlayerToGame(Player player ,String mision) {
+	public void deadPlayerToGame(Player player ,String mision) {
 		
 		
 		GameInfo mis = plugin.getGameInfoPoo().get(mision);
@@ -645,7 +672,7 @@ public class GameConditions {
 		}
 	}
 	
-	public void SpectatorAddToGame(Player player ,String mision) {
+	public void spectatorAddToGame(Player player ,String mision) {
 		
 		GameInfo mis = plugin.getGameInfoPoo().get(mision);
 		if(mis instanceof GameAdventure) {
@@ -656,7 +683,7 @@ public class GameConditions {
 		}
 	}
 	
-	public void PlayerArriveToTheWin(Player player ,String mision) {
+	public void playerArriveToTheWin(Player player ,String mision) {
 		
 		GameInfo mis = plugin.getGameInfoPoo().get(mision);
 		if(mis instanceof GameAdventure) {
@@ -668,7 +695,7 @@ public class GameConditions {
 	}
 	
 	 
-	public void RemoveAllPlayerToGame(Player player ,String mision) {
+	public void removeAllPlayerToGame(Player player ,String mision) {
 		
 		GameInfo mis = plugin.getGameInfoPoo().get(mision);
 		if(mis instanceof GameAdventure) {
@@ -698,7 +725,7 @@ public class GameConditions {
 		}
 	}
 	
-	public void PlayerWinnerReward(Player player) {
+	public void playerWinnerReward(Player player) {
 		
 		ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 
@@ -791,7 +818,7 @@ public class GameConditions {
 		
 	}
 	
-	public void PlayerLoserReward(Player player) {
+	public void playerLoserReward(Player player) {
 		ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
@@ -876,7 +903,7 @@ public class GameConditions {
 			}}
 	}
 	
-	public void StartGameActions(String map) {
+	public void startGameActions(String map) {
 		FileConfiguration mision = getGameConfig(map);
 		
 		List<String> start = mision.getStringList("Start-Console.Commands");
@@ -885,7 +912,7 @@ public class GameConditions {
 		}
 	}
 	
-	public void EndGameActions(String map) {
+	public void endGameActions(String map) {
 		FileConfiguration mision = getGameConfig(map);
 		
 		List<String> end = mision.getStringList("End-Console.Commands");
@@ -898,7 +925,7 @@ public class GameConditions {
 	
 	
 	
-	public Location GetLocationOfLobby() {
+	public Location getLocationOfLobby() {
 	    FileConfiguration config = plugin.getConfig();
 	    Location l = null;
 	    
@@ -917,7 +944,7 @@ public class GameConditions {
 		return l;
 	}
 	
-	public void ReturnToLobby(Player player) {
+	public void returnToLobby(Player player) {
 		    FileConfiguration config = plugin.getConfig();
 			for (String key : config.getConfigurationSection("Lobby-Spawn").getKeys(false)) {
 				
@@ -941,7 +968,7 @@ public class GameConditions {
 	
 	
 	 
-	public void SetAndSavePlayer(Player player,String map) {
+	public void setAndSavePlayer(Player player,String map) {
 		
 		 PlayerInfo pl = null;
 		 Attribute attribute = Attribute.MAX_HEALTH; 
@@ -950,7 +977,7 @@ public class GameConditions {
 			 	
 				
 				if(ExistLobbyMg()) {
-				    pl = new PlayerInfo(plugin,false,player, player.getGameMode(), player.isFlying(), GetLocationOfLobby(), map,new GamePoints());
+				    pl = new PlayerInfo(plugin,false,player, player.getGameMode(), player.isFlying(), getLocationOfLobby(), map,new GamePoints());
 				
 				}else {
 					pl = new PlayerInfo(plugin,false,player, player.getGameMode(), player.isFlying(), player.getLocation(), map,new GamePoints());
@@ -960,7 +987,7 @@ public class GameConditions {
 				//LO SALVAS
 				
 				if(ExistLobbyMg()) {
-				    pl = new PlayerInfo(plugin,true,player,player.getActivePotionEffects(), player.getInventory().getContents(), player.getGameMode(), player.isFlying(),player.getHealth(), player.getAttribute(attribute).getValue(), player.getFoodLevel(), player.getLevel(),player.getExp(), GetLocationOfLobby(), map,new GamePoints());
+				    pl = new PlayerInfo(plugin,true,player,player.getActivePotionEffects(), player.getInventory().getContents(), player.getGameMode(), player.isFlying(),player.getHealth(), player.getAttribute(attribute).getValue(), player.getFoodLevel(), player.getLevel(),player.getExp(), getLocationOfLobby(), map,new GamePoints());
 					
 				}else {
 					pl = new PlayerInfo(plugin,true,player,player.getActivePotionEffects(), player.getInventory().getContents(), player.getGameMode(), player.isFlying(),player.getHealth(), player.getAttribute(attribute).getValue(), player.getFoodLevel(), player.getLevel(),player.getExp(), player.getLocation(), map,new GamePoints());
@@ -1069,8 +1096,9 @@ public class GameConditions {
 
 
 	
-	public boolean CanStartTheGame(Player player ,String map) {
+	public boolean canStartTheGame(Player player ,String map) {
 		
+		// NO ESTA INCLUIDO LA CONDICION DE SI AL EMPEZAR EL MAPA CON LOS JUGADORES MINIMOS Y UNO DURANTE LA FASE DE COMENZANDO SE SALE ESTA SE DETENGA
 		 GameInfo ms = plugin.getGameInfoPoo().get(map);
 		 if(ms instanceof GameAdventure) {
 				GameAdventure ga = (GameAdventure) ms;
@@ -1379,13 +1407,14 @@ public class GameConditions {
   		  return pr;
 		
 	}
-	
+	  
 	public void JoinSpectator(Player player ,String map) {
 		 //MODO ESPECTADOR no te uniras como jugador
-		 SetAndSavePlayer(player, map);
-		 SpectatorAddToGame(player, map);
+		 setAndSavePlayer(player, map);
+		 spectatorAddToGame(player, map);
 		 GameInfo ms = plugin.getGameInfoPoo().get(map);
 		 if(ms instanceof GameAdventure) {
+			 	player.setGameMode(GameMode.SPECTATOR);
 				GameAdventure ga = (GameAdventure) ms;
 				 List<String> spectador = ga.getSpectators();
 				 player.sendMessage(ChatColor.GREEN+"Estas como Espectador en el Mapa: "+ChatColor.GOLD+map);
@@ -1403,14 +1432,14 @@ public class GameConditions {
 		 }if(!ExistMap(map)) {
 			 player.sendMessage(ChatColor.RED+" Ese Mapa no Existe...");
 			 return false;
-		 }if(ConditionsToStartAdventureGame(player,map)) {
+		 }if(ConditionsToStartGame(player,map)) {
 			return true;//visto bueno para entrar
 		 }
 	    return false;
 	}
 	
 	
-	public boolean ConditionsToStartAdventureGame(Player player,String map) {
+	public boolean ConditionsToStartGame(Player player,String map) {
 		if(HasMaintenance()) {
 			if(!player.isOp()) {
 				player.sendMessage(ChatColor.RED+"Fuera de Servicio Por Mantenimiento contacta con un Administrador.");
@@ -1427,7 +1456,7 @@ public class GameConditions {
 			}
 		}
 		
-		 
+		  
 		 
 		 FileConfiguration mision = getGameConfig(map);
 		 GameInfo minfo = plugin.getGameInfoPoo().get(map);
@@ -2595,6 +2624,11 @@ public class GameConditions {
 			List<String> spectator = ga.getSpectators();
 			List<String> arrives = ga.getArrivePlayers();
 			
+			if(!HasMaintenance() || !isBlockedTheMap(map.getMapName())) {
+				saveMapFrequencysmg(map);
+			}
+			
+			
 			LocalDateTime ldt = LocalDateTime.now();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss a",Locale.ENGLISH);
 			
@@ -2605,6 +2639,7 @@ public class GameConditions {
 			sendMessageToConsole(""+ChatColor.GRAY+"DEFAULT TIMER: "+ChatColor.GREEN+ga.getGameTime().getGameTimerDefaultForResult());
 			sendMessageToConsole(""+ChatColor.GRAY+"DURACION: "+ChatColor.WHITE+cronomet);
 			sendMessageToConsole(""+ChatColor.GRAY+"TIMER: "+ChatColor.WHITE+timer);
+			sendMessageToConsole(""+ChatColor.GRAY+"MOTIVOS DE PARADA: "+ChatColor.WHITE+map.getMotivo().toString());
 
 			if(participants.isEmpty()) {
 				sendMessageToConsole(""+ChatColor.GRAY+ChatColor.BOLD+"PARTICIPANTES: "+ChatColor.WHITE+"SIN PARTICIPANTES");
@@ -2691,20 +2726,20 @@ public class GameConditions {
 						player.teleport(pl.getLocationMG());
 						pl.RestoreAllPlayerMg(player);
 						if(ms.getGameStatus() == GameStatus.TERMINANDO) {
-							PlayerWinnerReward(player);
-							PlayerLoserReward(player);
+							playerWinnerReward(player);
+							playerLoserReward(player);
 						}
 						
-						RemoveAllPlayerToGame(player, pl.getMapName());
+						removeAllPlayerToGame(player, pl.getMapName());
 					
 					}else {
 						player.teleport(pl.getLocationMG());
 						pl.RestoreGamemodePlayerMg(player);
 						if(ms.getGameStatus() == GameStatus.TERMINANDO) {
-							PlayerWinnerReward(player);
-							PlayerLoserReward(player);
+							playerWinnerReward(player);
+							playerLoserReward(player);
 						}
-						RemoveAllPlayerToGame(player, pl.getMapName());
+						removeAllPlayerToGame(player, pl.getMapName());
 					}
 				
 		 }else if(ms instanceof GameNexo) {
@@ -2717,7 +2752,7 @@ public class GameConditions {
 					player.teleport(pl.getLocationMG());
 					pl.RestoreAllPlayerMg(player);
 				
-				RemoveAllPlayerToGame(player, pl.getMapName());
+				removeAllPlayerToGame(player, pl.getMapName());
 				
 		 }
 	}
@@ -2779,7 +2814,7 @@ public class GameConditions {
 		// SEGUNDA PARTE CALCULO MUESTRA DE MAYOR A MENOR PUNTAJE
 		List<Map.Entry<String, Integer>> list = new ArrayList<>(scores.entrySet());
 
-		
+		 
 		Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
 			public int compare(Map.Entry<String, Integer> e1, Map.Entry<String, Integer> e2) {
 				return e2.getValue() - e1.getValue();
@@ -3214,6 +3249,7 @@ public class GameConditions {
 				
 	   }
 	  
+	   
 	   
 	   //TODO LOAD
 	   
@@ -4007,6 +4043,72 @@ public class GameConditions {
 		
 	}
    
+	public void saveMapFrequencysmg(GameInfo gi) {
+		
+		FileConfiguration mst = plugin.getMapFrequency();
+		
+		int revive = 0;
+		int deads = 0; 
+		
+		if(gi instanceof GameAdventure) {
+			
+			GameAdventure ga = (GameAdventure) gi;
+			String mapname = gi.getMapName();
+			
+			Map<Player,PlayerInfo> pi = plugin.getPlayerInfoPoo();
+			
+			List<Map.Entry<Player, PlayerInfo>> list = new ArrayList<>(pi.entrySet());
+			for (Map.Entry<Player, PlayerInfo> e : list) {
+				if(e.getValue().getMapName().equals(mapname)) {
+					GamePoints  pli = e.getValue().getGamePoints();
+					revive += pli.getHelpRevive();
+					deads += pli.getDeads();
+				}
+			}
+			
+			
+			if(mst.contains("MapFrequency."+mapname)) {
+				
+				int timeplayed = mst.getInt("MapFrequency."+mapname+".Times-Played");
+				int participating = mst.getInt("MapFrequency."+mapname+".Participating-Players");
+				int winningplayed = mst.getInt("MapFrequency."+mapname+".Winning-Players");
+				int reviveplayer = mst.getInt("MapFrequency."+mapname+".Revive-Players");
+				int deadplayer = mst.getInt("MapFrequency."+mapname+".Dead-Players");
+				
+				mst.set("MapFrequency."+mapname+".Times-Played",timeplayed+1);
+				mst.set("MapFrequency."+mapname+".Participating-Players",participating+gi.getParticipants().size());
+				mst.set("MapFrequency."+mapname+".Winning-Players",winningplayed+ga.getArrivePlayers().size());
+				mst.set("MapFrequency."+mapname+".Revive-Players",reviveplayer+revive);
+				mst.set("MapFrequency."+mapname+".Dead-Players",deadplayer+deads);
+			}else {
+				mst.set("MapFrequency."+mapname+".Times-Played",1);
+				mst.set("MapFrequency."+mapname+".Participating-Players",gi.getParticipants().size());
+				mst.set("MapFrequency."+mapname+".Winning-Players",ga.getArrivePlayers().size());
+				mst.set("MapFrequency."+mapname+".Revive-Players",revive);
+				mst.set("MapFrequency."+mapname+".Dead-Players",deads);
+				
+			
+			}
+			plugin.getMapFrequency().save();
+			plugin.getMapFrequency().reload();
+		}
+		
+	
+		
+	}
+	
+	//TODO COMPLEJIDAD
+	public String calcularComplejidad(int participantes,int ganadores,int revividos,int muertes) {
+	    
+    	double ganadoress = (double)ganadores / (double)participantes * 100 ;
+    	double perdedores = 100 - ((double)ganadores / (double)participantes * 100) ;
+    	double muertos = (double)muertes / (double)participantes * 100;
+    	double revividoss = (double)revividos / (double)participantes * 100;
+    	double exito = (double)ganadores / ((double)ganadores + (double)muertes + (double)revividos) * 100;
+    	
+    	    return "Ganadores: "+(int)ganadoress+"% Perdedores: "+(int)perdedores+"% Muertos: "+(int)muertos+"% Revividos: "+(int)revividoss+"% Exito: "+(int)exito+"%"; // Convertir a porcentaje
+    }
+    
    	//mg objetive-primary complete 1
     //mg objetive-secondary complete 1
 	//mg objetive-primary incomplete 1

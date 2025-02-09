@@ -222,7 +222,7 @@ public class EventRandoms implements Listener{
 					if(as.getCustomName() != null) {
 						String name = ChatColor.stripColor(as.getCustomName());
 						
-						if(name.startsWith("CADAVER DE ")){
+						if(name.startsWith("REVIVIR CON (SHIFT + CLICK DERECHO) A: ")){
 							e.setCancelled(true);
 							
 							Player target = Bukkit.getPlayer(name.replace("REVIVIR CON (SHIFT + CLICK DERECHO) A: ","").replace(" ",""));

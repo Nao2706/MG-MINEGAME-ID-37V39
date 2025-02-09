@@ -149,7 +149,7 @@ public class NexoTemp {
 				    		
 				    			//dn.TpAllTeamsToSpawn(name);
 				    			
-				    			gc.StartGameActions(name);
+				    			gc.startGameActions(name);
 				    		}
 						  
 					     }
@@ -351,7 +351,7 @@ public class NexoTemp {
 //					   		
 //								//RemoveArmorStandsAndItemsInMap(target);
 					   			//dn.EndNexo(name);
-								gc.EndGameActions(name);
+								gc.endGameActions(name);
 				  
 					    	 //ms.setEstadopartida(EstadoPartida.ESPERANDO);
 				   		
