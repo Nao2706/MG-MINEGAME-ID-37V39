@@ -1326,7 +1326,7 @@ public class GameConditions {
 		FileConfiguration mision = getGameConfig(map);
 		return mision.getInt("Min-Player");
 	}
-	
+	 
 	//TODO TIME 
 	public void HasTimePath(String time ,String map) {
 				  
@@ -1341,7 +1341,7 @@ public class GameConditions {
 		if(gta.isActionExecuted()) return;
 		
 			 	ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-				gta.setActionExecuted(true);
+				
 				List<String> actions = gta.getTimeActions();
 				if(!actions.isEmpty()) {
 					for(int i = 0 ;i<actions.size();i++) {
@@ -1349,8 +1349,10 @@ public class GameConditions {
 						if(!isMessageFromActions(map,texto)) {
 							Bukkit.dispatchCommand(console, ChatColor.translateAlternateColorCodes('&', texto));	
 						} 
-		 }}		
-		 
+				}}		
+			
+				
+				gta.setActionExecuted(true);
 		 return;
 	}
 	 
@@ -3302,19 +3304,18 @@ public class GameConditions {
 			
 		return l;
 	}      
-	   
+	     
 	public List<GameTimeActions> loadGameTimeActions(String map) {
 		FileConfiguration game = getGameConfig(map);
 		List<GameTimeActions> list = new ArrayList<>();
-			if(game.contains("Time-Actions")) { 
+			if(game.contains("Time-Actions")) {
 				for (String key : game.getConfigurationSection("Time-Actions").getKeys(false)) {
 					List<String> actions = game.getStringList("Time-Actions."+key+".List");
-					GameTimeActions gta = new GameTimeActions(key,actions);
-					list.add(gta);
+					list.add(new GameTimeActions(key,actions));
 				}
 			    
 			}
-			
+		
 		return list;
 	}   
 	

@@ -161,13 +161,13 @@ public class ResistenceTemp {
 						if(startm <= 5) {
 			       	  		if(startm != 0) {
 			       	  			players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 2F);
-			       	  			players.sendTitle(""+ChatColor.RED+ChatColor.BOLD+String.valueOf(startm),""+ChatColor.YELLOW+ChatColor.BOLD+"La partida empieza en ", 20, 20, 20);
+			       	  			players.sendTitle(""+ChatColor.RED+ChatColor.BOLD+String.valueOf(startm),""+ChatColor.YELLOW+ChatColor.BOLD+"La partida empieza en ", 0, 20, 0);
 			       	  		}
 			    			
 				    	//	players.sendMessage(ChatColor.RED+"No hay jugadores suficientes para empezar la partida :(");
 			    		}else {
 			    			players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
-			    			players.sendTitle("",ChatColor.YELLOW+"La partida empieza en "+ChatColor.RED+startm, 20, 20, 20);
+			    			players.sendTitle("",ChatColor.YELLOW+"La partida empieza en "+ChatColor.RED+startm, 0, 20, 0);
 
 			    			//target.sendMessage(ChatColor.YELLOW+"La partida empieza en "+ChatColor.RED+startm);
 			    		}
@@ -265,7 +265,6 @@ public class ResistenceTemp {
 						
 						anuncios ++;
 				  
-					 gc.HasTimePath("Time-"+gt.getTimerhour()+"-"+gt.getGameminute()+"-"+gt.getTimersecond(), name);
 				
 				//colocar terminando
 			}
