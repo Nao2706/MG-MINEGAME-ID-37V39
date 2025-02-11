@@ -29,7 +29,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.util.RayTraceResult;
 
 import me.nao.enums.GameStatus;
-import me.nao.enums.StopMotivo;
+import me.nao.enums.StopMotive;
 //import me.nao.gamemode.DestroyNexo;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameNexo;
@@ -101,7 +101,7 @@ public class NexoTemp {
 			List<String> joins = ms.getParticipants();
 		
 			GameStatus part = ms.getGameStatus();
-			StopMotivo motivo = ms.getMotivo();
+			StopMotive motivo = ms.getMotive();
 
 			//SI TODOS SE SALEN MIENTRAS COMIENZA
 			if(joins.size() == 0 && part == GameStatus.COMENZANDO || part == GameStatus.JUGANDO || part == GameStatus.PAUSE) {
@@ -277,14 +277,14 @@ public class NexoTemp {
 					    			
 					    		
 						  
-					     }else if(motivo == StopMotivo.WIN || motivo == StopMotivo.LOSE || motivo == StopMotivo.ERROR || motivo == StopMotivo.FORCE) {
+					     }else if(motivo == StopMotive.WIN || motivo == StopMotive.LOSE || motivo == StopMotive.ERROR || motivo == StopMotive.FORCE) {
 //				    			
 				    			
 				    			
 				    			 boss.setProgress(1.0);
 						  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN..");
 						  		//RemoveArmorStandsAndItemsInMap(target);
-						  		 if(motivo == StopMotivo.WIN || motivo == StopMotivo.LOSE ) {
+						  		 if(motivo == StopMotive.WIN || motivo == StopMotive.LOSE ) {
 						  	//		 gc.Top(target,name);
 						  		 }
 						  		

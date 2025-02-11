@@ -56,7 +56,7 @@ import me.nao.enums.GameReportType;
 import me.nao.enums.GameStatus;
 import me.nao.enums.Items;
 import me.nao.enums.ObjetiveStatusType;
-import me.nao.enums.StopMotivo;
+import me.nao.enums.StopMotive;
 import me.nao.events.mg.ItemNBT;
 //import me.nao.events.ItemNBT2;
 import me.nao.fillareas.Data;
@@ -137,6 +137,26 @@ public class Comandos implements CommandExecutor{
 						}
 						
 					return true;
+				}else if(args[0].equalsIgnoreCase("reportlogs")) {
+					 //mg reportlogs nao 1
+					
+					if(args.length == 2) {
+							String name = args[1];
+							ReportsManager cool = new ReportsManager(plugin);
+							cool.sendReportLogs(null, name, 1);
+							
+					}else if(args.length == 3){
+						String name = args[1];
+						int pag = Integer.valueOf(args[2]);
+						ReportsManager cool = new ReportsManager(plugin);
+						cool.sendReportLogs(null, name, pag);
+						
+					}else {
+						Bukkit.getConsoleSender().sendMessage("Usa /mg reportlogs <player>");
+						Bukkit.getConsoleSender().sendMessage("Usa /mg reportlogs <player> <pag>");
+					}
+					
+					return true;
 				}else if(args[0].equalsIgnoreCase("isban")) {
 					
 					if(args.length == 2) {
@@ -146,6 +166,7 @@ public class Comandos implements CommandExecutor{
 							
 					}else {
 						Bukkit.getConsoleSender().sendMessage("Usa /mg isban <player>");
+						
 					}
 					
 					return true;
@@ -979,7 +1000,7 @@ public class Comandos implements CommandExecutor{
 						
 						String name = args[1];
 						try {
-							StopMotivo motivo = StopMotivo.valueOf(args[2].toUpperCase());
+							StopMotive motivo = StopMotive.valueOf(args[2].toUpperCase());
 							
 							//plugin.yml = new YamlFile(plugin,name, new File(plugin.getDataFolder().getAbsolutePath()+carpeta));;
 							//MG STOP NAME
@@ -2258,6 +2279,26 @@ public class Comandos implements CommandExecutor{
 					
 					return true;
 					
+				}else if(args[0].equalsIgnoreCase("reportlogs")) {
+					 //mg reportlogs nao 1
+					
+					if(args.length == 2) {
+							String name = args[1];
+							ReportsManager cool = new ReportsManager(plugin);
+							cool.sendReportLogs(player, name, 1);
+							
+					}else if(args.length == 3){
+						String name = args[1];
+						int pag = Integer.valueOf(args[2]);
+						ReportsManager cool = new ReportsManager(plugin);
+						cool.sendReportLogs(player, name, pag);
+						
+					}else {
+						player.sendMessage("Usa /mg reportlogs <player>");
+						player.sendMessage("Usa /mg reportlogs <player> <pag>");
+					}
+					
+					return true;
 				}else if(args[0].equalsIgnoreCase("isban")) {
 					if (args.length == 2) {
 						String name = args[1];
@@ -3429,7 +3470,7 @@ public class Comandos implements CommandExecutor{
 						if (args.length == 3) {
 							String name = args[1];
 							try {
-								StopMotivo motivo = StopMotivo.valueOf(args[2].toUpperCase());
+								StopMotive motivo = StopMotive.valueOf(args[2].toUpperCase());
 								
 								//plugin.yml = new YamlFile(plugin,name, new File(plugin.getDataFolder().getAbsolutePath()+carpeta));;
 								//MG STOP NAME

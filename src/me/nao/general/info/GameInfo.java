@@ -9,7 +9,7 @@ import org.bukkit.boss.BossBar;
 
 import me.nao.enums.GameStatus;
 import me.nao.enums.GameType;
-import me.nao.enums.StopMotivo;
+import me.nao.enums.StopMotive;
 
 public class GameInfo {
 	
@@ -19,7 +19,7 @@ public class GameInfo {
 	private List<String> participants,spectators;
 	private GameType type;
 	private GameStatus estpart;
-	private StopMotivo motivo;
+	private StopMotive motivo;
 	private BossBar boss;
 	private GameObjetivesMG objetives;
 	private List<GameTimeActions> gametimeactions;
@@ -41,7 +41,7 @@ public class GameInfo {
 		this.minplayers = 1;
 		this.type = null;
 		this.estpart = GameStatus.ESPERANDO;
-		this.motivo = StopMotivo.NINGUNO;
+		this.motivo = StopMotive.NINGUNO;
 		this.boss = null;
 		this.time = "0";
 		this.objetives = null;
@@ -89,7 +89,7 @@ public class GameInfo {
 		return estpart;
 	}
 
-	public StopMotivo getMotivo() {
+	public StopMotive getMotive() {
 		return motivo;
 	}
 
@@ -177,7 +177,7 @@ public class GameInfo {
 		this.estpart = estpart;
 	}
 
-	public void setMotivo(StopMotivo motivo) {
+	public void setMotive(StopMotive motivo) {
 		this.motivo = motivo;
 	}
 	
@@ -219,7 +219,7 @@ public class GameInfo {
 	
 	public String ShowGame() {
 		return getMapName()+" "+getMaxPlayers()+" "+getMinPlayers()+" "+getGameType().toString()+" "+getGameStatus().toString()+" "+
-	getMotivo().toString()+" "+getBossbar().getTitle()+" "+getTimeMg();
+	getMotive().toString()+" "+getBossbar().getTitle()+" "+getTimeMg();
 	}
 	
 

@@ -402,8 +402,69 @@ public class ReportsManager {
 	}
 	
 	
+	public void sendReportLogs(Player player, String target,int pag) {
+		
+		FileConfiguration report = plugin.getReportsYaml();
+		if(!report.contains("Players."+target)) {
+			
+			if(player != null) {
+				player.sendMessage(ChatColor.GOLD+"El Jugador "+target+" no existe o no tiene ningun reporte.");
+			}
+			Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+"El Jugador "+target+" no existe o no tiene ningun reporte.");
+			
+			return;
+		}
+		//Jugador=NAO2706-Sancion=WARN-Fecha=19/06/2024 22:09:37 PM-Tiempo=SIN TIEMPO-Moderador=CONSOLA-Razon=(HACKS)
+    
+		List<String> list = report.getStringList("Players."+target+".Reports");
+		
+		pagssendtoPlayer(player,list,pag,5);
+		
+	}
 	
+	 public void pagssendtoPlayer(Player player,List<String> l , int pag,int datsperpags) {
+	    	
+	    	if(!l.isEmpty()) {
+	    		int inicio = (pag -1) * datsperpags;
+	    		int fin = inicio + datsperpags;
+	    		
+	    		int tamañolista = l.size();
+	    		int numerodepags = (int) Math.ceil((double) tamañolista /datsperpags);
+	    		
+	    		if(pag > numerodepags) {
+	    			if(player != null) {
+		    			player.sendMessage(ChatColor.RED+"No hay mas datos para mostrar en la pag: "+ChatColor.GOLD+pag+" Paginas en Total: "+((l.size()+datsperpags-1)/datsperpags));
 
+	    			}
+	    			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No hay mas datos para mostrar en la pag: "+ChatColor.GOLD+pag+" Paginas en Total: "+((l.size()+datsperpags-1)/datsperpags));
+	    			return;
+	    		}
+	    		player.sendMessage(ChatColor.GOLD+"Paginas: "+ChatColor.RED+pag+ChatColor.GOLD+"/"+ChatColor.RED+((l.size()+datsperpags-1)/datsperpags));
+	    		for(int i = inicio;i < fin && i < l.size();i++) {
+	    			if(player != null) {
+	    				player.sendMessage(""+ChatColor.RED+(i+1)+").  "+ChatColor.WHITE+l.get(i).replaceAll("-"," ")
+		    					.replaceAll("Jugador",ChatColor.GREEN+"Jugador").replaceAll("Sancion",ChatColor.GOLD+"Sancion")
+		    					.replaceAll("Fecha",ChatColor.GREEN+"Fecha").replaceAll("Tiempo",ChatColor.GREEN+"Tiempo")
+		    					.replaceAll("Moderador",ChatColor.GREEN+"Moderador").replaceAll("Razon",ChatColor.GREEN+"Razon"));
+	    			}
+	    			
+	    			
+	    			Bukkit.getConsoleSender().sendMessage(""+ChatColor.RED+(i+1)+").  "+ChatColor.WHITE+l.get(i).replaceAll("-"," ")
+	    					.replaceAll("Jugador",ChatColor.GREEN+"Jugador").replaceAll("Sancion",ChatColor.GOLD+"Sancion")
+	    					.replaceAll("Fecha",ChatColor.GREEN+"Fecha").replaceAll("Tiempo",ChatColor.GREEN+"Tiempo")
+	    					.replaceAll("Moderador",ChatColor.GREEN+"Moderador").replaceAll("Razon",ChatColor.GREEN+"Razon"));
+	    					
+	    		}
+	    		
+	    	}else {
+	    		if(player != null) {
+		    		player.sendMessage(ChatColor.RED+"No hay datos para mostrar.");
+
+	    		}
+	    		Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No hay datos para mostrar.");
+	    	}
+	    	return;
+	    }
 	
 	
 

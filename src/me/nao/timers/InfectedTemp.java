@@ -26,7 +26,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitScheduler;
 
 import me.nao.enums.GameStatus;
-import me.nao.enums.StopMotivo;
+import me.nao.enums.StopMotive;
 import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
@@ -100,7 +100,7 @@ public class InfectedTemp {
 			List<String> alive = ga.getAlivePlayers();
 			List<String> dead = ga.getDeadPlayers();
 			GameStatus part = ms.getGameStatus();
-			StopMotivo motivo = ms.getMotivo();
+			StopMotive motivo = ms.getMotive();
 
 			//SI TODOS SE SALEN MIENTRAS COMIENZA
 			if(joins.size() == 0 && part == GameStatus.COMENZANDO || part == GameStatus.JUGANDO || part == GameStatus.PAUSE) {
@@ -250,7 +250,7 @@ public class InfectedTemp {
 					    			
 					    		
 						  
-					     }else if(motivo == StopMotivo.WIN || motivo == StopMotivo.LOSE || motivo == StopMotivo.ERROR || motivo == StopMotivo.FORCE) {
+					     }else if(motivo == StopMotive.WIN || motivo == StopMotive.LOSE || motivo == StopMotive.ERROR || motivo == StopMotive.FORCE) {
 //				    			
 				    			
 				    			//Bukkit.getScheduler().cancelTask(taskID);

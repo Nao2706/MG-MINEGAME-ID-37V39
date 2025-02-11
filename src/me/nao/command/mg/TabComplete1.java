@@ -80,6 +80,7 @@ public class TabComplete1 implements TabCompleter{
 			arguments.add("pause");
 			arguments.add("get-scale");
 			arguments.add("set-scale");
+			arguments.add("reportlogs");
 		
 			
 		}

@@ -54,7 +54,7 @@ import me.nao.enums.GameStatus;
 import me.nao.enums.GameType;
 import me.nao.enums.Items;
 import me.nao.enums.ObjetiveStatusType;
-import me.nao.enums.StopMotivo;
+import me.nao.enums.StopMotive;
 import me.nao.main.mg.Minegame;
 import me.nao.manager.GameIntoMap;
 import me.nao.scoreboard.MgScore;
@@ -2641,7 +2641,7 @@ public class GameConditions {
 			sendMessageToConsole(""+ChatColor.GRAY+"DEFAULT TIMER: "+ChatColor.GREEN+ga.getGameTime().getGameTimerDefaultForResult());
 			sendMessageToConsole(""+ChatColor.GRAY+"DURACION: "+ChatColor.WHITE+cronomet);
 			sendMessageToConsole(""+ChatColor.GRAY+"TIMER: "+ChatColor.WHITE+timer);
-			sendMessageToConsole(""+ChatColor.GRAY+"MOTIVOS DE PARADA: "+ChatColor.WHITE+map.getMotivo().toString());
+			sendMessageToConsole(""+ChatColor.GRAY+"MOTIVOS DE PARADA: "+ChatColor.WHITE+map.getMotive().getValue());
 
 			if(participants.isEmpty()) {
 				sendMessageToConsole(""+ChatColor.GRAY+ChatColor.BOLD+"PARTICIPANTES: "+ChatColor.WHITE+"SIN PARTICIPANTES");
@@ -3111,7 +3111,7 @@ public class GameConditions {
    	
 	
 	   //TODO STOP
-	   public void StopGames(Player player , String name,StopMotivo motivo) {
+	   public void StopGames(Player player , String name,StopMotive motivo) {
 		   
 		   GameConditions gc = new GameConditions(plugin);
 			if(gc.ExistMap(name)) {
@@ -3122,10 +3122,10 @@ public class GameConditions {
 					if(estadoPartida == GameStatus.JUGANDO) {
 						GameIntoMap ci = new GameIntoMap(plugin);
 						
-						ms.setMotivo(motivo);
+						ms.setMotive(motivo);
 						List<String> vivos = ga.getAlivePlayers();
 						List<Player> players = gc.ConvertStringToPlayer(vivos);
-						if(motivo == StopMotivo.WIN) {
+						if(motivo == StopMotive.WIN) {
 							
 							if(vivos.isEmpty()) {
 								Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+ms.getGameType().toString()+ChatColor.GREEN+" Ganaron en la Arena: "+ChatColor.GOLD+name+ChatColor.GREEN+" por Condiciones varias , Terminando. Pero no hay ningun jugador vivo.");
@@ -3153,7 +3153,7 @@ public class GameConditions {
 							
 							}
 						
-						}else if(motivo == StopMotivo.LOSE) {
+						}else if(motivo == StopMotive.LOSE) {
 							
 							if(vivos.isEmpty()) {
 								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+ms.getGameType().toString()+ChatColor.GREEN+"Perdieron en la Arena: "+ChatColor.GOLD+name+ChatColor.GREEN+" por Condiciones varias , Terminando. Pero no hay ningun jugador vivo.");
@@ -3177,7 +3177,7 @@ public class GameConditions {
 								return;
 							}
 							
-						}else if(motivo == StopMotivo.ERROR) {
+						}else if(motivo == StopMotive.ERROR) {
 							
 							
 							if(vivos.isEmpty()) {
@@ -3202,7 +3202,7 @@ public class GameConditions {
 								return;
 							}
 							
-						}else if(motivo == StopMotivo.FORCE) {
+						}else if(motivo == StopMotive.FORCE) {
 							
 							
 							if(vivos.isEmpty()) {
@@ -3331,8 +3331,8 @@ public class GameConditions {
 					String coord2 = split[1];
 					String status = split[2];
 					 
-					CuboidZone cz = new CuboidZone(convertStringLocationToLocations(coord1),convertStringLocationToLocations(coord2),convertStringToGameInteractions(status));
-					zones.add(cz);
+					
+					zones.add(new CuboidZone(convertStringLocationToLocations(coord1),convertStringLocationToLocations(coord2),convertStringToGameInteractions(status)));
 				}
 			}
 		}

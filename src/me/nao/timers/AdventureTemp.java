@@ -53,7 +53,7 @@ import org.bukkit.util.Vector;
 
 import me.nao.enums.GameStatus;
 import me.nao.enums.Items;
-import me.nao.enums.StopMotivo;
+import me.nao.enums.StopMotive;
 import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.GameInfo;
@@ -136,7 +136,7 @@ public class AdventureTemp {
 			List<String> dead = ga.getDeadPlayers();
 			List<String> spect = ga.getSpectators();
 			GameStatus part = ms.getGameStatus();
-			StopMotivo motivo = ms.getMotivo();
+			StopMotive motivo = ms.getMotive();
 
 			//SI TODOS SE SALEN MIENTRAS COMIENZA
 			if(joins.isEmpty() && part != GameStatus.TERMINANDO) {
@@ -218,7 +218,7 @@ public class AdventureTemp {
 						
 						 ms.setGameStatus(GameStatus.TERMINANDO);
 				  		 //STOP
-					}else if(motivo == StopMotivo.WIN || motivo == StopMotivo.LOSE || motivo == StopMotivo.ERROR || motivo == StopMotivo.FORCE) {
+					}else if(motivo == StopMotive.WIN || motivo == StopMotive.LOSE || motivo == StopMotive.ERROR || motivo == StopMotive.FORCE) {
 						
 
 						 boss.setProgress(1.0);

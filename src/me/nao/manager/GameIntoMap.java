@@ -26,7 +26,7 @@ import me.nao.cosmetics.fireworks.Fireworks;
 import me.nao.enums.GameStatus;
 import me.nao.enums.GameType;
 import me.nao.enums.Items;
-import me.nao.enums.StopMotivo;
+import me.nao.enums.StopMotive;
 //import me.nao.gamemode.DestroyNexo;
 import me.nao.general.info.GameInfo;
 import me.nao.general.info.GameNexo;
@@ -304,29 +304,37 @@ public class GameIntoMap {
 		
 		if(gm instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) gm;
-			StopMotivo motivo = gm.getMotivo();
+			StopMotive motivo = gm.getMotive();
 			List<String> dead = ga.getDeadPlayers();
 			List<String> arrivo = ga.getArrivePlayers();
 			
 			//FINALES POR COMANDO STOP PARA MODOS ADVENTURE Y RESISTENCE
-			if(motivo == StopMotivo.WIN && gm.getGameType() == GameType.ADVENTURE && gm.getGameStatus() == GameStatus.JUGANDO) {
-				if(!dead.contains(player.getName()) && !arrivo.contains(player.getName())) {
-					
-					gmc.playerArriveToTheWin(player, mapa);
-					player.setGameMode(GameMode.SPECTATOR);
-					Fireworks f = new Fireworks(player);
-					f.spawnFireballGreenLarge();
-					player.sendMessage(ChatColor.GREEN+"Has Sobrevivido Felicidades.");
-					gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.GREEN+" Sobrevivio y Gano.");
-					isTheGameRanked(player,mapa);
-					
+			if(motivo == StopMotive.WIN && gm.getGameType() == GameType.ADVENTURE) {
 				
-				
-				 return;
+				if(gm.getGameStatus() == GameStatus.JUGANDO || gm.getGameStatus() == GameStatus.PAUSE || gm.getGameStatus() == GameStatus.FREEZE) {
+					if(!dead.contains(player.getName()) && !arrivo.contains(player.getName())) {
+						
+						gmc.playerArriveToTheWin(player, mapa);
+						player.setGameMode(GameMode.SPECTATOR);
+						Fireworks f = new Fireworks(player);
+						f.spawnFireballGreenLarge();
+						player.sendMessage(ChatColor.GREEN+"Has Sobrevivido Felicidades.");
+						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.GREEN+" Sobrevivio y Gano.");
+						isTheGameRanked(player,mapa);
+						
+					
+					
+					 return;
+					}
 				}
-			}else if(motivo == StopMotivo.WIN && gm.getGameType() == GameType.RESISTENCE && gm.getGameStatus() == GameStatus.JUGANDO) {
 				
-				gmc.EndTptoSpawn(player, mapa);
+				
+			}else if(motivo == StopMotive.WIN && gm.getGameType() == GameType.RESISTENCE) {
+				
+				if(gm.getGameStatus() == GameStatus.JUGANDO || gm.getGameStatus() == GameStatus.PAUSE || gm.getGameStatus() == GameStatus.FREEZE) {
+					gmc.EndTptoSpawn(player, mapa);
+				}
+				
 				return;
 				
 				//VICTORIAS SIN USAR COMANDOS
@@ -461,7 +469,7 @@ public class GameIntoMap {
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		String mapa = pl.getMapName();
 		GameInfo gm = plugin.getGameInfoPoo().get(mapa);
-		StopMotivo motivo = gm.getMotivo();
+		StopMotive motivo = gm.getMotive();
 		
 		gmc.deadPlayerToGame(player, mapa);
 		
@@ -473,13 +481,13 @@ public class GameIntoMap {
 		player.getWorld().spawnParticle(Particle.CLOUD, player.getLocation().add(0, 0, 0),
 				/* NUMERO DE PARTICULAS */50, 0.5, 1, 0.5, /* velocidad */0, null, true);
 		
-		if(motivo == StopMotivo.LOSE) {
+		if(motivo == StopMotive.LOSE) {
 			 return;
 									}
-		if(motivo == StopMotivo.ERROR) {
+		if(motivo == StopMotive.ERROR) {
 			 return;
 		}
-		if(motivo == StopMotivo.FORCE) {
+		if(motivo == StopMotive.FORCE) {
 			 return;
 		}else {
 			//   player.setDisplayName(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.RED+ChatColor.BOLD+"MUERTO"+ChatColor.DARK_GRAY+ChatColor.BOLD+"] "+ChatColor.WHITE+player.getDisplayName());
