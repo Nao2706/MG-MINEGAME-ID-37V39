@@ -81,6 +81,7 @@ public class TabComplete1 implements TabCompleter{
 			arguments.add("get-scale");
 			arguments.add("set-scale");
 			arguments.add("reportlogs");
+			arguments.add("invite");
 		
 			
 		}

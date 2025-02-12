@@ -144,6 +144,7 @@ public class MapSettings {
 			ym.set("Cuboid-Zones.List",zones);
 			zones.add("world/123/34/56;world/124/34/58;CANPLACE");
 			zones.add("world/123/34/56;world/124/34/58;CANBREAK");
+			zones.add("world/123/34/56;world/124/34/58;CANMODIFY");
 			
 			plugin.getCacheSpecificYML(name).save();
 			plugin.getCacheSpecificYML(name).reload();

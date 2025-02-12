@@ -850,8 +850,11 @@ public class SourceOfDamage implements Listener{
 				return;
 			}
 		
-			
+			// CUANDO CAE ENCIMA DEL BARRIER RECIBE DAÑO PERO ESTE NO MUERE PERO SE PUEDE MOVER UNOS SEGS
 			if(player.getHealth() > e.getFinalDamage() && e.getCause() == DamageCause.FALL) {
+				ci.GamePlayerFallMap(player);
+			}if(e.getCause() == DamageCause.VOID) {
+				e.setCancelled(true);
 				ci.GamePlayerFallMap(player);
 			}else if(e.getFinalDamage() >= player.getHealth()) {
 				

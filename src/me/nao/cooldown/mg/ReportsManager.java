@@ -433,10 +433,10 @@ public class ReportsManager {
 	    		
 	    		if(pag > numerodepags) {
 	    			if(player != null) {
-		    			player.sendMessage(ChatColor.RED+"No hay mas datos para mostrar en la pag: "+ChatColor.GOLD+pag+" Paginas en Total: "+((l.size()+datsperpags-1)/datsperpags));
+		    			player.sendMessage(ChatColor.RED+"No hay mas datos para mostrar en la pag: "+ChatColor.GOLD+pag+ChatColor.GREEN+" Paginas en Total: "+ChatColor.RED+((l.size()+datsperpags-1)/datsperpags));
 
 	    			}
-	    			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No hay mas datos para mostrar en la pag: "+ChatColor.GOLD+pag+" Paginas en Total: "+((l.size()+datsperpags-1)/datsperpags));
+	    			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No hay mas datos para mostrar en la pag: "+ChatColor.GOLD+pag+ChatColor.GREEN+" Paginas en Total: "+ChatColor.RED+((l.size()+datsperpags-1)/datsperpags));
 	    			return;
 	    		}
 	    		player.sendMessage(ChatColor.GOLD+"Paginas: "+ChatColor.RED+pag+ChatColor.GOLD+"/"+ChatColor.RED+((l.size()+datsperpags-1)/datsperpags));

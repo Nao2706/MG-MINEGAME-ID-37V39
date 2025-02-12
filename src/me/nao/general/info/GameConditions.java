@@ -1019,13 +1019,13 @@ public class GameConditions {
 				}
 			    boss.setVisible(true);
 			   
-			   
+			    
 			    if(type == GameType.ADVENTURE || type == GameType.RESISTENCE) {
 			    	  //pasar solo una lista para los 4 espacios ojo
 				  
 			
 				    List<Entity> entities = new ArrayList<>();
-					     
+					      
 					    
 			    	GameAdventure ga = new GameAdventure();
 			    	ga.setMapName(map);
@@ -1035,7 +1035,7 @@ public class GameConditions {
 			    	ga.setMinPlayersinMap(minplayers);
 			    	ga.setBossbar(boss);	    	
 			    	ga.setObjetivesMg(loadObjetivesOfGames(map));
-			     
+			      
 			    	ga.setGameTimeActions(loadGameTimeActions(map));
 			    	ga.setCuboidZones(loadCuboidZones(map));
 			    	ga.setLootTableLimit(getLootTableLimit());
@@ -1093,7 +1093,7 @@ public class GameConditions {
 		return false;
 	}
 	
-
+	
 
 	
 	public boolean canStartTheGame(Player player ,String map) {
@@ -1101,14 +1101,17 @@ public class GameConditions {
 		// NO ESTA INCLUIDO LA CONDICION DE SI AL EMPEZAR EL MAPA CON LOS JUGADORES MINIMOS Y UNO DURANTE LA FASE DE COMENZANDO SE SALE ESTA SE DETENGA
 		 GameInfo ms = plugin.getGameInfoPoo().get(map);
 		 if(ms instanceof GameAdventure) {
-				GameAdventure ga = (GameAdventure) ms;
+//			 	CommandsMessage cm = new CommandsMessage(plugin);
+//			 	cm.joinannounce(player,map);
+			 
+				 GameAdventure ga = (GameAdventure) ms;
 				 System.out.println("LOG-2 CANSTART MISION: "+ms.ShowGame());
 				 player.sendMessage("");
 				 player.sendMessage(ChatColor.GREEN+"Has Entrado en el Mapa "+ChatColor.translateAlternateColorCodes('&',getNameOfTheMap(map).replace("%player%",player.getName())));
 
 				 player.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.YELLOW+" Te has unido"+ChatColor.RED+" ("+ChatColor.GOLD+ga.getParticipants().size()+ChatColor.YELLOW+"/"+ChatColor.GOLD+ getMaxPlayerMap(map)+ChatColor.RED+")");
 
-				 sendMessageToUsersOfSameMapLessPlayer(player,
+				sendMessageToUsersOfSameMapLessPlayer(player,
 				ChatColor.YELLOW+"Se a unido "+ChatColor.GREEN+player.getName()+ChatColor.RED+" ("+ChatColor.GOLD+ga.getParticipants().size()+ChatColor.YELLOW+"/"+ChatColor.GOLD+getMaxPlayerMap(map)+ChatColor.RED+")");
 				MgScore sc = new MgScore(plugin);
 				sc.LoadScore(player);
@@ -1467,374 +1470,97 @@ public class GameConditions {
 				GameAdventure ga = (GameAdventure) minfo;
 				 BossBar boss = minfo.getBossbar();
 				 GameType misiontype = minfo.getGameType();
-				 int maxplayers = mision.getInt("Max-Player");
+				 int maxplayers = minfo.getMaxPlayers();
 				 ReportsManager cooldown = new ReportsManager(plugin) ;
 				 
-				if(misiontype == GameType.ADVENTURE) {
-					
-					if(cooldown.HasSancionPlayer(player)) {
-					
-						 return false;
+				 if(cooldown.HasSancionPlayer(player)) {
+						
+					 return false;
+				 }
+				if(!mision.contains("Pre-Lobby")) {
+					 if(player.isOp()) {
+						 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el PreLobby");
 					 }
-					if(!mision.contains("Pre-Lobby")) {
-						 if(player.isOp()) {
-							 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el PreLobby");
-						 }
-						 else {
-							 player.sendMessage(ChatColor.RED+"Error en el Mapa: "+map);
-						 }
-						 return false;
+					 else {
+						 player.sendMessage(ChatColor.RED+"Error en el Mapa: "+map);
 					 }
-					 if(!mision.contains("Spawn")) {
-						 if(player.isOp()) {
-							 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el Spawn");
-						 }
-						 else {
-							 player.sendMessage(ChatColor.RED+"Error en el Mapa: "+map);
-						 }
-						 return false;
+					 return false;
+				 }
+				 if(!mision.contains("Spawn")) {
+					 if(player.isOp()) {
+						 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el Spawn");
 					 }
-					 if(!mision.contains("Spawn-Spectator")) {
-						 if(player.isOp()) {
-							 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el Spawn-Spectator");
-						 }
-						 else {
-							 player.sendMessage(ChatColor.RED+"Error en el Mapa: "+map);
-						 }
-						 return false;
+					 else {
+						 player.sendMessage(ChatColor.RED+"Error en el Mapa: "+map);
 					 }
+					 return false;
+				 }
+				 if(!mision.contains("Spawn-Spectator")) {
+					 if(player.isOp()) {
+						 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el Spawn-Spectator");
+					 }
+					 else {
+						 player.sendMessage(ChatColor.RED+"Error en el Mapa: "+map);
+					 }
+					 return false;
 					 
-					 if(minfo.getGameStatus() == GameStatus.TERMINANDO) {
-						 player.sendMessage(ChatColor.RED+"La Partida esta terminando. ");
-						 return false;
+				 }if(misiontype == GameType.RESISTENCE && !mision.contains("Spawn-End")) {
+					 if(player.isOp()) {
+						 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el Spawn-Spectator");
 					 }
-					 
-					 if(ga.getParticipants().size() == maxplayers && minfo.getGameStatus() == GameStatus.COMENZANDO) {
-						 player.sendMessage(ChatColor.RED+"La Partida esta llena espera un rato para entrar como Espectador."); 
-						 return false;
-					 }if(minfo.getGameStatus() == GameStatus.JUGANDO && !isPlayerinGame(player)) {
-						 if(cooldown.HasSancionPlayer(player)) {
-							 //MODO ESPECTADOR no te uniras como jugador
-							 player.sendMessage(ChatColor.YELLOW+"Estas Baneado o tienes un TempBan pero puedes Observar.");
-						 }
-							 //MODO ESPECTADOR no te uniras como jugador
-						 JoinSpectator(player,map);
-						  
-						 return false;
-					 }if(mision.getBoolean("Requires-Permission")) {
-			 				String perm = mision.getString("Permission-To-Play");
-			 				if(!player.hasPermission(perm)) {
-			 					List<String> perml = mision.getStringList("How-Get-Permission.Message");
-			 					if(!perml.isEmpty()) {
-			 						
-			 						player.sendMessage("");
-			 						for(int i =0;i< perml.size();i++) {
-			 							player.sendMessage(ChatColor.translateAlternateColorCodes('&', perml.get(i)).replace("%player%", player.getName()));
-			 						}
-			 						player.sendMessage("");			
-			 						
-			 						
-			 					}else {
-			 						player.sendMessage(ChatColor.RED+"Mapa Bloqueado: Necesitas un Permiso para Acceder.");
-			 					}
-			 					
-			 					return false;
-			 				}
-			 		 }if(mision.getBoolean("Has-Time")) {
-						 String time = mision.getString("Time");
-					    	
-					        if(!PassedTimeMg(player,time)) return false;
+					 else {
+						 player.sendMessage(ChatColor.RED+"Error en el Mapa: "+map);
 					 }
+					 return false;
+				 }
+				 if(minfo.getGameStatus() == GameStatus.TERMINANDO) {
+					 player.sendMessage(ChatColor.RED+"La Partida esta terminando. ");
+					 return false;
+				 }
+				 
+				 if(ga.getParticipants().size() == maxplayers && minfo.getGameStatus() == GameStatus.COMENZANDO) {
+					 player.sendMessage(ChatColor.RED+"La Partida esta llena espera un rato para entrar como Espectador."); 
+					 return false;
+				 }if(minfo.getGameStatus() == GameStatus.JUGANDO && !isPlayerinGame(player)) {
+					 if(cooldown.HasSancionPlayer(player)) {
+						 //MODO ESPECTADOR no te uniras como jugador
+						 player.sendMessage(ChatColor.YELLOW+"Estas Baneado o tienes un TempBan pero puedes Observar.");
+					 }
+						 //MODO ESPECTADOR no te uniras como jugador
+					 JoinSpectator(player,map);
+					  
+					 return false;
+				 }if(mision.getBoolean("Requires-Permission")) {
+		 				String perm = mision.getString("Permission-To-Play");
+		 				if(!player.hasPermission(perm)) {
+		 					List<String> perml = mision.getStringList("How-Get-Permission.Message");
+		 					if(!perml.isEmpty()) {
+		 						
+		 						player.sendMessage("");
+		 						for(int i =0;i< perml.size();i++) {
+		 							player.sendMessage(ChatColor.translateAlternateColorCodes('&', perml.get(i)).replace("%player%", player.getName()));
+		 						}
+		 						player.sendMessage("");			
+		 						
+		 						
+		 					}else {
+		 						player.sendMessage(ChatColor.RED+"Mapa Bloqueado: Necesitas un Permiso para Acceder.");
+		 					}
+		 					
+		 					return false;
+		 				}
+		 		 }if(mision.getBoolean("Has-Time")) {
+					 String time = mision.getString("Time");
+				    	
+				        if(!PassedTimeMg(player,time)) return false;
+				 }
+				
+					
+					
 			 		 
 			 		boss.addPlayer(player);
 			 		return true;
-				}else if(misiontype == GameType.RESISTENCE) {
-					
-					if(cooldown.HasSancionPlayer(player)) {
-					
-						 return false;
-					 }
-					if(!mision.contains("Pre-Lobby")) {
-						 if(player.isOp()) {
-							 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el PreLobby");
-						 }
-						 else {
-							 player.sendMessage(ChatColor.RED+"Error en el Mapa: "+map);
-						 }
-						 return false;
-					 }
-					 if(!mision.contains("Spawn")) {
-						 if(player.isOp()) {
-							 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el Spawn");
-						 }
-						 else {
-							 player.sendMessage(ChatColor.RED+"Error en el Mapa: "+map);
-						 }
-						 return false;
-					 }
-					 if(!mision.contains("Spawn-Spectator")) {
-						 if(player.isOp()) {
-							 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el Spawn-Spectator");
-						 }
-						 else {
-							 player.sendMessage(ChatColor.RED+"Error en el Mapa: "+map);
-						 }
-						 return false;
-					 }
-					 
-					 if(!mision.contains("Spawn-End")) {
-						 if(player.isOp()) {
-							 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el Spawn-Spectator");
-						 }
-						 else {
-							 player.sendMessage(ChatColor.RED+"Error en el Mapa: "+map);
-						 }
-						 return false;
-					 }
-					 
-					 
-					 if(minfo.getGameStatus() == GameStatus.TERMINANDO) {
-						 player.sendMessage(ChatColor.RED+"La Partida esta terminando. ");
-						 return false;
-					 }
-					 
-					 if(ga.getParticipants().size() == maxplayers && minfo.getGameStatus() == GameStatus.COMENZANDO) {
-						 player.sendMessage(ChatColor.RED+"La Partida esta llena espera un rato para entrar como Espectador."); 
-						 return false;
-					 }if(minfo.getGameStatus() == GameStatus.JUGANDO || minfo.getGameStatus() == GameStatus.PAUSE && !isPlayerinGame(player)) {
-						 if(cooldown.HasSancionPlayer(player)) {
-							 //MODO ESPECTADOR no te uniras como jugador
-							 player.sendMessage(ChatColor.YELLOW+"Estas Baneado o tienes un TempBan pero puedes Observar.");
-						 }
-							 //MODO ESPECTADOR no te uniras como jugador
-						 JoinSpectator(player,map);
-						
-						 return false;
-					 }if(mision.getBoolean("Requires-Permission")) {
-			 				String perm = mision.getString("Permission-To-Play");
-			 				if(!player.hasPermission(perm)) {
-			 					List<String> perml = mision.getStringList("How-Get-Permission.Message");
-			 					if(!perml.isEmpty()) {
-			 						
-			 						player.sendMessage("");
-			 						for(int i =0;i< perml.size();i++) {
-			 							player.sendMessage(ChatColor.translateAlternateColorCodes('&', perml.get(i)).replace("%player%", player.getName()));
-			 						}
-			 						player.sendMessage("");			
-			 						
-			 						
-			 					}else {
-			 						player.sendMessage(ChatColor.RED+"Mapa Bloqueado: Necesitas un Permiso para Acceder.");
-			 					}
-			 					
-			 					return false;
-			 				}
-			 		 }if(mision.getBoolean("Has-Time")) {
-						 String time = mision.getString("Time");
-					    	
-					        if(!PassedTimeMg(player,time)) return false;
-					 }
-			 		 
-			 		boss.addPlayer(player);
-			 		return true;
-				}else if(misiontype == GameType.INFECTED) {
-					
-					if(cooldown.HasSancionPlayer(player)) {
-					
-						 return false;
-					 }
-					if(!mision.contains("Pre-Lobby")) {
-						 if(player.isOp()) {
-							 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el PreLobby");
-						 }
-						 else {
-							 player.sendMessage(ChatColor.RED+"Error en el Mapa: "+map);
-						 }
-						 return false;
-					 }
-					 if(!mision.contains("Spawn")) {
-						 if(player.isOp()) {
-							 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el Spawn");
-						 }
-						 else {
-							 player.sendMessage(ChatColor.RED+"Error en el Mapa: "+map);
-						 }
-						 return false;
-					 }
-					 if(!mision.contains("Spawn-Spectator")) {
-						 if(player.isOp()) {
-							 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el Spawn-Spectator");
-						 }
-						 else {
-							 player.sendMessage(ChatColor.RED+"Error en el Mapa: "+map);
-						 }
-						 return false;
-					 }
-					 
-					 if(!mision.contains("Spawn-End")) {
-						 if(player.isOp()) {
-							 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el Spawn-Spectator");
-						 }
-						 else {
-							 player.sendMessage(ChatColor.RED+"Error en el Mapa: "+map);
-						 }
-						 return false;
-					 }
-					 
-					 
-					 if(minfo.getGameStatus() == GameStatus.TERMINANDO) {
-						 player.sendMessage(ChatColor.RED+"La Partida esta terminando. ");
-						 return false;
-					 }
-					 
-					 if(ga.getParticipants().size() == maxplayers && minfo.getGameStatus() == GameStatus.COMENZANDO) {
-						 player.sendMessage(ChatColor.RED+"La Partida esta llena espera un rato para entrar como Espectador."); 
-						 return false;
-					 }if(minfo.getGameStatus() == GameStatus.JUGANDO  || minfo.getGameStatus() == GameStatus.PAUSE && !isPlayerinGame(player)) {
-						 if(cooldown.HasSancionPlayer(player)) {
-							 //MODO ESPECTADOR no te uniras como jugador
-							 player.sendMessage(ChatColor.YELLOW+"Estas Baneado o tienes un TempBan pero puedes Observar.");
-						 }
-						 JoinSpectator(player,map);
-						
-						 return false;
-					 }if(mision.getBoolean("Requires-Permission")) {
-			 				String perm = mision.getString("Permission-To-Play");
-			 				if(!player.hasPermission(perm)) {
-			 					List<String> perml = mision.getStringList("How-Get-Permission.Message");
-			 					if(!perml.isEmpty()) {
-			 						
-			 						player.sendMessage("");
-			 						for(int i =0;i< perml.size();i++) {
-			 							player.sendMessage(ChatColor.translateAlternateColorCodes('&', perml.get(i)).replace("%player%", player.getName()));
-			 						}
-			 						player.sendMessage("");			 						
-			 						
-			 					}else {
-			 						player.sendMessage(ChatColor.RED+"Mapa Bloqueado: Necesitas un Permiso para Acceder.");
-			 					}
-			 					
-			 					return false;
-			 				}
-			 		 }if(mision.getBoolean("Has-Time")) {
-						 String time = mision.getString("Time");
-					    	
-					        if(!PassedTimeMg(player,time)) return false;
-					 }
-			 		 
-			 		boss.addPlayer(player);
-			 		return true;
-				}
-		 }else if(minfo instanceof GameNexo) {
-			 
-			 GameNexo ga = (GameNexo) minfo;
-			 BossBar boss = minfo.getBossbar();
-			 GameType misiontype = minfo.getGameType();
-			 int maxplayers = mision.getInt("Max-Player");
-			 ReportsManager cooldown = new ReportsManager(plugin) ;
-			 
-			 if(misiontype == GameType.NEXO) {
-					
-					if(cooldown.HasSancionPlayer(player)) {
-						
-						 return false;
-					 }
-					if(!mision.contains("Pre-Lobby")) {
-						 if(player.isOp()) {
-							 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el PreLobby");
-						 }
-						 else {
-							 player.sendMessage(ChatColor.RED+"Error en el Mapa: "+map);
-						 }
-						 return false;
-					 }
-					 if(!mision.contains("SpawnBlue")) {
-						 if(player.isOp()) {
-							 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el NexoBlue");
-						 }
-						 else {
-							 player.sendMessage(ChatColor.RED+"Error en el Mapa: "+map);
-						 }
-						 return false;
-					 }
-					 if(!mision.contains("SpawnRed")) {
-						 if(player.isOp()) {
-							 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el NexoRed");
-						 }
-						 else {
-							 player.sendMessage(ChatColor.RED+"Error en el Mapa: "+map);
-						 }
-						 return false;
-					 }
-					 if(!mision.contains("NexoBlue")) {
-						 if(player.isOp()) {
-							 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el NexoBlue");
-						 }
-						 else {
-							 player.sendMessage(ChatColor.RED+"Error en el Mapa: "+map);
-						 }
-						 return false;
-					 }
-					 if(!mision.contains("NexoRed")) {
-						 if(player.isOp()) {
-							 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el NexoRed");
-						 }
-						 else {
-							 player.sendMessage(ChatColor.RED+"Error en el Mapa: "+map);
-						 }
-						 return false;
-					 }
-					 if(!mision.contains("Spawn-Spectator")) {
-						 if(player.isOp()) {
-							 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el Spawn-Spectator");
-						 }
-						 else {
-							 player.sendMessage(ChatColor.RED+"Error en el Mapa: "+map);
-						 }
-						 return false;
-					 }
-					 if(minfo.getGameStatus() == GameStatus.TERMINANDO) {
-						 player.sendMessage(ChatColor.RED+"La Partida esta terminando. ");
-						 return false;
-					 }
-					 
-					 if(ga.getParticipants().size() == maxplayers && minfo.getGameStatus() == GameStatus.COMENZANDO) {
-						 player.sendMessage(ChatColor.RED+"La Partida esta llena espera un rato para entrar como Espectador."); 
-						 return false;
-					 }if(minfo.getGameStatus() == GameStatus.JUGANDO && !isPlayerinGame(player)) {
-						 if(cooldown.HasSancionPlayer(player)) {
-							 //MODO ESPECTADOR no te uniras como jugador
-							 player.sendMessage(ChatColor.YELLOW+"Estas Baneado o tienes un TempBan pero puedes Observar.");
-						 }
-						 JoinSpectator(player,map);
-						
-						 return false;
-					 }if(mision.getBoolean("Requires-Permission")) {
-			 				String perm = mision.getString("Permission-To-Play");
-			 				if(!player.hasPermission(perm)) {
-			 					List<String> perml = mision.getStringList("How-Get-Permission.Message");
-			 					if(!perml.isEmpty()) {
-			 						perml.add("");
-			 						for(int i =0;i< perml.size();i++) {
-			 							player.sendMessage(ChatColor.translateAlternateColorCodes('&', perml.get(i)).replace("%player%", player.getName()));
-			 						}
-			 						perml.add("");
-			 						
-			 					}else {
-			 						player.sendMessage(ChatColor.RED+"Mapa Bloqueado: Necesitas un Permiso para Acceder.");
-			 					}
-			 					
-			 					return false;
-			 				}
-			 		 }if(mision.getBoolean("Has-Time")) {
-						 String time = mision.getString("Usage-Time");
-					    	
-					        if(!PassedTimeMg(player,time)) return false;
-					 }
-			 		 
-			 		boss.addPlayer(player);
-			 		return true;
-				}
+				
 		 }
 		 
 		
@@ -4386,11 +4112,6 @@ public class GameConditions {
 			}
 			return false;
 		
-	}
-	
-	public boolean isBlock(Material m , Location point1) {
-		return point1.getBlock().getType() == m ;
-	
 	}
 	
 	public boolean isEntityAbove(Location loc) {

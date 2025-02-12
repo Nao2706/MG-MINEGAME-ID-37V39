@@ -1,7 +1,12 @@
 package me.nao.command.mg;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import me.nao.enums.GameStatus;
+import me.nao.general.info.GameConditions;
+import me.nao.general.info.GameInfo;
+import me.nao.main.mg.Minegame;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -10,7 +15,11 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class CommandsMessage {
 	
+	private Minegame plugin;
 	
+	public CommandsMessage(Minegame plugin) {
+		this.plugin = plugin;
+	}
 	
 	@SuppressWarnings("deprecation")
 	public void FormatsMessage(Player player) {
@@ -102,8 +111,133 @@ public class CommandsMessage {
 		
 	}
 	
+	@SuppressWarnings("deprecation")
+	public void joinannounce(Player player, String map) {
+		GameConditions gc = new GameConditions(plugin);
+		TextComponent m1 = new TextComponent();
+		m1.setText(ChatColor.AQUA+"    [Click para Jugar]");
+		m1.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,new ComponentBuilder("(Clickeame para Jugar.)").color(ChatColor.GOLD).create()));
+	    m1.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/mg join "+map));
+
+		
+		if(player.hasPermission("mg.announce.join") && !gc.HasMaintenance() && !gc.isBlockedTheMap(map)) {
+			for(Player players : Bukkit.getOnlinePlayers()) {
+				if(players.getName().equals(player.getName())) continue;
+				if(gc.isPlayerinGame(players)) continue;
+				players.sendMessage("");
+				players.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.GOLD+" Entro al mapa: "+ChatColor.RED+map);
+				players.sendMessage(ChatColor.GRAY+"Si deseas Unirte escribe: "+ChatColor.GREEN+"/mg join "+map+ChatColor.GRAY+" o Has Click en el mensaje de Abajo.");
+			    players.spigot().sendMessage(m1);
+			    players.sendMessage("");
+			}
+			
+	 		
+	 	}
+	}
 	
+	@SuppressWarnings("deprecation")
+	public void inviteToPlay(Player player, String map) {
+		
+		
+		
+		GameConditions gc = new GameConditions(plugin);
+		
+		if(!gc.ExistMap(map)) {
+			if(player != null) {
+				player.sendMessage(ChatColor.RED+"El mapa "+ChatColor.GOLD+map+ChatColor.RED+" no existe o esta mal escrito.");
+			}
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El mapa "+ChatColor.GOLD+map+ChatColor.RED+" no existe o esta mal escrito.");
+			return;
+		}
+		
+		TextComponent m1 = new TextComponent();
+		m1.setText(""+ChatColor.DARK_PURPLE+ChatColor.MAGIC+"[]"+ChatColor.AQUA+"        [Click para Jugar]        "+ChatColor.DARK_PURPLE+ChatColor.MAGIC+"[]");
+		m1.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,new ComponentBuilder("(Clickeame para Jugar.)").color(ChatColor.GOLD).create()));
+	    m1.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/mg join "+map));
+		
+		if(gc.isMapinGame(map)) {
+			GameInfo gi = plugin.getGameInfoPoo().get(map);
+			if(gi.getGameStatus() == GameStatus.ESPERANDO) {
+				if(!gc.HasMaintenance() && !gc.isBlockedTheMap(map)) {
+					for(Player players : Bukkit.getOnlinePlayers()) {
+						if(gc.isPlayerinGame(players)) continue;
+						players.sendMessage("");
+						if(player != null) {
+							players.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"INVITACION DE JUEGO");
+							players.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.GRAY+" esta Invitando a Jugar en el Mapa: "+ChatColor.RED+map);
+							players.sendMessage(ChatColor.GRAY+"Si deseas Unirte escribe: "+ChatColor.GREEN+"/mg join "+map+ChatColor.GRAY+" o Has Click en el mensaje de Abajo.");
+							players.spigot().sendMessage(m1);
+						}else {
+							players.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"INVITACION DE JUEGO");
+							players.sendMessage(ChatColor.GREEN+"Notificacion: "+ChatColor.GRAY+"Se esta Invitando a Jugar en el Mapa: "+ChatColor.RED+map);
+							players.sendMessage(ChatColor.GRAY+"Si deseas Unirte escribe: "+ChatColor.GREEN+"/mg join "+map+ChatColor.GRAY+" o Has Click en el mensaje de Abajo.");
+							players.spigot().sendMessage(m1);
+						}
+						players.sendMessage("");
+					  
+					}
+					
+					
+					Bukkit.getConsoleSender().sendMessage("");
+					if(player != null) {
+						Bukkit.getConsoleSender().sendMessage(""+ChatColor.RED+ChatColor.BOLD+"INVITACION DE JUEGO");
+						Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+player.getName()+ChatColor.GRAY+" esta Invitando a Jugar en el Mapa: "+ChatColor.RED+map);
+						Bukkit.getConsoleSender().sendMessage(ChatColor.GRAY+"Si deseas Unirte escribe: "+ChatColor.GREEN+"/mg join "+map+ChatColor.GRAY+" o Has Click en el mensaje de Abajo.");
+						Bukkit.getConsoleSender().spigot().sendMessage(m1);
+					}else {
+						Bukkit.getConsoleSender().sendMessage(""+ChatColor.RED+ChatColor.BOLD+"INVITACION DE JUEGO");
+						Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Notificacion: "+ChatColor.GRAY+"Se esta Invitando a Jugar en el Mapa: "+ChatColor.RED+map);
+						Bukkit.getConsoleSender().sendMessage(ChatColor.GRAY+"Si deseas Unirte escribe: "+ChatColor.GREEN+"/mg join "+map+ChatColor.GRAY+" o Has Click en el mensaje de Abajo.");
+						Bukkit.getConsoleSender().spigot().sendMessage(m1);
+					}
+					Bukkit.getConsoleSender().sendMessage("");
+			 	}
+			}else {
+				if(player != null) {
+					player.sendMessage(ChatColor.RED+"El mapa "+ChatColor.GOLD+map+ChatColor.RED+" ya esta Empezando o Jugando nose puede Invitar.");
+				}
+				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El mapa "+ChatColor.GOLD+map+ChatColor.RED+" ya esta Empezando o Jugando nose puede Invitar.");
+			}
+		}else {
+			
+			if(!gc.HasMaintenance() && !gc.isBlockedTheMap(map)) {
+				for(Player players : Bukkit.getOnlinePlayers()) {
+					if(gc.isPlayerinGame(players)) continue;
+					players.sendMessage("");
+					if(player != null) {
+						players.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"INVITACION DE JUEGO");
+						players.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.GRAY+" esta Invitando a Jugar en el Mapa: "+ChatColor.RED+map);
+						players.sendMessage(ChatColor.GRAY+"Si deseas Unirte escribe: "+ChatColor.GREEN+"/mg join "+map+ChatColor.GRAY+" o Has Click en el mensaje de Abajo.");
+						players.spigot().sendMessage(m1);
+					}else {
+						players.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"INVITACION DE JUEGO");
+						players.sendMessage(ChatColor.GREEN+"Notificacion: "+ChatColor.GRAY+"Se esta Invitando a Jugar en el Mapa: "+ChatColor.RED+map);
+						players.sendMessage(ChatColor.GRAY+"Si deseas Unirte escribe: "+ChatColor.GREEN+"/mg join "+map+ChatColor.GRAY+" o Has Click en el mensaje de Abajo.");
+						players.spigot().sendMessage(m1);
+					}
+					players.sendMessage("");
+				  
+				}
+				
+				Bukkit.getConsoleSender().sendMessage("");
+				if(player != null) {
+					Bukkit.getConsoleSender().sendMessage(""+ChatColor.RED+ChatColor.BOLD+"INVITACION DE JUEGO");
+					Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+player.getName()+ChatColor.GRAY+" esta Invitando a Jugar en el Mapa: "+ChatColor.RED+map);
+					Bukkit.getConsoleSender().sendMessage(ChatColor.GRAY+"Si deseas Unirte escribe: "+ChatColor.GREEN+"/mg join "+map+ChatColor.GRAY+" o Has Click en el mensaje de Abajo.");
+					Bukkit.getConsoleSender().spigot().sendMessage(m1);
+				}else {
+					Bukkit.getConsoleSender().sendMessage(""+ChatColor.RED+ChatColor.BOLD+"INVITACION DE JUEGO");
+					Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Notificacion: "+ChatColor.GRAY+"Se esta Invitando a Jugar en el Mapa: "+ChatColor.RED+map);
+					Bukkit.getConsoleSender().sendMessage(ChatColor.GRAY+"Si deseas Unirte escribe: "+ChatColor.GREEN+"/mg join "+map+ChatColor.GRAY+" o Has Click en el mensaje de Abajo.");
+					Bukkit.getConsoleSender().spigot().sendMessage(m1);
+				}
+				Bukkit.getConsoleSender().sendMessage("");
+		 	}
+		}
+
+		
 	
+	}
 	
 	
 

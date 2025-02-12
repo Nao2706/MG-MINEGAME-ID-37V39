@@ -1,14 +1,20 @@
 package me.top.users.mg;
 
 
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.configuration.file.FileConfiguration;
+
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.nao.general.info.GameConditions;
+import me.nao.general.info.GameInfo;
+import me.nao.general.info.ObjetivesMG;
 import me.nao.general.info.PlayerInfo;
 import me.nao.main.mg.Minegame;
 
@@ -169,13 +175,15 @@ public class PHMiniGame extends PlaceholderExpansion{
         	
         	String text = identifier.replace("isblock_","");
         	String[] split = text.split("_");
-        	String[] split1 = text.split(":");
+        	String[] split1 = text.split(",");
         	String[] split2 = split[0].split(",");
    
         	//mg isblock_world,23,45,67:AIR
-        	GameConditions c = new GameConditions(plugin);
-        	Location loc1 = new Location(Bukkit.getWorld(split2[0]),Double.valueOf(split2[1]),Double.valueOf(split2[2]),Double.valueOf(split2[3].replaceAll("\\D","")));
-        	return 	String.valueOf(c.isBlock(Material.valueOf(split1[1].toUpperCase()), loc1));
+        	//mg isblock_world,23,45,67:SEA_LANTERN
+        	
+        	Location loc1 = new Location(Bukkit.getWorld(split2[0]),Double.valueOf(split2[1]),Double.valueOf(split2[2]),Double.valueOf(split2[3]));
+        	
+        	return 	String.valueOf(split1[4].toUpperCase().equals(loc1.getBlock().getType().toString()));
  
         }else if(identifier.startsWith("entitysamountaboveblock_")){
         	
@@ -230,6 +238,28 @@ public class PHMiniGame extends PlaceholderExpansion{
         	
         	return 	String.valueOf(c.getEntitysAmountInZone(loc1, loc2));
  
+        }else if(identifier.startsWith("objetivecurrentvalue")){
+        	//mg_objetive_Tutorial,Puerta1
+        	String text = identifier.replace("objetivecurrentvalue_","");
+        	String[] split = text.split(",");
+        	
+      
+        	
+        	return 	getObjetiveCurrentValue(split[0], split[1]);
+ 
+        }else if(identifier.startsWith("objetivecompletevalue")){
+        	//mg_objetive_Tutorial,Puerta1
+        	String text = identifier.replace("objetivecompletevalue_","");
+        	String[] split = text.split(",");
+        	
+      
+        	
+        	return 	getObjetiveCurrentCompleteValue(split[0], split[1]);
+ 
+        }else if(identifier.startsWith("playerlvl")){
+        	//mg_objetive_Tutorial,Puerta1
+        	return 	getPlayerlvlmg(player);
+ 
         }
         
         // We return null if an invalid placeholder (f.e. %someplugin_placeholder3%) 
@@ -257,11 +287,58 @@ public class PHMiniGame extends PlaceholderExpansion{
 	}
 	
 	
+	public String getObjetiveCurrentValue(String map,String objetive) {
+		
+		GameConditions gc = new GameConditions(plugin);
+		if(!gc.ExistMap(map)) {
+			return "El mapa no existe.";
+		}
+		
+		if(!gc.isMapinGame(map)) {
+			return "El mapa no esta en Juego";
+		}
+		GameInfo gi = plugin.getGameInfoPoo().get(map);	
+		List<ObjetivesMG> l = gi.getGameObjetivesMg().getObjetives();
+		if(!l.stream().filter(o -> o.getObjetiveName().equals(objetive)).findFirst().isPresent()) {
+			return "Sin datos";
+		}
+		ObjetivesMG obj = l.stream().filter(o -> o.getObjetiveName().equals(objetive)).findFirst().get();
+		
+		return String.valueOf(obj.getCurrentValue());
+	}
 	
+	public String getObjetiveCurrentCompleteValue(String map,String objetive) {
+		
+		GameConditions gc = new GameConditions(plugin);
+		if(!gc.ExistMap(map)) {
+			return "El mapa no existe.";
+		}
+		
+		if(!gc.isMapinGame(map)) {
+			return "El mapa no esta en Juego";
+		}
+		
+		GameInfo gi = plugin.getGameInfoPoo().get(map);	
+		List<ObjetivesMG> l = gi.getGameObjetivesMg().getObjetives();
+		if(!l.stream().filter(o -> o.getObjetiveName().equals(objetive)).findFirst().isPresent()) {
+			return "Sin datos.";
+		}
+		ObjetivesMG obj = l.stream().filter(o -> o.getObjetiveName().equals(objetive)).findFirst().get();
+		
+		return String.valueOf(obj.getCompleteValue());
+	}
 	
-	
-	
-	
+	public String getPlayerlvlmg(Player player) {
+		FileConfiguration lvl = plugin.getPoints();
+		String text = "";
+		if(lvl.contains("Players."+player.getName())) {
+			text = lvl.getString("Players."+player.getName()+".Level");
+		}else {
+			text = "0";
+		}
+		
+		return text;
+	}
 	
 	
 	

@@ -490,7 +490,28 @@ public class Comandos implements CommandExecutor{
 			 		 }
 			 		 
 			 		 return true;
-				  }else if(args[0].equalsIgnoreCase("timegame")) {
+				  }else if(args[0].equalsIgnoreCase("formats")) {
+	              	  CommandsMessage c1 = new CommandsMessage(plugin);
+	              	  c1.FormatsMessage(null);
+          			
+          			return true;
+          			
+          		}else if(args[0].equalsIgnoreCase("invite")) {
+          			
+          			//mg invite Tutorial
+          			
+          			if(args.length == 2) {
+          				CommandsMessage c1 = new CommandsMessage(plugin);
+          				c1.inviteToPlay(null, args[1]);
+          			}else {
+          				Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa /mg invite <Mapa>");
+          				Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Ejemplo /mg invite Tutorial");
+          			}
+	              	  
+        			
+        			return true;
+        			
+        		}else if(args[0].equalsIgnoreCase("timegame")) {
 						//mg time Tutorial set 0-1-2
 			 		  
 			 		 if(args.length == 4) {
@@ -1279,7 +1300,7 @@ public class Comandos implements CommandExecutor{
 			return true;
 		   }else if(args[0].equalsIgnoreCase("difficult")) {
 							
-					CommandsMessage cm = new CommandsMessage();
+					CommandsMessage cm = new CommandsMessage(plugin);
 					cm.DifficultMessage(player);
 						
 					return true;
@@ -2013,12 +2034,27 @@ public class Comandos implements CommandExecutor{
 					
 					return true;
 				}else if(args[0].equalsIgnoreCase("formats") && player.isOp()) {
-	              	  CommandsMessage c1 = new CommandsMessage();
+	              	  CommandsMessage c1 = new CommandsMessage(plugin);
 	              	  c1.FormatsMessage(player);
           			
           			return true;
           			
-          		}else if(args[0].equalsIgnoreCase("time")) {
+          		}else if(args[0].equalsIgnoreCase("invite")) {
+          			
+          			//mg invite Tutorial
+          			
+          			if(args.length == 2) {
+          				CommandsMessage c1 = new CommandsMessage(plugin);
+          				c1.inviteToPlay(player, args[1]);
+          			}else {
+          				player.sendMessage(ChatColor.GREEN+"Usa /mg invite <Mapa>");
+          				player.sendMessage(ChatColor.GREEN+"Ejemplo /mg invite Tutorial");
+          			}
+	              	  
+        			
+        			return true;
+        			
+        		}else if(args[0].equalsIgnoreCase("time")) {
               	
               		LocalDateTime lt = gc.AddOrRemoveMg();
           			player.sendMessage(TimeR(lt));
@@ -2357,7 +2393,7 @@ public class Comandos implements CommandExecutor{
 							player.sendMessage(ChatColor.RED+"/mg head <material>");
 						}
 						
-						return true;
+						return true; 
 					}else if(args[0].equalsIgnoreCase("join")) {
 						if(args.length == 2) {
 							String name = args[1];
