@@ -1903,14 +1903,14 @@ public class Comandos implements CommandExecutor{
 					if(player.isOp()) {
 						
 						player.getInventory().addItem(Items.RAINARROW.getValue());
-						
+						 
 				}else {
 					player.sendMessage(plugin.nombre+ChatColor.RED+" No tienes permiso para usar ese comando");
 					
 				}
 				
 				return true;
-				
+				    
 				//TODO REWARD
 			}else if (args[0].equalsIgnoreCase("create")) {
 					if(player.isOp()) {
@@ -2570,11 +2570,11 @@ public class Comandos implements CommandExecutor{
 							
 					}else if(args[0].equalsIgnoreCase("setprelobby")) {
 							if(player.isOp()) {
-								if (args.length == 2) {
-									String name = args[1];
-								
+								if (args.length >= 2) {
+									
+								String mapname = args[1];
 							  
-								c.setMapPreLobby(name, player);
+								c.setMapPreLobby(mapname, player);
 							
 								}else {
 									player.sendMessage(plugin.nombre+ChatColor.GREEN+"escribe /mg setprelobby <mapa>");
@@ -2588,11 +2588,11 @@ public class Comandos implements CommandExecutor{
 					}else if(args[0].equalsIgnoreCase("setspawn")) {
 						
 							if(player.isOp()) {
-								if (args.length == 2) {
-									String name = args[1];
+								if (args.length >= 2) {
 								
+									String mapname = args[1];
 							   
-								c.setMapSpawn(name, player);
+								c.setMapSpawn(mapname, player);
 							
 								}else {
 									player.sendMessage(plugin.nombre+ChatColor.GREEN+"escribe /mg setspawn <mapa>");
@@ -2648,10 +2648,10 @@ public class Comandos implements CommandExecutor{
 					
 					if(player.isOp()) {
 						if (args.length == 2) {
-							String name = args[1];
-						
+							
+							String mapname = args[1];
 					   
-						c.setMapSpawnEnd(name, player);
+						c.setMapSpawnEnd(mapname, player);
 					
 						}else {
 							player.sendMessage(plugin.nombre+ChatColor.GREEN+"escribe /mg setspawn <mapa>");
@@ -2667,10 +2667,10 @@ public class Comandos implements CommandExecutor{
 					
 					if(player.isOp()) {
 						if (args.length == 2) {
-							String name = args[1];
-						
+							
+							String mapname = args[1];
 					   
-						c.setMapSpawnSpectator(name, player);
+						c.setMapSpawnSpectator(mapname, player);
 					
 						}else {
 							player.sendMessage(plugin.nombre+ChatColor.GREEN+"escribe /mg setspawn-spectator <mapa>");
@@ -2757,25 +2757,25 @@ public class Comandos implements CommandExecutor{
 				return true;
 				
 			}else if(args[0].equalsIgnoreCase("enabled")&& player.isOp()) {
-					if (args.length == 2) {
-						String name = args[1];
+					if (args.length >= 2) {
+						
 						FileConfiguration config = plugin.getConfig();
-					
-				 		if(gc.ExistMap(name)) {
+						String mapname = args[1];
+				 		if(gc.ExistMap(mapname)) {
 							 List<String> al = config.getStringList("Maps-Blocked.List");
-							 if(al.contains(name)) {
+							 if(al.contains(mapname)) {
 								 config.set("Maps-Blocked.List",al);
-								 al.remove(name);
+								 al.remove(mapname);
 								 plugin.getConfig().save();
 								 plugin.getConfig().reload();
-									player.sendMessage(plugin.nombre+ChatColor.GREEN+" El Mapa "+ChatColor.GOLD+name+ChatColor.GREEN+" a sido Habilitada");
+									player.sendMessage(plugin.nombre+ChatColor.GREEN+" El Mapa "+ChatColor.GOLD+mapname+ChatColor.GREEN+" a sido Habilitada");
 							 }else {
-								 player.sendMessage(plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+name+ChatColor.RED+" no esta Deshabilitada.");
+								 player.sendMessage(plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+mapname+ChatColor.RED+" no esta Deshabilitada.");
 							 }
 							
 							
 						}else {
-							player.sendMessage(plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+name+ChatColor.RED+" no existe o esta mal escrita.");
+							player.sendMessage(plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+mapname+ChatColor.RED+" no existe o esta mal escrita.");
 						}
 						
 					
@@ -2788,23 +2788,23 @@ public class Comandos implements CommandExecutor{
 					
 				}else if(args[0].equalsIgnoreCase("disabled")&& player.isOp()) {
 					if (args.length == 2) {
-						String name = args[1];
+						String mapname = args[1];
 						FileConfiguration config = plugin.getConfig();
-						if(gc.ExistMap(name)) {
+						if(gc.ExistMap(mapname)) {
 							 List<String> al = config.getStringList("Maps-Blocked.List");
-							 if(!al.contains(name)) {
+							 if(!al.contains(mapname)) {
 								 config.set("Maps-Blocked.List",al);
-								 al.add(name);
+								 al.add(mapname);
 								 plugin.getConfig().save();
 								 plugin.getConfig().reload();
-								player.sendMessage(plugin.nombre+ChatColor.GREEN+" El Mapa "+ChatColor.GOLD+name+ChatColor.GREEN+" a sido Deshabilitada");
+								player.sendMessage(plugin.nombre+ChatColor.GREEN+" El Mapa "+ChatColor.GOLD+mapname+ChatColor.GREEN+" a sido Deshabilitada");
 							 }else {
-								 player.sendMessage(plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+name+ChatColor.RED+" ya esta Deshabilitada.");
+								 player.sendMessage(plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+mapname+ChatColor.RED+" ya esta Deshabilitada.");
 							 }
 							
 							
 						}else {
-							player.sendMessage(plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+name+ChatColor.RED+" no existe o esta mal escrita.");
+							player.sendMessage(plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+mapname+ChatColor.RED+" no existe o esta mal escrita.");
 						}
 				
 					}else {
@@ -2817,7 +2817,7 @@ public class Comandos implements CommandExecutor{
 					//TODO ITEM
 			}else if(args[0].equalsIgnoreCase("itemread")) {
 				  player.sendMessage(ChatColor.RED+"Leyendo item.");
-				  
+				 // player.getInventory().addItem(ItemNBT.getItemNBT223(new ItemStack(Material.DIAMOND_PICKAXE)));
 				  ItemNBT.getItemsChest(player.getInventory().getItemInMainHand());
 				  
 				return true;
@@ -2830,10 +2830,10 @@ public class Comandos implements CommandExecutor{
 							}
 				    		if(args.length == 3) { 
 				    			//mg item candestroy stone
-				    			  String messagep = ChatColor.RED+" /mg item <CanPlaceOn|CanDestroy> <stone,dirt,sand>";
+				    			  String messagep = ChatColor.RED+" /mg item <canplaceon|canbreak> <stone,dirt,sand>";
 				    			  String status = args[1];
 								  String data = args[2];
-				    			  if(status.equals("CanDestroy") || status.equals("CanPlaceOn")) {
+				    			  if(status.equals("canbreak") || status.equals("canplaceon")) {
 				    				  ItemStack it = player.getInventory().getItemInMainHand();
 				 					 
 									  
@@ -2844,7 +2844,7 @@ public class Comandos implements CommandExecutor{
 						                    	 player.sendMessage(ChatColor.RED+" Ingresa datos de materiales en el 4to argumento ejemplo dirt,stone,sand");
 						                    	 return false;
 						                     }else{
-						    				  player.getInventory().addItem(ItemNBT.getItemNBT2(it, status, data));
+						    				  player.getInventory().addItem(ItemNBT.getItemNBTnew(it, status, data));
 							    			  player.sendMessage(ChatColor.GREEN+"Se han agregado las Tags al Item.");
 						    			     }
 								      }else{
@@ -2858,7 +2858,7 @@ public class Comandos implements CommandExecutor{
 				    		}
 				    		
 				    		else if(args.length == 4) {
-				    			  String messagep = ChatColor.RED+" /mg item <item> <CanPlaceOn|CanDestroy> <stone,dirt,sand>";
+				    			  String messagep = ChatColor.RED+" /mg item <item> <canplaceon|canbreak> <stone,dirt,sand>";
 					    		  Material m = Material.matchMaterial(args[1]);
 					    		  String status = args[2];
 								  String data = args[3];
@@ -2867,13 +2867,13 @@ public class Comandos implements CommandExecutor{
 		                                  return false;
 		                           }
 					    		  
-					    		  else if(status.equals("CanDestroy") || status.equals("CanPlaceOn")) {
+					    		  else if(status.equals("canbreak") || status.equals("canplaceon")) {
 					    			  
 					    			  if (data == null) {
 					                    	 player.sendMessage(ChatColor.RED+" Ingresa datos de materiales en el 4to argumento ejemplo dirt,stone,sand");
 					                    	 return false;
 					                     }else{
-					    				  player.getInventory().addItem(ItemNBT.getItemNBT(m, status, data));
+					    				  player.getInventory().addItem(ItemNBT.getItemNBTnew(m, status, data));
 						    			  player.sendMessage(ChatColor.GREEN+"Se han agregado las Tags al Item.");
 					    			     }
 					    			 
@@ -3091,9 +3091,9 @@ public class Comandos implements CommandExecutor{
 				}else if(args[0].equalsIgnoreCase("generator")) {
 
 					if(args.length == 2) {
-						String name = args[1];
+						String mapname = args[1];
 						MapSettings ms = new MapSettings(plugin);
-						ms.setMapSpawnSimpleGenerators(name, player);
+						ms.setMapSpawnSimpleGenerators(mapname, player);
 						
 					}else {
 						player.sendMessage(ChatColor.RED+"/mg generator <Mapa> (Ver un Bloque)");
@@ -3103,9 +3103,9 @@ public class Comandos implements CommandExecutor{
 				}else if(args[0].equalsIgnoreCase("delgenerator")) {
 
 					if(args.length == 2) {
-						String name = args[1];
+						String mapname = args[1];
 						MapSettings ms = new MapSettings(plugin);
-						ms.deleteMapSpawnSimpleGenerators(name, player);
+						ms.deleteMapSpawnSimpleGenerators(mapname, player);
 						
 					}else {
 						player.sendMessage(ChatColor.RED+"/mg delgenerator <Mapa> (Ver un Bloque)");
@@ -3115,9 +3115,9 @@ public class Comandos implements CommandExecutor{
 				}else if(args[0].equalsIgnoreCase("mobgenerator")) {
 
 					if(args.length == 2) {
-						String name = args[1];
+						String mapname = args[1];
 						MapSettings ms = new MapSettings(plugin);
-						ms.setMapSpawnSimpleMobsGenerators(name, player);
+						ms.setMapSpawnSimpleMobsGenerators(mapname, player);
 						
 					}else {
 						player.sendMessage(ChatColor.RED+"/mg mobgenerator <Mapa> (Ver un Bloque)");
@@ -3127,18 +3127,14 @@ public class Comandos implements CommandExecutor{
 				}else if(args[0].equalsIgnoreCase("delmobgenerator")) {
 
 					if(args.length == 2) {
-						String name = args[1];
+						String mapname = args[1];
 						MapSettings ms = new MapSettings(plugin);
-						ms.deleteMapSpawnSimpleMobsGenerators(name, player);
+						ms.deleteMapSpawnSimpleMobsGenerators(mapname, player);
 						
 					}else {
 						player.sendMessage(ChatColor.RED+"/mg delmobgenerator <Mapa> (Ver un Bloque)");
 					}
 					
-					return true;
-				}else if(args[0].equalsIgnoreCase("craw")) {
-					
-					player.setSwimming(true);			
 					return true;
 				}else if(args[0].equalsIgnoreCase("maintenance")) {
 					FileConfiguration config = plugin.getConfig();
@@ -3207,7 +3203,7 @@ public class Comandos implements CommandExecutor{
 				
 				return true;
 			  }else if(args[0].equalsIgnoreCase("tp")){
-					
+				  
 					if(args.length == 9) {
 						String target = args[1];
 						String map = args[2];
@@ -3242,7 +3238,7 @@ public class Comandos implements CommandExecutor{
 				}else if(args[0].equalsIgnoreCase("tpall")){
 					
 					if(args.length == 8) {
-		
+						
 						String map = args[1];
 						String world = args[2];
 						double x = Double.valueOf(args[3]);
@@ -3327,7 +3323,7 @@ public class Comandos implements CommandExecutor{
 					return true;
 				}else if(args[0].equalsIgnoreCase("objetive")){
 					if(args.length == 4) {
-						
+						 
 						
 						String map = args[1];
 						String name = args[2];
@@ -3921,8 +3917,20 @@ public class Comandos implements CommandExecutor{
  	
  	
 	
-	
+//	public String mapNamemg(String[] arg, int positionstart) {
+//			String text = "";
+// 			int comas = arg.split(",").lenght -1; 	
+//	   	 for(int i = positionstart ;i < arg.length; i++) {
+//	   		 text = text+arg[i]+" "; 
+//				 
+//			}
+//	   	 
+//	   	 return text;
+//	}
 
+	
+	
+	
 //mg ban NAO POR NOOB
 	public void IdentifierReports(Player player,String[] report) {
 		
