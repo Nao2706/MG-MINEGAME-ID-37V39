@@ -830,21 +830,21 @@ public class EventRandoms implements Listener{
 	 			GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
 	 			
 	 			List<CuboidZone> zones = gi.getCuboidZones();
-	 			
+	 			System.out.println(pl.getMapName());
 	 			if(zones.isEmpty())return;
 	 			
 	 			
 	 			for(CuboidZone zone : zones) {
 	 				if(zone.getGameInteractionType() == GameInteractions.CANMODIFY || zone.getGameInteractionType() == GameInteractions.CANBREAK) {
-	 					if(!zone.isinsideOfCuboidZone(e.getBlock().getLocation(), zone.getLocation1(), zone.getLocation2())) {
-		 					e.setCancelled(true);
-		 					player.sendMessage(ChatColor.RED+"No puedes Romper esa Zona.");
-		 					return;
-		 				}
+	 				
+	 					if(zone.isinsideOfCuboidZone(e.getBlock().getLocation(), zone.getLocation1(), zone.getLocation2())) return;
+		 				
 	 				}
 	 				
 	 			}
-	 			
+	 				e.setCancelled(true);
+					player.sendMessage(ChatColor.RED+"No puedes Romper Bloques en esa Zona.");
+					return;
 	 		}
 	 		
 	 		
@@ -919,7 +919,7 @@ public class EventRandoms implements Listener{
 	 		if(player.getGameMode() == GameMode.ADVENTURE) {
 	 			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 	 			GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
-	 			
+	 			System.out.println(pl.getMapName());
 	 			List<CuboidZone> zones = gi.getCuboidZones();
 	 			
 	 			if(zones.isEmpty()) return;
@@ -927,15 +927,15 @@ public class EventRandoms implements Listener{
 	 			for(CuboidZone zone : zones) {
 	 				
 	 				if(zone.getGameInteractionType() == GameInteractions.CANMODIFY || zone.getGameInteractionType() == GameInteractions.CANPLACE) {
-	 					if(!zone.isinsideOfCuboidZone(e.getBlockPlaced().getLocation(), zone.getLocation1(), zone.getLocation2())) {
-		 					e.setCancelled(true);
-		 					player.sendMessage(ChatColor.RED+"No puedes Colocar Bloques en esa Zona.");
-		 					return;
-		 				}
+	 					
+	 					if(zone.isinsideOfCuboidZone(e.getBlockPlaced().getLocation(), zone.getLocation1(), zone.getLocation2())) return;
+		 				
 	 				}
 	 				
 	 			}
-	 			
+	 				e.setCancelled(true);
+					player.sendMessage(ChatColor.RED+"No puedes Colocar Bloques en esa Zona.");
+					return;
 	 		}
 	//	 if(event.getBlock().getLocation().subtract(0,1,0).getBlock().getType() != Material.AIR) 
 		//	 return;

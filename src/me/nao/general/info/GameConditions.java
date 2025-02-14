@@ -560,6 +560,8 @@ public class GameConditions {
 		
 		if(gi.getGameStatus() == GameStatus.ESPERANDO) {
 			 SendMessageToAllUsersOfSameMap(player, ChatColor.GREEN+"\nSe a Forzado a Comenzar el Juego.\n"+ChatColor.GOLD+"La partida Comenzara en: "+ChatColor.RED+gi.getCountDownStart()+ChatColor.GREEN+" segundos.\n ");
+			 gi.setGameStatus(GameStatus.COMENZANDO);
+			 
 			 if(gi.getGameType() == GameType.ADVENTURE) {
 					AdventureTemp t = new AdventureTemp(plugin);
 					t.Inicio(gi.getMapName());
@@ -3056,7 +3058,7 @@ public class GameConditions {
 					String coord1 = split[0];
 					String coord2 = split[1];
 					String status = split[2];
-					 
+					System.out.println(coord1+" "+coord2+" "+status);
 					
 					zones.add(new CuboidZone(convertStringLocationToLocations(coord1),convertStringLocationToLocations(coord2),convertStringToGameInteractions(status)));
 				}

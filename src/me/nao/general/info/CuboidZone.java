@@ -43,7 +43,7 @@ public class CuboidZone {
 	//BLOCK VERSION
 	public boolean isinsideOfCuboidZone(Location location , Location point1 , Location point2) {
 		
-		if(!(getLocation1().getWorld().getName().equals(getLocation2().getWorld().getName()))) return false;
+		//if(!(getLocation1().getWorld().getName().equals(getLocation2().getWorld().getName()))) return false;
 		
 			double minX = Math.min(getLocation1().getX(),getLocation2().getX());
 			double minY = Math.min(getLocation1().getY(),getLocation2().getY());
