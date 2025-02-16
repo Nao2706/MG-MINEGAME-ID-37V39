@@ -3,6 +3,8 @@ package me.nao.revive;
 
 
 
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
@@ -46,6 +48,7 @@ public class RevivePlayer{
 	private ReviveStatus rv;
 	private int taskID;
 	private ArmorStand armor ;
+	private ItemStack[] contents;
 	
 	public RevivePlayer(Player player, int value, int time,ReviveStatus rv, Entity e,DamageCause cause,ArmorStand armor,Minegame plugin) {
 		this.player = player;
@@ -56,6 +59,7 @@ public class RevivePlayer{
 		this.plugin = plugin;
 		this.rv = rv;
 		this.armor = armor;
+		this.contents = null;
 	
 
 	}
@@ -66,6 +70,10 @@ public class RevivePlayer{
 
 	public int getRemainingTimeLife() {
 		return time;
+	}
+	
+	public ItemStack[] restoreItemstoPlayer() {
+		return contents;
 	}
 	
 	public int getValue() {
@@ -96,9 +104,13 @@ public class RevivePlayer{
 		this.value = value;
 	}
 	
+	public void saveItemsPlayer() {
+		this.contents = player.getInventory().getContents();
+	}
+	
 	public void Dead(Entity e, DamageCause cause) {
 		GameIntoMap mig = new GameIntoMap(plugin);
-		
+		player.getInventory().setContents(restoreItemstoPlayer());
 		if(e != null) {
 			mig.GameMobDamagerCauses(player, e);
 		}else {
@@ -111,11 +123,6 @@ public class RevivePlayer{
 	public void Knocked() {
 		
 		GameConditions gc = new GameConditions(plugin);
-		//Block b = player.getLocation().getBlock();
-		//Block r = b.getRelative(0, 1, 0);
-		
-	    //player.sendBlockChange(r.getLocation(), Material.BARRIER.createBlockData());
-		
 		ItemStack head = new ItemStack(Material.PLAYER_HEAD,1);
 		SkullMeta meta = (SkullMeta) head.getItemMeta();
 		meta.setOwningPlayer(player);
@@ -156,6 +163,8 @@ public class RevivePlayer{
 		
 		
 		player.setGameMode(GameMode.SPECTATOR);
+		saveItemsPlayer();
+		clearInventorymg();
 		addToRevive();
 		//System.out.println("TODOS NOQUEADOS: "+isAllKnocked()+ " TIENE ITEM DE REVIVIR: "+hasPlayersAutoreviveItem());
 		Start();
@@ -226,9 +235,21 @@ public class RevivePlayer{
 	
 	public void StandUp() {
 		
-		player.setGameMode(GameMode.ADVENTURE);
+		player.getInventory().setContents(restoreItemstoPlayer());
 		player.teleport(getArmorStand().getLocation());
-	
+		
+		if(getReviveStatus() == ReviveStatus.SELFREVIVED) {
+			if(player.getInventory().getContents().length >= 1) {
+				for (ItemStack itemStack : player.getInventory().getContents()) {
+					if(itemStack == null || !itemStack.isSimilar(Items.REVIVEP.getValue())) continue;
+							
+	                    player.getInventory().removeItem(itemStack);
+	              }
+
+			}
+	 	}
+		
+		player.setGameMode(GameMode.ADVENTURE);
 		removeToRevive();
 		PotionEffect vid = new PotionEffect(PotionEffectType.REGENERATION,/*duration*/ 10 * 20,/*amplifier:*/10, true ,true,true );
 		PotionEffect comida = new PotionEffect(PotionEffectType.SATURATION,/*duration*/ 10 * 20,/*amplifier:*/10, true ,true,true );
@@ -298,7 +319,6 @@ public class RevivePlayer{
 					ga.getKnockedPlayers().add(player.getName());
 				} 
 				
-				System.out.println("L1: "+ga.getKnockedPlayers());
 			}
 		
 	}
@@ -310,11 +330,9 @@ public class RevivePlayer{
 	
 		if(gi instanceof GameAdventure) {
 			getArmorStand().remove();
-			System.out.println("REMOVIDO "+player.getName());
 			plugin.getKnockedPlayer().remove(player);
 			GameAdventure ga = (GameAdventure) gi;
 			if(ga.getKnockedPlayers().remove(player.getName()));
-			System.out.println("L2: "+ga.getKnockedPlayers());
 			
 		}
 	
@@ -336,21 +354,28 @@ public class RevivePlayer{
 	
 	
 	public boolean reviveStoped() {
-		
-		if(getReviveStatus() != ReviveStatus.REVIVED) {
-			 if(time == 0) {
-					System.out.println("TIEMPO 0");
-					return true;
-				}
-//			 	else if(isAllKnocked()) {
-//					System.out.println("TODOS NOQUEADOS");
-//					return true;
-//				}
-				else if(isDangerZone()) {
-					System.out.println("ZONA PELIGROSA");
-					return true;
-				}
+		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+		GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
+		if(gi instanceof GameAdventure) {
+			GameAdventure ga = (GameAdventure) gi;
+			if(getReviveStatus() != ReviveStatus.REVIVED || getReviveStatus() != ReviveStatus.SELFREVIVED) {
+				 if(time == 0) {
+						System.out.println("TIEMPO 0");
+						return true;
+					}
+				 
+				 	else if(ga.getAlivePlayers().size() == ga.getKnockedPlayers().size() && !hasReviveItemAnyPlayer()) {
+						System.out.println("TODOS NOQUEADOS");
+						return true;
+					}
+					else if(isDangerZone()) {
+						System.out.println("ZONA PELIGROSA");
+						return true;
+					}
+			}
+			
 		}
+	
 	
 		return false;
 	}
@@ -361,23 +386,26 @@ public class RevivePlayer{
 		
 		BukkitScheduler sh = Bukkit.getServer().getScheduler();
 	    
+		
+		
 		taskID = sh.scheduleSyncRepeatingTask(plugin,new Runnable(){
 			@Override
 			public void run() {
 				//setColor(getArmorStand());
 				
-				if(getReviveStatus() == ReviveStatus.REVIVED) {
+				if(getReviveStatus() == ReviveStatus.REVIVED || getReviveStatus() == ReviveStatus.SELFREVIVED) {
 					
 					StandUp();
 					Bukkit.getScheduler().cancelTask(taskID);	
 				}
 				if(ms.getGameStatus() == GameStatus.TERMINANDO) {
-					
+					System.out.println("Error");
 				    Dead(e, cause);
 				    Bukkit.getScheduler().cancelTask(taskID);	
 				   
 				}else if(reviveStoped() || player == null || !player.isOnline()) {
 					Dead(e, cause);
+					System.out.println("No tienen item F");
 					Bukkit.getScheduler().cancelTask(taskID);	
 
 				}else if(getReviveStatus() == ReviveStatus.BLEEDING) {
@@ -410,8 +438,35 @@ public class RevivePlayer{
 	}
 	
 
+	public void clearInventorymg() {
+		if(player.getInventory().getContents().length >= 1) {
+			for (ItemStack itemStack : player.getInventory().getContents()) {
+				if(itemStack == null || itemStack.isSimilar(Items.REVIVEP.getValue())) continue;
+						
+                    player.getInventory().removeItem(itemStack);
+              }
+
+		}
+	}
 
 	
+	public boolean hasReviveItemAnyPlayer() {
+		
+		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+		GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
+		if(gi instanceof GameAdventure) {
+			GameAdventure ga = (GameAdventure) gi;
+			List<String> l = ga.getAlivePlayers();
+			for(String player : l) {
+				Player pla = Bukkit.getPlayerExact(player);
+				if(pla.getInventory().contains(Items.REVIVEP.getValue(), 1) || pla.getInventory().getItemInOffHand().isSimilar(Items.REVIVEP.getValue())) {
+					return true;
+				}
+			}
+		
+		}
+		return false;
+	}
 	
 	
 }

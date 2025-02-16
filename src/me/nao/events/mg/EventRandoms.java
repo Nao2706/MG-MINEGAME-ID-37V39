@@ -240,11 +240,12 @@ public class EventRandoms implements Listener{
 											pr.setReviveStatus(ReviveStatus.HEALING);
 											
 										}else {
-											pr.setReviveStatus(ReviveStatus.REVIVED);
+											if(pr.getReviveStatus() == ReviveStatus.SELFREVIVED) return;
+											pr.setReviveStatus(ReviveStatus.SELFREVIVED);
 											player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+"REVIVIDO" ,""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(100,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 20, 20, 20);
 											player.sendMessage(ChatColor.GOLD+"Te has autorevivido ");
 											gc.sendMessageToUsersOfSameMapLessPlayer(player,""+ChatColor.GREEN+ChatColor.BOLD+player.getName()+" consiguio Autorevivirse.");
-											removeItemstackCustom(player,Items.REVIVEP.getValue());
+											//removeItemstackCustom(player,Items.REVIVEP.getValue());
 										}
 									}
 									
@@ -259,7 +260,7 @@ public class EventRandoms implements Listener{
 											player.sendTitle(""+ChatColor.WHITE+ChatColor.BOLD+"REVIVIENDO"+ChatColor.GREEN+ChatColor.BOLD+" + ", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 0, 20, 0);
 											pr.setReviveStatus(ReviveStatus.HEALING);
 										}else {
-											if(pr.getReviveStatus() != ReviveStatus.REVIVED) {
+											if(pr.getReviveStatus() == ReviveStatus.REVIVED) return;
 												target.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+"REVIVIDO", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(100,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 20, 20, 20);
 												player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+"REVIVIDO", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(100,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 20, 20, 20);
 											
@@ -267,9 +268,8 @@ public class EventRandoms implements Listener{
 												target.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.GOLD+" te ayudo a levantarte.");
 												gc.sendMessageToUsersOfSameMapLessTwoPlayers(player, target, ChatColor.GOLD+target.getName()+ChatColor.AQUA+" ayudo a "+ChatColor.GREEN+player.getName()+ChatColor.AQUA+" a Levantarse.");
 												
-												 
 												pr.setReviveStatus(ReviveStatus.REVIVED);
-											}
+											
 											
 										}
 										
