@@ -418,41 +418,43 @@ public class ReportsManager {
     
 		List<String> list = report.getStringList("Players."+target+".Reports");
 		
-		pagssendtoPlayer(player,list,pag,5);
+		pagssendtoPlayer(player,list,pag,5,target);
 		
 	}
-	
-	 public void pagssendtoPlayer(Player player,List<String> l , int pag,int datsperpags) {
+ /// PRIMERO PEDIMOS UNA LISTA , LUEGO LA PAGINA A VISUALIZAR , POR ULTIMO CUANTOS DATOS CONFORMAN UNA PAGINA
+	 public void pagssendtoPlayer(Player player,List<String> l , int pag,int datosperpags,String target) {
 	    	
 	    	if(!l.isEmpty()) {
-	    		int inicio = (pag -1) * datsperpags;
-	    		int fin = inicio + datsperpags;
+	    		int inicio = (pag -1) * datosperpags;
+	    		int fin = inicio + datosperpags;
 	    		
 	    		int tamañolista = l.size();
-	    		int numerodepags = (int) Math.ceil((double) tamañolista /datsperpags);
+	    		int numerodepags = (int) Math.ceil((double) tamañolista /datosperpags);
 	    		
 	    		if(pag > numerodepags) {
 	    			if(player != null) {
-		    			player.sendMessage(ChatColor.RED+"No hay mas datos para mostrar en la pag: "+ChatColor.GOLD+pag+ChatColor.GREEN+" Paginas en Total: "+ChatColor.RED+((l.size()+datsperpags-1)/datsperpags));
+		    			player.sendMessage(ChatColor.RED+"No hay mas datos para mostrar en la pag: "+ChatColor.GOLD+pag+ChatColor.GREEN+" Paginas en Total: "+ChatColor.RED+((l.size()+datosperpags-1)/datosperpags));
 
 	    			}
-	    			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No hay mas datos para mostrar en la pag: "+ChatColor.GOLD+pag+ChatColor.GREEN+" Paginas en Total: "+ChatColor.RED+((l.size()+datsperpags-1)/datsperpags));
+	    			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No hay mas datos para mostrar en la pag: "+ChatColor.GOLD+pag+ChatColor.GREEN+" Paginas en Total: "+ChatColor.RED+((l.size()+datosperpags-1)/datosperpags));
 	    			return;
 	    		}
-	    		player.sendMessage(ChatColor.GOLD+"Paginas: "+ChatColor.RED+pag+ChatColor.GOLD+"/"+ChatColor.RED+((l.size()+datsperpags-1)/datsperpags));
+	    		
+	    		player.sendMessage(ChatColor.GOLD+"Lista de Reportes de: "+ChatColor.GREEN+target);
+	    		player.sendMessage(ChatColor.GOLD+"Paginas: "+ChatColor.RED+pag+ChatColor.GOLD+"/"+ChatColor.RED+((l.size()+datosperpags-1)/datosperpags));
 	    		for(int i = inicio;i < fin && i < l.size();i++) {
 	    			if(player != null) {
 	    				player.sendMessage(""+ChatColor.RED+(i+1)+").  "+ChatColor.WHITE+l.get(i).replaceAll("-"," ")
-		    					.replaceAll("Jugador",ChatColor.GREEN+"Jugador").replaceAll("Sancion",ChatColor.GOLD+"Sancion")
-		    					.replaceAll("Fecha",ChatColor.GREEN+"Fecha").replaceAll("Tiempo",ChatColor.GREEN+"Tiempo")
-		    					.replaceAll("Moderador",ChatColor.GREEN+"Moderador").replaceAll("Razon",ChatColor.GREEN+"Razon"));
+	    						.replaceAll("Sancion:",ChatColor.GOLD+"Sancion:")
+		    					.replaceAll("Fecha:",ChatColor.GREEN+"Fecha:").replaceAll("Tiempo:",ChatColor.GREEN+"Tiempo:")
+		    					.replaceAll("Mod:",ChatColor.GREEN+"Mod:").replaceAll("Razon:",ChatColor.GREEN+"Razon:"));
 	    			}
 	    			
 	    			
 	    			Bukkit.getConsoleSender().sendMessage(""+ChatColor.RED+(i+1)+").  "+ChatColor.WHITE+l.get(i).replaceAll("-"," ")
-	    					.replaceAll("Jugador",ChatColor.GREEN+"Jugador").replaceAll("Sancion",ChatColor.GOLD+"Sancion")
-	    					.replaceAll("Fecha",ChatColor.GREEN+"Fecha").replaceAll("Tiempo",ChatColor.GREEN+"Tiempo")
-	    					.replaceAll("Moderador",ChatColor.GREEN+"Moderador").replaceAll("Razon",ChatColor.GREEN+"Razon"));
+	    					.replaceAll("Sancion:",ChatColor.GOLD+"Sancion:")
+	    					.replaceAll("Fecha:",ChatColor.GREEN+"Fecha:").replaceAll("Tiempo:",ChatColor.GREEN+"Tiempo:")
+	    					.replaceAll("Mod:",ChatColor.GREEN+"Mod:").replaceAll("Razon:",ChatColor.GREEN+"Razon:"));
 	    					
 	    		}
 	    		

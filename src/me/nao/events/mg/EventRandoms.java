@@ -261,6 +261,7 @@ public class EventRandoms implements Listener{
 											pr.setReviveStatus(ReviveStatus.HEALING);
 										}else {
 											if(pr.getReviveStatus() == ReviveStatus.REVIVED) return;
+												pr.setReviveStatus(ReviveStatus.REVIVED);
 												target.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+"REVIVIDO", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(100,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 20, 20, 20);
 												player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+"REVIVIDO", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(100,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 20, 20, 20);
 											
@@ -268,7 +269,7 @@ public class EventRandoms implements Listener{
 												target.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.GOLD+" te ayudo a levantarte.");
 												gc.sendMessageToUsersOfSameMapLessTwoPlayers(player, target, ChatColor.GOLD+target.getName()+ChatColor.AQUA+" ayudo a "+ChatColor.GREEN+player.getName()+ChatColor.AQUA+" a Levantarse.");
 												
-												pr.setReviveStatus(ReviveStatus.REVIVED);
+												
 											
 											
 										}

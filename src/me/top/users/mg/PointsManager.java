@@ -50,14 +50,14 @@ public class PointsManager {
 				points.set("Players."+player.getName()+".Revive",point3+gp.getRevive());
 				points.set("Players."+player.getName()+".Help-Revive",point4+gp.getHelpRevive());
 				saveAll();
-				CalcReferenceExp(player,CalcExp(player, gp));
+				calcReferenceExp(player,calcExp(player, gp));
 			}else {
 				
 				
 				points.set("Players."+player.getName()+".Prestige",0);
 				points.set("Players."+player.getName()+".Level",0);
 				points.set("Players."+player.getName()+".Xp",0);
-				points.set("Players."+player.getName()+".Reference-Xp",1000);
+				points.set("Players."+player.getName()+".Reference-Xp",100);
 				points.set("Players."+player.getName()+".Streaks",0);
 				points.set("Players."+player.getName()+".Wins",0);
 				points.set("Players."+player.getName()+".Loses",0);
@@ -68,14 +68,14 @@ public class PointsManager {
 				
 				saveAll();
 				
-				CalcReferenceExp(player,CalcExp(player, gp));
+				calcReferenceExp(player,calcExp(player, gp));
 			}
 		
 			
 		}
 		
 		
-		public int CalcExp(Player player,GamePoints gp) {
+		public int calcExp(Player player,GamePoints gp) {
 			//k 200 hr 100 deads -200 revive 50 
 			int kills = gp.getKills();
 			int helpr = gp.getHelpRevive();
@@ -85,14 +85,14 @@ public class PointsManager {
 			
 			kills = kills * 25;
 			helpr = helpr * 15;
-			deads = deads * 25;
+			deads = deads * 30;
 			revive = revive * 10;
 			
 			total = kills+helpr+revive-deads;
 		
 			
 			if(total <= 0) {
-				player.sendMessage(ChatColor.RED+"XP Ganada: "+0);
+				player.sendMessage(ChatColor.RED+"XP Ganada: "+0+" tuviste muchas muertes.");
 			}else {
 				//player.sendMessage(ChatColor.RED+"XP Ganada: "+total);
 				return total;
@@ -103,7 +103,7 @@ public class PointsManager {
 			return 0;
 		}
 		
-		public void CalcReferenceExp(Player player ,int val) {
+		public void calcReferenceExp(Player player ,int val) {
 			FileConfiguration points = plugin.getPoints();
 			int refer = points.getInt("Players."+player.getName()+".Reference-Xp");
 			int xp = points.getInt("Players."+player.getName()+".Xp");
@@ -118,7 +118,8 @@ public class PointsManager {
 			
 			if(xp >= refer) {
 				xp = xp - refer;
-				refer = refer+ refer;
+				// EL NUMERO 2 CAMBIA EL RANGO ENTRE LOS VALORES (EL RANGO FUE TESTEADO Y ES ACEPTABLE)
+				refer =  (int) Math.round(refer * (1 + 2 / 100.0));
 				
 				int lvl = points.getInt("Players."+player.getName()+".Level");
 			

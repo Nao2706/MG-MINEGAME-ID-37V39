@@ -44,7 +44,7 @@ public class GameReports {
 
 	
 	public String DataReport() {
-		return "Jugador="+getTarget()+"-Sancion="+getReportype().toString()+"-Fecha="+getTimereal()+"-Tiempo="+getTimeReport()+"-Moderador="+getModerador()+"-Razon=("+getCausa()+")";
+		return "Sancion:"+getReportype().toString()+"-Fecha:"+getTimereal()+"-Tiempo:"+getTimeReport()+"-Mod:"+getModerador()+"-Razon:["+getCausa()+"]";
 	}
 	
 }
