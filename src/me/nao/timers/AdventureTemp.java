@@ -193,11 +193,6 @@ public class AdventureTemp {
 			      startm --;
 			}else if(part == GameStatus.JUGANDO || part == GameStatus.PAUSE || part == GameStatus.FREEZE) {
 				
-				     gc.HasTimePath("Time-"+gt.getTimerhour()+"-"+gt.getTimerminute()+"-"+gt.getTimersecond(), name);
-				     gt.timerRunMg();
-					 plugin.getArenaCronometer().put(name,gt.getCronomethour()+":"+gt.getCronometminute()+":"+gt.getCronometsecond());
-				
-
 				  //TIME OUT
 					
 					//EL ORDEN DEL TERMINADO SIEMPRE DEBE IR AL FINAL SINO PUEDE DAR NULLPOINTER POR Q TRATAS DE ACCEDER A COSAS VIEJAS
@@ -292,6 +287,10 @@ public class AdventureTemp {
 							  }
 						}
 					}
+					
+						 gc.HasTimePath("Time-"+gt.getTimerhour()+"-"+gt.getTimerminute()+"-"+gt.getTimersecond(), name);
+					     gt.timerRunMg();
+						 //plugin.getArenaCronometer().put(name,gt.getCronomethour()+":"+gt.getCronometminute()+":"+gt.getCronometsecond());
 					
 					if(anuncios == 25) {
 						anuncios = 0;

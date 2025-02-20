@@ -119,7 +119,7 @@ public class PHMiniGame extends PlaceholderExpansion{
         	String[] spl = identifier.split("_");
         	int n = Integer.valueOf(spl[1]);
         	n = n -1;
-        	return p.PositionArmorStand(n);
+        	return p.positionArmorStand(n);
         	
         }else if(identifier.equals("dific_1") || identifier.equals("dific_2") || identifier.equals("dific_3") || identifier.equals("dific_4") || identifier.equals("dific_5")
         		|| identifier.equals("dific_6")){

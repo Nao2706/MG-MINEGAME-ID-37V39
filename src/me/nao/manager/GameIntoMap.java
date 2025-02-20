@@ -11,14 +11,17 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Zombie;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -723,6 +726,9 @@ public class GameIntoMap {
 
 				}
 			}
+			if(e instanceof Zombie) {
+				spawnPlayerZombi(player);
+			}
 			player.sendMessage("");
 			HealPlayer(player);
 			GamePlayerDeadInMap(player);
@@ -994,6 +1000,41 @@ public class GameIntoMap {
 		return false;
 	}
 	
+	public void spawnPlayerZombi(Player player) {
+		
+		
+		PotionEffect rapido = new PotionEffect(PotionEffectType.SPEED,/*duration*/ 99999,/*amplifier:*/5, true ,true,true );   
+		PotionEffect salto= new PotionEffect(PotionEffectType.JUMP_BOOST,/*duration*/ 99999,/*amplifier:*/5, true ,true,true );
+		 ItemStack[] inv = player.getInventory().getArmorContents();
+		ItemStack item = new ItemStack(Material.PLAYER_HEAD,/*CANTIDAD*/1);
+		SkullMeta meta = (SkullMeta) item.getItemMeta();
+		meta.setOwningPlayer(player);
+		item.setItemMeta(meta);
+		
+
+		Zombie zombi = (Zombie) player.getWorld().spawnEntity(player.getLocation(), EntityType.ZOMBIE);
+		zombi.getEquipment().setHelmet(item);
+		zombi.setCanPickupItems(true);
+		zombi.setCustomName(ChatColor.RED+player.getName());
+		zombi.setCustomNameVisible(true);
+		zombi.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
+		zombi.addPotionEffect(rapido);
+		zombi.addPotionEffect(salto);
+		zombi.getEquipment().setArmorContents(inv);
+		zombi.getEquipment().setItemInMainHand(player.getInventory().getItemInMainHand());   
+		 	
+	        //acciones
+	
+		//plugin.getDeadmob().put(player, player.getLocation().getWorld().getName()+"/"+player.getLocation().getX()+"/"+player.getLocation().getY()+"/"+player.getLocation().getZ());
+		
+//		ArmorStand a = (ArmorStand) player.getWorld().spawnEntity(player.getLocation().add(0,-1,0), EntityType.ARMOR_STAND);
+//		a.setCustomName(ChatColor.YELLOW+player.getName()+ChatColor.RED+" Murio aqui.");
+//		a.setCustomNameVisible(true);
+//		a.setCollidable(false);
+//		a.setInvisible(true);
+//		a.setInvulnerable(true);
+//		a.setGravity(false);
+	}
 	
 
-}
+ }

@@ -865,6 +865,7 @@ public class SourceOfDamage implements Listener{
 				e.setCancelled(true);
 				if(e instanceof EntityDamageByEntityEvent){
 					
+					
 					Entity damager = ((EntityDamageByEntityEvent)e).getDamager();
 					
 							if(gc.isEnabledReviveSystem(pi.getMapName())) {

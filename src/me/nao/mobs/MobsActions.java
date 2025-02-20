@@ -57,12 +57,10 @@ public class MobsActions {
 			  Player target = (Player) atacante;
 			  Zombie z = (Zombie) atacada;
 			  
-			  if(z.getCustomName() == null) {
-				  return;
-			  }
+			  if(z.getCustomName() == null) return;
 			  
 			  
-			  	PotionEffect JUMP_BOOST = new PotionEffect(PotionEffectType.JUMP_BOOST,/*duration*/ 99999,/*amplifier:*/5, false ,false,true );
+			  	PotionEffect jump = new PotionEffect(PotionEffectType.JUMP_BOOST,/*duration*/ 99999,/*amplifier:*/5, false ,false,true );
 				PotionEffect speed = new PotionEffect(PotionEffectType.SPEED,/*duration*/ 99999,/*amplifier:*/5, false ,false,true );
 			  if(z.getCustomName().contains(ChatColor.RED+"Screamer")) {
 					
@@ -92,7 +90,7 @@ public class MobsActions {
         					//if(cre.getUniqueId().equals(z.getUniqueId())) continue;
         					cre.setTarget(target);
         					cre.addPotionEffect(speed);
-        					cre.addPotionEffect(JUMP_BOOST);
+        					cre.addPotionEffect(jump);
         				}
         			}
 			   
@@ -101,7 +99,7 @@ public class MobsActions {
 						Location loc = z.getLocation();
 						Zombie z1 = (Zombie) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ZOMBIE);
 						z1.addPotionEffect(speed);
-						z1.addPotionEffect(JUMP_BOOST);
+						z1.addPotionEffect(jump);
 						
 					}
 					
@@ -153,7 +151,7 @@ public class MobsActions {
 								Zombie z1 = (Zombie) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ZOMBIE);
 								z1.setCustomName(ChatColor.RED+"Summon");
 								z1.addPotionEffect(speed);
-								z1.addPotionEffect(JUMP_BOOST);
+								z1.addPotionEffect(jump);
 							}
 					}if(rand == 8) {
 						target.sendMessage(ChatColor.RED+" Que tu copia te mate ");
@@ -168,7 +166,7 @@ public class MobsActions {
 								Zombie z1 = (Zombie) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ZOMBIE);
 								z1.setCustomName(ChatColor.GOLD+target.getName()+ChatColor.GREEN+" soy su copia y lo mate xD");
 								z1.addPotionEffect(speed);
-								z1.addPotionEffect(JUMP_BOOST);
+								z1.addPotionEffect(jump);
 								 ItemStack[] inv = target.getInventory().getArmorContents();
 							        
 								 	
@@ -189,9 +187,7 @@ public class MobsActions {
 		  if(atacante instanceof Player && atacada instanceof Zombie) {
 			  Zombie z = (Zombie) atacada;
 			  
-			    if(z.getCustomName() == null) {
-				  return;
-			    }
+			    if(z.getCustomName() == null) return;
 			    if(z.getCustomName().contains(ChatColor.RED+"VIRUS")) {
 				  AreaPotion(z,z.getLocation(),PotionEffectType.POISON,"GREEN",15,20,20,2);
 				  AreaPotion(z,z.getLocation(),PotionEffectType.INSTANT_DAMAGE,"RED",15,20,20,2);

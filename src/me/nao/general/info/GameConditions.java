@@ -2110,9 +2110,9 @@ public class GameConditions {
 		GameInfo ms = plugin.getGameInfoPoo().get(map);
 		//MisionInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
 		
-		if(player != null) {
-			player.sendMessage(ChatColor.WHITE+"Mensaje en Mapa: "+ChatColor.GOLD+map+" "+ChatColor.translateAlternateColorCodes('&', text));
-		}
+//		if(player != null) {
+//			player.sendMessage(ChatColor.WHITE+"Mensaje en Mapa: "+ChatColor.GOLD+map+" "+ChatColor.translateAlternateColorCodes('&', text));
+//		}
 		 Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE+"Mensaje en Mapa: "+ChatColor.GOLD+map+" "+ChatColor.translateAlternateColorCodes('&', text));
 		
 		 if(ms instanceof GameAdventure) {

@@ -192,9 +192,7 @@ public class ResistenceTemp {
 			}//TODO EN PROGRESO
 			else if(part == GameStatus.JUGANDO || part == GameStatus.PAUSE|| part == GameStatus.FREEZE) {
 
-			    	gc.HasTimePath("Time-"+gt.getTimerhour()+"-"+gt.getTimerminute()+"-"+gt.getTimersecond(), name);
-
-					gt.timerRunMg();
+			    	
 
 				if(gt.getTimersecond() <= 0 && gt.getTimerminute() <= 0 && gt.getTimerhour() <= 0) {
 
@@ -258,6 +256,9 @@ public class ResistenceTemp {
 							  spawnMobs(players);
 						  }
 					 }}	
+				  
+				    gc.HasTimePath("Time-"+gt.getTimerhour()+"-"+gt.getTimerminute()+"-"+gt.getTimersecond(), name);
+					gt.timerRunMg();
 				  
 					  if(anuncios == 25) {
 							anuncios = 0;

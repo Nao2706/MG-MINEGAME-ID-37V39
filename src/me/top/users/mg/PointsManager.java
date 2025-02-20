@@ -11,17 +11,20 @@ import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Particle;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import com.google.common.base.Strings;
 
+import me.nao.command.mg.CommandsMessage;
 import me.nao.cooldown.mg.Cooldown;
 import me.nao.cosmetics.fireworks.Fireworks;
 import me.nao.general.info.GamePoints;
 import me.nao.general.info.PlayerInfo;
 import me.nao.main.mg.Minegame;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 
 public class PointsManager {
 
@@ -57,7 +60,7 @@ public class PointsManager {
 				points.set("Players."+player.getName()+".Prestige",0);
 				points.set("Players."+player.getName()+".Level",0);
 				points.set("Players."+player.getName()+".Xp",0);
-				points.set("Players."+player.getName()+".Reference-Xp",100);
+				points.set("Players."+player.getName()+".Reference-Xp",1000);
 				points.set("Players."+player.getName()+".Streaks",0);
 				points.set("Players."+player.getName()+".Wins",0);
 				points.set("Players."+player.getName()+".Loses",0);
@@ -82,8 +85,8 @@ public class PointsManager {
 			int deads = gp.getDeads();
 			int revive = gp.getRevive();
 			int total ;
-			
-			kills = kills * 25;
+			//2
+			kills = kills * 2;
 			helpr = helpr * 15;
 			deads = deads * 30;
 			revive = revive * 10;
@@ -107,35 +110,68 @@ public class PointsManager {
 			FileConfiguration points = plugin.getPoints();
 			int refer = points.getInt("Players."+player.getName()+".Reference-Xp");
 			int xp = points.getInt("Players."+player.getName()+".Xp");
-			int point = points.getInt("Players."+player.getName()+".Streaks");
+			int streak = points.getInt("Players."+player.getName()+".Streaks");
+			int savelvl = points.getInt("Players."+player.getName()+".Level");
 			
+			
+			int totalxp = (xp + val + (streak * 100));
 			
 			//player.sendMessage("Has Ganado "+val+" de Xp para el modo Ranked.");
-			player.sendMessage(ChatColor.GOLD+"Xp Anterior: "+ChatColor.YELLOW+val+ChatColor.RED+" + "+ChatColor.GOLD+"Xp Ganada: "+ChatColor.GREEN+xp+ChatColor.RED+" x "+ChatColor.GOLD+"Racha: "+ChatColor.RED+point+" Total: "+ChatColor.GREEN+(xp + val + (point * 100)) );
-			xp = xp + val + (point * 100);
+			player.sendMessage("");
+			player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"| INFORME DE PROGRESO |");
+			CommandsMessage cm = new CommandsMessage(plugin);
+			player.spigot().sendMessage(cm.sendTextComponentShow(net.md_5.bungee.api.ChatColor.DARK_GRAY+"- "+net.md_5.bungee.api.ChatColor.GRAY+"Xp Guardada: "+net.md_5.bungee.api.ChatColor.GREEN+xp,"La Experiencia que tenias.", net.md_5.bungee.api.ChatColor.GOLD));
+			player.spigot().sendMessage(cm.sendTextComponentShow(net.md_5.bungee.api.ChatColor.DARK_GRAY+"- "+net.md_5.bungee.api.ChatColor.GREEN+"Xp Ganada: "+net.md_5.bungee.api.ChatColor.GREEN+val,"La Experiencia Conseguiste.", net.md_5.bungee.api.ChatColor.GOLD));
+			player.spigot().sendMessage(cm.sendTextComponentShow(net.md_5.bungee.api.ChatColor.DARK_GRAY+"- "+net.md_5.bungee.api.ChatColor.DARK_PURPLE+"Racha: "+net.md_5.bungee.api.ChatColor.GOLD+streak,"La Racha que Conseguiste.", net.md_5.bungee.api.ChatColor.GOLD));
+			ComponentBuilder cb = new ComponentBuilder();
+			cb.append(cm.sendTextComponentShow(net.md_5.bungee.api.ChatColor.GOLD+"Resultado: ","El Calculo de la Experiencia.", net.md_5.bungee.api.ChatColor.GREEN));
+			cb.append(cm.sendTextComponentShow(net.md_5.bungee.api.ChatColor.GRAY+String.valueOf(xp),"Experiencia Guardada.", net.md_5.bungee.api.ChatColor.GREEN));
+			cb.append(ChatColor.RED+" + ");
+			cb.append(cm.sendTextComponentShow(net.md_5.bungee.api.ChatColor.GREEN+String.valueOf(val),"Experiencia Ganada.", net.md_5.bungee.api.ChatColor.GREEN));
+			cb.append(ChatColor.RED+" x ");
+			cb.append(cm.sendTextComponentShow(net.md_5.bungee.api.ChatColor.RED+String.valueOf(streak),"Las Rachas Multiplican el Puntaje.", net.md_5.bungee.api.ChatColor.GOLD));
+			cb.append(ChatColor.RED+" = ");
+			cb.append(cm.sendTextComponentShow(net.md_5.bungee.api.ChatColor.DARK_PURPLE+String.valueOf(totalxp),"Total de Puntos.", net.md_5.bungee.api.ChatColor.GOLD));
+
+			player.spigot().sendMessage(cb.create());
+			//player.sendMessage(ChatColor.GOLD+"Resultado: "+ChatColor.GRAY+xp+ChatColor.RED+" + "+ChatColor.GREEN+val+ChatColor.RED+" x "+ChatColor.GOLD+ChatColor.RED+streak+ChatColor.DARK_PURPLE+" = "+ChatColor.GREEN+(xp + val + (streak * 100)));
+			//SI VA EN RACHA GANARA UN BONUS
 			
 			
 			
-			if(xp >= refer) {
-				xp = xp - refer;
-				// EL NUMERO 2 CAMBIA EL RANGO ENTRE LOS VALORES (EL RANGO FUE TESTEADO Y ES ACEPTABLE)
-				refer =  (int) Math.round(refer * (1 + 2 / 100.0));
-				
-				int lvl = points.getInt("Players."+player.getName()+".Level");
 			
-				lvl = lvl +1;
-				player.sendMessage("Level Up "+lvl);
+			if(totalxp >= refer) {
+//				// EL NUMERO 2 CAMBIA EL RANGO ENTRE LOS VALORES (EL RANGO FUE TESTEADO Y ES ACEPTABLE)
+//				refer =  (int) Math.round(refer * (1 + 2 / 100.0));
+				int lvl = 0;
+			  	int referencia = 1000;
+			  	int referencianterior = 0;
+			  	int puntajerestante = totalxp;
+			  	//CACLULA EL NIVEL EN BASE AL PUNTAJE 
+			  	while(puntajerestante > referencia) {
+			  		referencianterior = referencia;
+			  		lvl++;
+			  		referencia = (int) Math.round(referencia * (1 + 2 / 100.0));
+			  		puntajerestante -= referencianterior;
+			  	}
+			  	
+				//player.sendTitle(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+ChatColor.MAGIC+"[]"+ChatColor.GREEN+ChatColor.BOLD+ChatColor.UNDERLINE+" SUBISTE DE NIVEL "+ChatColor.DARK_PURPLE+ChatColor.BOLD+ChatColor.MAGIC+"[]", ""+ChatColor.GOLD+ChatColor.BOLD+"DE NIVEL "+ChatColor.YELLOW+ChatColor.BOLD+savelvl+ChatColor.GOLD+ChatColor.BOLD+" AL NIVEL "+ChatColor.GREEN+ChatColor.BOLD+lvl, 40, 60, 20);
+			  	player.sendMessage(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+ChatColor.MAGIC+"[]"+ChatColor.GREEN+ChatColor.BOLD+ChatColor.UNDERLINE+" SUBISTE DE NIVEL "+ChatColor.DARK_PURPLE+ChatColor.BOLD+ChatColor.MAGIC+"[]");
+				player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"   DE "+ChatColor.YELLOW+ChatColor.BOLD+savelvl+".LVL"+ChatColor.GOLD+ChatColor.BOLD+" >>>>> "+ChatColor.GREEN+ChatColor.BOLD+lvl+".LVL");
+				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.YELLOW+puntajerestante+ChatColor.GOLD+ChatColor.BOLD+"/"+ChatColor.GREEN+referencia+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
+				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+getProgressBar(puntajerestante, referencia,20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
+				player.sendMessage("");
+				player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,player.getLocation().add(0.5, 1, 0.5), 100);
 				points.set("Players."+player.getName()+".Level",lvl);
-				points.set("Players."+player.getName()+".Xp",xp);
-				points.set("Players."+player.getName()+".Reference-Xp",refer);
-				player.sendMessage(" "+ChatColor.RED+xp+ChatColor.GOLD+"/"+ChatColor.GREEN+refer);
-				player.sendMessage(getProgressBar(xp, refer,20, '|', ChatColor.GREEN, ChatColor.RED));
+				points.set("Players."+player.getName()+".Xp",puntajerestante);
+				points.set("Players."+player.getName()+".Reference-Xp",referencia);
+				
 				saveAll();
 				return;
 			}else {
-				points.set("Players."+player.getName()+".Xp",xp);
-				player.sendMessage(" "+ChatColor.RED+xp+ChatColor.GOLD+"/"+ChatColor.GREEN+refer);
-				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+getProgressBar(xp, refer,20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
+				points.set("Players."+player.getName()+".Xp",totalxp);
+				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+" "+ChatColor.YELLOW+totalxp+ChatColor.GOLD+ChatColor.BOLD+"/"+ChatColor.GREEN+refer+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
+				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+getProgressBar(totalxp, refer,20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
 				saveAll();
 			}
 			
@@ -275,7 +311,7 @@ public class PointsManager {
 		 }
 	}
 	
-	public String TopArmorStand() {
+	public String topArmorStand() {
 		
 		StringBuilder f = new StringBuilder();
 		FileConfiguration message = plugin.getMessage();
@@ -331,7 +367,7 @@ public class PointsManager {
 	}
 	
 	
-	public String PositionArmorStand(int posicion) {
+	public String positionArmorStand(int posicion) {
 		
 		try {
 		

@@ -239,6 +239,35 @@ public class CommandsMessage {
 	
 	}
 	
+	@SuppressWarnings("deprecation")
+	public TextComponent sendTextComponentShow(String text,String showtext,ChatColor color) {
+		TextComponent m1 = new TextComponent();
+		m1.setText(text);
+		m1.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,new ComponentBuilder(showtext).color(color).bold(true).create()));
+	    //m1.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/mg join "));
+	    return m1;
+	}
 	
+	@SuppressWarnings("deprecation")
+	public TextComponent sendTextComponentRunCommand(String text,String showtext,String runcommand ,ChatColor color) {
+		TextComponent m1 = new TextComponent();
+		m1.setText(text);
+		m1.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,new ComponentBuilder(showtext).color(color).bold(true).create()));
+	    m1.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/"+runcommand));
+	    return m1;
+	}
+	
+	@SuppressWarnings("deprecation")
+	public TextComponent sendTextComponentSuggestCommand(String text,String showtext,String suggestcommand ,ChatColor color) {
+		TextComponent m1 = new TextComponent();
+		m1.setText(text);
+		m1.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,new ComponentBuilder(showtext).color(color).bold(true).create()));
+	    m1.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,"/"+suggestcommand));
+	    return m1;
+	}
+	
+	
+	
+
 
 }

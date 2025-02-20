@@ -166,7 +166,6 @@ public class RevivePlayer{
 		saveItemsPlayer();
 		clearInventorymg();
 		addToRevive();
-		//System.out.println("TODOS NOQUEADOS: "+isAllKnocked()+ " TIENE ITEM DE REVIVIR: "+hasPlayersAutoreviveItem());
 		Start();
 		gc.sendMessageToUsersOfSameMapLessPlayer(player,""+ChatColor.RED+ChatColor.BOLD+ player.getName()+ChatColor.YELLOW+" fue Derribado/a. (Ayudalo/a a levantarse tiene solo %time%)".replace("%time%",time+"s"));
 		
@@ -204,9 +203,7 @@ public class RevivePlayer{
 				
 				
 				
-			}
-			
-			if(e instanceof LivingEntity) {
+			}else if(e instanceof LivingEntity) {
 				LivingEntity le = (LivingEntity) e;
 				if(le.getCustomName() != null) {
 					player.sendMessage(ChatColor.YELLOW+"Has sido Derribado/a por: "+ChatColor.GOLD+le.getCustomName());
@@ -257,11 +254,6 @@ public class RevivePlayer{
 		player.addPotionEffect(vid);
 		player.addPotionEffect(comida);
 		player.addPotionEffect(abso);
-		
-		if(player.hasPotionEffect(PotionEffectType.JUMP_BOOST)) {
-			player.removePotionEffect(PotionEffectType.SLOWNESS);
-			player.removePotionEffect(PotionEffectType.JUMP_BOOST);
-		}
 		
 		
 	}

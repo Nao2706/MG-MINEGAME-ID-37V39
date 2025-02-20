@@ -118,6 +118,7 @@ import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.PlayerInfo;
 import me.nao.main.mg.Minegame;
+import me.nao.manager.GameIntoMap;
 import me.nao.mobs.MobsActions;
 import me.nao.revive.RevivePlayer;
 import me.nao.shop.mg.MinigameShop1;
@@ -2908,7 +2909,7 @@ public class EventRandoms implements Listener{
 					
 		 public void HeadShoot(Player player, LivingEntity damage, Projectile projectil) {
 						 
-						 
+			 			 GameIntoMap c = new GameIntoMap(plugin);
 				         double projectileY = projectil.getLocation().getY();
 				         double damagedY = damage.getLocation().getY();
 				         int headshoot = 50;
@@ -2954,12 +2955,14 @@ public class EventRandoms implements Listener{
 		         			            	projectil.remove();
 		         			            	player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 		         			            	
+		         							 c.GamePlayerAddPoints(player);
+		         			            	 
 		                				 }
 		                				 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.RED+ChatColor.BOLD+"CRITICAL HEADSHOT"));
 		                				   
 		                		       }else{
 		                		    	   		 ItemStack it = damage.getEquipment().getHelmet();
-		                		    	   		 System.out.println("type1 "+it.getType());
+		                		    	   	
 		                		    	   		 
 		    									 if(it.getType() == Material.NETHERITE_HELMET || it.getType() == Material.DIAMOND_HELMET || it.getType() == Material.GOLDEN_HELMET ||
 		    									    it.getType() == Material.IRON_HELMET || it.getType() == Material.CHAINMAIL_HELMET || it.getType() == Material.LEATHER_HELMET ||
@@ -2984,23 +2987,29 @@ public class EventRandoms implements Listener{
 
 		        											 player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 20.0F, 1F);
 		        											 if(damage.getCustomName() != null) {
-		           		           			   		             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.RED+">>> "+ChatColor.GRAY+damage.getName()+ChatColor.RED+" <<<"));
+		           		           			   		            // player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.RED+">>> "+ChatColor.GRAY+damage.getName()+ChatColor.RED+" <<<"));
+		        		        	   			                	player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.RED+">>> "+ChatColor.GRAY+damage.getName()+ChatColor.GRAY+" A ROTO SU CASCO "+ChatColor.RED+" <<<"));
 
 		        		        	   			                }else {
-		           		           			                	
-		           		           			   		             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.RED+">>> "+ChatColor.GRAY+damage.getType()+ChatColor.RED+" <<<"));
+		        		        	   			                	player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.RED+">>> "+ChatColor.GRAY+damage.getType()+ChatColor.GRAY+" CASCO ROTO "+ChatColor.RED+" <<<"));
+		           		           			   		             //player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.RED+">>> "+ChatColor.GRAY+damage.getType()+ChatColor.RED+" <<<"));
 
+		        		        	   			                	
 		        		        	   			                }
 		        											
 		    											 }else {
 		    												 damage.getWorld().spawnParticle(Particle.DRIPPING_LAVA, damage.getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */25, 0.5, 1, 0.5, /* velocidad */0, null, true);
 		        		    								 player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_PLACE, 20.0F, 1F); 
 		        		    								 if(damage.getCustomName() != null) {
-		           		           			   		             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.YELLOW+"!!! "+ChatColor.GRAY+damage.getName()+ChatColor.YELLOW+" !!!"));
+		           		           			   		             //player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.YELLOW+"!!! "+ChatColor.GRAY+damage.getName()+ChatColor.YELLOW+" !!!"));
+		        		        	   			                	player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.YELLOW+"!!! "+ChatColor.RED+damage.getName()+ChatColor.GRAY+" TIENE CASCO "+vidaitem+"/"+it.getType().getMaxDurability()+ChatColor.YELLOW+" !!!"));
 
+		        		    									 
+		        		    									 
 		        		        	   			                }else {
-		           		           			   		             player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.YELLOW+"!!! "+ChatColor.GRAY+damage.getType()+ChatColor.YELLOW+" !!!"));
-
+		           		           			   		            // player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.YELLOW+"!!! "+ChatColor.GRAY+damage.getType()+ChatColor.YELLOW+" !!!"));
+		        		        	   			                	player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(ChatColor.YELLOW+"!!! "+ChatColor.RED+damage.getType()+ChatColor.GRAY+" TIENE CASCO "+vidaitem+"/"+it.getType().getMaxDurability()+ChatColor.YELLOW+" !!!"));
+		        		        	   			                	
 		        		        	   			                }
 		    											 }			
 		    									}else{
@@ -3010,11 +3019,6 @@ public class EventRandoms implements Listener{
 														 return;
 		    										
 		    									}
-		                 		    	   
-		    									
-		    									
-		            			               
-		        			               
 		        		            	}
 		                			 
 		                			 return;
