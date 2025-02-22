@@ -25,6 +25,7 @@ public class MgTeams {
 			t.setColor(ChatColor.GREEN);
 			t.setOption(Option.NAME_TAG_VISIBILITY,OptionStatus.ALWAYS);
 			t.setCanSeeFriendlyInvisibles(true);
+			t.setAllowFriendlyFire(false);
 			t.addEntry(player.getName());
 			return;
 		}	
@@ -49,6 +50,7 @@ public class MgTeams {
 			t.setColor(ChatColor.RED);
 			t.setOption(Option.NAME_TAG_VISIBILITY,OptionStatus.ALWAYS);
 			t.setCanSeeFriendlyInvisibles(true);
+			t.setAllowFriendlyFire(false);
 			t.addEntry(player.getName());
 			return;
 		}	
@@ -73,6 +75,7 @@ public class MgTeams {
 			t.setColor(ChatColor.WHITE);
 			t.setOption(Option.NAME_TAG_VISIBILITY,OptionStatus.ALWAYS);
 			t.setCanSeeFriendlyInvisibles(true);
+			t.setAllowFriendlyFire(false);
 			t.addEntry(player.getName());
 			return;
 		

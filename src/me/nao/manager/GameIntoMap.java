@@ -29,6 +29,7 @@ import me.nao.cosmetics.fireworks.Fireworks;
 import me.nao.enums.GameStatus;
 import me.nao.enums.GameType;
 import me.nao.enums.Items;
+import me.nao.enums.ReviveStatus;
 import me.nao.enums.StopMotive;
 //import me.nao.gamemode.DestroyNexo;
 import me.nao.general.info.GameInfo;
@@ -39,6 +40,7 @@ import me.nao.general.info.GameAdventure;
 import me.nao.general.info.GameConditions;
 import me.nao.general.info.PlayerInfo;
 import me.nao.main.mg.Minegame;
+import me.nao.revive.RevivePlayer;
 import me.nao.shop.mg.MinigameShop1;
 import me.nao.teamsmg.MgTeams;
 import me.top.users.mg.PointsManager;
@@ -174,10 +176,18 @@ public class GameIntoMap {
 			List<String> vivo = ga.getAlivePlayers();
 			List<String> deaths = ga.getDeadPlayers();
 			
+			List<String> knocked = ga.getKnockedPlayers();
+			
+			if(knocked.contains(name)) {
+				
+				RevivePlayer rp = plugin.getKnockedPlayer().get(target);
+				rp.setReviveStatus(ReviveStatus.REVIVED);
+				return;
+			}
+			
 			
 			if(!deaths.contains(name)) {
-				
-				cm.sendMessageToUserAndConsole(player,ChatColor.RED+"Ese jugador salio de la partida o ya fue Revivido.");
+				cm.sendMessageToUserAndConsole(player,ChatColor.RED+"Ese Jugador salio de la partida o ya fue Revivido.");
 			    return;
 			}
 			
@@ -185,7 +195,7 @@ public class GameIntoMap {
 			
 			String t = vivo.get(r.nextInt(vivo.size()));
 			
-			Player targetgo = Bukkit.getServer().getPlayerExact(t);
+			 Player targetgo = Bukkit.getServer().getPlayerExact(t);
 			 String world = targetgo.getWorld().getName();
 			 int x = targetgo.getLocation().getBlockX();
 			 int y = targetgo.getLocation().getBlockY();
@@ -203,10 +213,21 @@ public class GameIntoMap {
 					target.teleport(l);
 					target.setGameMode(GameMode.ADVENTURE);
 					HealPlayer(target);
-					target.sendTitle(ChatColor.GREEN+"Fuiste Revivido",ChatColor.GREEN+"por: "+ChatColor.YELLOW+player.getName(),20,60,20);
-					target.sendMessage(ChatColor.WHITE+"Fuiste Revivido por: "+ChatColor.GREEN+player.getName());
-					cm.sendMessageToUserAndConsole(player,ChatColor.GREEN+"Reviviste a: "+ChatColor.GOLD+target.getName());
-					cm.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.GREEN+" Revivio a "+ChatColor.WHITE+target.getName());
+					
+					if(player != null) {
+						target.sendTitle(ChatColor.GREEN+"Fuiste Revivido",ChatColor.GREEN+"por: "+ChatColor.YELLOW+player.getName(),20,60,20);
+						target.sendMessage(ChatColor.WHITE+"Fuiste Revivido por: "+ChatColor.GREEN+player.getName());
+						cm.sendMessageToUserAndConsole(player,ChatColor.GREEN+"Reviviste a: "+ChatColor.GOLD+target.getName());
+						cm.sendMessageToUsersOfSameMapLessTwoPlayers(player,target,ChatColor.GOLD+player.getName()+ChatColor.GREEN+" Revivio a "+ChatColor.WHITE+target.getName());
+					}else {
+						target.sendTitle(ChatColor.GREEN+"Fuiste Revivido",ChatColor.GREEN+"por: "+ChatColor.YELLOW+"Consola",20,60,20);
+						target.sendMessage(ChatColor.WHITE+"Fuiste Revivido por: "+ChatColor.GREEN+"Consola");
+						cm.sendMessageToUserAndConsole(null,ChatColor.GREEN+"Reviviste a: "+ChatColor.GOLD+target.getName());
+						cm.sendMessageToUsersOfSameMapLessTwoPlayers(null,target,ChatColor.GOLD+"Consola"+ChatColor.GREEN+" Revivio a "+ChatColor.WHITE+target.getName());
+
+					}
+					
+					
 				
 			
 		

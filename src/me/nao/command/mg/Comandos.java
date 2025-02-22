@@ -1488,11 +1488,11 @@ public class Comandos implements CommandExecutor{
 						}
 						//==============1
 						
-						MinigameShop1 mg = new MinigameShop1(plugin);
+						PointsManager pm = new PointsManager(plugin);
 						
 								int lvl = points1.getInt("Players."+player.getName()+".Level");
-								int refer = points1.getInt("Players."+player.getName()+".Reference-Xp");
-								int xp = points1.getInt("Players."+player.getName()+".Xp");
+								long refer = points1.getInt("Players."+player.getName()+".Reference-Xp");
+								long xp = points1.getInt("Players."+player.getName()+".Xp");
 								int points = points1.getInt("Players."+player.getName()+".Streaks");
 								int pointk = points1.getInt("Players."+player.getName()+".Kills");
 								int point2 = points1.getInt("Players."+player.getName()+".Deads");
@@ -1514,8 +1514,8 @@ public class Comandos implements CommandExecutor{
 												 .replace("%refer%",String.valueOf(refer))
 												 .replace("%xp%", String.valueOf(xp))
 												 .replace("%streaks%",String.valueOf(points))
-												 .replace("%progress%",""+ChatColor.GRAY+ChatColor.BOLD+"["+mg.getProgressBar(xp,refer, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GRAY+ChatColor.BOLD+"]")
-												 .replace("%porcent%",mg.Porcentage(xp,refer))
+												 .replace("%progress%",""+ChatColor.GRAY+ChatColor.BOLD+"["+pm.getProgressBar(xp,refer, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GRAY+ChatColor.BOLD+"]")
+												 .replace("%porcent%",pm.Porcentage(xp,refer))
 												 .replace("%lvl%",String.valueOf(lvl))
 												 .replace("%wins%",String.valueOf(point5))
 												 .replace("%loses%",String.valueOf(point6))

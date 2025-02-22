@@ -215,6 +215,74 @@ public class SourceOfDamage implements Listener{
 					}
 				}
 				
+				if(player.hasPermission("mg.toxiczone")) {
+					Block block = player.getLocation().getBlock();
+					
+
+					Block b1 = block.getRelative(0, 0, 0);
+					Block b2 = block.getRelative(0, 1, 0);
+				
+					PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+					GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
+					
+					if(!player.hasPotionEffect(PotionEffectType.POISON)) {
+						PotionEffect veneno = new PotionEffect(PotionEffectType.POISON,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true);
+						PotionEffect lento = new PotionEffect(PotionEffectType.SLOWNESS,/*duration*/ 10 * 20,/*amplifier:*/20, false ,false,true);
+						PotionEffect ciego = new PotionEffect(PotionEffectType.BLINDNESS,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true);
+						PotionEffect nausea = new PotionEffect(PotionEffectType.NAUSEA,/*duration*/ 10 * 20,/*amplifier:*/20, false ,false,true);
+						PotionEffect debil = new PotionEffect(PotionEffectType.WEAKNESS,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true);
+						PotionEffect hambre = new PotionEffect(PotionEffectType.HUNGER,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true);
+						
+					
+						
+						
+						if(b1.getType() == Material.WATER || b2.getType() == Material.WATER) {
+							player.sendTitle(ChatColor.RED+"!!!PELIGRO!!!", ChatColor.GREEN+"Estas en"+ChatColor.BLUE+" Agua Toxica "+ChatColor.GREEN+"corre", 20, 40, 20);
+							player.addPotionEffect(debil);
+							player.addPotionEffect(lento);
+							player.addPotionEffect(veneno);
+							player.addPotionEffect(ciego);
+							player.addPotionEffect(nausea);
+							player.addPotionEffect(hambre);
+						}else if(b1.getType() == Material.LAVA || b2.getType() == Material.LAVA) {
+							player.sendTitle(ChatColor.RED+"!!!PELIGRO!!!", ChatColor.GREEN+"Estas en"+ChatColor.YELLOW+" Agua Toxica "+ChatColor.GREEN+"corre", 20, 40, 20);
+							player.addPotionEffect(debil);
+							player.addPotionEffect(lento);
+							player.addPotionEffect(veneno);
+							player.addPotionEffect(ciego);
+							player.addPotionEffect(nausea);
+							player.addPotionEffect(hambre);
+						}
+						
+						int rango = gi.getSpawnMobRange();
+						
+						List<Location> l = gi.getMobsGenerators();
+						
+						if(!l.isEmpty()) {
+							for(Location loc : l) {
+								
+								if(player.getLocation().distance(loc) > rango) continue;
+								Block a = loc.getBlock();
+								Block b = a.getRelative(0,-1, 0);
+								
+								if(a.getType() == Material.COMMAND_BLOCK && b.getType() == Material.BEDROCK) {
+									player.sendTitle(ChatColor.RED+"!!!PELIGRO!!!", ChatColor.GREEN+"Estas en una"+ChatColor.RED+" Zona Toxica "+ChatColor.GREEN+"corre", 20, 40, 20);
+									player.addPotionEffect(debil);
+									player.addPotionEffect(lento);
+									player.addPotionEffect(veneno);
+									player.addPotionEffect(ciego);
+									player.addPotionEffect(nausea);
+									player.addPotionEffect(hambre);
+									break;
+								}
+							}}
+						
+						
+					}
+				}
+				
+				
+				
 //				if(plugin.getPlayerKnocked().containsKey(player)) {
 //					
 //					Block b = player.getLocation().getBlock();
@@ -235,11 +303,13 @@ public class SourceOfDamage implements Listener{
 			
 			
 			Block block = player.getLocation().getBlock();
-			
-			Block b = block.getRelative(0, -2, 0);
-			//Block b1 = block.getRelative(0, -1, 0);
-			//Block b2 = block.getRelative(0, -3, 0);
+			Block b = block.getRelative(0, -2, 0);	
 			Block b3 = block.getRelative(0, -4, 0);
+			
+		
+			
+			
+			
 			//Block bx = block.getRelative(0, 0, 0);
 			
 		

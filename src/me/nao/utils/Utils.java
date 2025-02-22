@@ -9,6 +9,11 @@ import java.util.regex.Pattern;
 import org.bukkit.Bukkit;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 
 public class Utils {
@@ -55,4 +60,51 @@ public class Utils {
 		    //SI SE DA ESPACIO AL %s %s al mostrar saldra asi 1 K juntos sale 1K
 		    return String.format("%s%s", decimalFormat.format(value), arr[index]);
 		}
+		
+		@SuppressWarnings("deprecation")
+		public static TextComponent sendTextComponentShow(String text,String showtext,ChatColor color) {
+			TextComponent m1 = new TextComponent();
+			m1.setText(text);
+			m1.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,new ComponentBuilder(showtext).color(color).bold(true).create()));
+		    //m1.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/mg join "));
+		    return m1;
+		}
+		
+		@SuppressWarnings("deprecation")
+		public static TextComponent sendTextComponentRunCommand(String text,String showtext,String runcommand ,ChatColor color) {
+			TextComponent m1 = new TextComponent();
+			m1.setText(text);
+			m1.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,new ComponentBuilder(showtext).color(color).bold(true).create()));
+		    m1.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/"+runcommand));
+		    return m1;
+		}
+		
+		@SuppressWarnings("deprecation")
+		public static TextComponent sendTextComponentSuggestCommand(String text,String showtext,String suggestcommand ,ChatColor color) {
+			TextComponent m1 = new TextComponent();
+			m1.setText(text);
+			m1.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,new ComponentBuilder(showtext).color(color).bold(true).create()));
+		    m1.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,"/"+suggestcommand));
+		    return m1;
+		}
+		
+		public static TextComponent sendTextComponent(String text) {
+			TextComponent m1 = new TextComponent();
+			m1.setText(text);
+		    //m1.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/mg join "));
+		    return m1;
+		}
+		
+		
+		public static BaseComponent sendTextComponentfromBaseComponent(TextComponent... textcomponent) {
+			ComponentBuilder cb = new ComponentBuilder();
+			for(TextComponent component : textcomponent) {
+				cb.append(component);
+			}
+		    //m1.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/mg join "));
+		    return cb.build();
+		}
+		
+		
+		
 }

@@ -88,12 +88,15 @@ public class TabComplete1 implements TabCompleter{
 		
 		FileConfiguration config = plugin.getConfig();
 		List<String> arguments2 = config.getStringList("Maps-Created.List");
-	
+		if(args[0].startsWith("join") || args[0].startsWith("delete") || args[0].startsWith("enabled") || args[0].startsWith("disabled")) {
 			if(arguments2.isEmpty()) {
 				for(int i = 0; i < arguments2.size();i++) {
 					arguments2.add(arguments2.get(i));
 				}
 			}
+			return arguments2;
+		}
+			
 			
 		
 			

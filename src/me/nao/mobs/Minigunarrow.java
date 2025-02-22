@@ -20,7 +20,7 @@ public class Minigunarrow extends BukkitRunnable{
 	public Minigunarrow(Monster entity, int time) {
 		this.entity = entity; 
 		this.time = time;
-		runTaskTimer(JavaPlugin.getPlugin(Minegame.class),0,3);
+		runTaskTimer(JavaPlugin.getPlugin(Minegame.class),0,10);
 	}
 	
 	
@@ -33,7 +33,7 @@ public class Minigunarrow extends BukkitRunnable{
 		
 		if(time == 0 || getMonster() == null || getMonster().isDead()) {
 			this.cancel();
-			if(getMonster() != null) {
+			if(getMonster() != null || !getMonster().isDead()) {
 				getMonster().getEquipment().setItemInMainHand(new ItemStack(Material.BLAZE_ROD));
 			}
 		}

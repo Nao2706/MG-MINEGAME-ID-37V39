@@ -196,22 +196,21 @@ public class MobsActions {
 			    	
 			    	  AreaPotion(z,z.getLocation(),PotionEffectType.HUNGER,"ORANGE",30,10,20,5);
 					  AreaPotion(z,z.getLocation(),PotionEffectType.POISON,"GREEN",30,10,20,50);
-					  AreaPotion(z,z.getLocation(),PotionEffectType.INSTANT_DAMAGE,"RED",25,10,20,2);
-					  AreaPotion(z,z.getLocation(),PotionEffectType.INSTANT_DAMAGE,"RED",5,10,20,2);
-					  AreaPotion(z,z.getLocation(),PotionEffectType.SLOWNESS,"PURPLE",35,10,20,2);
-					  AreaPotion(z,z.getLocation(),PotionEffectType.SLOWNESS,"PURPLE",35,10,20,2);
+					  AreaPotion(z,z.getLocation(),PotionEffectType.INSTANT_DAMAGE,"RED",25,20,20,2);
+					  AreaPotion(z,z.getLocation(),PotionEffectType.INSTANT_DAMAGE,"RED",10,20,30,2);
+					  AreaPotion(z,z.getLocation(),PotionEffectType.SLOWNESS,"PURPLE",35,15,20,3);
+					 
 					  
 				 }
 		  }
 	}
-	
+	 
 	public void getZombiettack(Entity atacante ,Entity atacada) {
 		 if(atacante instanceof Zombie && atacada instanceof Player) {
 			 Player player = (Player) atacada;
 			 Zombie z = (Zombie) atacante; 
-			 if(z.getCustomName() == null) {
-				  return;
-			  }
+			 if(z.getCustomName() == null) return;
+			  
 			  
 			  
 			  if(z.getCustomName().contains(ChatColor.RED+"Goliath") || z.getCustomName().contains(ChatColor.RED+"Tank")) {

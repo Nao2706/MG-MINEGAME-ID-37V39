@@ -24,7 +24,7 @@ public class PlayerInfo {
 	private double vida;
 	private double maxvida;
 	private int comida;
-	private int lvlxp , mglvl;
+	private int lvlxp , mglvl, mgprestige;
 	private float xp;
 	private Location l;
 	private String map;
@@ -57,6 +57,7 @@ public class PlayerInfo {
 		this.gp = gp;
 		this.teamname = "NINGUNO";
 		this.mglvl = 0;
+		this.mgprestige = 0;
 	}
 	
 	/** 
@@ -146,6 +147,10 @@ public class PlayerInfo {
 	public int getMgPlayerLvl() {
 		return mglvl;
 	}
+	
+	public int getMgPlayerPrestige() {
+		return mgprestige;
+	}
 
 	public void setPlayerMG(Player player) {
 		this.player = player;
@@ -199,16 +204,24 @@ public class PlayerInfo {
 		this.mglvl = value;
 	}
 	
+	public void setMgPlayerprestige(int value) {
+		this.mgprestige = value;
+	}
+	
 	public void ClearAllPlayerMg() {
 		
 		int lvl = 0 ;
+		int prestigee = 0 ;
 		FileConfiguration points = plugin.getPoints();
 		if(points.contains("Players."+player.getName())) {
 			int lvlplayer = points.getInt("Players."+player.getName()+".Level");
+			int prestigeplayer = points.getInt("Players."+player.getName()+".Prestige");
 			lvl = lvlplayer;
+			prestigee = prestigeplayer;
 		}
 		
 		setMgPlayerLvl(lvl);
+		setMgPlayerprestige(prestigee);
 		player.getAttribute(Attribute.MAX_HEALTH).setBaseValue(20);
 		player.setExp(0);
 		player.setLevel(0);
@@ -223,13 +236,17 @@ public class PlayerInfo {
 	
 	public void ClearGamemodePlayerMg() {
 		int lvl = 0 ;
+		int prestigee = 0 ;
 		FileConfiguration points = plugin.getPoints();
 		if(points.contains("Players."+player.getName())) {
 			int lvlplayer = points.getInt("Players."+player.getName()+".Level");
+			int prestigeplayer = points.getInt("Players."+player.getName()+".Prestige");
 			lvl = lvlplayer;
+			prestigee = prestigeplayer;
 		}
 		
 		setMgPlayerLvl(lvl);
+		setMgPlayerprestige(prestigee);
 		player.setFlying(false);
 		player.setGameMode(GameMode.ADVENTURE);
 	}

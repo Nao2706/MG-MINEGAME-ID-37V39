@@ -49,6 +49,7 @@ import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.ViaAPI;
 
 import me.nao.cooldown.mg.ReportsManager;
+import me.nao.cosmetics.fireworks.RankPlayer;
 import me.nao.enums.GameInteractions;
 import me.nao.enums.GameStatus;
 import me.nao.enums.GameType;
@@ -90,6 +91,9 @@ public class GameConditions {
 				player.sendMessage(ChatColor.RED+"Error conflicto de inventarios llama a un Administrador.");
 				return;
 			}
+				MgTeams mt = new MgTeams(plugin);
+				mt.JoinTeamLifeMG(player);
+				
 				//Salva al Jugador checa si debe setearle un inv
 				setAndSavePlayer(player, map);
 				addPlayerToGame(player,map);
@@ -2096,15 +2100,45 @@ public class GameConditions {
 	
 	
 	//TODO CHAT
+	public void SendMessageTextComponentToAllUsersOfSameMap(Player player ,String text) {
+		
+		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+		String map = pl.getMapName();
+		GameInfo ms = plugin.getGameInfoPoo().get(map);
+		RankPlayer rp = new RankPlayer(plugin);
+		//MisionInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
+		 if(ms instanceof GameAdventure) {
+				GameAdventure ga = (GameAdventure) ms;
+				
+				
+				List<Player> play = ConvertStringToPlayer(ga.getParticipants());
+				List<Player> spect = ConvertStringToPlayer(ga.getSpectators());
+				
+				for(Player target : play) {
+					
+					target.spigot().sendMessage(Utils.sendTextComponentfromBaseComponent(Utils.sendTextComponentShow(rp.getRankPrestigeColor(pl.getMgPlayerPrestige()),"PRESTIGIO",net.md_5.bungee.api.ChatColor.GREEN),Utils.sendTextComponent(text)));
+				}
+				
+				if(!spect.isEmpty()) {
+					for(Player target : spect) {
+					
+						target.spigot().sendMessage(Utils.sendTextComponentfromBaseComponent(Utils.sendTextComponentShow(rp.getRankPrestigeColor(pl.getMgPlayerPrestige()),"PRESTIGIO",net.md_5.bungee.api.ChatColor.GREEN),Utils.sendTextComponent(text)));
+					}
+				}
+				 Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+map.toUpperCase()+": "+text);
+		 }
+	}
+	
+	//TODO CHAT
 	public void SendMessageToAllUsersOfSameMapCommand(Player player, String map ,String text) {
 		
 		if(!isMapinGame(map)) {
 			
 			if(player != null) {
-				player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no existe.");
+				player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no esta en Juego.");
 			}
 			
-			 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no existe.");
+			 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no esta en Juego.");
 			return;
 		}
 		GameInfo ms = plugin.getGameInfoPoo().get(map);
@@ -2143,10 +2177,10 @@ public class GameConditions {
 		if(!isMapinGame(map)) {
 			
 			if(player != null) {
-				player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no existe.");
+				player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no esta en Juego.");
 			}
 			
-			 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no existe.");
+			 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no esta en Juego.");
 			return;
 		}
 		GameInfo ms = plugin.getGameInfoPoo().get(map);
@@ -2230,9 +2264,9 @@ public class GameConditions {
 	 * Orientado a revivir 
 	 * 
 	 */
-	public void sendMessageToUsersOfSameMapLessTwoPlayers(Player player,Player player2 ,String text) {
+	public void sendMessageToUsersOfSameMapLessTwoPlayers(Player player1,Player player2 ,String text) {
 		
-		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player2);
 		String mapname = pl.getMapName();
 		GameInfo ms = plugin.getGameInfoPoo().get(mapname);
 		//MisionInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
@@ -2241,11 +2275,18 @@ public class GameConditions {
 					List<Player> play = ConvertStringToPlayer(ga.getParticipants());
 				
 					sendMessageToConsole(text);
-					
-					for(Player target : play) {
-						   if(target.getName().equals(player.getName()) || target.getName().equals(player2.getName())) continue;
-						   target.sendMessage(ChatColor.translateAlternateColorCodes('&', text));
+					if(player1 != null) {
+						for(Player target : play) {
+							   if(target.getName().equals(player1.getName()) || target.getName().equals(player2.getName())) continue;
+							   target.sendMessage(ChatColor.translateAlternateColorCodes('&', text));
+						}
+					}else {
+						for(Player target : play) {
+							   if(target.getName().equals(player2.getName())) continue;
+							   target.sendMessage(ChatColor.translateAlternateColorCodes('&', text));
+						}
 					}
+					
 					
 					List<Player> spect = ConvertStringToPlayer(ga.getSpectators());
 					if(!spect.isEmpty()) {
@@ -2254,6 +2295,8 @@ public class GameConditions {
 					}}
 		 } 
 	}
+	
+	
 	 
 	
 	/**
@@ -2442,7 +2485,7 @@ public class GameConditions {
 	
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		GameInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
-		
+		MgTeams mt = new MgTeams(plugin);
 		 if(ms instanceof GameAdventure) {
 				//GameAdventure ga = (GameAdventure) ms;
 				SetDefaultHeartsInGame(player);
@@ -2459,7 +2502,7 @@ public class GameConditions {
 							playerWinnerReward(player);
 							playerLoserReward(player);
 						}
-						
+						mt.RemoveAllPlayer(player);
 						removeAllPlayerToGame(player, pl.getMapName());
 					
 					}else {
@@ -2469,6 +2512,7 @@ public class GameConditions {
 							playerWinnerReward(player);
 							playerLoserReward(player);
 						}
+						mt.RemoveAllPlayer(player);
 						removeAllPlayerToGame(player, pl.getMapName());
 					}
 				
