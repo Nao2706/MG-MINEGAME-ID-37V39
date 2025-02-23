@@ -172,6 +172,7 @@ public class MapSettings {
 	   FileConfiguration itemm = plugin.getMenuItems();
 	   
 	   itemm.set(name+".Is-Working",true);
+	   itemm.set(name+".Is-Enchanted",false);
 	   itemm.set(name+".Material","bedrock");
 	   itemm.set(name+".Display-Name",name);
 	   List<String> lore = itemm.getStringList(name+".Lore-Item");

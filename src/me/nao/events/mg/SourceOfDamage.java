@@ -239,17 +239,17 @@ public class SourceOfDamage implements Listener{
 						if(b1.getType() == Material.WATER || b2.getType() == Material.WATER) {
 							player.sendTitle(ChatColor.RED+"!!!PELIGRO!!!", ChatColor.GREEN+"Estas en"+ChatColor.BLUE+" Agua Toxica "+ChatColor.GREEN+"corre", 20, 40, 20);
 							player.addPotionEffect(debil);
-							player.addPotionEffect(lento);
+							//player.addPotionEffect(lento);
 							player.addPotionEffect(veneno);
-							player.addPotionEffect(ciego);
+							//player.addPotionEffect(ciego);
 							player.addPotionEffect(nausea);
 							player.addPotionEffect(hambre);
 						}else if(b1.getType() == Material.LAVA || b2.getType() == Material.LAVA) {
-							player.sendTitle(ChatColor.RED+"!!!PELIGRO!!!", ChatColor.GREEN+"Estas en"+ChatColor.YELLOW+" Agua Toxica "+ChatColor.GREEN+"corre", 20, 40, 20);
+							player.sendTitle(ChatColor.RED+"!!!PELIGRO!!!", ChatColor.GREEN+"Estas en"+ChatColor.YELLOW+" Lava Toxica "+ChatColor.GREEN+"corre", 20, 40, 20);
 							player.addPotionEffect(debil);
-							player.addPotionEffect(lento);
+							//player.addPotionEffect(lento);
 							player.addPotionEffect(veneno);
-							player.addPotionEffect(ciego);
+							//player.addPotionEffect(ciego);
 							player.addPotionEffect(nausea);
 							player.addPotionEffect(hambre);
 						}

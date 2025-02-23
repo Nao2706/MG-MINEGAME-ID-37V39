@@ -2075,6 +2075,7 @@ public class GameConditions {
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		String map = pl.getMapName();
 		GameInfo ms = plugin.getGameInfoPoo().get(map);
+	
 		//MisionInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
 		 if(ms instanceof GameAdventure) {
 				GameAdventure ga = (GameAdventure) ms;
@@ -2085,16 +2086,16 @@ public class GameConditions {
 				
 				for(Player target : play) {
 					
-					target.sendMessage(ChatColor.translateAlternateColorCodes('&', text));
+					target.sendMessage(Utils.colorTextChatColor(text));
 				}
 				
 				if(!spect.isEmpty()) {
 					for(Player target : spect) {
 						
-						target.sendMessage(ChatColor.translateAlternateColorCodes('&', text));
+						target.sendMessage(Utils.colorTextChatColor(text));
 					}
 				}
-				 Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+map.toUpperCase()+": "+text);
+				 Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+map.toUpperCase()+": "+Utils.colorTextChatColor(text));
 		 }
 	}
 	

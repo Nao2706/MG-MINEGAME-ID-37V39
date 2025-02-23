@@ -79,7 +79,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.event.player.PlayerInputEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -123,7 +122,6 @@ import me.nao.manager.GameIntoMap;
 import me.nao.mobs.MobsActions;
 import me.nao.revive.RevivePlayer;
 import me.nao.shop.mg.MinigameShop1;
-import me.nao.utils.Utils;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -1081,11 +1079,11 @@ public class EventRandoms implements Listener{
 	      
 	   }
 	 
-	 @EventHandler(priority = EventPriority.LOWEST)
-	 public void mginput(PlayerInputEvent e) {
-		 Bukkit.getConsoleSender().sendMessage("Test: "+e.getPlayer().getCurrentInput());
-		 Bukkit.getConsoleSender().sendMessage("Test2: "+e.getInput());
-	 }
+//	 //@EventHandler(priority = EventPriority.LOWEST)
+//	 public void mginput(PlayerInputEvent e) {
+//		 Bukkit.getConsoleSender().sendMessage("Test: "+e.getPlayer().getCurrentInput());
+//		 Bukkit.getConsoleSender().sendMessage("Test2: "+e.getInput());
+//	 }
 
 	 
 	 //TODO CHAT
@@ -1105,6 +1103,7 @@ public class EventRandoms implements Listener{
 			 PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 			 String mapa = pl.getMapName();
 			 GameInfo gi = plugin.getGameInfoPoo().get(mapa);
+			 RankPlayer rank = new RankPlayer(plugin);
 				if(gi instanceof GameAdventure) {
 					GameAdventure ga = (GameAdventure) gi;
 					
@@ -1115,51 +1114,20 @@ public class EventRandoms implements Listener{
 					
 					if(cm.isPlayerinGame(player)) {
 						
-//						if(plugin.getKnockedPlayer().containsKey(player)) {
-//							RevivePlayer rp = plugin.getKnockedPlayer().get(player);
-//							int timelife = rp.getRemainingTimeLife();
-//							
-//							if(timelife >= 41 && timelife <= 60) {
-//								cm.SendMessageToAllUsersOfSameMap(player, ""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.GREEN+ChatColor.BOLD+"DERRIBADO"+ChatColor.DARK_GRAY+ChatColor.BOLD+"] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+ChatColor.GRAY+player.getName()+": "+ChatColor.GREEN+message+ChatColor.GOLD+" (Le queda "+ChatColor.RED+rp.getRemainingTimeLife()+"secs"+ChatColor.GOLD+" de vida.)");
-//
-//							
-//							}else if(timelife >= 21 && timelife <= 40) {
-//								cm.SendMessageToAllUsersOfSameMap(player, ""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.YELLOW+ChatColor.BOLD+"DERRIBADO"+ChatColor.DARK_GRAY+ChatColor.BOLD+"] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+ChatColor.GRAY+player.getName()+": "+ChatColor.YELLOW+message+ChatColor.GOLD+" (Le queda "+ChatColor.RED+rp.getRemainingTimeLife()+"secs"+ChatColor.GOLD+" de vida.)");
-//
-//								
-//							}else if(timelife >= 1 && timelife <= 20) {
-//								cm.SendMessageToAllUsersOfSameMap(player, ""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.RED+ChatColor.BOLD+"DERRIBADO"+ChatColor.DARK_GRAY+ChatColor.BOLD+"] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+ChatColor.GRAY+player.getName()+": "+ChatColor.RED+message+ChatColor.GOLD+" (Le queda "+ChatColor.RED+rp.getRemainingTimeLife()+"secs"+ChatColor.GOLD+" de vida.)");
-//
-//								
-//							}
-//							
-// 
-//						}else if(alive1.contains(player.getName())) {
-//		
-//							cm.SendMessageToAllUsersOfSameMap(player, ""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.GREEN+ChatColor.BOLD+"VIVO"+ChatColor.DARK_GRAY+ChatColor.BOLD+"] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+ChatColor.WHITE+player.getName()+": "+ChatColor.GREEN+message);
-//						}else if(deads1.contains(player.getName())) {
-//		
-//							cm.SendMessageToAllUsersOfSameMap(player, ""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.RED+ChatColor.BOLD+"MUERTO"+ChatColor.DARK_GRAY+ChatColor.BOLD+"] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+ChatColor.WHITE+player.getName()+": "+ChatColor.YELLOW+message);
-//		
-//						}else if(spec.contains(player.getName())) {
-//		
-//							cm.SendMessageToAllUsersOfSameMap(player, ""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.WHITE+ChatColor.BOLD+"ESPECTADOR"+ChatColor.DARK_GRAY+ChatColor.BOLD+"] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+ChatColor.WHITE+player.getName()+": "+ChatColor.GRAY+message);
-//						}
-						
 						if(plugin.getKnockedPlayer().containsKey(player)) {
 							RevivePlayer rp = plugin.getKnockedPlayer().get(player);
 							int timelife = rp.getRemainingTimeLife();
 							
 							if(timelife >= 41 && timelife <= 60) {
-								cm.SendMessageTextComponentToAllUsersOfSameMap(player,Utils.colorText("&8&l[&a&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" &6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)"));
+								cm.SendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&a&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" &6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
 
 							
 							}else if(timelife >= 21 && timelife <= 40) {
-								cm.SendMessageTextComponentToAllUsersOfSameMap(player,Utils.colorText("&8&l[&e&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" &6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)"));
+								cm.SendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&e&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" &6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
 
 								
 							}else if(timelife >= 1 && timelife <= 20) {
-								cm.SendMessageTextComponentToAllUsersOfSameMap(player,Utils.colorText("&8&l[&c&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" &6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)"));
+								cm.SendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&c&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" &6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
 
 								
 							}
@@ -1167,15 +1135,47 @@ public class EventRandoms implements Listener{
  
 						}else if(alive1.contains(player.getName())) {
 		
-							cm.SendMessageTextComponentToAllUsersOfSameMap(player,Utils.colorText("&8&l[&a&lVIVO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &a"+message));
+							cm.SendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&a&lVIVO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &a"+message);
 						}else if(deads1.contains(player.getName())) {
 		
-							cm.SendMessageTextComponentToAllUsersOfSameMap(player,Utils.colorText("&8&l[&c&lMUERTO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &e"+message));
+							cm.SendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&c&lMUERTO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &e"+message);
 		
 						}else if(spec.contains(player.getName())) {
 		
-							cm.SendMessageTextComponentToAllUsersOfSameMap(player,Utils.colorText("&8&l[&f&lESPECTADOR&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &7"+message));
+							cm.SendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&f&lESPECTADOR&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &7"+message);
 						}
+						
+						//USA TEXT COMPONENT
+//						if(plugin.getKnockedPlayer().containsKey(player)) {
+//							RevivePlayer rp = plugin.getKnockedPlayer().get(player);
+//							int timelife = rp.getRemainingTimeLife();
+//							
+//							if(timelife >= 41 && timelife <= 60) {
+//								cm.SendMessageTextComponentToAllUsersOfSameMap(player,Utils.colorText("&8&l[&a&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" &6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)"));
+//
+//							
+//							}else if(timelife >= 21 && timelife <= 40) {
+//								cm.SendMessageTextComponentToAllUsersOfSameMap(player,Utils.colorText("&8&l[&e&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" &6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)"));
+//
+//								
+//							}else if(timelife >= 1 && timelife <= 20) {
+//								cm.SendMessageTextComponentToAllUsersOfSameMap(player,Utils.colorText("&8&l[&c&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" &6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)"));
+//
+//								
+//							}
+//							
+// 
+//						}else if(alive1.contains(player.getName())) {
+//		
+//							cm.SendMessageTextComponentToAllUsersOfSameMap(player,Utils.colorText("&8&l[&a&lVIVO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &a"+message));
+//						}else if(deads1.contains(player.getName())) {
+//		
+//							cm.SendMessageTextComponentToAllUsersOfSameMap(player,Utils.colorText("&8&l[&c&lMUERTO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &e"+message));
+//		
+//						}else if(spec.contains(player.getName())) {
+//		
+//							cm.SendMessageTextComponentToAllUsersOfSameMap(player,Utils.colorText("&8&l[&f&lESPECTADOR&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &7"+message));
+//						}
 
 					 e.setCancelled(true);
 					}

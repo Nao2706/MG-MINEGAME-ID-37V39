@@ -7,6 +7,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 
 import me.nao.main.mg.Minegame;
 
@@ -86,52 +87,91 @@ public class TabComplete1 implements TabCompleter{
 			
 		}
 		
-		FileConfiguration config = plugin.getConfig();
-		List<String> arguments2 = config.getStringList("Maps-Created.List");
-		if(args[0].startsWith("join") || args[0].startsWith("delete") || args[0].startsWith("enabled") || args[0].startsWith("disabled")) {
-			if(arguments2.isEmpty()) {
-				for(int i = 0; i < arguments2.size();i++) {
-					arguments2.add(arguments2.get(i));
+		
+		if(sender instanceof Player) {
+			//mg arg1-tutorial arg2-
+			
+			//Bukkit.getConsoleSender().sendMessage("TAB TEST: c:"+cmd+" label:"+label+" Args:"+String.join(" ", args)+" l:"+args.length);
+			
+			if(args.length >= 1) {
+				
+					if(args[0].equalsIgnoreCase("join") || args[0].equalsIgnoreCase("delete") || args[0].equalsIgnoreCase("enabled") || 
+							args[0].equalsIgnoreCase("disabled")|| args[0].equalsIgnoreCase("reload")) {
+						FileConfiguration config = plugin.getConfig();
+						List<String> result = new ArrayList<String>();
+						List<String> arguments2 = config.getStringList("Maps-Created.List");
+						if(!arguments2.isEmpty()) {
+							
+							for(String a : arguments2 ) {
+								if(args.length == 2) {
+									if(a.toLowerCase().startsWith(args[1].toLowerCase())) 
+										result.add(a);
+								}
+								
+							}
+						
+						}
+						return result;
+					} 
+				
+			
+			}
+			
+			//tab 1 comandos
+			List<String> result = new ArrayList<String>();
+			if(args.length == 1) {
+				for(String a : arguments ) {
+					//report NAO
+					//inicio de autocompletado args[0,1,2]
+					if(a.toLowerCase().startsWith(args[0].toLowerCase())) 
+						result.add(a);
+						
+					
+					
 				}
+				return result;
 			}
-			return arguments2;
+			
+			//checar todo
+			//tab 2 arenas
+//			List<String> result2 = new ArrayList<String>();
+//			if(args.length == 2) {
+//				for(String a : arguments2 ) {
+//					//report NAO
+//					//inicio de autocompletado args[0,1,2]
+//					if(a.toLowerCase().startsWith(args[1].toLowerCase())) 
+//						result2.add(a);
+//						
+//					
+//					
+//				}
+//				return result2;
+//			}
 		}
+		
+		
+
+			
+			
+//		FileConfiguration config = plugin.getConfig();
+//		List<String> arguments2 = config.getStringList("Maps-Created.List");
+//		if(args.length == 1) {
+//			for(String a : arguments ) {
+//				if(a.toLowerCase().startsWith("join") || a.toLowerCase().startsWith("delete") || a.toLowerCase().startsWith("enabled") || a.toLowerCase().startsWith("disabled")) {
+//					
+//				} 
+//			}
+//			if(arguments2.isEmpty()) {
+//				for(int i = 0; i < arguments2.size();i++) {
+//					arguments2.add(arguments2.get(i));
+//				}
+//			}
+//			return arguments2;
+//		}
 			
 			
 		
-			
-			
-		
-		//tab 1 comandos
-		List<String> result = new ArrayList<String>();
-		if(args.length == 1) {
-			for(String a : arguments ) {
-				//report NAO
-				//inicio de autocompletado args[0,1,2]
-				if(a.toLowerCase().startsWith(args[0].toLowerCase())) 
-					result.add(a);
-					
-				
-				
-			}
-			return result;
-		}
-		
-		//checar todo
-		//tab 2 arenas
-		List<String> result2 = new ArrayList<String>();
-		if(args.length == 2) {
-			for(String a : arguments2 ) {
-				//report NAO
-				//inicio de autocompletado args[0,1,2]
-				if(a.toLowerCase().startsWith(args[1].toLowerCase())) 
-					result2.add(a);
-					
-				
-				
-			}
-			return result2;
-		}
+
 		
 		
 		

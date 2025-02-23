@@ -64,7 +64,6 @@ import me.nao.main.mg.Minegame;
 import me.nao.manager.MapSettings;
 import me.nao.mobs.MobsActions;
 import me.nao.manager.GameIntoMap;
-import me.nao.scoreboard.MgScore;
 import me.nao.shop.mg.MinigameShop1;
 import me.nao.timers.Countdown2;
 import me.nao.yamlfile.mg.YamlFilePlus;
@@ -3159,9 +3158,10 @@ public class Comandos implements CommandExecutor{
 							//	MgScore mg = new MgScore(plugin);
 					//mg.ShowProgressObjetive(player);
 					return true;
-				}else if(args[0].equalsIgnoreCase("dscore")) {
-					MgScore mg = new MgScore(plugin);
-					mg.ClearScore(player);
+				}else if(args[0].equalsIgnoreCase("ping")) {
+//					MgScore mg = new MgScore(plugin);
+//					mg.ClearScore(player);
+					player.sendMessage(plugin.nombre+ChatColor.GOLD+" Tu Ping es: "+ChatColor.GOLD+player.getPing());
 					return true;
 				}else if (args[0].equalsIgnoreCase("set-life") && player.isOp()) {
 					try {

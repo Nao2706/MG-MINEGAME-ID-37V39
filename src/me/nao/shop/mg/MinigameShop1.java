@@ -17,6 +17,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Chest;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -26,6 +27,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -1096,6 +1098,12 @@ public class MinigameShop1 implements Listener{
 								ItemStack ite = new ItemStack(m);
 								String display = menu.getString(name+".Display-Name");
 								ItemMeta met = ite.getItemMeta();
+								if(menu.contains(name+".Is-Enchanted")) {
+									if(menu.getBoolean(name+".Is-Enchanted")) {
+										met.addEnchant(Enchantment.LOOTING, 1, true);
+										met.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+									}
+								}
 								met.setDisplayName(ChatColor.translateAlternateColorCodes('&', display.replace("_"," ")));
 								List<String> list = menu.getStringList(name+".Lore-Item");
 								if(!list.isEmpty()) {
@@ -1243,7 +1251,7 @@ public class MinigameShop1 implements Listener{
 				  
 				  
 				  if(!menu.contains(name)) {
-					  ItemStack item = new ItemStack(Material.BEDROCK);
+					    ItemStack item = new ItemStack(Material.BEDROCK);
 						String display = menu.getString(name.replace("null", "X")+".Display-Name");
 						ItemMeta met = item.getItemMeta();
 						met.setDisplayName(ChatColor.translateAlternateColorCodes('&',display+" &cError no hay Datos !!!"));
@@ -1285,6 +1293,13 @@ public class MinigameShop1 implements Listener{
 							ItemStack ite = new ItemStack(m);
 							String display = menu.getString(name+".Display-Name");
 							ItemMeta met = ite.getItemMeta();
+							if(menu.contains(name+".Is-Enchanted")) {
+								if(menu.getBoolean(name+".Is-Enchanted")) {
+									met.addEnchant(Enchantment.LOOTING, 1, true);
+									met.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+								}
+							}
+							
 							met.setDisplayName(ChatColor.translateAlternateColorCodes('&', display));
 							List<String> list = menu.getStringList(name+".Lore-Item");
 							if(!list.isEmpty()) {

@@ -23,6 +23,10 @@ public class Utils {
 		return ChatColor.translateAlternateColorCodes('&',text) ;
 	}
 	
+	public static String colorTextChatColor(String text) {
+		return org.bukkit.ChatColor.translateAlternateColorCodes('&',text) ;
+	}
+	
 	public static String getMessageColor(String texto) {
 				
 				

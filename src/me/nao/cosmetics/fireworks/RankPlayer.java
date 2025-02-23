@@ -110,37 +110,37 @@ public class RankPlayer {
 		
 			
 				if(lvl == 0) {
-					return rank = Utils.colorText("&8&l[&a&lH&8&l] ");
+					return rank = Utils.colorText("&7&l[&8&lH&7&l] ");
 					
 				}else if(lvl == 1) {
-					return rank =  Utils.colorText("&8&l[&b&lG&8&l] ");
+					return rank =  Utils.colorText("&7&l[&f&lG&7&l] ");
 					
 				}else if(lvl == 2) {
-					return rank =  Utils.colorText("&8&l[&c&lF&8&l] ");
+					return rank =  Utils.colorText("&7&l[&e&lF&7&l] ");
 					
 				}else if(lvl == 3) {
-					return rank =  Utils.colorText("&8&l[&5&lE&8&l] ");
+					return rank =  Utils.colorText("&7&l[&c&lE&7&l] ");
 					
 				}else if(lvl == 4) {
-					 rank =  Utils.colorText("&8&l[&9&lD&8&l] ");
+					 rank =  Utils.colorText("&7&l[&4&lD&7&l] ");
 					 
 				}else if(lvl == 5) {
-					 rank =  Utils.colorText("&8&l[&2&lC&8&l] ");
+					 rank =  Utils.colorText("&7&l[&a&lC&7&l] ");
 					 
 				}else if(lvl == 6) {
-					 rank =  Utils.colorText("&8&l[&4&lB&8&l] ");
+					 rank =  Utils.colorText("&7&l[&2&lB&7&l] ");
 					 
 				}else if(lvl == 7) {
-					 rank =  Utils.colorText("&8&l[&7&lA&8&l] ");
+					 rank =  Utils.colorText("&7&l[&b&lA&7&l] ");
 					 
-				}else if(lvl == 8) {
-					 rank =  Utils.colorText("&8&l[&3&lS+&8&l] ");
+				}else if(lvl == 7) {
+					 rank =  Utils.colorText("&7&l[&5&l&nS+&7&l] ");
 					 
 				}else if(lvl == 9) {
-					 rank =  Utils.colorText("&8&l[&0&lSS+&8&l] ");
+					 rank =  Utils.colorText("&7&l[&1&l&nSS+&7&l] ");
 					 
 				}else if(lvl == 10) {
-					 rank = Utils.colorText("&8&l[&6&lSSS+&8&l] ");
+					 rank = Utils.colorText("&7&l[&6&l&nSSS+&7&l] ");
 					 
 				}
 		
