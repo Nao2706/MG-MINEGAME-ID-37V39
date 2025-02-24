@@ -167,7 +167,7 @@ public class RevivePlayer{
 		clearInventorymg();
 		addToRevive();
 		Start();
-		gc.sendMessageToUsersOfSameMapLessPlayer(player,""+ChatColor.RED+ChatColor.BOLD+ player.getName()+ChatColor.YELLOW+" fue Derribado/a. (Ayudalo/a a levantarse tiene solo %time%)".replace("%time%",time+"s"));
+		gc.sendMessageToUsersOfSameMapLessPlayer(player,""+ChatColor.RED+ChatColor.BOLD+ player.getName()+ChatColor.YELLOW+" fue Derribado/a. \n(Ayudalo/a a levantarse tiene solo %time%)".replace("%time%",time+"s"));
 		
 		player.sendMessage("");
 		if(e != null) {
@@ -214,6 +214,18 @@ public class RevivePlayer{
 					gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+le.getType());
 					
 				}
+			}else if(e instanceof Player) {
+				
+				Player otherplayer = (Player) e;
+				if(player.getName().equals(otherplayer.getName())) {
+					player.sendMessage(ChatColor.YELLOW+"Has sido Derribado/a por: "+ChatColor.GOLD+"Ti mismo (Suicidio o Accidente)");
+					gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+"El/Ella mismo/a (Suicidio o Accidente)");
+					
+				}else {
+					player.sendMessage(ChatColor.YELLOW+"Has sido Derribado/a por: "+ChatColor.GOLD+otherplayer.getName());
+					gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+otherplayer.getName());
+				}
+				
 			}
 
 		}else{

@@ -66,6 +66,7 @@ import me.nao.mobs.MobsActions;
 import me.nao.manager.GameIntoMap;
 import me.nao.shop.mg.MinigameShop1;
 import me.nao.timers.Countdown2;
+import me.nao.utils.Utils;
 import me.nao.yamlfile.mg.YamlFilePlus;
 import me.top.users.mg.PointsManager;
 import net.md_5.bungee.api.ChatMessageType;
@@ -150,6 +151,64 @@ public class Comandos implements CommandExecutor{
 						Bukkit.getConsoleSender().sendMessage("Usa /mg reportlogs <player> <pag>");
 					}
 					
+					return true;
+				}else if(args[0].equalsIgnoreCase("addtag")) {
+					
+					if (args.length == 3) {
+						// /c add n p
+						//mg setlife nao 2
+						Player target = Bukkit.getServer().getPlayerExact(args[1]);
+					    String valor = args[2];
+					  
+						if(target != null) {
+							//target.setMaxHealth(target.getMaxHealth());
+							if(!target.getScoreboardTags().contains(valor)) {
+								target.addScoreboardTag(valor);
+								Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" El Jugador "+ChatColor.GOLD+target.getName()+ChatColor.GREEN+" fue añadida con la Tag correctamente. ");
+							}else {
+								Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" El Jugador "+ChatColor.GOLD+target.getName()+ChatColor.GREEN+" ya tiene la Tag "+ChatColor.RED+valor);
+
+							}
+							
+							
+						}else {
+							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+args[1]+ChatColor.RED+" no existe. ");
+							
+						}
+						
+						
+					}else {
+						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg addtag <nombre> <texto>");
+					}
+					return true;
+				}else if(args[0].equalsIgnoreCase("removetag")) {
+					
+					if (args.length == 3) {
+						// /c add n p
+						//mg setlife nao 2
+						Player target = Bukkit.getServer().getPlayerExact(args[1]);
+					    String valor = args[2];
+					  
+						if(target != null) {
+							//target.setMaxHealth(target.getMaxHealth());
+							if(target.getScoreboardTags().contains(valor)) {
+								target.removeScoreboardTag(valor);
+								Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" El Jugador "+ChatColor.GOLD+target.getName()+ChatColor.GREEN+" le fue removida la Tag correctamente. ");
+							}else {
+								Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" El Jugador "+ChatColor.GOLD+target.getName()+ChatColor.GREEN+" ya no tiene la Tag "+ChatColor.RED+valor);
+
+							}
+							
+							
+						}else {
+							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+args[1]+ChatColor.RED+" no existe. ");
+							
+						}
+						
+						
+					}else {
+						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg removetag <nombre> <texto>");
+					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("isban")) {
 					
@@ -733,6 +792,26 @@ public class Comandos implements CommandExecutor{
 					}
 				
 							
+					return true;
+				}else if(args[0].equalsIgnoreCase("ping")) {
+					if (args.length == 2) {
+						
+						//mg ping nao
+						String name = args[1];
+						Player target = Bukkit.getServer().getPlayerExact(name);
+						if(target != null) {
+							//target.setMaxHealth(target.getMaxHealth());
+							
+							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" El Ping de "+ChatColor.GOLD+target.getName()+ChatColor.GREEN+" es de "+Utils.pingLevel(target.getPing()));
+						}else {
+							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+target+ChatColor.RED+" no existe. ");
+							
+						}
+					}else {
+						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" /mg ping <jugador>");
+
+					}
+					
 					return true;
 				}else if (args[0].equalsIgnoreCase("set-points")) {
 					try {
@@ -2751,6 +2830,96 @@ public class Comandos implements CommandExecutor{
 				
 				return true;
 				
+			}else if(args[0].equalsIgnoreCase("addtag")) {
+				
+				if (args.length == 3) {
+					// /c add n p
+					//mg setlife nao 2
+					Player target = Bukkit.getServer().getPlayerExact(args[1]);
+				    String valor = args[2];
+				  
+					if(target != null) {
+						//target.setMaxHealth(target.getMaxHealth());
+						if(!target.getScoreboardTags().contains(valor)) {
+							target.addScoreboardTag(valor);
+							player.sendMessage(plugin.nombre+ChatColor.GREEN+" El Jugador "+ChatColor.GOLD+target.getName()+ChatColor.GREEN+" fue añadida con la Tag correctamente. ");
+						}else {
+							player.sendMessage(plugin.nombre+ChatColor.GREEN+" El Jugador "+ChatColor.GOLD+target.getName()+ChatColor.GREEN+" ya tiene la Tag "+ChatColor.RED+valor);
+
+						}
+						
+						
+					}else {
+						player.sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+args[1]+ChatColor.RED+" no existe. ");
+						
+					}
+					
+					
+				}else {
+					player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg addtag <nombre> <texto>");
+				}
+				return true;
+			}else if(args[0].equalsIgnoreCase("removetag")) {
+				
+				if (args.length == 3) {
+					// /c add n p
+					//mg setlife nao 2
+					Player target = Bukkit.getServer().getPlayerExact(args[1]);
+				    String valor = args[2];
+				  
+					if(target != null) {
+						//target.setMaxHealth(target.getMaxHealth());
+						if(target.getScoreboardTags().contains(valor)) {
+							target.removeScoreboardTag(valor);
+							player.sendMessage(plugin.nombre+ChatColor.GREEN+" El Jugador "+ChatColor.GOLD+target.getName()+ChatColor.GREEN+" le fue removida la Tag correctamente. ");
+						}else {
+							player.sendMessage(plugin.nombre+ChatColor.GREEN+" El Jugador "+ChatColor.GOLD+target.getName()+ChatColor.GREEN+" ya no tiene la Tag "+ChatColor.RED+valor);
+
+						}
+						
+						
+					}else {
+						player.sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+args[1]+ChatColor.RED+" no existe. ");
+						
+					}
+					
+					
+				}else {
+					player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg removetag <nombre> <texto>");
+				}
+				return true;
+			}else if(args[0].equalsIgnoreCase("showtags")) {
+				
+				if (args.length == 2) {
+					// /c add n p
+					//mg setlife nao 2
+					Player target = Bukkit.getServer().getPlayerExact(args[1]);
+				    
+				  
+					if(target != null) {
+						//target.setMaxHealth(target.getMaxHealth());
+						if(!target.getScoreboardTags().isEmpty()) {
+							player.sendMessage(plugin.nombre+ChatColor.GREEN+" El Jugador "+ChatColor.GOLD+target.getName()+ChatColor.GREEN+" Tiene las Siguientes Tags. ");
+
+							for(String t : target.getScoreboardTags()) {
+								player.sendMessage(t);
+							}
+						}else {
+							player.sendMessage(plugin.nombre+ChatColor.GREEN+" El Jugador "+ChatColor.GOLD+target.getName()+ChatColor.GREEN+" no tiene la Tags ");
+
+						}
+						
+						
+					}else {
+						player.sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+args[1]+ChatColor.RED+" no existe. ");
+						
+					}
+					
+					
+				}else {
+					player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg showtags <nombre> ");
+				}
+				return true;
 			}else if(args[0].equalsIgnoreCase("enabled")&& player.isOp()) {
 					if (args.length >= 2) {
 						
@@ -3159,9 +3328,23 @@ public class Comandos implements CommandExecutor{
 					//mg.ShowProgressObjetive(player);
 					return true;
 				}else if(args[0].equalsIgnoreCase("ping")) {
-//					MgScore mg = new MgScore(plugin);
-//					mg.ClearScore(player);
-					player.sendMessage(plugin.nombre+ChatColor.GOLD+" Tu Ping es: "+ChatColor.GOLD+player.getPing());
+					if (args.length == 2) {
+						
+						//mg ping nao
+						String name = args[1];
+						Player target = Bukkit.getServer().getPlayerExact(name);
+						if(target != null) {
+							//target.setMaxHealth(target.getMaxHealth());
+							
+							player.sendMessage(plugin.nombre+ChatColor.GREEN+" El Ping de "+ChatColor.GOLD+target.getName()+ChatColor.GREEN+" es de "+Utils.pingLevel(target.getPing()));
+						}else {
+							player.sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+target+ChatColor.RED+" no existe. ");
+							
+						}
+					}else {
+						player.sendMessage(plugin.nombre+ChatColor.GOLD+" Tu Ping es: "+Utils.pingLevel(player.getPing()));
+					}
+					
 					return true;
 				}else if (args[0].equalsIgnoreCase("set-life") && player.isOp()) {
 					try {

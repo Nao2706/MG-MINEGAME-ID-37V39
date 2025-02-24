@@ -113,6 +113,9 @@ import org.bukkit.inventory.meta.ItemMeta;
             ARROWL(""+ChatColor.GREEN+ChatColor.BOLD+"ARROW LAUNCHER", Material.BLAZE_ROD,"damage_all,10/knockback,3", 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"64 Netherite",ChatColor.YELLOW+ "Dispara Flechas mas rapido."),
             ARROWLP(""+ChatColor.GREEN+ChatColor.BOLD+"ARROW LAUNCHER", Material.BLAZE_ROD,"damage_all,10/knockback,3", 1,ChatColor.YELLOW+ "Dispara Flechas mas rapido.",ChatColor.RED+ "- Consume 2 Flechas."),
 
+            TNT(""+ChatColor.GREEN+ChatColor.BOLD+"TNT LANZABLE", Material.TNT,"fire_aspect,3/knockback,3", 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"3 Netherite",ChatColor.YELLOW+ "Lanza la TNT a tus Enemigos."),
+            TNTP(""+ChatColor.GREEN+ChatColor.BOLD+"TNT LANZABLE", Material.TNT,"fire_aspect,3/knockback,3", 1,ChatColor.YELLOW+ "Lanza la TNT a tus Enemigos."),
+
             
             MEDICO(""+ChatColor.RED+ChatColor.BOLD+"MEDICO", Material.EMERALD,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"30 Netherite",ChatColor.YELLOW+ "Llama a un Aldeano medico"),
             MEDICOP(""+ChatColor.RED+ChatColor.BOLD+"MEDICO", Material.EMERALD,null, 1),

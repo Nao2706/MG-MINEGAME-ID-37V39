@@ -71,6 +71,7 @@ public class MapSettings {
 			ym.set("Primary-Objetive-Opcional",false); 
 			ym.set("Secondary-Objetive-Opcional",false); 
 			ym.set("Set-Hearts",20); 
+			ym.set("Map-hasBarriers",true); 
 			ym.set("Anti-Void",false); 
 			ym.set("Allow-Inventory",false);
 			ym.set("Allow-PVP",false);

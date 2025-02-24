@@ -222,7 +222,7 @@ public class EventRandoms implements Listener{
 					ArmorStand as = (ArmorStand) ent;
 					if(as.getCustomName() != null) {
 						String name = ChatColor.stripColor(as.getCustomName());
-						
+						 
 						if(name.startsWith("REVIVIR CON (SHIFT + CLICK DERECHO) A: ")){
 							e.setCancelled(true);
 							
@@ -239,7 +239,8 @@ public class EventRandoms implements Listener{
 											pr.setValue(pr.getValue()+1);
 											player.sendTitle(""+ChatColor.WHITE+ChatColor.BOLD+"REVIVIENDO"+ChatColor.GREEN+ChatColor.BOLD+" + ", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 0, 20, 0);
 											pr.setReviveStatus(ReviveStatus.HEALING);
-											
+											pr.getArmorStand().getWorld().spawnParticle(Particle.HAPPY_VILLAGER, pr.getArmorStand().getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */25, 1, 1, 1, /* velocidad */0, null, true);
+
 										}else {
 											if(pr.getReviveStatus() == ReviveStatus.SELFREVIVED) return;
 											pr.setReviveStatus(ReviveStatus.SELFREVIVED);
@@ -260,6 +261,8 @@ public class EventRandoms implements Listener{
 											target.sendTitle(""+ChatColor.WHITE+ChatColor.BOLD+"REVIVIENDO"+ChatColor.GREEN+ChatColor.BOLD+" + ", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 0, 20, 0);
 											player.sendTitle(""+ChatColor.WHITE+ChatColor.BOLD+"REVIVIENDO"+ChatColor.GREEN+ChatColor.BOLD+" + ", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 0, 20, 0);
 											pr.setReviveStatus(ReviveStatus.HEALING);
+											pr.getArmorStand().getWorld().spawnParticle(Particle.HAPPY_VILLAGER, pr.getArmorStand().getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */25, 1, 1, 1, /* velocidad */0, null, true);
+
 										}else {
 											if(pr.getReviveStatus() == ReviveStatus.REVIVED) return;
 												pr.setReviveStatus(ReviveStatus.REVIVED);
@@ -268,8 +271,9 @@ public class EventRandoms implements Listener{
 											
 												player.sendMessage(ChatColor.GOLD+"Ayudaste a levantar a "+ChatColor.GREEN+target.getName());
 												target.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.GOLD+" te ayudo a levantarte.");
-												gc.sendMessageToUsersOfSameMapLessTwoPlayers(player, target, ChatColor.GOLD+target.getName()+ChatColor.AQUA+" ayudo a "+ChatColor.GREEN+player.getName()+ChatColor.AQUA+" a Levantarse.");
-												
+												gc.sendMessageToUsersOfSameMapLessTwoPlayers(player, target,""+ChatColor.GREEN+ChatColor.BOLD+"+ "+ChatColor.GOLD+player.getName()+ChatColor.AQUA+" ayudo a "+ChatColor.GREEN+target.getName()+ChatColor.AQUA+" a Levantarse.");
+												PlayerInfo targetrevive = plugin.getPlayerInfoPoo().get(player);
+												targetrevive.getGamePoints().setRevive(targetrevive.getGamePoints().getRevive()+5);
 												
 											
 											
@@ -751,10 +755,9 @@ public class EventRandoms implements Listener{
 						if(e.getItem().isSimilar(Items.MEDICOP.getValue())) {
 					
 							Location loc = player.getLocation();
-							Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.VILLAGER);
-							Villager v = (Villager) h1;
+							Villager v = (Villager) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.VILLAGER);
 							v.setCustomName(""+ChatColor.GREEN+ChatColor.BOLD+"Medico "+ChatColor.RED+ChatColor.BOLD+"+");
-							v.setProfession(Profession.CLERIC);
+							v.setProfession(Profession.NONE);
 							v.setTicksLived(1200);
 							removeItemstackCustom(player,e.getItem());
 							
@@ -762,7 +765,14 @@ public class EventRandoms implements Listener{
 							
 							
 							
-				        }
+				        }if(e.getItem().isSimilar(Items.TNTP.getValue())) {
+				        	TNTPrimed ptnt = (TNTPrimed) player.getWorld().spawnEntity(player.getLocation().add(0.5,1,0.5),EntityType.TNT);
+							ptnt.setFuseTicks(30);
+							ptnt.setVelocity(player.getLocation().getDirection().multiply(2.5));
+							ptnt.setCustomName(ChatColor.DARK_PURPLE+"TNT");
+							ptnt.setYield(5);
+							removeItemstackCustom(player,e.getItem());
+						}
 					
 						
 					}}
@@ -1053,12 +1063,12 @@ public class EventRandoms implements Listener{
 						 LivingEntity mob = (LivingEntity) entidadAtacada;
 						  	pl.getGamePoints().setDamage(pl.getGamePoints().getDamage()+ConvertDoubleToInt(mob.getHealth()-mob.getAttribute(Attribute.MAX_HEALTH).getBaseValue()));
 					 }
-					
+					 
 					  if(entidadAtacada instanceof Player || entidadAtacada instanceof Villager) {
-						  String arenaName = pl.getMapName();
-				 			if(!gc.isPvPAllowed(arenaName)) {
+						  String map = pl.getMapName();
+				 			if(!gc.isPvPAllowed(map)) {
 				 				e.setCancelled(true);
-				 				player.sendMessage(ChatColor.RED+"El PVP en el Mapa "+ChatColor.GOLD+arenaName+ChatColor.RED+" no esta Habilitado");
+				 				player.sendTitle("",ChatColor.RED+"El PVP en el Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no esta Habilitado",20,40,20);
 				 			}
 							return;
 					 }
@@ -1119,15 +1129,15 @@ public class EventRandoms implements Listener{
 							int timelife = rp.getRemainingTimeLife();
 							
 							if(timelife >= 41 && timelife <= 60) {
-								cm.SendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&a&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" &6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
+								cm.SendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&a&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" \n&6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
 
 							
 							}else if(timelife >= 21 && timelife <= 40) {
-								cm.SendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&e&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" &6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
+								cm.SendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&e&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" \n&6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
 
 								
 							}else if(timelife >= 1 && timelife <= 20) {
-								cm.SendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&c&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" &6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
+								cm.SendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&c&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" \n&6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
 
 								
 							}
@@ -1358,6 +1368,16 @@ public class EventRandoms implements Listener{
 		
 		@EventHandler
 		public void onExplodeEntity(EntityExplodeEvent e) {
+			
+				//
+				Entity ent = e.getEntity();
+				
+				if(ent.getCustomName() != null && ChatColor.stripColor(ent.getCustomName()).equals("Mina Explosiva")
+						|| ChatColor.stripColor(ent.getCustomName()).equals("Ataque Aereo") || ChatColor.stripColor(ent.getCustomName()).equals("TNT")) {
+					e.blockList().clear();
+				}
+				
+				 
 			
 				FileConfiguration config = plugin.getConfig();
 			
@@ -1650,10 +1670,10 @@ public class EventRandoms implements Listener{
 								String map = pl.getMapName();
 				
 								if(entidadhit == player)return;
-								
+								 
 					 			if(!gc.isPvPAllowed(map)) {
 					 				e.setCancelled(true);
-					 				player.sendMessage(ChatColor.RED+"El PVP en el Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no esta Habilitado");
+					 				player.sendTitle("",ChatColor.RED+"El PVP en el Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no esta Habilitado",20,40,20);
 					 	}}
 							return;
 					 }
@@ -2932,10 +2952,11 @@ public class EventRandoms implements Listener{
 	//TODO DOUBLE TO INT
 					
 		public int ConvertDoubleToInt(double damage) {
+			
 			NumberFormat nf = NumberFormat.getInstance();
 			nf.setMaximumFractionDigits(0);
-			
-			return Integer.parseInt(nf.format(damage));
+			nf.setGroupingUsed(false);
+			return TransformPosOrNeg(Integer.parseInt(nf.format(damage)));
 		}
 		
 					
@@ -3237,13 +3258,13 @@ public class EventRandoms implements Listener{
 					return;
 
 				}else if(r.getType() == Material.AIR) {
-					System.out.println("BOOM");
+					//System.out.println("BOOM");
 					//player.getWorld().createExplosion(r2.getLocation(), 15, false, false);
 					TNTPrimed ptnt = (TNTPrimed) player.getWorld().spawnEntity(r2.getLocation().add(0.5,0,0.5),EntityType.TNT);
 					ptnt.setFuseTicks(0);
 					ptnt.setCustomName(ChatColor.DARK_PURPLE+"Mina Explosiva");
 					ptnt.setYield(5);
-					ptnt.setIsIncendiary(true);
+					//ptnt.setIsIncendiary(true);
 				
 				
 					
