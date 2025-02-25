@@ -126,7 +126,7 @@ public class GameIntoMap {
 					pl.getGamePoints().setHelpRevive(pl.getGamePoints().getHelpRevive()+1);
 					
 					PlayerInfo targetrevive = plugin.getPlayerInfoPoo().get(target);
-					targetrevive.getGamePoints().setRevive(targetrevive.getGamePoints().getRevive()+1);
+					targetrevive.getGamePoints().setRevive(targetrevive.getGamePoints().getRevive()+10);
 					
 					
 					if(!deaths.isEmpty()) {
@@ -175,13 +175,26 @@ public class GameIntoMap {
 			GameAdventure ga = (GameAdventure) gm;
 			List<String> vivo = ga.getAlivePlayers();
 			List<String> deaths = ga.getDeadPlayers();
-			
 			List<String> knocked = ga.getKnockedPlayers();
 			
 			if(knocked.contains(name)) {
 				
 				RevivePlayer rp = plugin.getKnockedPlayer().get(target);
 				rp.setReviveStatus(ReviveStatus.REVIVED);
+				
+				if(player != null) {
+					target.sendTitle(ChatColor.GREEN+"Fuiste Revivido",ChatColor.GREEN+"por: "+ChatColor.YELLOW+player.getName(),20,60,20);
+					target.sendMessage(ChatColor.WHITE+"Fuiste Revivido por: "+ChatColor.GREEN+player.getName());
+					cm.sendMessageToUserAndConsole(player,ChatColor.GREEN+"Reviviste a: "+ChatColor.GOLD+target.getName());
+					cm.sendMessageToUsersOfSameMapLessTwoPlayers(player,target,ChatColor.GOLD+player.getName()+ChatColor.GREEN+" Revivio a "+ChatColor.WHITE+target.getName());
+				}else {
+					target.sendTitle(ChatColor.GREEN+"Fuiste Revivido",ChatColor.GREEN+"por: "+ChatColor.YELLOW+"Consola",20,60,20);
+					target.sendMessage(ChatColor.WHITE+"Fuiste Revivido por: "+ChatColor.GREEN+"Consola");
+					cm.sendMessageToUserAndConsole(null,ChatColor.GREEN+"Reviviste a: "+ChatColor.GOLD+target.getName());
+					cm.sendMessageToUsersOfSameMapLessTwoPlayers(null,target,ChatColor.GOLD+"Consola"+ChatColor.GREEN+" Revivio a "+ChatColor.WHITE+target.getName());
+
+				}
+				
 				return;
 			}
 			
@@ -596,7 +609,7 @@ public class GameIntoMap {
 		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+" Muertes : "+ChatColor.YELLOW+ChatColor.BOLD+puntos2);
 		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+" Revivido : "+ChatColor.YELLOW+ChatColor.BOLD+puntos3);
 		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+" Ayudas a Revivir : "+ChatColor.YELLOW+ChatColor.BOLD+puntos4);
-		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+" Daño : "+ChatColor.YELLOW+ChatColor.BOLD+TransformPosOrNeg(puntos5));
+		player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+" Daño : "+ChatColor.YELLOW+ChatColor.BOLD+puntos5);
 		
 	}
 	

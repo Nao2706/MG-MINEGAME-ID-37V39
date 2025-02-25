@@ -110,5 +110,18 @@ public class Utils {
 		}
 		
 		
-		
+		public static String pingLevel(int ping) {
+			String text = "";
+			if(ping <= 150) {
+				text = ""+org.bukkit.ChatColor.GREEN+ping+"ms es Bueno";
+			}else if(ping >= 151 && ping <= 250) {
+				text = ""+org.bukkit.ChatColor.YELLOW+ping+"ms es Medio";
+			}else if(ping >= 151 && ping <= 250) {
+				text = ""+org.bukkit.ChatColor.RED+ping+"ms es Malo";
+			}else if(ping >= 251) {
+				text = ""+org.bukkit.ChatColor.DARK_RED+ping+"ms es Peor";
+			}
+			
+			return text;
+		}
 }

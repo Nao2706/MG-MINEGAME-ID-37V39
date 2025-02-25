@@ -207,9 +207,11 @@ public class GameConditions {
 		GameAdventure ga = (GameAdventure) plugin.getGameInfoPoo().get(pl.getMapName());
 		if(CanJoinWithYourInventory(pl.getMapName()) && !ga.getSpectators().contains(player.getName())) {
 			
+			//si estas muerto te puedes ir
 			if(ga.getDeadPlayers().contains(player.getName())) {
 				mgLeaveOfTheGame(player);
 			}else{
+				//salir solo si debajo hay un structure block (posible cambio por un cuboid zone a future)
 				Block block = player.getLocation().getBlock();
 				Block b = block.getRelative(0, -2, 0);
 				if(b.getType() != Material.STRUCTURE_BLOCK) {
@@ -1032,7 +1034,7 @@ public class GameConditions {
 			
 				    List<Entity> entities = new ArrayList<>();
 					      
-					    
+					     
 			    	GameAdventure ga = new GameAdventure();
 			    	ga.setMapName(map);
 			    	ga.setTimeMg(time);
@@ -1052,6 +1054,8 @@ public class GameConditions {
 			    	ga.setPvpinMap(isPvPAllowed(map));
 			    	ga.setGameTime(loadMapGameTime(map, time)); 
 			    	ga.setCountDownStart(loadCountdownMap());
+			    	ga.setBarriersinMap(hasBarriersMap(map));
+			    	 
 			    	
 			    	System.out.println("LOG-1 MISION: "+ga.ShowGame());
 					
@@ -1177,7 +1181,8 @@ public class GameConditions {
     	gi.setGenerators(loadMapGenerators(map));
     	gi.setMobsGenerators(loadMapMobsGenerators(map));
     	gi.setPvpinMap(isPvPAllowed(map));
-    	gi.setGameTime(loadMapGameTime(map, gi.getTimeMg())); 
+    	gi.setGameTime(loadMapGameTime(map, gi.getTimeMg()));
+    	gi.setBarriersinMap(hasBarriersMap(map));
 	}
 	
 	public boolean isPlayerKnocked(Player player) {
@@ -1208,10 +1213,15 @@ public class GameConditions {
 		return config.getInt("Item-Spawn-Range");
 	}
 	
-	public boolean hasAntiVoid(Player player ) {
+	public boolean hasAntiVoid(Player player) {
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		FileConfiguration game = getGameConfig(pl.getMapName());
 		return game.getBoolean("Anti-Void");
+	}
+	
+	public boolean hasBarriersMap(String map) {
+		FileConfiguration game = getGameConfig(map);
+		return game.getBoolean("Map-hasBarriers");
 	}
 	
 	public void SetHeartsInGame(Player player , String map) {
@@ -3103,7 +3113,7 @@ public class GameConditions {
 					String coord1 = split[0];
 					String coord2 = split[1];
 					String status = split[2];
-					System.out.println(coord1+" "+coord2+" "+status);
+					//System.out.println(coord1+" "+coord2+" "+status);
 					
 					zones.add(new CuboidZone(convertStringLocationToLocations(coord1),convertStringLocationToLocations(coord2),convertStringToGameInteractions(status)));
 				}

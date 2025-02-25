@@ -22,6 +22,7 @@ import org.bukkit.util.Vector;
 
 import me.nao.enums.Items;
 import me.nao.general.info.GameConditions;
+import me.nao.general.info.GameInfo;
 import me.nao.main.mg.Minegame;
 
 
@@ -39,36 +40,69 @@ public class FlareActions {
 		
 		GameConditions gc = new GameConditions(plugin);
 		String map = plugin.getPlayerInfoPoo().get(player).getMapName();
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
+		
 		
 		Location loc = l;
 		
-		Block b = isOutside(loc).getBlock();
+		Block b = isOutside(loc,gi).getBlock();
 		//System.out.println("top es "+b.getType()+" loc: "+loc);
-		if(b.getType() == Material.BARRIER) {
-			gc.sendMessageToAllPlayersInMap(map,""+ChatColor.RED+ChatColor.BOLD+"AC 130: "+ChatColor.GREEN+"Paquete de ayuda solicitado por "+ChatColor.GOLD+player.getName()+ChatColor.GREEN+" suerte.");
+		
+		if(gi.hasBarriersinMap()) {
+			if(b.getType() == Material.BARRIER) {
+				gc.sendMessageToAllPlayersInMap(map,""+ChatColor.RED+ChatColor.BOLD+"AC 130: "+ChatColor.GREEN+"Paquete de ayuda solicitado por "+ChatColor.GOLD+player.getName()+ChatColor.GREEN+" suerte.");
 
-			StorageMinecart ent = (StorageMinecart) b.getWorld().spawnEntity(b.getLocation().add(0.5, -3, 0.5), EntityType.CHEST_MINECART);
-			ent.setCustomName(""+ChatColor.GREEN+ChatColor.BOLD+"PAQUETE DE AYUDA");
-			ent.setCustomNameVisible(true);		
-			ent.getLocation().setYaw(player.getLocation().getYaw());
-			
-			Vector v = player.getLocation().toVector().subtract(ent.getLocation().toVector());
-			Location en = ent.getLocation();
-			en.setDirection(v);
-			ent.teleport(en);
-			
-			//for(int i = 0 ; i <27;i++) {
-			 ItemStack[] items = LootItems().stream().toArray(ItemStack[] :: new);
-			
-			ent.getInventory().setContents(items);
-			return;
-			
+				StorageMinecart ent = (StorageMinecart) b.getWorld().spawnEntity(b.getLocation().add(0.5, -3, 0.5), EntityType.CHEST_MINECART);
+				ent.setCustomName(""+ChatColor.GREEN+ChatColor.BOLD+"PAQUETE DE AYUDA");
+				ent.setCustomNameVisible(true);		
+				ent.getLocation().setYaw(player.getLocation().getYaw());
+				
+				Vector v = player.getLocation().toVector().subtract(ent.getLocation().toVector());
+				Location en = ent.getLocation();
+				en.setDirection(v);
+				ent.teleport(en);
+				
+				//for(int i = 0 ; i <27;i++) {
+				 ItemStack[] items = lootItems().stream().toArray(ItemStack[] :: new);
+				
+				ent.getInventory().setContents(items);
+				return;
+				
+			}else {
+				player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"AC 130: "+ChatColor.YELLOW+"No podemos ver tu bengala lanza otra donde podamos verla.");
+				l.getWorld().dropItem(l, Items.BENGALAVERDEP.getValue());
+				//System.out.println("No hay Barriers");
+				return;
+			}
 		}else {
-			player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"AC 130: "+ChatColor.YELLOW+"No podemos ver tu bengala lanza otra donde podamos verla.");
-			l.getWorld().dropItem(l, Items.BENGALAVERDEP.getValue());
-			//System.out.println("No hay Barriers");
-			return;
+			if(b.getType() == Material.AIR) {
+				gc.sendMessageToAllPlayersInMap(map,""+ChatColor.RED+ChatColor.BOLD+"AC 130: "+ChatColor.GREEN+"Paquete de ayuda solicitado por "+ChatColor.GOLD+player.getName()+ChatColor.GREEN+" suerte.");
+
+				StorageMinecart ent = (StorageMinecart) b.getWorld().spawnEntity(b.getLocation().add(0.5, -3, 0.5), EntityType.CHEST_MINECART);
+				ent.setCustomName(""+ChatColor.GREEN+ChatColor.BOLD+"PAQUETE DE AYUDA");
+				ent.setCustomNameVisible(true);		
+				ent.getLocation().setYaw(player.getLocation().getYaw());
+				
+				Vector v = player.getLocation().toVector().subtract(ent.getLocation().toVector());
+				Location en = ent.getLocation();
+				en.setDirection(v);
+				ent.teleport(en);
+				
+				//for(int i = 0 ; i <27;i++) {
+				 ItemStack[] items = lootItems().stream().toArray(ItemStack[] :: new);
+				
+				ent.getInventory().setContents(items);
+				return;
+				
+			}else {
+				player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"AC 130: "+ChatColor.YELLOW+"No podemos ver tu bengala lanza otra donde podamos verla.");
+				l.getWorld().dropItem(l, Items.BENGALAVERDEP.getValue());
+				//System.out.println("No hay Barriers");
+				return;
+			}
 		}
+		
+	
 		
 	
 		
@@ -78,37 +112,64 @@ public class FlareActions {
 		
 		GameConditions gc = new GameConditions(plugin);
 		String map = plugin.getPlayerInfoPoo().get(player).getMapName();
-		
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
 		Location loc = l;
 		
 	
-		Block b = isOutside(loc).getBlock();
+		Block b = isOutside(loc,gi).getBlock();
 		//System.out.println("top es "+b.getType()+" loc: "+loc);
 		
-		if(b.getType() == Material.BARRIER) {
-			gc.sendMessageToAllPlayersInMap(map,""+ChatColor.RED+ChatColor.BOLD+"A10 WARTHOG: "+ChatColor.GREEN+"Ataque Aereo Solicitado por "+ChatColor.GOLD+player.getName()+ChatColor.GREEN+" en Camino.");
+		if(gi.hasBarriersinMap()) {
+			if(b.getType() == Material.BARRIER) {
+				gc.sendMessageToAllPlayersInMap(map,""+ChatColor.RED+ChatColor.BOLD+"A10 WARTHOG: "+ChatColor.GREEN+"Ataque Aereo Solicitado por "+ChatColor.GOLD+player.getName()+ChatColor.GREEN+" en Camino.");
 
-			Entity fb = b.getWorld().spawnEntity(b.getLocation().add(0.5, -1, 0.5), EntityType.FIREBALL);
-			//fb.setCustomName("Mortero");
-			
-			Fireball f = (Fireball) fb;
-			f.setYield(10);
-			f.setShooter(null);
-			f.setCustomName(""+ChatColor.RED+ChatColor.BOLD+"Ataque Aereo");
-			f.setDirection(new Vector (0,-3,0));
-			f.setVelocity(f.getAcceleration().multiply(3));
-			return;
-			//((Fireball) fb).setShooter(player);
+				Entity fb = b.getWorld().spawnEntity(b.getLocation().add(0.5, -1, 0.5), EntityType.FIREBALL);
+				//fb.setCustomName("Mortero");
+				
+				Fireball f = (Fireball) fb;
+				f.setYield(10);
+				f.setShooter(null);
+				f.setCustomName(""+ChatColor.RED+ChatColor.BOLD+"Ataque Aereo");
+				f.setDirection(new Vector (0,-3,0));
+				f.setVelocity(f.getAcceleration().multiply(3));
+				return;
+				//((Fireball) fb).setShooter(player);
+			}else {
+				player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"A10 WARTHOG: "+ChatColor.YELLOW+"No podemos ver tu bengala lanza otra donde podamos verla.");
+				l.getWorld().dropItem(l, Items.BENGALAROJAP.getValue());
+				return;
+				//System.out.println("No hay Barriers2");
+			}
 		}else {
-			player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"A10 WARTHOG: "+ChatColor.YELLOW+"No podemos ver tu bengala lanza otra donde podamos verla.");
-			l.getWorld().dropItem(l, Items.BENGALAROJAP.getValue());
-			return;
-			//System.out.println("No hay Barriers2");
+			if(b.getType() == Material.AIR) {
+				gc.sendMessageToAllPlayersInMap(map,""+ChatColor.RED+ChatColor.BOLD+"A10 WARTHOG: "+ChatColor.GREEN+"Ataque Aereo Solicitado por "+ChatColor.GOLD+player.getName()+ChatColor.GREEN+" en Camino.");
+
+				Entity fb = b.getWorld().spawnEntity(b.getLocation().add(0.5, -1, 0.5), EntityType.FIREBALL);
+				//fb.setCustomName("Mortero");
+				
+				Fireball f = (Fireball) fb;
+				f.setYield(10);
+				f.setShooter(null);
+				f.setCustomName(""+ChatColor.RED+ChatColor.BOLD+"Ataque Aereo");
+				f.setDirection(new Vector (0,-3,0));
+				f.setVelocity(f.getAcceleration().multiply(3));
+				return;
+			}else {
+				player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"A10 WARTHOG: "+ChatColor.YELLOW+"No podemos ver tu bengala lanza otra donde podamos verla.");
+				l.getWorld().dropItem(l, Items.BENGALAROJAP.getValue());
+				return;
+				//System.out.println("No hay Barriers2");
+			}
 		}
+		
+		
+		
+		
+		
 		
 	}
 	
-	private List<ItemStack> LootItems() {
+	private List<ItemStack> lootItems() {
 	
 		List<ItemStack> l = new ArrayList<>();
 		
@@ -132,6 +193,8 @@ public class FlareActions {
 		l.add(ChanceItemStack(45,Items.BENGALAROJAP.getValue()));
 		l.add(ChanceItemStack(45,Items.BENGALAVERDEP.getValue()));
 		l.add(ChanceItemStack(45,Items.DEADBOWP.getValue()));
+		l.add(ChanceItemStack(45,Items.BENGALAMARCADORAP.getValue()));
+		l.add(ChanceItemStack(45,Items.ARCOENCAN1P.getValue()));
 		Collections.shuffle(l);
 		
 		return l;
@@ -186,21 +249,43 @@ public class FlareActions {
 //		  System.out.println("Random probabilidad "+number);
 //	  }
 //	  
-	  public Location isOutside(Location l) {
+	  public Location isOutside(Location l,GameInfo gi) {
 		  
 		  Location loc = l;
 		
-		  int y = loc.getBlockY();
-		  while(y < 320) {
-			  if(new Location(loc.getWorld(),loc.getX(),y,loc.getZ()).getBlock().getType() == Material.BARRIER) {
-				  return new Location(loc.getWorld(),loc.getX(),y,loc.getZ());
-				  
-			  }else if(new Location(loc.getWorld(),loc.getX(),y,loc.getZ()).getBlock().getType() != Material.AIR) {
-				  return new Location(loc.getWorld(),loc.getX(),y,loc.getZ());
-				  
+		  
+		  if(gi.hasBarriersinMap()) {
+			  int y = loc.getBlockY();
+			  while(y < 320) {
+				  if(new Location(loc.getWorld(),loc.getX(),y,loc.getZ()).getBlock().getType() == Material.BARRIER) {
+					  return new Location(loc.getWorld(),loc.getX(),y,loc.getZ());
+					  
+				  }//else if(new Location(loc.getWorld(),loc.getX(),y,loc.getZ()).getBlock().getType() != Material.AIR) {
+				  else if(!(new Location(loc.getWorld(),loc.getX(),y,loc.getZ()).getBlock().isPassable())) {
+						
+					  return new Location(loc.getWorld(),loc.getX(),y,loc.getZ());
+					  
+				  }
+				  y++;
 			  }
-			  y++;
+		  }else {
+			  int y = loc.getBlockY();
+			  int start = 0;
+			  while(start < 51) {
+				  
+				  if(start == 50) {
+					  return new Location(loc.getWorld(),loc.getX(),y,loc.getZ()); 
+				  }else if(!(new Location(loc.getWorld(),loc.getX(),y,loc.getZ()).getBlock().isPassable())) {
+					
+					  return new Location(loc.getWorld(),loc.getX(),y,loc.getZ());
+					  
+				  }
+				  y++;
+				  start++;
+			  }
 		  }
+		  
+		
 		  return l;
 		
 	  }

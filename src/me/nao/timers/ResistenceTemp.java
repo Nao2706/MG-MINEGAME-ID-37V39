@@ -34,6 +34,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.Vindicator;
 import org.bukkit.entity.Witch;
 import org.bukkit.entity.Arrow;
@@ -239,6 +240,7 @@ public class ResistenceTemp {
 						 // getNearbyBlocks3(players);
 						  mobLocation(players);
 						  spawnOres(players);
+						  moblandmine(players);
 						  
 						  if(anuncios >= 0 && anuncios <= 5) {
 							  sco.ShowObjetives(players,1);
@@ -1315,7 +1317,25 @@ public class ResistenceTemp {
     	return;
     }
 
-
+    public void moblandmine(Player player) {
+    	List<Entity> l = getNearbyEntities(player.getLocation(),150);
+    	
+    	if(!l.isEmpty()) {
+    		for(Entity e : l) {
+    			if(e instanceof LivingEntity && !(e instanceof Player)) {
+    				Block block = e.getLocation().getBlock();
+    				Block r = block.getRelative(0, 0, 0);
+    				if(r.getType() == Material.HEAVY_WEIGHTED_PRESSURE_PLATE || r.getType() == Material.LIGHT_WEIGHTED_PRESSURE_PLATE) {
+    					TNTPrimed ptnt = (TNTPrimed) player.getWorld().spawnEntity(e.getLocation().add(0.5,0,0.5),EntityType.TNT);
+    					ptnt.setFuseTicks(0);
+    					ptnt.setCustomName(ChatColor.DARK_PURPLE+"Mina Explosiva");
+    					ptnt.setYield(5);
+    					ptnt.setIsIncendiary(true);
+    				}
+    			}
+    		}
+    	}
+    }
     
 	public List<Entity> getNearbyEntities(Location l , int size){
 			

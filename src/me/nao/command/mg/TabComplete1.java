@@ -83,6 +83,9 @@ public class TabComplete1 implements TabCompleter{
 			arguments.add("set-scale");
 			arguments.add("reportlogs");
 			arguments.add("invite");
+			arguments.add("addtag");
+			arguments.add("removetag");
+			arguments.add("showtags");
 		
 			
 		}
@@ -111,6 +114,26 @@ public class TabComplete1 implements TabCompleter{
 							}
 						
 						}
+						return result;
+					} 
+					
+					if(args[0].equalsIgnoreCase("getInv")) {
+						FileConfiguration invs = plugin.getInventorysYaml();
+						List<String> result = new ArrayList<String>();
+						if(invs.contains("Inventory")) {
+							for (String key : invs.getConfigurationSection("Inventory").getKeys(false)) {
+								if(args.length == 2) {
+									if(key.toLowerCase().startsWith(args[1].toLowerCase())) 
+										result.add(key);
+								}
+							}
+						}
+						
+						if(result.isEmpty()) {
+							result.add("Ningun Kit");	
+						}
+						
+		
 						return result;
 					} 
 				
