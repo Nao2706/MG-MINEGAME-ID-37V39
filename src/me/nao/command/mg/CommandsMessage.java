@@ -1,11 +1,13 @@
 package me.nao.command.mg;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import me.nao.enums.GameStatus;
-import me.nao.general.info.GameConditions;
-import me.nao.general.info.GameInfo;
+import me.nao.enums.mg.GameStatus;
+import me.nao.generalinfo.mg.GameConditions;
+import me.nao.generalinfo.mg.GameInfo;
 import me.nao.main.mg.Minegame;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -151,7 +153,7 @@ public class CommandsMessage {
 		}
 		
 		TextComponent m1 = new TextComponent();
-		m1.setText(""+ChatColor.DARK_PURPLE+ChatColor.MAGIC+"[]"+ChatColor.AQUA+"        [Click para Jugar]        "+ChatColor.DARK_PURPLE+ChatColor.MAGIC+"[]");
+		m1.setText(""+ChatColor.DARK_PURPLE+ChatColor.MAGIC+"[]"+ChatColor.AQUA+ChatColor.BOLD+"        [Click para Jugar]        "+ChatColor.DARK_PURPLE+ChatColor.MAGIC+"[]");
 		m1.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,new ComponentBuilder("(Clickeame para Jugar.)").color(ChatColor.GOLD).create()));
 	    m1.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/mg join "+map));
 		
@@ -240,6 +242,56 @@ public class CommandsMessage {
 	}
 	
 
+	
+	@SuppressWarnings("deprecation")
+	public void infoPrestige(Player player) {
+		
+		FileConfiguration points = plugin.getPoints();
+		
+		if(!points.contains("Players."+player.getName())) {
+			player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"!!! NOTIFICACION !!!");
+			player.sendMessage(ChatColor.GRAY+"Este Comando es solo para Jugadores de Nivel 360");
+			player.sendMessage(ChatColor.GRAY+"Tu nivel es: "+ChatColor.RED+0);
+			player.sendMessage(ChatColor.GRAY+"Sube de Nivel Rapido para poder Usarlo.");
+			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 100,1);
+			return;
+		}
+		
+		
+		int savelvl = points.getInt("Players."+player.getName()+".Level");
+		int prestige = points.getInt("Players."+player.getName()+".Prestige");
+		
+		if(savelvl != 360) {
+			player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"!!! NOTIFICACION !!!");
+			player.sendMessage(ChatColor.GRAY+"Este Comando es solo para Jugadores de Nivel 360");
+			player.sendMessage(ChatColor.GRAY+"Tu nivel es: "+ChatColor.GREEN+savelvl);
+			player.sendMessage(ChatColor.GRAY+"Sube de Nivel Rapido para poder Usarlo.");
+			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 100,1);
+			return;
+		}if(savelvl == 360 && prestige == 10) {
+			player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"!!! MAXIMO NIVEL ALCANZADO !!!");
+			player.sendMessage(ChatColor.GRAY+"Ya has alcanzado el Nivel Maximo.");
+			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 100,1);
+			
+			return;
+		}
+		
+		
+		
+		
+		TextComponent m1 = new TextComponent();
+		m1.setText(""+ChatColor.GOLD+ChatColor.BOLD+">>>>>"+ChatColor.GREEN+ChatColor.BOLD+"        [SUBIR DE PRESTIGIO]        "+ChatColor.GOLD+ChatColor.BOLD+"<<<<<");
+		m1.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,new ComponentBuilder("(Clickeame para Subir)").color(ChatColor.DARK_PURPLE).create()));
+	    m1.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/mg upgradeprestige"));
+	    player.sendMessage("");
+		player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"!!! NOTIFICACION !!!");
+		player.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.GRAY+" Felicidades has alcanzado el Nivel Maximo "+ChatColor.RED+"360.LVL");
+		player.sendMessage(ChatColor.GRAY+"Tienes la Oportunidad de Subir de Prestigio, esto Reiniciara tus Niveles.");
+		player.sendMessage(ChatColor.GRAY+"Pero puede que encuentres Cosas nuevas.");
+		player.spigot().sendMessage(m1);
+		player.sendMessage("");
+		return;
+	}
 
 
 }

@@ -20,19 +20,19 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
 
-import me.nao.command.mg.Comandos;
-import me.nao.command.mg.TabComplete1;
-import me.nao.database.ConexionMySQL;
-import me.nao.database.SQLInfo;
+import me.nao.command.mg.Comandsmg;
+import me.nao.command.mg.TabCompletemg;
+import me.nao.database.mg.ConexionMySQL;
+import me.nao.database.mg.SQLInfo;
 import me.nao.events.mg.EventRandoms;
 import me.nao.events.mg.SourceOfDamage;
-import me.nao.general.info.GameConditions;
-import me.nao.general.info.GameInfo;
-import me.nao.general.info.PlayerInfo;
-import me.nao.revive.RevivePlayer;
+import me.nao.generalinfo.mg.GameConditions;
+import me.nao.generalinfo.mg.GameInfo;
+import me.nao.generalinfo.mg.PlayerInfo;
+import me.nao.revive.mg.RevivePlayer;
 import me.nao.shop.mg.MinigameShop1;
+import me.nao.topusers.mg.PHMiniGame;
 import me.nao.yamlfile.mg.YamlFile;
-import me.top.users.mg.PHMiniGame;
 
 
 
@@ -296,8 +296,8 @@ public class Minegame extends JavaPlugin{
  
    public void registrarcomando() {
 		
-		this.getCommand("minegame").setExecutor(new Comandos(this));
-		this.getCommand("minegame").setTabCompleter(new TabComplete1(this));
+		this.getCommand("minegame").setExecutor(new Comandsmg(this));
+		this.getCommand("minegame").setTabCompleter(new TabCompletemg(this));
 		//this.getCommand("mg").setTabCompleter(new TabComplete2(this));
 		
 		

@@ -35,20 +35,20 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import com.google.common.base.Strings;
 
-import me.nao.enums.GameStatus;
-import me.nao.enums.Items;
-import me.nao.enums.ObjetiveStatusType;
-import me.nao.enums.Posion;
-import me.nao.general.info.GameAdventure;
-import me.nao.general.info.GameConditions;
-import me.nao.general.info.GameInfo;
-import me.nao.general.info.GameObjetivesMG;
-import me.nao.general.info.ObjetivesMG;
-import me.nao.general.info.PlayerInfo;
+import me.nao.enums.mg.GameStatus;
+import me.nao.enums.mg.Items;
+import me.nao.enums.mg.ObjetiveStatusType;
+import me.nao.enums.mg.Posion;
+import me.nao.generalinfo.mg.GameAdventure;
+import me.nao.generalinfo.mg.GameConditions;
+import me.nao.generalinfo.mg.GameInfo;
+import me.nao.generalinfo.mg.GameObjetivesMG;
+import me.nao.generalinfo.mg.ObjetivesMG;
+import me.nao.generalinfo.mg.PlayerInfo;
 import me.nao.main.mg.Minegame;
-import me.nao.manager.MapSettings;
+import me.nao.manager.mg.GameIntoMap;
+import me.nao.manager.mg.MapSettings;
 import me.nao.yamlfile.mg.YamlFilePlus;
-import me.nao.manager.GameIntoMap;
 
 
 

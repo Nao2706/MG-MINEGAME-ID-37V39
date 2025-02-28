@@ -105,22 +105,21 @@ import org.bukkit.util.Vector;
 
 import com.google.common.base.Strings;
 
-import me.nao.cosmetics.fireworks.RankPlayer;
-import me.nao.enums.GameInteractions;
-import me.nao.enums.GameStatus;
-import me.nao.enums.Items;
-import me.nao.enums.ReviveStatus;
-import me.nao.flare.actions.Flare;
-import me.nao.general.info.GameInfo;
-import me.nao.general.info.CuboidZone;
-//import me.nao.general.info.GameNexo;
-import me.nao.general.info.GameAdventure;
-import me.nao.general.info.GameConditions;
-import me.nao.general.info.PlayerInfo;
+import me.nao.cosmetics.mg.RankPlayer;
+import me.nao.enums.mg.GameInteractions;
+import me.nao.enums.mg.GameStatus;
+import me.nao.enums.mg.Items;
+import me.nao.enums.mg.ReviveStatus;
+import me.nao.flareactions.mg.Flare;
+import me.nao.generalinfo.mg.CuboidZone;
+import me.nao.generalinfo.mg.GameAdventure;
+import me.nao.generalinfo.mg.GameConditions;
+import me.nao.generalinfo.mg.GameInfo;
+import me.nao.generalinfo.mg.PlayerInfo;
 import me.nao.main.mg.Minegame;
-import me.nao.manager.GameIntoMap;
-import me.nao.mobs.MobsActions;
-import me.nao.revive.RevivePlayer;
+import me.nao.manager.mg.GameIntoMap;
+import me.nao.mobs.mg.MobsActions;
+import me.nao.revive.mg.RevivePlayer;
 import me.nao.shop.mg.MinigameShop1;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -1372,9 +1371,14 @@ public class EventRandoms implements Listener{
 				//
 				Entity ent = e.getEntity();
 				
-				if(ent.getCustomName() != null && ChatColor.stripColor(ent.getCustomName()).equals("Mina Explosiva")
-						|| ChatColor.stripColor(ent.getCustomName()).equals("Ataque Aereo") || ChatColor.stripColor(ent.getCustomName()).equals("TNT")) {
-					e.blockList().clear();
+				if(ent.getCustomName() != null ){
+					if(ChatColor.stripColor(ent.getCustomName()).equals("Mina Explosiva")
+						|| ChatColor.stripColor(ent.getCustomName()).equals("Ataque Aereo") 
+						|| ChatColor.stripColor(ent.getCustomName()).equals("TNT")
+						|| ChatColor.stripColor(ent.getCustomName()).equals("Suicida")) {
+					   e.blockList().clear();
+					  return;
+					}
 				}
 				
 				 

@@ -65,7 +65,7 @@ public class YamlFile extends YamlConfiguration {
  
     public void save() {
     	
-    	Bukkit.getConsoleSender().sendMessage(this.fileName+" tesssst");
+    	//Bukkit.getConsoleSender().sendMessage(this.fileName+" tesssst");
     	 File folder = this.plugin.getDataFolder();
         if (folder == null) {
             folder = this.plugin.getDataFolder();
@@ -89,7 +89,7 @@ public class YamlFile extends YamlConfiguration {
         		// Bukkit.getConsoleSender().sendMessage(file.getName()+"ggif1");
         	}
         	else{
-        		Bukkit.getConsoleSender().sendMessage(file.getName()+"gg5else");
+        		//Bukkit.getConsoleSender().sendMessage(file.getName()+"gg5else");
             for(int i =0; i < nombre_archivos.length;i++) {
               	 File file2 = new File(folder.getAbsolutePath(), nombre_archivos[i]);
               	 if(file2.isDirectory()) {
