@@ -4,11 +4,13 @@ package me.nao.command.mg;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -132,7 +134,20 @@ public class Comandsmg implements CommandExecutor{
 						}
 						
 					return true;
-				}else if(args[0].equalsIgnoreCase("reportlogs")) {
+				}else if(args[0].equalsIgnoreCase("time")) {
+        			FileConfiguration config = plugin.getConfig();
+        			String country = config.getString("Country-Time","Unknow");
+              		LocalDateTime lt = LocalDateTime.now();
+              		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss a",Locale.ENGLISH);
+              		
+              		Bukkit.getConsoleSender().sendMessage("");
+              		Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"La Fecha es del Pais: "+ChatColor.GRAY+country);
+              		Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+"Fecha Actual del Servidor: "+ChatColor.GREEN+lt.format(formatter));
+              		Bukkit.getConsoleSender().sendMessage("");
+          			
+          			return true;
+          			
+          		}else if(args[0].equalsIgnoreCase("reportlogs")) {
 					 //mg reportlogs nao 1
 					
 					if(args.length == 2) {
@@ -632,9 +647,11 @@ public class Comandsmg implements CommandExecutor{
 	        				
 	        				int value = Integer.valueOf(args[1]);
 	        				
-	        				if(value <= 359) {
+	        				int nextlvl = value + 1;
+	        				
+	        				if(value <= 359 && value >= 0) {
 	        					PointsManager pm = new PointsManager(plugin);
-	        					Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor("&c-&6El Nivel 6a"+value+" &6requiere de &a"+pm.xpPerLvl(1000, (1 + 2 / 100.0), value)+" &6XP para el &fNivel: &5"+(value+1)));
+	        					Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor("&c-&6El Nivel &a"+value+" &6requiere de &a"+pm.xpPerLvl(1000, (1 + 2 / 100.0), value)+" &6XP para el &fNivel: &5"+nextlvl));
 	        				}else {
 	        					Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Solo hay 360 niveles.");
 	        				}
@@ -2178,10 +2195,11 @@ public class Comandsmg implements CommandExecutor{
         			if(args.length == 2) {
         				
         				int value = Integer.valueOf(args[1]);
+        				int nextlvl = value + 1;
         				
-        				if(value <= 359) {
+        				if(value <= 359 && value >= 0) {
         					PointsManager pm = new PointsManager(plugin);
-              				player.sendMessage(Utils.colorTextChatColor("&c-&6El Nivel 6a"+value+" &6requiere de &a"+pm.xpPerLvl(1000, (1 + 2 / 100.0), value)+" &6XP para el &fNivel: &5"+(value+1)));
+        					player.sendMessage(Utils.colorTextChatColor("&c-&6El Nivel &a"+value+" &6requiere de &a"+pm.xpPerLvl(1000, (1 + 2 / 100.0), value)+" &6XP para el &fNivel: &5"+nextlvl));
         				}else {
         					player.sendMessage(ChatColor.GREEN+"Solo hay 360 niveles.");
         				}
@@ -2195,10 +2213,14 @@ public class Comandsmg implements CommandExecutor{
         			return true;
         			
         		}else if(args[0].equalsIgnoreCase("time")) {
-              	
-              		LocalDateTime lt = gc.AddOrRemoveMg();
-          			player.sendMessage(TimeR(lt));
-          			
+        			FileConfiguration config = plugin.getConfig();
+        			String country = config.getString("Country-Time");
+              		LocalDateTime lt = LocalDateTime.now();
+              		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss a",Locale.ENGLISH);
+              		player.sendMessage("");
+              		player.sendMessage(ChatColor.RED+"La Fecha es del Pais: "+ChatColor.GRAY+country);
+          			player.sendMessage(ChatColor.GOLD+"Fecha Actual del Servidor: "+ChatColor.GREEN+lt.format(formatter));
+          			player.sendMessage("");
           			return true;
           			
           		}else if (args[0].equalsIgnoreCase("ride")) {
@@ -4046,28 +4068,9 @@ public class Comandsmg implements CommandExecutor{
 			
 		player.sendMessage(ChatColor.GREEN+"Obtuviste la clase "+ChatColor.RED+name);
 	}
-
-	public String TimeR(LocalDateTime t) {
-		if(t.getHour() < 10) {
-			if(t.getMinute() < 10) {
-				return ChatColor.GOLD+"Fecha: "+ChatColor.GREEN+t.getDayOfMonth()+"/"+t.getMonth().toString().replace("JANUARY","Enero").replace("FEBRUARY","Febrero").replace("MARCH","Marzo").replace("APRIL","Abril").replace("MAY","Mayo").replace("JUNE","Junio").replace("JULY","Julio").replace("AUGUST","Agosto").replace("SEPTEMBER","Septiembre").replace("OCTOBER","Octubre").replace("NOVEMBER","Noviembre").replace("DECEMBER","Diciembre")+"/"+ t.getYear()  +" 0"+t.getHour()+ ":0"+t.getMinute();
-			}else {
-				return ChatColor.GOLD+"Fecha: "+ChatColor.GREEN+t.getDayOfMonth()+"/"+t.getMonth().toString().replace("JANUARY","Enero").replace("FEBRUARY","Febrero").replace("MARCH","Marzo").replace("APRIL","Abril").replace("MAY","Mayo").replace("JUNE","Junio").replace("JULY","Julio").replace("AUGUST","Agosto").replace("SEPTEMBER","Septiembre").replace("OCTOBER","Octubre").replace("NOVEMBER","Noviembre").replace("DECEMBER","Diciembre")+"/"+ t.getYear()  +" 0"+t.getHour()+ ":"+t.getMinute();
-			}
-			
-		}else {
-			if(t.getMinute() < 10) {
-				return ChatColor.GOLD+"Fecha: "+ChatColor.GREEN+t.getDayOfMonth()+"/"+t.getMonth().toString().replace("JANUARY","Enero").replace("FEBRUARY","Febrero").replace("MARCH","Marzo").replace("APRIL","Abril").replace("MAY","Mayo").replace("JUNE","Junio").replace("JULY","Julio").replace("AUGUST","Agosto").replace("SEPTEMBER","Septiembre").replace("OCTOBER","Octubre").replace("NOVEMBER","Noviembre").replace("DECEMBER","Diciembre")+"/"+ t.getYear()  +" "+t.getHour()+ ":0"+t.getMinute();
-			}else {
-				return ChatColor.GOLD+"Fecha: "+ChatColor.GREEN+t.getDayOfMonth()+"/"+t.getMonth().toString().replace("JANUARY","Enero").replace("FEBRUARY","Febrero").replace("MARCH","Marzo").replace("APRIL","Abril").replace("MAY","Mayo").replace("JUNE","Junio").replace("JULY","Julio").replace("AUGUST","Agosto").replace("SEPTEMBER","Septiembre").replace("OCTOBER","Octubre").replace("NOVEMBER","Noviembre").replace("DECEMBER","Diciembre")+"/"+ t.getYear()  +" "+t.getHour()+ ":"+t.getMinute();
-			}
-			
-		}
-		
-	}
 	
 	
- 	
+ 
  	
  	public ObjetiveStatusType convertStringToObjetiveStatusType(Player player,String text) {
  		ObjetiveStatusType type = null;

@@ -38,11 +38,11 @@ public class CommandsMessage {
 
 		m2.setText(ChatColor.GREEN + " formato 2");
 		m2.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,new ComponentBuilder("Formato con dias mas horas. (Asegurate de colocar los dias y las horas correctamente)").color(ChatColor.GOLD).create()));
-	    m2.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,"Domingo Sabado Viernes 08:35-17:11"));
+	    m2.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,"1)Sabado Viernes 08:35-10:12 2)Sabado Viernes 08:35-10:12,12:35-15:11"));
 	    
 		m3.setText(ChatColor.GREEN + " formato 3");
 		m3.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,new ComponentBuilder("Formato con fecha. (Asegurate de colocar las fecha correctamente)").color(ChatColor.GOLD).create()));
-	    m3.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,"10/01/2023 06:14:00 AM-"));
+	    m3.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,"10/01/2023 06:14:00 AM"));
 		
 		
 	    m4.setText(ChatColor.GREEN + " formato 4");
@@ -54,9 +54,9 @@ public class CommandsMessage {
 		player.spigot().sendMessage(m3);
 		player.spigot().sendMessage(m4);
 	
-		player.sendMessage("- Los dias de la semana siempre llevaran la primera letra en mayuscula.");
+		player.sendMessage("- Asegurate de escribir bien los dias (lunes martes miercolres etc).");
 		player.sendMessage("- Si cambias las horas del formato 2 asegurate que la primera hora sea inferior a la segunda hora.");
-		player.sendMessage("- Si usas el formato 3 no borres el signo ( - ) es similar al formato 4 pero solo usa una fecha");
+		player.sendMessage("- Similar al formato 4 pero solo usa una fecha");
 		player.sendMessage("- Si usas el formato 4 que la primera fecha se inferior a la segunda y revisa bien lo del AM y PM");
 		
 		

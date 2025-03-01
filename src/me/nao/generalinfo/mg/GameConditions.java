@@ -1665,7 +1665,7 @@ public class GameConditions {
 				    		return false;
 				    	}
 		 			 	
-				        if(!PassedTimeMg(player,time)) return false;
+				        if(!elapsedTime(player,time)) return false;
 				 }
 			 		boss.addPlayer(player);
 			 		return true;
@@ -1872,7 +1872,7 @@ public class GameConditions {
 	}
 	
 	
-	public String daysEnglishtoSpanish(String day) {
+	public String daysSpanishtoEnglish(String day) {
 		String text = day.toLowerCase();
 		String english = "";
 		if(text.equals("lunes")) {
@@ -1897,6 +1897,43 @@ public class GameConditions {
 		return english;
 	}
 	
+	
+	public String monthEnglishtoSpanish(String month) {
+		String text = month.toLowerCase();
+		String spanish = "";
+		if(text.equals("JANUARY")) {
+			spanish = "Enero";
+		}else if(text.equals("FEBRUARY")) {
+			spanish = "Febrero";
+		}else if(text.equals("MARCH")) {
+			spanish = "Marzo";
+		}else if(text.equals("APRIL")) {
+			spanish = "Abril";
+		}else if(text.equals("MAY")) {
+			spanish = "Mayo";
+		}else if(text.equals("JUNE")) {
+			spanish = "Junio";
+		}else if(text.equals("JULY")) {
+			spanish = "Julio";
+		}else if(text.equals("AUGUST")) {
+			spanish = "Agosto";
+		}else if(text.equals("SEPTEMBER")) {
+			spanish = "Septiembre";
+		}else if(text.equals("OCTOBER")) {
+			spanish = "Octubre";
+		}else if(text.equals("NOVEMBER")) {
+			spanish = "Noviembre";
+		}else if(text.equals("DECEMBER")) {
+			spanish = "Diciembre";
+		}else {
+			System.out.println("LOG-1 ENGLISH-SPANISH el mes "+month+" esta mal escrito o no existe se asignara el dia Lunes en Ingles");
+			spanish = "Enero";
+		}
+		
+		return spanish;
+	}
+	
+	
 	public List <DayOfWeek> spanishToEnglish(String days) {
 		String[] d = days.split(" ");
 		List <DayOfWeek> l = new ArrayList<DayOfWeek>();
@@ -1904,7 +1941,7 @@ public class GameConditions {
 			
 			for(int i = 0; i < d.length;i++) {
 				
-			l.add(DayOfWeek.valueOf(daysEnglishtoSpanish(d[i])));
+			l.add(DayOfWeek.valueOf(daysSpanishtoEnglish(d[i])));
 			
 			}
 		}catch(IllegalArgumentException e) {
@@ -1915,49 +1952,29 @@ public class GameConditions {
 		return l;
 	}
 	
-	
-	
-	public LocalDateTime AddOrRemoveMg() {
-		FileConfiguration config = plugin.getConfig();
-		LocalDateTime lt = LocalDateTime.now();
-		
-		String simbol = config.getString("Plus-Or-Remove");
-		 
-		int sld = config.getInt("Local-Time-Day");
-		int slh = config.getInt("Local-Time-Hour");
-		
-		if(simbol.equals("+")) {
-			
-			lt = lt.plusDays(sld).plusHours(slh);
-			
-		}else if(simbol.equals("-")) {
-			
-			lt = lt.minusDays(sld).minusHours(slh);
-			
-		}
-		return lt;
-	}
 	//				0				  1  2	3	4   5 total 6 	
 	//MG (BAN, TEMPBAM, KICK , WARN) NAO 5h 10m 10s No sabe Jugar en equipo
 	//TODO TIME
-	public boolean PassedTimeMg(Player player ,String time) {
+	public boolean elapsedTime(Player player ,String time) {
 		
-		LocalDateTime lt = AddOrRemoveMg();
+		LocalDateTime lt = LocalDateTime.now();
+	
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss a",Locale.ENGLISH);
 		if(time.contains("/")) {
 			//ST ES EL FORMATO QUE SE TOMA DE LA CONFIG Y SE RECORRE POSTERIORMENTE EN DISTINTOS IFS
-			StringTokenizer st = new StringTokenizer(time);
-		
-				if(st.countTokens() == 5) {
-					
+			//StringTokenizer st = new StringTokenizer(time);
+				//if(st.countTokens() == 5) {
+			      if(time.contains("-")) {
 					//TIME A AND TIME B
 					String[] cor = time.split("-");
 					String a = cor[0];
 					String b = cor[1];
 					
 						try {
-							  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss a",Locale.ENGLISH);
+							 
 							  LocalDateTime t = LocalDateTime.parse(a, formatter);
 							  LocalDateTime t2 = LocalDateTime.parse(b, formatter);
+							
 					    if(lt.isAfter(t) && lt.isBefore(t2)) {
 					    	//player.sendMessage("estas en la fecha correcta");
 							return true;
@@ -1966,21 +1983,27 @@ public class GameConditions {
 							if(lt.isBefore(t)) {
 								//antes de llegar a la fecha
 								player.sendMessage(ChatColor.GREEN+"================================================");
+								player.sendMessage("");
 								player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"                     [PROXIMO A ABRIR] ");
 								player.sendMessage(ChatColor.AQUA+"Me temo que aun no es el Tiempo para Ingresar ");
 								player.sendMessage(""+ChatColor.DARK_RED+ChatColor.BOLD+"                [Tiempo Faltante] ");
 								player.sendMessage(ChatColor.GREEN+TimeDiferenceMg(lt, t));
 								player.sendMessage(ChatColor.AQUA+"Para que pueda estar Disponible.");
+								player.sendMessage(ChatColor.GOLD+"Fecha Actual: "+ChatColor.GREEN+lt.format(formatter));
+								player.sendMessage("");
 								player.sendMessage(ChatColor.GREEN+"================================================");
 								//isJoinRunning(player);
 								return false;
 							}else if(lt.isAfter(t2)) {
 								player.sendMessage(ChatColor.RED+"================================================");
+								player.sendMessage("");
 								player.sendMessage(""+ChatColor.YELLOW+ChatColor.BOLD+"                     [CERRADO] ");
 								player.sendMessage(ChatColor.YELLOW+"Me temo que el Tiempo para Ingresar ya paso.");
 								player.sendMessage(""+ChatColor.YELLOW+ChatColor.BOLD+"                [A Trasncurrido] ");
 								player.sendMessage(ChatColor.RED+TimeDiferenceMg(t2, lt));
 								player.sendMessage(ChatColor.YELLOW+"Desde que ha terminado.");
+								player.sendMessage(ChatColor.GOLD+"Fecha Actual: "+ChatColor.GREEN+lt.format(formatter));
+								player.sendMessage("");
 								player.sendMessage(ChatColor.RED+"================================================");
 								//despues de pasar la fecha
 								//isJoinRunning(player);
@@ -1993,13 +2016,13 @@ public class GameConditions {
 						 e.printStackTrace();
 						 mgformatsTime();
 					 }
-				    
-				}else if (st.countTokens() == 3){
+						//else if (st.countTokens() == 3){
+				}else{
 					String[] cor = time.split("-");
 					String a = cor[0];
 					
 						try {
-						    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss a",Locale.ENGLISH);
+						  
 						    LocalDateTime t = LocalDateTime.parse(a, formatter);
 						    
 						    if(lt.isAfter(t)) {
@@ -2009,11 +2032,14 @@ public class GameConditions {
 								if(lt.isBefore(t)) {
 									//antes de llegar a la fecha
 									player.sendMessage(ChatColor.DARK_GREEN+"================================================");
+									player.sendMessage("");
 									player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"                     [PROXIMO A ABRIR] ");
 									player.sendMessage(ChatColor.AQUA+"Me temo que aun no es el Tiempo para Ingresar ");
 									player.sendMessage(""+ChatColor.DARK_RED+ChatColor.BOLD+"                [Tiempo Faltante] ");
 									player.sendMessage(ChatColor.GREEN+TimeDiferenceMg(lt, t));
 									player.sendMessage(ChatColor.AQUA+"Para que pueda estar Disponible.");
+									player.sendMessage(ChatColor.GOLD+"Fecha Actual: "+ChatColor.GREEN+lt.format(formatter));
+									player.sendMessage("");
 									player.sendMessage(ChatColor.DARK_GREEN+"================================================");
 									//isJoinRunning(player);
 									return false;
@@ -2038,7 +2064,7 @@ public class GameConditions {
 					//List <String> lex = new ArrayList<String>();
 					String hours = "";
 					StringTokenizer st = new StringTokenizer(time);
-					
+					List<String> dayspanish = new ArrayList<>();
 					while(st.hasMoreTokens()) {
 						
 						String cad = st.nextToken();
@@ -2047,60 +2073,96 @@ public class GameConditions {
 						if(m1.find()){
 							hours = cad;
 						}else{
-							lw.add(DayOfWeek.valueOf(daysEnglishtoSpanish(cad)));
+							lw.add(DayOfWeek.valueOf(daysSpanishtoEnglish(cad)));
+							dayspanish.add(cad); 
 						}
 					
 					}
 				
-					//String horac = le.get(0);
-				
-					String[] c2 = hours.split("-");
-					String t1 = c2[0];
-	 				String t2 = c2[1];
-					String[] c3 = t1.split(":");
-					String[] c4 = t2.split(":");
-				
-				    int hora = Integer.valueOf(c3[0]);
-				    int minuto = Integer.valueOf(c3[1]);
+					
+					if(hours.contains(",")) {
+						//si hay mas de una hora
+						String[] seccion = hours.split(",");
+						for(int i = 0;i < seccion.length ; i++) {
+							String[] c2 = seccion[i].split("-");
+							String t1 = c2[0];
+			 				String t2 = c2[1];
+							String[] c3 = t1.split(":");
+							String[] c4 = t2.split(":");
 						
-				    int hora2 = Integer.valueOf(c4[0]);
-			    	int minuto2 = Integer.valueOf(c4[1]);
+						    int hora = Integer.valueOf(c3[0]);
+						    int minuto = Integer.valueOf(c3[1]);
+								
+						    int hora2 = Integer.valueOf(c4[0]);
+					    	int minuto2 = Integer.valueOf(c4[1]);
+						
+							    LocalDateTime time1 = LocalDateTime.of(lt.getYear(), lt.getMonth(), lt.getDayOfMonth(), hora, minuto);
+								LocalDateTime time11 = LocalDateTime.of(lt.getYear(), lt.getMonth(), lt.getDayOfMonth(), hora2, minuto2);
+								
+								if(lw.contains(lt.getDayOfWeek())) {
+									if(lt.isAfter(time1) && lt.isBefore(time11)) {
+										return true;
+									}
+								 }
+						}
+						  
+					}else {
+						String[] c2 = hours.split("-");
+						String t1 = c2[0];
+		 				String t2 = c2[1];
+						String[] c3 = t1.split(":");
+						String[] c4 = t2.split(":");
+					
+					    int hora = Integer.valueOf(c3[0]);
+					    int minuto = Integer.valueOf(c3[1]);
+							
+					    int hora2 = Integer.valueOf(c4[0]);
+				    	int minuto2 = Integer.valueOf(c4[1]);
+					
+						    LocalDateTime time2 = LocalDateTime.of(lt.getYear(), lt.getMonth(), lt.getDayOfMonth(), hora, minuto);
+							LocalDateTime time22 = LocalDateTime.of(lt.getYear(), lt.getMonth(), lt.getDayOfMonth(), hora2, minuto2);
+							
+							if(lw.contains(lt.getDayOfWeek())) {
+								if(lt.isAfter(time2) && lt.isBefore(time22)) {
+									return true;
+								}
+							 }
+					}
+					//String horac = le.get(0);
 				
 				
 					
-					    LocalDateTime tw4 = LocalDateTime.of(lt.getYear(), lt.getMonth(), lt.getDayOfMonth(), hora, minuto);
-						LocalDateTime tw5 = LocalDateTime.of(lt.getYear(), lt.getMonth(), lt.getDayOfMonth(), hora2, minuto2);
-						
-						if(lw.contains(lt.getDayOfWeek())) {
-							if(lt.isAfter(tw4) && lt.isBefore(tw5)) {
-								return true;
-							}
-						 }
+							
 							StringTokenizer st2 = new StringTokenizer(time);
 							StringBuilder sb = new StringBuilder();
 							
 							int men = st2.countTokens();
 							int i = 1;
 							int tm = st2.countTokens()-1; 
+							int limitdays = st2.countTokens()-2;
 							
-				
 							while(st2.hasMoreTokens()) {
 							
 								sb.append(ChatColor.GREEN+st2.nextToken()+" ");
 								//SI TIENE MAS DIAS AGREGA EL TEXTO AL FINAL TM -1 ES REFERENTE AL TOKEN FINAL  LUNES VIERNERS ENTRE LAS HORAS 12 23
-								if(men > 1) {
+									if(men > 1) {
 									
-									if(i == tm) {
-										sb.append(ChatColor.RED+"entre las horas ");
-									}
-									i++;
-							}}
+										if(i == tm) {
+											sb.append(ChatColor.RED+"entre las horas ");
+										}
+										if(i == limitdays && dayspanish.size() >= 2) {
+											sb.append(ChatColor.RED+"y ");
+										}
+										i++;
+									}}
 						
 							String times = sb.toString();
 							player.sendMessage(ChatColor.AQUA+"================================================");
+							player.sendMessage("");
 							player.sendMessage(""+ChatColor.YELLOW+ChatColor.BOLD+"                     [CERRADO] ");
 							player.sendMessage(ChatColor.YELLOW+"Me temo que el Tiempo para Ingresar ya paso.");
 							player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"Cerrado: "+ChatColor.GOLD+"Solo funciona los dias "+times);
+							player.sendMessage(ChatColor.GOLD+"Fecha Actual: "+ChatColor.GREEN+lt.format(formatter));
 							player.sendMessage("");
 							player.sendMessage(ChatColor.AQUA+"================================================");
 							//isJoinRunning(player);
@@ -2175,6 +2237,7 @@ public class GameConditions {
 					player.sendMessage(""+ChatColor.YELLOW+ChatColor.BOLD+"                     [CERRADO] ");
 					player.sendMessage(ChatColor.YELLOW+"Me temo que el Tiempo para Ingresar ya paso.");
 					player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"Cerrado: "+ChatColor.GOLD+"Solo funciona los dias "+times);
+					player.sendMessage(ChatColor.GOLD+"Fecha Actual: "+ChatColor.GREEN+lt.format(formatter));
 					player.sendMessage("");
 					player.sendMessage(ChatColor.BLUE+"================================================");
 					//isJoinRunning(player);
@@ -2207,12 +2270,12 @@ public class GameConditions {
 
         long seconds = tempDateTime.until( fin, ChronoUnit.SECONDS );
 
-               return  years+ " Años " +
-               months+" Meses " + 
-                days + " Dias " +
-                hours + " Horas " +
-                minutes + " Minutos " +
-                seconds + " Segundos.";
+               return " Años: " +years+
+               " Meses: " + months+ 
+                 " Dias: " +days +
+                 " Horas: " +hours +
+                 " Minutos: " +minutes +
+                 " Segundos: "+seconds ;
 	}
 	
 	

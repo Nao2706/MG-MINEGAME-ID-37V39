@@ -79,6 +79,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -197,6 +198,22 @@ public class EventRandoms implements Listener{
 		}
 		
 	}
+
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void mgGameMode(PlayerGameModeChangeEvent e) {
+		Player player = (Player) e.getPlayer();
+		GameConditions gc = new GameConditions(plugin);
+		
+		if(gc.isPlayerinGame(player)) {
+			if(e.getNewGameMode() == GameMode.SPECTATOR) {
+				if(!player.getPassengers().isEmpty()) {
+					Entity ent = (Entity) player.getPassengers().get(0);
+					player.removePassenger(ent);
+				}
+			}
+		}
+	}
+	
 	
 	
 	//TODO INTERACT
