@@ -147,9 +147,12 @@ public class GameConditions {
 				sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.WHITE+"El jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" salio del Modo Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size() - 1)+ChatColor.RED+"]");
 				ga.getBossbar().removePlayer(player);
 			}else {
+				//" "+Utils.pingLevel(player.getPing())+
 				if(player.getPing() >= 150) {
+					sendMessageToConsole(Utils.pingLevel(player.getPing()));				
+					sendMessageToUsersOfSameMapLessPlayer(player,Utils.pingLevel(player.getPing()));
 					sendMessageToUsersOfSameMapLessPlayer(player,
-							ChatColor.YELLOW+"A Salido "+ChatColor.GREEN+player.getName()+" "+Utils.pingLevel(player.getPing())+ChatColor.RED+" ("+ChatColor.GOLD+(ga.getParticipants().size()-1)+ChatColor.YELLOW+"/"+ChatColor.GOLD+getMaxPlayerMap(pl.getMapName())+ChatColor.RED+")");
+							ChatColor.YELLOW+"A Salido "+ChatColor.GREEN+player.getName()+ChatColor.RED+" ("+ChatColor.GOLD+(ga.getParticipants().size()-1)+ChatColor.YELLOW+"/"+ChatColor.GOLD+getMaxPlayerMap(pl.getMapName())+ChatColor.RED+")");
 				}else {
 					sendMessageToUsersOfSameMapLessPlayer(player,
 							ChatColor.YELLOW+"A Salido "+ChatColor.GREEN+player.getName()+ChatColor.RED+" ("+ChatColor.GOLD+(ga.getParticipants().size()-1)+ChatColor.YELLOW+"/"+ChatColor.GOLD+getMaxPlayerMap(pl.getMapName())+ChatColor.RED+")");			
@@ -327,10 +330,10 @@ public class GameConditions {
 	   }
 	   
 	   //TODO TpEndSpawn
-	   public void EndTptoSpawn(Player player ,String arenaName){
+	   public void EndTptoSpawn(Player player ,String map){
 		   
 		   GameConditions gc = new GameConditions(plugin);
-		   FileConfiguration ym = gc.getGameConfig(arenaName);
+		   FileConfiguration ym = gc.getGameConfig(map);
 		   if(ym.contains("Spawn-End")) {
 			    String[] coords = ym.getString("Spawn-End").split("/");
 			    String world = coords[0];
@@ -361,10 +364,10 @@ public class GameConditions {
 	   
 	   
 	   //TODO TpDeathSpawn
-	   public void DeathTptoSpawn(Player player ,String arenaName){
+	   public void DeathTptoSpawn(Player player ,String map){
 		   
 		   GameConditions gc = new GameConditions(plugin);
-		   FileConfiguration ym = gc.getGameConfig(arenaName);
+		   FileConfiguration ym = gc.getGameConfig(map);
 		   if(ym.contains("Spawn-Spectator")) {
 			    String[] coords = ym.getString("Spawn-Spectator").split("/");
 			    String world = coords[0];
@@ -405,7 +408,7 @@ public class GameConditions {
 		   }
 	   }
 	   
-	   //TODO TP AL SPAWN DE LA ARENA
+	   //TODO TP AL SPAWN DEL MAPA
 	   public void TptoSpawnMap(Player player ,String map){
 		   GameConditions gc = new GameConditions(plugin);
 		   FileConfiguration ym = gc.getGameConfig(map);
@@ -493,9 +496,9 @@ public class GameConditions {
 	  
 
 	   //TP SPAWN SPECTATOR
-	   public void TptoSpawnSpectator(Player player ,String arenaName){
+	   public void TptoSpawnSpectator(Player player ,String map){
 		   GameConditions gc = new GameConditions(plugin);
-		   FileConfiguration ym = gc.getGameConfig(arenaName);
+		   FileConfiguration ym = gc.getGameConfig(map);
 		   if(ym.contains("Spawn-Spectator")) {
 			    String[] coords = ym.getString("Spawn-Spectator").split("/");
 			    String world = coords[0];
@@ -3026,9 +3029,9 @@ public class GameConditions {
 	}
    	
 	   //TODO TOP
-	public void TopForReward(Player player ,String arenaName) {
+	public void TopForReward(Player player ,String map) {
 				
-					FileConfiguration mision = getGameConfig(arenaName);
+					FileConfiguration mision = getGameConfig(map);
 					ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 
 		// PRIMERA PARTE
@@ -3036,7 +3039,7 @@ public class GameConditions {
 					
 
 					
-						GameInfo ms = plugin.getGameInfoPoo().get(arenaName);
+						GameInfo ms = plugin.getGameInfoPoo().get(map);
 						if(ms instanceof GameAdventure) {
 							GameAdventure ga = (GameAdventure) ms;
 							List<Player> joins = ConvertStringToPlayer(ga.getParticipants());
@@ -3094,7 +3097,7 @@ public class GameConditions {
    	
 	
 	   //TODO STOP
-	   public void StopGames(Player player , String name,StopMotive motivo) {
+	   public void StopGames(Player player , String name,StopMotive motive,String reason) {
 		   
 		   GameConditions gc = new GameConditions(plugin);
 			if(gc.ExistMap(name)) {
@@ -3105,106 +3108,107 @@ public class GameConditions {
 					if(estadoPartida == GameStatus.JUGANDO) {
 						GameIntoMap ci = new GameIntoMap(plugin);
 						
-						ms.setMotive(motivo);
+						ms.setMotive(motive);
 						List<String> vivos = ga.getAlivePlayers();
 						List<Player> players = gc.ConvertStringToPlayer(vivos);
-						if(motivo == StopMotive.WIN) {
+						if(motive == StopMotive.WIN) {
 							
 							if(vivos.isEmpty()) {
-								Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+ms.getGameType().toString()+ChatColor.GREEN+" Ganaron en la Arena: "+ChatColor.GOLD+name+ChatColor.GREEN+" por Condiciones varias , Terminando. Pero no hay ningun jugador vivo.");
+								Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+ms.getGameType().toString()+ChatColor.GREEN+" Ganaron en el Mapa: "+ChatColor.GOLD+name+ChatColor.GREEN+" por Condiciones varias , Terminando. Pero no hay ningun jugador vivo.");
+								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Razon: "+ChatColor.WHITE+reason);
 
 								return;
 							}
 							
-							Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+ms.getGameType().toString()+ChatColor.GREEN+": Ganaron en la Arena: "+ChatColor.GOLD+name+ChatColor.GREEN+" por Condiciones varias , Terminando.");
+							Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+ms.getGameType().toString()+ChatColor.GREEN+": Ganaron en el Mapa: "+ChatColor.GOLD+name+ChatColor.GREEN+" por Condiciones varias , Terminando.");
+							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Razon: "+ChatColor.WHITE+reason);
+
 							
-							
-							if(ms.getGameType() == GameType.ADVENTURE) {
+							if(ms.getGameType() == GameType.ADVENTURE || ms.getGameType() == GameType.RESISTENCE) {
 								for(Player target : players) {
-									target.sendMessage(ChatColor.GREEN+"Victoria todos los que quedaron Vivos han Ganado...");
+									
+									if(reason.equals("Ninguno")){
+										target.sendMessage(ChatColor.GREEN+"Victoria todos los que quedaron Vivos han Ganado...");
+									}else {
+										target.sendMessage(ChatColor.GREEN+reason);
+									}
+									
 									ci.GamePlayerWin(target);
 								}
 								return;
-							}else if(ms.getGameType() == GameType.RESISTENCE) {
-								
-								
-								for(Player target : players) {
-									target.sendMessage(ChatColor.GREEN+"Victoria todos los que quedaron Vivos han Ganado...");
-									gc.EndTptoSpawn(target, name);
-								}
-								return;
-							
 							}
 						
-						}else if(motivo == StopMotive.LOSE) {
+						}else if(motive == StopMotive.LOSE) {
 							
 							if(vivos.isEmpty()) {
-								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+ms.getGameType().toString()+ChatColor.GREEN+"Perdieron en la Arena: "+ChatColor.GOLD+name+ChatColor.GREEN+" por Condiciones varias , Terminando. Pero no hay ningun jugador vivo.");
+								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+ms.getGameType().toString()+ChatColor.GREEN+"Perdieron en el Mapa: "+ChatColor.GOLD+name+ChatColor.GREEN+" por Condiciones varias , Terminando. Pero no hay ningun jugador vivo.");
+								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Razon: "+ChatColor.WHITE+reason);
 
 								return;
 							}
-							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+ms.getGameType().toString()+ChatColor.RED+"Perdieron en la Arena: "+ChatColor.GREEN+name+ChatColor.RED+" por Condiciones varias , Terminando.");
-						
+							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+ms.getGameType().toString()+ChatColor.RED+"Perdieron en el Mapa: "+ChatColor.GREEN+name+ChatColor.RED+" por Condiciones varias , Terminando.");
+							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Razon: "+ChatColor.WHITE+reason);
+
 							
-							if(ms.getGameType() == GameType.ADVENTURE) {
+							if(ms.getGameType() == GameType.ADVENTURE || ms.getGameType() == GameType.RESISTENCE) {
 								for(Player target : players) {
-									target.sendMessage(ChatColor.RED+"Todos los Jugadores con Vida han Perdido...");
-									ci.GamePlayerLost(target);
-								}
-								return;
-							}else if(ms.getGameType() == GameType.RESISTENCE) {
-								for(Player target : players) {
-									target.sendMessage(ChatColor.RED+"Todos los Jugadores con Vida han Perdido...");
+									if(reason.equals("Ninguno")){
+										target.sendMessage(ChatColor.RED+"Todos los Jugadores con Vida han Perdido...");
+									}else {
+										target.sendMessage(ChatColor.RED+reason);
+									}
+									
 									ci.GamePlayerLost(target);
 								}
 								return;
 							}
 							
-						}else if(motivo == StopMotive.ERROR) {
+						}else if(motive == StopMotive.ERROR) {
 							
 							
 							if(vivos.isEmpty()) {
 								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+ms.getGameType().toString()+ChatColor.GREEN+"Hubo un error en el Mapa: "+ChatColor.GOLD+name+ChatColor.GREEN+" por Condiciones varias , Terminando. Pero no hay ningun jugador vivo.");
+								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Razon: "+ChatColor.GOLD+reason);
 
 								return;
 							}
 							
 							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+ms.getGameType().toString()+ChatColor.RED+"Hubo un error en el Mapa: "+ChatColor.GREEN+name+ChatColor.RED+" Terminando.");
-							
-							if(ms.getGameType() == GameType.ADVENTURE) {
+							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Razon: "+ChatColor.WHITE+reason);
+
+							if(ms.getGameType() == GameType.ADVENTURE || ms.getGameType() == GameType.RESISTENCE) {
 								for(Player target : players) {
-									target.sendMessage(ChatColor.RED+"Hubo un error en el Mapa: "+ChatColor.GREEN+name+ChatColor.RED+" Terminando.");
-									ci.GamePlayerLost(target);
-								}
-								return;
-							}else if(ms.getGameType() == GameType.RESISTENCE) {
-								for(Player target : players) {
-									target.sendMessage(ChatColor.RED+"Hubo un error en el Mapa: "+ChatColor.GREEN+name+ChatColor.RED+" Terminando.");
+									
+									if(reason.equals("Ninguno")){
+										target.sendMessage(ChatColor.RED+"Hubo un error en el Mapa: "+ChatColor.GREEN+name+ChatColor.RED+" Terminando.");
+									}else {
+										target.sendMessage(ChatColor.RED+reason);
+									}
 									ci.GamePlayerLost(target);
 								}
 								return;
 							}
 							
-						}else if(motivo == StopMotive.FORCE) {
+						}else if(motive == StopMotive.FORCE) {
 							
 							
 							if(vivos.isEmpty()) {
 								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+ms.getGameType().toString()+ChatColor.GREEN+"Perdieron en el Mapa: "+ChatColor.GOLD+name+ChatColor.GREEN+" por Condiciones varias , Terminando. Pero no hay ningun jugador vivo.");
+								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Razon: "+ChatColor.WHITE+reason);
 
 								return;
 							}
 							
 							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+ms.getGameType().toString()+ChatColor.RED+"El Mapa "+ChatColor.GREEN+name+ChatColor.RED+" fue Forzada a terminar.");
-							
-							if(ms.getGameType() == GameType.ADVENTURE) {
+							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Razon: "+ChatColor.WHITE+reason);
+
+							if(ms.getGameType() == GameType.ADVENTURE || ms.getGameType() == GameType.RESISTENCE) {
 								for(Player target : players) {
-									target.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GREEN+name+ChatColor.RED+" fue Forzada a terminar.");
-									ci.GamePlayerLost(target);
-								}
-								return;
-							}else if(ms.getGameType() == GameType.RESISTENCE) {
-								for(Player target : players) {
-									target.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GREEN+name+ChatColor.RED+" fue Forzada a terminar.");
+									if(reason.equals("Ninguno")){
+										target.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GREEN+name+ChatColor.RED+" fue Forzada a terminar.");
+									}else {
+										target.sendMessage(ChatColor.RED+reason);
+									}
 									ci.GamePlayerLost(target);
 								}
 								return;

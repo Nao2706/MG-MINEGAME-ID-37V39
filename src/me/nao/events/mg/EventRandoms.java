@@ -11,6 +11,7 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
+import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -786,6 +787,7 @@ public class EventRandoms implements Listener{
 							ptnt.setFuseTicks(30);
 							ptnt.setVelocity(player.getLocation().getDirection().multiply(2.5));
 							ptnt.setCustomName(ChatColor.DARK_PURPLE+"TNT");
+							ptnt.setSource(player);
 							ptnt.setYield(5);
 							removeItemstackCustom(player,e.getItem());
 						}
@@ -1393,6 +1395,19 @@ public class EventRandoms implements Listener{
 						|| ChatColor.stripColor(ent.getCustomName()).equals("Ataque Aereo") 
 						|| ChatColor.stripColor(ent.getCustomName()).equals("TNT")
 						|| ChatColor.stripColor(ent.getCustomName()).equals("Suicida")) {
+						
+						List<Material> mat = new ArrayList<>();
+						mat.add(Material.INFESTED_CHISELED_STONE_BRICKS);mat.add(Material.INFESTED_COBBLESTONE);mat.add(Material.INFESTED_CRACKED_STONE_BRICKS);
+						mat.add(Material.INFESTED_DEEPSLATE);mat.add(Material.INFESTED_MOSSY_STONE_BRICKS);mat.add(Material.INFESTED_STONE);
+						mat.add(Material.INFESTED_STONE_BRICKS);
+						for(Block b : e.blockList()) {
+							if(mat.contains(b.getType())) {
+								//System.out.println("SI");
+								b.getWorld().playEffect(b.getLocation().add(0.5,0,0.5), Effect.STEP_SOUND,b.getType()); 
+								b.setType(Material.AIR);
+							}
+						}
+						
 					   e.blockList().clear();
 					  return;
 					}

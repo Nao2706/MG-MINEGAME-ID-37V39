@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Matcher;
@@ -29,6 +30,7 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.block.data.type.Piston;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -134,6 +136,8 @@ public class Comandsmg implements CommandExecutor{
 						}
 						
 					return true;
+					
+					
 				}else if(args[0].equalsIgnoreCase("time")) {
         			FileConfiguration config = plugin.getConfig();
         			String country = config.getString("Country-Time","Unknow");
@@ -147,6 +151,22 @@ public class Comandsmg implements CommandExecutor{
           			
           			return true;
           			
+          		}else if(args[0].equalsIgnoreCase("mapsinprogress")) {
+          			
+          			
+          			List<Map.Entry<String, GameInfo>> list = new ArrayList<>(plugin.getGameInfoPoo().entrySet());
+          			
+          			if(list.isEmpty()) {
+          				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No hay ningun Juego en Progreso.");
+          				return true;
+          			}
+          			String text = ChatColor.GOLD+"Mapas en Juego o Progreso: ";
+          			for (Map.Entry<String, GameInfo> e : list) {
+          				text = text + ChatColor.GREEN+e.getKey()+ChatColor.AQUA+",";
+          			}
+          			text = text+ChatColor.GOLD+" un Total de: "+ChatColor.RED+list.size();
+          			Bukkit.getConsoleSender().sendMessage(text);
+          			return true;
           		}else if(args[0].equalsIgnoreCase("reportlogs")) {
 					 //mg reportlogs nao 1
 					
@@ -1132,7 +1152,7 @@ public class Comandsmg implements CommandExecutor{
 	   }else if (args[0].equalsIgnoreCase("stop")) {
 				
 					if (args.length == 3) {
-						
+						//mg stop tutorial win HOLQ
 						String name = args[1];
 						try {
 							StopMotive motivo = StopMotive.valueOf(args[2].toUpperCase());
@@ -1141,11 +1161,28 @@ public class Comandsmg implements CommandExecutor{
 							//MG STOP NAME
 							Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"STOP MOTIVO: "+motivo.toString());
 						
-							gc.StopGames(null, name,motivo);
+							gc.StopGames(null, name,motivo,"Ninguno");
 						}catch(IllegalArgumentException e) {
 							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Ese motivo no existe usa: Win , Lose , Error o Force. ");
 						}
 						
+					 }else if (args.length >= 4) {
+						 String name = args[1];
+							try {
+								StopMotive motivo = StopMotive.valueOf(args[2].toUpperCase());
+								
+								//plugin.yml = new YamlFile(plugin,name, new File(plugin.getDataFolder().getAbsolutePath()+carpeta));;
+								//MG STOP NAME
+								Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"STOP MOTIVO: "+motivo.toString());
+								String comments = "";
+					        	 for(int i = 3 ;i < args.length; i++) {
+					        		 comments = comments+args[i]+" "; 
+								 }
+					        	 
+								gc.StopGames(null, name,motivo,comments);
+							}catch(IllegalArgumentException e) {
+								Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Ese motivo no existe usa: Win , Lose , Error o Force. ");
+							}
 					 }else {
 					
 						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg stop <mapa> <motivo Win , Lose , Error o Force>");
@@ -2352,7 +2389,23 @@ public class Comandsmg implements CommandExecutor{
           		
           		return true;
           		
-          	}else if(args[0].equalsIgnoreCase("god")) {
+          	}else if(args[0].equalsIgnoreCase("mapsinprogress")) {
+      			
+      			
+      			List<Map.Entry<String, GameInfo>> list = new ArrayList<>(plugin.getGameInfoPoo().entrySet());
+      			
+      			if(list.isEmpty()) {
+      				player.sendMessage(ChatColor.RED+"No hay ningun Juego en Progreso.");
+      				return true;
+      			}
+      			String text = ChatColor.GOLD+"Mapas en Juego o Progreso: ";
+      			for (Map.Entry<String, GameInfo> e : list) {
+      				text = text + ChatColor.GREEN+e.getKey()+ChatColor.AQUA+",";
+      			}
+      			text = text+ChatColor.GOLD+" un Total de: "+ChatColor.RED+list.size();
+      			player.sendMessage(text);		
+      			return true;
+      		}else if(args[0].equalsIgnoreCase("god")) {
 				if (args.length == 2) {
 					// /c add n p
 					// mg set nao 10
@@ -3417,8 +3470,61 @@ public class Comandsmg implements CommandExecutor{
 					player.getInventory().addItem(Items.ARROWDIS.getValue());
 					player.getInventory().addItem(Items.ARROWDIS2.getValue());
 					player.getInventory().addItem(Items.REVIVE.getValue());
-					
+					 
 					return true;
+				}else if(args[0].equalsIgnoreCase("lock")) {
+						Block b = player.getTargetBlock((Set<Material>) null, 5);
+				       if(!b.getType().isSolid()) {
+				              player.sendMessage(ChatColor.RED+"Debes mirar un material Solido [Un Bloque]");
+				               return true;
+				         }
+				         
+				       if(b.getType() == Material.CHEST) {
+				    	   
+				    	   Chest cf = (Chest) b.getState();
+				    	   
+				    	   if(!cf.isLocked()) {
+				    		  
+				    		   if(player.getInventory().getItemInMainHand() != null && player.getInventory().getItemInMainHand().getType() != Material.AIR) {
+				    			   
+				    			   cf.setLockItem(player.getInventory().getItemInMainHand());
+				    			   cf.update();
+				    			   player.sendMessage(ChatColor.GREEN+"Cofre Bloqueado Correctamente.");
+				    		   }else {
+				    			   player.sendMessage(ChatColor.YELLOW+"Debes tener un Item en Mano.");
+				    		   }
+				    		 
+				    	   }else {
+				    		   player.sendMessage(ChatColor.RED+"Ese Cofre ya esta Bloqueado.");
+				    	   }
+				    	   
+				       }else {
+			    		   player.sendMessage(ChatColor.RED+"Debes ver un Cofre.");
+			    	   }
+				       
+				     return true;
+				}else if(args[0].equalsIgnoreCase("unlock")) {
+						Block b = player.getTargetBlock((Set<Material>) null, 5);
+				       if(!b.getType().isSolid()) {
+				              player.sendMessage(ChatColor.RED+"Debes mirar un material Solido [Un Bloque]");
+				               return true;
+				         }
+					
+					 if(b.getType() == Material.CHEST) {
+									    	   
+						 Chest cf = (Chest) b.getState();
+						  if(cf.isLocked()) {
+							  cf.setLockItem(null);
+							  cf.update();
+							  player.sendMessage(ChatColor.GREEN+"Cofre Desloqueado Correctamente.");
+						  }else {
+				    		   player.sendMessage(ChatColor.RED+"Ese Cofre ya esta Desbloqueado.");
+				    	   }    	   
+					 }else {
+			    		   player.sendMessage(ChatColor.RED+"Debes ver un Cofre.");
+			    	   }
+				       
+					return true ;
 				}else if(args[0].equalsIgnoreCase("generator")) {
 					if(!player.isOp()) {
 						
@@ -3895,15 +4001,29 @@ public class Comandsmg implements CommandExecutor{
 								
 								//plugin.yml = new YamlFile(plugin,name, new File(plugin.getDataFolder().getAbsolutePath()+carpeta));;
 								//MG STOP NAME
-								Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"STOP MOTIVO: "+motivo.toString());
-								gc.StopGames(player, name,motivo);
+								player.sendMessage(ChatColor.GREEN+"STOP MOTIVO: "+motivo.toString());
+								gc.StopGames(player, name,motivo,"Ninguno");
 							}catch(IllegalArgumentException e) {
 								player.sendMessage(plugin.nombre+ChatColor.GREEN+" Ese motivo no existe usa: Win , Lose , Error o Force. ");
 							}
 							
-							
-						
-							
+						 }else if (args.length >= 4) {
+							 String name = args[1];
+								try {
+									StopMotive motivo = StopMotive.valueOf(args[2].toUpperCase());
+									
+									//plugin.yml = new YamlFile(plugin,name, new File(plugin.getDataFolder().getAbsolutePath()+carpeta));;
+									//MG STOP NAME
+									player.sendMessage(ChatColor.GREEN+"STOP MOTIVO: "+motivo.toString());
+									String comments = "";
+						        	 for(int i = 3 ;i < args.length; i++) {
+						        		 comments = comments+args[i]+" "; 
+									 }
+						        	 
+									gc.StopGames(player, name,motivo,comments);
+								}catch(IllegalArgumentException e) {
+									player.sendMessage(plugin.nombre+ChatColor.GREEN+" Ese motivo no existe usa: Win , Lose , Error o Force. ");
+								}
 						 }else {
 							player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg stop <mapa> <motivo Win , Lose , Error o Force>");
 							
@@ -4089,7 +4209,7 @@ public class Comandsmg implements CommandExecutor{
  		objetivetype.put("WARNING", ObjetiveStatusType.WARNING);
  	
  		if(!objetivetype.containsKey(text.toUpperCase())) {
- 			
+ 			 
  			comments = ChatColor.RED+"Estatus de Objetivos: ";
  			
  			List<Map.Entry<String,ObjetiveStatusType>> list = new ArrayList<>(objetivetype.entrySet());

@@ -67,37 +67,37 @@ public class RankPlayer {
 		
 			
 				if(lvl <= 99) {
-					return rank = ""+ChatColor.GREEN+ChatColor.BOLD+lvl+".LVL ";
+					return rank = ""+ChatColor.GREEN+ChatColor.BOLD+"LVL."+lvl+" ";
 					
 				}else if(lvl >= 100 && lvl <= 199) {
-					return rank =  ""+ChatColor.AQUA+ChatColor.BOLD+lvl+".LVL ";
+					return rank =  ""+ChatColor.AQUA+ChatColor.BOLD+"LVL."+lvl+" ";
 					
 				}else if(lvl >= 200 && lvl <= 299) {
-					return rank =  ""+ChatColor.RED+ChatColor.BOLD+lvl+".LVL ";
+					return rank =  ""+ChatColor.RED+ChatColor.BOLD+"LVL."+lvl+" ";
 					
 				}else if(lvl >= 300 && lvl <= 399) {
-					return rank =  ""+ChatColor.DARK_PURPLE+ChatColor.BOLD+lvl+".LVL ";
+					return rank =  ""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"LVL."+lvl+" ";
 					
 				}else if(lvl >= 400 && lvl <= 499) {
-					 rank =  ""+ChatColor.GOLD+ChatColor.BOLD+lvl+".LVL ";
+					 rank =  ""+ChatColor.GOLD+ChatColor.BOLD+"LVL."+lvl+" ";
 					 
 				}else if(lvl >= 500 && lvl <= 599) {
-					 rank =  ""+ChatColor.DARK_GREEN+ChatColor.BOLD+lvl+".LVL ";
+					 rank =  ""+ChatColor.DARK_GREEN+ChatColor.BOLD+"LVL."+lvl+" ";
 					 
 				}else if(lvl >= 600 && lvl <= 699) {
-					 rank =  ""+ChatColor.DARK_RED+ChatColor.BOLD+lvl+".LVL ";
+					 rank =  ""+ChatColor.DARK_RED+ChatColor.BOLD+"LVL."+lvl+" ";
 					 
 				}else if(lvl >= 700 && lvl <= 799) {
-					 rank =  ""+ChatColor.GRAY+ChatColor.BOLD+lvl+".LVL ";
+					 rank =  ""+ChatColor.GRAY+ChatColor.BOLD+"LVL."+lvl+" ";
 					 
 				}else if(lvl >= 800 && lvl <= 899) {
-					 rank =  ""+ChatColor.DARK_PURPLE+ChatColor.BOLD+lvl+".LVL ";
+					 rank =  ""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"LVL."+lvl+" ";
 					 
 				}else if(lvl >= 900 && lvl <= 999) {
-					 rank =  ""+ChatColor.BLACK+ChatColor.BOLD+lvl+".LVL ";
+					 rank =  ""+ChatColor.BLACK+ChatColor.BOLD+"LVL."+lvl+" ";
 					 
 				}else if(lvl == 1000) {
-					 rank =  ""+ChatColor.GOLD+ChatColor.BOLD+lvl+".LVL ";
+					 rank =  ""+ChatColor.GOLD+ChatColor.BOLD+"LVL."+lvl+" ";
 					 
 				}
 		

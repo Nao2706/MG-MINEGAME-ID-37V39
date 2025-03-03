@@ -165,8 +165,8 @@ public class RevivePlayer{
 		player.setGameMode(GameMode.SPECTATOR);
 		saveItemsPlayer();
 		clearInventorymg();
-		addToRevive();
-		Start();
+		
+		
 		gc.sendMessageToUsersOfSameMapLessPlayer(player,""+ChatColor.RED+ChatColor.BOLD+ player.getName()+ChatColor.YELLOW+" fue Derribado/a. \n(Ayudalo/a a levantarse tiene solo %time%)".replace("%time%",time+"s"));
 		
 		player.sendMessage("");
@@ -226,6 +226,16 @@ public class RevivePlayer{
 					gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+otherplayer.getName());
 				}
 				
+			}else {
+				if(e.getCustomName() != null) {
+					player.sendMessage(ChatColor.YELLOW+"Has sido Derribado/a por: "+ChatColor.GOLD+e.getCustomName());
+					gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+e.getCustomName());
+					
+				}else {
+					player.sendMessage(ChatColor.YELLOW+"Has sido Derribado/a por: "+ChatColor.GOLD+e.getType());
+					gc.SendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+e.getType());
+					
+				}
 			}
 
 		}else{
@@ -239,7 +249,8 @@ public class RevivePlayer{
 		
 	
 		player.sendMessage("");
-
+		addToRevive();
+		Start();
 	}
 	
 	public void StandUp() {
