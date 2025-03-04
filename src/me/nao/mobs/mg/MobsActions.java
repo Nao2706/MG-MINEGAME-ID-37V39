@@ -184,12 +184,12 @@ public class MobsActions {
 	}
 	
 	public void virus(Entity atacante ,Entity atacada) {
-		  if(atacante instanceof Player && atacada instanceof Zombie) {
+		  if(atacante instanceof Entity && atacada instanceof Zombie) {
 			  Zombie z = (Zombie) atacada;
 			  
 			    if(z.getCustomName() == null) return;
 			    if(z.getCustomName().contains(ChatColor.RED+"VIRUS")) {
-				  AreaPotion(z,z.getLocation(),PotionEffectType.POISON,"GREEN",15,20,20,2);
+				  AreaPotion(z,z.getLocation(),PotionEffectType.POISON,"GREEN",15,20,20,5);
 				  AreaPotion(z,z.getLocation(),PotionEffectType.INSTANT_DAMAGE,"RED",15,20,20,2);
 				  
 			    }if(z.getCustomName().contains(ChatColor.RED+"HARDCORE VIRUS")) {
