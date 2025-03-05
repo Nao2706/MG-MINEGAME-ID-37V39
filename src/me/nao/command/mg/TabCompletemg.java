@@ -88,6 +88,7 @@ public class TabCompletemg implements TabCompleter{
 			arguments.add("showtags");
 			arguments.add("prestige");
 			arguments.add("querylevel");
+			arguments.add("activemaps");
 			
 			
 		}

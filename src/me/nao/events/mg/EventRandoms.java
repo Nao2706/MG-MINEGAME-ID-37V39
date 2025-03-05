@@ -1547,11 +1547,11 @@ public class EventRandoms implements Listener{
 				List<Entity> list = getNearbyEntitesItems(l1, 5);
 				//System.out.println("Lista 2 "+list.size());
 				if(list.size() >= gi.getLootTableLimit()) {
-					gc.sendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+ChatColor.RED+" Tu ambicion sera tu perdicion.\nAnti-Looter-2 y Suicida Invocados (Dejo tirados muchos items cerca de la Mesa)");
+					gc.sendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+ChatColor.RED+" Tu ambicion sera tu Perdicion.\nAnti-Looter-2 y Suicida Invocados (Dejo tirados muchos Items Cerca de la Mesa)");
 					l1.getWorld().spawnParticle(Particle.FLAME, l1,	/* N DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
 					player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 20.0F, 0F);
-					LivingEntity entidad = (LivingEntity) l1.getWorld().spawnEntity(l1, EntityType.ZOMBIE);
-					Zombie zombi = (Zombie) entidad;
+					
+					Zombie zombi = (Zombie) l1.getWorld().spawnEntity(l1, EntityType.ZOMBIE);
 					zombi.getAttribute(attribute).setBaseValue(150);
 					zombi.getAttribute(attributer).setBaseValue(50);
 					zombi.setCustomName(""+ChatColor.GOLD+ChatColor.BOLD+"Anti-Looter-2");
@@ -1561,6 +1561,7 @@ public class EventRandoms implements Listener{
 					zombi.getEquipment().setBoots(new ItemStack(Material.DIAMOND_BOOTS));
 					zombi.getEquipment().setItemInMainHand(Items.ZOMBIPALO.getValue());
 					zombi.getEquipment().setItemInOffHand(new ItemStack(Material.SHIELD));
+					zombi.setTarget(player);
 					
 					
 					PotionEffect rapido = new PotionEffect(PotionEffectType.SPEED,/*duration*/ 120 * 20,/*amplifier:*/2, true ,true,true );
@@ -1570,12 +1571,13 @@ public class EventRandoms implements Listener{
 				    zombi.addPotionEffect(rapido);
 					zombi.addPotionEffect(salto);
 					
-					LivingEntity entidadc = (LivingEntity) l1.getWorld().spawnEntity(l1, EntityType.CREEPER);
-					Creeper c = (Creeper) entidadc;
+					
+					Creeper c = (Creeper) l1.getWorld().spawnEntity(l1, EntityType.CREEPER);
 					c.setExplosionRadius(15);
 					c.setMaxFuseTicks(1);
 					c.getAttribute(attribute).setBaseValue(150);
 					c.setCustomName(""+ChatColor.AQUA+ChatColor.BOLD+"SUICIDA");
+					c.setTarget(player);
 					zombi.addPassenger(c);
 					gc.setPlayerTempCooldown(player);
 				}else if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND), 100)) {
@@ -1583,8 +1585,8 @@ public class EventRandoms implements Listener{
 					gc.sendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+ChatColor.RED+" recibio un Castigo por tener muchos Diamantes. (Tiene mas de 100 de Diamantes)\nAnti-Looter y Guardia del Loot Invocados");
 					l1.getWorld().spawnParticle(Particle.FLAME, l1,	/* N DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
 					player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 20.0F, 0F);
-					LivingEntity entidad = (LivingEntity) l1.getWorld().spawnEntity(l1, EntityType.ZOMBIE);
-					Zombie zombi = (Zombie) entidad;
+					
+					Zombie zombi = (Zombie) l1.getWorld().spawnEntity(l1, EntityType.ZOMBIE);
 					zombi.getAttribute(attribute).setBaseValue(150);
 					zombi.getAttribute(attributer).setBaseValue(50);
 					zombi.setCustomName(""+ChatColor.RED+ChatColor.BOLD+"Anti-Looter");
@@ -1602,11 +1604,12 @@ public class EventRandoms implements Listener{
 					
 				    zombi.addPotionEffect(rapido);
 					zombi.addPotionEffect(salto);
+					zombi.setTarget(player);
 					
-					LivingEntity entidad1 = (LivingEntity) l1.getWorld().spawnEntity(l1, EntityType.WITCH);
-					Witch c1 = (Witch) entidad1;
+					Witch c1 = (Witch) l1.getWorld().spawnEntity(l1, EntityType.WITCH);
 					c1.getAttribute(attribute).setBaseValue(150);
-					c1.setCustomName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"GUARDIA DEL LOOT");	
+					c1.setCustomName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"GUARDIA DEL LOOT");
+					c1.setTarget(player);
 					gc.setPlayerTempCooldown(player);
 				}else if(player.getInventory().containsAtLeast(new ItemStack(Material.GOLD_INGOT), 100)) {
 					
@@ -1615,19 +1618,21 @@ public class EventRandoms implements Listener{
 					l1.getWorld().spawnParticle(Particle.FLAME, l1.add(0.5, 1, 0.5),	/* N DE PARTICULAS */5, 0.5, 1, 0.5, /* velocidad */0, null, true);
 
 					player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 20.0F, 0F);
-					LivingEntity entidad = (LivingEntity) l1.getWorld().spawnEntity(l1, EntityType.CREEPER);
-					Creeper c = (Creeper) entidad;
+					
+					Creeper c = (Creeper) l1.getWorld().spawnEntity(l1, EntityType.CREEPER);
 					c.setExplosionRadius(5);
 					c.getAttribute(attribute).setBaseValue(150);
 					c.setCustomName(""+ChatColor.GREEN+ChatColor.BOLD+"GUARDIA DEL LOOT");
+					c.setTarget(player);
 					
 					//l.getWorld().spawnParticle(Particle.FLAME, l.add(0.5, 1, 0.5),	/* N DE PARTICULAS */5, 0.5, 1, 0.5, /* velocidad */0, null, true);
 
 					//player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 20.0F, 0F);
-					LivingEntity entidad1 = (LivingEntity) l1.getWorld().spawnEntity(l1, EntityType.WITCH);
-					Witch c1 = (Witch) entidad1;
+					
+					Witch c1 = (Witch) l1.getWorld().spawnEntity(l1, EntityType.WITCH);
 					c1.getAttribute(attribute).setBaseValue(150);
 					c1.setCustomName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"GUARDIA DEL LOOT");		
+					c1.setTarget(player);
 					gc.setPlayerTempCooldown(player);
 				}else {
 					
@@ -1646,7 +1651,7 @@ public class EventRandoms implements Listener{
 					}if(r == 5) {
 						l1.getWorld().dropItem(l1,new ItemStack(Material.GOLD_INGOT,r2));
 					}if(r == 6) {
-						l1.getWorld().dropItem(l1,new ItemStack(Material.NETHERITE_INGOT,1));
+						l1.getWorld().dropItem(l1,new ItemStack(Material.NETHERITE_INGOT,2));
 					}if(r == 7) {
 						l1.getWorld().dropItem(l1,new ItemStack(Material.WOODEN_SWORD,1));
 					}

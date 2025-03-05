@@ -20,6 +20,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Blaze;
@@ -27,7 +28,9 @@ import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fireball;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Mob;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Pillager;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
@@ -38,6 +41,7 @@ import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.AreaEffectCloudApplyEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -56,6 +60,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
+import me.nao.enums.mg.Items;
 import me.nao.enums.mg.Posion;
 import me.nao.enums.mg.ReviveStatus;
 import me.nao.generalinfo.mg.GameAdventure;
@@ -213,6 +218,28 @@ public class SourceOfDamage implements Listener{
 	
 	}
 	
+	@EventHandler
+	public void toxicCloud(AreaEffectCloudApplyEvent e) {
+		
+		AreaEffectCloud cloud = (AreaEffectCloud) e.getEntity();	
+		if(cloud.getCustomName() != null && ChatColor.stripColor(cloud.getCustomName()).equals("GAS TOXICO")) {
+			List<LivingEntity> l = e.getAffectedEntities();
+			
+			for(LivingEntity ent : l) {
+				if(ent instanceof Player) {
+					
+					Player player = (Player) ent;
+					if(player.getInventory().getHelmet() != null && player.getInventory().getHelmet().isSimilar(Items.MASCARAANTIGASP.getValue())) {
+						
+						e.setCancelled(true);
+					}
+				}else if(ent instanceof Monster) {
+					   e.setCancelled(true);
+				}
+			}
+		}		
+				
+	}
 	
 	//TODO MOVE EVNT
 	@EventHandler  //METODO
@@ -242,15 +269,15 @@ public class SourceOfDamage implements Listener{
 				
 				//if(player.hasPermission("mg.toxiczone")) {
 				if(player.getScoreboardTags().contains("Toxic") && player.getGameMode() == GameMode.ADVENTURE) {
-					Block block = player.getLocation().getBlock();
 					
-
+					if(player.getInventory().getHelmet() != null && player.getInventory().getHelmet().isSimilar(Items.MASCARAANTIGASP.getValue())) return;
+					if(player.hasPotionEffect(PotionEffectType.POISON)) return;
+					
+					Block block = player.getLocation().getBlock();
 					Block b1 = block.getRelative(0, 0, 0);
 					Block b2 = block.getRelative(0, 1, 0);
 					
-					if(!b1.isLiquid() || !b2.isLiquid())return;
-					if(player.hasPotionEffect(PotionEffectType.POISON)) return;
-					
+					//if(!b1.isLiquid() || !b2.isLiquid()) return;
 					
 						
 						if(b1.getType() == Material.WATER || b2.getType() == Material.WATER) {
@@ -275,13 +302,12 @@ public class SourceOfDamage implements Listener{
 									/* NUMERO DE PARTICULAS */10, 1, 0, 1, /* velocidad */0, null, true);
 						}
 						
-						
-						
-					
 				}else if(player.getScoreboardTags().contains("ToxicZone") && player.getGameMode() == GameMode.ADVENTURE) {
 					
-					Block block = player.getLocation().getBlock();
+					if(player.getInventory().getHelmet() != null && player.getInventory().getHelmet().isSimilar(Items.MASCARAANTIGASP.getValue())) return;
+					if(player.hasPotionEffect(PotionEffectType.POISON)) return;
 					
+					Block block = player.getLocation().getBlock();
 
 					Block b1 = block.getRelative(0, 0, 0);
 					Block b2 = block.getRelative(0, 1, 0);
@@ -291,10 +317,8 @@ public class SourceOfDamage implements Listener{
 					PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 					GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
 					
-					if(player.hasPotionEffect(PotionEffectType.POISON)) return;
-					player.getWorld().spawnParticle(Particle.DRAGON_BREATH, player.getLocation().add(1, 0, 1),
-							/* NUMERO DE PARTICULAS */10, 1, 0, 1, /* velocidad */0, null, true);
 					
+				
 					int rango = gi.getToxicZoneRange();
 					
 					List<Location> l = gi.getMobsGenerators();
@@ -307,6 +331,9 @@ public class SourceOfDamage implements Listener{
 							Block b = a.getRelative(0,-1, 0);
 							
 							if(a.getType() == Material.COMMAND_BLOCK && b.getType() == Material.BEDROCK) {
+								player.getWorld().spawnParticle(Particle.DRAGON_BREATH, player.getLocation().add(1, 0, 1),
+										/* NUMERO DE PARTICULAS */10, 1, 0, 1, /* velocidad */0, null, true);
+								
 								player.sendTitle(ChatColor.RED+"!!!PELIGRO!!!", ChatColor.GREEN+"Estas en una"+ChatColor.RED+" Zona Toxica "+ChatColor.GREEN+"corre", 20, 40, 20);
 								player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
 								player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,/*duration*/ 10 * 20,/*amplifier:*/20, false ,false,true));
@@ -319,6 +346,9 @@ public class SourceOfDamage implements Listener{
 								break;
 							}else if(a.getType() == Material.REPEATING_COMMAND_BLOCK && b.getType() == Material.BEDROCK) {
 								if(b1.getType() == Material.LAVA || b2.getType() == Material.LAVA) {
+									player.getWorld().spawnParticle(Particle.DRAGON_BREATH, player.getLocation().add(1, 0, 1),
+											/* NUMERO DE PARTICULAS */10, 1, 0, 1, /* velocidad */0, null, true);
+									
 									player.sendTitle(ChatColor.RED+"!!!PELIGRO!!!", ChatColor.GREEN+"Estas en"+ChatColor.YELLOW+" Zona de Lava Toxica "+ChatColor.GREEN+"corre", 20, 40, 20);
 									player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
 									//player.addPotionEffect(lento);
@@ -333,6 +363,9 @@ public class SourceOfDamage implements Listener{
 								break;
 							}else if(a.getType() == Material.CHAIN_COMMAND_BLOCK && b.getType() == Material.BEDROCK) {
 								if(b1.getType() == Material.WATER || b2.getType() == Material.WATER) {
+									player.getWorld().spawnParticle(Particle.DRAGON_BREATH, player.getLocation().add(1, 0, 1),
+											/* NUMERO DE PARTICULAS */10, 1, 0, 1, /* velocidad */0, null, true);
+									
 									player.sendTitle(ChatColor.RED+"!!!PELIGRO!!!", ChatColor.GREEN+"Estas en"+ChatColor.BLUE+" Zona Agua Toxica "+ChatColor.GREEN+"corre", 20, 40, 20);
 									player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
 									//player.addPotionEffect(lento);

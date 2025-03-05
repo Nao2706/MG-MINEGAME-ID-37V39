@@ -20,6 +20,10 @@ import org.bukkit.inventory.meta.ItemMeta;
             ESPADADIAMANTE(""+ChatColor.GREEN+ChatColor.BOLD+"ESPADA DE DIAMANTE", Material.DIAMOND_SWORD,null,1,ChatColor.GREEN+"Precio:"+ChatColor.RED+" 9 Diamante"),
             ESPADANETHERITA(""+ChatColor.GREEN+ChatColor.BOLD+"ESPADA DE NETHERITA", Material.NETHERITE_SWORD,null, 1,ChatColor.GREEN+"Precio:"+ChatColor.RED+" 12 Diamante"),
             
+            ESPADAENCAN1(""+ChatColor.GREEN+ChatColor.BOLD+"ESPADA ENCANTADA", Material.IRON_SWORD,"fire_aspect,3/knockback,4", 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"5 Netherite",ChatColor.YELLOW+ "Esta encantada"),
+        	ESPADAENCAN1P(""+ChatColor.GREEN+ChatColor.BOLD+"ESPADA ENCANTADA", Material.IRON_SWORD,"fire_aspect,3/knockback,4", 1),
+        	
+            
             FLECHA(""+ChatColor.GREEN+ChatColor.BOLD+"FLECHA", Material.ARROW,null, 1,ChatColor.GREEN+"Precio: "+ChatColor.RED+"3 de Oro"),
             FLECHAESPECTRAL(""+ChatColor.GREEN+ChatColor.BOLD+"FLECHA ESPECTRAL", Material.SPECTRAL_ARROW,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"5 de Oro",ChatColor.YELLOW+ "Marca a tus enemigos para que tus aliados lo vean"),
             ARCO(""+ChatColor.GREEN+ChatColor.BOLD+"ARCO", Material.BOW,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"20 de Hierro"),
@@ -42,9 +46,12 @@ import org.bukkit.inventory.meta.ItemMeta;
             BENGALAVERDE(""+ChatColor.GREEN+ChatColor.BOLD+"BENGALA VERDE", Material.REDSTONE_TORCH,null, 1,ChatColor.GREEN+"Precio: "+ChatColor.RED+"25 Netherite",ChatColor.YELLOW+"Recibe un paquete de Ayuda Random. ",ChatColor.RED+"Debes estar en un Sitio Despejado.. ",ChatColor.GREEN+"Click Derecho para Lanzar. "),
             BENGALAVERDEP(""+ChatColor.GREEN+ChatColor.BOLD+"BENGALA VERDE", Material.REDSTONE_TORCH,null, 1,ChatColor.YELLOW+"Recibe un paquete de Ayuda Random. ",ChatColor.RED+"Debes estar en un Sitio Despejado.. ",ChatColor.GREEN+"Click Derecho para Lanzar. "),
 
+            MASCARAANTIGAS(""+ChatColor.GREEN+ChatColor.BOLD+"MASCARA ANTIGAS", Material.CREEPER_HEAD,null, 1, ChatColor.GREEN+"Te vuelve inmune al Gas Toxico.", ChatColor.GREEN+"Debes colcocarlo en tu Cabeza.", ChatColor.GREEN+"Precio: "+ChatColor.RED+"2 Diamantes"),
+            MASCARAANTIGASP(""+ChatColor.GREEN+ChatColor.BOLD+"MASCARA ANTIGAS", Material.CREEPER_HEAD,null, 1, ChatColor.GREEN+"Te vuelve inmune al Gas Toxico.", ChatColor.GREEN+"Debes colcocarlo en tu Cabeza."),
+
             
             TEST(""+ChatColor.RED+ChatColor.BOLD+"TEST", Material.STICK,null, 1, ChatColor.GREEN+"Falling Block"),
-            REVIVE(""+ChatColor.RED+ChatColor.BOLD+"AUTO REVIVIR", Material.BREWING_STAND,null, 1, ChatColor.GREEN+"Llevalo contigo para AutorevivirteMantenlo pulsado.", ChatColor.GREEN+"Usalo cuando te Noqueen. (Click Derecho sobre tu Cadaver)", ChatColor.GREEN+"Precio: "+ChatColor.RED+"25 Diamantes"),
+            REVIVE(""+ChatColor.RED+ChatColor.BOLD+"AUTO REVIVIR", Material.BREWING_STAND,null, 1, ChatColor.GREEN+"Llevalo contigo para Autorevivirte Mantenlo pulsado.", ChatColor.GREEN+"Usalo cuando te Noqueen. (Click Derecho sobre tu Cadaver)", ChatColor.GREEN+"Precio: "+ChatColor.RED+"25 Diamantes"),
             REVIVEP(""+ChatColor.RED+ChatColor.BOLD+"AUTO REVIVIR", Material.BREWING_STAND,null, 1, ChatColor.GREEN+"Llevalo contigo para Autorevivirte.", ChatColor.GREEN+"Usalo cuando te Noqueen. (Click Derecho sobre tu Cadaver)"),
 
             SPAWNZOMBI(""+ChatColor.RED+ChatColor.BOLD+"SPAWN ZOMBI", Material.BARRIER,null, 1, ChatColor.GREEN+"Spawnea Zombis normales ."),
@@ -179,15 +186,11 @@ import org.bukkit.inventory.meta.ItemMeta;
             
             
             ADELANTE(""+ChatColor.GOLD+ChatColor.BOLD+"SIGUIENTE PAGINA", Material.GREEN_STAINED_GLASS_PANE,null,1, ChatColor.GREEN+"Nota:"+ChatColor.RED+" Ve la siguiente pagina."),
-            ATRAS(""+ChatColor.GOLD+ChatColor.BOLD+"PAGINA ANTERIOR", Material.RED_STAINED_GLASS_PANE,null,1, ChatColor.GREEN+"Nota:"+ChatColor.RED+" Ve la anterior pagina."),
+            ATRAS(""+ChatColor.GOLD+ChatColor.BOLD+"PAGINA ANTERIOR", Material.RED_STAINED_GLASS_PANE,null,1, ChatColor.GREEN+"Nota:"+ChatColor.RED+" Ve la anterior pagina.");
 
             
             
-            ESPADAENCAN1(""+ChatColor.GREEN+ChatColor.BOLD+"ESPADA ENCANTADA", Material.IRON_SWORD,"fire_aspect,3/knockback,4", 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"5 Netherite",ChatColor.YELLOW+ "Esta encantada"),
-        	ESPADAENCAN1P(""+ChatColor.GREEN+ChatColor.BOLD+"ESPADA ENCANTADA", Material.IRON_SWORD,"fire_aspect,3/knockback,4", 1);
-        	
-        	
-        	
+           
         	
             
             public ItemStack item;

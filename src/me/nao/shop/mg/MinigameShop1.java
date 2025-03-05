@@ -2098,7 +2098,18 @@ public class MinigameShop1 implements Listener{
 				}else {
 					player.sendMessage(ChatColor.RED+"Necesitas 3 Lingotes de Netherite");
 				}
+			}if(item.isSimilar(Items.MASCARAANTIGAS.getValue())) {
+				if(!hasSpaceinInventory(player)) return;
+				if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND),2)) {
+					player.getInventory().addItem(Items.MASCARAANTIGASP.getValue());
+					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
+					player.getInventory().removeItem(new ItemStack(Material.DIAMOND,3));
+				}else {
+					player.sendMessage(ChatColor.RED+"Necesitas 2 Diamantes");
+				}
 			}
+			
+			
 			
 			if(item.isSimilar(Items.ARMAS.getValue())) {
 				StoreCreateWeaponsMelee(player);
@@ -2334,6 +2345,7 @@ public class MinigameShop1 implements Listener{
 		}
 		inv.setItem(30, Items.BENGALAMARCADORA.getValue());
 		inv.setItem(31, Items.TNT.getValue());
+		inv.setItem(32, Items.MASCARAANTIGAS.getValue());
 		inv.setItem(40, Items.CERRAR.getValue());
 		inv.setItem(41, Items.VOLVER.getValue());
 		

@@ -1038,7 +1038,7 @@ public class GameIntoMap {
 		
 		PotionEffect rapido = new PotionEffect(PotionEffectType.SPEED,/*duration*/ 99999,/*amplifier:*/5, true ,true,true );   
 		PotionEffect salto= new PotionEffect(PotionEffectType.JUMP_BOOST,/*duration*/ 99999,/*amplifier:*/5, true ,true,true );
-		 ItemStack[] inv = player.getInventory().getArmorContents();
+		ItemStack[] inv = player.getInventory().getArmorContents();
 		ItemStack item = new ItemStack(Material.PLAYER_HEAD,/*CANTIDAD*/1);
 		SkullMeta meta = (SkullMeta) item.getItemMeta();
 		meta.setOwningPlayer(player);
@@ -1046,7 +1046,6 @@ public class GameIntoMap {
 		
 
 		Zombie zombi = (Zombie) player.getWorld().spawnEntity(player.getLocation(), EntityType.ZOMBIE);
-		zombi.getEquipment().setHelmet(item);
 		zombi.setCanPickupItems(true);
 		zombi.setCustomName(ChatColor.RED+player.getName());
 		zombi.setCustomNameVisible(true);
@@ -1054,7 +1053,8 @@ public class GameIntoMap {
 		zombi.addPotionEffect(rapido);
 		zombi.addPotionEffect(salto);
 		zombi.getEquipment().setArmorContents(inv);
-		zombi.getEquipment().setItemInMainHand(player.getInventory().getItemInMainHand());   
+		zombi.getEquipment().setItemInMainHand(player.getInventory().getItemInMainHand());
+		zombi.getEquipment().setHelmet(item);
 		 	
 	        //acciones
 	

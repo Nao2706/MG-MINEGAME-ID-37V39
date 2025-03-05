@@ -51,6 +51,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
+import me.nao.cosmetics.mg.RankPlayer;
 import me.nao.database.mg.BukkitSerialization;
 import me.nao.database.mg.SQLInfo;
 import me.nao.enums.mg.GameStatus;
@@ -151,7 +152,7 @@ public class Comandsmg implements CommandExecutor{
           			
           			return true;
           			
-          		}else if(args[0].equalsIgnoreCase("mapsinprogress")) {
+          		}else if(args[0].equalsIgnoreCase("activemaps")) {
           			
           			
           			List<Map.Entry<String, GameInfo>> list = new ArrayList<>(plugin.getGameInfoPoo().entrySet());
@@ -160,11 +161,20 @@ public class Comandsmg implements CommandExecutor{
           				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No hay ningun Juego en Progreso.");
           				return true;
           			}
-          			String text = ChatColor.GOLD+"Mapas en Juego o Progreso: ";
+          			String text = ChatColor.GOLD+"Mapas Activos: \n";
+          			
+
           			for (Map.Entry<String, GameInfo> e : list) {
-          				text = text + ChatColor.GREEN+e.getKey()+ChatColor.AQUA+",";
+          				if(e.getValue().getGameStatus() == GameStatus.ESPERANDO) {
+          					text = text+ChatColor.GREEN+e.getKey()+" "+text+ChatColor.WHITE+e.getValue().getGameStatus().toString()+"\n";
+          				}else {
+          					text = text+ChatColor.GREEN+e.getKey()+" "+ChatColor.RED+e.getValue().getGameStatus().toString()+"\n";
+          				}
+      
           			}
-          			text = text+ChatColor.GOLD+" un Total de: "+ChatColor.RED+list.size();
+          			
+          			
+          			text = text+ChatColor.GOLD+"Un Total de: "+ChatColor.RED+list.size()+" Mapas Activos.";
           			Bukkit.getConsoleSender().sendMessage(text);
           			return true;
           		}else if(args[0].equalsIgnoreCase("reportlogs")) {
@@ -1644,7 +1654,7 @@ public class Comandsmg implements CommandExecutor{
 						//==============1
 						
 						PointsManager pm = new PointsManager(plugin);
-						
+						RankPlayer rp = new RankPlayer(plugin);
 								int lvl = points1.getInt("Players."+player.getName()+".Level");
 								long refer = points1.getInt("Players."+player.getName()+".Reference-Xp");
 								long xp = points1.getInt("Players."+player.getName()+".Xp");
@@ -1674,11 +1684,9 @@ public class Comandsmg implements CommandExecutor{
 												 .replace("%porcent%",pm.Porcentage(xp,refer))
 												 .replace("%lvl%",String.valueOf(lvl))
 												 .replace("%wins%",String.valueOf(point5))
-												 .replace("%loses%",String.valueOf(point6)
-												 .replace("%prestige%",String.valueOf(prestige)))
-												 
-												 
-												 
+												 .replace("%loses%",String.valueOf(point6))
+												 .replace("%prestige%",String.valueOf(prestige))
+												 .replace("%prestigetext%",rp.getRankPrestigePlaceHolder(prestige))
 												));
 									}
 								}
@@ -2389,20 +2397,29 @@ public class Comandsmg implements CommandExecutor{
           		
           		return true;
           		
-          	}else if(args[0].equalsIgnoreCase("mapsinprogress")) {
+          	}else if(args[0].equalsIgnoreCase("activemaps")) {
       			
       			
       			List<Map.Entry<String, GameInfo>> list = new ArrayList<>(plugin.getGameInfoPoo().entrySet());
       			
       			if(list.isEmpty()) {
-      				player.sendMessage(ChatColor.RED+"No hay ningun Juego en Progreso.");
+      				player.sendMessage(ChatColor.RED+"No hay ningun Mapa Activo.");
       				return true;
       			}
-      			String text = ChatColor.GOLD+"Mapas en Juego o Progreso: ";
+      			String text = ChatColor.GOLD+"Mapas Activos: \n";
+      			
+
       			for (Map.Entry<String, GameInfo> e : list) {
-      				text = text + ChatColor.GREEN+e.getKey()+ChatColor.AQUA+",";
+      				if(e.getValue().getGameStatus() == GameStatus.ESPERANDO) {
+      					text = text+ChatColor.GREEN+e.getKey()+" "+text+ChatColor.WHITE+e.getValue().getGameStatus().toString()+"\n";
+      				}else {
+      					text = text+ChatColor.GREEN+e.getKey()+" "+ChatColor.RED+e.getValue().getGameStatus().toString()+"\n";
+      				}
+  
       			}
-      			text = text+ChatColor.GOLD+" un Total de: "+ChatColor.RED+list.size();
+      			
+      			
+      			text = text+ChatColor.GOLD+"Un Total de: "+ChatColor.RED+list.size()+" Mapas Activos.";
       			player.sendMessage(text);		
       			return true;
       		}else if(args[0].equalsIgnoreCase("god")) {

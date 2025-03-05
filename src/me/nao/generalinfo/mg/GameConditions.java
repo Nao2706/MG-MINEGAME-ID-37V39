@@ -149,7 +149,6 @@ public class GameConditions {
 			}else {
 				//" "+Utils.pingLevel(player.getPing())+
 				if(player.getPing() >= 150) {
-					sendMessageToConsole(Utils.pingLevel(player.getPing()));				
 					sendMessageToUsersOfSameMapLessPlayer(player,Utils.pingLevel(player.getPing()));
 					sendMessageToUsersOfSameMapLessPlayer(player,
 							ChatColor.YELLOW+"A Salido "+ChatColor.GREEN+player.getName()+ChatColor.RED+" ("+ChatColor.GOLD+(ga.getParticipants().size()-1)+ChatColor.YELLOW+"/"+ChatColor.GOLD+getMaxPlayerMap(pl.getMapName())+ChatColor.RED+")");
@@ -2164,7 +2163,7 @@ public class GameConditions {
 							player.sendMessage("");
 							player.sendMessage(""+ChatColor.YELLOW+ChatColor.BOLD+"                     [CERRADO] ");
 							player.sendMessage(ChatColor.YELLOW+"Me temo que el Tiempo para Ingresar ya paso.");
-							player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"Cerrado: "+ChatColor.GOLD+"Solo funciona los dias "+times);
+							player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"Cerrado: "+ChatColor.GOLD+"Solo funciona los dias "+times.replaceAll(",",ChatColor.YELLOW+","));
 							player.sendMessage(ChatColor.GOLD+"Fecha Actual: "+ChatColor.GREEN+lt.format(formatter));
 							player.sendMessage("");
 							player.sendMessage(ChatColor.AQUA+"================================================");
@@ -2239,7 +2238,7 @@ public class GameConditions {
 					player.sendMessage(ChatColor.BLUE+"================================================");
 					player.sendMessage(""+ChatColor.YELLOW+ChatColor.BOLD+"                     [CERRADO] ");
 					player.sendMessage(ChatColor.YELLOW+"Me temo que el Tiempo para Ingresar ya paso.");
-					player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"Cerrado: "+ChatColor.GOLD+"Solo funciona los dias "+times);
+					player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"Cerrado: "+ChatColor.GOLD+"Solo funciona los dias "+times.replaceAll(",",ChatColor.YELLOW+","));
 					player.sendMessage(ChatColor.GOLD+"Fecha Actual: "+ChatColor.GREEN+lt.format(formatter));
 					player.sendMessage("");
 					player.sendMessage(ChatColor.BLUE+"================================================");

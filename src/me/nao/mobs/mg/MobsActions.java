@@ -194,7 +194,7 @@ public class MobsActions {
 				  
 			    }if(z.getCustomName().contains(ChatColor.RED+"HARDCORE VIRUS")) {
 			    	
-			    	  AreaPotion(z,z.getLocation(),PotionEffectType.HUNGER,"ORANGE",30,10,20,5);
+			    	  AreaPotion(z,z.getLocation(),PotionEffectType.HUNGER,"GREEN",30,10,20,5);
 					  AreaPotion(z,z.getLocation(),PotionEffectType.POISON,"GREEN",30,10,20,50);
 					  AreaPotion(z,z.getLocation(),PotionEffectType.INSTANT_DAMAGE,"RED",25,20,20,2);
 					  AreaPotion(z,z.getLocation(),PotionEffectType.INSTANT_DAMAGE,"RED",10,20,30,2);
@@ -777,17 +777,6 @@ public class MobsActions {
 					zombi1.addPotionEffect(salto);
 				
 			
-				}else if(n == 15) {
-				
-					Zombie zombi1 = (Zombie)  world.spawnEntity(l2, EntityType.ZOMBIE);
-					zombi1.setCustomName(ChatColor.RED+"Screamer");
-					
-					
-					zombi1.addPotionEffect(rapido);
-					zombi1.addPotionEffect(salto);
-				
-				
-					
 				}else if(n == 15) {
 				
 					Zombie zombi1 = (Zombie)  world.spawnEntity(l2, EntityType.ZOMBIE);
