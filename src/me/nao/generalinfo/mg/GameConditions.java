@@ -212,8 +212,12 @@ public class GameConditions {
 		
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		GameAdventure ga = (GameAdventure) plugin.getGameInfoPoo().get(pl.getMapName());
+		
 		if(CanJoinWithYourInventory(pl.getMapName()) && !ga.getSpectators().contains(player.getName())) {
-			
+			if(ga.getGameStatus() == GameStatus.ESPERANDO || ga.getGameStatus() == GameStatus.COMENZANDO) {
+				mgLeaveOfTheGame(player);
+				return;
+			}
 			//si estas muerto te puedes ir
 			if(ga.getDeadPlayers().contains(player.getName())) {
 				mgLeaveOfTheGame(player);
@@ -381,7 +385,7 @@ public class GameConditions {
 				Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch);
 				player.teleport(l);
 			
-					return;
+				return;
 				  
 			} 
 	   }
@@ -986,32 +990,32 @@ public class GameConditions {
 	public void setAndSavePlayer(Player player,String map) {
 		
 		 PlayerInfo pl = null;
-		 Attribute attribute = Attribute.MAX_HEALTH; 
+		 
 		 if(CanJoinWithYourInventory(map) && !CanUseKit(map)) {
 				//NO SALVAS SU INVENTARIO
-			 	
-				
 				if(ExistLobbyMg()) {
-				    pl = new PlayerInfo(plugin,false,player, player.getGameMode(), player.isFlying(), getLocationOfLobby(), map,new GamePoints());
+				    pl = new PlayerInfo(plugin,false,player, getLocationOfLobby(), map,new GamePoints());
 				
 				}else {
-					pl = new PlayerInfo(plugin,false,player, player.getGameMode(), player.isFlying(), player.getLocation(), map,new GamePoints());
+					pl = new PlayerInfo(plugin,false,player, player.getLocation(), map,new GamePoints());
 					
 				}
-			}else{
+				pl.ClearGamemodePlayerMg();
+		}else{
 				//LO SALVAS
 				
 				if(ExistLobbyMg()) {
-				    pl = new PlayerInfo(plugin,true,player,player.getActivePotionEffects(), player.getInventory().getContents(), player.getGameMode(), player.isFlying(),player.getHealth(), player.getAttribute(attribute).getValue(), player.getFoodLevel(), player.getLevel(),player.getExp(), getLocationOfLobby(), map,new GamePoints());
+				    pl = new PlayerInfo(plugin,true,player, getLocationOfLobby(), map,new GamePoints());
 					
 				}else {
-					pl = new PlayerInfo(plugin,true,player,player.getActivePotionEffects(), player.getInventory().getContents(), player.getGameMode(), player.isFlying(),player.getHealth(), player.getAttribute(attribute).getValue(), player.getFoodLevel(), player.getLevel(),player.getExp(), player.getLocation(), map,new GamePoints());
+					pl = new PlayerInfo(plugin,true,player,player.getLocation(), map,new GamePoints());
 	
 				}
-			}
+				pl.ClearAllPlayerMg();
+		}
 		 
 		 	plugin.getPlayerInfoPoo().put(player, pl);
-			pl.ClearAllPlayerMg();
+			
 	}
 	
 	//TODO LOAD MAP

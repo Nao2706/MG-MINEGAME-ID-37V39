@@ -1686,9 +1686,6 @@ public class EventRandoms implements Listener{
 				 
 				  Player player = (Player) projectile.getShooter();
 				  Entity entidadhit = e.getHitEntity();
-				  
-				 
-				
 				 
 				  if(entidadhit != null) {
 					    if(!gc.isPlayerinGame(player)) return;

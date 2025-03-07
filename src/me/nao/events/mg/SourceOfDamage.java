@@ -253,7 +253,7 @@ public class SourceOfDamage implements Listener{
 				
 				gc.TryToScapeInSpectatorMode(player);
 				GameIntoMap ci = new GameIntoMap(plugin);
-				ci.GamePlayerFallMap(player);
+				ci.GamePlayerFallMap(player , null);
 				ci.GamePlayerWin(player);
 //				ci.PlayerFallMap(player);	
 //				ci.PlayerWin(player);
@@ -1024,10 +1024,10 @@ public class SourceOfDamage implements Listener{
 		
 			// CUANDO CAE ENCIMA DEL BARRIER RECIBE DAÑO PERO ESTE NO MUERE PERO SE PUEDE MOVER UNOS SEGS
 			if(player.getHealth() > e.getFinalDamage() && e.getCause() == DamageCause.FALL) {
-				ci.GamePlayerFallMap(player);
+				ci.GamePlayerFallMap(player,null);
 			}if(e.getCause() == DamageCause.VOID) {
 				e.setCancelled(true);
-				ci.GamePlayerFallMap(player);
+				ci.GamePlayerFallMap(player,DamageCause.VOID);
 			}else if(e.getFinalDamage() >= player.getHealth()) {
 				
 				if(player.getInventory().getItemInMainHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING)) || player.getInventory().getItemInOffHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING))) {

@@ -20,6 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
@@ -251,13 +252,13 @@ public class GameIntoMap {
 		
 	}
 	
-	public void GamePlayerFallMap(Player player) {
+	public void GamePlayerFallMap(Player player,DamageCause d) {
 		
-		
+	
 		Block block = player.getLocation().getBlock();
 		Block b = block.getRelative(0, -1, 0);
 		
-		if(b.getType() == Material.BARRIER && player.getGameMode() == GameMode.ADVENTURE) {
+		if(b.getType() == Material.BARRIER && player.getGameMode() == GameMode.ADVENTURE || player.getGameMode() == GameMode.ADVENTURE && d != null && d == DamageCause.VOID) {
 			
 			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 			String mapa = pl.getMapName();
@@ -270,8 +271,8 @@ public class GameIntoMap {
 				
 				gmc.TptoSpawnMapSimple(player);
 				player.sendTitle(ChatColor.GREEN+"Anti Void Activado",ChatColor.GREEN+"No te Caigas",20,60,20);
-				player.sendMessage(ChatColor.GREEN+"-Que suerte el Mapa tiene Anti Void pero Siempre Regresaras al Inicio del Mapa Ojo con el Tiempo.");
-				player.sendMessage(ChatColor.GREEN+"-Mmmm no estoy seguro si el Daño por Caida esta Anulado asi que ten Cuidado.");
+				player.sendMessage(ChatColor.GREEN+"- Que suerte el Mapa tiene Anti Void pero Siempre Regresaras al Inicio del Mapa Ojo con el Tiempo.");
+				player.sendMessage(ChatColor.GREEN+"- Mmmm no estoy seguro si el Daño por Caida esta Anulado asi que ten Cuidado.");
 				return;
 				
 			}else {
@@ -297,39 +298,22 @@ public class GameIntoMap {
 					player.sendMessage(ChatColor.RED+"Moriste por que "+ChatColor.YELLOW+"Te caiste fuera del Mapa");
 					gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"Caerse Fuera del Mapa.");
 
-				}if(gi.getGameType() == GameType.ADVENTURE) {
+				}
 					player.sendMessage(ChatColor.RED+"\nUsa la hotbar para ver a otros jugadores. "+ChatColor.YELLOW+"\n!!!Solo podras ver a los que estan en tu partida");
 					player.sendMessage(ChatColor.GREEN+"Puedes ser revivido por tus compañeros.(Siempre que hayan cofres de Revivir)");
 					
 				 	MgTeams t = new MgTeams(plugin);;
 					t.JoinTeamDeadMG(player);
-					
-			
-					GameConditions cm = new GameConditions(plugin);
-					cm.deadPlayerToGame(player, mapa);
-				
-					 
-					
-					
-					player.setGameMode(GameMode.SPECTATOR);
+					gmc.deadPlayerToGame(player, mapa);
 					gmc.DeathTptoSpawn(player, mapa);
+					player.setGameMode(GameMode.SPECTATOR);
 					
-				}else if(gi.getGameType() == GameType.NEXO) {
-					 if(gi instanceof GameNexo) {
-//							GameNexo gn = (GameNexo) gi;
-//							DestroyNexo dn = new DestroyNexo(plugin);
-//							if(gn.getBlueTeamMg().contains(player.getName())) {
-//								player.teleport(dn.TpSpawnBlue(mapa));
-//							}else if(gn.getRedTeamMg().contains(player.getName())){
-//								player.teleport(dn.TpSpawnRed(mapa));
-//							}
-//							
-						}
-				}
+					
+				
 			}
 			
 		}
-		
+		return;
 	}
 	
 	public void GamePlayerWin(Player player) {

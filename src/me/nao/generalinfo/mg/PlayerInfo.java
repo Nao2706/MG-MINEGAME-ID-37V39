@@ -22,7 +22,7 @@ public class PlayerInfo {
 	private GameMode gamemode;
 	private boolean fly;
 	private double vida;
-	private double maxvida;
+	private double maxvida,scale;
 	private int comida;
 	private int lvlxp , mglvl, mgprestige;
 	private float xp;
@@ -38,48 +38,42 @@ public class PlayerInfo {
 	 *
 	 * */
 	
-	public PlayerInfo(Minegame plugin ,boolean isinventorysave,Player player, Collection<PotionEffect> potions, ItemStack[] inv, GameMode gamemode, boolean fly, double vida, double maxvida,int comida, int lvlxp, float xp,Location l,String map,GamePoints gp) {
+	public PlayerInfo(Minegame plugin ,boolean isinventorysave,Player player,Location l,String map,GamePoints gp) {
 	
-		this.plugin = plugin;
-		this.isinventorysave = isinventorysave;
-		this.player = player;
-		this.potions = potions;
-		this.inv = inv;
-		this.gamemode = gamemode;
-		this.fly = fly;
-		this.vida = vida;
-		this.maxvida = maxvida;
-		this.comida = comida;
-		this.lvlxp = lvlxp;
-		this.xp = xp;
-		this.l = l;
-		this.map = map;
-		this.gp = gp;
-		this.teamname = "NINGUNO";
-		this.mglvl = 0;
-		this.mgprestige = 0;
-	}
-	
-	/** 
-	 * Crear Objeto PlayerInfo para poder definir si en un juego este entrara sin sus cosas(inventario , vida , posiones , exp ) variante en la cual no guarda su inventario pero si guarda otra informacion mas pequeña.
-	 * 
-	 * 
-	 * @param Minegame plugin ,boolean isinventorysave,Player player, GameMode gamemode, boolean fly,Location l,String nameMision,GamePoints gp
-	 * 
-	 * */
-	
-	public PlayerInfo(Minegame plugin ,boolean isinventorysave,Player player, GameMode gamemode, boolean fly,Location l,String map,GamePoints gp) {
+		if(isinventorysave) {
+			this.plugin = plugin;
+			this.isinventorysave = isinventorysave;
+			this.player = player;
+			this.potions = player.getActivePotionEffects();
+			this.inv = player.getInventory().getContents();
+			this.gamemode = player.getGameMode();
+			this.fly = player.isFlying();
+			this.vida = player.getHealth();
+			this.maxvida = player.getAttribute(Attribute.MAX_HEALTH).getValue();
+			this.scale = player.getAttribute(Attribute.SCALE).getValue();
+			this.comida = player.getFoodLevel();
+			this.lvlxp = player.getLevel();
+			this.xp = player.getExp();
+			this.l = l;
+			this.map = map;
+			this.gp = gp;
+			this.teamname = "NINGUNO";
+			this.mglvl = 0;
+			this.mgprestige = 0;
+		}else {
+			this.plugin = plugin;
+			this.isinventorysave = isinventorysave;
+			this.player = player;
+			this.gamemode = player.getGameMode();
+			this.scale = player.getAttribute(Attribute.SCALE).getValue();
+			this.fly = player.isFlying();
+			this.l = l;
+			this.map = map;
+			this.gp = gp;
+			this.teamname = "NINGUNO";
+			this.mglvl = 0;
+		}
 		
-		this.plugin = plugin;
-		this.isinventorysave = isinventorysave;
-		this.player = player;
-		this.gamemode = gamemode;
-		this.fly = fly;
-		this.l = l;
-		this.map = map;
-		this.gp = gp;
-		this.teamname = "NINGUNO";
-		this.mglvl = 0;
 		
 	}
 	
@@ -114,6 +108,10 @@ public class PlayerInfo {
 
 	public double getMaxLifeMG() {
 		return maxvida;
+	}
+	
+	public double getScaleMG() {
+		return scale;
 	}
 
 	public int getFoodMG() {
@@ -175,6 +173,10 @@ public class PlayerInfo {
 	public void setMaxvidaMG(double maxvida) {
 		this.maxvida = maxvida;
 	}
+	
+	public void setScaleMG(double scale) {
+		this.scale = scale;
+	}
 
 	public void setComidaMG(int comida) {
 		this.comida = comida;
@@ -223,6 +225,7 @@ public class PlayerInfo {
 		setMgPlayerLvl(lvl);
 		setMgPlayerprestige(prestigee);
 		player.getAttribute(Attribute.MAX_HEALTH).setBaseValue(20);
+		player.getAttribute(Attribute.SCALE).setBaseValue(1);
 		player.setExp(0);
 		player.setLevel(0);
 		player.getInventory().clear();
@@ -261,6 +264,7 @@ public class PlayerInfo {
 		 player.setFlying(pl.isFlyMG());
 		 player.getInventory().setContents(pl.getInventoryMG());
 		 player.getAttribute(Attribute.MAX_HEALTH).setBaseValue(pl.getMaxLifeMG());
+		 player.getAttribute(Attribute.SCALE).setBaseValue(pl.getScaleMG());
 		 player.setFoodLevel(pl.getFoodMG());
 		 player.addPotionEffects(pl.getPlayerPottionsMg());
 		 player.setExp(pl.getXpMG());
@@ -269,9 +273,9 @@ public class PlayerInfo {
 	}
 	
 	public void RestoreGamemodePlayerMg(Player playermg) {
-		PlayerInfo pl = plugin.getPlayerInfoPoo().get(playermg);
+		 PlayerInfo pl = plugin.getPlayerInfoPoo().get(playermg);
 		 player.setGameMode(pl.getGamemodeMG());
-		 
+		 player.getAttribute(Attribute.SCALE).setBaseValue(pl.getScaleMG());
 		 player.setFlying(pl.isFlyMG());
 		 
 		

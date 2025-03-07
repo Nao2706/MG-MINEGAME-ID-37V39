@@ -138,4 +138,38 @@ public class Utils {
 			
 			return text;
 		}
+		
+		public static String chooseAmPm(String text) {
+			int hour = Integer.valueOf(text.split(":")[0]);
+			
+			switch(hour) {
+				case 00:
+				case 1:
+				case 2:
+				case 3:
+				case 4:
+				case 5:
+				case 6:
+				case 7:
+				case 8:
+				case 9:
+				case 10:
+				case 11:
+					text = text + " AM";
+				case 12:
+				case 13:
+				case 14:
+				case 15:
+				case 16:
+				case 17:
+				case 18:
+				case 19:
+				case 20:
+				case 21:
+				case 22:
+				case 23:
+					text = text + " PM";
+			}
+			return text;
+		} 
 }
