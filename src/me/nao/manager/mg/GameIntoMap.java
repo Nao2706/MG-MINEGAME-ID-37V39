@@ -631,6 +631,9 @@ public class GameIntoMap {
 	//TODO DROP
 	public void PlayerDropAllItems(Player player) {
 		GameConditions gm = new GameConditions(plugin);
+		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+		
+		
 		
 		Location l = null;
 		
@@ -644,7 +647,7 @@ public class GameIntoMap {
 			for (ItemStack itemStack : player.getInventory().getContents()) {
 				if(itemStack == null) continue;
 				
-					if(gm.isPlayerinGame(player) && gm.CanJoinWithYourInventory(plugin.getPlayerInfoPoo().get(player).getMapName())) {
+					if(gm.isPlayerinGame(player) && pl.isInventoryAllowedForTheMap()) {
 						Item it = (Item) l.getWorld().spawnEntity(l,EntityType.ITEM);
 						it.setItemStack(itemStack);
 						it.setOwner(player.getUniqueId());

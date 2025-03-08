@@ -78,7 +78,7 @@ public class PlayerInfo {
 	}
 	
 	
-	public boolean hasPlayerMoreInfo() {
+	public boolean isInventoryAllowedForTheMap() {
 		return isinventorysave;
 	}
 

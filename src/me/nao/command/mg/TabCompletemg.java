@@ -88,7 +88,9 @@ public class TabCompletemg implements TabCompleter{
 			arguments.add("showtags");
 			arguments.add("prestige");
 			arguments.add("querylevel");
-			arguments.add("activemaps");
+			arguments.add("mapsingame");
+			arguments.add("ping");
+			arguments.add("gamedetails");
 			
 			
 		}

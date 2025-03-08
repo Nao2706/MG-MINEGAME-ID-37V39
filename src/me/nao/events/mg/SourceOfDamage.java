@@ -24,6 +24,7 @@ import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Blaze;
+import org.bukkit.entity.Boat;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -269,9 +270,15 @@ public class SourceOfDamage implements Listener{
 				
 				//if(player.hasPermission("mg.toxiczone")) {
 				if(player.getScoreboardTags().contains("Toxic") && player.getGameMode() == GameMode.ADVENTURE) {
-					
+					if(player.isInsideVehicle() && player.getVehicle() instanceof Boat) {
+						Boat boat = (Boat) player.getVehicle();
+						if(boat.getStatus() == Boat.Status.IN_WATER) {
+							return;
+						}
+					}
 					if(player.getInventory().getHelmet() != null && player.getInventory().getHelmet().isSimilar(Items.MASCARAANTIGASP.getValue())) return;
 					if(player.hasPotionEffect(PotionEffectType.POISON)) return;
+			
 					
 					Block block = player.getLocation().getBlock();
 					Block b1 = block.getRelative(0, 0, 0);
@@ -303,7 +310,12 @@ public class SourceOfDamage implements Listener{
 						}
 						
 				}else if(player.getScoreboardTags().contains("ToxicZone") && player.getGameMode() == GameMode.ADVENTURE) {
-					
+					if(player.isInsideVehicle() && player.getVehicle() instanceof Boat) {
+						Boat boat = (Boat) player.getVehicle();
+						if(boat.getStatus() == Boat.Status.IN_WATER) {
+							return;
+						}
+					}
 					if(player.getInventory().getHelmet() != null && player.getInventory().getHelmet().isSimilar(Items.MASCARAANTIGASP.getValue())) return;
 					if(player.hasPotionEffect(PotionEffectType.POISON)) return;
 					

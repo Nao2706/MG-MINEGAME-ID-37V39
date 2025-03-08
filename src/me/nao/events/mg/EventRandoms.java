@@ -256,7 +256,7 @@ public class EventRandoms implements Listener{
 											pr.setValue(pr.getValue()+1);
 											player.sendTitle(""+ChatColor.WHITE+ChatColor.BOLD+"REVIVIENDO"+ChatColor.GREEN+ChatColor.BOLD+" + ", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 0, 20, 0);
 											pr.setReviveStatus(ReviveStatus.HEALING);
-											pr.getArmorStand().getWorld().spawnParticle(Particle.HAPPY_VILLAGER, pr.getArmorStand().getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */25, 1, 1, 1, /* velocidad */0, null, true);
+											pr.getArmorStand().getWorld().spawnParticle(Particle.HAPPY_VILLAGER, pr.getArmorStand().getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */5, 1, 1, 1, /* velocidad */0, null, true);
 
 										}else {
 											if(pr.getReviveStatus() == ReviveStatus.SELFREVIVED) return;
@@ -278,7 +278,7 @@ public class EventRandoms implements Listener{
 											target.sendTitle(""+ChatColor.WHITE+ChatColor.BOLD+"REVIVIENDO"+ChatColor.GREEN+ChatColor.BOLD+" + ", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 0, 20, 0);
 											player.sendTitle(""+ChatColor.WHITE+ChatColor.BOLD+"REVIVIENDO"+ChatColor.GREEN+ChatColor.BOLD+" + ", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 0, 20, 0);
 											pr.setReviveStatus(ReviveStatus.HEALING);
-											pr.getArmorStand().getWorld().spawnParticle(Particle.HAPPY_VILLAGER, pr.getArmorStand().getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */25, 1, 1, 1, /* velocidad */0, null, true);
+											pr.getArmorStand().getWorld().spawnParticle(Particle.HAPPY_VILLAGER, pr.getArmorStand().getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */5, 1, 1, 1, /* velocidad */0, null, true);
 
 										}else {
 											if(pr.getReviveStatus() == ReviveStatus.REVIVED) return;

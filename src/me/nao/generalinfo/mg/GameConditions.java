@@ -213,7 +213,7 @@ public class GameConditions {
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		GameAdventure ga = (GameAdventure) plugin.getGameInfoPoo().get(pl.getMapName());
 		
-		if(CanJoinWithYourInventory(pl.getMapName()) && !ga.getSpectators().contains(player.getName())) {
+		if(pl.isInventoryAllowedForTheMap() && !ga.getSpectators().contains(player.getName())) {
 			if(ga.getGameStatus() == GameStatus.ESPERANDO || ga.getGameStatus() == GameStatus.COMENZANDO) {
 				mgLeaveOfTheGame(player);
 				return;
@@ -226,8 +226,10 @@ public class GameConditions {
 				Block block = player.getLocation().getBlock();
 				Block b = block.getRelative(0, -2, 0);
 				if(b.getType() != Material.STRUCTURE_BLOCK) {
-					 player.sendMessage(ChatColor.YELLOW+"Debes estar dentro de una Zona Segura para salirte.");
-					 player.sendMessage(ChatColor.RED+"Si te Desconectas fuera de una Zona segura tu Inventario se Borrara.");
+					 player.sendMessage(""+ChatColor.YELLOW+ChatColor.BOLD+" !!! ADVERTENCIA !!!");
+					 player.sendMessage(ChatColor.YELLOW+"- Debes estar dentro de una Zona Segura para Salirte.");
+					 player.sendMessage(ChatColor.YELLOW+"- Oh debes haber muerto.");
+					 player.sendMessage(ChatColor.RED+"⚠ Si te Desconectas fuera de una Zona segura tu Inventario se Dropeara ⚠");
 					 
 				}else {
 					mgLeaveOfTheGame(player);
@@ -241,7 +243,8 @@ public class GameConditions {
 	}
 	
 	
-	
+	//es usado para el evento cuando este se desconecta
+	//
 	public void LeaveMapConexionIlegal(Player player) {
 		
 		if(!isPlayerinGame(player)) return;
@@ -249,7 +252,7 @@ public class GameConditions {
 		
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		GameAdventure ga = (GameAdventure) plugin.getGameInfoPoo().get(pl.getMapName());
-		if(CanJoinWithYourInventory(pl.getMapName()) && !ga.getSpectators().contains(player.getName())) {
+		if(pl.isInventoryAllowedForTheMap() && !ga.getSpectators().contains(player.getName())) {
 			
 			if(ga.getDeadPlayers().contains(player.getName())) {
 				mgLeaveOfTheGame(player);
@@ -291,18 +294,18 @@ public class GameConditions {
 			}
 			
 			List<Player> spec = ConvertStringToPlayer(ga.getSpectators());
-			
+			 
 			for(Player target : spec) {
 				sco.ClearScore(target);
 				RestorePlayer(target);
 			}
 			
 				checkGenerator(gi);
-				System.out.println("LOG END GAME RESULT: "+plugin.getGameInfoPoo().get(name).ShowGame());
-				System.out.println("ENTIDADES MARCADAS: "+plugin.getEntitiesFromFlare().size());
+				//System.out.println("LOG END GAME RESULT: "+plugin.getGameInfoPoo().get(name).ShowGame());
+				//System.out.println("ENTIDADES MARCADAS: "+plugin.getEntitiesFromFlare().size());
 				plugin.getEntitiesFromFlare().remove(name);
 				plugin.getGameInfoPoo().remove(name);
-				System.out.println("LOG MAP OF GAMES: "+plugin.getGameInfoPoo().toString());
+				//System.out.println("LOG MAP OF GAMES: "+plugin.getGameInfoPoo().toString());
 
 		}
 		
@@ -2697,6 +2700,95 @@ public class GameConditions {
 		
 	}
 	
+	public void sendResultsInGame(GameInfo map,Player player) {
+		
+		if(map instanceof GameAdventure) {
+			
+			GameAdventure ga = (GameAdventure) map;
+			
+			if(ga.getGameStatus() == GameStatus.TERMINANDO) {
+				sendMessageToUserAndConsole(player,ChatColor.RED+"La Partida esta Terminando.");	
+				return;
+			}
+			
+			List<String> participants = ga.getParticipants(); 
+			List<String> alive = ga.getAlivePlayers();  
+			List<String> deads = ga.getDeadPlayers();
+			List<String> spectator = ga.getSpectators();
+			List<String> arrives = ga.getArrivePlayers();
+			
+			
+			sendMessageToUserAndConsole(player,"");	
+			sendMessageToUserAndConsole(player,""+ChatColor.RED+ChatColor.BOLD+"INFORME DEL PROGRESO DEL JUEGO");
+			sendMessageToUserAndConsole(player,ChatColor.GRAY+"=============================");
+			if(participants.isEmpty()) {
+				sendMessageToUserAndConsole(player,""+ChatColor.GRAY+ChatColor.BOLD+"PARTICIPANTES: "+ChatColor.WHITE+"SIN PARTICIPANTES");
+			}else {
+				String comments =  ""+ChatColor.GREEN+ChatColor.BOLD+"PARTICIPANTES: ";
+				for(int i = 0 ; i < participants.size();i++) {
+					comments = comments+ChatColor.GREEN+participants.get(i)+ChatColor.GOLD+",";
+				}
+				comments = comments+ChatColor.GRAY+ChatColor.BOLD+" PARTICIPARON: "+ChatColor.GREEN+participants.size();
+				sendMessageToUserAndConsole(player,comments);
+			}
+			
+			if(alive.isEmpty()) {
+				sendMessageToUserAndConsole(player,""+ChatColor.GREEN+ChatColor.BOLD+"VIVOS: "+ChatColor.WHITE+"SIN SUPERVIVIENTES");
+			}else {
+				String comments =  ""+ChatColor.GREEN+ChatColor.BOLD+"VIVOS: ";
+				for(Player p : ConvertStringToPlayer(alive)) {
+					comments = comments+ChatColor.GREEN+p.getName()+ChatColor.WHITE+" Vida:"+ChatColor.RED+p.getHealth()+ChatColor.GOLD+",";
+				}
+				
+				comments = comments+ChatColor.GREEN+ChatColor.BOLD+" SOBREVIVIERON: "+ChatColor.GOLD+alive.size();
+				sendMessageToUserAndConsole(player,comments);
+
+			}
+			
+			if(deads.isEmpty()) {
+				sendMessageToUserAndConsole(player,""+ChatColor.RED+ChatColor.BOLD+"MUERTOS: "+ChatColor.WHITE+"SIN MUERTOS");
+			}else {
+				String comments = ""+ChatColor.RED+ChatColor.BOLD+"MUERTOS: ";
+				for(int i = 0 ; i < deads.size();i++) {
+					comments = comments+ChatColor.YELLOW+deads.get(i)+ChatColor.GOLD+",";
+				}
+				comments = comments+ChatColor.RED+ChatColor.BOLD+" MURIERON: "+ChatColor.YELLOW+deads.size();
+				sendMessageToUserAndConsole(player,comments);
+
+			}
+			
+			if(spectator.isEmpty()) {
+				sendMessageToUserAndConsole(player,""+ChatColor.AQUA+ChatColor.BOLD+"ESPECTADORES: "+ChatColor.WHITE+"SIN ESPECTADORES");
+			}else {
+				String comments = ""+ChatColor.AQUA+ChatColor.BOLD+"ESPECTADORES: ";
+				for(int i = 0 ; i < spectator.size();i++) {
+					comments = comments+ChatColor.WHITE+spectator.get(i)+ChatColor.GOLD+",";
+				}
+				comments = comments+ChatColor.AQUA+ChatColor.BOLD+" ESPECTADORES: "+ChatColor.WHITE+spectator.size();
+				sendMessageToUserAndConsole(player,comments);
+
+			}
+			
+			if(arrives.isEmpty()) {
+				sendMessageToUserAndConsole(player,""+ChatColor.GOLD+ChatColor.BOLD+"GANADORES: "+ChatColor.WHITE+"SIN GANADORES");
+			}else {
+				String comments = ""+ChatColor.GOLD+ChatColor.BOLD+"GANADORES: ";
+				for(int i = 0 ; i < arrives.size();i++) {
+					comments = comments+ChatColor.DARK_PURPLE+arrives.get(i)+ChatColor.DARK_GREEN+",";
+				}
+				comments = comments+ChatColor.GOLD+ChatColor.BOLD+" GANADORES: "+ChatColor.WHITE+arrives.size();
+				sendMessageToUserAndConsole(player,comments);
+
+			}
+	
+			sendMessageToUserAndConsole(player,ChatColor.GRAY+"=============================");	
+			sendMessageToUserAndConsole(player,"");	
+			
+			
+		}
+		
+	}
+	
 	//TODO RESTORE
 	public void RestorePlayer(Player player) {
 	
@@ -2709,10 +2801,10 @@ public class GameConditions {
 				BossBar boss = ms.getBossbar();
 				boss.removePlayer(player);
 				
-				System.out.println("LOG-1 RESTORE ANTES MAP: "+ms.ShowGame());
+				//System.out.println("LOG-1 RESTORE ANTES MAP: "+ms.ShowGame());
 				
 					//SE SECCIONA POR QUE HAY QUE VER SI SE SALVO O NO SU INVENTARIO
-					if(pl.hasPlayerMoreInfo()) {
+					if(pl.isInventoryAllowedForTheMap()) {
 						player.teleport(pl.getLocationMG());
 						pl.RestoreAllPlayerMg(player);
 						if(ms.getGameStatus() == GameStatus.TERMINANDO) {
@@ -4447,6 +4539,51 @@ public class GameConditions {
 			}
 			return entities;
 	}
+	
+	
+	 public void pagsSystem(Player player,List<String> l , int pag,int datosperpags) {
+	    	
+	    	if(!l.isEmpty()) {
+	    		int inicio = (pag -1) * datosperpags;
+	    		int fin = inicio + datosperpags;
+	    		
+	    		int tamañolista = l.size();
+	    		int numerodepags = (int) Math.ceil((double) tamañolista /datosperpags);
+	    		
+	    		if(pag > numerodepags) {
+	    			if(player != null) {
+		    			player.sendMessage(ChatColor.RED+"No hay mas datos para mostrar en la pag: "+ChatColor.GOLD+pag+ChatColor.GREEN+" Paginas en Total: "+ChatColor.RED+((l.size()+datosperpags-1)/datosperpags));
+
+	    			}
+	    			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No hay mas datos para mostrar en la pag: "+ChatColor.GOLD+pag+ChatColor.GREEN+" Paginas en Total: "+ChatColor.RED+((l.size()+datosperpags-1)/datosperpags));
+	    			return;
+	    		}
+	    		if(player != null) {
+	    			
+		    		player.sendMessage(ChatColor.GOLD+"Paginas: "+ChatColor.RED+pag+ChatColor.GOLD+"/"+ChatColor.RED+((l.size()+datosperpags-1)/datosperpags));
+	    		}
+	    		
+	    	
+	    		Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+"Paginas: "+ChatColor.RED+pag+ChatColor.GOLD+"/"+ChatColor.RED+((l.size()+datosperpags-1)/datosperpags));
+	    	
+	    		for(int i = inicio;i < fin && i < l.size();i++) {
+	    			if(player != null) {
+	    				player.sendMessage(""+ChatColor.RED+(i+1)+").  "+l.get(i));
+	    			}
+	    			Bukkit.getConsoleSender().sendMessage(""+ChatColor.RED+(i+1)+").  "+ChatColor.WHITE+l.get(i));
+	    					
+	    		}
+	    		
+	    	}else {
+	    		if(player != null) {
+		    		player.sendMessage(ChatColor.RED+"No hay datos para mostrar.");
+
+	    		}
+	    		Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No hay datos para mostrar.");
+	    	}
+	    	return;
+	    }
+	
 	
 	public void mgfill(Material m , Location point1 , Location point2,boolean blockbreak) {
 		

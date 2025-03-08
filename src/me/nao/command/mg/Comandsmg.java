@@ -152,30 +152,51 @@ public class Comandsmg implements CommandExecutor{
           			
           			return true;
           			
-          		}else if(args[0].equalsIgnoreCase("activemaps")) {
+          		}else if(args[0].equalsIgnoreCase("mapsingame")) {
           			
-          			
+          			  
           			List<Map.Entry<String, GameInfo>> list = new ArrayList<>(plugin.getGameInfoPoo().entrySet());
           			
           			if(list.isEmpty()) {
           				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No hay ningun Juego en Progreso.");
           				return true;
           			}
-          			String text = ChatColor.GOLD+"Mapas Activos: \n";
           			
-
+          			Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+"Mapas Activos:");		
+          			List<String> l = new ArrayList<>();
           			for (Map.Entry<String, GameInfo> e : list) {
           				if(e.getValue().getGameStatus() == GameStatus.ESPERANDO) {
-          					text = text+ChatColor.GREEN+e.getKey()+" "+text+ChatColor.WHITE+e.getValue().getGameStatus().toString()+"\n";
-          				}else {
-          					text = text+ChatColor.GREEN+e.getKey()+" "+ChatColor.RED+e.getValue().getGameStatus().toString()+"\n";
+          					l.add(ChatColor.WHITE+e.getKey()+": "+ChatColor.WHITE+e.getValue().getGameStatus().toString());
+          				}else if(e.getValue().getGameStatus() == GameStatus.COMENZANDO) {
+          					l.add(ChatColor.WHITE+e.getKey()+": "+ChatColor.GREEN+e.getValue().getGameStatus().toString());
+          				}else if(e.getValue().getGameStatus() == GameStatus.JUGANDO) {
+          					l.add(ChatColor.WHITE+e.getKey()+": "+ChatColor.YELLOW+e.getValue().getGameStatus().toString());
+          				}else if(e.getValue().getGameStatus() == GameStatus.TERMINANDO) {
+          					l.add(ChatColor.WHITE+e.getKey()+": "+ChatColor.RED+e.getValue().getGameStatus().toString());
+          				}else if(e.getValue().getGameStatus() == GameStatus.PAUSE) {
+          					l.add(ChatColor.WHITE+e.getKey()+": "+ChatColor.GOLD+e.getValue().getGameStatus().toString());
+          				}else if(e.getValue().getGameStatus() == GameStatus.FREEZE) {
+          					l.add(ChatColor.WHITE+e.getKey()+": "+ChatColor.AQUA+e.getValue().getGameStatus().toString());
           				}
-      
           			}
           			
+        			if(args.length == 1) {
+    					
+          				gc.pagsSystem(null, l, 0, 10);
+          				Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+"Un Total de: "+ChatColor.RED+list.size()+" Mapas Activos.");		
+    				}else if(args.length == 2){
+    					
+    					int pag = Integer.valueOf(args[1]);
+    					gc.pagsSystem(null, l, pag, 10);
+    					Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+"Un Total de: "+ChatColor.RED+list.size()+" Mapas Activos.");		
+    				}else {
+    					Bukkit.getConsoleSender().sendMessage("Usa /mg mapsingame ");
+    					Bukkit.getConsoleSender().sendMessage("Usa /mg mapsingame <pag>");
+    				}
           			
-          			text = text+ChatColor.GOLD+"Un Total de: "+ChatColor.RED+list.size()+" Mapas Activos.";
-          			Bukkit.getConsoleSender().sendMessage(text);
+         
+          			
+          			
           			return true;
           		}else if(args[0].equalsIgnoreCase("reportlogs")) {
 					 //mg reportlogs nao 1
@@ -1014,7 +1035,23 @@ public class Comandsmg implements CommandExecutor{
 				}
 					return true;
 					
-				}else if (args[0].equalsIgnoreCase("show-maps") ) {
+				}else if(args[0].equalsIgnoreCase("gamedetails")) {
+	      			if(args.length == 2){
+	      				
+	      				if(plugin.getGameInfoPoo().isEmpty()) {
+	      					Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Sin datos. ");		
+	      					return true;
+	          			}
+	      				String map = args[1];
+	      				GameInfo info = plugin.getGameInfoPoo().get(map);
+	      				gc.sendResultsInGame(info, null);
+	      			}else {
+	      				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"/mg gamedetails <mapa>");
+	      			}
+	      			
+	      			
+	      			return true;
+	      		}else if (args[0].equalsIgnoreCase("show-maps") ) {
 					FileConfiguration config = plugin.getConfig();
 					List<String> ac = config.getStringList("Maps-Created.List");
 					if(!ac.isEmpty()) {
@@ -2397,30 +2434,68 @@ public class Comandsmg implements CommandExecutor{
           		
           		return true;
           		
-          	}else if(args[0].equalsIgnoreCase("activemaps")) {
+          	}else if(args[0].equalsIgnoreCase("mapsingame")) {
       			
-      			
+          		//mg mapsingame 1
+				
       			List<Map.Entry<String, GameInfo>> list = new ArrayList<>(plugin.getGameInfoPoo().entrySet());
       			
       			if(list.isEmpty()) {
       				player.sendMessage(ChatColor.RED+"No hay ningun Mapa Activo.");
       				return true;
       			}
-      			String text = ChatColor.GOLD+"Mapas Activos: \n";
       			
-
+      			player.sendMessage(ChatColor.GOLD+"Mapas Activos:");		
+      			List<String> l = new ArrayList<>();
       			for (Map.Entry<String, GameInfo> e : list) {
       				if(e.getValue().getGameStatus() == GameStatus.ESPERANDO) {
-      					text = text+ChatColor.GREEN+e.getKey()+" "+text+ChatColor.WHITE+e.getValue().getGameStatus().toString()+"\n";
-      				}else {
-      					text = text+ChatColor.GREEN+e.getKey()+" "+ChatColor.RED+e.getValue().getGameStatus().toString()+"\n";
+      					l.add(ChatColor.WHITE+e.getKey()+": "+ChatColor.WHITE+e.getValue().getGameStatus().toString());
+      				}else if(e.getValue().getGameStatus() == GameStatus.COMENZANDO) {
+      					l.add(ChatColor.WHITE+e.getKey()+": "+ChatColor.GREEN+e.getValue().getGameStatus().toString());
+      				}else if(e.getValue().getGameStatus() == GameStatus.JUGANDO) {
+      					l.add(ChatColor.WHITE+e.getKey()+": "+ChatColor.YELLOW+e.getValue().getGameStatus().toString());
+      				}else if(e.getValue().getGameStatus() == GameStatus.TERMINANDO) {
+      					l.add(ChatColor.WHITE+e.getKey()+": "+ChatColor.RED+e.getValue().getGameStatus().toString());
+      				}else if(e.getValue().getGameStatus() == GameStatus.PAUSE) {
+      					l.add(ChatColor.WHITE+e.getKey()+": "+ChatColor.GOLD+e.getValue().getGameStatus().toString());
+      				}else if(e.getValue().getGameStatus() == GameStatus.FREEZE) {
+      					l.add(ChatColor.WHITE+e.getKey()+": "+ChatColor.AQUA+e.getValue().getGameStatus().toString());
       				}
-  
+      			}
+      			
+      			if(args.length == 1) {
+					
+      				gc.pagsSystem(player, l, 0, 10);
+      				player.sendMessage(ChatColor.GOLD+"Un Total de: "+ChatColor.RED+list.size()+" Mapas Activos.");		
+				}else if(args.length == 2){
+					
+					int pag = Integer.valueOf(args[1]);
+					gc.pagsSystem(player, l, pag, 10);
+					player.sendMessage(ChatColor.GOLD+"Un Total de: "+ChatColor.RED+list.size()+" Mapas Activos.");		
+				}else {
+					player.sendMessage("Usa /mg mapsingame ");
+					player.sendMessage("Usa /mg mapsingame <pag>");
+				}
+      			
+      			
+     
+      			
+      			return true;
+      		}else if(args[0].equalsIgnoreCase("gamedetails")) {
+      			if(args.length == 2){
+      				
+      				if(plugin.getGameInfoPoo().isEmpty()) {
+      					player.sendMessage(ChatColor.RED+"Sin datos. ");		
+      					return true;
+          			}
+      				String map = args[1];
+      				GameInfo info = plugin.getGameInfoPoo().get(map);
+      				gc.sendResultsInGame(info, player);
+      			}else {
+      				player.sendMessage(ChatColor.RED+"/mg gamedetails <mapa>");
       			}
       			
       			
-      			text = text+ChatColor.GOLD+"Un Total de: "+ChatColor.RED+list.size()+" Mapas Activos.";
-      			player.sendMessage(text);		
       			return true;
       		}else if(args[0].equalsIgnoreCase("god")) {
 				if (args.length == 2) {
