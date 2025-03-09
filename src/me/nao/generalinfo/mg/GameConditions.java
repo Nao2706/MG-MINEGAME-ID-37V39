@@ -213,7 +213,7 @@ public class GameConditions {
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		GameAdventure ga = (GameAdventure) plugin.getGameInfoPoo().get(pl.getMapName());
 		
-		if(pl.isInventoryAllowedForTheMap() && !ga.getSpectators().contains(player.getName())) {
+		if(ga.isAllowedJoinWithOwnInventory() && !ga.getSpectators().contains(player.getName())) {
 			if(ga.getGameStatus() == GameStatus.ESPERANDO || ga.getGameStatus() == GameStatus.COMENZANDO) {
 				mgLeaveOfTheGame(player);
 				return;
@@ -252,7 +252,7 @@ public class GameConditions {
 		
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		GameAdventure ga = (GameAdventure) plugin.getGameInfoPoo().get(pl.getMapName());
-		if(pl.isInventoryAllowedForTheMap() && !ga.getSpectators().contains(player.getName())) {
+		if(ga.isAllowedJoinWithOwnInventory() && !ga.getSpectators().contains(player.getName())) {
 			
 			if(ga.getDeadPlayers().contains(player.getName())) {
 				mgLeaveOfTheGame(player);
@@ -416,8 +416,8 @@ public class GameConditions {
 	   
 	   //TODO TP AL SPAWN DEL MAPA
 	   public void TptoSpawnMap(Player player ,String map){
-		   GameConditions gc = new GameConditions(plugin);
-		   FileConfiguration ym = gc.getGameConfig(map);
+		  
+		   FileConfiguration ym = getGameConfig(map);
 		   if(ym.contains("Spawn")) {
 			   
 			   
@@ -456,7 +456,7 @@ public class GameConditions {
 			    player.setInvulnerable(false);
 				Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch);
 				player.teleport(l);
-				gc.SetHeartsInGame(player, map);
+				SetHeartsInGame(player, map);
 				//este send message es un separador de chat contra la cuenta atras xd
 				player.sendMessage(" ");
 				
@@ -473,13 +473,13 @@ public class GameConditions {
 				if(!start.isEmpty()) {
 					for(int i = 0 ; i < start.size(); i++) {
 						String texto = start.get(i);
-						if(!gc.hasPlayerPermissionByLuckPerms(player, texto)) continue;
-						Bukkit.dispatchCommand(console, ChatColor.translateAlternateColorCodes('&', texto.replaceAll("%player%",player.getName())));
+						if(!hasPlayerPermissionByLuckPerms(player, texto)) continue;
+						Bukkit.dispatchCommand(console, texto.replaceAll("%player%",player.getName()));
 					}
 				}
 				
 			     	 
-					gc.setKitMg(player);
+					setKitMg(player);
 					if(gomg.hasMapObjetives()) {
 						if(player.getInventory().getItemInMainHand() != null) {
 							if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
@@ -995,23 +995,23 @@ public class GameConditions {
 		 PlayerInfo pl = null;
 		 
 		 if(CanJoinWithYourInventory(map) && !CanUseKit(map)) {
-				//NO SALVAS SU INVENTARIO
+			 	//LO SALVAS
 				if(ExistLobbyMg()) {
-				    pl = new PlayerInfo(plugin,false,player, getLocationOfLobby(), map,new GamePoints());
+				    pl = new PlayerInfo(plugin,true,player, getLocationOfLobby(), map,new GamePoints());
 				
 				}else {
-					pl = new PlayerInfo(plugin,false,player, player.getLocation(), map,new GamePoints());
+					pl = new PlayerInfo(plugin,true,player, player.getLocation(), map,new GamePoints());
 					
 				}
 				pl.ClearGamemodePlayerMg();
 		}else{
-				//LO SALVAS
 				
+				//NO SALVAS SU INVENTARIO
 				if(ExistLobbyMg()) {
-				    pl = new PlayerInfo(plugin,true,player, getLocationOfLobby(), map,new GamePoints());
+				    pl = new PlayerInfo(plugin,false,player, getLocationOfLobby(), map,new GamePoints());
 					
 				}else {
-					pl = new PlayerInfo(plugin,true,player,player.getLocation(), map,new GamePoints());
+					pl = new PlayerInfo(plugin,false,player,player.getLocation(), map,new GamePoints());
 	
 				}
 				pl.ClearAllPlayerMg();
@@ -1086,9 +1086,10 @@ public class GameConditions {
 			    	ga.setGenerators(loadMapGenerators(map));
 			    	ga.setMobsGenerators(loadMapMobsGenerators(map));
 			    	ga.setPvpinMap(isPvPAllowed(map));
-			    	ga.setGameTime(loadMapGameTime(map, time)); 
 			    	ga.setCountDownStart(loadCountdownMap(map));
+			    	ga.setGameTime(loadMapGameTime(map, time)); 
 			    	ga.setBarriersinMap(hasBarriersMap(map));
+			    	ga.setAllowedJoinWithOwnInventory(CanJoinWithYourInventory(map)); 
 			    	 
 			    	ga.setSpawnItemRange(getSpawnItemRange(map));
 			    	ga.setSpawnMobRange(getSpawnMobRange(map));
@@ -1221,10 +1222,11 @@ public class GameConditions {
     	gi.setLootTableLimit(getLootTableLimit());
     	gi.setGenerators(loadMapGenerators(map));
     	gi.setMobsGenerators(loadMapMobsGenerators(map));
-    	gi.setPvpinMap(isPvPAllowed(map));
     	gi.setGameTime(loadMapGameTime(map, gi.getTimeMg()));
-    	gi.setBarriersinMap(hasBarriersMap(map));
     	gi.setCountDownStart(loadCountdownMap(map));
+    	gi.setBarriersinMap(hasBarriersMap(map));
+    	gi.setPvpinMap(isPvPAllowed(map));
+    	gi.setAllowedJoinWithOwnInventory(CanJoinWithYourInventory(map)); 
     	
     	gi.setSpawnItemRange(getSpawnItemRange(map));
     	gi.setSpawnMobRange(getSpawnMobRange(map));
@@ -1277,7 +1279,7 @@ public class GameConditions {
 		player.getAttribute(Attribute.MAX_HEALTH).setBaseValue(20);
 		return;
 	}
-	
+	  
 	public boolean CanJoinWithYourInventory(String map) {
 		 FileConfiguration game = getGameConfig(map);
 		 return game.getBoolean("Allow-Inventory");
@@ -2804,9 +2806,10 @@ public class GameConditions {
 				//System.out.println("LOG-1 RESTORE ANTES MAP: "+ms.ShowGame());
 				
 					//SE SECCIONA POR QUE HAY QUE VER SI SE SALVO O NO SU INVENTARIO
-					if(pl.isInventoryAllowedForTheMap()) {
+					if(ms.isAllowedJoinWithOwnInventory()) {
 						player.teleport(pl.getLocationMG());
-						pl.RestoreAllPlayerMg(player);
+						pl.RestoreGamemodePlayerMg(player);
+						
 						if(ms.getGameStatus() == GameStatus.TERMINANDO) {
 							playerWinnerReward(player);
 							playerLoserReward(player);
@@ -2816,7 +2819,8 @@ public class GameConditions {
 					
 					}else {
 						player.teleport(pl.getLocationMG());
-						pl.RestoreGamemodePlayerMg(player);
+						pl.RestoreAllPlayerMg(player);
+						
 						if(ms.getGameStatus() == GameStatus.TERMINANDO) {
 							playerWinnerReward(player);
 							playerLoserReward(player);
@@ -4300,20 +4304,16 @@ public class GameConditions {
 	//TODO VER SI USA UN COMANDO DE LUCKPERMS Y SI TIENE PERMISO
 	public boolean hasPlayerPermissionByLuckPerms(Player player ,String text) {
 		
-		if(!text.contains("permission set")) {
-			return false;
-		}else {
-				String[] split = text.split(" ");
-				String perm = split[5];
-				if(player.hasPermission(perm)) {
-					 Bukkit.getConsoleSender().sendMessage(Utils.colorText("&cEl Jugador &a%player% &cya tiene el Permiso &6%perm% &c(Omitiendo).".replace("%player%", player.getName()).replace("%perm%", perm))); 
-					return false;
-				}else{
-					return true;
-				}
+		if(text.contains("permission set")) {
+			String[] split = text.split(" ");
+			String perm = split[5];
+			if(player.hasPermission(perm)) {
+				 Bukkit.getConsoleSender().sendMessage(Utils.colorText("&cEl Jugador &a%player% &cya tiene el Permiso &6%perm% &c(Omitiendo).".replace("%player%", player.getName()).replace("%perm%", perm))); 
+				return false;
+			}
 		}
 			
-		
+		return true;
 	}
 	
 	public GameInteractions convertStringToGameInteractions(String text) {

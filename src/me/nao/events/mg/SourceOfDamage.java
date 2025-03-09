@@ -290,6 +290,7 @@ public class SourceOfDamage implements Listener{
 						if(b1.getType() == Material.WATER || b2.getType() == Material.WATER) {
 							player.sendTitle(ChatColor.RED+"!!!PELIGRO!!!", ChatColor.GREEN+"Estas en"+ChatColor.BLUE+" Agua Toxica "+ChatColor.GREEN+"corre", 20, 40, 20);
 							player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
+							player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,/*duration*/ 5 * 20,/*amplifier:*/10, false ,false,true));
 							//player.addPotionEffect(lento);
 							player.addPotionEffect(new PotionEffect(PotionEffectType.POISON,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
 							//player.addPotionEffect(ciego);
@@ -300,6 +301,7 @@ public class SourceOfDamage implements Listener{
 						}else if(b1.getType() == Material.LAVA || b2.getType() == Material.LAVA) {
 							player.sendTitle(ChatColor.RED+"!!!PELIGRO!!!", ChatColor.GREEN+"Estas en"+ChatColor.YELLOW+" Lava Toxica "+ChatColor.GREEN+"corre", 20, 40, 20);
 							player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
+							player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,/*duration*/ 5 * 20,/*amplifier:*/10, false ,false,true));
 							//player.addPotionEffect(lento);
 							player.addPotionEffect(new PotionEffect(PotionEffectType.POISON,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
 							//player.addPotionEffect(ciego);
@@ -363,6 +365,7 @@ public class SourceOfDamage implements Listener{
 									
 									player.sendTitle(ChatColor.RED+"!!!PELIGRO!!!", ChatColor.GREEN+"Estas en"+ChatColor.YELLOW+" Zona de Lava Toxica "+ChatColor.GREEN+"corre", 20, 40, 20);
 									player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
+									player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,/*duration*/ 5 * 20,/*amplifier:*/10, false ,false,true));
 									//player.addPotionEffect(lento);
 									player.addPotionEffect(new PotionEffect(PotionEffectType.POISON,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
 									//player.addPotionEffect(ciego);
@@ -380,6 +383,7 @@ public class SourceOfDamage implements Listener{
 									
 									player.sendTitle(ChatColor.RED+"!!!PELIGRO!!!", ChatColor.GREEN+"Estas en"+ChatColor.BLUE+" Zona Agua Toxica "+ChatColor.GREEN+"corre", 20, 40, 20);
 									player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
+									player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,/*duration*/ 5 * 20,/*amplifier:*/10, false ,false,true));
 									//player.addPotionEffect(lento);
 									player.addPotionEffect(new PotionEffect(PotionEffectType.POISON,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
 									//player.addPotionEffect(ciego);

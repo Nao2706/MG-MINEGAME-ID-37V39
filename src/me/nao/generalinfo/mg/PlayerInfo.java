@@ -1,6 +1,7 @@
 package me.nao.generalinfo.mg;
 
 import java.util.Collection;
+import java.util.Set;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -30,6 +31,7 @@ public class PlayerInfo {
 	private String map;
 	private GamePoints gp;
 	private String teamname;
+	private Set<String> tags;
 	
 	/** 
 	 *Crear Objeto PlayerInfo para poder definir si en un juego este entrara sin sus cosas(inventario , vida , posiones , exp ) variante que guarda su inventario y otra informacion.
@@ -41,6 +43,19 @@ public class PlayerInfo {
 	public PlayerInfo(Minegame plugin ,boolean isinventorysave,Player player,Location l,String map,GamePoints gp) {
 	
 		if(isinventorysave) {
+			this.plugin = plugin;
+			this.isinventorysave = isinventorysave;
+			this.player = player;
+			this.gamemode = player.getGameMode();
+			this.scale = player.getAttribute(Attribute.SCALE).getValue();
+			this.fly = player.isFlying();
+			this.l = l;
+			this.map = map;
+			this.gp = gp;
+			this.teamname = "NINGUNO";
+			this.mglvl = 0;
+			this.tags = player.getScoreboardTags();
+		}else{
 			this.plugin = plugin;
 			this.isinventorysave = isinventorysave;
 			this.player = player;
@@ -60,18 +75,7 @@ public class PlayerInfo {
 			this.teamname = "NINGUNO";
 			this.mglvl = 0;
 			this.mgprestige = 0;
-		}else {
-			this.plugin = plugin;
-			this.isinventorysave = isinventorysave;
-			this.player = player;
-			this.gamemode = player.getGameMode();
-			this.scale = player.getAttribute(Attribute.SCALE).getValue();
-			this.fly = player.isFlying();
-			this.l = l;
-			this.map = map;
-			this.gp = gp;
-			this.teamname = "NINGUNO";
-			this.mglvl = 0;
+			this.tags = player.getScoreboardTags();
 		}
 		
 		
@@ -149,6 +153,10 @@ public class PlayerInfo {
 	public int getMgPlayerPrestige() {
 		return mgprestige;
 	}
+	
+	public Set<String> getBackAllTagsMg(){
+		return tags;
+	}
 
 	public void setPlayerMG(Player player) {
 		this.player = player;
@@ -224,6 +232,7 @@ public class PlayerInfo {
 		
 		setMgPlayerLvl(lvl);
 		setMgPlayerprestige(prestigee);
+		player.getScoreboardTags().clear();
 		player.getAttribute(Attribute.MAX_HEALTH).setBaseValue(20);
 		player.getAttribute(Attribute.SCALE).setBaseValue(1);
 		player.setExp(0);
@@ -250,6 +259,7 @@ public class PlayerInfo {
 		
 		setMgPlayerLvl(lvl);
 		setMgPlayerprestige(prestigee);
+		player.getScoreboardTags().clear();
 		player.setFlying(false);
 		player.setGameMode(GameMode.ADVENTURE);
 	}
@@ -270,6 +280,7 @@ public class PlayerInfo {
 		 player.setExp(pl.getXpMG());
 		 player.setLevel(pl.getLvlXpMG());
 		 player.setHealth(pl.getLifeMG());
+		 player.getScoreboardTags().addAll(getBackAllTagsMg());
 	}
 	
 	public void RestoreGamemodePlayerMg(Player playermg) {
@@ -277,7 +288,7 @@ public class PlayerInfo {
 		 player.setGameMode(pl.getGamemodeMG());
 		 player.getAttribute(Attribute.SCALE).setBaseValue(pl.getScaleMG());
 		 player.setFlying(pl.isFlyMG());
-		 
+		 player.getScoreboardTags().addAll(getBackAllTagsMg());
 		
 	}
 	

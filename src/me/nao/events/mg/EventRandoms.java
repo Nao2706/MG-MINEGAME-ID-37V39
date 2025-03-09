@@ -207,9 +207,11 @@ public class EventRandoms implements Listener{
 		
 		if(gc.isPlayerinGame(player)) {
 			if(e.getNewGameMode() == GameMode.SPECTATOR) {
+				player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
 				if(!player.getPassengers().isEmpty()) {
 					Entity ent = (Entity) player.getPassengers().get(0);
 					player.removePassenger(ent);
+					
 				}
 			}
 		}

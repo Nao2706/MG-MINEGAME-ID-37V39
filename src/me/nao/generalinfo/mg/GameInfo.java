@@ -26,7 +26,7 @@ public class GameInfo {
 	private List<GameTimeActions> gametimeactions;
 	private List<CuboidZone> cuboidzones;	
 	private List<Location> generators,mobsgenerators;	
-	private boolean pvp,barriers;
+	private boolean pvp,barriers,allowinventory;
 	private GameTime gt;
 	// @param GameInfo Sirve para modo aventura y resistencia
 	/**
@@ -54,6 +54,7 @@ public class GameInfo {
 		this.mobsgenerators = new ArrayList<>();
 		this.pvp = false;
 		this.barriers = true;
+		this.allowinventory = false;
 		this.gt = null;
 		this.countdownstart = 0;
 		this.toxiczonerange = 0;
@@ -143,6 +144,10 @@ public class GameInfo {
 	
 	public boolean hasBarriersinMap() {
 		return barriers;
+	}
+	
+	public boolean isAllowedJoinWithOwnInventory() {
+		return allowinventory;
 	}
 	
 	public GameTime getGameTime() {
@@ -247,6 +252,10 @@ public class GameInfo {
 	
 	public void setBarriersinMap(boolean barriers) {
 		this.barriers = barriers;
+	}
+	
+	public void setAllowedJoinWithOwnInventory(boolean allowinventory) {
+		this.allowinventory = allowinventory;
 	}
 	
 	public void setGameTime(GameTime gt) {
