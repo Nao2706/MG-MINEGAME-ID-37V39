@@ -1,5 +1,6 @@
 package me.nao.generalinfo.mg;
 
+import java.text.NumberFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -842,7 +843,7 @@ public class GameConditions {
 	
 	public void playerLoserReward(Player player) {
 		ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-
+ 
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		String name = pl.getMapName();
 		GameInfo ms = plugin.getGameInfoPoo().get(name);
@@ -1998,8 +1999,9 @@ public class GameConditions {
 								player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"                     [PROXIMO A ABRIR] ");
 								player.sendMessage(ChatColor.AQUA+"Me temo que aun no es el Tiempo para Ingresar ");
 								player.sendMessage(""+ChatColor.DARK_RED+ChatColor.BOLD+"                [Tiempo Faltante] ");
-								player.sendMessage(ChatColor.GREEN+TimeDiferenceMg(lt, t));
+								player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"["+ChatColor.GREEN+TimeDiferenceMg(lt, t)+ChatColor.GOLD+ChatColor.BOLD+"]");
 								player.sendMessage(ChatColor.AQUA+"Para que pueda estar Disponible.");
+								player.sendMessage(ChatColor.GREEN+"Fecha de Apertura: "+ChatColor.AQUA+t.format(formatter));
 								player.sendMessage(ChatColor.GOLD+"Fecha Actual: "+ChatColor.GREEN+lt.format(formatter));
 								player.sendMessage("");
 								player.sendMessage(ChatColor.GREEN+"================================================");
@@ -2011,8 +2013,9 @@ public class GameConditions {
 								player.sendMessage(""+ChatColor.YELLOW+ChatColor.BOLD+"                     [CERRADO] ");
 								player.sendMessage(ChatColor.YELLOW+"Me temo que el Tiempo para Ingresar ya paso.");
 								player.sendMessage(""+ChatColor.YELLOW+ChatColor.BOLD+"                [A Trasncurrido] ");
-								player.sendMessage(ChatColor.RED+TimeDiferenceMg(t2, lt));
+								player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"["+ChatColor.RED+TimeDiferenceMg(t2, lt)+ChatColor.GOLD+ChatColor.BOLD+"]");
 								player.sendMessage(ChatColor.YELLOW+"Desde que ha terminado.");
+								player.sendMessage(ChatColor.YELLOW+"Fecha de Cierre: "+ChatColor.RED+t2.format(formatter));
 								player.sendMessage(ChatColor.GOLD+"Fecha Actual: "+ChatColor.GREEN+lt.format(formatter));
 								player.sendMessage("");
 								player.sendMessage(ChatColor.RED+"================================================");
@@ -2047,8 +2050,9 @@ public class GameConditions {
 									player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"                     [PROXIMO A ABRIR] ");
 									player.sendMessage(ChatColor.AQUA+"Me temo que aun no es el Tiempo para Ingresar ");
 									player.sendMessage(""+ChatColor.DARK_RED+ChatColor.BOLD+"                [Tiempo Faltante] ");
-									player.sendMessage(ChatColor.GREEN+TimeDiferenceMg(lt, t));
+									player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"["+ChatColor.GREEN+TimeDiferenceMg(lt, t)+ChatColor.GOLD+ChatColor.BOLD+"]");
 									player.sendMessage(ChatColor.AQUA+"Para que pueda estar Disponible.");
+									player.sendMessage(ChatColor.GREEN+"Fecha de Apertura: "+ChatColor.AQUA+t.format(formatter));
 									player.sendMessage(ChatColor.GOLD+"Fecha Actual: "+ChatColor.GREEN+lt.format(formatter));
 									player.sendMessage("");
 									player.sendMessage(ChatColor.DARK_GREEN+"================================================");
@@ -2281,12 +2285,12 @@ public class GameConditions {
 
         long seconds = tempDateTime.until( fin, ChronoUnit.SECONDS );
 
-               return " Años: " +years+
-               " Meses: " + months+ 
-                 " Dias: " +days +
-                 " Horas: " +hours +
-                 " Minutos: " +minutes +
-                 " Segundos: "+seconds ;
+               return years+":Años - "+
+               months+":Meses - "+ 
+               days+":Dias - "+
+               hours+":Horas - "+
+               minutes+":Minutos - "+
+               seconds+":Segundos" ;
 	}
 	
 	
@@ -2949,7 +2953,7 @@ public class GameConditions {
 													 .replace("%revive%", Integer.toString(getReviveInfo(e.getKey())))
 													 .replace("%helprevive%", Integer.toString(getReviveAsistenceInfo(e.getKey())))
 													 .replace("%deads%", Integer.toString(getDeadsInfo(e.getKey())))
-													 .replace("%damage%", Integer.toString(getDamageInfo(e.getKey())))
+													 .replace("%damage%", Long.toString(getDamageInfo(e.getKey())))
 													 //.replace("%cronomet%", time)
 													
 													 ));
@@ -2963,7 +2967,7 @@ public class GameConditions {
 													 .replace("%revive%", Integer.toString(getReviveInfo(e.getKey())))
 													 .replace("%helprevive%", Integer.toString(getReviveAsistenceInfo(e.getKey())))
 													 .replace("%deads%", Integer.toString(getDeadsInfo(e.getKey())))
-													 .replace("%damage%", Integer.toString(getDamageInfo(e.getKey())))
+													 .replace("%damage%", Long.toString(getDamageInfo(e.getKey())))
 													 //.replace("%cronomet%", time)
 													
 													 ));
@@ -3072,7 +3076,7 @@ public class GameConditions {
 														 .replace("%revive%", Integer.toString(getReviveInfo(e.getKey())))
 														 .replace("%helprevive%", Integer.toString(getReviveAsistenceInfo(e.getKey())))
 														 .replace("%deads%", Integer.toString(getDeadsInfo(e.getKey())))
-														 .replace("%damage%", Integer.toString(getDamageInfo(e.getKey())))
+														 .replace("%damage%", Long.toString(getDamageInfo(e.getKey())))
 														 //.replace("%cronomet%", time)
 														
 														 );
@@ -3086,7 +3090,7 @@ public class GameConditions {
 													 .replace("%revive%", Integer.toString(getReviveInfo(e.getKey())))
 													 .replace("%helprevive%", Integer.toString(getReviveAsistenceInfo(e.getKey())))
 													 .replace("%deads%", Integer.toString(getDeadsInfo(e.getKey())))
-													 .replace("%damage%", Integer.toString(getDamageInfo(e.getKey())))
+													 .replace("%damage%", Long.toString(getDamageInfo(e.getKey())))
 													 //.replace("%cronomet%", time)
 													
 													 );
@@ -3119,7 +3123,7 @@ public class GameConditions {
  	   	 return plugin.getPlayerInfoPoo().get(ConvertStringToPlayerAlone(name)).getGamePoints().getHelpRevive();
  	}
  	
- 	public int getDamageInfo(String name) {
+ 	public long getDamageInfo(String name) {
 	   	 return plugin.getPlayerInfoPoo().get(ConvertStringToPlayerAlone(name)).getGamePoints().getDamage();
 	}
  	
@@ -4543,7 +4547,7 @@ public class GameConditions {
 	
 	 public void pagsSystem(Player player,List<String> l , int pag,int datosperpags) {
 	    	
-	    	if(!l.isEmpty()) {
+	    	if(!l.isEmpty() || l.size() != 0) {
 	    		int inicio = (pag -1) * datosperpags;
 	    		int fin = inicio + datosperpags;
 	    		
@@ -4568,9 +4572,9 @@ public class GameConditions {
 	    	
 	    		for(int i = inicio;i < fin && i < l.size();i++) {
 	    			if(player != null) {
-	    				player.sendMessage(""+ChatColor.RED+(i+1)+").  "+l.get(i));
+	    				player.sendMessage(""+ChatColor.GREEN+(i+1)+"). "+l.get(i));
 	    			}
-	    			Bukkit.getConsoleSender().sendMessage(""+ChatColor.RED+(i+1)+").  "+ChatColor.WHITE+l.get(i));
+	    			Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+(i+1)+"). "+ChatColor.WHITE+l.get(i));
 	    					
 	    		}
 	    		
@@ -4950,5 +4954,91 @@ public class GameConditions {
 	    }
 	}
 	
+	public void showStatsMap(Player player , String map) {
+		
+		if(!ExistMap(map)) {
+			sendMessageToUserAndConsole(player,ChatColor.RED+"El Mapa "+ChatColor.GREEN+map+ChatColor.RED+" no existe. ");
+			return;
+		}
+		
+		NumberFormat nf = NumberFormat.getInstance();
+		nf.setGroupingUsed(false);
+		nf.setMaximumFractionDigits(0);
+		
+		FileConfiguration mf = plugin.getMapFrequency();
+		int timesplayed = mf.getInt("MapFrequency."+map+".Times-Played");
+		int participants = mf.getInt("MapFrequency."+map+".Participating-Players");
+		int wins = mf.getInt("MapFrequency."+map+".Winning-Players");
+		int revives = mf.getInt("MapFrequency."+map+".Revive-Players");
+		int deads = mf.getInt("MapFrequency."+map+".Dead-Players");
+		
+		MapStatistics ms = new MapStatistics(timesplayed,participants,wins,revives,deads);
+		sendMessageToUserAndConsole(player,"");
+		sendMessageToUserAndConsole(player,"======================================");
+		sendMessageToUserAndConsole(player,""+ChatColor.RED+ChatColor.BOLD+"Estadisticas del Mapa: "+ChatColor.GREEN+map);
+		sendMessageToUserAndConsole(player,ChatColor.GREEN+"Porcentaje de Victorias: "+ChatColor.GOLD+nf.format(ms.getPorcentWins()+"%"));
+		sendMessageToUserAndConsole(player,ChatColor.YELLOW+"Porcentaje de Revivir: "+ChatColor.GOLD+nf.format(ms.getPorcentRevives()+"%"));
+		sendMessageToUserAndConsole(player,ChatColor.RED+"Porcentaje de Muertes: "+ChatColor.GOLD+nf.format(ms.getPorcentOfDeads()+"%"));
+		sendMessageToUserAndConsole(player,ChatColor.GREEN+"Probabilidad de Ganar: "+ChatColor.GOLD+nf.format(ms.getProbablyOfWin()+"%"));
+		sendMessageToUserAndConsole(player,ChatColor.RED+"Probabilidad de Perder: "+ChatColor.GOLD+nf.format(ms.getProbablyOfLose()+"%"));
+		sendMessageToUserAndConsole(player,"======================================");
+		sendMessageToUserAndConsole(player,"");
+	}
+	
+	public void sudoAllParticipants(Player player , String map,String command) {
+		if(!ExistMap(map)) {
+			sendMessageToUserAndConsole(player,ChatColor.RED+"El Mapa "+ChatColor.GREEN+map+ChatColor.RED+" no existe. ");
+			return;
+		}
+		
+		if(!isMapinGame(map)) {
+			sendMessageToUserAndConsole(player,ChatColor.RED+"El Mapa "+ChatColor.GREEN+map+ChatColor.RED+" no esta en Juego. ");
+			return;
+		}
+		
+		
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
+		ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+
+		List<String> l = gi.getParticipants();
+		for(Player p : ConvertStringToPlayer(l)) {
+			Bukkit.dispatchCommand(console,  command.replaceAll("%player%",p.getName()));
+			sendMessageToConsole(ChatColor.RED+"Comando: "+ChatColor.AQUA+command+ChatColor.RED+" ejecutado a: "+ChatColor.GREEN+p.getName());
+		}
+		if(player != null) {
+			player.sendMessage(ChatColor.GREEN+"Sudo Ejecutado con exito revisa la Consola.");
+		}
+		sendMessageToConsole(ChatColor.GREEN+"Sudo Ejecutado con exito.");
+		
+		
+		return;
+	}
+	
+	public void sudoParticipant(Player player ,String target ,String command) {
+		
+			Player target2 = ConvertStringToPlayerAlone(target);
+		
+			if(target2 == null) {
+				if(player != null) {
+					player.sendMessage(ChatColor.RED+"El Juagdor "+target+" no existe.");
+				}
+				sendMessageToConsole(ChatColor.RED+"El Juagdor "+target+" no existe.");
+				return;
+			}
+		
+			ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+
+		
+			Bukkit.dispatchCommand(console,  command.replaceAll("%player%",target2.getName()));
+			sendMessageToConsole(ChatColor.RED+"Comando: "+ChatColor.AQUA+command+ChatColor.RED+" ejecutado a: "+ChatColor.GREEN+target2.getName());
+		
+		if(player != null) {
+			player.sendMessage(ChatColor.GREEN+"Sudo Ejecutado con exito revisa la Consola.");
+		}
+		sendMessageToConsole(ChatColor.GREEN+"Sudo Ejecutado con exito.");
+		
+		
+		return;
+	}
 	
 }

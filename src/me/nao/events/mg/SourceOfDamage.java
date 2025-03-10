@@ -309,6 +309,9 @@ public class SourceOfDamage implements Listener{
 							player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
 							player.getWorld().spawnParticle(Particle.DRAGON_BREATH, player.getLocation().add(1, 1, 1),
 									/* NUMERO DE PARTICULAS */10, 1, 0, 1, /* velocidad */0, null, true);
+							player.removePotionEffect(PotionEffectType.RESISTANCE);
+							player.removePotionEffect(PotionEffectType.FIRE_RESISTANCE);
+							player.removePotionEffect(PotionEffectType.REGENERATION);
 						}
 						
 				}else if(player.getScoreboardTags().contains("ToxicZone") && player.getGameMode() == GameMode.ADVENTURE) {
@@ -373,6 +376,9 @@ public class SourceOfDamage implements Listener{
 									player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
 									player.getWorld().spawnParticle(Particle.DRAGON_BREATH, player.getLocation().add(1, 1, 1),
 											/* NUMERO DE PARTICULAS */10, 1, 0, 1, /* velocidad */0, null, true);
+									player.removePotionEffect(PotionEffectType.RESISTANCE);
+									player.removePotionEffect(PotionEffectType.FIRE_RESISTANCE);
+									player.removePotionEffect(PotionEffectType.REGENERATION);
 								}
 								
 								break;

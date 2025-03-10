@@ -182,7 +182,7 @@ public class Comandsmg implements CommandExecutor{
           			
         			if(args.length == 1) {
     					
-          				gc.pagsSystem(null, l, 0, 10);
+          				gc.pagsSystem(null, l, 1, 10);
           				Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+"Un Total de: "+ChatColor.RED+list.size()+" Mapas Activos.");		
     				}else if(args.length == 2){
     					
@@ -306,6 +306,7 @@ public class Comandsmg implements CommandExecutor{
 					
 				}else if(args[0].equalsIgnoreCase("message") ) {
 					
+					//mg message map gola xd
 						if(args.length >= 2) {
 							String name = args[1];
 							String mensaje = "";
@@ -715,7 +716,47 @@ public class Comandsmg implements CommandExecutor{
 	        			
 	        			return true;
 	        			
-	        		}else if (args[0].equalsIgnoreCase("lparticle")) {
+	        		}else if(args[0].equalsIgnoreCase("sudoall")) {
+						
+						//mg sudo map text
+	        			if(args.length >= 2){
+	        				String map = args[1];
+	        				String text = "";
+				        	 for(int i = 2 ;i < args.length; i++) {
+				        		 text = text+args[i]+" "; 
+								 
+							 }
+	          				gc.sudoAllParticipants(null, map, text);
+	        			}else {
+	        				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"/mg sudoall <map> <command>");	
+	          			}
+	        			//mg sudo nao say hola
+	        			return true;
+	        		}else if(args[0].equalsIgnoreCase("sudo")) {
+	        			
+	        			//mg sudo nao text
+	        			if(args.length >= 2){
+	        				String target = args[1];
+	        				String text = "";
+				        	 for(int i = 2 ;i < args.length; i++) {
+				        		 text = text+args[i]+" "; 
+								  
+							 }
+	          				gc.sudoParticipant(null, target, text);
+	        			}else {
+	        				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"/mg sudo <target> <command>");	
+	          			}
+	        			
+	        			return true;
+	        		}else if(args[0].equalsIgnoreCase("mapinfo")) {
+	          			if(args.length == 2){
+	          				String map = args[1];
+	          				gc.showStatsMap(null, map);
+	          			}else {
+	          				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"/mg mapinfo <map>");	
+	          			}
+	          			return true;
+	          		}else if (args[0].equalsIgnoreCase("lparticle")) {
 			 		  //mg lparticle world 124 34 546 234 67 457 smoke
 			 		  
 			 		  if(args.length == 9) {
@@ -2465,7 +2506,7 @@ public class Comandsmg implements CommandExecutor{
       			
       			if(args.length == 1) {
 					
-      				gc.pagsSystem(player, l, 0, 10);
+      				gc.pagsSystem(player, l, 1, 10);
       				player.sendMessage(ChatColor.GOLD+"Un Total de: "+ChatColor.RED+list.size()+" Mapas Activos.");		
 				}else if(args.length == 2){
 					
@@ -2480,6 +2521,14 @@ public class Comandsmg implements CommandExecutor{
       			
      
       			
+      			return true;
+      		}else if(args[0].equalsIgnoreCase("mapinfo")) {
+      			if(args.length == 2){
+      				String map = args[1];
+      				gc.showStatsMap(player, map);
+      			}else {
+      				player.sendMessage(ChatColor.RED+"/mg mapinfo <map>");	
+      			}
       			return true;
       		}else if(args[0].equalsIgnoreCase("gamedetails")) {
       			if(args.length == 2){
@@ -3406,7 +3455,49 @@ public class Comandsmg implements CommandExecutor{
 					}
 					
 					return true;
-				}else if(args[0].equalsIgnoreCase("dbcheck")) {
+				}else if(args[0].equalsIgnoreCase("sudoall")) {
+					
+					if(!player.isOp()) {
+						
+						player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
+						return true;
+					}
+					
+					//mg sudo map text
+        			if(args.length >= 2){
+        				String map = args[1];
+        				String text = "";
+			        	 for(int i = 2 ;i < args.length; i++) {
+			        		 text = text+args[i]+" "; 
+							 
+						 }
+          				gc.sudoAllParticipants(player, map, text);
+        			}else {
+          				player.sendMessage(ChatColor.RED+"/mg sudoall <map> <command>");	
+          			}
+        			//mg sudo nao say hola
+        			return true;
+        		}else if(args[0].equalsIgnoreCase("sudo")) {
+        			if(!player.isOp()) {
+						
+						player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
+						return true;
+					}
+        			//mg sudo nao text
+        			if(args.length >= 2){
+        				String target = args[1];
+        				String text = "";
+			        	 for(int i = 2 ;i < args.length; i++) {
+			        		 text = text+args[i]+" "; 
+							  
+						 }
+          				gc.sudoParticipant(player, target, text);
+        			}else {
+          				player.sendMessage(ChatColor.RED+"/mg sudo <target> <command>");	
+          			}
+        			
+        			return true;
+        		}else if(args[0].equalsIgnoreCase("dbcheck")) {
 					if(!player.isOp()) {
 						
 						player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");

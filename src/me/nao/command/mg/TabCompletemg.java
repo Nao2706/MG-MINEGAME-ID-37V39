@@ -91,6 +91,9 @@ public class TabCompletemg implements TabCompleter{
 			arguments.add("mapsingame");
 			arguments.add("ping");
 			arguments.add("gamedetails");
+			arguments.add("mapinfo");
+			arguments.add("sudo");
+			arguments.add("sudoall");
 			
 			
 		}

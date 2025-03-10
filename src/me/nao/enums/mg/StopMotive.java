@@ -14,7 +14,7 @@ public enum StopMotive {
 	
 	 StopMotive(String description) {
 		this.description = description;
-	} 
+	 } 
 	
 	public String getValue() {
 		return this.description ;

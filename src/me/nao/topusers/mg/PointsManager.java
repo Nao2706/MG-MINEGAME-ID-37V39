@@ -202,7 +202,7 @@ public class PointsManager {
 				return;
 			}else {
 				points.set("Players."+player.getName()+".Xp",totalxp);
-				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+" "+ChatColor.YELLOW+totalxp+ChatColor.GOLD+ChatColor.BOLD+"/"+ChatColor.GREEN+refer+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
+				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.YELLOW+totalxp+ChatColor.GOLD+ChatColor.BOLD+"/"+ChatColor.GREEN+refer+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
 				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+getProgressBar(totalxp, refer,20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
 				saveAll();
 			}

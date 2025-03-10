@@ -4,8 +4,8 @@ public class GamePoints {
 
 	
 	
-	private int kills , deads , revive, helprevive, damage;
-
+	private int kills , deads , revive, helprevive;
+	private long damage;
 	
 	/**
 	 * Clase destinada a almacenar datos de Jugador Kills Deads Revive HelpRevive Damage
@@ -34,7 +34,7 @@ public class GamePoints {
 		return revive;
 	}
 	
-	public int getDamage() {
+	public long getDamage() {
 		return damage;
 	}
 	
@@ -57,7 +57,7 @@ public class GamePoints {
 		this.helprevive = helprevive;
 	}
 	
-	public void setDamage(int damage) {
+	public void setDamage(long damage) {
 		this.damage = damage;
 	}
 	

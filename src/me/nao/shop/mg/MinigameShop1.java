@@ -35,7 +35,6 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import com.google.common.base.Strings;
 
-import me.nao.enums.mg.GameStatus;
 import me.nao.enums.mg.Items;
 import me.nao.enums.mg.ObjetiveStatusType;
 import me.nao.enums.mg.Posion;
@@ -1028,7 +1027,7 @@ public class MinigameShop1 implements Listener{
 		if(!plugin.getPlayersLookingMgMenu().contains(player.getName())) {
 			return false;
 		}
-		
+		 
 		if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("MENU DE MAPAS")) {
 			FileConfiguration config = plugin.getConfig();
 			FileConfiguration menu = plugin.getMenuItems();
@@ -1151,10 +1150,7 @@ public class MinigameShop1 implements Listener{
 									if(plugin.getGameInfoPoo().get(name) != null) {
 										list2.add(""+ChatColor.GREEN+ChatColor.BOLD+"JUGADORES: "+ChatColor.RED+ChatColor.BOLD+plugin.getGameInfoPoo().get(name).getParticipants().size());
 										list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESPECTADORES: "+ChatColor.RED+ChatColor.BOLD+plugin.getGameInfoPoo().get(name).getSpectators().size());
-										list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESTADO: "+plugin.getGameInfoPoo().get(name).getGameStatus().toString().replace(GameStatus.ESPERANDO.toString(),""+ChatColor.WHITE+ChatColor.BOLD+GameStatus.ESPERANDO.toString())
-												.replace(GameStatus.COMENZANDO.toString(),""+ChatColor.YELLOW+ChatColor.BOLD+GameStatus.COMENZANDO.toString()).replace(GameStatus.JUGANDO.toString(),""+ChatColor.GREEN+ChatColor.BOLD+GameStatus.JUGANDO.toString())
-												.replace(GameStatus.DESACTIVADA.toString(),""+ChatColor.GRAY+ChatColor.BOLD+GameStatus.DESACTIVADA.toString()).replace(GameStatus.TERMINANDO.toString(),""+ChatColor.RED+ChatColor.BOLD+GameStatus.TERMINANDO.toString())
-												);
+										list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESTADO: "+plugin.getGameInfoPoo().get(name).getGameStatus().getValue());
 
 
 									}else {
@@ -1178,6 +1174,7 @@ public class MinigameShop1 implements Listener{
 					
 				//}
 				player.openInventory(inv);
+				
 			return true;
 		}
 		return false;
@@ -1185,7 +1182,7 @@ public class MinigameShop1 implements Listener{
 	
 	public void MissionsMenu(Player player) {
 		
-		
+		 
 		
 		FileConfiguration config = plugin.getConfig();
 	
@@ -1348,10 +1345,8 @@ public class MinigameShop1 implements Listener{
 								if(plugin.getGameInfoPoo().get(name) != null) {
 									list2.add(""+ChatColor.GREEN+ChatColor.BOLD+"JUGADORES: "+ChatColor.RED+ChatColor.BOLD+plugin.getGameInfoPoo().get(name).getParticipants().size());
 									list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESPECTADORES: "+ChatColor.RED+ChatColor.BOLD+plugin.getGameInfoPoo().get(name).getSpectators().size());
-									list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESTADO: "+plugin.getGameInfoPoo().get(name).getGameStatus().toString().replace(GameStatus.ESPERANDO.toString(),""+ChatColor.WHITE+ChatColor.BOLD+GameStatus.ESPERANDO.toString())
-											.replace(GameStatus.COMENZANDO.toString(),""+ChatColor.YELLOW+ChatColor.BOLD+GameStatus.COMENZANDO.toString()).replace(GameStatus.JUGANDO.toString(),""+ChatColor.GREEN+ChatColor.BOLD+GameStatus.JUGANDO.toString())
-											.replace(GameStatus.DESACTIVADA.toString(),""+ChatColor.GRAY+ChatColor.BOLD+GameStatus.DESACTIVADA.toString()).replace(GameStatus.TERMINANDO.toString(),""+ChatColor.RED+ChatColor.BOLD+GameStatus.TERMINANDO.toString())
-											);
+									list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESTADO: "+plugin.getGameInfoPoo().get(name).getGameStatus().getValue());
+
 
 								}else {
 									list2.add(""+ChatColor.RED+ChatColor.GREEN+"JUGADORES: "+ChatColor.RED+ChatColor.BOLD+"0");
