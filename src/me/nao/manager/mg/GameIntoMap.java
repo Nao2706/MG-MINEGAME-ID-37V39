@@ -324,7 +324,7 @@ public class GameIntoMap {
 		
 		if(gm instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) gm;
-			StopMotive motivo = gm.getMotive();
+			StopMotive motivo = gm.getStopMotive();
 			List<String> dead = ga.getDeadPlayers();
 			List<String> arrivo = ga.getArrivePlayers();
 			
@@ -489,7 +489,7 @@ public class GameIntoMap {
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		String mapa = pl.getMapName();
 		GameInfo gm = plugin.getGameInfoPoo().get(mapa);
-		StopMotive motivo = gm.getMotive();
+		StopMotive motivo = gm.getStopMotive();
 		
 		gmc.deadPlayerToGame(player, mapa);
 		

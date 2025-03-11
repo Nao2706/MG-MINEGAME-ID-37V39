@@ -65,6 +65,11 @@ public class MapStatistics {
     }
 
     public BigDecimal getProbablyOfLose() {
+    	
+    	if(timesplayed == 0 && participatingplayers == 0) {
+    		 return BigDecimal.ZERO;
+    	}
+    	
         return BigDecimal.valueOf(100).subtract(getProbablyOfWin());
     }
 	

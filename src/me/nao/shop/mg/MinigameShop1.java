@@ -2095,12 +2095,12 @@ public class MinigameShop1 implements Listener{
 				}
 			}if(item.isSimilar(Items.MASCARAANTIGAS.getValue())) {
 				if(!hasSpaceinInventory(player)) return;
-				if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND),2)) {
+				if(player.getInventory().containsAtLeast(new ItemStack(Material.IRON_INGOT),64)) {
 					player.getInventory().addItem(Items.MASCARAANTIGASP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
-					player.getInventory().removeItem(new ItemStack(Material.DIAMOND,3));
+					player.getInventory().removeItem(new ItemStack(Material.IRON_INGOT,64));
 				}else {
-					player.sendMessage(ChatColor.RED+"Necesitas 2 Diamantes");
+					player.sendMessage(ChatColor.RED+"Necesitas 64 de Hierro");
 				}
 			}
 			

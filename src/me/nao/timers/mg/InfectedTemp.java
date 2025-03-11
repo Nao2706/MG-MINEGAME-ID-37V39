@@ -100,7 +100,7 @@ public class InfectedTemp {
 			List<String> alive = ga.getAlivePlayers();
 			List<String> dead = ga.getDeadPlayers();
 			GameStatus part = ms.getGameStatus();
-			StopMotive motivo = ms.getMotive();
+			StopMotive motivo = ms.getStopMotive();
 
 			//SI TODOS SE SALEN MIENTRAS COMIENZA
 			if(joins.size() == 0 && part == GameStatus.COMENZANDO || part == GameStatus.JUGANDO || part == GameStatus.PAUSE) {

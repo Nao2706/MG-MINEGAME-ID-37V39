@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -247,7 +248,7 @@ public class SourceOfDamage implements Listener{
     public void moving(PlayerMoveEvent e){
 		   
 			Player player = e.getPlayer();
-			
+			 
 			GameConditions gc = new GameConditions(plugin);
 			if(gc.isPlayerinGame(player)) {
 				gc.blockPotion(player);
@@ -276,7 +277,7 @@ public class SourceOfDamage implements Listener{
 							return;
 						}
 					}
-					if(player.getInventory().getHelmet() != null && player.getInventory().getHelmet().isSimilar(Items.MASCARAANTIGASP.getValue())) return;
+					if(player.getInventory().getHelmet() != null && isAntiGasMask(player, player.getInventory().getHelmet())) return;
 					if(player.hasPotionEffect(PotionEffectType.POISON)) return;
 			
 					
@@ -321,7 +322,7 @@ public class SourceOfDamage implements Listener{
 							return;
 						}
 					}
-					if(player.getInventory().getHelmet() != null && player.getInventory().getHelmet().isSimilar(Items.MASCARAANTIGASP.getValue())) return;
+					if(player.getInventory().getHelmet() != null && isAntiGasMask(player, player.getInventory().getHelmet())) return;
 					if(player.hasPotionEffect(PotionEffectType.POISON)) return;
 					
 					Block block = player.getLocation().getBlock();
@@ -350,7 +351,7 @@ public class SourceOfDamage implements Listener{
 							if(a.getType() == Material.COMMAND_BLOCK && b.getType() == Material.BEDROCK) {
 								player.getWorld().spawnParticle(Particle.DRAGON_BREATH, player.getLocation().add(1, 0, 1),
 										/* NUMERO DE PARTICULAS */10, 1, 0, 1, /* velocidad */0, null, true);
-								
+								 
 								player.sendTitle(ChatColor.RED+"!!!PELIGRO!!!", ChatColor.GREEN+"Estas en una"+ChatColor.RED+" Zona Toxica "+ChatColor.GREEN+"corre", 20, 40, 20);
 								player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
 								player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,/*duration*/ 10 * 20,/*amplifier:*/20, false ,false,true));
@@ -1025,7 +1026,7 @@ public class SourceOfDamage implements Listener{
 				}
 			}
 	
-		}
+		} 
 		
 		if(e.getEntity() instanceof Player) {
 			Player player = (Player) e.getEntity();
@@ -1044,6 +1045,29 @@ public class SourceOfDamage implements Listener{
 				return;
 			}
 		
+			if(player.getHealth() <= 10) {
+				Block block = player.getLocation().getBlock();
+				Block b1 = block.getRelative(0, 0, 0);
+				Block b2 = block.getRelative(0, 1, 0);
+				
+				if(player.getGameMode() == GameMode.ADVENTURE) {
+					
+					if(player.getScoreboardTags().contains("Toxic") || player.getScoreboardTags().contains("ToxicZone")) {
+						if(b1.getType() == Material.WATER || b2.getType() == Material.WATER) {
+							spawnToxicCloud(player,ChatColor.BLUE+"Agua Toxica");
+						}else if(b1.getType() == Material.LAVA || b2.getType() == Material.LAVA) {
+							spawnToxicCloud(player,ChatColor.YELLOW+"Lava Toxica");
+						}
+//						else if(b1.getType() == Material.AIR) {
+//							spawnToxicCloud(player,ChatColor.DARK_GREEN+" Aire Toxico ");
+//						}
+					}
+				}
+			}
+			
+			if(e instanceof EntityDamageByEntityEvent &&isAntiGasMask(player, player.getInventory().getHelmet())) {
+				breakAntiGasMask(player, player.getInventory().getHelmet());
+			}
 			// CUANDO CAE ENCIMA DEL BARRIER RECIBE DAÑO PERO ESTE NO MUERE PERO SE PUEDE MOVER UNOS SEGS
 			if(player.getHealth() > e.getFinalDamage() && e.getCause() == DamageCause.FALL) {
 				ci.GamePlayerFallMap(player,null);
@@ -1058,22 +1082,23 @@ public class SourceOfDamage implements Listener{
 				
 				e.setCancelled(true);
 				if(e instanceof EntityDamageByEntityEvent){
-					
-					
-					Entity damager = ((EntityDamageByEntityEvent)e).getDamager();
+							
+							
+							Entity damager = ((EntityDamageByEntityEvent)e).getDamager();
 					
 							if(gc.isEnabledReviveSystem(pi.getMapName())) {
 								ArmorStand armor = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
-							
 								RevivePlayer pr = new RevivePlayer(player,0,60,ReviveStatus.BLEEDING,damager,null,armor ,plugin);
 								pr.Knocked();
 								plugin.getKnockedPlayer().put(player, pr);
-								return;
+								
 							}else {
 								ci.GameMobDamagerCauses(player, damager);
 							}
 						
-						return;
+							
+							
+							return;
 					
 				}else{
 					//bloque de daño por causas externas
@@ -1082,11 +1107,11 @@ public class SourceOfDamage implements Listener{
 								RevivePlayer pr = new RevivePlayer(player,0,60,ReviveStatus.BLEEDING,null,e.getCause(),armor ,plugin);
 								pr.Knocked();
 								plugin.getKnockedPlayer().put(player, pr);
-								return;
+								
 							}else {
 								ci.GameDamageCauses(player, e.getCause());
 							}
-					return;
+							return;
 				}
 					
 			}
@@ -1097,12 +1122,109 @@ public class SourceOfDamage implements Listener{
 		
 		
 	}
+	 
+	
+	public boolean isAntiGasMask(Player player,ItemStack it) {
+		if(it != null) {
+			if(it.hasItemMeta() && it.getItemMeta().hasDisplayName() && ChatColor.stripColor(it.getItemMeta().getDisplayName()).contains("MASCARA ANTIGAS")) {
+		
+					return true;
+			}
+		}
+
+		return false;
+	}
+	
+	public void breakAntiGasMask(Player player,ItemStack it) {
+			
+			//Durabilidad 5/5
+		
+			if(it.hasItemMeta() && it.getItemMeta().hasLore()) {
+				if(it.getItemMeta().getLore().size() > 1 && !ChatColor.stripColor(it.getItemMeta().getLore().get(2)).startsWith("Durabilidad:")) {
+					
+					return;
+				}
+				
+			}
+		
+			List<String> lore = it.getItemMeta().getLore();
+			ItemMeta meta = it.getItemMeta();
+			String info = ChatColor.stripColor(lore.get(2));
+			//player.sendMessage("info eh "+ info);
+			String[] letra = info.split(" ");
+			String numero = letra[1];
+			String[] num = numero.split("/");
+			int dur = Integer.valueOf(num[0]);
+			int limit = Integer.valueOf(num[1]);
+			if(dur == 0) {
+				player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 50.0F, 0F);
+				player.sendMessage(ChatColor.RED+"Mascara Anti Gas rota.");
+				if(player.getInventory().getHelmet() != null) {
+					player.getInventory().setHelmet(new ItemStack(Material.AIR));
+				}
+				
+			  return ;
+			}
+			dur = dur -1;
+			lore.set(2,ChatColor.GOLD+"Durabilidad: "+ChatColor.GREEN+dur+ChatColor.RED+"/"+ChatColor.GREEN+limit);
+			player.playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 50.0F, 0F);
+			meta.setLore(lore);
+			it.setItemMeta(meta);
+			player.getInventory().setHelmet(it);
+			
+			return ;
+		}
 	
 	
+//	public void breakAntiGasMask(Player player,ItemStack it,int slot) {
+//		
+//		//Durabilidad 5/5
+//	
+//		if(it.hasItemMeta() && it.getItemMeta().hasLore()) {
+//			if(it.getItemMeta().getLore().size() > 1 && !ChatColor.stripColor(it.getItemMeta().getLore().get(2)).startsWith("Durabilidad:")) {
+//				return;
+//			}
+//			
+//		}
+//	
+//		List<String> lore = it.getItemMeta().getLore();
+//		ItemMeta meta = it.getItemMeta();
+//		String info = ChatColor.stripColor(lore.get(2));
+//		//player.sendMessage("info eh "+ info);
+//		String[] letra = info.split(" ");
+//		String numero = letra[1];
+//		String[] num = numero.split("/");
+//		int dur = Integer.valueOf(num[0]);
+//		int limit = Integer.valueOf(num[1]);
+//		if(dur == 0) {
+//			player.sendMessage(ChatColor.RED+"Mascara Anti Gas rota.");
+//			if(player.getInventory().getHelmet() != null) {
+//				player.getInventory().setHelmet(new ItemStack(Material.AIR));
+//			}
+//			
+//		  return ;
+//		}
+//		dur = dur -1;
+//		lore.set(2,ChatColor.GOLD+"Durabilidad: "+ChatColor.GREEN+dur+ChatColor.RED+"/"+ChatColor.GREEN+limit);
+//	
+//		meta.setLore(lore);
+//		it.setItemMeta(meta);
+//		player.getInventory().setItem(slot, it);
+//		return ;
+//	}
 	
 	
-	
-	
+	public void spawnToxicCloud(Player player,String name) {
+		PotionEffect effect = new PotionEffect(PotionEffectType.INSTANT_DAMAGE,/*duration*/ 15*20,/*amplifier:*/25, false ,false,true );
+		AreaEffectCloud aec = (AreaEffectCloud) player.getWorld().spawnEntity(player.getLocation(),  EntityType.AREA_EFFECT_CLOUD);
+		aec.addCustomEffect(effect, true);
+		aec.setCustomName(name);
+		aec.setColor(Color.GREEN);
+		aec.setDuration(10*20);
+		aec.setRadius(1);
+		aec.setReapplicationDelay(5*20);
+		return;
+	}
 	
 	
 	

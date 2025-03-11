@@ -132,7 +132,7 @@ public class ResistenceTemp {
 			//List<Player> dead = gc.ConvertStringToPlayer(ga.getDeadPlayers());
 			List<Player> spect = gc.ConvertStringToPlayer(ga.getSpectators());
 			GameStatus part = ms.getGameStatus();
-			StopMotive motivo = ms.getMotive();
+			StopMotive motivo = ms.getStopMotive();
 
 			//SI TODOS SE SALEN MIENTRAS COMIENZA
 			if(joins.isEmpty() && part != GameStatus.TERMINANDO) {
@@ -447,7 +447,7 @@ public class ResistenceTemp {
 					
 					
 					if(a.getType() == Material.NETHERITE_BLOCK && b.getType() == Material.BEDROCK) {
-						 player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
+						 player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,(float) Math.max(0, 20 - player.getLocation().distance(loc) + 1), 1F  );
 						 a.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,a.getLocation().add(0.5, 1.5, 0.5), 1);
 						 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.NETHERITE_INGOT));
 						 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.NETHERITE_BLOCK,RandomBetweenValue(1, 100)));
@@ -455,28 +455,28 @@ public class ResistenceTemp {
 					}
 					
 					if(a.getType() == Material.DIAMOND_BLOCK && b.getType() == Material.BEDROCK) {
-						 player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
+						 player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,(float) Math.max(0, 20 - player.getLocation().distance(loc) + 1), 1F  );
 						 a.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,a.getLocation().add(0.5, 1.5, 0.5), 1);
 					     a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.DIAMOND));
 					     a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.DIAMOND_BLOCK,RandomBetweenValue(1, 100)));
 					}
 					
 					if(a.getType() == Material.EMERALD_BLOCK && b.getType() == Material.BEDROCK) {
-						 player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
+						 player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,(float) Math.max(0, 20 - player.getLocation().distance(loc) + 1), 1F  );
 						 a.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,a.getLocation().add(0.5, 1.5, 0.5), 1);
 						 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.EMERALD));
 						 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.EMERALD_BLOCK,RandomBetweenValue(1, 100)));
 					}
 					
 					if(a.getType() == Material.IRON_BLOCK && b.getType() == Material.BEDROCK) {
-						 player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
+						 player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,(float) Math.max(0, 20 - player.getLocation().distance(loc) + 1), 1F  );
 						 a.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,a.getLocation().add(0.5, 1.5, 0.5), 1);
 						 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.IRON_INGOT));
 						 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.IRON_BLOCK,RandomBetweenValue(1, 100)));
 					}
 					
 					if(a.getType() == Material.GOLD_BLOCK && b.getType() == Material.BEDROCK) {
-						 player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,20.0F , 1F  );
+						 player.getWorld().playSound(a.getLocation(),Sound.ENTITY_ITEM_PICKUP ,(float) Math.max(0, 20 - player.getLocation().distance(loc) + 1), 1F  );
 						 a.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,a.getLocation().add(0.5, 1.5, 0.5), 1);
 						 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.GOLD_INGOT));
 						 a.getWorld().dropItem(a.getLocation().add(0.5, 1, 0.5), new ItemStack(Material.GOLD_BLOCK,RandomBetweenValue(1, 100)));

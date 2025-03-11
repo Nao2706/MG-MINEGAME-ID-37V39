@@ -10,11 +10,12 @@ import org.bukkit.boss.BossBar;
 import me.nao.enums.mg.GameStatus;
 import me.nao.enums.mg.GameType;
 import me.nao.enums.mg.StopMotive;
+import me.nao.utils.mg.Utils;
 
 public class GameInfo {
 	
 	
-	private String name , time;
+	private String name , time , stopreason;
 	private int maxplayers,minplayers, loottablemax , itemspawnrange , spawnmobrange , countdownstart, toxiczonerange;
 	private int pointsperkills, pointsperdeads , pointsperrevive ,pointsperhelprevive , pointsbonus;
 	private List<String> participants,spectators;
@@ -62,6 +63,7 @@ public class GameInfo {
 		this.pointsperdeads = 30;
 		this.pointsperrevive = 10;
 		this.pointsperhelprevive = 15;
+		this.stopreason = StopMotive.NINGUNO.getValue();
 		
 	}
 	
@@ -98,8 +100,12 @@ public class GameInfo {
 		return estpart;
 	}
 
-	public StopMotive getMotive() {
+	public StopMotive getStopMotive() {
 		return motivo;
+	}
+	
+	public String getStopReason() {
+		return Utils.colorTextChatColor(stopreason);
 	}
 
 	public BossBar getBossbar() {
@@ -218,8 +224,12 @@ public class GameInfo {
 		this.estpart = estpart;
 	}
 
-	public void setMotive(StopMotive motivo) {
+	public void setStopMotive(StopMotive motivo) {
 		this.motivo = motivo;
+	}
+	
+	public void setStopReason(String stopreason) {
+		this.stopreason = stopreason;
 	}
 	
 	public void setGameType(GameType type) {
@@ -292,7 +302,7 @@ public class GameInfo {
 	
 	public String ShowGame() {
 		return getMapName()+" "+getMaxPlayers()+" "+getMinPlayers()+" "+getGameType().toString()+" "+getGameStatus().toString()+" "+
-	getMotive().toString()+" "+getBossbar().getTitle()+" "+getTimeMg();
+	getStopMotive().toString()+" "+getBossbar().getTitle()+" "+getTimeMg();
 	}
 	
 

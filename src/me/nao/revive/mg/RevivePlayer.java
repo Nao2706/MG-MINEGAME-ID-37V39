@@ -317,8 +317,12 @@ public class RevivePlayer{
 			causes = "POR HAMBRE";
 		}else if(cause == DamageCause.SUFFOCATION) {
 			causes = "POR SOFOCACION";
+		}else if(cause == DamageCause.POISON) {
+			causes = "POR ENVENENAMIENTO";
+		}else if(cause == DamageCause.WITHER) {
+			causes = "POR WITHER";
 		}else {
-			causes = "ALGO QUE NO ESTA EN LISTA "+cause.toString()+" (SI VES ESTO REPORTALO)";
+			causes = "ALGO QUE NO ESTA EN LISTA >>>"+cause.toString()+"<<< (SI VES ESTO REPORTALO)";
 		}
 		return causes;
 	}

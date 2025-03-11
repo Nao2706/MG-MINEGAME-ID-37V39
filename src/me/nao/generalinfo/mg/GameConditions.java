@@ -2001,8 +2001,8 @@ public class GameConditions {
 								player.sendMessage(""+ChatColor.DARK_RED+ChatColor.BOLD+"                [Tiempo Faltante] ");
 								player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"["+ChatColor.GREEN+TimeDiferenceMg(lt, t)+ChatColor.GOLD+ChatColor.BOLD+"]");
 								player.sendMessage(ChatColor.AQUA+"Para que pueda estar Disponible.");
-								player.sendMessage(ChatColor.GREEN+"Fecha de Apertura: "+ChatColor.AQUA+t.format(formatter));
 								player.sendMessage(ChatColor.GOLD+"Fecha Actual: "+ChatColor.GREEN+lt.format(formatter));
+								player.sendMessage(ChatColor.GREEN+"Fecha de Apertura: "+ChatColor.AQUA+t.format(formatter));
 								player.sendMessage("");
 								player.sendMessage(ChatColor.GREEN+"================================================");
 								//isJoinRunning(player);
@@ -2015,8 +2015,8 @@ public class GameConditions {
 								player.sendMessage(""+ChatColor.YELLOW+ChatColor.BOLD+"                [A Trasncurrido] ");
 								player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"["+ChatColor.RED+TimeDiferenceMg(t2, lt)+ChatColor.GOLD+ChatColor.BOLD+"]");
 								player.sendMessage(ChatColor.YELLOW+"Desde que ha terminado.");
-								player.sendMessage(ChatColor.YELLOW+"Fecha de Cierre: "+ChatColor.RED+t2.format(formatter));
 								player.sendMessage(ChatColor.GOLD+"Fecha Actual: "+ChatColor.GREEN+lt.format(formatter));
+								player.sendMessage(ChatColor.YELLOW+"Fecha de Cierre: "+ChatColor.RED+t2.format(formatter));
 								player.sendMessage("");
 								player.sendMessage(ChatColor.RED+"================================================");
 								//despues de pasar la fecha
@@ -2052,8 +2052,8 @@ public class GameConditions {
 									player.sendMessage(""+ChatColor.DARK_RED+ChatColor.BOLD+"                [Tiempo Faltante] ");
 									player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"["+ChatColor.GREEN+TimeDiferenceMg(lt, t)+ChatColor.GOLD+ChatColor.BOLD+"]");
 									player.sendMessage(ChatColor.AQUA+"Para que pueda estar Disponible.");
-									player.sendMessage(ChatColor.GREEN+"Fecha de Apertura: "+ChatColor.AQUA+t.format(formatter));
 									player.sendMessage(ChatColor.GOLD+"Fecha Actual: "+ChatColor.GREEN+lt.format(formatter));
+									player.sendMessage(ChatColor.GREEN+"Fecha de Apertura: "+ChatColor.AQUA+t.format(formatter));
 									player.sendMessage("");
 									player.sendMessage(ChatColor.DARK_GREEN+"================================================");
 									//isJoinRunning(player);
@@ -2638,7 +2638,7 @@ public class GameConditions {
 			sendMessageToConsole(""+ChatColor.GRAY+"DEFAULT TIMER: "+ChatColor.GREEN+ga.getGameTime().getGameTimerDefaultForResult());
 			sendMessageToConsole(""+ChatColor.GRAY+"DURACION: "+ChatColor.WHITE+cronomet);
 			sendMessageToConsole(""+ChatColor.GRAY+"TIMER: "+ChatColor.WHITE+timer);
-			sendMessageToConsole(""+ChatColor.GRAY+"MOTIVOS DE PARADA: "+ChatColor.WHITE+map.getMotive().getValue());
+			sendMessageToConsole(""+ChatColor.GRAY+"MOTIVOS DE PARADA: "+ChatColor.WHITE+map.getStopReason());
 
 			if(participants.isEmpty()) {
 				sendMessageToConsole(""+ChatColor.GRAY+ChatColor.BOLD+"PARTICIPANTES: "+ChatColor.WHITE+"SIN PARTICIPANTES");
@@ -3201,120 +3201,72 @@ public class GameConditions {
 	
 	   //TODO STOP
 	   public void StopGames(Player player , String name,StopMotive motive,String reason) {
-		   
+		    
 		   GameConditions gc = new GameConditions(plugin);
 			if(gc.ExistMap(name)) {
 				GameInfo ms = plugin.getGameInfoPoo().get(name);
 				if(ms instanceof GameAdventure) {
 					GameAdventure ga = (GameAdventure) ms;
 					GameStatus estadoPartida = ms.getGameStatus();
-					if(estadoPartida == GameStatus.JUGANDO) {
+					if(estadoPartida == GameStatus.JUGANDO || estadoPartida == GameStatus.FREEZE || estadoPartida == GameStatus.PAUSE) {
 						GameIntoMap ci = new GameIntoMap(plugin);
 						
-						ms.setMotive(motive);
-						List<String> vivos = ga.getAlivePlayers();
-						List<Player> players = gc.ConvertStringToPlayer(vivos);
-						if(motive == StopMotive.WIN) {
+						
+						ms.setStopMotive(motive);
+						if(reason.isEmpty()) {
+							ms.setStopReason(motive.getValue());
+						}else {
+							ms.setStopReason(reason);
+						}
+						
+						
+						List<Player> participants = gc.ConvertStringToPlayer(ga.getParticipants());
+						List<Player> alives = gc.ConvertStringToPlayer(ga.getAlivePlayers());
+						List<Player> spectator = gc.ConvertStringToPlayer(ga.getSpectators());
+						Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Motivo de Parada: "+ChatColor.WHITE+motive.getValue());
+						Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+ms.getGameType().toString()+ChatColor.GREEN+ms.getStopReason());
+						
+						for(Player target : participants) {
 							
-							if(vivos.isEmpty()) {
-								Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+ms.getGameType().toString()+ChatColor.GREEN+" Ganaron en el Mapa: "+ChatColor.GOLD+name+ChatColor.GREEN+" por Condiciones varias , Terminando. Pero no hay ningun jugador vivo.");
-								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Razon: "+ChatColor.WHITE+reason);
-
-								return;
-							}
-							
-							Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+ms.getGameType().toString()+ChatColor.GREEN+": Ganaron en el Mapa: "+ChatColor.GOLD+name+ChatColor.GREEN+" por Condiciones varias , Terminando.");
-							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Razon: "+ChatColor.WHITE+reason);
-
-							
-							if(ms.getGameType() == GameType.ADVENTURE || ms.getGameType() == GameType.RESISTENCE) {
-								for(Player target : players) {
-									
-									if(reason.equals("Ninguno")){
-										target.sendMessage(ChatColor.GREEN+"Victoria todos los que quedaron Vivos han Ganado...");
-									}else {
-										target.sendMessage(ChatColor.GREEN+reason);
-									}
-									
+							if(motive == StopMotive.WIN) {
+								target.sendMessage(ChatColor.GREEN+ms.getStopReason());
+								
+								if(alives.contains(target)) {
 									ci.GamePlayerWin(target);
 								}
-								return;
+								
+							}else if(motive == StopMotive.LOSE) {
+								target.sendMessage(ChatColor.RED+ms.getStopReason());
+								if(alives.contains(target)) {
+									ci.GamePlayerLost(target);
+								}
+								
+							}else if(motive == StopMotive.ERROR) {
+								target.sendMessage(ChatColor.RED+ms.getStopReason());
+								ci.GamePlayerLost(target);
+							}else if(motive == StopMotive.FORCE) {
+								target.sendMessage(ChatColor.RED+ms.getStopReason());
+								ci.GamePlayerLost(target);
 							}
+							
+							
+						}
 						
-						}else if(motive == StopMotive.LOSE) {
-							
-							if(vivos.isEmpty()) {
-								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+ms.getGameType().toString()+ChatColor.GREEN+"Perdieron en el Mapa: "+ChatColor.GOLD+name+ChatColor.GREEN+" por Condiciones varias , Terminando. Pero no hay ningun jugador vivo.");
-								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Razon: "+ChatColor.WHITE+reason);
-
-								return;
-							}
-							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+ms.getGameType().toString()+ChatColor.RED+"Perdieron en el Mapa: "+ChatColor.GREEN+name+ChatColor.RED+" por Condiciones varias , Terminando.");
-							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Razon: "+ChatColor.WHITE+reason);
-
-							
-							if(ms.getGameType() == GameType.ADVENTURE || ms.getGameType() == GameType.RESISTENCE) {
-								for(Player target : players) {
-									if(reason.equals("Ninguno")){
-										target.sendMessage(ChatColor.RED+"Todos los Jugadores con Vida han Perdido...");
-									}else {
-										target.sendMessage(ChatColor.RED+reason);
-									}
+						if(!spectator.isEmpty()) {
+							for(Player target : participants) {
+								if(motive == StopMotive.WIN) {
+									target.sendMessage(ChatColor.GREEN+ms.getStopReason());
 									
-									ci.GamePlayerLost(target);
-								}
-								return;
-							}
-							
-						}else if(motive == StopMotive.ERROR) {
-							
-							
-							if(vivos.isEmpty()) {
-								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+ms.getGameType().toString()+ChatColor.GREEN+"Hubo un error en el Mapa: "+ChatColor.GOLD+name+ChatColor.GREEN+" por Condiciones varias , Terminando. Pero no hay ningun jugador vivo.");
-								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Razon: "+ChatColor.GOLD+reason);
-
-								return;
-							}
-							
-							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+ms.getGameType().toString()+ChatColor.RED+"Hubo un error en el Mapa: "+ChatColor.GREEN+name+ChatColor.RED+" Terminando.");
-							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Razon: "+ChatColor.WHITE+reason);
-
-							if(ms.getGameType() == GameType.ADVENTURE || ms.getGameType() == GameType.RESISTENCE) {
-								for(Player target : players) {
+								}else if(motive == StopMotive.LOSE) {
+									target.sendMessage(ChatColor.RED+ms.getStopReason());
 									
-									if(reason.equals("Ninguno")){
-										target.sendMessage(ChatColor.RED+"Hubo un error en el Mapa: "+ChatColor.GREEN+name+ChatColor.RED+" Terminando.");
-									}else {
-										target.sendMessage(ChatColor.RED+reason);
-									}
-									ci.GamePlayerLost(target);
+								}else if(motive == StopMotive.ERROR) {
+									target.sendMessage(ChatColor.RED+ms.getStopReason());
+									
+								}else if(motive == StopMotive.FORCE) {
+									target.sendMessage(ChatColor.RED+ms.getStopReason());
+									
 								}
-								return;
-							}
-							
-						}else if(motive == StopMotive.FORCE) {
-							
-							
-							if(vivos.isEmpty()) {
-								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+ms.getGameType().toString()+ChatColor.GREEN+"Perdieron en el Mapa: "+ChatColor.GOLD+name+ChatColor.GREEN+" por Condiciones varias , Terminando. Pero no hay ningun jugador vivo.");
-								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Razon: "+ChatColor.WHITE+reason);
-
-								return;
-							}
-							
-							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+ms.getGameType().toString()+ChatColor.RED+"El Mapa "+ChatColor.GREEN+name+ChatColor.RED+" fue Forzada a terminar.");
-							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Razon: "+ChatColor.WHITE+reason);
-
-							if(ms.getGameType() == GameType.ADVENTURE || ms.getGameType() == GameType.RESISTENCE) {
-								for(Player target : players) {
-									if(reason.equals("Ninguno")){
-										target.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GREEN+name+ChatColor.RED+" fue Forzada a terminar.");
-									}else {
-										target.sendMessage(ChatColor.RED+reason);
-									}
-									ci.GamePlayerLost(target);
-								}
-								return;
 							}
 						}
 					
@@ -4976,11 +4928,11 @@ public class GameConditions {
 		sendMessageToUserAndConsole(player,"");
 		sendMessageToUserAndConsole(player,"======================================");
 		sendMessageToUserAndConsole(player,""+ChatColor.RED+ChatColor.BOLD+"Estadisticas del Mapa: "+ChatColor.GREEN+map);
-		sendMessageToUserAndConsole(player,ChatColor.GREEN+"Porcentaje de Victorias: "+ChatColor.GOLD+nf.format(ms.getPorcentWins()+"%"));
-		sendMessageToUserAndConsole(player,ChatColor.YELLOW+"Porcentaje de Revivir: "+ChatColor.GOLD+nf.format(ms.getPorcentRevives()+"%"));
-		sendMessageToUserAndConsole(player,ChatColor.RED+"Porcentaje de Muertes: "+ChatColor.GOLD+nf.format(ms.getPorcentOfDeads()+"%"));
-		sendMessageToUserAndConsole(player,ChatColor.GREEN+"Probabilidad de Ganar: "+ChatColor.GOLD+nf.format(ms.getProbablyOfWin()+"%"));
-		sendMessageToUserAndConsole(player,ChatColor.RED+"Probabilidad de Perder: "+ChatColor.GOLD+nf.format(ms.getProbablyOfLose()+"%"));
+		sendMessageToUserAndConsole(player,ChatColor.GREEN+"Porcentaje de Victorias: "+ChatColor.GOLD+nf.format(ms.getPorcentWins())+"%");
+		sendMessageToUserAndConsole(player,ChatColor.YELLOW+"Porcentaje de Revivir: "+ChatColor.GOLD+nf.format(ms.getPorcentRevives())+"%");
+		sendMessageToUserAndConsole(player,ChatColor.RED+"Porcentaje de Muertes: "+ChatColor.GOLD+nf.format(ms.getPorcentOfDeads())+"%");
+		sendMessageToUserAndConsole(player,ChatColor.GREEN+"Probabilidad de Ganar: "+ChatColor.GOLD+nf.format(ms.getProbablyOfWin())+"%");
+		sendMessageToUserAndConsole(player,ChatColor.RED+"Probabilidad de Perder: "+ChatColor.GOLD+nf.format(ms.getProbablyOfLose())+"%");
 		sendMessageToUserAndConsole(player,"======================================");
 		sendMessageToUserAndConsole(player,"");
 	}
