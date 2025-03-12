@@ -2023,7 +2023,7 @@ public class GameConditions {
 								//isJoinRunning(player);
 								return false;
 							}
-							
+							 
 						}
 					    
 					 }catch(DateTimeParseException e) {
@@ -2632,12 +2632,14 @@ public class GameConditions {
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss a",Locale.ENGLISH);
 			
 			sendMessageToConsole("");	
+			sendMessageToConsole(""+ChatColor.GRAY+ChatColor.BOLD+"RESULTADO DE LA PARTIDA");	
 			sendMessageToConsole(ChatColor.GRAY+"=============================");	
 			sendMessageToConsole(""+ChatColor.GRAY+"MAPA: "+ChatColor.WHITE+ga.getMapName());
 			sendMessageToConsole(""+ChatColor.GRAY+"FECHA: "+ChatColor.WHITE+ldt.format(formatter));
 			sendMessageToConsole(""+ChatColor.GRAY+"DEFAULT TIMER: "+ChatColor.GREEN+ga.getGameTime().getGameTimerDefaultForResult());
 			sendMessageToConsole(""+ChatColor.GRAY+"DURACION: "+ChatColor.WHITE+cronomet);
 			sendMessageToConsole(""+ChatColor.GRAY+"TIMER: "+ChatColor.WHITE+timer);
+			sendMessageToConsole(""+ChatColor.GRAY+"TIPO DE PARADA: "+ChatColor.WHITE+map.getStopMotive().toString()+" - "+map.getStopMotive().getValue());
 			sendMessageToConsole(""+ChatColor.GRAY+"MOTIVOS DE PARADA: "+ChatColor.WHITE+map.getStopReason());
 
 			if(participants.isEmpty()) {
@@ -3213,7 +3215,7 @@ public class GameConditions {
 						
 						
 						ms.setStopMotive(motive);
-						if(reason.isEmpty()) {
+						if(reason.isEmpty() || reason.equals("Ninguno")){
 							ms.setStopReason(motive.getValue());
 						}else {
 							ms.setStopReason(reason);
@@ -3223,8 +3225,8 @@ public class GameConditions {
 						List<Player> participants = gc.ConvertStringToPlayer(ga.getParticipants());
 						List<Player> alives = gc.ConvertStringToPlayer(ga.getAlivePlayers());
 						List<Player> spectator = gc.ConvertStringToPlayer(ga.getSpectators());
-						Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Motivo de Parada: "+ChatColor.WHITE+motive.getValue());
-						Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+ms.getGameType().toString()+ChatColor.GREEN+ms.getStopReason());
+						//Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Motivo de Parada: "+ChatColor.WHITE+motive.getValue());
+						//Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+ms.getGameType().toString()+ChatColor.GREEN+ms.getStopReason());
 						
 						for(Player target : participants) {
 							

@@ -646,7 +646,7 @@ public class SourceOfDamage implements Listener{
 				
 				if(m instanceof Zombie) {
 				     MobsActions ma = new MobsActions(plugin);
-					 ma.virus(player, m);
+					 ma.onDead(player, m);
 				}
 				//SoulsArmor(player);
 				
@@ -1045,7 +1045,7 @@ public class SourceOfDamage implements Listener{
 				return;
 			}
 		
-			if(player.getHealth() <= 10) {
+			if(player.getHealth() <= 3) {
 				Block block = player.getLocation().getBlock();
 				Block b1 = block.getRelative(0, 0, 0);
 				Block b2 = block.getRelative(0, 1, 0);
@@ -1057,10 +1057,9 @@ public class SourceOfDamage implements Listener{
 							spawnToxicCloud(player,ChatColor.BLUE+"Agua Toxica");
 						}else if(b1.getType() == Material.LAVA || b2.getType() == Material.LAVA) {
 							spawnToxicCloud(player,ChatColor.YELLOW+"Lava Toxica");
+						}else if(b1.getType() == Material.AIR) {
+							spawnToxicCloud(player,ChatColor.DARK_GREEN+" Aire Toxico ");
 						}
-//						else if(b1.getType() == Material.AIR) {
-//							spawnToxicCloud(player,ChatColor.DARK_GREEN+" Aire Toxico ");
-//						}
 					}
 				}
 			}
@@ -1150,12 +1149,12 @@ public class SourceOfDamage implements Listener{
 			List<String> lore = it.getItemMeta().getLore();
 			ItemMeta meta = it.getItemMeta();
 			String info = ChatColor.stripColor(lore.get(2));
-			//player.sendMessage("info eh "+ info);
 			String[] letra = info.split(" ");
 			String numero = letra[1];
 			String[] num = numero.split("/");
 			int dur = Integer.valueOf(num[0]);
 			int limit = Integer.valueOf(num[1]);
+			dur = dur -1;
 			if(dur == 0) {
 				player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 50.0F, 0F);
 				player.sendMessage(ChatColor.RED+"Mascara Anti Gas rota.");
@@ -1165,8 +1164,14 @@ public class SourceOfDamage implements Listener{
 				
 			  return ;
 			}
-			dur = dur -1;
-			lore.set(2,ChatColor.GOLD+"Durabilidad: "+ChatColor.GREEN+dur+ChatColor.RED+"/"+ChatColor.GREEN+limit);
+			if(dur >= 20 && dur <= 30) {
+				lore.set(2,ChatColor.GOLD+"Durabilidad: "+ChatColor.GREEN+dur+ChatColor.RED+"/"+ChatColor.GREEN+limit);
+			}else if(dur >= 10 && dur <= 19) {
+				lore.set(2,ChatColor.GOLD+"Durabilidad: "+ChatColor.YELLOW+dur+ChatColor.RED+"/"+ChatColor.GREEN+limit);
+			}else if(dur >= 1 && dur <= 9) {
+				lore.set(2,ChatColor.GOLD+"Durabilidad: "+ChatColor.RED+dur+ChatColor.RED+"/"+ChatColor.GREEN+limit);
+			}
+			
 			player.playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 50.0F, 0F);
 			meta.setLore(lore);
 			it.setItemMeta(meta);

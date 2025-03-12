@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -37,6 +38,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.AreaEffectCloud;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -1245,10 +1247,9 @@ public class Comandsmg implements CommandExecutor{
 						try {
 							StopMotive motivo = StopMotive.valueOf(args[2].toUpperCase());
 							
-							//plugin.yml = new YamlFile(plugin,name, new File(plugin.getDataFolder().getAbsolutePath()+carpeta));;
-							//MG STOP NAME
-							Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"STOP MOTIVO: "+motivo.toString());
-						
+							Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+"Deteniendo partida Tipo de Parada: "+ChatColor.RED+motivo.toString());
+							Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+"Mas detalles en el Log de la Consola.");
+
 							gc.StopGames(null, name,motivo,"Ninguno");
 						}catch(IllegalArgumentException e) {
 							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Ese motivo no existe usa: Win , Lose , Error o Force. ");
@@ -1258,10 +1259,9 @@ public class Comandsmg implements CommandExecutor{
 						 String name = args[1];
 							try {
 								StopMotive motivo = StopMotive.valueOf(args[2].toUpperCase());
-								
-								//plugin.yml = new YamlFile(plugin,name, new File(plugin.getDataFolder().getAbsolutePath()+carpeta));;
-								//MG STOP NAME
-								Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"STOP MOTIVO: "+motivo.toString());
+							
+								Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+"Deteniendo partida Tipo de Parada: "+ChatColor.RED+motivo.toString());
+								Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+"Mas detalles en el Log de la Consola.");
 								String comments = "";
 					        	 for(int i = 3 ;i < args.length; i++) {
 					        		 comments = comments+args[i]+" "; 
@@ -1624,6 +1624,13 @@ public class Comandsmg implements CommandExecutor{
 			
 			   		return true;
 			
+		   }else if (args[0].equalsIgnoreCase("arrow1") && player.isOp()) {
+			   for(int i = 0; i< 20;i++) {
+				   spawnArrows2(player); 
+			   }
+			   
+			  
+			   return true;
 		   }else if (args[0].equalsIgnoreCase("check") && player.isOp()) {
 				
 					if(args.length == 2) {
@@ -4182,10 +4189,10 @@ public class Comandsmg implements CommandExecutor{
 							try {
 								StopMotive motivo = StopMotive.valueOf(args[2].toUpperCase());
 								
-								//plugin.yml = new YamlFile(plugin,name, new File(plugin.getDataFolder().getAbsolutePath()+carpeta));;
-								//MG STOP NAME
-								player.sendMessage(ChatColor.GREEN+"STOP MOTIVO: "+motivo.toString());
-								gc.StopGames(player, name,motivo,"Ninguno");
+	
+								player.sendMessage(ChatColor.GOLD+"Deteniendo partida Tipo de Parada: "+ChatColor.RED+motivo.toString());
+								player.sendMessage(ChatColor.GOLD+"Mas detalles en el Log de la Consola.");
+								gc.StopGames(player, name,motivo,"");
 							}catch(IllegalArgumentException e) {
 								player.sendMessage(plugin.nombre+ChatColor.GREEN+" Ese motivo no existe usa: Win , Lose , Error o Force. ");
 							}
@@ -4197,7 +4204,8 @@ public class Comandsmg implements CommandExecutor{
 									
 									//plugin.yml = new YamlFile(plugin,name, new File(plugin.getDataFolder().getAbsolutePath()+carpeta));;
 									//MG STOP NAME
-									player.sendMessage(ChatColor.GREEN+"STOP MOTIVO: "+motivo.toString());
+									player.sendMessage(ChatColor.GOLD+"Deteniendo partida Tipo de Parada: "+ChatColor.RED+motivo.toString());
+									player.sendMessage(ChatColor.GOLD+"Mas detalles en el Log de la Consola.");
 									String comments = "";
 						        	 for(int i = 3 ;i < args.length; i++) {
 						        		 comments = comments+args[i]+" "; 
@@ -4590,6 +4598,42 @@ public class Comandsmg implements CommandExecutor{
 //	        return block;
 //	    }
 	
+	 public double randomPosOrNeg(int i){
+			Random r = new Random();
+			double v = r.nextDouble() * i;
+			//genera aleatoriedad si es 0 devuelve el valor como tal si es 1 devuelve un valor positivo o negativo
+			int r2 = r.nextInt(1+1);
+			if(r2 == 1){
+				return v;
+			}
+			return transformPosOrNeg(v);
+		}
+	 
+	 
+	 public double transformPosOrNeg(double i){
+			return -i;
+		}
+	 
+		@SuppressWarnings("deprecation")
+		public void spawnArrows2(Player player) {
+			
+			double rotatex = randomPosOrNeg(3);
+			double rotatey = randomPosOrNeg(3);
+			
+			player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 20.0F, 1F);
+			Location loc = player.getLocation();
+			
+			Vector v = loc.getDirection();
+			v.rotateAroundX(Math.toRadians(rotatex));
+			v.rotateAroundY(Math.toRadians(rotatey));
+			Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
+			aw.setVelocity(v.multiply(5));
+			aw.setCritical(true);
+			aw.setKnockbackStrength(2);
+			//aw.setFireTicks(1200);
+			aw.setShooter(player);
+			//((Arrow) h1).setShooter(player);
+		}
 	
 	public void AllReload(Player player) {
 		    plugin.getMenuItems().reload();

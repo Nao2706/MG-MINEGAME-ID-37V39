@@ -668,7 +668,7 @@ public class EventRandoms implements Listener{
 								}
 			               	removeItemstackCustom(player,e.getItem());
 						}
-						
+						 
 				
 						if(e.getItem().isSimilar(Items.STOREXPRESSP.getValue())) {
 									MinigameShop1 inv = new MinigameShop1(plugin);
@@ -722,7 +722,7 @@ public class EventRandoms implements Listener{
 							player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 20.0F, 1F);
 							Fireball f = (Fireball) fb;
 							f.setYield(10);
-							((Fireball) fb).setShooter(player);
+							f.setShooter(player);
 							
 							removeItemstackCustom(player, Items.COHETEP.getValue());
 						}else {
@@ -3130,6 +3130,8 @@ public class EventRandoms implements Listener{
 		 /// TODO ARROWS
 		 
 		 
+
+		 
 			public int RandomPosOrNeg(int i){
 				Random r = new Random();
 				int v = r.nextInt(i+1);
@@ -3144,6 +3146,10 @@ public class EventRandoms implements Listener{
 			public int TransformPosOrNeg(int i){
 				return i =  (~(i -1));
 			}
+			
+			
+			
+			
 			@SuppressWarnings("deprecation")
 			public void SpawnArrows(Player player,float addy ,float addp ) {
 				player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 20.0F, 1F);
