@@ -65,7 +65,6 @@ import org.bukkit.util.Vector;
 import me.nao.enums.mg.Items;
 import me.nao.enums.mg.Posion;
 import me.nao.enums.mg.ReviveStatus;
-import me.nao.generalinfo.mg.GameAdventure;
 import me.nao.generalinfo.mg.GameConditions;
 import me.nao.generalinfo.mg.GameInfo;
 import me.nao.generalinfo.mg.PlayerInfo;
@@ -98,7 +97,7 @@ public class SourceOfDamage implements Listener{
 				if(gc.isPlayerinGame(player)) {
 					
 					if(!player.getLocation().getWorld().getName().equals(l.getWorld().getName())) {
-						player.sendMessage(ChatColor.RED+"-Ese Jugador no esta en tu Juego.");
+						player.sendMessage(ChatColor.RED+"- Ese Jugador no esta en tu Juego.");
 						player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 20.0F, 1F);
 						e.setCancelled(true);
 						return;
@@ -109,26 +108,26 @@ public class SourceOfDamage implements Listener{
 								Player target = (Player) et;
 								
 								if(!gc.isPlayerinGame(target)) {
-									player.sendMessage(ChatColor.RED+"Ese Jugador no esta en tu Juego....");
+									player.sendMessage(ChatColor.RED+"Ese Jugador no esta Jugando....");
 									player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 20.0F, 1F);
 									e.setCancelled(true);
 									return;
 								}
 								
-								PlayerInfo pl = plugin.getPlayerInfoPoo().get(target);
-								GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
-								if(gi instanceof GameAdventure) {
-									GameAdventure ga = (GameAdventure) gi;
-									if(ga.getParticipants().contains(target.getName())) {
-										player.sendMessage(ChatColor.GREEN+"Te teletransportaste a "+ChatColor.GOLD+target.getName());
-										player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 20.0F, 1F);
-									}else {
-										player.sendMessage(ChatColor.RED+"Ese Jugador no esta en tu Juego...");
-										player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 20.0F, 1F);
-										e.setCancelled(true);
-									}
-								}
+								PlayerInfo tg = plugin.getPlayerInfoPoo().get(target);
+								PlayerInfo user = plugin.getPlayerInfoPoo().get(player);
 								
+								if(user.getMapName().equals(tg.getMapName())){
+									player.sendMessage(ChatColor.GREEN+"Te teletransportaste a "+ChatColor.GOLD+target.getName());
+									player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 20.0F, 1F);
+								}else {
+									player.sendMessage(ChatColor.RED+"Ese Jugador no esta en tu Juego...");
+									player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 20.0F, 1F);
+									e.setCancelled(true);
+								}
+									
+								
+							}
 							
 								
 								break;
@@ -139,7 +138,7 @@ public class SourceOfDamage implements Listener{
 			}
 		}
 		
-	}
+	
 	
 	
 	@EventHandler

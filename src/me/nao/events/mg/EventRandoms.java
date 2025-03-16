@@ -76,7 +76,6 @@ import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent.Cause;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerFishEvent;
@@ -95,6 +94,7 @@ import org.bukkit.event.server.TabCompleteEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.MainHand;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -137,13 +137,13 @@ public class EventRandoms implements Listener{
 	
 	
 
-		@EventHandler(priority = EventPriority.LOWEST)
-		public void mgMenu(InventoryCloseEvent e) {
-		   
-			Player player = (Player) e.getPlayer();
-			if(plugin.getPlayersLookingMgMenu().remove(player.getName()));
-	   }
-	
+//		@EventHandler(priority = EventPriority.LOWEST)
+//		public void mgMenu(InventoryCloseEvent e) {
+//		   
+//			Player player = (Player) e.getPlayer();
+//			if(plugin.getPlayersLookingMgMenu().remove(player.getName()));
+//	   }
+//	
 	
 	   @EventHandler(priority = EventPriority.LOWEST)
 		public void mgPotionEffect(EntityPotionEffectEvent e) {
@@ -319,7 +319,9 @@ public class EventRandoms implements Listener{
 					
 					
 					if(!player.getPassengers().isEmpty()) {
-						 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.RED+ChatColor.BOLD+"YA TIENES ENCIMA A UNA ENTIDAD"));
+						if(player.getMainHand() == MainHand.RIGHT) {
+							 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.RED+ChatColor.BOLD+"YA TIENES ENCIMA A UNA ENTIDAD"));
+						}
 						return;
 					}else if(ent.getType() == EntityType.PLAYER) {
 						Player target = (Player) ent;
@@ -328,13 +330,18 @@ public class EventRandoms implements Listener{
 						
 						if(player.getGameMode() == GameMode.SPECTATOR) {
 							e.setCancelled(true);
-							player.sendMessage(ChatColor.RED+"No puedes interactuar con Entidades siendo Espectador...");
+							if(player.getMainHand() == MainHand.RIGHT) {
+							  player.sendMessage(ChatColor.RED+"No puedes interactuar con Entidades siendo Espectador...");
+							}
 							return;
 						}
 						
 						if(target.getGameMode() == GameMode.SPECTATOR) {
 							e.setCancelled(true);
-							player.sendMessage(ChatColor.RED+"No puedes interactuar con Espectadores.");
+							if(player.getMainHand() == MainHand.RIGHT) {
+								player.sendMessage(ChatColor.RED+"No puedes interactuar con Espectadores.");
+							}
+							
 							return;
 						}
 					
@@ -358,7 +365,10 @@ public class EventRandoms implements Listener{
 					}else {
 						if(player.getGameMode() == GameMode.SPECTATOR) {
 							e.setCancelled(true);
-							player.sendMessage(ChatColor.RED+"No puedes interactuar con Entidades siendo Espectador.");
+							if(player.getMainHand() == MainHand.RIGHT) {
+								player.sendMessage(ChatColor.RED+"No puedes interactuar con Entidades siendo Espectador.");
+
+							}
 							return;
 						}else if(player.isSneaking() && ent.getPassengers().isEmpty()) {
 							ent.addPassenger(player);
@@ -373,7 +383,7 @@ public class EventRandoms implements Listener{
 			}
 		}
 		
-	}
+	} 
 	 
 	 
 	//TODO TROW ENTITY
@@ -788,7 +798,7 @@ public class EventRandoms implements Listener{
 				        	TNTPrimed ptnt = (TNTPrimed) player.getWorld().spawnEntity(player.getLocation().add(0.5,1,0.5),EntityType.TNT);
 							ptnt.setFuseTicks(30);
 							ptnt.setVelocity(player.getLocation().getDirection().multiply(2.5));
-							ptnt.setCustomName(ChatColor.DARK_PURPLE+"TNT");
+							ptnt.setCustomName(ChatColor.DARK_PURPLE+"TNT de: "+ChatColor.GREEN+player.getName());
 							ptnt.setSource(player);
 							ptnt.setYield(5);
 							removeItemstackCustom(player,e.getItem());
@@ -1395,7 +1405,7 @@ public class EventRandoms implements Listener{
 				if(ent.getCustomName() != null ){
 					if(ChatColor.stripColor(ent.getCustomName()).equals("Mina Explosiva")
 						|| ChatColor.stripColor(ent.getCustomName()).equals("Ataque Aereo") 
-						|| ChatColor.stripColor(ent.getCustomName()).equals("TNT")
+						|| ChatColor.stripColor(ent.getCustomName()).startsWith("TNT de:")
 						|| ChatColor.stripColor(ent.getCustomName()).equals("Suicida")) {
 						
 						List<Material> mat = new ArrayList<>();
@@ -1489,9 +1499,14 @@ public class EventRandoms implements Listener{
 						Location pl = player.getLocation();
 						Location hookl = e.getHook().getLocation();
 						Location ch = hookl.subtract(pl);
-						 
-						player.setVelocity(ch.toVector().setY(1).multiply(0.3));
 						
+						if(player.getFacing() == BlockFace.UP) {
+							
+							player.setVelocity(ch.toVector().setY(2.5).multiply(0.3));
+							
+						}else {
+							player.setVelocity(ch.toVector().setY(1).multiply(0.3));
+						}
 					}
 					
 				}
@@ -1499,12 +1514,12 @@ public class EventRandoms implements Listener{
 				if(name.contains("GANCHO DE MANIOBRAS")) {
 					if(e.getState() == PlayerFishEvent.State.REEL_IN) {
 					
-						if(!player.getInventory().containsAtLeast(new ItemStack(Material.LAPIS_LAZULI),5)) {
-							player.sendMessage(ChatColor.RED+"Necesitas tener 5 de LapisLazuli.");
+						if(!player.getInventory().containsAtLeast(new ItemStack(Material.LAPIS_LAZULI),10)) {
+							player.sendMessage(ChatColor.RED+"Necesitas tener 10 de LapisLazuli.");
 							return;
 						}
 						
-						player.getInventory().removeItem(new ItemStack(Material.LAPIS_LAZULI,5));
+						player.getInventory().removeItem(new ItemStack(Material.LAPIS_LAZULI,10));
 						Location pl = player.getLocation();
 						Location hookl = e.getHook().getLocation();
 						Location ch = hookl.subtract(pl);
@@ -1641,7 +1656,7 @@ public class EventRandoms implements Listener{
 					l1.getWorld().spawnParticle(Particle.FIREWORK, l1,	/* N DE PARTICULAS */1, 0.5, 1, 0.5, /* velocidad */0, null, true);
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
 					if(r == 0) {
-						l1.getWorld().dropItem(l1,new ItemStack(Material.LAPIS_LAZULI,r2));
+						l1.getWorld().dropItem(l1,new ItemStack(Material.LAPIS_LAZULI,5));
 					}if(r == 1) {
 						l1.getWorld().dropItem(l1,new ItemStack(Material.EXPERIENCE_BOTTLE,r2));
 					}if(r == 2) {

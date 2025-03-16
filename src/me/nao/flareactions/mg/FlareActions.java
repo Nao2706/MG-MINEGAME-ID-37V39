@@ -53,7 +53,7 @@ public class FlareActions {
 				gc.sendMessageToAllPlayersInMap(map,""+ChatColor.RED+ChatColor.BOLD+"AC 130: "+ChatColor.GREEN+"Paquete de ayuda solicitado por "+ChatColor.GOLD+player.getName()+ChatColor.GREEN+" suerte.");
 
 				StorageMinecart ent = (StorageMinecart) b.getWorld().spawnEntity(b.getLocation().add(0.5, -3, 0.5), EntityType.CHEST_MINECART);
-				ent.setCustomName(""+ChatColor.GREEN+ChatColor.BOLD+"PAQUETE DE AYUDA");
+				ent.setCustomName(""+ChatColor.DARK_GREEN+ChatColor.BOLD+"PAQUETE DE AYUDA");
 				ent.setCustomNameVisible(true);		
 				ent.getLocation().setYaw(player.getLocation().getYaw());
 				

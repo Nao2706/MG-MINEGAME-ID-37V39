@@ -28,6 +28,7 @@ import me.nao.events.mg.EventRandoms;
 import me.nao.events.mg.SourceOfDamage;
 import me.nao.generalinfo.mg.GameConditions;
 import me.nao.generalinfo.mg.GameInfo;
+import me.nao.generalinfo.mg.ItemMenu;
 import me.nao.generalinfo.mg.PlayerInfo;
 import me.nao.revive.mg.RevivePlayer;
 import me.nao.shop.mg.MinigameShop1;
@@ -89,7 +90,7 @@ public class Minegame extends JavaPlugin{
 
 	private List<String> air;
 	private List<String> timeract;
-	private List<String> playerlookingmgmenu;
+	private HashMap<String,ItemMenu>itemmenu;
     
     //Esto fue un test
   
@@ -265,13 +266,17 @@ public class Minegame extends JavaPlugin{
 		Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+nombre+ChatColor.GOLD+" Ha sido Activado "+ChatColor.RED+"[Version:"+ChatColor.DARK_GREEN+version+ChatColor.RED+"]");
 		Bukkit.getConsoleSender().sendMessage(ChatColor.BLUE+" Hora de Crear Aventuras. ");
 		Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"||||||||||||||||||||||||||||||||||");
-		registrarcomando();
-		registerEvents();
-	
-		InitializerMg();
-		TeamsMg();
-		DataBase();
 		
+		
+		 
+		 registrarcomando();
+		 registerEvents();
+	
+		 InitializerMg();
+		 TeamsMg();
+		 DataBase();
+		 GameConditions c = new GameConditions(this);
+		 c.loadItemMenu();
 	
 	}
 	
@@ -320,7 +325,7 @@ public class Minegame extends JavaPlugin{
 	    credit = new HashMap<>();
 	    playerrevive = new HashMap<>();
 	    
-	    
+	    itemmenu = new HashMap<>();
 	    //items
 	    entitys = new HashMap<>();
 	    tempcooldown = new HashMap<>();
@@ -335,7 +340,7 @@ public class Minegame extends JavaPlugin{
 	
 		air = new ArrayList<String>();
 		timeract = new ArrayList<String>();
-		playerlookingmgmenu = new ArrayList<String>();
+		//playerlookingmgmenu = new ArrayList<String>();
 	
 		
 		pags = new HashMap <Player,Integer>();
@@ -510,10 +515,10 @@ public class Minegame extends JavaPlugin{
 	   return timeract;
    }
    
-   public List<String> getPlayersLookingMgMenu(){
-	   return playerlookingmgmenu;
-   }
-   
+//   public List<String> getPlayersLookingMgMenus(){
+//	   return playerlookingmgmenu;
+//   }
+//   
   
    public HashMap <Player,Location> getCheckPoint(){
 	   return checkpoint;
@@ -525,6 +530,10 @@ public class Minegame extends JavaPlugin{
    
    public HashMap <String,String> getArenaCronometer(){
 	   return aretime; 
+   }
+   
+   public HashMap <String,ItemMenu> getItemMenuMg(){
+	   return itemmenu; 
    }
    
    public HashMap <String,String> getFirstLogMg(){

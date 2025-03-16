@@ -577,6 +577,7 @@ public class Comandsmg implements CommandExecutor{
 		    		
 		    		
 					FileConfiguration config = plugin.getConfig();
+					
 					if(config.getBoolean("Maintenance")) {
 						config.set("Maintenance", false);
 						Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Mantenimiento Desactivado.");
@@ -588,7 +589,7 @@ public class Comandsmg implements CommandExecutor{
 					}
 					plugin.getConfig().save();
 					plugin.getConfig().reload();
-					
+					gc.loadItemMenu();
 					return true;
 		    	}else if(args[0].equalsIgnoreCase("pause")) {
 			 		  //mg pause map
@@ -1284,7 +1285,8 @@ public class Comandsmg implements CommandExecutor{
 					if (args.length == 2) {
 						String name = args[1];
 						FileConfiguration config = plugin.getConfig();
-					
+						
+						
 				 		if(gc.ExistMap(name)) {
 							 List<String> al = config.getStringList("Maps-Blocked.List");
 							 if(!al.contains(name)) {
@@ -1292,6 +1294,7 @@ public class Comandsmg implements CommandExecutor{
 								 al.add(name);
 								 plugin.getConfig().save();
 								 plugin.getConfig().reload();
+								 gc.loadItemMenu();
 								 Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" El mapa "+ChatColor.GOLD+name+ChatColor.GREEN+" a sido Deshabilitada");
 							 }else {
 								 Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" El mapa "+ChatColor.GOLD+name+ChatColor.RED+" ya esta Deshabilitada.");
@@ -1345,6 +1348,7 @@ public class Comandsmg implements CommandExecutor{
 								 al.remove(name);
 								 plugin.getConfig().save();
 								 plugin.getConfig().reload();
+								 gc.loadItemMenu();
 								 Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" El mapa "+ChatColor.GOLD+name+ChatColor.GREEN+" a sido Habilitada.");
 							 }else {
 								 Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" El mapa "+ChatColor.GOLD+name+ChatColor.RED+" no esta Deshabilitada.");
@@ -1772,6 +1776,8 @@ public class Comandsmg implements CommandExecutor{
 												 .replace("%loses%",String.valueOf(point6))
 												 .replace("%prestige%",String.valueOf(prestige))
 												 .replace("%prestigetext%",rp.getRankPrestigePlaceHolder(prestige))
+												 .replace("%totalxp%",String.valueOf(pm.totalxp(lvl, xp, 0)))
+												 
 												));
 									}
 								}
@@ -3261,7 +3267,7 @@ public class Comandsmg implements CommandExecutor{
 						return true;
 					}
 					if (args.length >= 2) {
-						
+					
 						FileConfiguration config = plugin.getConfig();
 						String mapname = args[1];
 				 		if(gc.ExistMap(mapname)) {
@@ -3271,6 +3277,7 @@ public class Comandsmg implements CommandExecutor{
 								 al.remove(mapname);
 								 plugin.getConfig().save();
 								 plugin.getConfig().reload();
+								 gc.loadItemMenu();
 									player.sendMessage(plugin.nombre+ChatColor.GREEN+" El Mapa "+ChatColor.GOLD+mapname+ChatColor.GREEN+" a sido Habilitada");
 							 }else {
 								 player.sendMessage(plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+mapname+ChatColor.RED+" no esta Deshabilitada.");
@@ -3300,6 +3307,7 @@ public class Comandsmg implements CommandExecutor{
 					if (args.length == 2) {
 						String mapname = args[1];
 						FileConfiguration config = plugin.getConfig();
+						
 						if(gc.ExistMap(mapname)) {
 							 List<String> al = config.getStringList("Maps-Blocked.List");
 							 if(!al.contains(mapname)) {
@@ -3307,6 +3315,7 @@ public class Comandsmg implements CommandExecutor{
 								 al.add(mapname);
 								 plugin.getConfig().save();
 								 plugin.getConfig().reload();
+								 gc.loadItemMenu();
 								player.sendMessage(plugin.nombre+ChatColor.GREEN+" El Mapa "+ChatColor.GOLD+mapname+ChatColor.GREEN+" a sido Deshabilitada");
 							 }else {
 								 player.sendMessage(plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+mapname+ChatColor.RED+" ya esta Deshabilitada.");
@@ -3785,6 +3794,7 @@ public class Comandsmg implements CommandExecutor{
 						player.sendMessage(ChatColor.RED+"No tienes permiso para usar ese Comando.");
 						return true;
 		    		}
+		
 					
 					FileConfiguration config = plugin.getConfig();
 					if(config.getBoolean("Maintenance")) {
@@ -3798,7 +3808,7 @@ public class Comandsmg implements CommandExecutor{
 					}
 					plugin.getConfig().save();
 					plugin.getConfig().reload();
-					
+					gc.loadItemMenu();
 					
 				
 				return true;
@@ -3962,10 +3972,10 @@ public class Comandsmg implements CommandExecutor{
 					
 					MinigameShop1 ms = new MinigameShop1(plugin);
 					plugin.getPags().put(player, 1);
-					if(!plugin.getPlayersLookingMgMenu().contains(player.getName())) {
-						plugin.getPlayersLookingMgMenu().add(player.getName());
-					}
-					ms.MissionsMenu(player);
+//					if(!plugin.getPlayersLookingMgMenu().contains(player.getName())) {
+//						plugin.getPlayersLookingMgMenu().add(player.getName());
+//					}
+					ms.missionsMenu(player);
 					
 					return true;
 				}else if(args[0].equalsIgnoreCase("ban") || args[0].equalsIgnoreCase("kick")  || args[0].equalsIgnoreCase("tempban")  || args[0].equalsIgnoreCase("warn") || args[0].equalsIgnoreCase("pardon")){
@@ -4636,6 +4646,8 @@ public class Comandsmg implements CommandExecutor{
 		}
 	
 	public void AllReload(Player player) {
+		
+			
 		    plugin.getMenuItems().reload();
 			plugin.getConfig().reload();
 			plugin.getMessage().reload();
@@ -4644,7 +4656,8 @@ public class Comandsmg implements CommandExecutor{
 			plugin.getInventorysYaml().reload();
 			plugin.getCooldown().reload();	
 			plugin.getReportsYaml().reload();
-			
+			GameConditions gc = new GameConditions(plugin);
+			gc.loadItemMenu();
 			if(player != null) {
 				player.sendMessage(plugin.nombre+ChatColor.GREEN+" Se han recargado las Configuraciones Correctamente.");
 

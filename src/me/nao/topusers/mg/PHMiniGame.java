@@ -275,8 +275,8 @@ public class PHMiniGame extends PlaceholderExpansion{
 	
 	
 	public String getMapNamePlaceHolder(Player player) {
-		GameConditions gc = new GameConditions(plugin);
 		String status = "";
+		GameConditions gc = new GameConditions(plugin);
 		if(gc.isPlayerinGame(player)) {
 			PlayerInfo pi = plugin.getPlayerInfoPoo().get(player);
 			status = pi.getMapName();
@@ -288,6 +288,7 @@ public class PHMiniGame extends PlaceholderExpansion{
 	
 	public String isPlayerinGamePlaceHolder(Player player) {
 		GameConditions gc = new GameConditions(plugin);
+		
 		return String.valueOf(gc.isPlayerinGame(player));
 	}
 	

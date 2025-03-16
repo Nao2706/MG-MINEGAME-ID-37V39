@@ -317,6 +317,8 @@ public class GameConditions {
 	   public void tptoPreLobbyMap(Player player ,String map){
 		   FileConfiguration ym = getGameConfig(map);
 		   if(ym.contains("Pre-Lobby")) {
+			   player.getWorld().spawnParticle(Particle.DRAGON_BREATH, player.getLocation().add(0, 1, 0),
+						/* NUMERO DE PARTICULAS */100, 1, 2, 1, /* velocidad */0, null, true);
 			    System.out.println("El jugador "+player.getName()+" fue hacia el prelobby con exito");
 			    String[] coords = ym.getString("Pre-Lobby").split("/");
 			    String world = coords[0];
@@ -325,9 +327,6 @@ public class GameConditions {
 			    double z = Double.valueOf(coords[3]);
 			    float yaw = Float.valueOf(coords[4]);
 			    float pitch = Float.valueOf(coords[5]);
-
-				player.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, player.getLocation().add(0, 1, 0),
-						/* NUMERO DE PARTICULAS */20, 5, 5, 5, /* velocidad */0, null, true);
 				player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 20.0F, 1F);
 				Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch);
 				player.setInvulnerable(true);
@@ -950,6 +949,7 @@ public class GameConditions {
 	
 	public Location getLocationOfLobby() {
 	    FileConfiguration config = plugin.getConfig();
+	    
 	    Location l = null;
 	    
 		for (String key : config.getConfigurationSection("Lobby-Spawn").getKeys(false)) {
@@ -1668,7 +1668,7 @@ public class GameConditions {
 		 			 	String time = mision.getString("Usage-Time");
 				    	if(time == null || time.isEmpty()){
 				    		if(player.isOp()) {
-
+ 
 		 						player.sendMessage(ChatColor.RED+"Error de Tiempo: En el Path Usage-Time esta vacio.");
 
 				    		}else {
@@ -2285,12 +2285,12 @@ public class GameConditions {
 
         long seconds = tempDateTime.until( fin, ChronoUnit.SECONDS );
 
-               return years+":Años - "+
-               months+":Meses - "+ 
-               days+":Dias - "+
-               hours+":Horas - "+
-               minutes+":Minutos - "+
-               seconds+":Segundos" ;
+               return years+" :Años,"+
+               months+" :Meses,"+ 
+               days+" :Dias,"+
+               hours+" :Horas,"+
+               minutes+" :Minutos,"+
+               seconds+" :Segundos" ;
 	}
 	
 	
@@ -2834,7 +2834,8 @@ public class GameConditions {
 						mt.RemoveAllPlayer(player);
 						removeAllPlayerToGame(player, pl.getMapName());
 					}
-				
+			player.getWorld().spawnParticle(Particle.DRAGON_BREATH, player.getLocation().add(0, 1, 0),
+							/* NUMERO DE PARTICULAS */50, 2, 5, 2, /* velocidad */0, null, true);
 		 }else if(ms instanceof GameNexo) {
 			// GameNexo gn = (GameNexo) ms;
 			    SetDefaultHeartsInGame(player);
@@ -4920,6 +4921,14 @@ public class GameConditions {
 		nf.setMaximumFractionDigits(0);
 		
 		FileConfiguration mf = plugin.getMapFrequency();
+		
+		String rs = isEnabledReviveSystem(map) ? "Si" : "No";
+		String locked = isBlockedTheMap(map) ? "Deshabilitado" : "Habilitado";
+		int pointsperkill = getPointsPerKills(map);
+		int pointsperrevive = getPointsPerRevive(map);
+		int pointsperhelprevive = getPointsPerHelpRevive(map);
+		int pointsperdead = getPointsPerDeads(map);
+		int pointsperbonus = getPointsBonus(map);
 		int timesplayed = mf.getInt("MapFrequency."+map+".Times-Played");
 		int participants = mf.getInt("MapFrequency."+map+".Participating-Players");
 		int wins = mf.getInt("MapFrequency."+map+".Winning-Players");
@@ -4929,7 +4938,14 @@ public class GameConditions {
 		MapStatistics ms = new MapStatistics(timesplayed,participants,wins,revives,deads);
 		sendMessageToUserAndConsole(player,"");
 		sendMessageToUserAndConsole(player,"======================================");
-		sendMessageToUserAndConsole(player,""+ChatColor.RED+ChatColor.BOLD+"Estadisticas del Mapa: "+ChatColor.GREEN+map);
+		sendMessageToUserAndConsole(player,""+ChatColor.RED+ChatColor.BOLD+"Informacion del Mapa: "+ChatColor.GREEN+map);
+		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Tiene Sistema de Revivir: "+ChatColor.GREEN+rs);
+		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Estado: "+ChatColor.GREEN+locked);
+		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Xp por Kill: "+ChatColor.GREEN+pointsperkill);
+		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Xp por Revivir: "+ChatColor.GREEN+pointsperrevive);
+		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Xp por Ayudar a Revivir: "+ChatColor.GREEN+pointsperhelprevive);
+		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Xp menos por Muerte: "+ChatColor.GREEN+pointsperdead);
+		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Puntos de Bonus: "+ChatColor.GREEN+pointsperbonus);
 		sendMessageToUserAndConsole(player,ChatColor.GREEN+"Porcentaje de Victorias: "+ChatColor.GOLD+nf.format(ms.getPorcentWins())+"%");
 		sendMessageToUserAndConsole(player,ChatColor.YELLOW+"Porcentaje de Revivir: "+ChatColor.GOLD+nf.format(ms.getPorcentRevives())+"%");
 		sendMessageToUserAndConsole(player,ChatColor.RED+"Porcentaje de Muertes: "+ChatColor.GOLD+nf.format(ms.getPorcentOfDeads())+"%");
@@ -4995,4 +5011,45 @@ public class GameConditions {
 		return;
 	}
 	
+	
+	public void loadItemMenu() {
+		
+		 FileConfiguration config = plugin.getConfig();
+	     
+		 List<String> mc = config.getStringList("Maps-Created.List");
+		 
+		 if(!mc.isEmpty()){
+			 
+			 FileConfiguration menu = plugin.getMenuItems();
+			 for(int i = 0 ; i< mc.size();i++ ) {
+				 String map = mc.get(i);
+				 
+				 FileConfiguration game = getGameConfig(map);
+				 ItemMenu it = new ItemMenu(plugin);
+				 it.setPosition(i);
+				 it.setCode(map);
+				 it.setDisplayname(menu.getString(map+".Display-Name"));
+				 it.setItem(new ItemStack(Material.matchMaterial(menu.getString(map+".Material","BEDROCK"))));
+				 it.setEnchanted(menu.getBoolean(map+".Is-Enchanted",false));
+				 it.setLocked(isBlockedTheMap(map));
+				 it.setWorking(menu.getBoolean(map+".Is-Working",true));
+				 it.setLore(menu.getStringList(map+".Lore-Item"));
+				 it.setMaintenance(HasMaintenance());
+				 it.setRanked(isMapRanked(map));
+				 it.setTime(game.getBoolean("Has-Time"));
+				 it.setDatetime(map);
+				 it.setDatetime(game.getString("Usage-Time"));
+				 it.setPermission(game.getBoolean("Requires-Permission"));
+				 it.setPermissionforplay(game.getString("Permission-To-Play"));
+				 it.setPermissionmessage(game.getStringList("How-Get-Permission.Message"));
+				 plugin.getItemMenuMg().put(map, it);
+				 //plugin.getItemMenuMg().put(map, null)u
+			 }
+			 sendMessageToConsole(ChatColor.GREEN+"Datos de Mapas Cargados...");
+		 }else{
+			 sendMessageToConsole(ChatColor.RED+"No hay Ningun Mapa Creado.");
+		 }
+		 
+		
+	}
 }

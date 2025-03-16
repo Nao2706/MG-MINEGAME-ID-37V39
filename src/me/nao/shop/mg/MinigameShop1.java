@@ -17,7 +17,6 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Chest;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -27,7 +26,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -42,11 +40,11 @@ import me.nao.generalinfo.mg.GameAdventure;
 import me.nao.generalinfo.mg.GameConditions;
 import me.nao.generalinfo.mg.GameInfo;
 import me.nao.generalinfo.mg.GameObjetivesMG;
+import me.nao.generalinfo.mg.ItemMenu;
 import me.nao.generalinfo.mg.ObjetivesMG;
 import me.nao.generalinfo.mg.PlayerInfo;
 import me.nao.main.mg.Minegame;
 import me.nao.manager.mg.GameIntoMap;
-import me.nao.manager.mg.MapSettings;
 import me.nao.yamlfile.mg.YamlFilePlus;
 
 
@@ -941,16 +939,17 @@ public class MinigameShop1 implements Listener{
 		}
 	}
 
-
-	 
 	
-	public void UpdateInventory(Player player) {
+	
+	
+	public void updateInventory(Player player) {
 		BukkitScheduler sh = Bukkit.getServer().getScheduler();
 	 
 		GameConditions gc = new GameConditions(plugin);
 		TaskID = sh.scheduleSyncRepeatingTask(plugin, new Runnable() {
 			public void run() {
-				if(player.getOpenInventory() == null || !isUpdateable(player) || gc.isPlayerinGame(player)) {
+			
+				if(gc.isPlayerinGame(player) || player.getOpenInventory() == null || !isUpdateable(player)) {
 					Bukkit.getScheduler().cancelTask(TaskID);
 					return;
 				}
@@ -959,6 +958,164 @@ public class MinigameShop1 implements Listener{
 		
 		
 	}
+	
+	public boolean isUpdateable(Player player) {
+		
+		if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("MENU DE MAPAS")) {
+			
+
+			
+			 Inventory inv = Bukkit.createInventory(null,54,""+ChatColor.DARK_GREEN+ChatColor.BOLD+"MENU DE MAPAS");
+			 MenuDecoration(inv,Material.BLACK_STAINED_GLASS_PANE);
+			 
+			   int puntaje = plugin.getItemMenuMg().size(); //para tienda con pags
+			   double resultado = puntaje / 22;
+			   long pr = 0;
+			   pr = Math.round(resultado);
+			 
+			   int pagactual = plugin.getPags().get(player);
+			  
+
+				ItemStack it = new ItemStack(Material.BOOK);
+				ItemMeta meta = it.getItemMeta();
+				meta.setDisplayName(""+ChatColor.GREEN+ChatColor.BOLD+"PAGINA:" +pagactual+"/"+(pr+1));
+				it.setItemMeta(meta);
+				
+				// se coloca +1 por que pr antes de llegar al borde da 0 + 1 da como resultado pag 1
+				
+				pr = pr + 1;
+				
+				//significa que tiene mas paginas si es mayor 
+				if((pr) > pagactual){
+					inv.setItem(53, Items.ADELANTE.getValue());
+				}
+				
+				//2
+				// tienes una pag que regresar 
+				if(pagactual >= 2) {
+					inv.setItem(45, Items.ATRAS.getValue());
+				}
+				
+				List<ItemStack> itemlist = new ArrayList<ItemStack>();
+			
+				List<Map.Entry<String, ItemMenu>> list = new ArrayList<>(plugin.getItemMenuMg().entrySet());
+				
+				Collections.sort(list, new Comparator<Map.Entry<String, ItemMenu>>() {
+					public int compare(Map.Entry<String, ItemMenu> e1, Map.Entry<String, ItemMenu> e2) {
+						// e2 a e1 = de mayor a menor e1 a e2 = de menor a mayor
+						return e1.getValue().getPosition() - e2.getValue().getPosition();
+					}
+				});
+				
+				for(Map.Entry<String, ItemMenu> e : list) {
+					if(!e.getValue().isWorking()) continue; 
+					itemlist.add(e.getValue().getUpdateLore(player));
+				}
+				
+				 
+				int slot = 10;
+				
+				//se recorre para poder llenar solo los espacios mencionados
+				for(int r = 0 ; r<itemlist.size();r++) {
+					
+					//testa si termino en el ultimo slot por llenar y pasa a la siguiente fila
+					if(slot == 17 || slot == 26) {
+						slot = slot + 2;
+					}
+					
+					//romp
+					if(slot == 35) {
+						break;
+					}
+					inv.setItem(slot, itemlist.get(r));
+					slot++;
+				}
+				
+				player.openInventory(inv);
+			
+			return true;
+		}
+		return false;
+	}
+	
+	public void missionsMenu(Player player) {
+		
+		if(!plugin.getItemMenuMg().isEmpty()){
+			 Inventory inv = Bukkit.createInventory(null,54,""+ChatColor.DARK_GREEN+ChatColor.BOLD+"MENU DE MAPAS");
+			 MenuDecoration(inv,Material.BLACK_STAINED_GLASS_PANE);
+			 
+			   int puntaje = plugin.getItemMenuMg().size(); //para tienda con pags
+			   double resultado = puntaje / 22;
+			   long pr = 0;
+			   pr = Math.round(resultado);
+			 
+			   int pagactual = plugin.getPags().get(player);
+			  
+
+				ItemStack it = new ItemStack(Material.BOOK);
+				ItemMeta meta = it.getItemMeta();
+				meta.setDisplayName(""+ChatColor.GREEN+ChatColor.BOLD+"PAGINA:" +pagactual+"/"+(pr+1));
+				it.setItemMeta(meta);
+				
+				// se coloca +1 por que pr antes de llegar al borde da 0 + 1 da como resultado pag 1
+				
+				pr = pr + 1;
+				
+				//significa que tiene mas paginas si es mayor 
+				if((pr) > pagactual){
+					inv.setItem(53, Items.ADELANTE.getValue());
+				}
+				
+				//2
+				// tienes una pag que regresar 
+				if(pagactual >= 2) {
+					inv.setItem(45, Items.ATRAS.getValue());
+				}
+				
+				List<ItemStack> itemlist = new ArrayList<ItemStack>();
+			
+				List<Map.Entry<String, ItemMenu>> list = new ArrayList<>(plugin.getItemMenuMg().entrySet());
+				
+				Collections.sort(list, new Comparator<Map.Entry<String, ItemMenu>>() {
+					public int compare(Map.Entry<String, ItemMenu> e1, Map.Entry<String, ItemMenu> e2) {
+						return e2.getValue().getPosition() - e1.getValue().getPosition();
+					}
+				});
+				
+				
+				for(Map.Entry<String, ItemMenu> e : list) {
+					if(!e.getValue().isWorking()) continue; 
+					itemlist.add(e.getValue().getUpdateLore(player));
+				}
+				
+				
+				int slot = 10;
+				
+				//se recorre para poder llenar solo los espacios mencionados
+				for(int r = 0 ; r<itemlist.size();r++) {
+					
+					//testa si termino en el ultimo slot por llenar y pasa a la siguiente fila
+					if(slot == 17 || slot == 26) {
+						slot = slot + 2;
+					}
+					
+					//romp
+					if(slot == 35) {
+						break;
+					}
+					inv.setItem(slot, itemlist.get(r));
+					slot++;
+				}
+				
+				player.openInventory(inv);
+				updateInventory(player);
+		}else{
+		  player.sendMessage(ChatColor.RED+"No hay Mapas Disponibles.");
+			 
+		}
+		return;
+	}
+	
 	
 	public void UpdateInventory2(Player player) {
 		
@@ -1020,375 +1177,6 @@ public class MinigameShop1 implements Listener{
 	
 	
 	
-	
-	
-	public boolean isUpdateable(Player player) {
-		
-		if(!plugin.getPlayersLookingMgMenu().contains(player.getName())) {
-			return false;
-		}
-		 
-		if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("MENU DE MAPAS")) {
-			FileConfiguration config = plugin.getConfig();
-			FileConfiguration menu = plugin.getMenuItems();
-			MapSettings ca = new MapSettings(plugin);
-			Inventory inv = player.getOpenInventory().getTopInventory();
-			 List<String> ac = config.getStringList("Maps-Created.List");
-		
-			 
-			 if(ac.isEmpty()) {
-				 player.sendMessage(ChatColor.RED+"No hay misiones Disponibles.");
-				 return false;
-			 }
-			
-			 
-				MenuDecoration(inv,Material.BLACK_STAINED_GLASS_PANE);
-			
-			 
-				
-				
-				List<ItemStack> itemlist = new ArrayList<ItemStack>();
-					
-				for(int i = 0 ; i< ac.size();i++) {
-					if(ac.get(i).equals("example"))continue;
-					
-					//items creados van aqui secolocan en una lista de items stack para posterior obtenerla
-					//21 es el tope dentro del for hay un mini calculo que da 0 si no hay mas pags y si hay mas multiplica
-				//	for(int i2 = (21 * (pagactual-1)) ; i2< l.size();i2++) {
-						
-						  String name = ac.get(i);
-						  
-						  if(!menu.contains(name)) {
-							  ItemStack item = new ItemStack(Material.BEDROCK);
-								String display = menu.getString(name.replace("null", "X")+".Display-Name");
-								ItemMeta met = item.getItemMeta();
-								met.setDisplayName(ChatColor.translateAlternateColorCodes('&',display+" &cError no hay Datos !!!"));
-								List<String> list2 = new ArrayList<String>();
-								list2.add(ChatColor.RED+"No hay datos de "+ChatColor.YELLOW+name+ChatColor.RED+" en el yml.");
-								list2.add(ChatColor.RED+"Notifica a Administracion si ves esto.");
-								met.setLore(list2);
-								item.setItemMeta(met);
-								
-								itemlist.add(item);
-								// sino existe seta en el yml la informacion de default
-								ca.SetInfoItemOfMision(name);
-								continue;
-						  }else if(menu.getBoolean(ChatColor.stripColor(name)+".Is-Working")) {
-							  String material = menu.getString(name+".Material");
-							  Material m = Material.matchMaterial(material);
-							if(m == null) {
-								//error
-								ItemStack item = new ItemStack(Material.BEDROCK);
-								String display = menu.getString(name+".Display-Name");
-								ItemMeta met = item.getItemMeta();
-								met.setDisplayName(ChatColor.translateAlternateColorCodes('&',display+" &cError de Material !!!"));
-								List<String> list2 = new ArrayList<String>();
-								list2.add(ChatColor.RED+"Error el Material "+ChatColor.YELLOW+material+ChatColor.RED+" no Existe.");
-								list2.add(ChatColor.RED+"Notifica a Administracion si ves esto.");
-								met.setLore(list2);
-								item.setItemMeta(met);
-								
-								itemlist.add(item);
-							}else {
-								
-								FileConfiguration map = getGameConfig(name);
-								GameConditions gc = new GameConditions(plugin);
-								
-								ItemStack ite = new ItemStack(m);
-								String display = menu.getString(name+".Display-Name");
-								ItemMeta met = ite.getItemMeta();
-								if(menu.contains(name+".Is-Enchanted")) {
-									if(menu.getBoolean(name+".Is-Enchanted")) {
-										met.addEnchant(Enchantment.LOOTING, 1, true);
-										met.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-									}
-								}
-								met.setDisplayName(ChatColor.translateAlternateColorCodes('&', display.replace("_"," ")));
-								List<String> list = menu.getStringList(name+".Lore-Item");
-								if(!list.isEmpty()) {
-									List<String> list2 = new ArrayList<String>();
-									list2.add("");
-									for(int lor = 0 ; lor < list.size();lor++) {
-										list2.add(ChatColor.translateAlternateColorCodes('&',list.get(lor)));
-									}
-									
-									
-									list2.add("");
-									if(gc.HasMaintenance()) {
-										list2.add("  "+ChatColor.YELLOW+ChatColor.BOLD+ChatColor.ITALIC+"X "+ChatColor.RED+ChatColor.BOLD+ChatColor.UNDERLINE+"EN MANTENIMIENTO "+ChatColor.YELLOW+ChatColor.BOLD+ChatColor.ITALIC+"X");
-										list2.add(ChatColor.GOLD+" Todos los Mapas estan Bloqueados. ");
-									}if(gc.isBlockedTheMap(name)) {
-										list2.add(" "+ChatColor.GOLD+ChatColor.BOLD+"MAPA: "+ChatColor.RED+ChatColor.BOLD+"DESHABILITADO.");
-									}if(gc.isMapRanked(name)) {
-										list2.add(""+ChatColor.GREEN+ChatColor.MAGIC+"[[["+ChatColor.DARK_PURPLE+ChatColor.BOLD+" RANKED MAP "+ChatColor.GREEN+ChatColor.MAGIC+"]]]");
-									}
-									
-									list2.add("");
-									
-									if(map.getBoolean("Requires-Permission")) {
-						 				String perm = map.getString("Permission-To-Play");
-						 				if(!player.hasPermission(perm)) {
-						 					list2.add(""+ChatColor.RED+ChatColor.BOLD+"BLOQUEADO");
-						 					List<String> perml = map.getStringList("How-Get-Permission.Message");
-						 					if(!perml.isEmpty()) {
-						 						
-						 						for(int i2 =0;i2< perml.size();i2++) {
-						 							list2.add(ChatColor.translateAlternateColorCodes('&', perml.get(i2)).replace("%player%", player.getName()));
-						 						}
-						 						
-						 					}else {
-						 						list2.add(ChatColor.RED+"Mapa Bloqueado: "+ChatColor.GOLD+"Necesitas un Permiso para Acceder.");;
-						 					}
-						 					
-						 				
-						 				}else {
-						 					list2.add(""+ChatColor.GREEN+ChatColor.BOLD+"DESBLOQUEADO");
-						 				}
-						 		    }
-									
-									list2.add("");
-									if(plugin.getGameInfoPoo().get(name) != null) {
-										list2.add(""+ChatColor.GREEN+ChatColor.BOLD+"JUGADORES: "+ChatColor.RED+ChatColor.BOLD+plugin.getGameInfoPoo().get(name).getParticipants().size());
-										list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESPECTADORES: "+ChatColor.RED+ChatColor.BOLD+plugin.getGameInfoPoo().get(name).getSpectators().size());
-										list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESTADO: "+plugin.getGameInfoPoo().get(name).getGameStatus().getValue());
-
-
-									}else {
-										list2.add(""+ChatColor.GREEN+ChatColor.BOLD+"JUGADORES: "+ChatColor.RED+ChatColor.BOLD+"0");
-										list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESPECTADORES: "+ChatColor.RED+ChatColor.BOLD+"0");
-										list2.add(""+ChatColor.GOLD+ChatColor.BOLD+"ESTADO: "+ChatColor.WHITE+ChatColor.BOLD+"ESPERANDO");
-									}
-									
-								
-									met.setLore(list2);
-								}
-								
-								ite.setItemMeta(met);
-								itemlist.add(ite);
-							}
-						  }
-						 
-				} 
-					
-				PagsCreation(player,inv,itemlist);
-					
-				//}
-				player.openInventory(inv);
-				
-			return true;
-		}
-		return false;
-	}
-	
-	public void MissionsMenu(Player player) {
-		
-		 
-		
-		FileConfiguration config = plugin.getConfig();
-	
-		 List<String> ac = config.getStringList("Maps-Created.List");
-		
-		 if(ac.isEmpty()) {
-			 player.sendMessage(ChatColor.RED+"No hay Mapas Disponibles.");
-			 return ;
-		 }
-		 
-			 FileConfiguration menu = plugin.getMenuItems();
-			 MapSettings ca = new MapSettings(plugin);
-			 Inventory inv = Bukkit.createInventory(null,54,""+ChatColor.DARK_GREEN+ChatColor.BOLD+"MENU DE MAPAS");
-			 List<String> l = new ArrayList<String>();
-			 
-		 
-			for(int i = 0 ; i< ac.size();i++) {
-				if(ac.get(i).equals("example"))continue;
-				l.add(ac.get(i));
-			} 
-		 
-			MenuDecoration(inv,Material.BLACK_STAINED_GLASS_PANE);
-		 
-		  int puntaje = l.size(); //para tienda con pags
-		  double resultado = puntaje / 22;
-		  long pr = 0;
-		  pr = Math.round(resultado);
-		 
-		
-		  int pagactual = plugin.getPags().get(player);
-		  
-		  
-
-			ItemStack it = new ItemStack(Material.BOOK);
-			ItemMeta meta = it.getItemMeta();
-			meta.setDisplayName(""+ChatColor.GREEN+ChatColor.BOLD+"PAGINA:" +pagactual+"/"+(pr+1));
-			it.setItemMeta(meta);
-			
-			// se coloca +1 por que pr antes de llegar al borde da 0 + 1 da como resultado pag 1
-			
-			pr = pr + 1;
-			
-			//significa que tiene mas paginas si es mayor 
-			if((pr) > pagactual){
-				inv.setItem(53, Items.ADELANTE.getValue());
-			}
-			
-			//2
-			// tienes una pag que regresar 
-			if(pagactual >= 2) {
-				inv.setItem(45, Items.ATRAS.getValue());
-			}
-			
-			
-			List<ItemStack> itemlist = new ArrayList<ItemStack>();
-			//LISTA DE ITEMS STACKS BASADOS EN LA LISTA PREVIA OBTENIDA 
-			//ESTA AGREGARA LOS ITEMS A LA LISTA DE ITEMS EN BASE AL RECORRIDO QUE HACE EL FOR PARA POSTERIOR AGREGARLOS CON OTRO FOR
-			//items creados van aqui secolocan en una lista de items stack para posterior obtenerla
-			//21 es el tope dentro del for hay un mini calculo que da 0 si no hay mas pags y si hay mas multiplica
-			for(int i2 = (21 * (pagactual-1)) ; i2< l.size();i2++) {
-				
-				  String name = l.get(i2);
-				  
-				  
-				  if(!menu.contains(name)) {
-					    ItemStack item = new ItemStack(Material.BEDROCK);
-						String display = menu.getString(name.replace("null", "X")+".Display-Name");
-						ItemMeta met = item.getItemMeta();
-						met.setDisplayName(ChatColor.translateAlternateColorCodes('&',display+" &cError no hay Datos !!!"));
-						List<String> list2 = new ArrayList<String>();
-						list2.add(ChatColor.RED+"No hay datos de "+ChatColor.YELLOW+name+ChatColor.RED+" en el yml.");
-						list2.add(ChatColor.RED+"Notifica a Administracion si ves esto.");
-						met.setLore(list2);
-						item.setItemMeta(met);
-						
-						itemlist.add(item);
-						// sino existe seta en el yml la informacion de default
-						ca.SetInfoItemOfMision(name);
-						continue;
-				  }else if(menu.contains(name)) {
-					  
-					
-					  if(menu.getBoolean(ChatColor.stripColor(name)+".Is-Working")) {
-						  String material = menu.getString(name+".Material");
-						  Material m = Material.matchMaterial(material.toUpperCase());
-						if(m == null) {
-							//error
-							ItemStack item = new ItemStack(Material.BEDROCK);
-							String display = menu.getString(name+".Display-Name");
-							ItemMeta met = item.getItemMeta();
-							met.setDisplayName(ChatColor.translateAlternateColorCodes('&',display+" &cError de Material !!!"));
-							List<String> list2 = new ArrayList<String>();
-							list2.add(ChatColor.RED+"Error el Material "+ChatColor.YELLOW+material+ChatColor.RED+" no Existe.");
-							list2.add(ChatColor.RED+"Notifica a Administracion si ves esto.");
-							met.setLore(list2);
-							item.setItemMeta(met);
-							
-							itemlist.add(item);
-						}else {
-							
-							FileConfiguration map = getGameConfig(name);
-							GameConditions gc = new GameConditions(plugin);
-							
-							
-							ItemStack ite = new ItemStack(m);
-							String display = menu.getString(name+".Display-Name");
-							ItemMeta met = ite.getItemMeta();
-							if(menu.contains(name+".Is-Enchanted")) {
-								if(menu.getBoolean(name+".Is-Enchanted")) {
-									met.addEnchant(Enchantment.LOOTING, 1, true);
-									met.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-								}
-							}
-							
-							met.setDisplayName(ChatColor.translateAlternateColorCodes('&', display));
-							List<String> list = menu.getStringList(name+".Lore-Item");
-							if(!list.isEmpty()) {
-								List<String> list2 = new ArrayList<String>();
-								list2.add("");
-								for(int lor = 0 ; lor < list.size();lor++) {
-									list2.add(ChatColor.translateAlternateColorCodes('&',list.get(lor)));
-								}
-								list2.add("");
-								if(gc.HasMaintenance()) {
-									list2.add("  "+ChatColor.YELLOW+ChatColor.BOLD+ChatColor.ITALIC+"X "+ChatColor.RED+ChatColor.BOLD+ChatColor.UNDERLINE+"EN MANTENIMIENTO "+ChatColor.YELLOW+ChatColor.BOLD+ChatColor.ITALIC+"X");
-									list2.add(ChatColor.GOLD+" Todos los Mapas estan Bloqueados. ");
-								}
-								if(gc.isBlockedTheMap(name)) {
-									list2.add(" "+ChatColor.GOLD+ChatColor.BOLD+"MAPA: "+ChatColor.RED+ChatColor.BOLD+"DESHABILITADO.");
-								}if(gc.isMapRanked(name)) {
-									list2.add(""+ChatColor.GREEN+ChatColor.MAGIC+"[[["+ChatColor.DARK_PURPLE+ChatColor.BOLD+" RANKED MAP "+ChatColor.GREEN+ChatColor.MAGIC+"]]]");
-								}
-								
-								
-								list2.add("");
-								
-								if(map.getBoolean("Requires-Permission")) {
-					 				String perm = map.getString("Permission-To-Play");
-					 				if(!player.hasPermission(perm)) {
-					 					
-					 					list2.add(""+ChatColor.RED+ChatColor.BOLD+"BLOQUEADO");
-					 					List<String> perml = map.getStringList("How-Get-Permission.Message");
-					 					if(!perml.isEmpty()) {
-					 						
-					 						
-					 						for(int i =0;i< perml.size();i++) {
-					 							list2.add(ChatColor.translateAlternateColorCodes('&', perml.get(i)).replace("%player%", player.getName()));
-					 						}
-					 					}else {
-					 						list2.add(ChatColor.RED+"Mapa Bloqueado: "+ChatColor.GOLD+"Necesitas un Permiso para Acceder.");
-					 					}
-					 					
-					 				
-					 				}else {
-					 					list2.add(""+ChatColor.GREEN+ChatColor.BOLD+"DESBLOQUEADO");
-					 				}
-					 		    }
-								
-								list2.add("");
-								if(plugin.getGameInfoPoo().get(name) != null) {
-									list2.add(""+ChatColor.GREEN+ChatColor.BOLD+"JUGADORES: "+ChatColor.RED+ChatColor.BOLD+plugin.getGameInfoPoo().get(name).getParticipants().size());
-									list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESPECTADORES: "+ChatColor.RED+ChatColor.BOLD+plugin.getGameInfoPoo().get(name).getSpectators().size());
-									list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESTADO: "+plugin.getGameInfoPoo().get(name).getGameStatus().getValue());
-
-
-								}else {
-									list2.add(""+ChatColor.RED+ChatColor.GREEN+"JUGADORES: "+ChatColor.RED+ChatColor.BOLD+"0");
-									list2.add(""+ChatColor.WHITE+ChatColor.BOLD+"ESPECTADORES: "+ChatColor.RED+ChatColor.BOLD+"0");
-									list2.add(""+ChatColor.GOLD+ChatColor.BOLD+"ESTADO: "+ChatColor.WHITE+ChatColor.BOLD+"ESPERANDO");
-								}
-								 
-							
-								met.setLore(list2);
-							}
-							
-							ite.setItemMeta(met);
-							itemlist.add(ite);
-						}
-					  }
-				  }
-			}
-			
-			int slot = 10;
-			
-			//se recorre para poder llenar solo los espacios mencionados
-			for(int r = 0 ; r<itemlist.size();r++) {
-				
-				//testa si termino en el ultimo slot por llenar y pasa a la siguiente fila
-				if(slot == 17 || slot == 26) {
-					slot = slot + 2;
-				}
-				
-				//romp
-				if(slot == 35) {
-					break;
-				}
-				inv.setItem(slot, itemlist.get(r));
-				slot++;
-			}
-			
-			player.openInventory(inv);
-			UpdateInventory(player);
-		
-	}
-	
-	
 	//TODO STORE CHEST
 	public void StoreChest(Player player,ItemStack item) {
 		
@@ -1410,15 +1198,18 @@ public class MinigameShop1 implements Listener{
 					return;
 				}
 					
-				
-				
-				if(item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
+				if(item.hasItemMeta() && item.getItemMeta().hasLore()) {
 					
 					
-					String name = ChatColor.stripColor(item.getItemMeta().getDisplayName().replace(" ","_"));
+					List<String> list = item.getItemMeta().getLore();
+					System.out.println("Lore: ");
+					for(String s : list) {
+						System.out.println("- "+s);
+					}
 					
-					
-					
+					System.out.println("Size: "+list.size());
+					String name = ChatColor.stripColor(list.get(list.size()-1).replace("Codigo: ",""));
+					System.out.println("("+name+")");
 					if(gc.ExistMap(name)) {
 						player.closeInventory();
 						gc.mgJoinToTheGames(player, name);
@@ -1426,16 +1217,24 @@ public class MinigameShop1 implements Listener{
 					}else {
 						player.sendMessage(ChatColor.RED+"Ese Mapa no existe.");
 					}
-					
-//					if(plugin.ExistArena(name)) {
-//						ClassArena cs= new ClassArena(plugin);
-//						cs.JoinPlayerArena(player, name);
-//						return;
-//					}else {
-//						player.sendMessage(ChatColor.RED+"Esa arena no existe.");
-//					}
-					
 				}
+				
+//				if(item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
+//					
+//					
+//					String name = ChatColor.stripColor(item.getItemMeta().getDisplayName().replace(" ","_"));
+//					
+//					
+//					
+//					if(gc.ExistMap(name)) {
+//						player.closeInventory();
+//						gc.mgJoinToTheGames(player, name);
+//						
+//					}else {
+//						player.sendMessage(ChatColor.RED+"Ese Mapa no existe.");
+//					}
+//					
+//				}
 				return;
 			}
 		
@@ -1455,9 +1254,11 @@ public class MinigameShop1 implements Listener{
 				 player.getInventory().addItem(Items.OBJETIVOSP.getValue());
 				 return;
 			 }
+			 
+			 
 			if(item.isSimilar(Items.ESPADAENCAN1.getValue())) {
 				
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 5)) {
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1471,7 +1272,7 @@ public class MinigameShop1 implements Listener{
 			
 			if(item.isSimilar(Items.STOREXPRESS.getValue())) {
 				
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.IRON_INGOT), 192)) {
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1484,7 +1285,7 @@ public class MinigameShop1 implements Listener{
 				
 			if(item.isSimilar(Items.REFUERZOS.getValue())) {
 				
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 30)) {
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1496,7 +1297,7 @@ public class MinigameShop1 implements Listener{
 			}
 			if(item.isSimilar(Items.REFUERZOS2.getValue())) {
 				
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 20)) {
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1509,7 +1310,7 @@ public class MinigameShop1 implements Listener{
 			
 			if(item.isSimilar(Items.JEDI.getValue())) {
 				
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 40)) {
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1521,7 +1322,7 @@ public class MinigameShop1 implements Listener{
 			}
 			if(item.isSimilar(Items.PALO.getValue())) {
 				
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 40)) {
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1534,7 +1335,7 @@ public class MinigameShop1 implements Listener{
 			
 			if(item.isSimilar(Items.ESPADADIAMANTE.getValue())) {
 				
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND), 9)) {
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1547,7 +1348,7 @@ public class MinigameShop1 implements Listener{
 			
 			if(item.isSimilar(Items.ESPADAHIERRO.getValue())) {
 				
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND), 5)) {
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1559,6 +1360,7 @@ public class MinigameShop1 implements Listener{
 		    }
 			
 			if(item.isSimilar(Items.ESPADAORO.getValue())) {
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 7)) {
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
 					player.getInventory().addItem(new ItemStack(Material.GOLDEN_SWORD,1));
@@ -1570,7 +1372,7 @@ public class MinigameShop1 implements Listener{
 			
 			if(item.isSimilar(Items.ESPADAMADERA.getValue())) {
 				
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND), 1)) {
 					player.getInventory().addItem(new ItemStack(Material.WOODEN_SWORD,1));
@@ -1582,7 +1384,7 @@ public class MinigameShop1 implements Listener{
 			}
 			if(item.isSimilar(Items.ESPADAPIEDRA.getValue())) {
 				
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND), 3)) {
 					player.getInventory().addItem(new ItemStack(Material.STONE_SWORD,1));
@@ -1594,7 +1396,7 @@ public class MinigameShop1 implements Listener{
 			}
 			if(item.isSimilar(Items.ESPADANETHERITA.getValue())) {
 				
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND), 12)) {
 					player.getInventory().addItem(new ItemStack(Material.NETHERITE_SWORD,1));
@@ -1607,7 +1409,7 @@ public class MinigameShop1 implements Listener{
 		
 			if(item.isSimilar(Items.CHECKPOINT.getValue())) {
 				
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 20)) {
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1619,7 +1421,7 @@ public class MinigameShop1 implements Listener{
 			}
 			if(item.isSimilar(Items.KATANA.getValue())) {
 				
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 62)) {
 					player.getInventory().addItem(Items.KATANAP.getValue());
@@ -1631,7 +1433,7 @@ public class MinigameShop1 implements Listener{
 			}
 			if(item.isSimilar(Items.KATANA2.getValue())) {
 				
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 100)) {
 					player.getInventory().addItem(Items.KATANA2P.getValue());
@@ -1644,7 +1446,7 @@ public class MinigameShop1 implements Listener{
 			
 			if(item.isSimilar(Items.TRIDENTE.getValue())) {
 				
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.EMERALD), 5)) {
 					player.getInventory().addItem(new ItemStack(Material.TRIDENT,1));
@@ -1656,7 +1458,7 @@ public class MinigameShop1 implements Listener{
 			}
 			if(item.isSimilar(Items.TOTEM.getValue())) {
 				
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.EMERALD), 30)) {
 					player.getInventory().addItem(new ItemStack(Material.TOTEM_OF_UNDYING,1));
@@ -1668,7 +1470,7 @@ public class MinigameShop1 implements Listener{
 			}
 			if(item.isSimilar(Items.ESCUDO.getValue())) {
 				
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.IRON_INGOT), 20)) {
 					player.getInventory().addItem(new ItemStack(Material.SHIELD,1));
@@ -1680,6 +1482,9 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.ESCUDO1.getValue())) {
+				
+				if(hasSpaceinInventory(player)) return;
+				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.IRON_INGOT), 64)) {
 					player.getInventory().addItem(Items.ESCUDO1P.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1690,6 +1495,9 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.ESCUDO2.getValue())) {
+				
+				if(hasSpaceinInventory(player)) return;
+				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.IRON_INGOT), 150)) {
 					player.getInventory().addItem(Items.ESCUDO2P.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1701,7 +1509,7 @@ public class MinigameShop1 implements Listener{
 			
 			if(item.isSimilar(Items.TRIDENTEE.getValue())) {
 				
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 64)) {
 					player.getInventory().addItem(Items.TRIDENTEEP.getValue());
@@ -1714,7 +1522,7 @@ public class MinigameShop1 implements Listener{
 			
 			if(item.isSimilar(Items.TRIDENTEE2.getValue())) {
 				
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 100)) {
 					player.getInventory().addItem(Items.TRIDENTEE2P.getValue());
@@ -1727,7 +1535,7 @@ public class MinigameShop1 implements Listener{
 			
 			if(item.isSimilar(Items.ARCOENCAN1.getValue())) {
 				
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 30)) {
 					player.getInventory().addItem(Items.ARCOENCAN1P.getValue());
@@ -1739,7 +1547,7 @@ public class MinigameShop1 implements Listener{
 			}
 			if(item.isSimilar(Items.DEADBOW.getValue())) {
 				
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 40)) {
 					player.getInventory().addItem(Items.DEADBOWP.getValue());
@@ -1751,7 +1559,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.DEADBOW2.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 110)) {
 					player.getInventory().addItem(Items.DEADBOW2P.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1762,7 +1570,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.ARCO.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 					if(player.getInventory().containsAtLeast(new ItemStack(Material.IRON_INGOT), 20)) {
 						player.getInventory().addItem(new ItemStack(Material.BOW,1));
 						player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1773,7 +1581,7 @@ public class MinigameShop1 implements Listener{
 				}
 		
 			if(item.isSimilar(Items.MEDICO.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 30)) {
 					player.getInventory().addItem(Items.MEDICOP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1784,7 +1592,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.BALLESTA1.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 40)) {
 					player.getInventory().addItem(Items.BALLESTA1P.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1796,7 +1604,7 @@ public class MinigameShop1 implements Listener{
 			
 			
 			if(item.isSimilar(Items.BALLESTA2.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT), 64)) {
 					player.getInventory().addItem(Items.BALLESTA2P.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1808,7 +1616,7 @@ public class MinigameShop1 implements Listener{
 			
 			
 			if(item.isSimilar(Items.BALLESTA.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.GOLD_INGOT), 12)) {
 					player.getInventory().addItem(new ItemStack(Material.CROSSBOW,1));
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1818,7 +1626,7 @@ public class MinigameShop1 implements Listener{
 				}
 			}
 			if(item.isSimilar(Items.FLECHA.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.GOLD_INGOT), 3)) {
 					player.getInventory().addItem(new ItemStack(Material.ARROW,5));
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1828,7 +1636,7 @@ public class MinigameShop1 implements Listener{
 				}
 			}
 			if(item.isSimilar(Items.FLECHAESPECTRAL.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.GOLD_INGOT), 4)) {
 					player.getInventory().addItem(new ItemStack(Material.SPECTRAL_ARROW,5));
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1838,7 +1646,7 @@ public class MinigameShop1 implements Listener{
 				}
 			}
 			if(item.isSimilar(Items.MANZANA.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.IRON_INGOT),1)) {
 					player.getInventory().addItem(new ItemStack(Material.APPLE,5));
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1847,7 +1655,7 @@ public class MinigameShop1 implements Listener{
 					player.sendMessage(ChatColor.RED+"Necesitas 1 Lingotes de Hierro");
 				}
 			}if(item.isSimilar(Items.MANZANAOROENCANTADA.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.EMERALD),35)) {
 					player.getInventory().addItem(new ItemStack(Material.ENCHANTED_GOLDEN_APPLE,3));
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1858,7 +1666,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.MANZANAORO.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.EMERALD),10)) {
 					player.getInventory().addItem(new ItemStack(Material.GOLDEN_APPLE,10));
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1869,7 +1677,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Posion.HEALTH.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND),3)) {
 					player.getInventory().addItem(Posion.HEALTHP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1880,7 +1688,7 @@ public class MinigameShop1 implements Listener{
 			}
 		
 			if(item.isSimilar(Posion.SPEED.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND),20)) {
 					player.getInventory().addItem(Posion.SPEEDP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1890,7 +1698,7 @@ public class MinigameShop1 implements Listener{
 				}
 			}
 			if(item.isSimilar(Posion.REGENER.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND),2)) {
 					player.getInventory().addItem(Posion.REGENERP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1901,7 +1709,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Posion.ABSOR.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND),25)) {
 					player.getInventory().addItem(Posion.ABSORP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1912,7 +1720,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Posion.RESIS.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),2)) {
 					player.getInventory().addItem(Posion.RESISP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1923,7 +1731,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.GANCHO.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),30)) {
 					player.getInventory().addItem(Items.GANCHOP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1933,7 +1741,7 @@ public class MinigameShop1 implements Listener{
 				}
 			}
 			if(item.isSimilar(Items.GANCHO2.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),50)) {
 					player.getInventory().addItem(Items.GANCHO2P.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1943,7 +1751,7 @@ public class MinigameShop1 implements Listener{
 				}
 			}
 			if(item.isSimilar(Items.ESCU1.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),40)) {
 					player.getInventory().addItem(Items.ESCU1P.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1954,7 +1762,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.ESCU2.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),40)) {
 					player.getInventory().addItem(Items.ESCU2P.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1965,7 +1773,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.ESCU3.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),45)) {
 					player.getInventory().addItem(Items.ESCU3P.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1976,7 +1784,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.ESCU4.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),35)) {
 					player.getInventory().addItem(Items.ESCU4P.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1986,7 +1794,7 @@ public class MinigameShop1 implements Listener{
 				}
 			}
 			if(item.isSimilar(Items.ESCU5.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),200)) {
 					player.getInventory().addItem(Items.ESCU5P.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -1997,7 +1805,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.ARROWL.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),64)) {
 					player.getInventory().addItem(Items.ARROWLP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -2008,7 +1816,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.BAZUKA.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),128)) {
 					player.getInventory().addItem(Items.BAZUKAP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -2019,7 +1827,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.COHETE.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),40)) {
 					player.getInventory().addItem(Items.COHETEP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -2031,7 +1839,7 @@ public class MinigameShop1 implements Listener{
 			
 			
 			if(item.isSimilar(Items.RAINARROW.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),10)) {
 					player.getInventory().addItem(Items.RAINARROWP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -2042,7 +1850,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.BENGALAROJA.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),30)) {
 					player.getInventory().addItem(Items.BENGALAROJAP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -2054,7 +1862,7 @@ public class MinigameShop1 implements Listener{
 			
 			
 			if(item.isSimilar(Items.BENGALAVERDE.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),25)) {
 					player.getInventory().addItem(Items.BENGALAVERDEP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -2065,7 +1873,7 @@ public class MinigameShop1 implements Listener{
 			}
 			 
 			if(item.isSimilar(Items.REVIVE.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND),25)) {
 					player.getInventory().addItem(Items.REVIVEP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -2076,7 +1884,7 @@ public class MinigameShop1 implements Listener{
 			}
 			
 			if(item.isSimilar(Items.BENGALAMARCADORA.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),10)) {
 					player.getInventory().addItem(Items.BENGALAMARCADORAP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -2085,7 +1893,7 @@ public class MinigameShop1 implements Listener{
 					player.sendMessage(ChatColor.RED+"Necesitas 10 Lingotes de Netherite");
 				}
 			}if(item.isSimilar(Items.TNT.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.NETHERITE_INGOT),3)) {
 					player.getInventory().addItem(Items.TNTP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -2094,7 +1902,7 @@ public class MinigameShop1 implements Listener{
 					player.sendMessage(ChatColor.RED+"Necesitas 3 Lingotes de Netherite");
 				}
 			}if(item.isSimilar(Items.MASCARAANTIGAS.getValue())) {
-				if(!hasSpaceinInventory(player)) return;
+				if(hasSpaceinInventory(player)) return;
 				if(player.getInventory().containsAtLeast(new ItemStack(Material.IRON_INGOT),64)) {
 					player.getInventory().addItem(Items.MASCARAANTIGASP.getValue());
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
@@ -2157,10 +1965,10 @@ public class MinigameShop1 implements Listener{
 	public boolean hasSpaceinInventory(Player player) {
 		 if(player.getInventory().firstEmpty() == -1) {
 			 player.sendMessage(ChatColor.RED+"Tu Inventario esta lleno has Espacio.");
-			  return false;
-		 }else {
-			 return true;
+			  return true;
 		 }
+		 return false;
+		 
 	}
 	
 	//CHEQUEAR LUEGO
@@ -2353,7 +2161,7 @@ public class MinigameShop1 implements Listener{
 	//NUEVA PAGINA EN UNA PAGINA SECUNDARIA   
 	public void NewPag(Player player) {
 		if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("MENU DE MAPAS")) {
-			MissionsMenu(player);
+			missionsMenu(player);
 		}else if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("OBJETIVOS PRIMARIOS")) {
 			ObjetivesPrimary(player);
 		}else if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("OBJETIVOS SECUNDARIOS")) {
