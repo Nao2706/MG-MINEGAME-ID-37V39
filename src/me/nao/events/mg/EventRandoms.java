@@ -91,10 +91,10 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.event.server.TabCompleteEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.MainHand;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -123,6 +123,7 @@ import me.nao.manager.mg.GameIntoMap;
 import me.nao.mobs.mg.MobsActions;
 import me.nao.revive.mg.RevivePlayer;
 import me.nao.shop.mg.MinigameShop1;
+import me.nao.utils.mg.Utils;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -316,12 +317,12 @@ public class EventRandoms implements Listener{
 				
 
 				if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
-					
+					if(e.getHand() == EquipmentSlot.OFF_HAND)return;
 					
 					if(!player.getPassengers().isEmpty()) {
-						if(player.getMainHand() == MainHand.RIGHT) {
+						
 							 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.RED+ChatColor.BOLD+"YA TIENES ENCIMA A UNA ENTIDAD"));
-						}
+						
 						return;
 					}else if(ent.getType() == EntityType.PLAYER) {
 						Player target = (Player) ent;
@@ -330,17 +331,17 @@ public class EventRandoms implements Listener{
 						
 						if(player.getGameMode() == GameMode.SPECTATOR) {
 							e.setCancelled(true);
-							if(player.getMainHand() == MainHand.RIGHT) {
+							
 							  player.sendMessage(ChatColor.RED+"No puedes interactuar con Entidades siendo Espectador...");
-							}
+							
 							return;
 						}
 						
 						if(target.getGameMode() == GameMode.SPECTATOR) {
 							e.setCancelled(true);
-							if(player.getMainHand() == MainHand.RIGHT) {
+							
 								player.sendMessage(ChatColor.RED+"No puedes interactuar con Espectadores.");
-							}
+							
 							
 							return;
 						}
@@ -365,10 +366,10 @@ public class EventRandoms implements Listener{
 					}else {
 						if(player.getGameMode() == GameMode.SPECTATOR) {
 							e.setCancelled(true);
-							if(player.getMainHand() == MainHand.RIGHT) {
+							
 								player.sendMessage(ChatColor.RED+"No puedes interactuar con Entidades siendo Espectador.");
 
-							}
+							
 							return;
 						}else if(player.isSneaking() && ent.getPassengers().isEmpty()) {
 							ent.addPassenger(player);
@@ -474,13 +475,13 @@ public class EventRandoms implements Listener{
 		
 		GameConditions gc = new GameConditions(plugin);
 		if(gc.isPlayerinGame(player)) {
-			
+			 
 				
 				
 				if(e.getAction() == Action.PHYSICAL) {
 					if(e.getClickedBlock().getType() == Material.TRIPWIRE || e.getClickedBlock().getType() == Material.STONE_PRESSURE_PLATE) {
 						
-						DetectDispenser(player.getLocation());
+						detectDispenser(player,player.getLocation(),plugin.getGameInfoPoo().get(plugin.getPlayerInfoPoo().get(player).getMapName()));
 						//Bukkit.broadcastMessage("1");
 						
 						
@@ -564,16 +565,6 @@ public class EventRandoms implements Listener{
 											    player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 20.0F, 1F);
 											  	MinigameShop1 inv = new MinigameShop1(plugin);
 												inv.StoreCreate(player);
-												
-										  }
-										  if(chest.getCustomName().contains("TIENDA TEST")) {
-											
-												if(chest.getInventory().isEmpty()) {
-													MinigameShop1 inv = new MinigameShop1(plugin);
-													inv.CreateInvChest(player, chest);
-												}
-											
-											  
 												
 										  }
 										  if(chest.getCustomName().contains("TRAMPA1")) {
@@ -697,8 +688,7 @@ public class EventRandoms implements Listener{
 						if(e.getItem().isSimilar( Items.REFUERZOSP.getValue())) {
 					
 							Location loc = player.getLocation();
-							Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.IRON_GOLEM);
-							IronGolem ih = (IronGolem) h1;
+							IronGolem ih = (IronGolem) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.IRON_GOLEM);
 							ih.setCustomName(ChatColor.AQUA+"GUARDIA DE: "+ChatColor.GOLD+player.getName());
 							removeItemstackCustom(player,e.getItem());
 						 }
@@ -712,8 +702,7 @@ public class EventRandoms implements Listener{
 
 							
 							for(int i = 0 ; i < 4;i++) {
-								Entity h1 = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.SNOW_GOLEM);
-								Snowman ih = (Snowman) h1;
+								Snowman ih = (Snowman) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.SNOW_GOLEM);
 								ih.getEquipment().setHelmet(head);
 								ih.setCustomName(ChatColor.GREEN+"GUARDIA DE: "+ChatColor.GOLD+player.getName());
 							}
@@ -727,11 +716,11 @@ public class EventRandoms implements Listener{
 					if (e.getItem().isSimilar(Items.BAZUKAP.getValue())) {
 						if(player.getInventory().containsAtLeast( Items.COHETEP.getValue(),1)) {
 							Location loc = player.getLocation();
-							Entity fb = loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.FIREBALL);
-							fb.setVelocity(loc.getDirection().multiply(3));
 							player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 20.0F, 1F);
-							Fireball f = (Fireball) fb;
+							Fireball f = (Fireball) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.FIREBALL);
+							f.setCustomName(ChatColor.GOLD+"Cohete");
 							f.setYield(10);
+							f.setVelocity(loc.getDirection().multiply(3));
 							f.setShooter(player);
 							
 							removeItemstackCustom(player, Items.COHETEP.getValue());
@@ -798,7 +787,7 @@ public class EventRandoms implements Listener{
 				        	TNTPrimed ptnt = (TNTPrimed) player.getWorld().spawnEntity(player.getLocation().add(0.5,1,0.5),EntityType.TNT);
 							ptnt.setFuseTicks(30);
 							ptnt.setVelocity(player.getLocation().getDirection().multiply(2.5));
-							ptnt.setCustomName(ChatColor.DARK_PURPLE+"TNT de: "+ChatColor.GREEN+player.getName());
+							ptnt.setCustomName(ChatColor.DARK_PURPLE+"Super TNT");
 							ptnt.setSource(player);
 							ptnt.setYield(5);
 							removeItemstackCustom(player,e.getItem());
@@ -1399,14 +1388,25 @@ public class EventRandoms implements Listener{
 		@EventHandler
 		public void onExplodeEntity(EntityExplodeEvent e) {
 			
-				//
+				// 
 				Entity ent = e.getEntity();
-				
-				if(ent.getCustomName() != null ){
-					if(ChatColor.stripColor(ent.getCustomName()).equals("Mina Explosiva")
-						|| ChatColor.stripColor(ent.getCustomName()).equals("Ataque Aereo") 
-						|| ChatColor.stripColor(ent.getCustomName()).startsWith("TNT de:")
-						|| ChatColor.stripColor(ent.getCustomName()).equals("Suicida")) {
+				 
+				if(ent.getCustomName() != null){
+					String mobname = ChatColor.stripColor(ent.getCustomName());
+					
+					
+					
+					List<String> names = new ArrayList<>();
+					names.add("Mina Explosiva");
+					names.add("Ataque Aereo");
+					names.add("Anti Aereo Explosivo");
+					names.add("Suicida");
+					names.add("Cohete");
+					names.add("Super TNT");
+					
+					
+					//names.stream().filter(o -> o.contains(ChatColor.stripColor(ent.getCustomName()))).findFirst().isPresent() || 
+					if(names.stream().filter(o -> o.startsWith(mobname)).findFirst().isPresent()) {
 						
 						List<Material> mat = new ArrayList<>();
 						mat.add(Material.INFESTED_CHISELED_STONE_BRICKS);mat.add(Material.INFESTED_COBBLESTONE);mat.add(Material.INFESTED_CRACKED_STONE_BRICKS);
@@ -1564,7 +1564,7 @@ public class EventRandoms implements Listener{
 				List<Entity> list = getNearbyEntitesItems(l1, 5);
 				//System.out.println("Lista 2 "+list.size());
 				if(list.size() >= gi.getLootTableLimit()) {
-					gc.sendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+ChatColor.RED+" Tu ambicion sera tu Perdicion.\nAnti-Looter-2 y Suicida Invocados (Dejo tirados muchos Items Cerca de la Mesa)");
+					gc.sendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+Utils.colorTextChatColor("\n&cTu ambicion sera tu Perdicion.\n&5Anti-Looter-2 &cy &5Suicida Invocados \n&e(&8Dejo tirados muchos Items Cerca de la Mesa&e)"));
 					l1.getWorld().spawnParticle(Particle.FLAME, l1,	/* N DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
 					player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 20.0F, 0F);
 					
@@ -1599,7 +1599,7 @@ public class EventRandoms implements Listener{
 					gc.setPlayerTempCooldown(player);
 				}else if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND), 100)) {
 					
-					gc.sendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+ChatColor.RED+" recibio un Castigo por tener muchos Diamantes. (Tiene mas de 100 de Diamantes)\nAnti-Looter y Guardia del Loot Invocados");
+					gc.sendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+Utils.colorTextChatColor(" \n&crecibio un Castigo por tener muchos &bDiamantes. \n&e(&8Tiene mas de 100 de &bDiamantes&e)\n&5Anti-Looter &cy &5Guardia del Loot Invocados"));
 					l1.getWorld().spawnParticle(Particle.FLAME, l1,	/* N DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
 					player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 20.0F, 0F);
 					
@@ -1630,7 +1630,7 @@ public class EventRandoms implements Listener{
 					gc.setPlayerTempCooldown(player);
 				}else if(player.getInventory().containsAtLeast(new ItemStack(Material.GOLD_INGOT), 100)) {
 					
-					gc.sendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+ChatColor.RED+" recibio un Castigo por tener mucho Oro. (Tiene mas de 100 de Oro)\nGuardias del Loot Invocados");
+					gc.sendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+Utils.colorTextChatColor(" \n&crecibio un Castigo por tener mucho &6Oro. \n&e(&8Tiene mas de 100 de Oro&e)\n&5Guardias del Loot Invocados"));
 
 					l1.getWorld().spawnParticle(Particle.FLAME, l1.add(0.5, 1, 0.5),	/* N DE PARTICULAS */5, 0.5, 1, 0.5, /* velocidad */0, null, true);
 
@@ -1682,7 +1682,7 @@ public class EventRandoms implements Listener{
 		 @EventHandler
 		 public void onProjectileEvent(ProjectileHitEvent e) {
 			 
-		
+		  
 			  Projectile projectile = e.getEntity();
 			  GameConditions gc = new GameConditions(plugin);
 			  
@@ -1732,7 +1732,7 @@ public class EventRandoms implements Listener{
 					 	}}
 							return;
 					 }
-				  
+				   
 				  if(e.getHitBlock() != null) {
 					  Block b = e.getHitBlock();
 					  if(projectile instanceof AbstractArrow) {
@@ -1752,7 +1752,7 @@ public class EventRandoms implements Listener{
 					  }
 						 // Player player = (Player) projectile.getShooter();
 						  if(b.getType() == Material.TARGET) {
-							  DetectDispenser(b.getLocation());
+							  detectDispenser(player,b.getLocation(),plugin.getGameInfoPoo().get(plugin.getPlayerInfoPoo().get(player).getMapName()));
 							  DetectChestAndCommand(b.getLocation());
 						  }if(b.getType() == Material.STRUCTURE_BLOCK) {
 							if(projectile instanceof AbstractArrow) {
@@ -1786,26 +1786,26 @@ public class EventRandoms implements Listener{
 					 
 				  }
 				  
-				  if(e.getHitBlock() != null) {
-					  Block b = e.getHitBlock();
-					  if(projectile instanceof AbstractArrow) {
-						  AbstractArrow arrow = (AbstractArrow) projectile;
-						  if(arrow.getCustomName() != null) {
-							  if(arrow.getCustomName().equals("Flecha Trampa") || arrow.getCustomName().equals("Flecha Trampa Mejorada")) {
-								arrow.remove();
-							  }else if(arrow.getCustomName().startsWith("Torreta")) {
-								arrow.remove();
-							  }
-							  
-						  }else{
-							  if(b.getType() == Material.BARRIER) {
-								  arrow.remove();
-							  }
+				
+				  
+				 
+			  }else if(e.getHitBlock() != null) {
+				  Block b = e.getHitBlock();
+				  if(projectile instanceof AbstractArrow) {
+					  AbstractArrow arrow = (AbstractArrow) projectile;
+					  if(arrow.getCustomName() != null) {
+						  if(arrow.getCustomName().equals("Flecha Trampa") || arrow.getCustomName().equals("Flecha Trampa Mejorada")) {
+							arrow.remove();
+						  }else if(arrow.getCustomName().startsWith("Torreta")) {
+							arrow.remove();
+						  }
+						  
+					  }else{
+						  if(b.getType() == Material.BARRIER) {
+							  arrow.remove();
 						  }
 					  }
 				  }
-				  
-				 
 			  }
 			  
 			   
@@ -1933,11 +1933,12 @@ public class EventRandoms implements Listener{
 			
 		}
 		
-		public void DetectDispenser(Location l) {
-			FileConfiguration config = plugin.getConfig();
+		public void detectDispenser(Player player ,Location l,GameInfo gi) {
+			
 			Block block = l.getBlock();
 			Block r = block.getRelative(0, 0, 0);
-			int rango = config.getInt("Dispenser-Range") ;
+			int rango = gi.getDispenserRange();;
+			MobsActions ma = new MobsActions(plugin);
 			
 		//	if (r.getType().equals(Material.STONE_PRESSURE_PLATE)) {
 				
@@ -1954,6 +1955,8 @@ public class EventRandoms implements Listener{
 								
 		
 									if(a.getType() == Material.DISPENSER) {
+										
+										ma.detectBlockAndShoot(player, a.getLocation(), rango);
 										
 										Dispenser d = (Dispenser) a.getBlockData();
 										Location loc = a.getLocation();

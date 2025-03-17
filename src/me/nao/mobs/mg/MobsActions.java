@@ -19,6 +19,8 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.type.Dispenser;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.Arrow;
@@ -68,6 +70,253 @@ public class MobsActions {
 		this.plugin = plugin;
 	}
 	
+	public void detectBlockAndShoot(Player player,Location l ,int range) {
+		
+		
+		Block a = l.getBlock();
+		Block b = a.getRelative(0, -1, 0);
+		
+		
+		if(a.getType() == Material.DISPENSER && b.getType() == Material.LODESTONE) {
+			Dispenser d = (Dispenser) a.getBlockData();
+			
+			if(d.getFacing() == BlockFace.UP) {
+				if(player.getLocation().getBlockY() > a.getLocation().getBlockY()) {
+					Location pl = player.getLocation();
+					Location sl = new Location(Bukkit.getWorld(pl.getWorld().getName()), pl.getX(), pl.getY()+1, pl.getZ());
+				
+				
+					
+					Arrow aw = (Arrow) a.getLocation().getWorld().spawnEntity(a.getLocation().add(0.5,1,0.5), EntityType.ARROW);
+					
+					Vector v = sl.toVector().subtract(aw.getLocation().toVector());
+					Location en = aw.getLocation();
+					en.setDirection(v);
+					aw.teleport(en);
+					aw.setVelocity(aw.getLocation().getDirection().multiply(6));
+					aw.setCritical(true);
+					aw.setFireTicks(1200);
+					//aw.setKnockbackStrength(10);
+					aw.setCustomName(ChatColor.RED+"Torreta Anti Aerea");
+					aw.setPickupStatus(PickupStatus.CREATIVE_ONLY);
+				}
+			
+			}
+			
+		}else if(a.getType() == Material.LODESTONE && b.getType() == Material.DISPENSER) {
+			Dispenser d = (Dispenser) b.getBlockData();
+			
+			if(d.getFacing() == BlockFace.DOWN) {
+				
+				if(player.getLocation().getBlockY() < b.getLocation().getBlockY()) {
+					Location pl = player.getLocation();
+					Location sl = new Location(Bukkit.getWorld(pl.getWorld().getName()), pl.getX(), pl.getY()-1, pl.getZ());
+				
+					Arrow aw = (Arrow) b.getLocation().getWorld().spawnEntity(b.getLocation().add(0.5,1,0.5), EntityType.ARROW);
+
+					Vector v = sl.toVector().subtract(aw.getLocation().toVector());
+					Location en = aw.getLocation();
+					en.setDirection(v);
+					aw.teleport(en);
+					aw.setVelocity(aw.getLocation().getDirection().multiply(6));
+					aw.setCritical(true);
+					aw.setFireTicks(1200);
+					//aw.setKnockbackStrength(10);
+					aw.setCustomName(ChatColor.RED+"Torreta Anti Aerea");
+					aw.setPickupStatus(PickupStatus.CREATIVE_ONLY);
+				}
+
+			}
+		}if(a.getType() == Material.DISPENSER && b.getType() == Material.BLAST_FURNACE) {
+			
+			
+			
+			Dispenser d = (Dispenser) a.getBlockData();
+		
+
+			if(d.getFacing() == BlockFace.UP) {
+				
+				if(player.getLocation().getBlockY() > a.getLocation().getBlockY()) {
+					
+					Location pl = player.getLocation();
+					Location sl = new Location(Bukkit.getWorld(pl.getWorld().getName()), pl.getX(), pl.getY()+1, pl.getZ());
+				
+					
+					Fireball fb = (Fireball) a.getLocation().getWorld().spawnEntity(a.getLocation().add(0.5,1,0.5),  EntityType.FIREBALL);
+					Vector v = sl.toVector().subtract(fb.getLocation().toVector());
+					Location en = fb.getLocation();
+					en.setDirection(v);
+					fb.teleport(en);
+					fb.setCustomName("Anti Aereo Explosivo");
+					fb.setVelocity(fb.getLocation().getDirection().multiply(7));
+					fb.setYield(10);
+					fb.setFallDistance(60);
+					//fb.setBounce(false);
+				
+				}
+				
+
+			}
+			
+
+			//player.sendMessage("Hay un bloque de dispensador en las coords Z:"+a.getLocation().getBlockX()+" Y:"+a.getLocation().getBlockY()+" Z:"+a.getLocation().getBlockZ());
+		}if(a.getType() == Material.DISPENSER && b.getType() == Material.BEACON) {
+			
+			
+				
+			Dispenser d = (Dispenser) a.getBlockData();
+		
+
+			if(d.getFacing() == BlockFace.UP) {
+				if(player.getLocation().getBlockY() > a.getLocation().getBlockY()) {
+					
+					Location pl = player.getLocation();
+					Location sl = new Location(Bukkit.getWorld(pl.getWorld().getName()), pl.getX(), pl.getY()+1, pl.getZ());
+				
+					Arrow aw = (Arrow) a.getLocation().getWorld().spawnEntity(a.getLocation().add(0.5,1,0.5), EntityType.ARROW);
+					
+					Vector v = sl.toVector().subtract(aw.getLocation().toVector());
+					Location en = aw.getLocation();
+					en.setDirection(v);
+					aw.teleport(en);
+					aw.setVelocity(aw.getLocation().getDirection().multiply(6).rotateAroundY(Math.toRadians(1)));
+					aw.setCritical(true);
+					aw.setFireTicks(1200);
+					
+					aw.setCustomName("Torreta Anti Aerea");
+					aw.setPickupStatus(PickupStatus.CREATIVE_ONLY);
+					
+				
+					Arrow aw2 = (Arrow) a.getLocation().getWorld().spawnEntity(a.getLocation().add(0.5,1,0.5), EntityType.ARROW);
+					Vector v2 = sl.toVector().subtract(aw2.getLocation().toVector());
+					Location en2 = aw2.getLocation();
+					en2.setDirection(v2);
+					aw2.teleport(en2);
+					aw2.setVelocity(aw2.getLocation().getDirection().multiply(6).rotateAroundY(Math.toRadians(-1)));
+					aw2.setCritical(true);
+					aw2.setFireTicks(1200);
+				
+					aw2.setCustomName("Torreta Anti Aerea");
+					aw2.setPickupStatus(PickupStatus.CREATIVE_ONLY);
+				
+				
+				}
+		
+
+			}
+			
+
+			//player.sendMessage("Hay un bloque de dispensador en las coords Z:"+a.getLocation().getBlockX()+" Y:"+a.getLocation().getBlockY()+" Z:"+a.getLocation().getBlockZ());
+		}if(a.getType() == Material.BLAST_FURNACE && b.getType() == Material.DISPENSER) {
+			Dispenser d = (Dispenser) b.getBlockData();
+			if(d.getFacing() == BlockFace.DOWN) {
+				if(player.getLocation().getBlockY() < b.getLocation().getBlockY()) {
+					
+					Location pl = player.getLocation();
+					Location sl = new Location(Bukkit.getWorld(pl.getWorld().getName()), pl.getX(), pl.getY()-1, pl.getZ());
+				
+					Fireball fb = (Fireball) b.getLocation().getWorld().spawnEntity(b.getLocation().add(0.5,-1,0.5),  EntityType.FIREBALL);
+					Vector v = sl.toVector().subtract(fb.getLocation().toVector());
+					Location en = fb.getLocation();
+					en.setDirection(v);
+					fb.teleport(en);
+					fb.setCustomName("Anti Aereo Explosivo");
+					fb.setVelocity(fb.getLocation().getDirection().multiply(7));
+					fb.setYield(10);
+					//fb.setBounce(false);
+					
+				}
+			}
+		}
+		if(a.getType() == Material.BEACON && b.getType() == Material.DISPENSER) {
+			Dispenser d = (Dispenser) b.getBlockData();
+			if(d.getFacing() == BlockFace.DOWN) {
+				if(player.getLocation().getBlockY() < b.getLocation().getBlockY()) {
+					
+					
+					Location pl = player.getLocation();
+					Location sl = new Location(Bukkit.getWorld(pl.getWorld().getName()), pl.getX(), pl.getY(), pl.getZ());
+					
+					Arrow aw = (Arrow) b.getLocation().getWorld().spawnEntity(b.getLocation().add(0.5,-1,0.5), EntityType.ARROW);
+					
+					
+					Vector v = sl.toVector().subtract(aw.getLocation().toVector());
+					Location en = aw.getLocation();
+					en.setDirection(v);
+					aw.teleport(en);
+					aw.setVelocity(aw.getLocation().getDirection().multiply(6).rotateAroundY(Math.toRadians(1)));
+					aw.setCritical(true);
+					aw.setFireTicks(1200);
+					
+					aw.setCustomName("Torreta Anti Aerea");
+					aw.setPickupStatus(PickupStatus.CREATIVE_ONLY);
+					
+					
+				
+					
+					
+					Arrow aw2 = (Arrow) b.getLocation().getWorld().spawnEntity(b.getLocation().add(0.5,-1,0.5), EntityType.ARROW);
+					Vector v2 = sl.toVector().subtract(aw2.getLocation().toVector());
+					Location en2 = aw2.getLocation();
+					en2.setDirection(v2);
+					aw2.teleport(en2);
+					aw2.setVelocity(aw2.getLocation().getDirection().multiply(6).rotateAroundY(Math.toRadians(-1)));
+					aw2.setCritical(true);
+					aw2.setFireTicks(1200);
+			
+					aw2.setCustomName("Torreta Anti Aerea");
+					aw2.setPickupStatus(PickupStatus.CREATIVE_ONLY);
+				
+				
+					
+					
+				}
+			}
+		}
+		
+		
+		
+		
+		
+//		if(player.getInventory().containsAtLeast(new ItemStack(Material.COMMAND_BLOCK), 1)) {
+//			return;
+//		}
+		
+//		//FileConfiguration config = plugin.getConfig();
+//		Block block = player.getLocation().getBlock();
+//		Block r = block.getRelative(0, 0, 0);
+//		
+//	//	if (r.getType().equals(Material.STONE_PRESSURE_PLATE)) {
+//			int rango = range;
+//		//	Powerable pw = (Powerable) r.getBlockData();
+//		//	if(pw.isPowered()) {
+//
+//				for (int x = -rango; x < rango+1; x++) {
+//					for (int y = -rango; y < rango+1; y++) {
+//						for (int z = -rango; z < rango+1; z++) {
+//	
+//							Block a = r.getRelative(x, y, z);
+//							if(a.getType() == Material.AIR) continue;
+//						
+//							Block b = r.getRelative(x, y-1, z);
+//	
+//							// setea bloques en esos puntos
+//							
+//	
+//					
+//		
+//						};
+//					};
+//				};
+//		//	}	
+//			//player.sendMessage("" + ChatColor.GREEN + "Has actiavdo el detector");
+
+		//}
+	}
+	
+	
+	
+
 	
 	@SuppressWarnings("deprecation")
 	public void getAttackedZombie(Entity atacante ,Entity atacada) {
@@ -1456,7 +1705,7 @@ public class MobsActions {
 				if(a.getType() == Material.MAGENTA_CONCRETE && b.getType() == Material.BEDROCK) {
 					Bruja(a.getWorld(),a.getLocation().getBlockX(),a.getLocation().getBlockY(),a.getLocation().getBlockZ());
 				}
-				
+				detectBlockAndShoot(player,loc,gi.getDispenserRange());
 			  }	
 			}
 		}

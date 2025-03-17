@@ -1202,12 +1202,6 @@ public class MinigameShop1 implements Listener{
 					
 					
 					List<String> list = item.getItemMeta().getLore();
-					System.out.println("Lore: ");
-					for(String s : list) {
-						System.out.println("- "+s);
-					}
-					
-					System.out.println("Size: "+list.size());
 					String name = ChatColor.stripColor(list.get(list.size()-1).replace("Codigo: ",""));
 					System.out.println("("+name+")");
 					if(gc.ExistMap(name)) {

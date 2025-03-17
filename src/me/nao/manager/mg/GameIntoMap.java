@@ -18,6 +18,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -734,17 +735,43 @@ public class GameIntoMap {
 				}
 				
 			}else {
-				if(EntityHasName(e)) {
-					player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+e.getCustomName(), 40, 80, 40);
-					player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+e.getCustomName());
-					gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+e.getCustomName());
+				
+				if(e instanceof TNTPrimed) {
+					TNTPrimed tnt = (TNTPrimed) e;
+					if(tnt.getSource() != null) {
+						Entity entnt = (Entity) tnt.getSource();
+						if(EntityHasName(entnt) && tnt .getCustomName() != null) {
+							player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+e.getCustomName(), 40, 80, 40);
+							player.sendMessage(ChatColor.RED+"- Moriste por: "+ChatColor.YELLOW+tnt.getCustomName()+" de "+entnt.getCustomName());
+							gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por. "+ChatColor.YELLOW+tnt.getCustomName()+" de "+entnt.getCustomName());
 
+						}else {
+							player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+e.getType(), 40, 80, 40);
+							player.sendMessage(ChatColor.RED+"- Moriste por "+ChatColor.YELLOW+e.getType());
+							gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por.. "+ChatColor.YELLOW+e.getType());
+
+						}
+					}else {
+						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+e.getType(), 40, 80, 40);
+						player.sendMessage(ChatColor.RED+"-Moriste por "+ChatColor.YELLOW+e.getType());
+						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por... "+ChatColor.YELLOW+e.getType());
+
+					}
 				}else {
-					player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+e.getType(), 40, 80, 40);
-					player.sendMessage(ChatColor.RED+"Moriste por "+ChatColor.YELLOW+e.getType());
-					gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+e.getType());
+					if(EntityHasName(e)) {
+						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+e.getCustomName(), 40, 80, 40);
+						player.sendMessage(ChatColor.RED+"Moriste por; "+ChatColor.YELLOW+e.getCustomName());
+						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por; "+ChatColor.YELLOW+e.getCustomName());
 
+					}else {
+						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+e.getType(), 40, 80, 40);
+						player.sendMessage(ChatColor.RED+"Moriste por, "+ChatColor.YELLOW+e.getType());
+						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por, "+ChatColor.YELLOW+e.getType());
+
+					}
 				}
+				
+			
 			}
 			if(e instanceof Zombie) {
 				spawnPlayerZombi(player);

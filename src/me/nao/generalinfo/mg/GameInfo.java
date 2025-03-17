@@ -16,7 +16,7 @@ public class GameInfo {
 	
 	
 	private String name , time , stopreason;
-	private int maxplayers,minplayers, loottablemax , itemspawnrange , spawnmobrange , countdownstart, toxiczonerange;
+	private int maxplayers,minplayers, loottablemax , itemspawnrange , spawnmobrange , countdownstart, toxiczonerange, dispenserrange;
 	private int pointsperkills, pointsperdeads , pointsperrevive ,pointsperhelprevive , pointsbonus;
 	private List<String> participants,spectators;
 	private GameType type;
@@ -64,6 +64,7 @@ public class GameInfo {
 		this.pointsperrevive = 10;
 		this.pointsperhelprevive = 15;
 		this.stopreason = StopMotive.NINGUNO.getValue();
+		this.dispenserrange = 0;
 		
 	}
 	
@@ -82,6 +83,10 @@ public class GameInfo {
 	
 	public int getLootTableLimit() {
 		return loottablemax;
+	}
+	
+	public int getDispenserRange() {
+		return dispenserrange;
 	}
 	
 	public int getMaxPlayers() {
@@ -202,6 +207,10 @@ public class GameInfo {
 	
 	public void setLootTableLimit(int amount) {
 		this.loottablemax = amount;
+	}
+	
+	public void setDispenserRange(int dispenserrange) {
+		this.dispenserrange = dispenserrange;
 	}
 	
 	public void setMaxPlayersinMap(int maxplayers) {

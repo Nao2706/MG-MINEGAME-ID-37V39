@@ -71,7 +71,8 @@ public class MapSettings {
 			ym.set("Has-Objetives",false); 
 			ym.set("Primary-Objetive-Opcional",false); 
 			ym.set("Secondary-Objetive-Opcional",false); 
-			ym.set("Set-Hearts",20); 
+			ym.set("Set-Hearts",20);
+			ym.set("Dispenser-Range",30);
 			ym.set("Map-hasBarriers",true); 
 			ym.set("Anti-Void",false); 
 			ym.set("Allow-Inventory",false);
@@ -82,6 +83,7 @@ public class MapSettings {
 			ym.set("Usage-Time","Lunes Viernes");
 			ym.set("Requires-Permission",false);
 			ym.set("Permission-To-Play","my.permission.use");
+			
 			
 			List<String> perm = ym.getStringList("How-Get-Permission.Message");
 			ym.set("How-Get-Permission.Message", perm);

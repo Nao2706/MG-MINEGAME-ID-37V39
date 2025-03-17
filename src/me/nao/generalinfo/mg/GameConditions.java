@@ -1101,6 +1101,8 @@ public class GameConditions {
 			    	ga.setPointsPerRevive(getPointsPerRevive(map));
 			    	ga.setPointsPerHelpRevive(getPointsPerHelpRevive(map));
 			    	ga.setPointsBonus(getPointsBonus(map));
+			    	ga.setDispenserRange(getDispenserRange(map));
+			    	
 			    	
 			    	System.out.println("LOG-1 MISION: "+ga.ShowGame());
 					
@@ -1238,6 +1240,7 @@ public class GameConditions {
     	gi.setPointsPerRevive(getPointsPerRevive(map));
     	gi.setPointsPerHelpRevive(getPointsPerHelpRevive(map));
     	gi.setPointsBonus(getPointsBonus(map));
+    	gi.setDispenserRange(getDispenserRange(map));
 	}
 	
 	public boolean isPlayerKnocked(Player player) {
@@ -1379,6 +1382,11 @@ public class GameConditions {
 	public int getMinPlayerMap(String map) {
 		FileConfiguration mision = getGameConfig(map);
 		return mision.getInt("Min-Player");
+	}
+	
+	public int getDispenserRange(String map) {
+		FileConfiguration game = getGameConfig(map);
+		return game.getInt("Dispenser-Range",30);
 	}
 	
 	public int getSpawnItemRange(String map) {
@@ -4946,11 +4954,20 @@ public class GameConditions {
 		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Xp por Ayudar a Revivir: "+ChatColor.GREEN+pointsperhelprevive);
 		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Xp menos por Muerte: "+ChatColor.GREEN+pointsperdead);
 		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Puntos de Bonus: "+ChatColor.GREEN+pointsperbonus);
-		sendMessageToUserAndConsole(player,ChatColor.GREEN+"Porcentaje de Victorias: "+ChatColor.GOLD+nf.format(ms.getPorcentWins())+"%");
-		sendMessageToUserAndConsole(player,ChatColor.YELLOW+"Porcentaje de Revivir: "+ChatColor.GOLD+nf.format(ms.getPorcentRevives())+"%");
-		sendMessageToUserAndConsole(player,ChatColor.RED+"Porcentaje de Muertes: "+ChatColor.GOLD+nf.format(ms.getPorcentOfDeads())+"%");
-		sendMessageToUserAndConsole(player,ChatColor.GREEN+"Probabilidad de Ganar: "+ChatColor.GOLD+nf.format(ms.getProbablyOfWin())+"%");
-		sendMessageToUserAndConsole(player,ChatColor.RED+"Probabilidad de Perder: "+ChatColor.GOLD+nf.format(ms.getProbablyOfLose())+"%");
+		
+		
+		
+		String st1 = ms.getPorcentWins().intValue() == 0 ? ChatColor.DARK_PURPLE+"Sin Datos..." : ChatColor.GOLD+nf.format(ms.getPorcentWins())+"%" ;
+		String st2 = ms.getPorcentRevives().intValue() == 0 ? ChatColor.DARK_PURPLE+"Sin Datos..." : ChatColor.GOLD+nf.format(ms.getPorcentRevives())+"%" ;
+		String st3 = ms.getPorcentOfDeads().intValue() == 0 ? ChatColor.DARK_PURPLE+"Sin Datos..." : ChatColor.GOLD+nf.format(ms.getPorcentOfDeads())+"%" ;
+		String st4 = ms.getProbablyOfWin().intValue() == 0 ? ChatColor.DARK_PURPLE+"Sin Datos..." : ChatColor.GOLD+nf.format(ms.getProbablyOfWin())+"%" ;
+		String st5 = ms.getProbablyOfLose().intValue() == 0 ? ChatColor.DARK_PURPLE+"Sin Datos..." : ChatColor.GOLD+nf.format(ms.getProbablyOfLose())+"%" ;
+		
+		sendMessageToUserAndConsole(player,ChatColor.GREEN+"Porcentaje de Victorias: "+st1);
+		sendMessageToUserAndConsole(player,ChatColor.YELLOW+"Porcentaje de Revivir: "+st2);
+		sendMessageToUserAndConsole(player,ChatColor.RED+"Porcentaje de Muertes: "+st3);
+		sendMessageToUserAndConsole(player,ChatColor.GREEN+"Probabilidad de Ganar: "+st4);
+		sendMessageToUserAndConsole(player,ChatColor.RED+"Probabilidad de Perder: "+st5);
 		sendMessageToUserAndConsole(player,"======================================");
 		sendMessageToUserAndConsole(player,"");
 	}
