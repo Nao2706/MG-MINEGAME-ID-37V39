@@ -376,14 +376,14 @@ public class RevivePlayer{
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
 		if(gi instanceof GameAdventure) {
-			GameAdventure ga = (GameAdventure) gi;
 			if(getReviveStatus() != ReviveStatus.REVIVED || getReviveStatus() != ReviveStatus.SELFREVIVED) {
 				 if(time == 0) {
 						System.out.println("TIEMPO 0");
 						return true;
 					}
+				  	
 				 
-				 	else if(ga.getAlivePlayers().size() == ga.getKnockedPlayers().size() && !hasReviveItemAnyPlayer()) {
+				 	else if(allAlivePlayersKnocked() && !hasReviveItemAnyPlayer()) {
 						System.out.println("TODOS NOQUEADOS");
 						return true;
 					}
@@ -416,23 +416,23 @@ public class RevivePlayer{
 					
 					StandUp();
 					Bukkit.getScheduler().cancelTask(taskID);	
-				}
-				if(ms.getGameStatus() == GameStatus.TERMINANDO) {
-					System.out.println("Error");
+				}else if(getReviveStatus() == ReviveStatus.HEALING) {
+					setReviveStatus(ReviveStatus.BLEEDING);
+				}else if(ms.getGameStatus() == GameStatus.TERMINANDO) {
+					//System.out.println("Error");
 				    Dead(e, cause);
 				    Bukkit.getScheduler().cancelTask(taskID);	
 				   
 				}else if(reviveStoped() || player == null || !player.isOnline()) {
 					Dead(e, cause);
-					System.out.println("No tienen item F");
+					//System.out.println("No tienen item F");
 					Bukkit.getScheduler().cancelTask(taskID);	
 
 				}else if(getReviveStatus() == ReviveStatus.BLEEDING) {
-					time--;
+					
 					player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"SANGRANDO",""+ChatColor.YELLOW+ChatColor.BOLD+"Moriras en "+ChatColor.RED+ChatColor.BOLD+time, 0, 20, 0);
 					player.playEffect(getArmorStand().getLocation().add(0,0,0), Effect.STEP_SOUND, Material.REDSTONE_BLOCK); 
-				}else if(getReviveStatus() == ReviveStatus.HEALING) {
-					setReviveStatus(ReviveStatus.BLEEDING);
+					time--;
 				}
 			
 				
@@ -487,5 +487,24 @@ public class RevivePlayer{
 		return false;
 	}
 	
+	public boolean allAlivePlayersKnocked() {
+		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+		GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
+		if(gi instanceof GameAdventure) {
+			GameAdventure ga = (GameAdventure) gi;
+			int alive = ga.getAlivePlayers().size();
+			int knocked = ga.getKnockedPlayers().size();
+			int arrive = ga.getArrivePlayers().size();
+			 System.out.println("true "+(alive - arrive)+" == "+knocked);
+			 if((alive - arrive) == knocked) {
+				
+				return true; 
+			 }
+				
+				
+		}
+		return false;
+	}
+
 	
 }

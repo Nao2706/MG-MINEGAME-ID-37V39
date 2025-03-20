@@ -706,7 +706,7 @@ public class Comandsmg implements CommandExecutor{
 	        				
 	        				if(value <= 359 && value >= 0) {
 	        					PointsManager pm = new PointsManager(plugin);
-	        					Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor("&c-&6El Nivel &a"+value+" &6requiere de &a"+pm.xpPerLvl(1000, (1 + 2 / 100.0), value)+" &6XP para el &fNivel: &5"+nextlvl));
+	        					Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor("&c-&6El Nivel &a"+value+" &6requiere de &a"+pm.currentXpLvl(value)+" &6XP para el &fNivel: &5"+nextlvl));
 	        				}else {
 	        					Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Solo hay 360 niveles.");
 	        				}
@@ -2335,7 +2335,7 @@ public class Comandsmg implements CommandExecutor{
         				
         				if(value <= 359 && value >= 0) {
         					PointsManager pm = new PointsManager(plugin);
-        					player.sendMessage(Utils.colorTextChatColor("&c-&6El Nivel &a"+value+" &6requiere de &a"+pm.xpPerLvl(1000, (1 + 2 / 100.0), value)+" &6XP para el &fNivel: &5"+nextlvl));
+        					player.sendMessage(Utils.colorTextChatColor("&c-&6El Nivel &a"+value+" &6requiere de &a"+pm.currentXpLvl(value)+" &6XP para el &fNivel: &5"+nextlvl));
         				}else {
         					player.sendMessage(ChatColor.GREEN+"Solo hay 360 niveles.");
         				}

@@ -94,6 +94,7 @@ public class MapSettings {
 			ym.set("Points-System.Points-Per-Revive",15);
 			ym.set("Points-System.Points-Per-HelpRevive",10);
 			ym.set("Points-System.Points-Bonus",0);
+			ym.set("Points-System.Points-LosePorcent",0);
 			
 			ym.set("Spawners-Detection.Mob-Spawner",10);
 			ym.set("Spawners-Detection.Ore-Spawner",10);

@@ -227,13 +227,19 @@ public class EventRandoms implements Listener{
 		GameConditions gc = new GameConditions(plugin);
 		
 		if(gc.isPlayerinGame(player)) {
-			
+			if(e.getHand() == EquipmentSlot.OFF_HAND)return;
 			
 			PlayerInfo pi = plugin.getPlayerInfoPoo().get(player);
 			GameInfo gi = plugin.getGameInfoPoo().get(pi.getMapName());
 			if(gi.getGameStatus() == GameStatus.JUGANDO || gi.getGameStatus() == GameStatus.PAUSE || gi.getGameStatus() == GameStatus.FREEZE) {
 
-				
+				if(gi instanceof GameAdventure) {
+					GameAdventure ga = (GameAdventure) gi;
+					if(ga.getDeadPlayers().contains(player.getName())) {
+						e.setCancelled(true);
+						return;
+					}
+				}
 				
 				Entity ent = e.getRightClicked();
 				
@@ -249,7 +255,7 @@ public class EventRandoms implements Listener{
 							Player target = Bukkit.getPlayer(name.replace("REVIVIR CON (SHIFT + CLICK DERECHO) A: ","").replace(" ",""));
 							if(gc.isPlayerKnocked(target)) {
 								
-								if(target.getName().equals(player.getName())) {
+								if(target.getName().equals(player.getName()) && player.getGameMode() == GameMode.SPECTATOR){
 									
 									if(player.getInventory().containsAtLeast(Items.REVIVEP.getValue(), 1)){
 										
@@ -317,7 +323,7 @@ public class EventRandoms implements Listener{
 				
 
 				if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
-					if(e.getHand() == EquipmentSlot.OFF_HAND)return;
+					
 					
 					if(!player.getPassengers().isEmpty()) {
 						

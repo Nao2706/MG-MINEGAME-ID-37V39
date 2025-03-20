@@ -17,7 +17,7 @@ public class GameInfo {
 	
 	private String name , time , stopreason;
 	private int maxplayers,minplayers, loottablemax , itemspawnrange , spawnmobrange , countdownstart, toxiczonerange, dispenserrange;
-	private int pointsperkills, pointsperdeads , pointsperrevive ,pointsperhelprevive , pointsbonus;
+	private int pointsperkills, pointsperdeads , pointsperrevive ,pointsperhelprevive , pointsbonus , pointsloseporcent;
 	private List<String> participants,spectators;
 	private GameType type;
 	private GameStatus estpart;
@@ -27,7 +27,7 @@ public class GameInfo {
 	private List<GameTimeActions> gametimeactions;
 	private List<CuboidZone> cuboidzones;	
 	private List<Location> generators,mobsgenerators;	
-	private boolean pvp,barriers,allowinventory;
+	private boolean pvp,barriers,allowinventory,ranked;
 	private GameTime gt;
 	// @param GameInfo Sirve para modo aventura y resistencia
 	/**
@@ -65,6 +65,8 @@ public class GameInfo {
 		this.pointsperhelprevive = 15;
 		this.stopreason = StopMotive.NINGUNO.getValue();
 		this.dispenserrange = 0;
+		this.ranked = false;
+		this.pointsloseporcent = 0;
 		
 	}
 	
@@ -157,6 +159,10 @@ public class GameInfo {
 		return barriers;
 	}
 	
+	public boolean isRankedMap() {
+		return ranked;
+	}
+	
 	public boolean isAllowedJoinWithOwnInventory() {
 		return allowinventory;
 	}
@@ -191,6 +197,10 @@ public class GameInfo {
 	
 	public int getPointsBonus() {
 		return pointsbonus;
+	}
+	
+	public int getPointsLosePorcent() {
+		return pointsloseporcent;
 	}
 	
 	public void setMapName(String name) {
@@ -273,6 +283,10 @@ public class GameInfo {
 		this.barriers = barriers;
 	}
 	
+	public void setRankedMap(boolean ranked) {
+		this.ranked = ranked;
+	}
+	
 	public void setAllowedJoinWithOwnInventory(boolean allowinventory) {
 		this.allowinventory = allowinventory;
 	}
@@ -307,6 +321,10 @@ public class GameInfo {
 	
 	public void setPointsBonus(int pointsbonus) {
 		this.pointsbonus = pointsbonus;
+	}
+	
+	public void setPointsLosePorcent(int pointsloseporcent) {
+		this.pointsloseporcent = pointsloseporcent;
 	}
 	
 	public String ShowGame() {

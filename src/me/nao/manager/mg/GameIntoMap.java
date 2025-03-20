@@ -326,6 +326,7 @@ public class GameIntoMap {
 		if(gm instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) gm;
 			StopMotive motivo = gm.getStopMotive();
+			List<String> spect = ga.getSpectators();
 			List<String> dead = ga.getDeadPlayers();
 			List<String> arrivo = ga.getArrivePlayers();
 			
@@ -333,7 +334,7 @@ public class GameIntoMap {
 			if(motivo == StopMotive.WIN && gm.getGameType() == GameType.ADVENTURE) {
 				
 				if(gm.getGameStatus() == GameStatus.JUGANDO || gm.getGameStatus() == GameStatus.PAUSE || gm.getGameStatus() == GameStatus.FREEZE) {
-					if(!dead.contains(player.getName()) && !arrivo.contains(player.getName())) {
+					if(!dead.contains(player.getName()) && !arrivo.contains(player.getName()) && !spect.contains(player.getName())) {
 						
 						gmc.playerArriveToTheWin(player, mapa);
 						player.setGameMode(GameMode.SPECTATOR);
@@ -341,10 +342,7 @@ public class GameIntoMap {
 						f.spawnFireballGreenLarge();
 						player.sendMessage(ChatColor.GREEN+"Has Sobrevivido Felicidades.");
 						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.GREEN+" Sobrevivio y Gano.");
-						isTheGameRanked(player,mapa);
 						
-					
-					
 					 return;
 					}
 				}
@@ -402,7 +400,7 @@ public class GameIntoMap {
 			       
 					gmc.EndTptoSpawn(player, mapa);
 				}
-				isTheGameRanked(player,mapa);
+				
 			}else {
 				if(gm.getGameType() == GameType.ADVENTURE) {
 				
@@ -414,6 +412,7 @@ public class GameIntoMap {
 				}
 				
 			}
+			isTheRankedGames(player,gm.isRankedMap());
 			return;
 		}else if(!gomg.isNecessaryObjetivePrimary() && gomg.isNecessaryObjetiveSedondary()) {
 			if(gmc.isAllSecondaryObjetivesComplete(player, mapa)) {
@@ -428,7 +427,7 @@ public class GameIntoMap {
 			      
 					gmc.EndTptoSpawn(player, mapa);
 				}
-				isTheGameRanked(player,mapa);
+				
 			}else {
 				
 				if(gm.getGameType() == GameType.ADVENTURE) {
@@ -441,6 +440,7 @@ public class GameIntoMap {
 				
 				
 			}
+			isTheRankedGames(player,gm.isRankedMap());
 			return;
 		}else if(gomg.isNecessaryObjetivePrimary() && gomg.isNecessaryObjetiveSedondary()) {
 			if(gmc.isAllPrimaryObjetivesComplete(player, mapa) && gmc.isAllSecondaryObjetivesComplete(player, mapa)) {
@@ -455,7 +455,7 @@ public class GameIntoMap {
 
 					gmc.EndTptoSpawn(player, mapa);
 				}
-				isTheGameRanked(player,mapa);
+				
 			}else {
 				if(gm.getGameType() == GameType.ADVENTURE) {
 					gmc.TptoSpawnMapSimple(player);
@@ -466,6 +466,7 @@ public class GameIntoMap {
 				}
 				
 			}
+			isTheRankedGames(player,gm.isRankedMap());
 			return;
 		}else {
 			if(gm.getGameType() == GameType.ADVENTURE) {
@@ -479,7 +480,7 @@ public class GameIntoMap {
 		      
 				gmc.EndTptoSpawn(player, mapa);
 			}
-			isTheGameRanked(player,mapa);
+			isTheRankedGames(player,gm.isRankedMap());
 			return;
 		}
 	}
@@ -614,15 +615,12 @@ public class GameIntoMap {
 		
 	}
 	
-	public void isTheGameRanked(Player player ,String mapa) {
-		GameConditions gm = new GameConditions(plugin);
-		//int puntos = plugin.getEspecificPlayerPoints().get(player);
-		//int puntos = pl.getGamePoints().getKills();
+	public void isTheRankedGames(Player player ,boolean isranked) {
 		
-		if(gm.isMapRanked(mapa)) {
+		if(isranked) {
 			PointsManager pm = new PointsManager(plugin);
 			player.sendMessage(ChatColor.GREEN+"Se han agregado Puntos al Ranking de Juegos");
-			pm.addGamePoints(player);	
+			pm.setGamePoints(player);	
 		}else {
 			player.sendMessage(ChatColor.RED+"Este Mapa no añade Puntos al Ranking de Juegos.");
 		}
@@ -679,11 +677,11 @@ public class GameIntoMap {
 				player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto..",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+p.getName(), 40, 80, 40);
 				if(p.getName().equals(player.getName())) {
 					player.sendMessage(ChatColor.RED+"Moriste por Suicidarte");
+					gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"Suicidarse.");
 				}else{
 					player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+p.getName());
+					gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+p.getName());
 				}
-			
-				gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+p.getName());
 				
 			//SI TE MATA UN PROYECTIL	
 			}else if(e instanceof Projectile) {
@@ -711,67 +709,43 @@ public class GameIntoMap {
 						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+damager.getCustomName(), 40, 80, 40);
 						player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+damager.getCustomName());
 						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+damager.getCustomName());
-
-						
-					}else {
-						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+damager.getType(), 40, 80, 40);
-						player.sendMessage(ChatColor.RED+"Moriste por "+ChatColor.YELLOW+damager.getType());
-						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+damager.getType());
-
 					}
-				}else {
-					if(ProjectileHasName(shoot)) {
-						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+shoot.getCustomName(), 40, 80, 40);
-						player.sendMessage(ChatColor.RED+"Moriste por :"+ChatColor.YELLOW+shoot.getCustomName());
-						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+shoot.getCustomName());
+				}else if(ProjectileHasName(shoot)) {
+					player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+shoot.getCustomName(), 40, 80, 40);
+					player.sendMessage(ChatColor.RED+"Moriste por :"+ChatColor.YELLOW+shoot.getCustomName());
+					gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+shoot.getCustomName());
 
-						
-					}else {
-						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+shoot.getType(), 40, 80, 40);
-						player.sendMessage(ChatColor.RED+"Moriste por "+ChatColor.YELLOW+shoot.getType());
-						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+shoot.getType());
+				}
+				
+			}else if(e instanceof TNTPrimed) {
+				TNTPrimed tnt = (TNTPrimed) e;
+				if(tnt.getSource() != null) {
+					Entity entnt = (Entity) tnt.getSource();
+					if(entnt instanceof Player && EntityHasName(tnt)) {
+						Player target = (Player) entnt;
+						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+tnt.getCustomName()+" de "+target.getName(), 40, 80, 40);
+						player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+tnt.getCustomName()+" de "+target.getName());
+						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por. "+ChatColor.YELLOW+tnt.getCustomName()+" de "+target.getName());
+
+					}else if(EntityHasName(entnt) && EntityHasName(tnt)){
+						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+tnt.getCustomName()+" de "+entnt.getCustomName(), 40, 80, 40);
+						player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+tnt.getCustomName()+" de "+entnt.getCustomName());
+						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por. "+ChatColor.YELLOW+tnt.getCustomName()+" de "+entnt.getCustomName());
 
 					}
 				}
-				
-			}else {
-				
-				if(e instanceof TNTPrimed) {
-					TNTPrimed tnt = (TNTPrimed) e;
-					if(tnt.getSource() != null) {
-						Entity entnt = (Entity) tnt.getSource();
-						if(EntityHasName(entnt) && tnt .getCustomName() != null) {
-							player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+e.getCustomName(), 40, 80, 40);
-							player.sendMessage(ChatColor.RED+"- Moriste por: "+ChatColor.YELLOW+tnt.getCustomName()+" de "+entnt.getCustomName());
-							gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por. "+ChatColor.YELLOW+tnt.getCustomName()+" de "+entnt.getCustomName());
-
-						}else {
-							player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+e.getType(), 40, 80, 40);
-							player.sendMessage(ChatColor.RED+"- Moriste por "+ChatColor.YELLOW+e.getType());
-							gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por.. "+ChatColor.YELLOW+e.getType());
-
-						}
-					}else {
-						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+e.getType(), 40, 80, 40);
-						player.sendMessage(ChatColor.RED+"-Moriste por "+ChatColor.YELLOW+e.getType());
-						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por... "+ChatColor.YELLOW+e.getType());
-
-					}
-				}else {
-					if(EntityHasName(e)) {
+			}else{
+				if(EntityHasName(e)) {
 						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+e.getCustomName(), 40, 80, 40);
-						player.sendMessage(ChatColor.RED+"Moriste por; "+ChatColor.YELLOW+e.getCustomName());
-						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por; "+ChatColor.YELLOW+e.getCustomName());
+						player.sendMessage(ChatColor.RED+"Moriste por "+ChatColor.YELLOW+e.getCustomName()+".");
+						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+e.getCustomName()+".");
 
-					}else {
+				}else {
 						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+e.getType(), 40, 80, 40);
-						player.sendMessage(ChatColor.RED+"Moriste por, "+ChatColor.YELLOW+e.getType());
-						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por, "+ChatColor.YELLOW+e.getType());
+						player.sendMessage(ChatColor.RED+"Moriste por, "+ChatColor.YELLOW+e.getType()+".");
+						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+e.getType()+".");
 
-					}
 				}
-				
-			
 			}
 			if(e instanceof Zombie) {
 				spawnPlayerZombi(player);

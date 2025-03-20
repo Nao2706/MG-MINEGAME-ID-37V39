@@ -279,19 +279,22 @@ public class GameConditions {
 		return;
 	}
 	
-	
-	
+	 
 	public void mgEndTheGame(String  name) {
 		GameInfo gi = plugin.getGameInfoPoo().get(name);
 		
+	
 		if(gi instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) gi;
 			List<Player> player = ConvertStringToPlayer(ga.getParticipants());
+			
 			MgScore sco = new MgScore(plugin);
 		
 			for(Player target : player) {
+				
 				sco.ClearScore(target);
 				RestorePlayer(target);
+				
 			}
 			
 			List<Player> spec = ConvertStringToPlayer(ga.getSpectators());
@@ -783,7 +786,7 @@ public class GameConditions {
 		}	
 		
 		
-		if(isMapRanked(name)) {
+		if(ms.isRankedMap()) {
 			PointsManager pm = new PointsManager(plugin) ;
 			pm.WinGamePoints(player);
 		}
@@ -882,7 +885,7 @@ public class GameConditions {
 			PointsManager pm = new PointsManager(plugin) ;
 			pm.LoseGamePoints(player);
 		}
-	
+	 
 		FileConfiguration mision = getGameConfig(name);
 		List<String> lostreward = mision.getStringList("Lost-Rewards.Commands");
 		List<String> lost = mision.getStringList("Lost.Chat-Message-Lost");
@@ -1102,6 +1105,8 @@ public class GameConditions {
 			    	ga.setPointsPerHelpRevive(getPointsPerHelpRevive(map));
 			    	ga.setPointsBonus(getPointsBonus(map));
 			    	ga.setDispenserRange(getDispenserRange(map));
+			    	ga.setRankedMap(isMapRanked(map));
+			    	ga.setPointsLosePorcent(getPointsLosePorcent(map));
 			    	
 			    	
 			    	System.out.println("LOG-1 MISION: "+ga.ShowGame());
@@ -1241,6 +1246,9 @@ public class GameConditions {
     	gi.setPointsPerHelpRevive(getPointsPerHelpRevive(map));
     	gi.setPointsBonus(getPointsBonus(map));
     	gi.setDispenserRange(getDispenserRange(map));
+    	gi.setRankedMap(isMapRanked(map));
+    	gi.setPointsLosePorcent(getPointsLosePorcent(map));
+    	
 	}
 	
 	public boolean isPlayerKnocked(Player player) {
@@ -1427,6 +1435,11 @@ public class GameConditions {
 	public int getPointsBonus(String map) {
 		FileConfiguration game = getGameConfig(map);
 		return game.getInt("Points-System.Points-Bonus");
+	}	
+	
+	public int getPointsLosePorcent(String map) {
+		FileConfiguration game = getGameConfig(map);
+		return game.getInt("Points-System.Points-LosePorcent");
 	}	
 	
 	public boolean isEnabledReviveSystem(String map) {
@@ -2890,7 +2903,7 @@ public class GameConditions {
 	
 	
 	   //TODO TOP
-   	public void Top(String map) {
+   	public void topGame(String map) {
    					FileConfiguration message = plugin.getMessage();
 		// PRIMERA PARTE
 					HashMap<String, Integer> scores = new HashMap<>();
@@ -2901,9 +2914,23 @@ public class GameConditions {
 						
 						 if(ms instanceof GameAdventure) {
 								GameAdventure ga = (GameAdventure) ms;
+								
+								PointsManager pm = new PointsManager(plugin);
+								List<Player> lose = ConvertStringToPlayer(ga.getArrivePlayers());
+								
+							
+								
+								
 								 joins = ConvertStringToPlayer(ga.getParticipants());
 								 spectador = ConvertStringToPlayer(ga.getSpectators());
 								for(Player user : joins) {
+									
+									if(ga.isRankedMap()) {
+										if(!lose.contains(user)) {
+											pm.setGamePoints(user);	
+										}
+									}
+									
 									PlayerInfo pl = plugin.getPlayerInfoPoo().get(user);
 									
 									if(spectador.contains(user)) continue;
@@ -2929,7 +2956,7 @@ public class GameConditions {
 				System.out.println("LOG 1 -------TOP--------");
 				
 				
-					
+				
 					for(Player player : joins) {
 
 						if (message.getBoolean("Message.message-top")) {
@@ -2993,6 +3020,10 @@ public class GameConditions {
 								
 									player.sendMessage(ChatColor.translateAlternateColorCodes('&', texto3));
 						  }}
+						 
+						 
+						
+							
 					}
    		
    	}
@@ -3011,7 +3042,7 @@ public class GameConditions {
    		return list;
    	}
    
-   	public void TopConsole(String map) {
+   	public void topConsole(String map) {
 	FileConfiguration message = plugin.getMessage();
    		
 		
@@ -3264,7 +3295,7 @@ public class GameConditions {
 						}
 						
 						if(!spectator.isEmpty()) {
-							for(Player target : participants) {
+							for(Player target : spectator) {
 								if(motive == StopMotive.WIN) {
 									target.sendMessage(ChatColor.GREEN+ms.getStopReason());
 									
@@ -4929,8 +4960,9 @@ public class GameConditions {
 		nf.setMaximumFractionDigits(0);
 		
 		FileConfiguration mf = plugin.getMapFrequency();
-		
+		 
 		String rs = isEnabledReviveSystem(map) ? "Si" : "No";
+		String rk = isMapRanked(map) ? "Si" : "No";
 		String locked = isBlockedTheMap(map) ? "Deshabilitado" : "Habilitado";
 		int pointsperkill = getPointsPerKills(map);
 		int pointsperrevive = getPointsPerRevive(map);
@@ -4948,6 +4980,8 @@ public class GameConditions {
 		sendMessageToUserAndConsole(player,"======================================");
 		sendMessageToUserAndConsole(player,""+ChatColor.RED+ChatColor.BOLD+"Informacion del Mapa: "+ChatColor.GREEN+map);
 		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Tiene Sistema de Revivir: "+ChatColor.GREEN+rs);
+		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Ranked: "+ChatColor.GREEN+rk);
+		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Porcentaje por Perder: "+ChatColor.GREEN+getPointsLosePorcent(map)+"%");
 		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Estado: "+ChatColor.GREEN+locked);
 		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Xp por Kill: "+ChatColor.GREEN+pointsperkill);
 		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Xp por Revivir: "+ChatColor.GREEN+pointsperrevive);

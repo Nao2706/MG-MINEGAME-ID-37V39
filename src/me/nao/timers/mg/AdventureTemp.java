@@ -277,8 +277,8 @@ public class AdventureTemp {
 						if(end == 10) {
 							 boss.setProgress(1.0);
 					  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"| FIN |");
-							 gc.TopConsole(name);
-							 gc.Top(name);
+							 gc.topConsole(name);
+							 gc.topGame(name);
 							 gc.sendResultsOfGame(ga,gt.getGameCronometForResult(),gt.getGameTimerForResult());
 						}
 				 
