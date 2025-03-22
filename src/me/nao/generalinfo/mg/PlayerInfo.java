@@ -32,6 +32,7 @@ public class PlayerInfo {
 	private GamePoints gp;
 	private String teamname;
 	private Set<String> tags;
+	private SystemOfLevels sl;
 	
 	/** 
 	 *Crear Objeto PlayerInfo para poder definir si en un juego este entrara sin sus cosas(inventario , vida , posiones , exp ) variante que guarda su inventario y otra informacion.
@@ -77,7 +78,7 @@ public class PlayerInfo {
 			this.mgprestige = 0;
 			this.tags = player.getScoreboardTags();
 		}
-		
+		sl = null;
 		
 	}
 	
@@ -157,6 +158,10 @@ public class PlayerInfo {
 	public Set<String> getBackAllTagsMg(){
 		return tags;
 	}
+	
+	public SystemOfLevels getSl() {
+		return sl;
+	}
 
 	public void setPlayerMG(Player player) {
 		this.player = player;
@@ -218,6 +223,11 @@ public class PlayerInfo {
 		this.mgprestige = value;
 	}
 	
+	public void setSl(SystemOfLevels sl) {
+		this.sl = sl;
+	}
+
+
 	public void ClearAllPlayerMg() {
 		
 		int lvl = 0 ;

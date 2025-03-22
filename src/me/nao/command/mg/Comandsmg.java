@@ -1776,7 +1776,7 @@ public class Comandsmg implements CommandExecutor{
 												 .replace("%loses%",String.valueOf(point6))
 												 .replace("%prestige%",String.valueOf(prestige))
 												 .replace("%prestigetext%",rp.getRankPrestigePlaceHolder(prestige))
-												 .replace("%totalxp%",String.valueOf(pm.totalxp(lvl, xp, 0)))
+												// .replace("%totalxp%",String.valueOf(pm.totalxp(lvl, xp, 0)))
 												 
 												));
 									}
@@ -2347,7 +2347,7 @@ public class Comandsmg implements CommandExecutor{
  
         			
         			return true;
-        			
+
         		}else if(args[0].equalsIgnoreCase("time")) {
         			FileConfiguration config = plugin.getConfig();
         			String country = config.getString("Country-Time");

@@ -120,30 +120,11 @@ public class PointsManager {
 		public long currentXpLvl(int level) {
 	    	//xpstart    increase
 	    	//1000,  (1 + 2 / 100.0),
-	    	if(level < 0) {
-	    		return 0;
-	    	}
+	  
 	    	
-	    	return (long) Math.round(1000 * Math.pow((1 + 2 / 100.0), level));  
+	    	return level < 0 ? 0 :(long) Math.round(1000 * Math.pow((1 + 2 / 100.0), level));  
 	    }
-		
-	    public  long currentTotalXp(int lvl) {
-	    	int level = lvl >= 1 ? lvl+1 : 0;
-	    	long lvlxptotal = 0;
-	    	
-	    	for(int i = 0 ; i < level;i++) {
-	    		lvlxptotal += currentXpLvl(i);
-	    	
-	    	}
-	    	return lvlxptotal;
-	    }
-	    
-	    public  long totalxp(int lvl,long savexp,long gamexp) {
-	    	long lvlxptotal = currentTotalXp(lvl);
-	    	long result = (lvlxptotal+savexp+gamexp) < 0 ? 0 : (lvlxptotal+savexp+gamexp);
-	    	
-	    	return result;
-	    }	
+
 	 	
 	 public long negativePointIncrease(long xp, int porcent) {
 		    	
@@ -169,6 +150,8 @@ public class PointsManager {
 		}
 		
 		
+
+		
 		public void calcReferenceExp(Player player ,long val) {
 			FileConfiguration points = plugin.getPoints();
 			
@@ -190,18 +173,14 @@ public class PointsManager {
 			GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
 			GamePoints gp = pl.getGamePoints();
 			
-			
-			
-			
-			
 			long refer = points.getInt("Players."+player.getName()+".Reference-Xp");
 			long xp = points.getInt("Players."+player.getName()+".Xp");
 			int streak = points.getInt("Players."+player.getName()+".Streaks");
 		
 			// joshua 1000 1020 1040
-			long referenciaanterior = currentTotalXp(currentlvl);
+			long referenciaanterior = currentlvl;//currentTotalXp(); CAMBIAR
 			int calcstreak = streak * 100;
-			long generaltotalxp = totalxp(currentlvl,xp,val) + (streak * 100);
+			long generaltotalxp = (currentlvl+xp+val) + (streak * 100);//totalxp; CAMBIAR 
 			long xpdisplay = (xp + val + (streak * 100));
 			long totalreferencexpbefore = currentXpLvl(currentlvl);
 			
