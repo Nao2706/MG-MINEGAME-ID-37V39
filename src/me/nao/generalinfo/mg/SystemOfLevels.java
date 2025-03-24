@@ -79,7 +79,11 @@ public class SystemOfLevels {
 	  	
 	  	referencianterior = lvl == 0 ? 0 : referencianterior+1;
 	  	//xptotalcalculado += puntajerestante;
-	  	System.out.println("LVL "+lvl+" RA:"+referencianterior+" RP:"+referencia+" total xp:"+generaltotalxp);
+	  	//System.out.println("LVL "+lvl+" RA:"+referencianterior+" RP:"+referencia+" total xp:"+generaltotalxp);
+	  	setPlayerlvl(lvl);
+	  	setReferenceA(referencianterior);
+	  	setReferenceB(referencia);
+	  	
     }
 	
 	
@@ -92,6 +96,10 @@ public class SystemOfLevels {
     		refer +=  (int) Math.round(1000 * Math.pow((1 + 2 / 100.0),i+1));
     	}
     	System.out.println(referant+" "+refer); 
+    	setTotalxplvlA(referant);
+    	setTotalplayerxp(referant);
+    	setTotalxplvlB(refer);
+    	
     }
 	
 	
