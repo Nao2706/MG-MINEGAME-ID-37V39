@@ -174,20 +174,24 @@ public class PointsManager {
 			long baseoflvlxp = manager.getTotalxplvlA();
 			long limitoflvlxp = manager.getTotalxplvlB();
 			
-			long currentplayertotalxpwhithoutchanges = (manager.getTotalplayerxp()+savexp+val);
-			long displayxp = (savexp+val);
-			int calcstreak = streak * 100;
-			long currentplayertotalxpwithchanges = currentplayertotalxpwhithoutchanges;
-			
 			boolean playerlose = false;
 			if(gi instanceof GameAdventure) {
 				GameAdventure ga = (GameAdventure) gi;
 				if(!ga.getArrivePlayers().contains(player.getName())) {
-					currentplayertotalxpwithchanges =  (int) negativePointIncrease(currentplayertotalxpwithchanges,gi.getPointsLosePorcent());
 					playerlose = true;
 				}
 			}
+		
+			int calcstreaks = streak * 100;
+			long displayxp = (savexp+calcstreaks+val);
+			long currentplayertotalxpwhithoutchanges = (manager.getTotalplayerxp()+savexp+calcstreaks+val);
+			long copyeofcurrentplayertotal = displayxp;
+			long currentplayertotalxpwithchanges = currentplayertotalxpwhithoutchanges;
 			
+			if(playerlose) {
+				currentplayertotalxpwithchanges = (int) negativePointIncrease(currentplayertotalxpwithchanges,gi.getPointsLosePorcent());
+				displayxp = (int) negativePointIncrease(displayxp,gi.getPointsLosePorcent());
+			}			
 			
 			//SE LO USA PARA MOSTRAR EN MENSAJES DATOS
 			GamePoints gp = pl.getGamePoints();
@@ -203,23 +207,22 @@ public class PointsManager {
 
 			player.spigot().sendMessage(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.DARK_GRAY+"- "+net.md_5.bungee.api.ChatColor.GRAY+"Xp Guardada: "+net.md_5.bungee.api.ChatColor.GREEN+savexp,"La Experiencia que tenias.", net.md_5.bungee.api.ChatColor.GOLD));
 			player.spigot().sendMessage(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.DARK_GRAY+"- "+net.md_5.bungee.api.ChatColor.GREEN+"Xp Ganada: "+net.md_5.bungee.api.ChatColor.GREEN+val,"La Experiencia Conseguiste.", net.md_5.bungee.api.ChatColor.GOLD));
-			player.spigot().sendMessage(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.DARK_GRAY+"- "+net.md_5.bungee.api.ChatColor.DARK_PURPLE+"Racha: "+net.md_5.bungee.api.ChatColor.GOLD+streak+net.md_5.bungee.api.ChatColor.RED+" x "+net.md_5.bungee.api.ChatColor.GOLD+net.md_5.bungee.api.ChatColor.BOLD+"100 "+net.md_5.bungee.api.ChatColor.RED+"= "+net.md_5.bungee.api.ChatColor.DARK_PURPLE+calcstreak,"La Racha que tienes.", net.md_5.bungee.api.ChatColor.GOLD));
+			player.spigot().sendMessage(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.DARK_GRAY+"- "+net.md_5.bungee.api.ChatColor.DARK_PURPLE+"Racha: "+net.md_5.bungee.api.ChatColor.GOLD+streak+net.md_5.bungee.api.ChatColor.RED+" x "+net.md_5.bungee.api.ChatColor.GOLD+net.md_5.bungee.api.ChatColor.BOLD+"100 "+net.md_5.bungee.api.ChatColor.RED+"= "+net.md_5.bungee.api.ChatColor.DARK_PURPLE+calcstreaks,"La Racha que tienes.", net.md_5.bungee.api.ChatColor.GOLD));
 			ComponentBuilder cb = new ComponentBuilder();
 			cb.append(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.GOLD+"Resultado: ","El Calculo de la Experiencia.", net.md_5.bungee.api.ChatColor.GREEN));
 			cb.append(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.GRAY+String.valueOf(savexp),"Experiencia Guardada.", net.md_5.bungee.api.ChatColor.GREEN));
 			cb.append(Utils.sendTextComponent(net.md_5.bungee.api.ChatColor.RED+" + "));
 			cb.append(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.GREEN+String.valueOf(val),"Experiencia Ganada.", net.md_5.bungee.api.ChatColor.GREEN));
 			cb.append(Utils.sendTextComponent(net.md_5.bungee.api.ChatColor.RED+" + "));
-			cb.append(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.RED+String.valueOf(calcstreak),Utils.colorText("La Racha se multiplica por 100.\nLuego se suma."), net.md_5.bungee.api.ChatColor.DARK_PURPLE));
+			cb.append(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.RED+String.valueOf(calcstreaks),Utils.colorText("La Racha se multiplica por 100.\nLuego se suma."), net.md_5.bungee.api.ChatColor.DARK_PURPLE));
 			cb.append(Utils.sendTextComponent(net.md_5.bungee.api.ChatColor.RED+" = "));
 			cb.append(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.DARK_PURPLE+String.valueOf(displayxp),"Total de Puntos. ", net.md_5.bungee.api.ChatColor.GOLD));
 			if(playerlose) {
-				cb.append(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.RED+" Castigo por Perder: -"+String.valueOf(gi.getPointsLosePorcent())+"%","Si tu XP es positiva es Descuento.\nSi tu XP es negativa enpeorara.", net.md_5.bungee.api.ChatColor.RED));
+				cb.append(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.RED+" Castigo por Perder: -"+String.valueOf(gi.getPointsLosePorcent())+"%"+net.md_5.bungee.api.ChatColor.GREEN+" \nOriginal XP:"+copyeofcurrentplayertotal,"Si tu XP es positiva es Descuento.\nSi tu XP es negativa enpeorara.", net.md_5.bungee.api.ChatColor.RED));
 			}
 			
 			player.spigot().sendMessage(cb.create());
 			player.sendMessage("");
-			
 			
 			
 			SystemOfLevels manager2 = new SystemOfLevels();
@@ -233,8 +236,8 @@ public class PointsManager {
 				player.sendMessage(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+ChatColor.MAGIC+"[]"+ChatColor.GREEN+ChatColor.BOLD+ChatColor.UNDERLINE+" SUBISTE DE NIVEL "+ChatColor.DARK_PURPLE+ChatColor.BOLD+ChatColor.MAGIC+"[]");
 			  	player.sendMessage("");
 				player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"   DE "+ChatColor.YELLOW+ChatColor.BOLD+"LVL."+currentlvl+ChatColor.GOLD+ChatColor.BOLD+" >>> A >>> "+ChatColor.GREEN+ChatColor.BOLD+"LVL."+manager2.getPlayerlvl());
-				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.YELLOW+manager2.getRemaingxp()+ChatColor.GOLD+ChatColor.BOLD+"/"+ChatColor.GREEN+manager2.getReferenceB()+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
-				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+getProgressBar(manager2.getRemaingxp(), manager2.getReferenceB(),20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
+				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"             ["+ChatColor.YELLOW+manager2.getRemaingxp()+ChatColor.GOLD+ChatColor.BOLD+"/"+ChatColor.GREEN+manager2.getReferenceB()+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
+				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"           ["+getProgressBar(manager2.getRemaingxp(), manager2.getReferenceB(),20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
 				player.sendMessage(""+ChatColor.DARK_GRAY+"Total de XP General: "+ChatColor.GREEN+ChatColor.BOLD+currentplayertotalxpwithchanges);
 				player.sendMessage("");
 				
@@ -249,9 +252,9 @@ public class PointsManager {
 				manager2.setRemaingxp(currentplayertotalxpwithchanges-manager2.getReferenceA());
 				player.sendMessage(""+ChatColor.YELLOW+ChatColor.BOLD+ChatColor.MAGIC+"[]"+ChatColor.RED+ChatColor.BOLD+ChatColor.UNDERLINE+" BAJASTE DE NIVEL "+ChatColor.YELLOW+ChatColor.BOLD+ChatColor.MAGIC+"[]");
 			  	player.sendMessage("");
-				player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"   DE "+ChatColor.YELLOW+ChatColor.BOLD+"LVL."+currentlvl+ChatColor.GOLD+ChatColor.BOLD+" >>> A >>> "+ChatColor.GREEN+ChatColor.BOLD+"LVL."+manager2.getPlayerlvl());
-				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.YELLOW+manager2.getRemaingxp()+ChatColor.GOLD+ChatColor.BOLD+"/"+ChatColor.GREEN+manager2.getReferenceB()+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
-				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+getProgressBar(manager2.getRemaingxp(), manager2.getReferenceB(),20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
+				player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"   DE "+ChatColor.YELLOW+ChatColor.BOLD+"LVL."+currentlvl+ChatColor.GOLD+ChatColor.BOLD+" >>> A >>> "+ChatColor.RED+ChatColor.BOLD+"LVL."+manager2.getPlayerlvl());
+				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"             ["+ChatColor.YELLOW+manager2.getRemaingxp()+ChatColor.GOLD+ChatColor.BOLD+"/"+ChatColor.GREEN+manager2.getReferenceB()+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
+				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"           ["+getProgressBar(manager2.getRemaingxp(), manager2.getReferenceB(),20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
 				player.sendMessage(""+ChatColor.DARK_GRAY+"Total de XP General: "+ChatColor.GREEN+ChatColor.BOLD+currentplayertotalxpwithchanges);
 				player.sendMessage("");
 				
@@ -264,9 +267,14 @@ public class PointsManager {
 				//SE MANTIENE EN EL NIVEL
 			}else{
 				manager2.setRemaingxp(manager.getReferenceB()-displayxp);
-				player.sendMessage(ChatColor.DARK_GRAY+" Te faltan "+ChatColor.RED+manager2.getRemaingxp()+ChatColor.DARK_GRAY+" Puntos de XP para Subir de Nivel.");
-				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+ChatColor.YELLOW+displayxp+ChatColor.GOLD+ChatColor.BOLD+"/"+ChatColor.GREEN+refer+ChatColor.DARK_GRAY+ChatColor.BOLD+"]"+ChatColor.GREEN+" + Subiste.");
-				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"["+getProgressBar(displayxp, refer,20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
+				String text = manager2.getRemaingxp() > 0 ? ChatColor.GREEN+" + Subiste." : ChatColor.RED+" - Bajaste.";
+				if(manager2.getRemaingxp() > 0) {
+					player.sendMessage(ChatColor.DARK_GRAY+" Te faltan "+ChatColor.RED+manager2.getRemaingxp()+ChatColor.DARK_GRAY+" Puntos de XP para Subir de Nivel.");
+				}else {
+					player.sendMessage(ChatColor.DARK_GRAY+" Bajaste "+ChatColor.RED+manager2.getRemaingxp()+ChatColor.DARK_GRAY+" Puntos de XP para Subir de Nivel.");
+				}
+				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"             ["+ChatColor.YELLOW+displayxp+ChatColor.GOLD+ChatColor.BOLD+"/"+ChatColor.GREEN+refer+ChatColor.DARK_GRAY+ChatColor.BOLD+"]"+text);
+				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"           ["+getProgressBar(displayxp, refer,20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
 				player.sendMessage(""+ChatColor.DARK_GRAY+"Total de XP General: "+ChatColor.GREEN+ChatColor.BOLD+currentplayertotalxpwithchanges);
 				player.sendMessage("");
 				

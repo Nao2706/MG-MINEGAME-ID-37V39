@@ -66,6 +66,7 @@ import me.nao.generalinfo.mg.GameConditions;
 import me.nao.generalinfo.mg.GameInfo;
 import me.nao.generalinfo.mg.GameTime;
 import me.nao.generalinfo.mg.ReportsManager;
+import me.nao.generalinfo.mg.SystemOfLevels;
 import me.nao.main.mg.Minegame;
 import me.nao.manager.mg.GameIntoMap;
 import me.nao.manager.mg.InfectedGame;
@@ -702,11 +703,12 @@ public class Comandsmg implements CommandExecutor{
 	        				
 	        				int value = Integer.valueOf(args[1]);
 	        				
-	        				int nextlvl = value + 1;
-	        				
+
 	        				if(value <= 359 && value >= 0) {
-	        					PointsManager pm = new PointsManager(plugin);
-	        					Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor("&c-&6El Nivel &a"+value+" &6requiere de &a"+pm.currentXpLvl(value)+" &6XP para el &fNivel: &5"+nextlvl));
+	        
+	        					SystemOfLevels sof = new SystemOfLevels();
+	        					sof.rangeOfLvl(value);
+	        					Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor("&c-&6El Nivel &a"+value+" &6Requiere de &a"+sof.getTotalxplvlA()+" &6XP y termina con &a"+sof.getTotalxplvlB()+" &6de XP."));
 	        				}else {
 	        					Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Solo hay 360 niveles.");
 	        				}
@@ -1744,6 +1746,7 @@ public class Comandsmg implements CommandExecutor{
 						
 						PointsManager pm = new PointsManager(plugin);
 						RankPlayer rp = new RankPlayer(plugin);
+						SystemOfLevels sof = new SystemOfLevels();
 								int lvl = points1.getInt("Players."+player.getName()+".Level");
 								long refer = points1.getInt("Players."+player.getName()+".Reference-Xp");
 								long xp = points1.getInt("Players."+player.getName()+".Xp");
@@ -1755,6 +1758,9 @@ public class Comandsmg implements CommandExecutor{
 								int point5 = points1.getInt("Players."+player.getName()+".Wins");
 								int point6 = points1.getInt("Players."+player.getName()+".Loses");
 								int prestige = points1.getInt("Players."+player.getName()+".Prestige");
+								
+								sof.rangeOfLvl(lvl);
+								long currentxp = xp+sof.getTotalplayerxp();
 								
 								if (message.getBoolean("Message-My-Points.message")) {
 									List<String> messagep = message.getStringList("Message-My-Points.message-points-texto");
@@ -1776,7 +1782,7 @@ public class Comandsmg implements CommandExecutor{
 												 .replace("%loses%",String.valueOf(point6))
 												 .replace("%prestige%",String.valueOf(prestige))
 												 .replace("%prestigetext%",rp.getRankPrestigePlaceHolder(prestige))
-												// .replace("%totalxp%",String.valueOf(pm.totalxp(lvl, xp, 0)))
+												 .replace("%totalxp%",String.valueOf(currentxp))
 												 
 												));
 									}
@@ -2331,11 +2337,12 @@ public class Comandsmg implements CommandExecutor{
         			if(args.length == 2) {
         				
         				int value = Integer.valueOf(args[1]);
-        				int nextlvl = value + 1;
-        				
+        			
         				if(value <= 359 && value >= 0) {
-        					PointsManager pm = new PointsManager(plugin);
-        					player.sendMessage(Utils.colorTextChatColor("&c-&6El Nivel &a"+value+" &6requiere de &a"+pm.currentXpLvl(value)+" &6XP para el &fNivel: &5"+nextlvl));
+        
+        					SystemOfLevels sof = new SystemOfLevels();
+        					sof.rangeOfLvl(value);
+        					player.sendMessage(Utils.colorTextChatColor("&c-&6El Nivel &a"+value+" &6Requiere de &a"+sof.getTotalxplvlA()+" &6XP y termina con &a"+sof.getTotalxplvlB()+" &6de XP."));
         				}else {
         					player.sendMessage(ChatColor.GREEN+"Solo hay 360 niveles.");
         				}

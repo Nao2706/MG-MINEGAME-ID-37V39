@@ -292,7 +292,7 @@ public class SourceOfDamage implements Listener{
 							player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
 							player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,/*duration*/ 5 * 20,/*amplifier:*/10, false ,false,true));
 							//player.addPotionEffect(lento);
-							player.addPotionEffect(new PotionEffect(PotionEffectType.POISON,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
+							player.addPotionEffect(new PotionEffect(PotionEffectType.POISON,/*duration*/ 10 * 20,/*amplifier:*/100, false ,false,true));
 							//player.addPotionEffect(ciego);
 							player.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA,/*duration*/ 10 * 20,/*amplifier:*/20, false ,false,true));
 							player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
@@ -303,7 +303,7 @@ public class SourceOfDamage implements Listener{
 							player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
 							player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,/*duration*/ 5 * 20,/*amplifier:*/10, false ,false,true));
 							//player.addPotionEffect(lento);
-							player.addPotionEffect(new PotionEffect(PotionEffectType.POISON,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
+							player.addPotionEffect(new PotionEffect(PotionEffectType.POISON,/*duration*/ 10 * 20,/*amplifier:*/100, false ,false,true));
 							//player.addPotionEffect(ciego);
 							player.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA,/*duration*/ 10 * 20,/*amplifier:*/20, false ,false,true));
 							player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
@@ -354,7 +354,7 @@ public class SourceOfDamage implements Listener{
 								player.sendTitle(ChatColor.RED+"!!!PELIGRO!!!", ChatColor.GREEN+"Estas en una"+ChatColor.RED+" Zona Toxica "+ChatColor.GREEN+"corre", 20, 40, 20);
 								player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
 								player.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,/*duration*/ 10 * 20,/*amplifier:*/20, false ,false,true));
-								player.addPotionEffect(new PotionEffect(PotionEffectType.POISON,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
+								player.addPotionEffect(new PotionEffect(PotionEffectType.POISON,/*duration*/ 10 * 20,/*amplifier:*/100, false ,false,true));
 								player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
 								player.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA,/*duration*/ 10 * 20,/*amplifier:*/20, false ,false,true));
 								player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
@@ -370,7 +370,7 @@ public class SourceOfDamage implements Listener{
 									player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
 									player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,/*duration*/ 5 * 20,/*amplifier:*/10, false ,false,true));
 									//player.addPotionEffect(lento);
-									player.addPotionEffect(new PotionEffect(PotionEffectType.POISON,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
+									player.addPotionEffect(new PotionEffect(PotionEffectType.POISON,/*duration*/ 10 * 20,/*amplifier:*/100, false ,false,true));
 									//player.addPotionEffect(ciego);
 									player.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA,/*duration*/ 10 * 20,/*amplifier:*/20, false ,false,true));
 									player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
@@ -391,7 +391,7 @@ public class SourceOfDamage implements Listener{
 									player.addPotionEffect(new PotionEffect(PotionEffectType.WEAKNESS,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
 									player.addPotionEffect(new PotionEffect(PotionEffectType.WITHER,/*duration*/ 5 * 20,/*amplifier:*/10, false ,false,true));
 									//player.addPotionEffect(lento);
-									player.addPotionEffect(new PotionEffect(PotionEffectType.POISON,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
+									player.addPotionEffect(new PotionEffect(PotionEffectType.POISON,/*duration*/ 10 * 20,/*amplifier:*/100, false ,false,true));
 									//player.addPotionEffect(ciego);
 									player.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA,/*duration*/ 10 * 20,/*amplifier:*/20, false ,false,true));
 									player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
