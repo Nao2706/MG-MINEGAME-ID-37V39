@@ -296,7 +296,7 @@ public class PHMiniGame extends PlaceholderExpansion{
 	public String getObjetiveCurrentValue(String map,String objetive) {
 		
 		GameConditions gc = new GameConditions(plugin);
-		if(!gc.ExistMap(map)) {
+		if(!gc.existMap(map)) {
 			return "El mapa no existe.";
 		}
 		
@@ -316,7 +316,7 @@ public class PHMiniGame extends PlaceholderExpansion{
 	public String getObjetiveCurrentCompleteValue(String map,String objetive) {
 		
 		GameConditions gc = new GameConditions(plugin);
-		if(!gc.ExistMap(map)) {
+		if(!gc.existMap(map)) {
 			return "El mapa no existe.";
 		}
 		

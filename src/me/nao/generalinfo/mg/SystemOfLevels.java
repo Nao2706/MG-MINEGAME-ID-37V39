@@ -95,7 +95,7 @@ public class SystemOfLevels {
     		referant = lvl != 0 ? refer+1 : refer;
     		refer +=  (int) Math.round(1000 * Math.pow((1 + 2 / 100.0),i+1));
     	}
-    	System.out.println(referant+" "+refer); 
+    	//System.out.println(referant+" "+refer); 
     	setTotalxplvlA(referant);
     	setTotalplayerxp(referant);
     	setTotalxplvlB(refer);

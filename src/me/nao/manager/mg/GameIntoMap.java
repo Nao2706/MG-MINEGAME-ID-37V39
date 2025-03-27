@@ -92,7 +92,7 @@ public class GameIntoMap {
 				
 				
 					GameConditions cm = new GameConditions(plugin);
-					cm.SetHeartsInGame(player, mapa);
+					cm.setHeartsInGame(player, mapa);
 					cm.revivePlayerToGame(target, mapa);
 				
 					cm.setKitMg(target);

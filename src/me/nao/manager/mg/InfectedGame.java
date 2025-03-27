@@ -36,7 +36,7 @@ public class InfectedGame {
 	 //TODO INFECTADO
 	   public void setArenaSpawnSurvivor(String name, Player player) {
 		   GameConditions gc = new GameConditions(plugin);
-	 		if(gc.ExistMap(name)) {
+	 		if(gc.existMap(name)) {
 				plugin.ChargedYml(name, player);
 				FileConfiguration ym = plugin.getCacheSpecificYML(name);	
 				if(ym.getInt("Game-Mode") != 3) {
@@ -74,7 +74,7 @@ public class InfectedGame {
 	   public void setArenaSpawnInfectado(String name, Player player) {
 			
 		   GameConditions gc = new GameConditions(plugin);
-	 		if(gc.ExistMap(name)) {
+	 		if(gc.existMap(name)) {
 				//plugin.ChargedYml(name, player);
 				//FileConfiguration ym = plugin.getCacheSpecificYML(name);	
 				plugin.ChargedYml(name, player);

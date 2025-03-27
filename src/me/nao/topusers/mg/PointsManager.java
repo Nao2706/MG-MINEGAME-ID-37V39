@@ -218,7 +218,7 @@ public class PointsManager {
 			cb.append(Utils.sendTextComponent(net.md_5.bungee.api.ChatColor.RED+" = "));
 			cb.append(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.DARK_PURPLE+String.valueOf(displayxp),"Total de Puntos. ", net.md_5.bungee.api.ChatColor.GOLD));
 			if(playerlose) {
-				cb.append(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.RED+" Castigo por Perder: -"+String.valueOf(gi.getPointsLosePorcent())+"%"+net.md_5.bungee.api.ChatColor.GREEN+" \nOriginal XP:"+copyeofcurrentplayertotal,"Si tu XP es positiva es Descuento.\nSi tu XP es negativa enpeorara.", net.md_5.bungee.api.ChatColor.RED));
+				cb.append(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.RED+" Castigo por Perder: -"+String.valueOf(gi.getPointsLosePorcent())+"%"+net.md_5.bungee.api.ChatColor.GREEN+" \nXP Original:"+net.md_5.bungee.api.ChatColor.GOLD+copyeofcurrentplayertotal,"Si tu XP es positiva es Descuento.\nSi tu XP es negativa enpeorara.", net.md_5.bungee.api.ChatColor.RED));
 			}
 			
 			player.spigot().sendMessage(cb.create());
@@ -237,7 +237,7 @@ public class PointsManager {
 			  	player.sendMessage("");
 				player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"   DE "+ChatColor.YELLOW+ChatColor.BOLD+"LVL."+currentlvl+ChatColor.GOLD+ChatColor.BOLD+" >>> A >>> "+ChatColor.GREEN+ChatColor.BOLD+"LVL."+manager2.getPlayerlvl());
 				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"             ["+ChatColor.YELLOW+manager2.getRemaingxp()+ChatColor.GOLD+ChatColor.BOLD+"/"+ChatColor.GREEN+manager2.getReferenceB()+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
-				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"           ["+getProgressBar(manager2.getRemaingxp(), manager2.getReferenceB(),20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
+				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"            ["+getProgressBar(manager2.getRemaingxp(), manager2.getReferenceB(),20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
 				player.sendMessage(""+ChatColor.DARK_GRAY+"Total de XP General: "+ChatColor.GREEN+ChatColor.BOLD+currentplayertotalxpwithchanges);
 				player.sendMessage("");
 				
@@ -254,7 +254,7 @@ public class PointsManager {
 			  	player.sendMessage("");
 				player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"   DE "+ChatColor.YELLOW+ChatColor.BOLD+"LVL."+currentlvl+ChatColor.GOLD+ChatColor.BOLD+" >>> A >>> "+ChatColor.RED+ChatColor.BOLD+"LVL."+manager2.getPlayerlvl());
 				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"             ["+ChatColor.YELLOW+manager2.getRemaingxp()+ChatColor.GOLD+ChatColor.BOLD+"/"+ChatColor.GREEN+manager2.getReferenceB()+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
-				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"           ["+getProgressBar(manager2.getRemaingxp(), manager2.getReferenceB(),20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
+				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"            ["+getProgressBar(manager2.getRemaingxp(), manager2.getReferenceB(),20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
 				player.sendMessage(""+ChatColor.DARK_GRAY+"Total de XP General: "+ChatColor.GREEN+ChatColor.BOLD+currentplayertotalxpwithchanges);
 				player.sendMessage("");
 				
@@ -266,15 +266,21 @@ public class PointsManager {
 				
 				//SE MANTIENE EN EL NIVEL
 			}else{
-				manager2.setRemaingxp(manager.getReferenceB()-displayxp);
+				//System.out.println(" "+manager.getReferenceB()+" - "+displayxp +" "+(manager.getReferenceB()-displayxp));
+				manager2.setRemaingxp(manager2.getReferenceB()-displayxp);
+				
+				
 				String text = manager2.getRemaingxp() > 0 ? ChatColor.GREEN+" + Subiste." : ChatColor.RED+" - Bajaste.";
-				if(manager2.getRemaingxp() > 0) {
-					player.sendMessage(ChatColor.DARK_GRAY+" Te faltan "+ChatColor.RED+manager2.getRemaingxp()+ChatColor.DARK_GRAY+" Puntos de XP para Subir de Nivel.");
+				if(manager2.getRemaingxp() == savexp) {
+					player.sendMessage(ChatColor.DARK_GRAY+" Te Mantienes en el Mismo Puntaje de Xp "+ChatColor.YELLOW+manager2.getRemaingxp()+ChatColor.DARK_GRAY+" con el que Entraste.");
+					text = ChatColor.YELLOW+" Se Mantiene";
+				}else if(manager2.getRemaingxp() > 0) {
+					player.sendMessage(ChatColor.DARK_GRAY+" Te faltan "+ChatColor.GREEN+manager2.getRemaingxp()+ChatColor.DARK_GRAY+" Puntos de XP para Subir de Nivel.");
 				}else {
 					player.sendMessage(ChatColor.DARK_GRAY+" Bajaste "+ChatColor.RED+manager2.getRemaingxp()+ChatColor.DARK_GRAY+" Puntos de XP para Subir de Nivel.");
 				}
 				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"             ["+ChatColor.YELLOW+displayxp+ChatColor.GOLD+ChatColor.BOLD+"/"+ChatColor.GREEN+refer+ChatColor.DARK_GRAY+ChatColor.BOLD+"]"+text);
-				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"           ["+getProgressBar(displayxp, refer,20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
+				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"            ["+getProgressBar(displayxp, refer,20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
 				player.sendMessage(""+ChatColor.DARK_GRAY+"Total de XP General: "+ChatColor.GREEN+ChatColor.BOLD+currentplayertotalxpwithchanges);
 				player.sendMessage("");
 				

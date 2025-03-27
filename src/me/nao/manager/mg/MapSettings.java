@@ -37,7 +37,7 @@ public class MapSettings {
 		//PENDIENTE MAS ACCIONES
 	public void CreateDialog(String name,String path ,Player player) {
 		GameConditions gc = new GameConditions(plugin);
- 		if(!gc.ExistMapDialog(name)) {
+ 		if(!gc.existMapDialog(name)) {
  			plugin.NewYmlDialog(name, player);
  			FileConfiguration dialog = plugin.getCacheSpecificDialogsYML(name);
  			dialog.set(path+".Time", 1);
@@ -59,10 +59,11 @@ public class MapSettings {
 		//TODO DEFAULT INFO PLAYER
 	public void CreateNewGame(String name, Player player) {
 		GameConditions gc = new GameConditions(plugin);
- 		if(!gc.ExistMap(name)) {
+ 		if(!gc.existMap(name)) {
 			plugin.NewYml(name, player);
 			FileConfiguration ym = plugin.getCacheSpecificYML(name);
 			ym.set("Type-Map","Adventure");
+			ym.set("Min-Level-To-Play:", 2);
 			ym.set("Revive-System",false);
 			ym.set("CountDownPreLobby",30);
 			ym.set("Max-Player", 5);
@@ -291,7 +292,7 @@ public class MapSettings {
    //TODO setArenaPrelobby
    public void setMapPreLobby(String name, Player player) {
 	   GameConditions gc = new GameConditions(plugin);
-		if(gc.ExistMap(name)) {
+		if(gc.existMap(name)) {
 			
 	
 			plugin.ChargedYml(name, player);
@@ -324,7 +325,7 @@ public class MapSettings {
    //TODO setSpwanArena
    public void setMapSpawn(String name, Player player) {
 	   GameConditions gc = new GameConditions(plugin);
-		if(gc.ExistMap(name)) {
+		if(gc.existMap(name)) {
 			plugin.ChargedYml(name, player);
 			FileConfiguration ym = plugin.getCacheSpecificYML(name);	
 			NumberFormat nf = NumberFormat.getInstance();
@@ -355,7 +356,7 @@ public class MapSettings {
 		   
 	   
 	   	GameConditions gc = new GameConditions(plugin);
-		if(gc.ExistMap(name)) {
+		if(gc.existMap(name)) {
 				plugin.ChargedYml(name, player);
 				FileConfiguration ym = plugin.getCacheSpecificYML(name);	
 				NumberFormat nf = NumberFormat.getInstance();
@@ -394,7 +395,7 @@ public class MapSettings {
 		   
 	   
 	   	GameConditions gc = new GameConditions(plugin);
-		if(gc.ExistMap(name)) {
+		if(gc.existMap(name)) {
 				plugin.ChargedYml(name, player);
 				FileConfiguration ym = plugin.getCacheSpecificYML(name);	
 				NumberFormat nf = NumberFormat.getInstance();
@@ -434,7 +435,7 @@ public class MapSettings {
 		   
 	   
 	   	GameConditions gc = new GameConditions(plugin);
-		if(gc.ExistMap(name)) {
+		if(gc.existMap(name)) {
 				plugin.ChargedYml(name, player);
 				FileConfiguration ym = plugin.getCacheSpecificYML(name);	
 				NumberFormat nf = NumberFormat.getInstance();
@@ -474,7 +475,7 @@ public class MapSettings {
 		   
 	   
 	   	GameConditions gc = new GameConditions(plugin);
-		if(gc.ExistMap(name)) {
+		if(gc.existMap(name)) {
 				plugin.ChargedYml(name, player);
 				FileConfiguration ym = plugin.getCacheSpecificYML(name);	
 				NumberFormat nf = NumberFormat.getInstance();
@@ -506,7 +507,7 @@ public class MapSettings {
    //TODO setSpawnSpectator
    public void setMapSpawnSpectator(String name, Player player) {
 	   GameConditions gc = new GameConditions(plugin);
-		if(gc.ExistMap(name)) {
+		if(gc.existMap(name)) {
 			plugin.ChargedYml(name, player);
 			FileConfiguration ym = plugin.getCacheSpecificYML(name);	
 			NumberFormat nf = NumberFormat.getInstance();
@@ -533,7 +534,7 @@ public class MapSettings {
    //TODO END SPAWN
    public void setMapSpawnEnd(String name, Player player) {
 		GameConditions gc = new GameConditions(plugin);
- 		if(gc.ExistMap(name)) {
+ 		if(gc.existMap(name)) {
  			plugin.ChargedYml(name, player);
  			FileConfiguration ym = plugin.getCacheSpecificYML(name);	
  			NumberFormat nf = NumberFormat.getInstance();
@@ -560,7 +561,7 @@ public class MapSettings {
    
 	  public void setMapSpawnRed(String name, Player player) {
 		  GameConditions gc = new GameConditions(plugin);
-		  if(gc.ExistMap(name)) {
+		  if(gc.existMap(name)) {
 					plugin.ChargedYml(name, player);
 					FileConfiguration ym = plugin.getCacheSpecificYML(name);	
 					NumberFormat nf = NumberFormat.getInstance();
@@ -589,7 +590,7 @@ public class MapSettings {
 		
 		  
 		  GameConditions gc = new GameConditions(plugin);
-		  if(gc.ExistMap(name)) {
+		  if(gc.existMap(name)) {
 
 					plugin.ChargedYml(name, player);
 					FileConfiguration ym = plugin.getCacheSpecificYML(name);	
@@ -613,7 +614,7 @@ public class MapSettings {
    
 	  public void setMapBlueNexo(String name, Player player) {
 		  GameConditions gc = new GameConditions(plugin);
-		  if(gc.ExistMap(name)) {
+		  if(gc.existMap(name)) {
 			plugin.ChargedYml(name, player);
 			FileConfiguration ym = plugin.getCacheSpecificYML(name);	
 			
@@ -646,7 +647,7 @@ public class MapSettings {
 	  
 	  public void setMapRedNexo(String name, Player player) {
 		  GameConditions gc = new GameConditions(plugin);
-		  if(gc.ExistMap(name)) {
+		  if(gc.existMap(name)) {
 			plugin.ChargedYml(name, player);
 			FileConfiguration ym = plugin.getCacheSpecificYML(name);	
 			

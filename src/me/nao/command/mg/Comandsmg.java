@@ -600,7 +600,7 @@ public class Comandsmg implements CommandExecutor{
 			 		 }
 			 		 
 			 		 String map = args[1];
-			 		 if(!gc.ExistMap(map)) {
+			 		 if(!gc.existMap(map)) {
 			 			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El Mapa "+map+" no existe.");
 		 				 return true;
 		 			 }else if(!gc.isMapinGame(map)) {
@@ -645,7 +645,7 @@ public class Comandsmg implements CommandExecutor{
 			 			 String type  = args[2].toUpperCase();
 			 			 String time = args[3];
 			 			 
-			 			 if(!gc.ExistMap(map)) {
+			 			 if(!gc.existMap(map)) {
 			 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El Mapa "+map+" no existe.");
 			 				 return true;
 			 			 }else if(!gc.isMapinGame(map)) {
@@ -1289,7 +1289,7 @@ public class Comandsmg implements CommandExecutor{
 						FileConfiguration config = plugin.getConfig();
 						
 						
-				 		if(gc.ExistMap(name)) {
+				 		if(gc.existMap(name)) {
 							 List<String> al = config.getStringList("Maps-Blocked.List");
 							 if(!al.contains(name)) {
 								 config.set("Maps-Blocked.List",al);
@@ -1342,7 +1342,7 @@ public class Comandsmg implements CommandExecutor{
 						String name = args[1];
 						FileConfiguration config = plugin.getConfig();
 					
-				 		if(gc.ExistMap(name)) {
+				 		if(gc.existMap(name)) {
 						
 							 List<String> al = config.getStringList("Maps-Blocked.List");
 							 if(al.contains(name)) {
@@ -2527,12 +2527,12 @@ public class Comandsmg implements CommandExecutor{
       			if(args.length == 1) {
 					
       				gc.pagsSystem(player, l, 1, 10);
-      				player.sendMessage(ChatColor.GOLD+"Un Total de: "+ChatColor.RED+list.size()+" Mapas Activos.");		
+					player.sendMessage(ChatColor.YELLOW+"Un Total de: "+ChatColor.RED+list.size()+ChatColor.GREEN+" Mapas Activos.");		
 				}else if(args.length == 2){
 					
 					int pag = Integer.valueOf(args[1]);
 					gc.pagsSystem(player, l, pag, 10);
-					player.sendMessage(ChatColor.GOLD+"Un Total de: "+ChatColor.RED+list.size()+" Mapas Activos.");		
+					player.sendMessage(ChatColor.YELLOW+"Un Total de: "+ChatColor.RED+list.size()+ChatColor.GREEN+" Mapas Activos.");		
 				}else {
 					player.sendMessage("Usa /mg mapsingame ");
 					player.sendMessage("Usa /mg mapsingame <pag>");
@@ -2819,7 +2819,7 @@ public class Comandsmg implements CommandExecutor{
 				 		 }
 				 		 
 				 		 String map = args[1];
-				 		 if(!gc.ExistMap(map)) {
+				 		 if(!gc.existMap(map)) {
 			 				 player.sendMessage(ChatColor.RED+"El Mapa "+map+" no existe.");
 			 				 return true;
 			 			 }else if(!gc.isMapinGame(map)) {
@@ -2847,7 +2847,7 @@ public class Comandsmg implements CommandExecutor{
 				 			 String type  = args[2];
 				 			 String time = args[3];
 				 			 
-				 			 if(!gc.ExistMap(map)) {
+				 			 if(!gc.existMap(map)) {
 				 				 player.sendMessage(ChatColor.RED+"El Mapa "+map+" no existe.");
 				 				 return true;
 				 			 }else if(!gc.isMapinGame(map)) {
@@ -3277,7 +3277,7 @@ public class Comandsmg implements CommandExecutor{
 					
 						FileConfiguration config = plugin.getConfig();
 						String mapname = args[1];
-				 		if(gc.ExistMap(mapname)) {
+				 		if(gc.existMap(mapname)) {
 							 List<String> al = config.getStringList("Maps-Blocked.List");
 							 if(al.contains(mapname)) {
 								 config.set("Maps-Blocked.List",al);
@@ -3315,7 +3315,7 @@ public class Comandsmg implements CommandExecutor{
 						String mapname = args[1];
 						FileConfiguration config = plugin.getConfig();
 						
-						if(gc.ExistMap(mapname)) {
+						if(gc.existMap(mapname)) {
 							 List<String> al = config.getStringList("Maps-Blocked.List");
 							 if(!al.contains(mapname)) {
 								 config.set("Maps-Blocked.List",al);
@@ -4558,7 +4558,7 @@ public class Comandsmg implements CommandExecutor{
  		GameConditions gc = new GameConditions(plugin);
  		if(args.length == 4) {
  			
-			if(gc.ExistMapDialog(args[1])) {
+			if(gc.existMap(args[1])) {
 				gc.LoadDialogues(args[1], args[2], args[3]);
 			}else {
 				gc.sendMessageToUserAndConsole(player, ChatColor.RED+"El Dialogo "+args[1]+" no Existe.");

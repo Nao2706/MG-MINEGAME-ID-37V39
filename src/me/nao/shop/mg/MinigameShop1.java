@@ -1204,7 +1204,7 @@ public class MinigameShop1 implements Listener{
 					List<String> list = item.getItemMeta().getLore();
 					String name = ChatColor.stripColor(list.get(list.size()-1).replace("Codigo: ",""));
 					System.out.println("("+name+")");
-					if(gc.ExistMap(name)) {
+					if(gc.existMap(name)) {
 						player.closeInventory();
 						gc.mgJoinToTheGames(player, name);
 						

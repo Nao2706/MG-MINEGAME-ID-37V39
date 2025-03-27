@@ -122,7 +122,7 @@ public class CommandsMessage {
 	    m1.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/mg join "+map));
 
 		
-		if(player.hasPermission("mg.announce.join") && !gc.HasMaintenance() && !gc.isBlockedTheMap(map)) {
+		if(player.hasPermission("mg.announce.join") && !gc.hasMaintenance() && !gc.isBlockedTheMap(map)) {
 			for(Player players : Bukkit.getOnlinePlayers()) {
 				if(players.getName().equals(player.getName())) continue;
 				if(gc.isPlayerinGame(players)) continue;
@@ -144,7 +144,7 @@ public class CommandsMessage {
 		
 		GameConditions gc = new GameConditions(plugin);
 		
-		if(!gc.ExistMap(map)) {
+		if(!gc.existMap(map)) {
 			if(player != null) {
 				player.sendMessage(ChatColor.RED+"El mapa "+ChatColor.GOLD+map+ChatColor.RED+" no existe o esta mal escrito.");
 			}
@@ -160,7 +160,7 @@ public class CommandsMessage {
 		if(gc.isMapinGame(map)) {
 			GameInfo gi = plugin.getGameInfoPoo().get(map);
 			if(gi.getGameStatus() == GameStatus.ESPERANDO) {
-				if(!gc.HasMaintenance() && !gc.isBlockedTheMap(map)) {
+				if(!gc.hasMaintenance() && !gc.isBlockedTheMap(map)) {
 					for(Player players : Bukkit.getOnlinePlayers()) {
 						if(gc.isPlayerinGame(players)) continue;
 						players.sendMessage("");
@@ -202,7 +202,7 @@ public class CommandsMessage {
 			}
 		}else {
 			
-			if(!gc.HasMaintenance() && !gc.isBlockedTheMap(map)) {
+			if(!gc.hasMaintenance() && !gc.isBlockedTheMap(map)) {
 				for(Player players : Bukkit.getOnlinePlayers()) {
 					if(gc.isPlayerinGame(players)) continue;
 					players.sendMessage("");

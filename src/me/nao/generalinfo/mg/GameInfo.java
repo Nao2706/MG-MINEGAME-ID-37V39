@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.boss.BossBar;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import me.nao.enums.mg.GameStatus;
 import me.nao.enums.mg.GameType;
@@ -16,7 +17,7 @@ public class GameInfo {
 	
 	
 	private String name , time , stopreason;
-	private int maxplayers,minplayers, loottablemax , itemspawnrange , spawnmobrange , countdownstart, toxiczonerange, dispenserrange;
+	private int minlvltoplay, maxplayers,minplayers, loottablemax , itemspawnrange , spawnmobrange , countdownstart, toxiczonerange, dispenserrange;
 	private int pointsperkills, pointsperdeads , pointsperrevive ,pointsperhelprevive , pointsbonus , pointsloseporcent;
 	private List<String> participants,spectators;
 	private GameType type;
@@ -29,6 +30,8 @@ public class GameInfo {
 	private List<Location> generators,mobsgenerators;	
 	private boolean pvp,barriers,allowinventory,ranked;
 	private GameTime gt;
+	private FileConfiguration data;
+	
 	// @param GameInfo Sirve para modo aventura y resistencia
 	/**
 	 * Constructor Base para futuros tipos de Juegos 
@@ -203,6 +206,14 @@ public class GameInfo {
 		return pointsloseporcent;
 	}
 	
+	public int getMinlvltoPlay() {
+		return minlvltoplay;
+	}
+	
+	public FileConfiguration getMapData() {
+		return data;
+	}
+	
 	public void setMapName(String name) {
 		this.name = name;
 	}
@@ -327,6 +338,15 @@ public class GameInfo {
 		this.pointsloseporcent = pointsloseporcent;
 	}
 	
+	public void setMapData(FileConfiguration data) {
+		this.data = data;
+	}
+
+	public void setMinlvltoPlay(int minlvltoplay) {
+		this.minlvltoplay = minlvltoplay;
+	}
+
+
 	public String ShowGame() {
 		return getMapName()+" "+getMaxPlayers()+" "+getMinPlayers()+" "+getGameType().toString()+" "+getGameStatus().toString()+" "+
 	getStopMotive().toString()+" "+getBossbar().getTitle()+" "+getTimeMg();

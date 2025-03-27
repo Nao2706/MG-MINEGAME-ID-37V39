@@ -85,9 +85,9 @@ public class GameConditions {
 	public void mgJoinToTheGames(Player player,String map) {
 		loadDataMap(map);
 		
-		if(CanJoinToTheMap(player,map)){
+		if(canJoinToTheMap(player,map)){
 			
-			if(ExistProblemBetweenInventorys(map)) {
+			if(existProblemBetweenInventorys(map)) {
 				player.sendMessage(ChatColor.RED+"Error conflicto de inventarios llama a un Administrador.");
 				return;
 			}
@@ -318,6 +318,7 @@ public class GameConditions {
 	
 	 //TODO TP AL PRELOBBY DEL MAPA
 	   public void tptoPreLobbyMap(Player player ,String map){
+		   
 		   FileConfiguration ym = getGameConfig(map);
 		   if(ym.contains("Pre-Lobby")) {
 			   player.getWorld().spawnParticle(Particle.DRAGON_BREATH, player.getLocation().add(0, 1, 0),
@@ -459,7 +460,7 @@ public class GameConditions {
 			    player.setInvulnerable(false);
 				Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch);
 				player.teleport(l);
-				SetHeartsInGame(player, map);
+				setHeartsInGame(player, map);
 				//este send message es un separador de chat contra la cuenta atras xd
 				player.sendMessage(" ");
 				
@@ -569,7 +570,7 @@ public class GameConditions {
 	
 	public void forceGameStart(Player player,String map) {
 		
-		if(!ExistMap(map)) {
+		if(!existMap(map)) {
 			player.sendMessage(ChatColor.RED+"El mapa "+ChatColor.GOLD+map+ChatColor.RED+" no existe o esta mal escrito.");
 
 		}
@@ -998,9 +999,9 @@ public class GameConditions {
 		
 		 PlayerInfo pl = null;
 		 
-		 if(CanJoinWithYourInventory(map) && !CanUseKit(map)) {
+		 if(canJoinWithYourInventory(map) && !canUseKit(map)) {
 			 	//LO SALVAS
-				if(ExistLobbyMg()) {
+				if(existLobbyMg()) {
 				    pl = new PlayerInfo(plugin,true,player, getLocationOfLobby(), map,new GamePoints());
 				
 				}else {
@@ -1011,7 +1012,7 @@ public class GameConditions {
 		}else{
 				
 				//NO SALVAS SU INVENTARIO
-				if(ExistLobbyMg()) {
+				if(existLobbyMg()) {
 				    pl = new PlayerInfo(plugin,false,player, getLocationOfLobby(), map,new GamePoints());
 					
 				}else {
@@ -1027,7 +1028,7 @@ public class GameConditions {
 	
 	//TODO LOAD MAP
 	public boolean loadDataMap(String map) {
-		
+		 
 		
 		if(!plugin.getGameInfoPoo().containsKey(map)) {
 			try {
@@ -1037,7 +1038,7 @@ public class GameConditions {
 				GameType type = GameType.valueOf(enumtype);
 				int maxplayers = game.getInt("Max-Player");
 				int minplayers = game.getInt("Min-Player");
-				
+				 
 				if(type == null) {
 					sendMessageToConsole(ChatColor.RED+"Error en el tipo de Juego "+enumtype+" no existe.");
 					return false;
@@ -1093,7 +1094,7 @@ public class GameConditions {
 			    	ga.setCountDownStart(loadCountdownMap(map));
 			    	ga.setGameTime(loadMapGameTime(map, time)); 
 			    	ga.setBarriersinMap(hasBarriersMap(map));
-			    	ga.setAllowedJoinWithOwnInventory(CanJoinWithYourInventory(map)); 
+			    	ga.setAllowedJoinWithOwnInventory(canJoinWithYourInventory(map)); 
 			    	 
 			    	ga.setSpawnItemRange(getSpawnItemRange(map));
 			    	ga.setSpawnMobRange(getSpawnMobRange(map));
@@ -1107,7 +1108,8 @@ public class GameConditions {
 			    	ga.setDispenserRange(getDispenserRange(map));
 			    	ga.setRankedMap(isMapRanked(map));
 			    	ga.setPointsLosePorcent(getPointsLosePorcent(map));
-			    	
+			    	ga.setMapData(game);			    	
+			    	ga.setMinlvltoPlay(getMinLvlToPlay(map));		
 			    	
 			    	System.out.println("LOG-1 MISION: "+ga.ShowGame());
 					
@@ -1234,12 +1236,12 @@ public class GameConditions {
     	gi.setCountDownStart(loadCountdownMap(map));
     	gi.setBarriersinMap(hasBarriersMap(map));
     	gi.setPvpinMap(isPvPAllowed(map));
-    	gi.setAllowedJoinWithOwnInventory(CanJoinWithYourInventory(map)); 
+    	gi.setAllowedJoinWithOwnInventory(canJoinWithYourInventory(map)); 
     	
     	gi.setSpawnItemRange(getSpawnItemRange(map));
     	gi.setSpawnMobRange(getSpawnMobRange(map));
     	gi.setToxicZoneRange(getToxicZoneRange(map));
-    	 
+    	  
     	gi.setPointsPerKills(getPointsPerKills(map));
     	gi.setPointsPerDeads(getPointsPerDeads(map));
     	gi.setPointsPerRevive(getPointsPerRevive(map));
@@ -1248,6 +1250,7 @@ public class GameConditions {
     	gi.setDispenserRange(getDispenserRange(map));
     	gi.setRankedMap(isMapRanked(map));
     	gi.setPointsLosePorcent(getPointsLosePorcent(map));
+    	gi.setMapData(getGameConfig(map));
     	
 	}
 	
@@ -1280,19 +1283,24 @@ public class GameConditions {
 		return game.getBoolean("Map-hasBarriers");
 	}
 	
-	public void SetHeartsInGame(Player player , String map) {
+	public void setHeartsInGame(Player player , String map) {
 		FileConfiguration game = getGameConfig(map);
 		int vida = game.getInt("Set-Hearts");
 		player.getAttribute(Attribute.MAX_HEALTH).setBaseValue(vida);
 		return;
 	}
 	
-	public void SetDefaultHeartsInGame(Player player) {
+	public int getMinLvlToPlay(String map) {
+		FileConfiguration game = getGameConfig(map); 
+		return game.getInt("Min-Level-To-Play");
+	}
+	
+	public void setDefaultHeartsInGame(Player player) {
 		player.getAttribute(Attribute.MAX_HEALTH).setBaseValue(20);
 		return;
 	}
 	  
-	public boolean CanJoinWithYourInventory(String map) {
+	public boolean canJoinWithYourInventory(String map) {
 		 FileConfiguration game = getGameConfig(map);
 		 return game.getBoolean("Allow-Inventory");
 	}
@@ -1307,12 +1315,12 @@ public class GameConditions {
 		 return game.getBoolean("Has-Objetives");
 	}
 	
-	public boolean CanUseKit(String map) {
+	public boolean canUseKit(String map) {
 		 FileConfiguration game = getGameConfig(map);
 		 return game.getBoolean("Has-Kit");
 	}
 	
-	public boolean ExistKit(String map) {
+	public boolean existKit(String map) {
 		 FileConfiguration game = getGameConfig(map);
 		 FileConfiguration invt = plugin.getInventorysYaml();
 		
@@ -1320,8 +1328,8 @@ public class GameConditions {
 		return invt.contains("Inventory."+kit);
 	}
 	
-	public boolean ExistProblemBetweenInventorys(String map) {
-		 if(CanUseKit(map) && CanJoinWithYourInventory(map)) {
+	public boolean existProblemBetweenInventorys(String map) {
+		 if(canUseKit(map) && canJoinWithYourInventory(map)) {
 			 return true;
 		 }
 		return false;
@@ -1333,7 +1341,7 @@ public class GameConditions {
 		 return ac.contains(map);
 	}
 	
-	public boolean ExistLobbyMg() {
+	public boolean existLobbyMg() {
 		 FileConfiguration config = plugin.getConfig();
 		 if(config.contains("Lobby-Active")) {
 			 return config.getBoolean("Lobby-Active");
@@ -1341,18 +1349,18 @@ public class GameConditions {
 		return false;
 	}
 	
-	public boolean HasMaintenance() {
+	public boolean hasMaintenance() {
 		 FileConfiguration config = plugin.getConfig();	 
 	     return config.getBoolean("Maintenance");
 	}
 	
-	public boolean ExistMap(String map) {
+	public boolean existMap(String map) {
 		FileConfiguration config = plugin.getConfig();
 		List<String> ac = config.getStringList("Maps-Created.List");
 		 return ac.contains(map);
 	}
 	
-	public boolean ExistMapDialog(String map) {
+	public boolean existMapDialog(String map) {
 		FileConfiguration config = plugin.getConfig();
 		List<String> ac = config.getStringList("Maps-Dialogs.List");
 		return ac.contains(map);
@@ -1554,22 +1562,22 @@ public class GameConditions {
 	}
 
 	
-	public boolean CanJoinToTheMap(Player player ,String map) {
+	public boolean canJoinToTheMap(Player player ,String map) {
 		 if(isPlayerinGame(player)) {
 			 player.sendMessage(ChatColor.RED+" Ya estas en un Juego...");
 			 return false;
-		 }if(!ExistMap(map)) {
+		 }if(!existMap(map)) {
 			 player.sendMessage(ChatColor.RED+" Ese Mapa no Existe...");
 			 return false;
-		 }if(ConditionsToStartGame(player,map)) {
+		 }if(conditionsToStartGame(player,map)) {
 			return true;//visto bueno para entrar
 		 }
 	    return false;
 	}
 	
 	
-	public boolean ConditionsToStartGame(Player player,String map) {
-		if(HasMaintenance()) {
+	public boolean conditionsToStartGame(Player player,String map) {
+		if(hasMaintenance()) {
 			if(!player.isOp()) {
 				player.sendMessage(Utils.warningLineMessage(44));
 				player.sendMessage("");
@@ -1597,23 +1605,24 @@ public class GameConditions {
 			}
 		}
 		
+		   
+		GameInfo minfo = plugin.getGameInfoPoo().get(map);
+		FileConfiguration data = minfo.getMapData();
+		FileConfiguration playerdata = plugin.getPoints();
+		int playerlvl = playerdata.getInt("Players."+player.getName()+".Level",0);
 		  
-		 
-		 FileConfiguration mision = getGameConfig(map);
-		 GameInfo minfo = plugin.getGameInfoPoo().get(map);
-		 
 		 if(minfo instanceof GameAdventure) {
-				GameAdventure ga = (GameAdventure) minfo;
+				 GameAdventure ga = (GameAdventure) minfo;
 				 BossBar boss = minfo.getBossbar();
 				 GameType misiontype = minfo.getGameType();
 				 int maxplayers = minfo.getMaxPlayers();
 				 ReportsManager cooldown = new ReportsManager(plugin) ;
 				 
 				 if(cooldown.HasSancionPlayer(player)) {
-						
+						 
 					 return false;
 				 }
-				if(!mision.contains("Pre-Lobby")) {
+				if(!data.contains("Pre-Lobby")) {
 					 if(player.isOp()) {
 						 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el PreLobby");
 					 }
@@ -1622,7 +1631,7 @@ public class GameConditions {
 					 }
 					 return false;
 				 }
-				 if(!mision.contains("Spawn")) {
+				 if(!data.contains("Spawn")) {
 					 if(player.isOp()) {
 						 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el Spawn");
 					 }
@@ -1631,7 +1640,7 @@ public class GameConditions {
 					 }
 					 return false;
 				 }
-				 if(!mision.contains("Spawn-Spectator")) {
+				 if(!data.contains("Spawn-Spectator")) {
 					 if(player.isOp()) {
 						 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el Spawn-Spectator");
 					 }
@@ -1640,7 +1649,7 @@ public class GameConditions {
 					 }
 					 return false;
 					 
-				 }if(misiontype == GameType.RESISTENCE && !mision.contains("Spawn-End")) {
+				 }if(misiontype == GameType.RESISTENCE && !map.contains("Spawn-End")) {
 					 if(player.isOp()) {
 						 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el Spawn-Spectator");
 					 }
@@ -1652,6 +1661,23 @@ public class GameConditions {
 				 if(minfo.getGameStatus() == GameStatus.TERMINANDO) {
 					 player.sendMessage(ChatColor.RED+"La Partida esta terminando. ");
 					 return false;
+				 }
+				  
+				 if(playerlvl < minfo.getMinlvltoPlay()) {
+					 if(!player.isOp()) {
+						 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 20.0F, 1F);
+						 player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"NIVEL INSUFICIENTE DETECTADO");
+						 player.sendMessage(ChatColor.GRAY+"Tu Nivel es Demasiado Bajo para Jugar en este Mapa.");
+						 player.sendMessage(ChatColor.GOLD+"Nivel del Mapa: "+ChatColor.RED+minfo.getMinlvltoPlay()+ChatColor.GRAY+" Tu Nivel: "+ChatColor.GREEN+playerlvl);
+						 player.sendMessage(ChatColor.GRAY+"Sube tu Nivel. ");
+						 return false;
+					 }else {
+						 player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"NIVEL INSUFICIENTE DETECTADO OP BYPASS");
+						 player.sendMessage(ChatColor.GRAY+"Puedes Acceder pero revisa si el Nivel para Jugar del Mapa es el Correcto.");
+						 player.sendMessage(ChatColor.GOLD+"Nivel del Mapa: "+ChatColor.RED+minfo.getMinlvltoPlay()+ChatColor.GRAY+" Tu Nivel: "+ChatColor.GREEN+playerlvl);
+						 player.sendMessage(ChatColor.GRAY+"Sube tu Nivel. ");
+					 }
+					
 				 }
 				 
 				 if(ga.getParticipants().size() == maxplayers && minfo.getGameStatus() == GameStatus.COMENZANDO) {
@@ -1666,10 +1692,10 @@ public class GameConditions {
 					 JoinSpectator(player,map);
 					  
 					 return false;
-				 }if(mision.getBoolean("Requires-Permission")) {
-		 				String perm = mision.getString("Permission-To-Play");
+				 }if(data.getBoolean("Requires-Permission")) {
+		 				String perm = data.getString("Permission-To-Play");
 		 				if(!player.hasPermission(perm)) {
-		 					List<String> perml = mision.getStringList("How-Get-Permission.Message");
+		 					List<String> perml = data.getStringList("How-Get-Permission.Message");
 		 					if(!perml.isEmpty()) {
 		 						
 		 						player.sendMessage("");
@@ -1685,8 +1711,8 @@ public class GameConditions {
 		 					
 		 					return false;
 		 				}
-		 		 }if(mision.getBoolean("Has-Time")) {
-		 			 	String time = mision.getString("Usage-Time");
+		 		 }if(data.getBoolean("Has-Time")) {
+		 			 	String time = data.getString("Usage-Time");
 				    	if(time == null || time.isEmpty()){
 				    		if(player.isOp()) {
  
@@ -2644,7 +2670,7 @@ public class GameConditions {
 			List<String> spectator = ga.getSpectators();
 			List<String> arrives = ga.getArrivePlayers();
 			
-			if(!HasMaintenance() || !isBlockedTheMap(map.getMapName())) {
+			if(!hasMaintenance() || !isBlockedTheMap(map.getMapName())) {
 				saveMapFrequencysmg(map);
 			}
 			
@@ -2826,7 +2852,7 @@ public class GameConditions {
 		MgTeams mt = new MgTeams(plugin);
 		 if(ms instanceof GameAdventure) {
 				//GameAdventure ga = (GameAdventure) ms;
-				SetDefaultHeartsInGame(player);
+				setDefaultHeartsInGame(player);
 				BossBar boss = ms.getBossbar();
 				boss.removePlayer(player);
 				
@@ -2859,7 +2885,7 @@ public class GameConditions {
 							/* NUMERO DE PARTICULAS */50, 2, 5, 2, /* velocidad */0, null, true);
 		 }else if(ms instanceof GameNexo) {
 			// GameNexo gn = (GameNexo) ms;
-			    SetDefaultHeartsInGame(player);
+			    setDefaultHeartsInGame(player);
 				BossBar boss = ms.getBossbar();
 				boss.removePlayer(player);
 				System.out.println("LOG 2 RESTORE ANTES NEXO: "+ms.ShowGame());
@@ -2878,10 +2904,10 @@ public class GameConditions {
 		FileConfiguration mision = getGameConfig(map);
 		
 			//name =
-		  if(!CanUseKit(map)) {
+		  if(!canUseKit(map)) {
 			return;  
 		  }
-		  if(!ExistKit(map)) {
+		  if(!existKit(map)) {
 				 
 			  if(player.isOp()) {
 				    String kit = mision.getString("Start-Kit");
@@ -3245,7 +3271,7 @@ public class GameConditions {
 	   public void StopGames(Player player , String name,StopMotive motive,String reason) {
 		    
 		   GameConditions gc = new GameConditions(plugin);
-			if(gc.ExistMap(name)) {
+			if(gc.existMap(name)) {
 				GameInfo ms = plugin.getGameInfoPoo().get(name);
 				if(ms instanceof GameAdventure) {
 					GameAdventure ga = (GameAdventure) ms;
@@ -4950,7 +4976,7 @@ public class GameConditions {
 	
 	public void showStatsMap(Player player , String map) {
 		
-		if(!ExistMap(map)) {
+		if(!existMap(map)) {
 			sendMessageToUserAndConsole(player,ChatColor.RED+"El Mapa "+ChatColor.GREEN+map+ChatColor.RED+" no existe. ");
 			return;
 		}
@@ -4974,12 +5000,14 @@ public class GameConditions {
 		int wins = mf.getInt("MapFrequency."+map+".Winning-Players");
 		int revives = mf.getInt("MapFrequency."+map+".Revive-Players");
 		int deads = mf.getInt("MapFrequency."+map+".Dead-Players");
+		int lvltoplay = getMinLvlToPlay(map);
 		
 		MapStatistics ms = new MapStatistics(timesplayed,participants,wins,revives,deads);
 		sendMessageToUserAndConsole(player,"");
 		sendMessageToUserAndConsole(player,"======================================");
 		sendMessageToUserAndConsole(player,""+ChatColor.RED+ChatColor.BOLD+"Informacion del Mapa: "+ChatColor.GREEN+map);
 		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Tiene Sistema de Revivir: "+ChatColor.GREEN+rs);
+		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Nivel Para Jugarlo: "+ChatColor.GREEN+lvltoplay);
 		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Ranked: "+ChatColor.GREEN+rk);
 		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Porcentaje por Perder: "+ChatColor.GREEN+getPointsLosePorcent(map)+"%");
 		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Estado: "+ChatColor.GREEN+locked);
@@ -5007,7 +5035,7 @@ public class GameConditions {
 	}
 	
 	public void sudoAllParticipants(Player player , String map,String command) {
-		if(!ExistMap(map)) {
+		if(!existMap(map)) {
 			sendMessageToUserAndConsole(player,ChatColor.RED+"El Mapa "+ChatColor.GREEN+map+ChatColor.RED+" no existe. ");
 			return;
 		}
@@ -5085,7 +5113,7 @@ public class GameConditions {
 				 it.setLocked(isBlockedTheMap(map));
 				 it.setWorking(menu.getBoolean(map+".Is-Working",true));
 				 it.setLore(menu.getStringList(map+".Lore-Item"));
-				 it.setMaintenance(HasMaintenance());
+				 it.setMaintenance(hasMaintenance());
 				 it.setRanked(isMapRanked(map));
 				 it.setTime(game.getBoolean("Has-Time"));
 				 it.setDatetime(map);
