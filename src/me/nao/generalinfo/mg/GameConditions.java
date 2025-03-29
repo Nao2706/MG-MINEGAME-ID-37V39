@@ -5009,7 +5009,7 @@ public class GameConditions {
 		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Tiene Sistema de Revivir: "+ChatColor.GREEN+rs);
 		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Nivel Para Jugarlo: "+ChatColor.GREEN+lvltoplay);
 		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Ranked: "+ChatColor.GREEN+rk);
-		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Porcentaje por Perder: "+ChatColor.GREEN+getPointsLosePorcent(map)+"%");
+		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Castigo de Puntos por Perder: "+ChatColor.GREEN+getPointsLosePorcent(map)+"%");
 		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Estado: "+ChatColor.GREEN+locked);
 		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Xp por Kill: "+ChatColor.GREEN+pointsperkill);
 		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Xp por Revivir: "+ChatColor.GREEN+pointsperrevive);

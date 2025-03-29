@@ -65,10 +65,11 @@ public class SystemOfLevels {
 	}
 	
 	public void calcXp(long generaltotalxp) {
+		long preresult = generaltotalxp < 0 ? 0 : generaltotalxp;
 		int lvl = 0;
 		long referencia = 1000;
 	  	long referencianterior = 0;
-	  	long puntajerestante = generaltotalxp;
+	  	long puntajerestante = preresult;
 	  	//CACLULA EL NIVEL EN BASE AL PUNTAJE 
 	  	while(puntajerestante > referencia) {
 	  		referencianterior = referencia;
