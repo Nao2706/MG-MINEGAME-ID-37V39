@@ -47,7 +47,9 @@ import org.bukkit.event.entity.AreaEffectCloudApplyEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityPotionEffectEvent.Cause;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -62,7 +64,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
-import me.nao.enums.mg.Items;
 import me.nao.enums.mg.Posion;
 import me.nao.enums.mg.ReviveStatus;
 import me.nao.generalinfo.mg.GameConditions;
@@ -230,7 +231,7 @@ public class SourceOfDamage implements Listener{
 				if(ent instanceof Player) {
 					
 					Player player = (Player) ent;
-					if(player.getInventory().getHelmet() != null && player.getInventory().getHelmet().isSimilar(Items.MASCARAANTIGASP.getValue())) {
+					if(player.getInventory().getHelmet() != null && isAntiGasMask(player, player.getInventory().getHelmet())) {
 						
 						e.setCancelled(true);
 					}
@@ -241,6 +242,32 @@ public class SourceOfDamage implements Listener{
 		}		
 				
 	}
+	
+	
+	   @EventHandler(priority = EventPriority.LOWEST)
+		public void mgPotionEffect(EntityPotionEffectEvent e) {
+		
+			Entity ent = e.getEntity();
+			Cause cause = e.getCause();
+			
+			if(cause == Cause.AREA_EFFECT_CLOUD) {
+				
+				if(ent instanceof Player) {
+					Player player = (Player) ent;
+					if(player.getInventory().getHelmet() != null && isAntiGasMask(player, player.getInventory().getHelmet())){
+						e.setCancelled(true);
+					}
+					return;
+				}else if(ent instanceof Monster) {
+					e.setCancelled(true);
+				}
+			}
+		
+			
+		
+			
+		}
+	
 	
 	//TODO MOVE EVNT
 	@EventHandler  //METODO

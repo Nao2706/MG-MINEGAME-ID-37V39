@@ -206,7 +206,7 @@ public class GameInfo {
 		return pointsloseporcent;
 	}
 	
-	public int getMinlvltoPlay() {
+	public int getlvltoPlay() {
 		return minlvltoplay;
 	}
 	
@@ -342,7 +342,7 @@ public class GameInfo {
 		this.data = data;
 	}
 
-	public void setMinlvltoPlay(int minlvltoplay) {
+	public void setlvltoPlay(int minlvltoplay) {
 		this.minlvltoplay = minlvltoplay;
 	}
 

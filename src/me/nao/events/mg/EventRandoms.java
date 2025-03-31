@@ -72,8 +72,6 @@ import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.EntityPotionEffectEvent;
-import org.bukkit.event.entity.EntityPotionEffectEvent.Cause;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
@@ -145,30 +143,7 @@ public class EventRandoms implements Listener{
 //			if(plugin.getPlayersLookingMgMenu().remove(player.getName()));
 //	   }
 //	
-	
-	   @EventHandler(priority = EventPriority.LOWEST)
-		public void mgPotionEffect(EntityPotionEffectEvent e) {
-		
-			Entity ent = e.getEntity();
-			Cause cause = e.getCause();
-			
-			if(cause == Cause.AREA_EFFECT_CLOUD) {
-				
-				if(ent instanceof Player) {
-					Player player = (Player) ent;
-					if(player.getInventory().getHelmet() != null && player.getInventory().getHelmet().isSimilar(new ItemStack(Material.CREEPER_HEAD))){
-						e.setCancelled(true);
-					}
-					return;
-				}else if(ent instanceof Monster) {
-					e.setCancelled(true);
-				}
-			}
-		
-			
-		
-			
-		}
+
 	
 	//@EventHandler(priority = EventPriority.LOWEST)
 	public void runev(PlayerToggleSprintEvent e) {
