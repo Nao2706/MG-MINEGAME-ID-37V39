@@ -1129,15 +1129,15 @@ public class EventRandoms implements Listener{
 							int timelife = rp.getRemainingTimeLife();
 							
 							if(timelife >= 41 && timelife <= 60) {
-								cm.SendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&a&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" \n&6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
+								cm.sendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&a&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" \n&6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
 
 							
 							}else if(timelife >= 21 && timelife <= 40) {
-								cm.SendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&e&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" \n&6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
+								cm.sendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&e&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" \n&6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
 
 								
 							}else if(timelife >= 1 && timelife <= 20) {
-								cm.SendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&c&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" \n&6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
+								cm.sendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&c&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" \n&6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
 
 								
 							}
@@ -1145,14 +1145,14 @@ public class EventRandoms implements Listener{
  
 						}else if(alive1.contains(player.getName())) {
 		
-							cm.SendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&a&lVIVO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &a"+message);
+							cm.sendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&a&lVIVO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &a"+message);
 						}else if(deads1.contains(player.getName())) {
 		
-							cm.SendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&c&lMUERTO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &e"+message);
+							cm.sendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&c&lMUERTO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &e"+message);
 		
 						}else if(spec.contains(player.getName())) {
 		
-							cm.SendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&f&lESPECTADOR&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &7"+message);
+							cm.sendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&f&lESPECTADOR&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &7"+message);
 						}
 						
 						//USA TEXT COMPONENT

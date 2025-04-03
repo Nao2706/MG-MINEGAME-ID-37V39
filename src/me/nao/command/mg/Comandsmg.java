@@ -316,7 +316,7 @@ public class Comandsmg implements CommandExecutor{
 				        	 for(int i = 2 ;i < args.length; i++) {
 								 mensaje = mensaje+args[i]+" "; 
 							 }
-							gc.SendMessageToAllUsersOfSameMapCommand(null, name, mensaje);
+							gc.sendMessageToAllUsersOfSameMapCommand(null, name, mensaje);
 							
 						}else {
 							gc.sendMessageToUserAndConsole(null,plugin.nombre+ChatColor.GREEN+" Usa /mg message <map> <message>");
@@ -331,7 +331,7 @@ public class Comandsmg implements CommandExecutor{
 				        	 for(int i = 2 ;i < args.length; i++) {
 								 mensaje = mensaje+args[i]+" "; 
 							 }
-							gc.SendTittleToAllUsersOfSameMapCommand(null, name, mensaje);
+							gc.sendTittleToAllUsersOfSameMapCommand(null, name, mensaje);
 							
 						}else {
 							gc.sendMessageToUserAndConsole(null,plugin.nombre+ChatColor.GREEN+" Usa /mg tittle <map> <message1 ; message2>");
@@ -1526,6 +1526,9 @@ public class Comandsmg implements CommandExecutor{
 			
 						
 				return true;
+			}else if(args[0].equalsIgnoreCase("text")) {
+				Utils.sendTextComponentItem(player,ChatColor.GREEN+"Tu Item es: ", player.getInventory().getItemInMainHand());
+				return true;
 			}else if(args[0].equalsIgnoreCase("end-fa")){
 				
 				String group = args[1];
@@ -1846,7 +1849,7 @@ public class Comandsmg implements CommandExecutor{
 								 mensaje = mensaje+args[i]+" "; 
 								 
 							 }
-							gc.SendMessageToAllUsersOfSameMapCommand(player, name, mensaje);
+							gc.sendMessageToAllUsersOfSameMapCommand(player, name, mensaje);
 						}else {
 							player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg message <map> <message>");
 						}
@@ -1868,7 +1871,7 @@ public class Comandsmg implements CommandExecutor{
 				        	 for(int i = 2 ;i < args.length; i++) {
 								 mensaje = mensaje+args[i]+" "; 
 							 }
-							gc.SendTittleToAllUsersOfSameMapCommand(player, name, mensaje);
+							gc.sendTittleToAllUsersOfSameMapCommand(player, name, mensaje);
 						}else {
 							player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg tittle <map> <message1 ; message2>");
 						}

@@ -7,13 +7,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.ItemTag;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.hover.content.Item;
 
 
 public class Utils {
@@ -110,6 +114,27 @@ public class Utils {
 		    //m1.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/mg join "));
 		    return m1;
 		}
+		
+		@SuppressWarnings("deprecation")
+		public static TextComponent sendTextComponentItem(Player player ,String text ,ItemStack is) {
+		   // String output = "Whatever you want the line of text you'll hover over to be.";
+		    TextComponent cLink = new TextComponent(text+" "+is.getItemMeta().getDisplayName());
+		         
+		            //this is the magic line, gets us the item meta of an existing item stack so we can send it to the hoverEvent
+		            //ItemTag itemTag = ItemTag.ofNbt(is.getItemMeta() == null ? null : is.getItemMeta().getAsString());
+		            ItemTag itemTag = ItemTag.ofNbt(is.getItemMeta() == null ? null : is.getItemMeta().toString());
+		     //****NOTE**** if you are trying to do this on 1.17 you must replace .getAsString() with .toString()
+		         	//DynamicOps<JsonElement> dyna = CraftRegistry.getMinecraftR
+		    		System.out.println("TEXT: "+itemTag);
+		            cLink.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, new Item(is.getType().getKey().toString(), is.getAmount(),ItemTag.ofNbt(itemTag.getNbt()))));
+
+		            cLink.setText(ChatColor.translateAlternateColorCodes('&', cLink.getText()));
+
+		            //then simply send it to the player
+		          player.spigot().sendMessage(cLink);
+		      return cLink;
+		}
+		
 		
 		
 		public static BaseComponent sendTextComponentfromBaseComponent(TextComponent... textcomponent) {

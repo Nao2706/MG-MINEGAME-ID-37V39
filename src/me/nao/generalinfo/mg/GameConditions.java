@@ -583,7 +583,7 @@ public class GameConditions {
 		GameInfo gi = plugin.getGameInfoPoo().get(map);
 		
 		if(gi.getGameStatus() == GameStatus.ESPERANDO) {
-			 SendMessageToAllUsersOfSameMap(player, ChatColor.GREEN+"\nSe a Forzado a Comenzar el Juego.\n"+ChatColor.GOLD+"La partida Comenzara en: "+ChatColor.RED+gi.getCountDownStart()+ChatColor.GREEN+" segundos.\n ");
+			 sendMessageToAllUsersOfSameMap(player, ChatColor.GREEN+"\nSe a Forzado a Comenzar el Juego.\n"+ChatColor.GOLD+"La partida Comenzara en: "+ChatColor.RED+gi.getCountDownStart()+ChatColor.GREEN+" segundos.\n ");
 			 gi.setGameStatus(GameStatus.COMENZANDO);
 			 
 			 if(gi.getGameType() == GameType.ADVENTURE) {
@@ -1200,7 +1200,7 @@ public class GameConditions {
 				if(ms.getGameStatus() == GameStatus.COMENZANDO) {
 				     int  segundo = ga.getCountDownStart();
 				
-					 SendMessageToAllUsersOfSameMap(player, ChatColor.GREEN+"\nSe a alcanzado el minimo de Jugadores necesarios.\n"+ChatColor.GOLD+"La partida Comenzara en: "+ChatColor.RED+segundo+ChatColor.GREEN+" segundos.\n ");
+					 sendMessageToAllUsersOfSameMap(player, ChatColor.GREEN+"\nSe a alcanzado el minimo de Jugadores necesarios.\n"+ChatColor.GOLD+"La partida Comenzara en: "+ChatColor.RED+segundo+ChatColor.GREEN+" segundos.\n ");
 			 
 				}
 				
@@ -2342,7 +2342,7 @@ public class GameConditions {
 	
 	
 	//TODO CHAT
-	public void SendMessageToAllUsersOfSameMap(Player player ,String text) {
+	public void sendMessageToAllUsersOfSameMap(Player player ,String text) {
 		
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		String map = pl.getMapName();
@@ -2373,8 +2373,8 @@ public class GameConditions {
 	
 	
 	//TODO CHAT
-	public void SendMessageTextComponentToAllUsersOfSameMap(Player player ,String text) {
-		
+	public void sendMessageTextComponentToAllUsersOfSameMap(Player player ,String text,ItemStack it) {
+		 
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		String map = pl.getMapName();
 		GameInfo ms = plugin.getGameInfoPoo().get(map);
@@ -2388,13 +2388,13 @@ public class GameConditions {
 				List<Player> spect = ConvertStringToPlayer(ga.getSpectators());
 				
 				for(Player target : play) {
-					
-					target.spigot().sendMessage(Utils.sendTextComponentfromBaseComponent(Utils.sendTextComponentShow(rp.getRankPrestigeColor(pl.getMgPlayerPrestige()),"PRESTIGIO",net.md_5.bungee.api.ChatColor.GREEN),Utils.sendTextComponent(text)));
+					//target.spigot().sendMessage(Utils.sendTextComponentItem(text, it));
+				target.spigot().sendMessage(Utils.sendTextComponentfromBaseComponent(Utils.sendTextComponentShow(rp.getRankPrestigeColor(pl.getMgPlayerPrestige()),"PRESTIGIO",net.md_5.bungee.api.ChatColor.GREEN),Utils.sendTextComponent(text)));
 				}
 				
 				if(!spect.isEmpty()) {
 					for(Player target : spect) {
-					
+						//target.spigot().sendMessage(Utils.sendTextComponentItem(text, it));
 						target.spigot().sendMessage(Utils.sendTextComponentfromBaseComponent(Utils.sendTextComponentShow(rp.getRankPrestigeColor(pl.getMgPlayerPrestige()),"PRESTIGIO",net.md_5.bungee.api.ChatColor.GREEN),Utils.sendTextComponent(text)));
 					}
 				}
@@ -2403,7 +2403,7 @@ public class GameConditions {
 	}
 	
 	//TODO CHAT
-	public void SendMessageToAllUsersOfSameMapCommand(Player player, String map ,String text) {
+	public void sendMessageToAllUsersOfSameMapCommand(Player player, String map ,String text) {
 		
 		if(!isMapinGame(map)) {
 			
@@ -2445,7 +2445,7 @@ public class GameConditions {
 	
 	//mg message Tutorial hola que hacen ???
 	//mg tittle Tutorial hola que hacen ??? ; que mas
-	public void SendTittleToAllUsersOfSameMapCommand(Player player, String map ,String text) {
+	public void sendTittleToAllUsersOfSameMapCommand(Player player, String map ,String text) {
 		
 		if(!isMapinGame(map)) {
 			
@@ -2776,6 +2776,10 @@ public class GameConditions {
 			sendMessageToUserAndConsole(player,"");	
 			sendMessageToUserAndConsole(player,""+ChatColor.RED+ChatColor.BOLD+"INFORME DEL PROGRESO DEL JUEGO");
 			sendMessageToUserAndConsole(player,ChatColor.GRAY+"=============================");
+			sendMessageToConsole(""+ChatColor.GRAY+"MAPA: "+ChatColor.WHITE+ga.getMapName());
+			sendMessageToConsole(""+ChatColor.GRAY+"DEFAULT TIMER: "+ChatColor.GREEN+ga.getGameTime().getGameTimerDefaultForResult());
+			sendMessageToConsole(""+ChatColor.GRAY+"DURACION: "+ChatColor.WHITE+ga.getGameTime().getGameCronometForResult());
+			sendMessageToConsole(""+ChatColor.GRAY+"TIMER: "+ChatColor.WHITE+ga.getGameTime().getGameTimerForResult());
 			if(participants.isEmpty()) {
 				sendMessageToUserAndConsole(player,""+ChatColor.GRAY+ChatColor.BOLD+"PARTICIPANTES: "+ChatColor.WHITE+"SIN PARTICIPANTES");
 			}else {
@@ -2790,12 +2794,16 @@ public class GameConditions {
 			if(alive.isEmpty()) {
 				sendMessageToUserAndConsole(player,""+ChatColor.GREEN+ChatColor.BOLD+"VIVOS: "+ChatColor.WHITE+"SIN SUPERVIVIENTES");
 			}else {
+				
+				NumberFormat nf = NumberFormat.getInstance();
+				nf.setGroupingUsed(false);
+				nf.setMaximumFractionDigits(0);
 				String comments =  ""+ChatColor.GREEN+ChatColor.BOLD+"VIVOS: ";
 				for(Player p : ConvertStringToPlayer(alive)) {
-					comments = comments+ChatColor.GREEN+p.getName()+ChatColor.WHITE+" Vida:"+ChatColor.RED+p.getHealth()+ChatColor.GOLD+",";
+					comments = comments+ChatColor.GREEN+p.getName()+ChatColor.WHITE+" Vida:"+ChatColor.RED+nf.format(p.getHealth())+ChatColor.GOLD+" ,";
 				}
 				
-				comments = comments+ChatColor.GREEN+ChatColor.BOLD+" SOBREVIVIERON: "+ChatColor.GOLD+alive.size();
+				comments = comments+ChatColor.GREEN+ChatColor.BOLD+" SUPERVIVIENTES: "+ChatColor.GOLD+alive.size();
 				sendMessageToUserAndConsole(player,comments);
 
 			}
