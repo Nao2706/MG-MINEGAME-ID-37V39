@@ -1527,7 +1527,13 @@ public class Comandsmg implements CommandExecutor{
 						
 				return true;
 			}else if(args[0].equalsIgnoreCase("text")) {
-				Utils.sendTextComponentItem(player,ChatColor.GREEN+"Tu Item es: ", player.getInventory().getItemInMainHand());
+				
+				//Component ct = Component.text("hola");
+				
+				//Bukkit.spigot().broadcast(Component.text("My item is").hoverEvent((@Nullable HoverEventSource<?>) player.getInventory().getItemInMainHand()));
+				
+				//Utils.sendTextComponentItem(player,ChatColor.GREEN+"Tu Item es: ", );
+				//Utils.iteminfo(player.getInventory().getItemInMainHand());
 				return true;
 			}else if(args[0].equalsIgnoreCase("end-fa")){
 				

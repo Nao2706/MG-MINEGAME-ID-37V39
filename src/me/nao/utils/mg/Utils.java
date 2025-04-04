@@ -3,10 +3,14 @@ package me.nao.utils.mg;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -115,27 +119,83 @@ public class Utils {
 		    return m1;
 		}
 		
+		public static void iteminfo(ItemStack it) {
+			//List<Map.Entry<String, Integer>> list = new ArrayList<>(scores.entrySet());
+			
+			System.out.println("NAME"+it.getItemMeta().getDisplayName());
+			
+			List<String> lore = it.getItemMeta().getLore();
+			for(String t : lore) {
+				System.out.println("Lore:"+t);
+			}
+		
+			List<Map.Entry<Attribute,AttributeModifier>> list = new ArrayList<>(it.getItemMeta().getAttributeModifiers().entries());
+			for(Map.Entry<Attribute,AttributeModifier> e : list) {
+				
+				System.out.println("Atr"+e.getKey().getKeyOrThrow()+" value:"+ e.getValue().getAmount()+" slot:"+e.getValue().getSlotGroup() );
+			}
+			
+			List<Map.Entry<Enchantment,Integer>> list2 = new ArrayList<>(it.getItemMeta().getEnchants().entrySet());
+			for(Map.Entry<Enchantment,Integer> e : list2) {
+				System.out.println("encan"+e.getKey()+" lvl:"+ e.getValue());
+			}
+		}
+		
 		@SuppressWarnings("deprecation")
 		public static TextComponent sendTextComponentItem(Player player ,String text ,ItemStack is) {
+			
+			
 		   // String output = "Whatever you want the line of text you'll hover over to be.";
 		    TextComponent cLink = new TextComponent(text+" "+is.getItemMeta().getDisplayName());
-		         
+		    TextComponent cLink2 = new TextComponent();
+		    TextComponent cLink3 = new TextComponent();
 		            //this is the magic line, gets us the item meta of an existing item stack so we can send it to the hoverEvent
 		            //ItemTag itemTag = ItemTag.ofNbt(is.getItemMeta() == null ? null : is.getItemMeta().getAsString());
-		            ItemTag itemTag = ItemTag.ofNbt(is.getItemMeta() == null ? null : is.getItemMeta().toString());
-		     //****NOTE**** if you are trying to do this on 1.17 you must replace .getAsString() with .toString()
-		         	//DynamicOps<JsonElement> dyna = CraftRegistry.getMinecraftR
-		    		System.out.println("TEXT: "+itemTag);
-		            cLink.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, new Item(is.getType().getKey().toString(), is.getAmount(),ItemTag.ofNbt(itemTag.getNbt()))));
-
+		    
+		    		String t1 = is.getItemMeta().toString();
+		    		String t2 = is.getItemMeta().getAsComponentString();
+		    		String t3 = is.getItemMeta().getAsString();// SUPUESTAMENTE HASTA LE VERSION 1.20.4 FUNCIONABA CON ESTO
+//		    		String components = is.getItemMeta().getAsComponentString(); // example: "[minecraft:damage=53]"
+//		    		 String itemTypeKey = is.getType().getKey().toString(); // example: "minecraft:diamond_sword"
+//		    		 String itemAsString = itemTypeKey + components; // results in: "minecraft:diamond_sword[minecraft:damage=53]"
+//
+//		    		 ItemStack recreatedItemStack = Bukkit.getItemFactory().createItemStack(itemAsString);
+//		    		 assert is.isSimilar(recreatedItemStack); // Should be true*
+		    		ItemTag itemtag = ItemTag.ofNbt(t1);
+		    		ItemTag itemtag2 = ItemTag.ofNbt(t2);
+		    		ItemTag itemtag3 = ItemTag.ofNbt(t3);
+		    		System.out.println("T1: "+t1);// ELIMINADO EN PRUEBA POR MENCION DE UNSPECIFIC_META 
+		    		System.out.println("T2: "+t2);
+		    		System.out.println("T3: "+t3);
+//		    		Map<String,Object> seri = is.serialize();
+//		    		System.out.println("Seri: "+seri.toString());
+//		            //ItemTag itemtag = ItemTag.ofNbt(is.getItemMeta() == null ? null : seri.toString());
+//		     //****NOTE**** if you are trying to do this on 1.17 you must replace .getAsString() with .toString()
+//		        	System.out.println("toString: "+is.getItemMeta().toString());
+//		         	//DynamicOps<JsonElement> dyna = CraftRegistry.getMinecraftR
+//		    		System.out.println("ItemTag: "+itemtag);
+//		    		
+//		    		System.out.println("desSeri: "+ItemStack.deserialize(seri).toString());
+//		    		 ItemTag itemtag2 = ItemTag.ofNbt(is.getItemMeta() == null ? null : ItemStack.deserialize(seri).toString());
+		    		Item it = new Item(is.getType().getKey().toString(),is.getAmount(),itemtag);
+		    		Item it2 = new Item(is.getType().getKey().toString(),is.getAmount(),itemtag2);
+		    		Item it3 = new Item(is.getType().getKey().toString(),is.getAmount(),itemtag3);
+		            cLink.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, it));
+		            cLink2.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, it2));
+		            cLink3.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, it3));
 		            cLink.setText(ChatColor.translateAlternateColorCodes('&', cLink.getText()));
-
+		            cLink2.setText("Hola");
+		            cLink3.setText("Hola3");
 		            //then simply send it to the player
 		          player.spigot().sendMessage(cLink);
+		          player.spigot().sendMessage(cLink2);
+		          player.spigot().sendMessage(cLink3);
 		      return cLink;
 		}
 		
+
 		
+	
 		
 		public static BaseComponent sendTextComponentfromBaseComponent(TextComponent... textcomponent) {
 			ComponentBuilder cb = new ComponentBuilder();
@@ -146,6 +206,11 @@ public class Utils {
 		    return cb.build();
 		}
 		
+		public static void rand() {
+		
+			
+		
+		}
 		
 		public static String pingLevel(int ping) {
 			String text = "";

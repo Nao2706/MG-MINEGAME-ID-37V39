@@ -432,8 +432,8 @@ public class ReportsManager {
 	    		int inicio = (pag -1) * datosperpags;
 	    		int fin = inicio + datosperpags;
 	    		
-	    		int tamañolista = l.size();
-	    		int numerodepags = (int) Math.ceil((double) tamañolista /datosperpags);
+	    		int sizelista = l.size();
+	    		int numerodepags = (int) Math.ceil((double) sizelista /datosperpags);
 	    		
 	    		if(pag > numerodepags) {
 	    			if(player != null) {

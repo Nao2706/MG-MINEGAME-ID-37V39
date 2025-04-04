@@ -238,7 +238,7 @@ public class PointsManager {
 				//SUBE DE NIVEL
 			if(currentplayertotalxpwithchanges > limitoflvlxp) {
 				//POSIBLE ERROR FANTASMA CON VALORES NEGATIVOS
-				manager2.setRemaingxp(displayxp-limitoflvlxp);
+				manager2.setRemaingxp(limitoflvlxp-displayxp);
 				long result = manager2.getRemaingxp() < 0 ? 0 : manager2.getRemaingxp();
 				player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,player.getLocation().add(0.5, 1, 0.5), 100);
 				player.sendMessage("     "+ChatColor.DARK_PURPLE+ChatColor.BOLD+ChatColor.MAGIC+"[]"+ChatColor.GREEN+ChatColor.BOLD+ChatColor.UNDERLINE+" SUBES DE NIVEL "+ChatColor.DARK_PURPLE+ChatColor.BOLD+ChatColor.MAGIC+"[]");
@@ -257,7 +257,7 @@ public class PointsManager {
 				
 				//BAJA DE NIVEL
 			}else if(currentplayertotalxpwithchanges < baseoflvlxp && currentlvl != 0) {
-				System.out.println(currentplayertotalxpwithchanges+" "+manager2.getReferenceA()+" ="+(currentplayertotalxpwithchanges-manager2.getReferenceA()));
+				//System.out.println(currentplayertotalxpwithchanges+" "+manager2.getReferenceA()+" ="+(currentplayertotalxpwithchanges-manager2.getReferenceA()));
 				manager2.setRemaingxp(currentplayertotalxpwithchanges-manager2.getReferenceA());
 				
 				long result = manager2.getRemaingxp() < 0 ? 0 : manager2.getRemaingxp();
