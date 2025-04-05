@@ -84,6 +84,8 @@ public class SystemOfLevels {
 	  	setPlayerlvl(lvl);
 	  	setReferenceA(referencianterior);
 	  	setReferenceB(referencia);
+	  	rangeOfLvl(lvl);
+	  	setRemaingxp(generaltotalxp-getTotalxplvlA());
 	  	
     }
 	

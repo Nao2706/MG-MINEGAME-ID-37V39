@@ -169,11 +169,12 @@ public class PointsManager {
 			
 			
 			SystemOfLevels manager = new SystemOfLevels();
-			
+			//CALCULAR XP DE NIVEL LA BASE Y EL LIMITE
 			manager.rangeOfLvl(currentlvl);
 			long baseoflvlxp = manager.getTotalxplvlA();
 			long limitoflvlxp = manager.getTotalxplvlB();
 			
+			//SI PERDIO ESTO ESTARA EN TRUE SINO SERA FALSE
 			boolean playerlose = false;
 			if(gi instanceof GameAdventure) {
 				GameAdventure ga = (GameAdventure) gi;
@@ -182,15 +183,20 @@ public class PointsManager {
 				}
 			}
 		
+			//RECHA
 			int calcstreaks = streak * 100;
+			//DISPLAY DE XP : LO QUE CONSIGUIO DE XP EN UNA PARTIDA SE POSITIVO O NEGATIVO
 			long displayxp = (savexp+calcstreaks+val);
+			//XP REAL: LO QUE EL JUGADOR RALMENTE TIENE DE XP SUMANDO LOS NIVELES BASE MAS LA XP GUARDADA + RACHA + XP QUE GANO EN PARTIDA
 			long currentplayertotalxpwhithoutchanges = (manager.getTotalplayerxp()+savexp+calcstreaks+val);
 			//System.out.println("current "+savexp+" "+calcstreaks+" "+val+"= "+currentplayertotalxpwhithoutchanges);
 			//long copyeofcurrentplayertotal = displayxp;
+			
+			//COPIA DE LA XP TOTAL PARA PODER REALIZAR MODIFICACIONES Y POSTERIOR PRINTEAR DIFERENCIAS.
 			long currentplayertotalxpwithchanges = currentplayertotalxpwhithoutchanges;
 			
-			//le quita porcentaje al valor original antes de calcularlo con el sistema de niveles por ende en un ejemplo qu
-			// que el jugador tenga 1001 de xp + 100 de xp guardada da 1101 - 500 da 601 - el 1 %
+			//SE MODIFICA EL VALOR COPIADO PARA VER CUAL SERA EL VERDADERO PUNTAJE EN CASO DE PERDER 
+			// SI EL JUGADOR TIENE DE BASE 1001 + 100 XP = 1101 Y SI PIERDE -500 SERIA 601 Y SI RECIBE -1% SERIA 594
 			if(playerlose) {
 				currentplayertotalxpwithchanges = (int) negativePointIncrease(currentplayertotalxpwithchanges,gi.getPointsLosePorcent());
 				displayxp = (int) negativePointIncrease(displayxp,gi.getPointsLosePorcent());
@@ -198,15 +204,16 @@ public class PointsManager {
 			//System.out.println("current22 "+displayxp);
 			//System.out.println("current2 "+currentplayertotalxpwithchanges);
 			//SE LO USA PARA MOSTRAR EN MENSAJES DATOS
+			
+			//PRINTEAR DATOS
 			GamePoints gp = pl.getGamePoints();
 			//player.sendMessage("Has Ganado "+val+" de Xp para el modo Ranked.");
 			player.sendMessage("");
-			player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+ChatColor.UNDERLINE+"| INFORME DE XP|");
+			player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+ChatColor.UNDERLINE+"|TU INFORME DE XP|"+Utils.colorTextChatColor("&6"+player.getName()));
 			player.sendMessage("");
 			player.sendMessage(Utils.colorTextChatColor("&6El Mapa: &a"+pl.getMapName()+" &6da la Siguiente XP por Cada&f:"));
 			player.sendMessage(Utils.colorTextChatColor("&7Kill: &a"+gi.getPointsPerKills()+" &7Muerte: &a"+gi.getPointsPerDeads()+" &7Revivir: &a"+gi.getPointsPerRevive()+" &7Ayudara Revivir: &a"+gi.getPointsPerHelpRevive()));
 			player.sendMessage(Utils.colorTextChatColor("&aEl Bonus de este Mapa es: &6"+gi.getPointsBonus()));
-			player.sendMessage(Utils.colorTextChatColor("&aTus Datos: &6"+player.getName()));
 			player.sendMessage(Utils.colorTextChatColor("&7Kills: &a"+gp.getKills()+" &7Muertes: &a"+gp.getDeads()+" &7Revivido: &a"+gp.getRevive()+" &7Ayudas a Revivir: &a"+gp.getHelpRevive()));
 
 			player.spigot().sendMessage(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.DARK_GRAY+"- "+net.md_5.bungee.api.ChatColor.GRAY+"Xp de tu Nivel: "+net.md_5.bungee.api.ChatColor.GREEN+manager.getTotalplayerxp(),"La Experiencia que tu nivel Tiene", net.md_5.bungee.api.ChatColor.GOLD));
@@ -225,27 +232,29 @@ public class PointsManager {
 			cb.append(Utils.sendTextComponent(net.md_5.bungee.api.ChatColor.RED+" = "));
 			cb.append(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.DARK_PURPLE+String.valueOf(currentplayertotalxpwithchanges),"Total de Puntos. ", net.md_5.bungee.api.ChatColor.GOLD));
 			if(playerlose) {
-				cb.append(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.RED+" Castigo por Perder: -"+String.valueOf(gi.getPointsLosePorcent())+"%"+net.md_5.bungee.api.ChatColor.GREEN+" \nXP Original:"+net.md_5.bungee.api.ChatColor.GOLD+currentplayertotalxpwhithoutchanges,"Si tu XP es positiva es Descuento.\nSi tu XP es negativa enpeorara.", net.md_5.bungee.api.ChatColor.RED));
+				cb.append(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.RED+" Castigo por Perder: -"+String.valueOf(gi.getPointsLosePorcent())+"%"+net.md_5.bungee.api.ChatColor.GREEN+" \nXP Original:"+net.md_5.bungee.api.ChatColor.GOLD+currentplayertotalxpwhithoutchanges,"Si tu XP es Positiva es Descuento.\nSi tu XP es Negativa empeorara.", net.md_5.bungee.api.ChatColor.RED));
 			}
 			
 			player.spigot().sendMessage(cb.create());
 			player.sendMessage("");
 			
-			
+			//SE VUELVE A CALCULAR EL NIVEL EN BASE A LA EXPERIENCIA TOTAL 
 			SystemOfLevels manager2 = new SystemOfLevels();
 			manager2.calcXp(currentplayertotalxpwithchanges);
 			
 				//SUBE DE NIVEL
+			//SE COMPRUEBA QUE EL TOTAL DE XP CON CAMBIOS SEA MAYOR AL LIMITE DEL NIVEL QUE TUVO PARA VER SI SUBE DE NIVEL
 			if(currentplayertotalxpwithchanges > limitoflvlxp) {
-				//POSIBLE ERROR FANTASMA CON VALORES NEGATIVOS
-				manager2.setRemaingxp(limitoflvlxp-displayxp);
-				long result = manager2.getRemaingxp() < 0 ? 0 : manager2.getRemaingxp();
+				//LA XP DEL JUEGO SE RESTA - POR LA REFERENCIA BASE DEL NUEVO NIVEL EJEMPLO XP 1002 - BASE -1001 = 1 XP RESTANTE
+			
+				//SI POR ALGUNA RAZON FUERA NEGATIVO SERIA 0 (NO DEBERIA ESTAR ESTO AQUI PUESTO QUE SOLO CALCULA SUBIDA)
+				
 				player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,player.getLocation().add(0.5, 1, 0.5), 100);
 				player.sendMessage("     "+ChatColor.DARK_PURPLE+ChatColor.BOLD+ChatColor.MAGIC+"[]"+ChatColor.GREEN+ChatColor.BOLD+ChatColor.UNDERLINE+" SUBES DE NIVEL "+ChatColor.DARK_PURPLE+ChatColor.BOLD+ChatColor.MAGIC+"[]");
 			  	player.sendMessage("");
 				player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"   DE "+ChatColor.YELLOW+ChatColor.BOLD+"LVL."+currentlvl+ChatColor.GOLD+ChatColor.BOLD+" >>> A >>> "+ChatColor.GREEN+ChatColor.BOLD+"LVL."+manager2.getPlayerlvl());
-				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"             ["+ChatColor.YELLOW+result+ChatColor.GOLD+ChatColor.BOLD+"/"+ChatColor.GREEN+manager2.getReferenceB()+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
-				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"            ["+getProgressBar(result, manager2.getReferenceB(),20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
+				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"             ["+ChatColor.YELLOW+manager2.getRemaingxp()+ChatColor.GOLD+ChatColor.BOLD+"/"+ChatColor.GREEN+manager2.getReferenceB()+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
+				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"            ["+getProgressBar(manager2.getRemaingxp(), manager2.getReferenceB(),20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
 				player.sendMessage(""+ChatColor.DARK_GRAY+"Total de XP General: "+ChatColor.GREEN+ChatColor.BOLD+currentplayertotalxpwithchanges);
 				player.sendMessage("");
 				
@@ -256,22 +265,22 @@ public class PointsManager {
 				saveAll();
 				
 				//BAJA DE NIVEL
+				//COMPRUEBA QUE EL TOTAL DE XP SEA MENOR A LA BASE DEL NIVEL ACTUAL LO QUE SIGNIFICA QUE BAJARIA DE NIVEL , SI ES IGUAL A0 NO SE EJECUTARA POR QUE NO
+				//PUEDES BAJARLE MAS A 0
 			}else if(currentplayertotalxpwithchanges < baseoflvlxp && currentlvl != 0) {
 				//System.out.println(currentplayertotalxpwithchanges+" "+manager2.getReferenceA()+" ="+(currentplayertotalxpwithchanges-manager2.getReferenceA()));
-				manager2.setRemaingxp(currentplayertotalxpwithchanges-manager2.getReferenceA());
-				
-				long result = manager2.getRemaingxp() < 0 ? 0 : manager2.getRemaingxp();
+				//COMO SE RECALCULA DE NUEVO LA XP SE RESTA DEL TOTAL DE XP LA REFERENCIA BASE
 				
 				player.sendMessage("     "+ChatColor.YELLOW+ChatColor.BOLD+ChatColor.MAGIC+"[]"+ChatColor.RED+ChatColor.BOLD+ChatColor.UNDERLINE+" BAJAS DE NIVEL "+ChatColor.YELLOW+ChatColor.BOLD+ChatColor.MAGIC+"[]");
 			  	player.sendMessage("");
 				player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"   DE "+ChatColor.YELLOW+ChatColor.BOLD+"LVL."+currentlvl+ChatColor.GOLD+ChatColor.BOLD+" >>> A >>> "+ChatColor.RED+ChatColor.BOLD+"LVL."+manager2.getPlayerlvl());
-				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"             ["+ChatColor.YELLOW+result+ChatColor.GOLD+ChatColor.BOLD+"/"+ChatColor.GREEN+manager2.getReferenceB()+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
-				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"            ["+getProgressBar(result, manager2.getReferenceB(),20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
+				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"             ["+ChatColor.YELLOW+manager2.getRemaingxp()+ChatColor.GOLD+ChatColor.BOLD+"/"+ChatColor.GREEN+manager2.getReferenceB()+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
+				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"            ["+getProgressBar(manager2.getRemaingxp(), manager2.getReferenceB(),20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
 				player.sendMessage(""+ChatColor.DARK_GRAY+"Total de XP General: "+ChatColor.GREEN+ChatColor.BOLD+currentplayertotalxpwithchanges);
 				player.sendMessage("");
 				
 				points.set("Players."+player.getName()+".Level",manager2.getPlayerlvl());
-				points.set("Players."+player.getName()+".Xp",result);
+				points.set("Players."+player.getName()+".Xp",manager2.getRemaingxp());
 				points.set("Players."+player.getName()+".Reference-Xp",manager2.getReferenceB());
 				
 				saveAll();
@@ -280,17 +289,17 @@ public class PointsManager {
 			}else{
 				//System.out.println(" "+manager.getReferenceB()+" - "+displayxp +" "+(manager.getReferenceB()-displayxp));
 				long result = displayxp < 0 ? 0 : displayxp;
-				
+				long leftpoints = manager2.getReferenceB()- displayxp;
 				String text = displayxp > 0 ? ChatColor.GREEN+" + Subiste." : ChatColor.RED+" - Bajaste.";
 				if(displayxp == savexp) {
 					player.sendMessage(ChatColor.DARK_GRAY+" Te Mantienes en el Mismo Puntaje de Xp "+ChatColor.YELLOW+savexp+ChatColor.DARK_GRAY+" con el que Entraste.");
 					text = ChatColor.YELLOW+" Se Mantiene";
 				}else if(displayxp > savexp) {
-					manager2.setRemaingxp(manager2.getReferenceB()-displayxp);
-					player.sendMessage(ChatColor.DARK_GRAY+" Te faltan "+ChatColor.GREEN+manager2.getRemaingxp()+ChatColor.DARK_GRAY+" Puntos de XP para Subir de Nivel.");
+				
+					player.sendMessage(ChatColor.DARK_GRAY+" Te faltan "+ChatColor.GREEN+leftpoints+ChatColor.DARK_GRAY+" Puntos de XP para Subir de Nivel.");
 				}else if(displayxp < savexp) {
-					manager2.setRemaingxp(manager2.getReferenceB()-displayxp);
-					player.sendMessage(ChatColor.DARK_GRAY+" Bajaste "+ChatColor.RED+manager2.getRemaingxp()+ChatColor.DARK_GRAY+" Puntos de XP para Subir de Nivel.");
+					
+					player.sendMessage(ChatColor.DARK_GRAY+" Bajaste "+ChatColor.RED+leftpoints+ChatColor.DARK_GRAY+" Puntos de XP para Subir de Nivel.");
 				}
 				
 				

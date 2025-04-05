@@ -141,6 +141,24 @@ public class Utils {
 			}
 		}
 		
+			@SuppressWarnings("deprecation")
+			public static void iteminfo2(Player player ,ItemStack it) {
+			
+				TextComponent cLink = new TextComponent("Hola mi item es: ");
+				
+				
+				
+				ItemTag itemtag = ItemTag.ofNbt(it.getItemMeta().toString());	
+				Item item = new Item(it.getType().getKey().toString(),it.getAmount(),itemtag);
+				cLink.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, item));
+				
+				ComponentBuilder cb = new ComponentBuilder(cLink);
+				BaseComponent[] bc = cb.create();
+				
+				player.spigot().sendMessage(bc);
+				
+		   }
+		
 		@SuppressWarnings("deprecation")
 		public static TextComponent sendTextComponentItem(Player player ,String text ,ItemStack is) {
 			

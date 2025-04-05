@@ -574,8 +574,7 @@ public class GameIntoMap {
 			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		
 			int puntos = pl.getGamePoints().getKills();
-			puntos = puntos+1;
-			
+			puntos = puntos +1;
 			pl.getGamePoints().setKills(puntos);
 			player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.GREEN+ChatColor.BOLD+"KILLS: "+ChatColor.RED+puntos));
 
