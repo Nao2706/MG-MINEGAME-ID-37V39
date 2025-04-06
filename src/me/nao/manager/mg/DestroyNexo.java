@@ -21,6 +21,7 @@ import me.nao.generalinfo.mg.TeamsMg;
 import me.nao.main.mg.Minegame;
 import me.nao.yamlfile.mg.YamlFilePlus;
 
+@SuppressWarnings("deprecation")
 public class DestroyNexo {
 
 	

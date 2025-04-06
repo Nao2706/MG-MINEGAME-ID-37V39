@@ -13,7 +13,7 @@ import me.nao.main.mg.Minegame;
 
 
 
-
+@SuppressWarnings("deprecation")
 public class Data {
 	
 	private Minegame plugin;

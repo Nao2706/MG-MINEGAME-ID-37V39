@@ -39,7 +39,7 @@ import me.nao.mobs.mg.MobsActions;
 import me.nao.scoreboard.mg.MgScore;
 
 
-
+@SuppressWarnings("deprecation")
 public class ResistenceTemp {
 
 	

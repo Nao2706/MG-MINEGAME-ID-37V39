@@ -35,7 +35,7 @@ import me.nao.generalinfo.mg.GameNexo;
 import me.nao.main.mg.Minegame;
 
 
-
+@SuppressWarnings("deprecation")
 public class NexoTemp {
 
 	
@@ -574,7 +574,8 @@ public class NexoTemp {
     }
 	
  
-    @SuppressWarnings("deprecation")
+ 
+	@SuppressWarnings("removal")
 	public void ShootEntityToPlayer(Player player) {
     	
     	List<Entity> l = getNearbyEntites(player.getLocation(),150);

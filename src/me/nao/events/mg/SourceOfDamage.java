@@ -75,7 +75,7 @@ import me.nao.mobs.mg.MobsActions;
 import me.nao.revive.mg.RevivePlayer;
 
 
-
+@SuppressWarnings("deprecation")
 public class SourceOfDamage implements Listener{
 
 	private Minegame plugin;
@@ -850,7 +850,8 @@ public class SourceOfDamage implements Listener{
 	
 	
 	
-	@SuppressWarnings("deprecation")
+	
+	@SuppressWarnings("removal")
 	@EventHandler
 	public void shootm(ProjectileLaunchEvent e) {
 		Entity m = (Entity) e.getEntity().getShooter();
@@ -1017,7 +1018,8 @@ public class SourceOfDamage implements Listener{
 		
 	}
 	
-	@SuppressWarnings("deprecation")
+
+	@SuppressWarnings("removal")
 	public void SpawnArrowsFireMob(Entity e,float addy ,float addp ) {
 		
 		Location loc = e.getLocation();

@@ -13,7 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import me.nao.main.mg.Minegame;
 import me.nao.utils.mg.Utils;
 
-
+@SuppressWarnings("deprecation")
 public class ItemMenu {
 
 	private String code , displayname , datetime , permissionforplay;

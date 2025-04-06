@@ -19,7 +19,7 @@ import me.nao.generalinfo.mg.ObjetivesMG;
 import me.nao.generalinfo.mg.PlayerInfo;
 import me.nao.main.mg.Minegame;
 
-
+@SuppressWarnings("deprecation")
 public class PHMiniGame extends PlaceholderExpansion{
 
 	

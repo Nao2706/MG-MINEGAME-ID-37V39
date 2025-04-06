@@ -12,6 +12,8 @@ import me.nao.generalinfo.mg.GameInfo;
 import me.nao.generalinfo.mg.PlayerInfo;
 import me.nao.main.mg.Minegame;
 
+
+@SuppressWarnings("deprecation")
 public class AutoRevivePlayerBeta {
 
 	

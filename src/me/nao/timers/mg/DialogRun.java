@@ -17,7 +17,7 @@ import me.nao.main.mg.Minegame;
 
 
 
-
+@SuppressWarnings("deprecation")
 public class DialogRun {
 
 	

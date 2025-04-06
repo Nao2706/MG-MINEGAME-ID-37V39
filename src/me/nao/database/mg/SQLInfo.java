@@ -17,7 +17,7 @@ import org.bukkit.inventory.ItemStack;
 
 import me.nao.main.mg.Minegame;
 
-
+@SuppressWarnings("deprecation")
 public class SQLInfo {
  
 	private  Minegame plugin;

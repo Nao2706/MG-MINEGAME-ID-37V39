@@ -9,6 +9,7 @@ import me.nao.enums.mg.GameStatus;
 import me.nao.enums.mg.GameType;
 import me.nao.main.mg.Minegame;
 
+@SuppressWarnings("deprecation")
 public class GameTime {
 
 	

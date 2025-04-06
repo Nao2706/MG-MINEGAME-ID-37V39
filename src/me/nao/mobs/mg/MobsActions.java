@@ -61,7 +61,7 @@ import me.nao.generalinfo.mg.PlayerInfo;
 import me.nao.main.mg.Minegame;
 import me.nao.manager.mg.GameIntoMap;
 
-
+@SuppressWarnings("deprecation")
 public class MobsActions {
 
 	private Minegame plugin;
@@ -318,7 +318,6 @@ public class MobsActions {
 	
 
 	
-	@SuppressWarnings("deprecation")
 	public void getAttackedZombie(Entity atacante ,Entity atacada) {
 		
 		
@@ -1776,8 +1775,9 @@ public class MobsActions {
 		}
 	
 		
-		  @SuppressWarnings("deprecation")
-		    public void shootEntityToPlayer(Player player) {
+		 
+		    @SuppressWarnings("removal")
+			public void shootEntityToPlayer(Player player) {
 		    	 
 		    	List<Entity> l = getNearbyEntities(player.getLocation(),150);
 		    	
@@ -1863,8 +1863,8 @@ public class MobsActions {
 		    	}
 		    }
 		    
-		    @SuppressWarnings("deprecation")
-		    public void SpawnArrowsFireMob(Entity e,float addy ,float addp ) {
+		    @SuppressWarnings("removal")
+			public void SpawnArrowsFireMob(Entity e,float addy ,float addp ) {
 				
 				Location loc = e.getLocation();
 				loc.setYaw(loc.getYaw()+addy);

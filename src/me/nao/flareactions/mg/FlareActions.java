@@ -26,7 +26,7 @@ import me.nao.generalinfo.mg.GameInfo;
 import me.nao.main.mg.Minegame;
 
 
-
+@SuppressWarnings("deprecation")
 public class FlareActions {
 	
 	private Minegame plugin;

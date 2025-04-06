@@ -49,7 +49,7 @@ import org.bukkit.util.Vector;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.ViaAPI;
 
-import me.nao.cosmetics.mg.RankPlayer;
+//import me.nao.cosmetics.mg.RankPlayer;
 import me.nao.enums.mg.GameInteractions;
 import me.nao.enums.mg.GameStatus;
 import me.nao.enums.mg.GameType;
@@ -68,8 +68,10 @@ import me.nao.timers.mg.ResistenceTemp;
 import me.nao.topusers.mg.PointsManager;
 import me.nao.utils.mg.Utils;
 import me.nao.yamlfile.mg.YamlFilePlus;
+import net.kyori.adventure.text.Component;
 
 
+@SuppressWarnings("deprecation")
 public class GameConditions {
 	
 	private Minegame plugin;
@@ -448,7 +450,7 @@ public class GameConditions {
 			        String[] sts = ym.getString("Start.Sound-of-Mision").split(";");
 			      try {
 			    	  
-			    	    @SuppressWarnings("deprecation")
+			    	   
 						Sound soundtype = Sound.valueOf(sts[0].toUpperCase());
 					    Float volumen = Float.valueOf(sts[1]);
 					    Float grade = Float.valueOf(sts[2]);
@@ -807,7 +809,7 @@ public class GameConditions {
 		   String[] sts = mision.getString("Win.Sound-of-Win").split(";");
 		
 		   try {
-	    	   @SuppressWarnings("deprecation")
+	    	 
 	    	   Sound soundtype = Sound.valueOf(sts[0].toUpperCase());
 			   Float volumen = Float.valueOf(sts[1]);
 			   Float grade = Float.valueOf(sts[2]);
@@ -901,7 +903,7 @@ public class GameConditions {
 		   String[] sts = mision.getString("Lost.Sound-of-Lost").split(";");
 	       try {
 	    	  
-			   @SuppressWarnings("deprecation")
+			 
 			   Sound soundtype = Sound.valueOf(sts[0].toUpperCase());
 			   Float volumen = Float.valueOf(sts[1]);
 			   Float grade = Float.valueOf(sts[2]);
@@ -2373,12 +2375,12 @@ public class GameConditions {
 	
 	
 	//TODO CHAT
-	public void sendMessageTextComponentToAllUsersOfSameMap(Player player ,String text,ItemStack it) {
+	public void sendMessageTextComponentToUsersOfSameMapLessPlayer(Player player ,String text ,ItemStack it) {
 		 
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		String map = pl.getMapName();
 		GameInfo ms = plugin.getGameInfoPoo().get(map);
-		RankPlayer rp = new RankPlayer(plugin);
+		//RankPlayer rp = new RankPlayer(plugin);
 		//MisionInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
 		 if(ms instanceof GameAdventure) {
 				GameAdventure ga = (GameAdventure) ms;
@@ -2388,17 +2390,20 @@ public class GameConditions {
 				List<Player> spect = ConvertStringToPlayer(ga.getSpectators());
 				
 				for(Player target : play) {
+					 if(target.getName().equals(player.getName())) continue;
 					//target.spigot().sendMessage(Utils.sendTextComponentItem(text, it));
-				target.spigot().sendMessage(Utils.sendTextComponentfromBaseComponent(Utils.sendTextComponentShow(rp.getRankPrestigeColor(pl.getMgPlayerPrestige()),"PRESTIGIO",net.md_5.bungee.api.ChatColor.GREEN),Utils.sendTextComponent(text)));
+					target.sendMessage(Component.text(text).append(Component.text(it.getItemMeta().getDisplayName()).hoverEvent(it)));
+				//target.spigot().sendMessage(Utils.sendTextComponentfromBaseComponent(Utils.sendTextComponentShow(rp.getRankPrestigeColor(pl.getMgPlayerPrestige()),"PRESTIGIO",net.md_5.bungee.api.ChatColor.GREEN),Utils.sendTextComponent(text)));
 				}
 				
 				if(!spect.isEmpty()) {
 					for(Player target : spect) {
+						target.sendMessage(Component.text(text).append(Component.text(it.getItemMeta().getDisplayName()).hoverEvent(it)));
 						//target.spigot().sendMessage(Utils.sendTextComponentItem(text, it));
-						target.spigot().sendMessage(Utils.sendTextComponentfromBaseComponent(Utils.sendTextComponentShow(rp.getRankPrestigeColor(pl.getMgPlayerPrestige()),"PRESTIGIO",net.md_5.bungee.api.ChatColor.GREEN),Utils.sendTextComponent(text)));
+						//target.spigot().sendMessage(Utils.sendTextComponentfromBaseComponent(Utils.sendTextComponentShow(rp.getRankPrestigeColor(pl.getMgPlayerPrestige()),"PRESTIGIO",net.md_5.bungee.api.ChatColor.GREEN),Utils.sendTextComponent(text)));
 					}
 				}
-				 Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+map.toUpperCase()+": "+text);
+				 Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+map.toUpperCase()+": "+text+Component.text(it.getItemMeta().getDisplayName()).hoverEvent(it));
 		 }
 	}
 	
@@ -4825,7 +4830,8 @@ public class GameConditions {
 	}
 	
 	
-	@SuppressWarnings("deprecation")
+	
+	@SuppressWarnings("removal")
 	public void turret(LivingEntity ent) {
 		
 		Location loc = ent.getLocation();
@@ -5088,7 +5094,7 @@ public class GameConditions {
 				sendMessageToConsole(ChatColor.RED+"El Juagdor "+target+" no existe.");
 				return;
 			}
-		
+			
 			ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 
 		

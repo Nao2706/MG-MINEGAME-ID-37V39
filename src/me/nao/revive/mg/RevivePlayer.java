@@ -37,6 +37,7 @@ import me.nao.generalinfo.mg.PlayerInfo;
 import me.nao.main.mg.Minegame;
 import me.nao.manager.mg.GameIntoMap;
 
+@SuppressWarnings("deprecation")
 public class RevivePlayer{
 
 	private Player player;

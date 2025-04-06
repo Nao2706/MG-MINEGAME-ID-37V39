@@ -77,6 +77,7 @@ import me.nao.timers.mg.Countdown2;
 import me.nao.topusers.mg.PointsManager;
 import me.nao.utils.mg.Utils;
 import me.nao.yamlfile.mg.YamlFilePlus;
+import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -86,7 +87,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 
 
-
+@SuppressWarnings("deprecation")
 public class Comandsmg implements CommandExecutor{
 
 	
@@ -1531,7 +1532,8 @@ public class Comandsmg implements CommandExecutor{
 				//Component ct = Component.text("hola");
 				
 				//Bukkit.spigot().broadcast(Component.text("My item is").hoverEvent((@Nullable HoverEventSource<?>) player.getInventory().getItemInMainHand()));
-				
+				player.sendMessage(Component.text(ChatColor.GREEN+"Tu Item es: ").append(Component.text(player.getInventory().getItemInMainHand().getItemMeta().getDisplayName()).hoverEvent(player.getInventory().getItemInMainHand())));
+				//Utils.iteminfo23(player, player.getInventory().getItemInMainHand());
 				//Utils.sendTextComponentItem(player,ChatColor.GREEN+"Tu Item es: ", );
 				//Utils.iteminfo(player.getInventory().getItemInMainHand());
 				return true;
@@ -4640,7 +4642,8 @@ public class Comandsmg implements CommandExecutor{
 			return -i;
 		}
 	 
-		@SuppressWarnings("deprecation")
+	
+		@SuppressWarnings("removal")
 		public void spawnArrows2(Player player) {
 			
 			double rotatex = randomPosOrNeg(3);

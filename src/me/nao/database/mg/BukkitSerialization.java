@@ -19,7 +19,7 @@ import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 
 
-
+@SuppressWarnings("deprecation")
 public class BukkitSerialization {
 	
 	 private BukkitSerialization() {

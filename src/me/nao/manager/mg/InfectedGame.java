@@ -19,6 +19,7 @@ import me.nao.generalinfo.mg.GameConditions;
 import me.nao.main.mg.Minegame;
 import me.nao.yamlfile.mg.YamlFilePlus;
 
+@SuppressWarnings("deprecation")
 public class InfectedGame {
 
 	private Minegame plugin;

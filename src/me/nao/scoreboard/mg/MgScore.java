@@ -36,7 +36,7 @@ import me.nao.main.mg.Minegame;
 import me.nao.revive.mg.RevivePlayer;
 
 
-
+@SuppressWarnings("deprecation")
 public class MgScore {
 
 	private Minegame plugin;

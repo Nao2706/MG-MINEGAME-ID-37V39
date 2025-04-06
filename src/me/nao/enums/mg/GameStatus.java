@@ -2,6 +2,7 @@ package me.nao.enums.mg;
 
 import org.bukkit.ChatColor;
 
+@SuppressWarnings("deprecation")
 public enum GameStatus {
 
 

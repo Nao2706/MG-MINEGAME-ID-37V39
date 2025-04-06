@@ -34,7 +34,7 @@ import me.nao.main.mg.Minegame;
 import me.nao.manager.mg.GameIntoMap;
 
 
-
+@SuppressWarnings("deprecation")
 public class InfectedTemp {
 
 	

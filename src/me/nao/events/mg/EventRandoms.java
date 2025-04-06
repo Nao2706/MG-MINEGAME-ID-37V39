@@ -125,7 +125,7 @@ import me.nao.utils.mg.Utils;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
-
+@SuppressWarnings("deprecation")
 public class EventRandoms implements Listener{
 	
 	private Minegame plugin;
@@ -417,7 +417,8 @@ public class EventRandoms implements Listener{
 	}
 	
 	//TODO INTERACCION
-	@SuppressWarnings("deprecation")
+
+	@SuppressWarnings("removal")
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void alinteractuar(PlayerInteractEvent e) {
 		
@@ -2048,7 +2049,8 @@ public class EventRandoms implements Listener{
 		
 	
 		
-		@SuppressWarnings("deprecation")
+		
+		@SuppressWarnings("removal")
 		public void ProyectileShootType(Dispenser d, EntityType type , int option ,Location loc ) {
 					Location loc2 = loc;
 			
@@ -2475,7 +2477,7 @@ public class EventRandoms implements Listener{
 																  int dura = Integer.valueOf(nn[1]);
 																  int power = Integer.valueOf(nn[2]);
 															
-															@SuppressWarnings("deprecation")
+														
 															PotionEffect posion = new PotionEffect(PotionEffectType.getByName(type),/*duration*/ dura * 20,/*amplifier:*/power, true ,true,true );
 															player.addPotionEffect(posion);
 											              }
@@ -3149,7 +3151,8 @@ public class EventRandoms implements Listener{
 			
 			
 			
-			@SuppressWarnings("deprecation")
+			
+			@SuppressWarnings("removal")
 			public void SpawnArrows(Player player,float addy ,float addp ) {
 				player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 20.0F, 1F);
 				Location loc = player.getLocation();
@@ -3165,7 +3168,8 @@ public class EventRandoms implements Listener{
 				aw.setShooter(player);
 				//((Arrow) h1).setShooter(player);
 			}
-			@SuppressWarnings("deprecation")
+			
+			@SuppressWarnings("removal")
 			public void SpawnArrowsFire(Player player,float addy ,float addp ) {
 				player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 20.0F, 1F);
 				Location loc = player.getLocation();
@@ -3181,7 +3185,7 @@ public class EventRandoms implements Listener{
 				aw.setShooter(player);
 			}
 			
-			@SuppressWarnings("deprecation")
+			@SuppressWarnings("removal")
 			public void SpawnArrowsPoison(Player player,float addy ,float addp ) {
 				player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 20.0F, 1F);
 				PotionEffect poison = new PotionEffect(PotionEffectType.POISON,/*duration*/ 20*20,/*amplifier:*/50, false ,false,true );
@@ -3200,7 +3204,8 @@ public class EventRandoms implements Listener{
 				//((Arrow) h1).setShooter(player);
 			}
 			
-			@SuppressWarnings("deprecation")
+			
+			@SuppressWarnings("removal")
 			public void SpawnArrowsDamage(Player player,float addy ,float addp ) {
 				player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 20.0F, 1F);
 				PotionEffect damage = new PotionEffect(PotionEffectType.INSTANT_DAMAGE,/*duration*/ 20*20,/*amplifier:*/50, false ,false,true );
@@ -3221,7 +3226,8 @@ public class EventRandoms implements Listener{
 				//((Arrow) h1).setShooter(player);
 			}
 			
-			@SuppressWarnings("deprecation")
+		
+			@SuppressWarnings("removal")
 			public void SpawnArrowsExplosive(Player player,float addy ,float addp ) {
 				player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 20.0F, 1F);
 				Location loc = player.getLocation();
@@ -3243,7 +3249,8 @@ public class EventRandoms implements Listener{
 				//((Arrow) h1).setShooter(player);
 			}
 			
-			@SuppressWarnings("deprecation")
+		
+			@SuppressWarnings("removal")
 			public void SpawnArrowsFireMob(Entity e,float addy ,float addp ) {
 			
 				Location loc = e.getLocation();
@@ -3260,7 +3267,8 @@ public class EventRandoms implements Listener{
 			}
 		 
 		 
-			@SuppressWarnings("deprecation")
+		
+			@SuppressWarnings("removal")
 			public void SpawnArrowsDispenser(Location l,BlockFace bf,float addy ,float addp , boolean iswithfire) {
 				Location loc = l;
 				Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc, EntityType.ARROW);

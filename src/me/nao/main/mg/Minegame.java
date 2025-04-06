@@ -40,7 +40,7 @@ import me.nao.yamlfile.mg.YamlFile;
 
 
 
-
+@SuppressWarnings("deprecation")
 public class Minegame extends JavaPlugin{
 	
 	private ConexionMySQL conexion;

@@ -50,7 +50,7 @@ import me.nao.yamlfile.mg.YamlFilePlus;
 
 
 
-
+@SuppressWarnings("deprecation")
 public class MinigameShop1 implements Listener{
 	
 
@@ -86,6 +86,7 @@ public class MinigameShop1 implements Listener{
 	}
 	
 	
+	@SuppressWarnings("removal")
 	@EventHandler
 	public void clickEvent(InventoryClickEvent e) {
 		

@@ -14,6 +14,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import de.tr7zw.nbtapi.NBT;
+import de.tr7zw.nbtapi.iface.ReadWriteNBT;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -24,6 +26,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.chat.hover.content.Item;
 
 
+@SuppressWarnings("unused")
 public class Utils {
 
 	public static String warningLineMessage(int amount) {
@@ -43,6 +46,7 @@ public class Utils {
 		return ChatColor.translateAlternateColorCodes('&',text) ;
 	}
 	
+	@SuppressWarnings("deprecation")
 	public static String colorTextChatColor(String text) {
 		return org.bukkit.ChatColor.translateAlternateColorCodes('&',text) ;
 	}
@@ -119,6 +123,7 @@ public class Utils {
 		    return m1;
 		}
 		
+		@SuppressWarnings("deprecation")
 		public static void iteminfo(ItemStack it) {
 			//List<Map.Entry<String, Integer>> list = new ArrayList<>(scores.entrySet());
 			
@@ -129,11 +134,11 @@ public class Utils {
 				System.out.println("Lore:"+t);
 			}
 		
-			List<Map.Entry<Attribute,AttributeModifier>> list = new ArrayList<>(it.getItemMeta().getAttributeModifiers().entries());
-			for(Map.Entry<Attribute,AttributeModifier> e : list) {
-				
-				System.out.println("Atr"+e.getKey().getKeyOrThrow()+" value:"+ e.getValue().getAmount()+" slot:"+e.getValue().getSlotGroup() );
-			}
+//			List<Map.Entry<Attribute,AttributeModifier>> list = new ArrayList<>(it.getItemMeta().getAttributeModifiers().entries());
+//			for(Map.Entry<Attribute,AttributeModifier> e : list) {
+//				
+//				//System.out.println("Atr"+e.getKey().getKeyOrThrow()+" value:"+ e.getValue().getAmount()+" slot:"+e.getValue().getSlotGroup() );
+//			}
 			
 			List<Map.Entry<Enchantment,Integer>> list2 = new ArrayList<>(it.getItemMeta().getEnchants().entrySet());
 			for(Map.Entry<Enchantment,Integer> e : list2) {
@@ -142,13 +147,13 @@ public class Utils {
 		}
 		
 			@SuppressWarnings("deprecation")
-			public static void iteminfo2(Player player ,ItemStack it) {
+			public static void iteminfo23(Player player ,ItemStack it) {
 			
-				TextComponent cLink = new TextComponent("Hola mi item es: ");
+				TextComponent cLink = new TextComponent("Hi my item is: ");
 				
-				
-				
-				ItemTag itemtag = ItemTag.ofNbt(it.getItemMeta().toString());	
+				ReadWriteNBT rw = NBT.itemStackToNBT(it);
+				System.out.println(rw.toString());
+				ItemTag itemtag = ItemTag.ofNbt(rw.toString());
 				Item item = new Item(it.getType().getKey().toString(),it.getAmount(),itemtag);
 				cLink.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_ITEM, item));
 				
@@ -156,8 +161,17 @@ public class Utils {
 				BaseComponent[] bc = cb.create();
 				
 				player.spigot().sendMessage(bc);
+//				NBT.getComponents(it, nbt ->{ 
+//					
+//				});
+				
+				
+				
 				
 		   }
+			
+	
+			
 		
 		@SuppressWarnings("deprecation")
 		public static TextComponent sendTextComponentItem(Player player ,String text ,ItemStack is) {

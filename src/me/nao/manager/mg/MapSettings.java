@@ -23,7 +23,7 @@ import me.nao.timers.mg.Countdown;
 
 
 
-
+@SuppressWarnings("deprecation")
 public class MapSettings {
 
 		

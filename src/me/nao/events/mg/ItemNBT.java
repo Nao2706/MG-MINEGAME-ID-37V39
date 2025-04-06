@@ -150,8 +150,6 @@ public class ItemNBT {
 			
 			// nbt.setString("minecraft:can_break","{blocks:[stone,dirt]}");
 			// nbt.setString("minecraft:can_break","{\"blocks\":[\"stone\",\"dirt\"]}");
-		
-			
 			// nbt.setString("minecraft:can_break", "{\"blocks\":[\"stone\"]}");
 			if(status.toLowerCase().equals("canbreak")){
 				ReadWriteNBT cb = nbt.getOrCreateCompound("minecraft:can_break");	

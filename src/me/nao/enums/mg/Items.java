@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
  
- 
+@SuppressWarnings("deprecation")
         public enum Items{
         	
             ESPADAMADERA(""+ChatColor.GOLD+ChatColor.BOLD+"ESPADA DE MADERA", Material.WOODEN_SWORD,null,1, ChatColor.GREEN+"Precio:"+ChatColor.RED+" 1 Diamante"),
@@ -195,7 +195,7 @@ import org.bukkit.inventory.meta.ItemMeta;
             
             public ItemStack item;
          
-            @SuppressWarnings("deprecation")
+          
 			private Items(String nombre, Material material,String encant , int amount, String ...lore){
                 ItemStack item = new ItemStack(material,amount);
                 ItemMeta meta = item.getItemMeta();

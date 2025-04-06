@@ -12,7 +12,7 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
  
- 
+@SuppressWarnings("deprecation")
         public enum Posion{
             HEALTH(""+ChatColor.RED+ChatColor.BOLD+"INSTA HEALTH", Material.SPLASH_POTION,Color.RED,new PotionEffect(PotionEffectType.INSTANT_HEALTH,5 * 20,2, true ,true,true ), 1, ChatColor.GREEN+"Precio:"+ChatColor.RED+" 3 Diamantes",ChatColor.GREEN+"Te Curara Instantaneamente al usarlo."),
             HEALTHP(""+ChatColor.RED+ChatColor.BOLD+"INSTA HEALTH", Material.SPLASH_POTION,Color.RED,new PotionEffect(PotionEffectType.INSTANT_HEALTH,5 * 20,2, true ,true,true ), 1,ChatColor.GREEN+"Te Curara al usarlo."),

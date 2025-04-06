@@ -31,6 +31,7 @@ import me.nao.main.mg.Minegame;
 import me.nao.utils.mg.Utils;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 
+@SuppressWarnings("deprecation")
 public class PointsManager {
 
 	private Minegame plugin;

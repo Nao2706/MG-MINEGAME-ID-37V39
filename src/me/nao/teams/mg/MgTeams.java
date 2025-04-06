@@ -8,6 +8,7 @@ import org.bukkit.scoreboard.Team.OptionStatus;
 
 import me.nao.main.mg.Minegame;
 
+@SuppressWarnings("deprecation")
 public class MgTeams {
 	
 	private Minegame plugin;
