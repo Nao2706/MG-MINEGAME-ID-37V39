@@ -49,6 +49,7 @@ import org.bukkit.util.Vector;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.ViaAPI;
 
+import me.nao.cosmetics.mg.RankPlayer;
 //import me.nao.cosmetics.mg.RankPlayer;
 import me.nao.enums.mg.GameInteractions;
 import me.nao.enums.mg.GameStatus;
@@ -2388,22 +2389,23 @@ public class GameConditions {
 				
 				List<Player> play = ConvertStringToPlayer(ga.getParticipants());
 				List<Player> spect = ConvertStringToPlayer(ga.getSpectators());
-				
+				String text1 = it.getItemMeta() == null ? it.getType().toString() : it.getItemMeta().getDisplayName();
+
 				for(Player target : play) {
 					 if(target.getName().equals(player.getName())) continue;
 					//target.spigot().sendMessage(Utils.sendTextComponentItem(text, it));
-					target.sendMessage(Component.text(text).append(Component.text(it.getItemMeta().getDisplayName()).hoverEvent(it)));
+					target.sendMessage(Component.text(text).append(Component.text(text1).hoverEvent(it)));
 				//target.spigot().sendMessage(Utils.sendTextComponentfromBaseComponent(Utils.sendTextComponentShow(rp.getRankPrestigeColor(pl.getMgPlayerPrestige()),"PRESTIGIO",net.md_5.bungee.api.ChatColor.GREEN),Utils.sendTextComponent(text)));
 				}
 				
 				if(!spect.isEmpty()) {
 					for(Player target : spect) {
-						target.sendMessage(Component.text(text).append(Component.text(it.getItemMeta().getDisplayName()).hoverEvent(it)));
+						target.sendMessage(Component.text(text).append(Component.text(text1).hoverEvent(it)));
 						//target.spigot().sendMessage(Utils.sendTextComponentItem(text, it));
 						//target.spigot().sendMessage(Utils.sendTextComponentfromBaseComponent(Utils.sendTextComponentShow(rp.getRankPrestigeColor(pl.getMgPlayerPrestige()),"PRESTIGIO",net.md_5.bungee.api.ChatColor.GREEN),Utils.sendTextComponent(text)));
 					}
 				}
-				 Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+map.toUpperCase()+": "+text+Component.text(it.getItemMeta().getDisplayName()).hoverEvent(it));
+				 Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+map.toUpperCase()+": "+text+Component.text(text1).hoverEvent(it));
 		 }
 	}
 	
@@ -5122,12 +5124,12 @@ public class GameConditions {
 			 FileConfiguration menu = plugin.getMenuItems();
 			 for(int i = 0 ; i< mc.size();i++ ) {
 				 String map = mc.get(i);
-				 
+				 if(!menu.contains(map))continue;
 				 FileConfiguration game = getGameConfig(map);
 				 ItemMenu it = new ItemMenu(plugin);
 				 it.setPosition(i);
 				 it.setCode(map);
-				 it.setDisplayname(menu.getString(map+".Display-Name"));
+				 it.setDisplayname(menu.getString(map+".Display-Name","Sin Nombre"));
 				 it.setItem(new ItemStack(Material.matchMaterial(menu.getString(map+".Material","BEDROCK"))));
 				 it.setEnchanted(menu.getBoolean(map+".Is-Enchanted",false));
 				 it.setLocked(isBlockedTheMap(map));
@@ -5151,4 +5153,95 @@ public class GameConditions {
 		 
 		
 	}
+	
+	
+	public void checkPlayerInfo(Player player, String target) {
+		
+		FileConfiguration message = plugin.getMessage();
+		FileConfiguration points1 = plugin.getPoints();		
+		
+		
+		if(!points1.contains("Players."+target)) {
+			
+			if(player.getName().equals(target)) {
+				sendMessageToUserAndConsole(player,ChatColor.RED+"No tienes ningun puntaje Guardado.");
+			}else {
+				sendMessageToUserAndConsole(player,ChatColor.RED+"No hay Datos Guardados de "+target);
+			}
+			return;
+		}
+		
+		if (message.getBoolean("Message-My-Points.message")) {
+			List<String> messagemp1 = message.getStringList("Message-My-Points.message-points-decoracion1");
+			for (int j = 0; j < messagemp1.size(); j++) {
+				String texto = messagemp1.get(j);
+				
+				sendMessageToUserAndConsole(player, texto);
+			
+				
+			}
+		}
+		//==============1
+		
+		PointsManager pm = new PointsManager(plugin);
+		RankPlayer rp = new RankPlayer(plugin);
+		SystemOfLevels sof = new SystemOfLevels();
+				int lvl = points1.getInt("Players."+target+".Level");
+				long refer = points1.getInt("Players."+target+".Reference-Xp");
+				long xp = points1.getInt("Players."+target+".Xp");
+				int points = points1.getInt("Players."+target+".Streaks");
+				int pointk = points1.getInt("Players."+target+".Kills");
+				int point2 = points1.getInt("Players."+target+".Deads");
+				int point3 = points1.getInt("Players."+target+".Revive");
+				int point4 = points1.getInt("Players."+target+".Help-Revive");
+				int point5 = points1.getInt("Players."+target+".Wins");
+				int point6 = points1.getInt("Players."+target+".Loses");
+				int prestige = points1.getInt("Players."+target+".Prestige");
+				
+				sof.rangeOfLvl(lvl);
+				long currentxp = xp+sof.getTotalplayerxp();
+				
+				if (message.getBoolean("Message-My-Points.message")) {
+					List<String> messagep = message.getStringList("Message-My-Points.message-points-texto");
+					for (int j = 0; j < messagep.size(); j++) {
+						String texto = messagep.get(j);
+						
+						if(player != null) {
+							player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 50.0F, 1F);
+						}
+					
+						sendMessageToUserAndConsole(player,ChatColor.translateAlternateColorCodes('&',texto.replaceAll("%player%", target)
+								 .replace("%kills%",	String.valueOf(pointk))
+								 .replace("%revive%",String.valueOf(point3))
+								 .replace("%helprevive%", String.valueOf(point4))
+								 .replace("%deads%",String.valueOf(point2))
+								 .replace("%refer%",String.valueOf(refer))
+								 .replace("%xp%", String.valueOf(xp))
+								 .replace("%streaks%",String.valueOf(points))
+								 .replace("%progress%",""+ChatColor.GRAY+ChatColor.BOLD+"["+pm.getProgressBar(xp,refer, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GRAY+ChatColor.BOLD+"]")
+								 .replace("%porcent%",pm.Porcentage(xp,refer))
+								 .replace("%lvl%",String.valueOf(lvl))
+								 .replace("%wins%",String.valueOf(point5))
+								 .replace("%loses%",String.valueOf(point6))
+								 .replace("%prestige%",String.valueOf(prestige))
+								 .replace("%prestigetext%",rp.getRankPrestigePlaceHolder(prestige))
+								 .replace("%totalxp%",String.valueOf(currentxp))
+								 
+								));
+					}
+				}
+		///2
+		if (message.getBoolean("Message-My-Points.message")) {
+			List<String> messagemp2 = message.getStringList("Message-My-Points.message-points-decoracion2");
+			for (int j = 0; j < messagemp2.size(); j++) {
+				String texto = messagemp2.get(j);
+				sendMessageToUserAndConsole(player,ChatColor.translateAlternateColorCodes('&', texto));
+			}
+
+		
+		}
+		
+	}
+	
+	
 }

@@ -53,7 +53,6 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
-import me.nao.cosmetics.mg.RankPlayer;
 import me.nao.database.mg.BukkitSerialization;
 import me.nao.database.mg.SQLInfo;
 import me.nao.enums.mg.GameStatus;
@@ -662,14 +661,14 @@ public class Comandsmg implements CommandExecutor{
 			 				 int minute = Integer.valueOf(split[1]);
 			 				 int second = Integer.valueOf(split[2]);
 			 				 
-			 				 gt.addTimeToTimer(hour, minute, second);
+			 				 gt.addTimeToTimer(map,hour, minute, second);
 			 				Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Fue añadido el Tiempo a +"+hour+"h +"+minute+"m +"+second+"s");
 			 			 }else if(type.equals("set")) {
 			 				 String[] split = time.split("-");
 			 				 int hour = Integer.valueOf(split[0]);
 			 				 int minute = Integer.valueOf(split[1]);
 			 				 int second = Integer.valueOf(split[2]);
-			 				 gt.setTimeToTimer(hour, minute, second);
+			 				 gt.setTimeToTimer(map,hour, minute, second);
 			 				 
 			 				Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Fue seteado el Tiempo a "+hour+"h "+minute+"m "+second+"s");
 			 			 }else if(type.equals("remove")) {
@@ -677,14 +676,14 @@ public class Comandsmg implements CommandExecutor{
 			 				 int hour = Integer.valueOf(split[0]);
 			 				 int minute = Integer.valueOf(split[1]);
 			 				 int second = Integer.valueOf(split[2]);
-			 				 gt.removeTimeToTimer(hour, minute, second);
+			 				 gt.removeTimeToTimer(map,hour, minute, second);
 			 				Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Fue removido el Tiempo a "+hour+"h "+minute+"m "+second+"s");
 			 			 }else if(type.equals("freeze")) {
 			 				 String[] split = time.split("-");
 			 				 int hour = Integer.valueOf(split[0]);
 			 				 int minute = Integer.valueOf(split[1]);
 			 				 int second = Integer.valueOf(split[2]);
-			 				 gt.freezesetTimeToTimer(hour, minute, second);
+			 				 gt.freezesetTimeToTimer(map,hour, minute, second);
 			 				Bukkit.getConsoleSender().sendMessage(ChatColor.AQUA+"Fue Freezeado el Tiempo a "+hour+"h "+minute+"m "+second+"s");
 			 				
 			 			 }
@@ -813,32 +812,20 @@ public class Comandsmg implements CommandExecutor{
 			 		  }
 			 		  
 			 		  return true;
-			 	  }else if (args[0].equalsIgnoreCase("check")) {
-		    		
-		    		if(args.length == 2){
-			    				String name = args[1];
-								if(points1.contains("Players." + name)) {
-									for (String key : points1.getConfigurationSection("Players").getKeys(false)) {
-									if (name.equals(key)) {
-										List<String> messagep = message.getStringList("Message-Check-Player.message");
-										for(int i = 0 ; i<messagep.size();i++) {
-											int puntaje = Integer.valueOf((points1.getString("Players." + key + ".Kills")));
-											String texto = messagep.get(i);
-											Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', texto.replaceAll("%player%",name).replaceAll("%points%",String.valueOf(puntaje))));
-										//player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 50.0F, 1F);
-									
-										
-										}
-									}
-								}
-				    		}else{
-								Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+name+ChatColor.RED+" no existe. ");
-								//player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 50.0F, 1F);
-				    		}
-					}
-				
-					return true;
-				}else if (args[0].equalsIgnoreCase("versionpl")) {
+			 	  }else if(args[0].equalsIgnoreCase("check-points")) {
+						
+						if(args.length == 2) {
+							String name = args[1];
+							
+							gc.checkPlayerInfo(null,name);
+						}else {
+							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" /mg check-points <");
+							//gc.checkPlayerInfo(player,player.getName());
+						}
+					
+						return true;
+						
+					}else if (args[0].equalsIgnoreCase("versionpl")) {
 					if (args.length == 2) {
 						String target = args[1];
 						gc.getPlayerVersion(null, target);
@@ -1648,38 +1635,7 @@ public class Comandsmg implements CommandExecutor{
 			   
 			  
 			   return true;
-		   }else if (args[0].equalsIgnoreCase("check") && player.isOp()) {
-				
-					if(args.length == 2) {
-						String name = args[1];
-						if(points1.contains("Players." + name + ".Kills")) {
-							for (String key : points1.getConfigurationSection("Players").getKeys(false)) {
-
-								if (name.equals(key) && points1.getString("Players." + name + ".Kills",null) != null) {
-									List<String> messagep = message.getStringList("Message-Check-Player.message");
-									for(int i = 0 ; i<messagep.size();i++) {
-										int puntaje = Integer.valueOf((points1.getString("Players." + key + ".Kills")));
-										String texto = messagep.get(i);
-									player.sendMessage(ChatColor.translateAlternateColorCodes('&', texto.replaceAll("%player%",name).replaceAll("%points%",String.valueOf(puntaje))));
-									player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 50.0F, 1F);
-								
-									
-									}
-								
-								}
-						
-							}
-						}else {
-							player.sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+name+ChatColor.RED+" no existe. ");
-							player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 50.0F, 1F);
-						}
-					}else {
-						player.sendMessage(plugin.nombre+ChatColor.RED+" Usa /mg check <Player> ");
-					}
-				
-					return true;
-					
-				}else if (args[0].equalsIgnoreCase("set-points") && player.isOp()) {
+		   }else if (args[0].equalsIgnoreCase("set-points") && player.isOp()) {
 					try {
 						//mg set nao add,set,subtract 1
 					if (args.length == 4) {
@@ -1740,77 +1696,18 @@ public class Comandsmg implements CommandExecutor{
 				
 							
 					return true;
+					//mg check NAO
+				}else if(args[0].equalsIgnoreCase("check-points")) {
 					
-				}else if(args[0].equalsIgnoreCase("my-points") ) {
-					
-					
-					if(points1.contains("Players."+player.getName())) {
+					if(args.length == 2) {
+						String name = args[1];
 						
-						if (message.getBoolean("Message-My-Points.message")) {
-							List<String> messagemp1 = message.getStringList("Message-My-Points.message-points-decoracion1");
-							for (int j = 0; j < messagemp1.size(); j++) {
-								String texto = messagemp1.get(j);
-								player.sendMessage(ChatColor.translateAlternateColorCodes('&', texto));
-							}
-						}
-						//==============1
-						
-						PointsManager pm = new PointsManager(plugin);
-						RankPlayer rp = new RankPlayer(plugin);
-						SystemOfLevels sof = new SystemOfLevels();
-								int lvl = points1.getInt("Players."+player.getName()+".Level");
-								long refer = points1.getInt("Players."+player.getName()+".Reference-Xp");
-								long xp = points1.getInt("Players."+player.getName()+".Xp");
-								int points = points1.getInt("Players."+player.getName()+".Streaks");
-								int pointk = points1.getInt("Players."+player.getName()+".Kills");
-								int point2 = points1.getInt("Players."+player.getName()+".Deads");
-								int point3 = points1.getInt("Players."+player.getName()+".Revive");
-								int point4 = points1.getInt("Players."+player.getName()+".Help-Revive");
-								int point5 = points1.getInt("Players."+player.getName()+".Wins");
-								int point6 = points1.getInt("Players."+player.getName()+".Loses");
-								int prestige = points1.getInt("Players."+player.getName()+".Prestige");
-								
-								sof.rangeOfLvl(lvl);
-								long currentxp = xp+sof.getTotalplayerxp();
-								
-								if (message.getBoolean("Message-My-Points.message")) {
-									List<String> messagep = message.getStringList("Message-My-Points.message-points-texto");
-									for (int j = 0; j < messagep.size(); j++) {
-										String texto = messagep.get(j);
-										player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 50.0F, 1F);
-										player.sendMessage(ChatColor.translateAlternateColorCodes('&',texto.replaceAll("%player%", player.getName())
-												 .replace("%kills%",	String.valueOf(pointk))
-												 .replace("%revive%",String.valueOf(point3))
-												 .replace("%helprevive%", String.valueOf(point4))
-												 .replace("%deads%",String.valueOf(point2))
-												 .replace("%refer%",String.valueOf(refer))
-												 .replace("%xp%", String.valueOf(xp))
-												 .replace("%streaks%",String.valueOf(points))
-												 .replace("%progress%",""+ChatColor.GRAY+ChatColor.BOLD+"["+pm.getProgressBar(xp,refer, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GRAY+ChatColor.BOLD+"]")
-												 .replace("%porcent%",pm.Porcentage(xp,refer))
-												 .replace("%lvl%",String.valueOf(lvl))
-												 .replace("%wins%",String.valueOf(point5))
-												 .replace("%loses%",String.valueOf(point6))
-												 .replace("%prestige%",String.valueOf(prestige))
-												 .replace("%prestigetext%",rp.getRankPrestigePlaceHolder(prestige))
-												 .replace("%totalxp%",String.valueOf(currentxp))
-												 
-												));
-									}
-								}
-						///2
-						if (message.getBoolean("Message-My-Points.message")) {
-							List<String> messagemp2 = message.getStringList("Message-My-Points.message-points-decoracion2");
-							for (int j = 0; j < messagemp2.size(); j++) {
-								String texto = messagemp2.get(j);
-								player.sendMessage(ChatColor.translateAlternateColorCodes('&', texto));
-							}
-
-						
-						}
+						gc.checkPlayerInfo(player,name);
 					}else {
-						player.sendMessage(ChatColor.RED+"No tienes ningun puntaje guardado.");
+						player.sendMessage(plugin.nombre+ChatColor.RED+" /mg check-points <");
+						//gc.checkPlayerInfo(player,player.getName());
 					}
+				
 					return true;
 					
 				}else if(args[0].equalsIgnoreCase("reload")) {
@@ -2874,14 +2771,14 @@ public class Comandsmg implements CommandExecutor{
 				 				 int minute = Integer.valueOf(split[1]);
 				 				 int second = Integer.valueOf(split[2]);
 				 				 
-				 				 gt.addTimeToTimer(hour, minute, second);
+				 				 gt.addTimeToTimer(map,hour, minute, second);
 				 				player.sendMessage(ChatColor.GREEN+"Fue añadido el Tiempo a +"+hour+"h +"+minute+"m +"+second+"s");
 				 			 }else if(type.equals("set")) {
 				 				 String[] split = time.split("-");
 				 				 int hour = Integer.valueOf(split[0]);
 				 				 int minute = Integer.valueOf(split[1]);
 				 				 int second = Integer.valueOf(split[2]);
-				 				 gt.setTimeToTimer(hour, minute, second);
+				 				 gt.setTimeToTimer(map,hour, minute, second);
 				 				player.sendMessage(ChatColor.GREEN+"Fue seteado el Tiempo a "+hour+"h "+minute+"m "+second+"s");
 				 				
 				 			 }else if(type.equals("remove")) {
@@ -2889,7 +2786,7 @@ public class Comandsmg implements CommandExecutor{
 				 				 int hour = Integer.valueOf(split[0]);
 				 				 int minute = Integer.valueOf(split[1]);
 				 				 int second = Integer.valueOf(split[2]);
-				 				 gt.removeTimeToTimer(hour, minute, second);
+				 				 gt.removeTimeToTimer(map,hour, minute, second);
 				 				player.sendMessage(ChatColor.GREEN+"Fue removido el Tiempo a "+hour+"h "+minute+"m "+second+"s");
 				 				
 				 			 }else if(type.equals("freeze")) {
@@ -2897,7 +2794,7 @@ public class Comandsmg implements CommandExecutor{
 				 				 int hour = Integer.valueOf(split[0]);
 				 				 int minute = Integer.valueOf(split[1]);
 				 				 int second = Integer.valueOf(split[2]);
-				 				 gt.freezesetTimeToTimer(hour, minute, second);
+				 				 gt.freezesetTimeToTimer(map,hour, minute, second);
 				 				player.sendMessage(ChatColor.AQUA+"Fue Freezeado el Tiempo a "+hour+"h "+minute+"m "+second+"s");
 				 				
 				 			 }

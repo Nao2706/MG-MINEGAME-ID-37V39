@@ -130,7 +130,7 @@ public class GameIntoMap {
 					pl.getGamePoints().setHelpRevive(pl.getGamePoints().getHelpRevive()+1);
 					
 					PlayerInfo targetrevive = plugin.getPlayerInfoPoo().get(target);
-					targetrevive.getGamePoints().setRevive(targetrevive.getGamePoints().getRevive()+10);
+					targetrevive.getGamePoints().setRevive(targetrevive.getGamePoints().getRevive()+1);
 					
 					
 					if(!deaths.isEmpty()) {
@@ -710,8 +710,10 @@ public class GameIntoMap {
 						if(killer.getName().equals(player.getName())) {
 							
 							if(hasEntityCustomItemStack(killer)) {
+								
+								String text = killer.getInventory().getItemInMainHand().getItemMeta() == null ? killer.getInventory().getItemInMainHand().getType().toString() : killer.getInventory().getItemInMainHand().getItemMeta().getDisplayName();
 								player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto ",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+"Autodispararse (Suicidio)", 40, 80, 40);
-								player.sendMessage(Component.text(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto Disparado "+ChatColor.YELLOW+"por: "+ChatColor.YELLOW+"Autodispararse (Suicidio)"+ChatColor.RED+" usando ").append(Component.text(killer.getInventory().getItemInMainHand().getItemMeta().getDisplayName())).hoverEvent(killer.getInventory().getItemInMainHand()));
+								player.sendMessage(Component.text(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto Disparado "+ChatColor.YELLOW+"por: "+ChatColor.YELLOW+"Autodispararse (Suicidio)"+ChatColor.RED+" usando ").append(Component.text(text)).hoverEvent(killer.getInventory().getItemInMainHand()));
 								
 								gmc.sendMessageTextComponentToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"Autodispararse (Suicidio)"+ChatColor.RED+" usando ",killer.getInventory().getItemInMainHand());
 							}else {
@@ -725,8 +727,10 @@ public class GameIntoMap {
 //							gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"Autodispararse (Suicidio)");
 						}else{
 							if(hasEntityCustomItemStack(killer)) {
+								String text = killer.getInventory().getItemInMainHand().getItemMeta() == null ? killer.getInventory().getItemInMainHand().getType().toString() : killer.getInventory().getItemInMainHand().getItemMeta().getDisplayName();
+
 								player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto Disparado ",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+killer.getName(), 40, 80, 40);
-								player.sendMessage(Component.text(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto Disparado "+ChatColor.YELLOW+"por: "+killer.getName()+ChatColor.RED+" usando ").append(Component.text(killer.getInventory().getItemInMainHand().getItemMeta().getDisplayName())).hoverEvent(killer.getInventory().getItemInMainHand()));
+								player.sendMessage(Component.text(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto Disparado "+ChatColor.YELLOW+"por: "+killer.getName()+ChatColor.RED+" usando ").append(Component.text(text)).hoverEvent(killer.getInventory().getItemInMainHand()));
 								
 								gmc.sendMessageTextComponentToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio Disparado por "+ChatColor.YELLOW+killer.getName()+ChatColor.RED+" usando ",killer.getInventory().getItemInMainHand());
 							}else {
@@ -748,9 +752,11 @@ public class GameIntoMap {
 						
 						if(EntityHasName(liv)) {
 							if(hasEntityCustomItemStack(liv)) {
+								String text1 = liv.getEquipment().getItemInMainHand().getItemMeta() == null ? liv.getEquipment().getItemInMainHand().getType().toString() : liv.getEquipment().getItemInMainHand().getItemMeta().getDisplayName();
+
 								player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"Disparado por: "+ChatColor.YELLOW+damager.getCustomName(), 40, 80, 40);
 								//player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+damager.getCustomName()+" usando "+liv.getEquipment().getItemInMainHand().getItemMeta().getDisplayName());
-								player.sendMessage(Component.text(ChatColor.RED+"Moriste Disparado por: "+ChatColor.YELLOW+liv.getCustomName()+ChatColor.RED+" usando ").append(Component.text(liv.getEquipment().getItemInMainHand().getItemMeta().getDisplayName())).hoverEvent(liv.getEquipment().getItemInMainHand()));
+								player.sendMessage(Component.text(ChatColor.RED+"Moriste Disparado por: "+ChatColor.YELLOW+liv.getCustomName()+ChatColor.RED+" usando ").append(Component.text(text1)).hoverEvent(liv.getEquipment().getItemInMainHand()));
 							
 								gmc.sendMessageTextComponentToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio Disparado por "+ChatColor.YELLOW+liv.getCustomName()+ChatColor.RED+" usando ",liv.getEquipment().getItemInMainHand());
 								//gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+damager.getCustomName()+" usando "+liv.getEquipment().getItemInMainHand().getItemMeta().getDisplayName());
@@ -763,9 +769,11 @@ public class GameIntoMap {
 							}
 						}else {
 							if(hasEntityCustomItemStack(liv)) {
+								String text1 = liv.getEquipment().getItemInMainHand().getItemMeta() == null ? liv.getEquipment().getItemInMainHand().getType().toString() : liv.getEquipment().getItemInMainHand().getItemMeta().getDisplayName();
+
 								player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto Disparado ",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+liv.getType(), 40, 80, 40);
 								//player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+damager.getCustomName()+" usando "+liv.getEquipment().getItemInMainHand().getItemMeta().getDisplayName());
-								player.sendMessage(Component.text(ChatColor.RED+"Moriste Disparado por: "+ChatColor.YELLOW+liv.getType()+ChatColor.RED+" usando ").append(Component.text(liv.getEquipment().getItemInMainHand().getItemMeta().getDisplayName())).hoverEvent(liv.getEquipment().getItemInMainHand()));
+								player.sendMessage(Component.text(ChatColor.RED+"Moriste Disparado por: "+ChatColor.YELLOW+liv.getType()+ChatColor.RED+" usando ").append(Component.text(text1)).hoverEvent(liv.getEquipment().getItemInMainHand()));
 							
 								gmc.sendMessageTextComponentToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio Disparado por "+ChatColor.YELLOW+liv.getType()+ChatColor.RED+" usando ",liv.getEquipment().getItemInMainHand());
 						
@@ -1171,11 +1179,15 @@ public class GameIntoMap {
 		if(e instanceof Player) {
 			Player p = (Player) e;
 			if(p.getInventory().getItemInMainHand() != null && p.getInventory().getItemInMainHand().hasItemMeta()) {
+				if(p.getInventory().getItemInMainHand().getItemMeta().hasDisplayName()) {
 					return true;
+				}
 			}
 		}else {
 			if(e.getEquipment().getItemInMainHand() != null && e.getEquipment().getItemInMainHand().hasItemMeta()) {
-				return true;
+				if(e.getEquipment().getItemInMainHand().getItemMeta().hasDisplayName()) {
+					return true;
+				}
 			}
 		}
 		

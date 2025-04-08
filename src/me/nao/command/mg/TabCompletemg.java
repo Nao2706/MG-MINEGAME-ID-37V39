@@ -48,8 +48,8 @@ public class TabCompletemg implements TabCompleter{
 			arguments.add("set-points");
 			arguments.add("set-life");
 			arguments.add("top");
-			arguments.add("check");
-			arguments.add("my-points");
+			arguments.add("check-points");
+			//arguments.add("my-points");
 			arguments.add("reward");
 			arguments.add("setspawn-end");
 			arguments.add("stop");
