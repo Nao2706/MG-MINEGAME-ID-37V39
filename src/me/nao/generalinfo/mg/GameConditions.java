@@ -5122,28 +5122,30 @@ public class GameConditions {
 		 if(!mc.isEmpty()){
 			 
 			 FileConfiguration menu = plugin.getMenuItems();
-			 for(int i = 0 ; i< mc.size();i++ ) {
+			 for(int i = 0 ; i < mc.size() ; i++) {
 				 String map = mc.get(i);
-				 if(!menu.contains(map))continue;
-				 FileConfiguration game = getGameConfig(map);
-				 ItemMenu it = new ItemMenu(plugin);
-				 it.setPosition(i);
-				 it.setCode(map);
-				 it.setDisplayname(menu.getString(map+".Display-Name","Sin Nombre"));
-				 it.setItem(new ItemStack(Material.matchMaterial(menu.getString(map+".Material","BEDROCK"))));
-				 it.setEnchanted(menu.getBoolean(map+".Is-Enchanted",false));
-				 it.setLocked(isBlockedTheMap(map));
-				 it.setWorking(menu.getBoolean(map+".Is-Working",true));
-				 it.setLore(menu.getStringList(map+".Lore-Item"));
-				 it.setMaintenance(hasMaintenance());
-				 it.setRanked(isMapRanked(map));
-				 it.setTime(game.getBoolean("Has-Time"));
-				 it.setDatetime(map);
-				 it.setDatetime(game.getString("Usage-Time"));
-				 it.setPermission(game.getBoolean("Requires-Permission"));
-				 it.setPermissionforplay(game.getString("Permission-To-Play"));
-				 it.setPermissionmessage(game.getStringList("How-Get-Permission.Message"));
-				 plugin.getItemMenuMg().put(map, it);
+				 if(menu.contains(map)) {
+					 FileConfiguration game = getGameConfig(map);
+					 ItemMenu it = new ItemMenu(plugin);
+					 it.setPosition(i);
+					 it.setCode(map);
+					 it.setDisplayname(menu.getString(map+".Display-Name","Sin Nombre"));
+					 it.setItem(new ItemStack(Material.matchMaterial(menu.getString(map+".Material","BEDROCK"))));
+					 it.setEnchanted(menu.getBoolean(map+".Is-Enchanted",false));
+					 it.setLocked(isBlockedTheMap(map));
+					 it.setWorking(menu.getBoolean(map+".Is-Working",true));
+					 it.setLore(menu.getStringList(map+".Lore-Item"));
+					 it.setMaintenance(hasMaintenance());
+					 it.setRanked(isMapRanked(map));
+					 it.setTime(game.getBoolean("Has-Time"));
+					 it.setDatetime(map);
+					 it.setDatetime(game.getString("Usage-Time"));
+					 it.setPermission(game.getBoolean("Requires-Permission"));
+					 it.setPermissionforplay(game.getString("Permission-To-Play"));
+					 it.setPermissionmessage(game.getStringList("How-Get-Permission.Message"));
+					 plugin.getItemMenuMg().put(map, it);
+				 }
+				 
 				 //plugin.getItemMenuMg().put(map, null)u
 			 }
 			 sendMessageToConsole(ChatColor.GREEN+"Datos de Mapas Cargados...");

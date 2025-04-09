@@ -1094,6 +1094,11 @@ public class GameIntoMap {
 					gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio de "+ChatColor.YELLOW+"HAMBRE");
 					 
 					
+				}else {
+					player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+c.toString(),40, 80, 40);
+					player.sendMessage(ChatColor.RED+"Moriste de "+ChatColor.YELLOW+c.toString());
+					
+					gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio de "+ChatColor.YELLOW+c.toString());
 				}
 				player.sendMessage("");
 				HealPlayer(player);

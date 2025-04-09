@@ -1498,7 +1498,7 @@ public class MinigameShop1 implements Listener{
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
 					player.getInventory().removeItem(new ItemStack(Material.IRON_INGOT,150));
 				}else {
-					player.sendMessage(ChatColor.RED+"Necesitas 20 Lingotes de Hierro");
+					player.sendMessage(ChatColor.RED+"Necesitas 150 Lingotes de Hierro");
 				}
 			}
 			

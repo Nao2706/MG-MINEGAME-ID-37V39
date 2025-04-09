@@ -2335,8 +2335,8 @@ public class Comandsmg implements CommandExecutor{
               			List<Entity> list = getNearbyEntites(player.getLocation(), 500);
               			
               			for(Entity e : list) {
-              				if(e.getType() != EntityType.PLAYER && e instanceof Creature) {
-              					Creature ent = (Creature) e;
+              				if(e.getType() != EntityType.PLAYER && e instanceof Monster) {
+              					Monster ent = (Monster) e;
               					ent.setTarget(player);
               					
               				}
