@@ -304,7 +304,7 @@ public class GameIntoMap {
 
 				}
 					player.sendMessage(ChatColor.RED+"\nUsa la hotbar para ver a otros jugadores. "+ChatColor.YELLOW+"\n!!!Solo podras ver a los que estan en tu partida");
-					player.sendMessage(ChatColor.GREEN+"Puedes ser revivido por tus compañeros.(Siempre que hayan cofres de Revivir)");
+					player.sendMessage(ChatColor.GREEN+"Puedes ser revivido por tus compañeros.\n(Siempre que hayan cofres de Revivir)");
 					
 				 	MgTeams t = new MgTeams(plugin);;
 					t.JoinTeamDeadMG(player);
@@ -548,8 +548,8 @@ public class GameIntoMap {
 			player.setGameMode(GameMode.SPECTATOR);
 			
 			if(!ga.getAlivePlayers().isEmpty()) {
-				player.sendMessage(ChatColor.RED+"|Usa la hotbar para Espectear a otros Jugadores. "+ChatColor.YELLOW+"\n|Solo podras ver a los que estan en tu Partida");
-				player.sendMessage(ChatColor.WHITE+"|Puedes ser "+ChatColor.GREEN+"Revivido "+ChatColor.WHITE+"por tus compañeros"+ChatColor.GOLD+"(Siempre que hayan cofres de Revivir)");
+				player.sendMessage(ChatColor.RED+"Usa la hotbar para Espectear a otros Jugadores. "+ChatColor.YELLOW+"\nSolo podras ver a los que estan en tu Partida");
+				player.sendMessage(ChatColor.WHITE+"Puedes ser "+ChatColor.GREEN+"Revivido "+ChatColor.WHITE+"por tus compañeros"+ChatColor.GOLD+"\n(Siempre que hayan cofres de Revivir)");
 			}
 		
 			
@@ -756,7 +756,7 @@ public class GameIntoMap {
 
 								player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"Disparado por: "+ChatColor.YELLOW+damager.getCustomName(), 40, 80, 40);
 								//player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+damager.getCustomName()+" usando "+liv.getEquipment().getItemInMainHand().getItemMeta().getDisplayName());
-								player.sendMessage(Component.text(ChatColor.RED+"Moriste Disparado por: "+ChatColor.YELLOW+liv.getCustomName()+ChatColor.RED+" usando ").append(Component.text(text1)).hoverEvent(liv.getEquipment().getItemInMainHand()));
+								player.sendMessage(Component.text(ChatColor.RED+"Moriste Disparado por: "+ChatColor.YELLOW+liv.getCustomName()+ChatColor.RED+" usando ").append(Component.text(text1).hoverEvent(liv.getEquipment().getItemInMainHand())));
 							
 								gmc.sendMessageTextComponentToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio Disparado por "+ChatColor.YELLOW+liv.getCustomName()+ChatColor.RED+" usando ",liv.getEquipment().getItemInMainHand());
 								//gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+damager.getCustomName()+" usando "+liv.getEquipment().getItemInMainHand().getItemMeta().getDisplayName());
@@ -773,7 +773,7 @@ public class GameIntoMap {
 
 								player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto Disparado ",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+liv.getType(), 40, 80, 40);
 								//player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+damager.getCustomName()+" usando "+liv.getEquipment().getItemInMainHand().getItemMeta().getDisplayName());
-								player.sendMessage(Component.text(ChatColor.RED+"Moriste Disparado por: "+ChatColor.YELLOW+liv.getType()+ChatColor.RED+" usando ").append(Component.text(text1)).hoverEvent(liv.getEquipment().getItemInMainHand()));
+								player.sendMessage(Component.text(ChatColor.RED+"Moriste Disparado por: "+ChatColor.YELLOW+liv.getType()+ChatColor.RED+" usando ").append(Component.text(text1).hoverEvent(liv.getEquipment().getItemInMainHand())));
 							
 								gmc.sendMessageTextComponentToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio Disparado por "+ChatColor.YELLOW+liv.getType()+ChatColor.RED+" usando ",liv.getEquipment().getItemInMainHand());
 						
@@ -1092,6 +1092,13 @@ public class GameIntoMap {
 					player.sendMessage(ChatColor.RED+"Moriste de "+ChatColor.YELLOW+"HAMBRE");
 					
 					gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio de "+ChatColor.YELLOW+"HAMBRE");
+					 
+					
+				}if(c == EntityDamageEvent.DamageCause.THORNS) {
+					player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"ESPINAS", 40, 80, 40);
+					player.sendMessage(ChatColor.RED+"Moriste de "+ChatColor.YELLOW+"ESPINAS");
+					
+					gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"ESPINAS");
 					 
 					
 				}else {

@@ -2952,7 +2952,7 @@ public class EventRandoms implements Listener{
 														player.sendMessage(ChatColor.YELLOW+"Necesitas que todos los jugadores vivos esten cerca para avanzar.");
 														
 														
-														gc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GREEN+player.getName()+ChatColor.RED+" Solicita una reunion para poder activar un Evento.");
+														gc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GREEN+player.getName()+ChatColor.RED+" Solicita una Reunion para poder activar un Evento.");
 														return;
 												   }else if(!chest.getInventory().isEmpty()) {
 														for (ItemStack itemStack : chest.getInventory().getContents()) {
