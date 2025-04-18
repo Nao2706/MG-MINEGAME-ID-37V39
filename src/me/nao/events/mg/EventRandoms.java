@@ -1731,9 +1731,10 @@ public class EventRandoms implements Listener{
 								  arrow.remove();
 							  }
 						  }
-					  }
+					  } 
 						 // Player player = (Player) projectile.getShooter();
 						  if(b.getType() == Material.TARGET) {
+							   if(!gc.isPlayerinGame(player)) return;
 							  detectDispenser(player,b.getLocation(),plugin.getGameInfoPoo().get(plugin.getPlayerInfoPoo().get(player).getMapName()));
 							  DetectChestAndCommand(b.getLocation());
 						  }if(b.getType() == Material.STRUCTURE_BLOCK) {
