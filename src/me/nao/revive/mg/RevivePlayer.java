@@ -496,7 +496,7 @@ public class RevivePlayer{
 			int alive = ga.getAlivePlayers().size();
 			int knocked = ga.getKnockedPlayers().size();
 			int arrive = ga.getArrivePlayers().size();
-			 System.out.println("true "+(alive - arrive)+" == "+knocked);
+			// System.out.println("true "+(alive - arrive)+" == "+knocked);
 			 if((alive - arrive) == knocked) {
 				
 				return true; 

@@ -205,8 +205,9 @@ public class MgScore {
 		if(!ga.getKnockedPlayers().isEmpty()) {
 			//System.out.println("NO ESTA VACIO");
 			for(Player target : gc.ConvertStringToPlayer(ga.getKnockedPlayers())) {
-				
+				  
 				//COLOCADO PARA QUE AL ITERAR SOBRE EL MAP DE JUGADORES NOQUEADOS NO ESTE SETANDO EL SCOREBOARD A OTRO JUGADOR DE OTRO MAPA (TESTEAR Y CAMBIAR SI ES NECESARIO)
+				if(!gc.isPlayerinGame(target)) continue;
 				PlayerInfo pl = plugin.getPlayerInfoPoo().get(target);
 				if(pl.getMapName().equals(p.getMapName())) {
 				
