@@ -453,17 +453,17 @@ public class ReportsManager {
 	    	
 	    		for(int i = inicio;i < fin && i < l.size();i++) {
 	    			if(player != null) {
-	    				player.sendMessage(""+ChatColor.RED+(i+1)+").  "+ChatColor.WHITE+l.get(i).replaceAll("-"," ")
-	    						.replaceAll("Sancion:",ChatColor.GOLD+"Sancion:")
-		    					.replaceAll("Fecha:",ChatColor.GREEN+"Fecha:").replaceAll("Tiempo:",ChatColor.GREEN+"Tiempo:")
-		    					.replaceAll("Mod:",ChatColor.GREEN+"Mod:").replaceAll("Razon:",ChatColor.GREEN+"Razon:"));
+	    				player.sendMessage(""+ChatColor.RED+(i+1)+"). "+ChatColor.WHITE+l.get(i).replaceAll("-"," ")
+	    						.replaceAll("Sancion:",ChatColor.GOLD+"Sancion:"+ChatColor.GREEN)
+		    					.replaceAll("Fecha:",ChatColor.GOLD+"Fecha:"+ChatColor.GREEN).replaceAll("Tiempo:",ChatColor.GOLD+"Tiempo:"+ChatColor.GREEN)
+		    					.replaceAll("Mod:",ChatColor.GOLD+"Mod:"+ChatColor.GREEN).replaceAll("Razon:",ChatColor.GOLD+"Razon:"+ChatColor.GREEN));
 	    			}
 	    			
 	    			
-	    			Bukkit.getConsoleSender().sendMessage(""+ChatColor.RED+(i+1)+").  "+ChatColor.WHITE+l.get(i).replaceAll("-"," ")
-	    					.replaceAll("Sancion:",ChatColor.GOLD+"Sancion:")
-	    					.replaceAll("Fecha:",ChatColor.GREEN+"Fecha:").replaceAll("Tiempo:",ChatColor.GREEN+"Tiempo:")
-	    					.replaceAll("Mod:",ChatColor.GREEN+"Mod:").replaceAll("Razon:",ChatColor.GREEN+"Razon:"));
+	    			Bukkit.getConsoleSender().sendMessage(""+ChatColor.RED+(i+1)+"). "+ChatColor.WHITE+l.get(i).replaceAll("-"," ")
+	    					.replaceAll("Sancion:",ChatColor.GOLD+"Sancion:"+ChatColor.GREEN)
+	    					.replaceAll("Fecha:",ChatColor.GOLD+"Fecha:"+ChatColor.GREEN).replaceAll("Tiempo:",ChatColor.GOLD+"Tiempo:"+ChatColor.GREEN)
+	    					.replaceAll("Mod:",ChatColor.GOLD+"Mod:"+ChatColor.GREEN).replaceAll("Razon:",ChatColor.GOLD+"Razon:"+ChatColor.GREEN));
 	    					
 	    		}
 	    		
@@ -546,6 +546,9 @@ public class ReportsManager {
 				        		 comments = comments+report[i]+" "; 
 								 
 							 }
+				        	 
+				        	 comments = comments+".";
+				        	 
 				        	 if(player != null) {
 									GameReports gr = new GameReports(target,GameReportType.valueOf(type.toUpperCase()),ld.format(formatter).toString(),"SIN TIEMPO",player.getName(),comments.replace("-", " ").replace(",", " "));
 									cool.SetSancionPlayer(player, gr, 0);
@@ -566,7 +569,9 @@ public class ReportsManager {
 					        		 comments = comments+report[i]+" "; 
 									 
 								 }
-							
+					        	
+							     comments = comments+".";
+								 
 								//String timeg = time;
 								GameConditions gc = new GameConditions(plugin);
 								
@@ -626,6 +631,8 @@ public class ReportsManager {
 									
 									 if(comments.isEmpty()) {
 										 comments = "Sin especificar.";
+									 }else {
+										 comments = comments+".";
 									 }
 									 
 									int total = (ReturnHourAndMinuteToSecons(time));
@@ -649,6 +656,8 @@ public class ReportsManager {
 									
 									 if(comments.isEmpty()) {
 										 comments = "Sin especificar.";
+									 }else {
+										 comments = comments+".";
 									 }
 									 
 									int total = (ReturnHourAndMinuteToSecons(time)+ReturnHourAndMinuteToSecons(time2));
@@ -673,6 +682,8 @@ public class ReportsManager {
 									 
 									 if(comments.isEmpty()) {
 										 comments = "Sin especificar.";
+									 }else {
+										 comments = comments+".";
 									 }
 									 
 								

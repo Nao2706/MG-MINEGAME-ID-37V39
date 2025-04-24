@@ -94,6 +94,7 @@ public class TabCompletemg implements TabCompleter{
 			arguments.add("mapinfo");
 			arguments.add("sudo");
 			arguments.add("sudoall");
+			arguments.add("prestiges");
 			
 			
 		}

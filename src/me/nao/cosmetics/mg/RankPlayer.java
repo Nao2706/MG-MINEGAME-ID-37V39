@@ -1,5 +1,9 @@
 package me.nao.cosmetics.mg;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -110,37 +114,37 @@ public class RankPlayer {
 		
 			
 				if(lvl == 0) {
-					return rank = Utils.colorText("&7&l[&8&lNM&7&l] ");
+					return rank = Utils.colorText("&7&l[&8&lNOVATO&7&l] ");
 					
 				}else if(lvl == 1) {
-					return rank =  Utils.colorText("&7&l[&f&lEK&7&l] ");
+					return rank =  Utils.colorText("&7&l[&f&lCABALLERO&7&l] ");
 					
 				}else if(lvl == 2) {
-					return rank =  Utils.colorText("&7&l[&e&lSG&7&l] ");
+					return rank =  Utils.colorText("&7&l[&e&lGUARDIAN&7&l] ");
 					
 				}else if(lvl == 3) {
-					return rank =  Utils.colorText("&7&l[&c&lCL&7&l] ");
+					return rank =  Utils.colorText("&7&l[&c&lCENTINELA&7&l] ");
 					
 				}else if(lvl == 4) {
-					 rank =  Utils.colorText("&7&l[&4&lAE&7&l] ");
+					 rank =  Utils.colorText("&7&l[&4&lCAMPEON&7&l] ");
 					 
 				}else if(lvl == 5) {
-					 rank =  Utils.colorText("&7&l[&a&lTO&7&l] ");
+					 rank =  Utils.colorText("&7&l[&a&lCONQUISTADOR&7&l] ");
 					 
 				}else if(lvl == 6) {
-					 rank =  Utils.colorText("&7&l[&2&lLW&7&l] ");
+					 rank =  Utils.colorText("&7&l[&2&lTITAN&7&l] ");
 					 
 				}else if(lvl == 7) {
-					 rank =  Utils.colorText("&7&l[&b&lIK&7&l] ");
+					 rank =  Utils.colorText("&7&l[&b&lEMPERADOR&7&l] ");
 					 
 				}else if(lvl == 7) {
-					 rank =  Utils.colorText("&7&l[&5&l&nEC&7&l] ");
+					 rank =  Utils.colorText("&7&l[&5&l&nREY&7&l] ");
 					 
 				}else if(lvl == 9) {
-					 rank =  Utils.colorText("&7&l[&1&l&nMC&7&l] ");
+					 rank =  Utils.colorText("&7&l[&1&l&nMAESTRO&7&l] ");
 					 
 				}else if(lvl == 10) {
-					 rank = Utils.colorText("&7&l[&6&l&nSSS+&7&l] ");
+					 rank = Utils.colorText("&7&l[&6&l&nCELESTIAL&7&l] ");
 					 
 				}
 		
@@ -154,48 +158,76 @@ public class RankPlayer {
 		
 			
 				if(lvl == 0) {
-					return rank = "NM";
+					return rank = "NOVATO";
 					
 				}else if(lvl == 1) {
-					return rank =  "EK";
+					return rank =  "CABALLERO";
 					
 				}else if(lvl == 2) {
-					return rank = "SG";
+					return rank = "GUARDIAN";
 					
 				}else if(lvl == 3) {
-					return rank = "CL";
+					return rank = "CENTINELA";
 					
 				}else if(lvl == 4) {
-					 rank =  "AE";
+					 rank =  "CAMPEON";
 					 
 				}else if(lvl == 5) {
-					 rank = "TO";
+					 rank = "CONQUISTADOR";
 					 
 				}else if(lvl == 6) {
-					 rank = "LW";
+					 rank = "TITAN";
 					 
 				}else if(lvl == 7) {
-					 rank =  "IK";
+					 rank =  "EMPERADOR";
 					 
 				}else if(lvl == 7) {
-					 rank =  "EC";
+					 rank =  "REY";
 					 
 				}else if(lvl == 9) {
-					 rank =  "MC";
+					 rank =  "MAESTRO";
 					 
 				}else if(lvl == 10) {
-					 rank = "SSS+";
+					 rank = "CELESTIAL";
 					 
 				}
 		
 			return rank;
 	}
 	
+	public void showPrestiges(Player player) {
+		
+		
+		List<String> l = new ArrayList<>();
+		
+		l.add("&c- &7&l[&8&lNOVATO&7&l]");
+		l.add("&c- &7&l[&f&lCABALLERO&7&l]");
+		l.add("&c- &7&l[&e&lGUARDIAN&7&l]");
+		l.add("&c- &7&l[&c&lCENTINELA&7&l]");
+		l.add("&c- &7&l[&4&lCAMPEON&7&l]");
+		l.add("&c- &7&l[&a&lCONQUISTADOR&7&l]");
+		l.add("&c- &7&l[&2&lTITAN&7&l]");
+		l.add("&c- &7&l[&b&lEMPERADOR&7&l]");
+		l.add("&c- &7&l[&5&l&nREY&7&l]");
+		l.add("&c- &7&l[&1&l&nMAESTRO&7&l]");
+		l.add("&c- &7&l[&6&l&nCELESTIAL&7&l]");
+
+		
+		if(player != null) {
+			player.sendMessage(Utils.colorText("&c&l&nPrestigios Disponibles"));
+			
+			for(String text : l) {
+				player.sendMessage(Utils.colorText(text));
+			}
+		
+		}
+		Bukkit.getConsoleSender().sendMessage(Utils.colorText("&c&l&nPrestigios Disponibles"));
+		for(String text : l) {
+			Bukkit.getConsoleSender().sendMessage(Utils.colorText(text));
+		}
 	
 	
-	
-	
-	
+	}
 	
 	
 	

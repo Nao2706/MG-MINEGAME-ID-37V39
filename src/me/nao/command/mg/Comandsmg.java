@@ -53,6 +53,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
+import me.nao.cosmetics.mg.RankPlayer;
 import me.nao.database.mg.BukkitSerialization;
 import me.nao.database.mg.SQLInfo;
 import me.nao.enums.mg.GameStatus;
@@ -637,6 +638,11 @@ public class Comandsmg implements CommandExecutor{
         			
         			return true;
         			
+        		}else if(args[0].equalsIgnoreCase("prestiges")) {
+        			RankPlayer rk= new RankPlayer(plugin);
+        			
+        			rk.showPrestiges(null);
+        			return true;
         		}else if(args[0].equalsIgnoreCase("timegame")) {
 						//mg time Tutorial set 0-1-2
 			 		  
@@ -2220,6 +2226,11 @@ public class Comandsmg implements CommandExecutor{
         			
         			return true;
         			
+        		}else if(args[0].equalsIgnoreCase("prestiges")) {
+        			RankPlayer rk= new RankPlayer(plugin);
+        			
+        			rk.showPrestiges(player);
+        			return true;
         		}else if(args[0].equalsIgnoreCase("prestige")) {
           			
           			//mg invite Tutorial

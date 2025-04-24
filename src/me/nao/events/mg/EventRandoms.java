@@ -210,7 +210,7 @@ public class EventRandoms implements Listener{
 
 				if(gi instanceof GameAdventure) {
 					GameAdventure ga = (GameAdventure) gi;
-					if(ga.getDeadPlayers().contains(player.getName())) {
+					if(ga.getDeadPlayers().contains(player.getName()) || ga.getSpectators().contains(player.getName())) {
 						e.setCancelled(true);
 						return;
 					}

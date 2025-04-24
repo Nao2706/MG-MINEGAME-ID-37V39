@@ -322,6 +322,31 @@ public class PointsManager {
 			
 		}
 		
+		
+		
+		public void setPlayerLevelMg(Player player ,String target ,int lvl) {
+			FileConfiguration points = plugin.getPoints();
+			
+			if(!points.contains("Players."+target)) {
+				
+				if(player != null) {
+					player.sendMessage(ChatColor.RED+"El Jugador "+target+" no existe (no hay datos) o su nombre esta mal escrito.");
+				}
+				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El Jugador "+target+" no existe (no hay datos) o su nombre esta mal escrito.");
+				return;
+			}
+			
+			
+			SystemOfLevels manager = new SystemOfLevels();
+			manager.rangeOfLvl(lvl);
+			points.set("Players."+player.getName()+".Level",manager.getPlayerlvl());
+			points.set("Players."+player.getName()+".Xp",0);
+			points.set("Players."+player.getName()+".Reference-Xp",manager.getReferenceB());
+			saveAll();
+		}
+		
+		
+		
 		//no tiene muchas condiciones por que esas van en otro lado CommandsMessage
 		public void prestigeMg(Player player) {
 			
