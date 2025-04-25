@@ -1011,7 +1011,7 @@ public class GameConditions {
 					pl = new PlayerInfo(plugin,true,player, player.getLocation(), map,new GamePoints());
 					
 				}
-				pl.ClearGamemodePlayerMg();
+				pl.clearGamemodePlayerMg();
 		}else{
 				
 				//NO SALVAS SU INVENTARIO
@@ -1022,7 +1022,7 @@ public class GameConditions {
 					pl = new PlayerInfo(plugin,false,player,player.getLocation(), map,new GamePoints());
 	
 				}
-				pl.ClearAllPlayerMg();
+				pl.clearAllPlayerMg();
 		}
 		 
 		 	plugin.getPlayerInfoPoo().put(player, pl);
@@ -2876,7 +2876,7 @@ public class GameConditions {
 					//SE SECCIONA POR QUE HAY QUE VER SI SE SALVO O NO SU INVENTARIO
 					if(ms.isAllowedJoinWithOwnInventory()) {
 						player.teleport(pl.getLocationMG());
-						pl.RestoreGamemodePlayerMg(player);
+						pl.restoreGamemodePlayerMg();
 						
 						if(ms.getGameStatus() == GameStatus.TERMINANDO) {
 							playerWinnerReward(player);
@@ -2887,7 +2887,7 @@ public class GameConditions {
 					
 					}else {
 						player.teleport(pl.getLocationMG());
-						pl.RestoreAllPlayerMg(player);
+						pl.restoreAllPlayerMg();
 						
 						if(ms.getGameStatus() == GameStatus.TERMINANDO) {
 							playerWinnerReward(player);
@@ -2906,7 +2906,7 @@ public class GameConditions {
 				System.out.println("LOG 2 RESTORE ANTES NEXO: "+ms.ShowGame());
 				
 					player.teleport(pl.getLocationMG());
-					pl.RestoreAllPlayerMg(player);
+					pl.restoreAllPlayerMg();
 				
 				removeAllPlayerToGame(player, pl.getMapName());
 				

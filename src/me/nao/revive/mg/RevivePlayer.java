@@ -379,17 +379,13 @@ public class RevivePlayer{
 		if(gi instanceof GameAdventure) {
 			if(getReviveStatus() != ReviveStatus.REVIVED || getReviveStatus() != ReviveStatus.SELFREVIVED) {
 				 if(time == 0) {
-						System.out.println("TIEMPO 0");
+						//System.out.println("TIEMPO 0");
 						return true;
-					}
-				  	
-				 
-				 	else if(allAlivePlayersKnocked() && !hasReviveItemAnyPlayer()) {
-						System.out.println("TODOS NOQUEADOS");
+					}else if(allAlivePlayersKnocked() && !hasReviveItemAnyPlayer()) {
+						//System.out.println("TODOS NOQUEADOS");
 						return true;
-					}
-					else if(isDangerZone()) {
-						System.out.println("ZONA PELIGROSA");
+					}else if(isDangerZone()) {
+						//System.out.println("ZONA PELIGROSA");
 						return true;
 					}
 			}

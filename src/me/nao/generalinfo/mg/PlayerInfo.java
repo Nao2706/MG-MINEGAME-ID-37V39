@@ -228,7 +228,7 @@ public class PlayerInfo {
 	}
 
 
-	public void ClearAllPlayerMg() {
+	public void clearAllPlayerMg() {
 		
 		int lvl = 0 ;
 		int prestigee = 0 ;
@@ -256,7 +256,7 @@ public class PlayerInfo {
 		
 	}
 	
-	public void ClearGamemodePlayerMg() {
+	public void clearGamemodePlayerMg() {
 		int lvl = 0 ;
 		int prestigee = 0 ;
 		FileConfiguration points = plugin.getPoints();
@@ -275,29 +275,29 @@ public class PlayerInfo {
 	}
 	
 	
-	public void RestoreAllPlayerMg(Player playerMg) {
-		PlayerInfo pl = plugin.getPlayerInfoPoo().get(playerMg);
+	public void restoreAllPlayerMg() {
+		//PlayerInfo pl = plugin.getPlayerInfoPoo().get(playerMg);
 		
 		 player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
 		 
-		 player.setGameMode(pl.getGamemodeMG());
-		 player.setFlying(pl.isFlyMG());
-		 player.getInventory().setContents(pl.getInventoryMG());
-		 player.getAttribute(Attribute.MAX_HEALTH).setBaseValue(pl.getMaxLifeMG());
-		 player.getAttribute(Attribute.SCALE).setBaseValue(pl.getScaleMG());
-		 player.setFoodLevel(pl.getFoodMG());
-		 player.addPotionEffects(pl.getPlayerPottionsMg());
-		 player.setExp(pl.getXpMG());
-		 player.setLevel(pl.getLvlXpMG());
-		 player.setHealth(pl.getLifeMG());
+		 player.setGameMode(getGamemodeMG());
+		 player.setFlying(isFlyMG());
+		 player.getInventory().setContents(getInventoryMG());
+		 player.getAttribute(Attribute.MAX_HEALTH).setBaseValue(getMaxLifeMG());
+		 player.getAttribute(Attribute.SCALE).setBaseValue(getScaleMG());
+		 player.setFoodLevel(getFoodMG());
+		 player.addPotionEffects(getPlayerPottionsMg());
+		 player.setExp(getXpMG());
+		 player.setLevel(getLvlXpMG());
+		 player.setHealth(getLifeMG());
 		 player.getScoreboardTags().addAll(getBackAllTagsMg());
 	}
 	
-	public void RestoreGamemodePlayerMg(Player playermg) {
-		 PlayerInfo pl = plugin.getPlayerInfoPoo().get(playermg);
-		 player.setGameMode(pl.getGamemodeMG());
-		 player.getAttribute(Attribute.SCALE).setBaseValue(pl.getScaleMG());
-		 player.setFlying(pl.isFlyMG());
+	public void restoreGamemodePlayerMg() {
+		 //PlayerInfo pl = plugin.getPlayerInfoPoo().get(playermg);
+		 player.setGameMode(getGamemodeMG());
+		 player.getAttribute(Attribute.SCALE).setBaseValue(getScaleMG());
+		 player.setFlying(isFlyMG());
 		 player.getScoreboardTags().addAll(getBackAllTagsMg());
 		
 	}
