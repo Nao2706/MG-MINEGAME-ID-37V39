@@ -114,26 +114,16 @@ public class MinigameShop1 implements Listener{
 			if(!isCustomInventory(player))return;
 			
 			
-			try{
 			
-					if(e.getCurrentItem() == null) {
+			
+				if(e.getCurrentItem() == null) {
 						if(e.getClickedInventory().getType() == e.getView().getType()) {
 							//System.out.println("GG");
 							e.setCancelled(true);
 						}
 						return;
-					}
+				}
 					
-					
-				
-			}catch(NullPointerException e2) {
-				
-			}
-			
-			
-			
-			
-	
 				
 				if(e.getCurrentItem() != null) {
 					
