@@ -86,6 +86,7 @@ public class GameConditions {
 	//TODO JOIN
 	 
 	public void mgJoinToTheGames(Player player,String map) {
+		if(!existMap(map)) return;
 		loadDataMap(map);
 		
 		if(canJoinToTheMap(player,map)){

@@ -749,14 +749,14 @@ public class PointsManager {
 	}
 	
 	public String getProgressBar(long current, long max, int totalBars, char symbol, ChatColor completedColor,ChatColor notCompletedColor) {
-		double percent = (double) current/max;
+		double percent = current < 0 ? 0 : (double) current/max;
         int progressBars = (int) (totalBars * percent);
  
         return Strings.repeat(""+ completedColor +ChatColor.BOLD + symbol, progressBars) + Strings.repeat("" + notCompletedColor +ChatColor.BOLD+ symbol, totalBars - progressBars);
    }
 	
 	public String Porcentage(long current , long max ) {
-		double percent = (double) current/max*100;
+		double percent = current < 0 ? 0 : (double) current/max*100;
 		NumberFormat nf = NumberFormat.getInstance();
 		nf.setMaximumFractionDigits(0);
 		return nf.format(percent)+"%";

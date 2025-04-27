@@ -299,6 +299,14 @@ public class EventRandoms implements Listener{
 
 				if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
 					
+					if(gi instanceof GameAdventure) {
+						GameAdventure ga = (GameAdventure) gi;
+						if(ga.getDeadPlayers().contains(player.getName()) || ga.getSpectators().contains(player.getName())) {
+							e.setCancelled(true);
+							return;
+						}
+					}
+					
 					
 					if(!player.getPassengers().isEmpty()) {
 						

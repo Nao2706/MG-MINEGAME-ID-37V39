@@ -90,11 +90,15 @@ public class SourceOfDamage implements Listener{
 		Player player = (Player) e.getPlayer();
 		Location l = e.getTo();
 		
-	
+		GameConditions gc = new GameConditions(plugin);
+		if(gc.isPlayerinGame(player)) {
+			gc.ForceGameModePlayerRol(player);
+			
+		}
 		
 		if(player.getGameMode() == GameMode.SPECTATOR) {
 			if(e.getCause() == PlayerTeleportEvent.TeleportCause.SPECTATE) {
-				GameConditions gc = new GameConditions(plugin);
+			
 				if(gc.isPlayerinGame(player)) {
 					
 					if(!player.getLocation().getWorld().getName().equals(l.getWorld().getName())) {
@@ -212,6 +216,7 @@ public class SourceOfDamage implements Listener{
 	@EventHandler(priority = EventPriority.LOWEST)  //METODO
     public void mgworld(PlayerChangedWorldEvent e){
 		Player player = e.getPlayer();
+
 		GameConditions gc = new GameConditions(plugin);
 		if(gc.isPlayerinGame(player)) {
 			gc.ForceGameModePlayerRol(player);
