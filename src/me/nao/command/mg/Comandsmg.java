@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -1016,29 +1015,35 @@ public class Comandsmg implements CommandExecutor{
 					}
 
 					// PRIMERA PARTE
-					HashMap<String, Integer> scores = new HashMap<>();
+					HashMap<String, Long> scores = new HashMap<>();
 
 					for (String key : points1.getConfigurationSection("Players").getKeys(false)) {
 
-						int puntaje = Integer.valueOf(points1.getString("Players." + key + ".Kills"));
+						long xp = points1.getLong("Players." + key + ".Xp");
+						int lvl = points1.getInt("Players." + key + ".Level");
+						SystemOfLevels manager = new SystemOfLevels();
+						manager.rangeOfLvl(lvl);
+						long xptotal = xp+manager.getTotalPlayerXpLvl();
 						// SE GUARDAN LOS DATOS EN EL HASH MAP
-						scores.put(key, puntaje);
+						scores.put(key, xptotal);
 
 					}
 
 					// SEGUNDA PARTE CALCULO MUESTRA DE MAYOR A MENOR PUNTAJE
-					List<Map.Entry<String, Integer>> list = new ArrayList<>(scores.entrySet());
+					List<Map.Entry<String, Long>> list = new ArrayList<>(scores.entrySet());
 
-					Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
-						public int compare(Map.Entry<String, Integer> e1, Map.Entry<String, Integer> e2) {
-							return e2.getValue() - e1.getValue();
-						}
-					});
+					list.sort(Comparator.comparingLong((Map.Entry<String, Long> e)->e.getValue()).reversed());
+					//funcional con ints
+//					Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+//						public int compare(Map.Entry<String, Integer> e1, Map.Entry<String, Integer> e2) {
+//							return e2.getValue() - e1.getValue();
+//						}
+//					});
 
 					// TERCERA PARTE IMPRIMIR DATOS DE MAYOR A MENOR
 
 					int i = 0;
-					for (Map.Entry<String, Integer> e : list) {
+					for (Map.Entry<String, Long> e : list) {
 
 						i++;
 						if (i <= message.getInt("Top-Amount-Command")) {
@@ -1050,7 +1055,8 @@ public class Comandsmg implements CommandExecutor{
 									String texto = messagep.get(j);
 									Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&',
 											texto.replaceAll("%player%", e.getKey())
-													.replace("%pointuser%", e.getValue().toString())
+													.replaceAll("%xp%", e.getValue().toString())
+													.replaceAll("%userlvl%",  points1.getString("Players." + e.getKey() + ".Level"))
 													.replaceAll("%place%", Integer.toString(i))));
 								
 
@@ -4033,29 +4039,44 @@ public class Comandsmg implements CommandExecutor{
 						}
 
 						// PRIMERA PARTE
-						HashMap<String, Integer> scores = new HashMap<>();
-
+						HashMap<String, Long> scores = new HashMap<>();
 						for (String key : points1.getConfigurationSection("Players").getKeys(false)) {
 
-							int puntaje = Integer.valueOf(points1.getString("Players." + key + ".Kills"));
+							long xp = points1.getLong("Players." + key + ".Xp");
+							int lvl = points1.getInt("Players." + key + ".Level");
+							SystemOfLevels manager = new SystemOfLevels();
+							manager.rangeOfLvl(lvl);
+							long xptotal = xp+manager.getTotalPlayerXpLvl();
 							// SE GUARDAN LOS DATOS EN EL HASH MAP
-							scores.put(key, puntaje);
+							scores.put(key, xptotal);
 
 						}
 
 						// SEGUNDA PARTE CALCULO MUESTRA DE MAYOR A MENOR PUNTAJE
-						List<Map.Entry<String, Integer>> list = new ArrayList<>(scores.entrySet());
+						List<Map.Entry<String, Long>> list = new ArrayList<>(scores.entrySet());
 
-						Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
-							public int compare(Map.Entry<String, Integer> e1, Map.Entry<String, Integer> e2) {
-								return e2.getValue() - e1.getValue();
-							}
-						});
+						list.sort(Comparator.comparingLong((Map.Entry<String, Long> e)->e.getValue()).reversed());
+//						for (String key : points1.getConfigurationSection("Players").getKeys(false)) {
+//
+//							int puntaje = Integer.valueOf(points1.getString("Players." + key + ".Kills"));
+//							// SE GUARDAN LOS DATOS EN EL HASH MAP
+//							scores.put(key, puntaje);
+//
+//						}
+
+						// SEGUNDA PARTE CALCULO MUESTRA DE MAYOR A MENOR PUNTAJE
+						//List<Map.Entry<String, Integer>> list = new ArrayList<>(scores.entrySet());
+
+//						Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+//							public int compare(Map.Entry<String, Integer> e1, Map.Entry<String, Integer> e2) {
+//								return e2.getValue() - e1.getValue();
+//							}
+//						});
 
 						// TERCERA PARTE IMPRIMIR DATOS DE MAYOR A MENOR
 
 						int i = 0;
-						for (Map.Entry<String, Integer> e : list) {
+						for (Map.Entry<String, Long> e : list) {
 
 							i++;
 							if (i <= message.getInt("Top-Amount-Command")) {
@@ -4067,7 +4088,8 @@ public class Comandsmg implements CommandExecutor{
 										String texto = messagep.get(j);
 										player.sendMessage(ChatColor.translateAlternateColorCodes('&',
 												texto.replaceAll("%player%", e.getKey())
-														.replace("%pointuser%", e.getValue().toString())
+												.replaceAll("%xp%", e.getValue().toString())
+												.replaceAll("%userlvl%",  points1.getString("Players." + e.getKey() + ".Level"))
 														.replaceAll("%place%", Integer.toString(i))));
 									}
 

@@ -70,8 +70,8 @@ public class MapSettings {
 			ym.set("Min-Player", 2);
 			ym.set("Game-Timer-H-M-S", "1,5,10");
 			ym.set("Has-Objetives",false); 
-			ym.set("Primary-Objetive-Opcional",false); 
-			ym.set("Secondary-Objetive-Opcional",false); 
+			ym.set("Primary-Objetive-Mandatory",false); 
+			ym.set("Secondary-Objetive-Mandatory",false); 
 			ym.set("Set-Hearts",20);
 			ym.set("Dispenser-Range",30);
 			ym.set("Map-hasBarriers",true); 

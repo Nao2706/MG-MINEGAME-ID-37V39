@@ -938,7 +938,7 @@ public class MinigameShop1 implements Listener{
 		TaskID = sh.scheduleSyncRepeatingTask(plugin, new Runnable() {
 			public void run() {
 			
-				if(gc.isPlayerinGame(player) || player.getOpenInventory() == null || !isUpdateable(player)) {
+				if(player.getOpenInventory() == null || !isUpdateable(player,gc.isPlayerinGame(player))) {
 					Bukkit.getScheduler().cancelTask(TaskID);
 					return;
 				}
@@ -948,7 +948,11 @@ public class MinigameShop1 implements Listener{
 		
 	}
 	
-	public boolean isUpdateable(Player player) {
+	public boolean isUpdateable(Player player, boolean status) {
+		
+		if(status){
+			return false;
+		}
 		
 		if(player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("MENU DE MAPAS")) {
 			

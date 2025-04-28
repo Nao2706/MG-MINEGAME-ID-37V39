@@ -189,7 +189,7 @@ public class PointsManager {
 			//DISPLAY DE XP : LO QUE CONSIGUIO DE XP EN UNA PARTIDA SE POSITIVO O NEGATIVO
 			long displayxp = (savexp+calcstreaks+val);
 			//XP REAL: LO QUE EL JUGADOR RALMENTE TIENE DE XP SUMANDO LOS NIVELES BASE MAS LA XP GUARDADA + RACHA + XP QUE GANO EN PARTIDA
-			long currentplayertotalxpwhithoutchanges = (manager.getTotalplayerxp()+savexp+calcstreaks+val);
+			long currentplayertotalxpwhithoutchanges = (manager.getTotalPlayerXpLvl()+savexp+calcstreaks+val);
 			//System.out.println("current "+savexp+" "+calcstreaks+" "+val+"= "+currentplayertotalxpwhithoutchanges);
 			//long copyeofcurrentplayertotal = displayxp;
 			
@@ -217,13 +217,13 @@ public class PointsManager {
 			player.sendMessage(Utils.colorTextChatColor("&aEl Bonus de este Mapa es: &6X"+gi.getPointsBonus()));
 			player.sendMessage(Utils.colorTextChatColor("&7Kills: &a"+gp.getKills()+" &7Muertes: &a"+gp.getDeads()+" &7Revivido: &a"+gp.getRevive()+" &7Ayudas a Revivir: &a"+gp.getHelpRevive()));
 
-			player.spigot().sendMessage(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.DARK_GRAY+"- "+net.md_5.bungee.api.ChatColor.GRAY+"Xp de tu Nivel: "+net.md_5.bungee.api.ChatColor.GREEN+manager.getTotalplayerxp(),"La Experiencia que tu nivel Tiene", net.md_5.bungee.api.ChatColor.GOLD));
+			player.spigot().sendMessage(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.DARK_GRAY+"- "+net.md_5.bungee.api.ChatColor.GRAY+"Xp de tu Nivel: "+net.md_5.bungee.api.ChatColor.GREEN+manager.getTotalPlayerXpLvl(),"La Experiencia que tu nivel Tiene", net.md_5.bungee.api.ChatColor.GOLD));
 			player.spigot().sendMessage(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.DARK_GRAY+"- "+net.md_5.bungee.api.ChatColor.GRAY+"Xp Guardada: "+net.md_5.bungee.api.ChatColor.GREEN+savexp,"La Experiencia que tenias.", net.md_5.bungee.api.ChatColor.GOLD));
 			player.spigot().sendMessage(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.DARK_GRAY+"- "+net.md_5.bungee.api.ChatColor.GREEN+"Xp Ganada: "+net.md_5.bungee.api.ChatColor.GREEN+val,"La Experiencia Conseguiste.", net.md_5.bungee.api.ChatColor.GOLD));
 			player.spigot().sendMessage(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.DARK_GRAY+"- "+net.md_5.bungee.api.ChatColor.DARK_PURPLE+"Racha: "+net.md_5.bungee.api.ChatColor.GOLD+streak+net.md_5.bungee.api.ChatColor.RED+" x "+net.md_5.bungee.api.ChatColor.GOLD+net.md_5.bungee.api.ChatColor.BOLD+"100 "+net.md_5.bungee.api.ChatColor.RED+"= "+net.md_5.bungee.api.ChatColor.DARK_PURPLE+calcstreaks,"La Racha que tienes.", net.md_5.bungee.api.ChatColor.GOLD));
 			ComponentBuilder cb = new ComponentBuilder();
 			cb.append(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.GOLD+"Resultado: ","El Calculo de la Experiencia.", net.md_5.bungee.api.ChatColor.GREEN));
-			cb.append(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.GRAY+String.valueOf(manager.getTotalplayerxp()),"Experiencia del nivel.", net.md_5.bungee.api.ChatColor.GREEN));
+			cb.append(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.GRAY+String.valueOf(manager.getTotalPlayerXpLvl()),"Experiencia del nivel.", net.md_5.bungee.api.ChatColor.GREEN));
 			cb.append(Utils.sendTextComponent(net.md_5.bungee.api.ChatColor.RED+" + "));
 			cb.append(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.GRAY+String.valueOf(savexp),"Experiencia Guardada.", net.md_5.bungee.api.ChatColor.GREEN));
 			cb.append(Utils.sendTextComponent(net.md_5.bungee.api.ChatColor.RED+" + "));
@@ -358,7 +358,7 @@ public class PointsManager {
 			//DISPLAY DE XP : LO QUE CONSIGUIO DE XP EN UNA PARTIDA SE POSITIVO O NEGATIVO
 			long displayxp = (savexp+val);
 			//XP REAL: LO QUE EL JUGADOR RALMENTE TIENE DE XP SUMANDO LOS NIVELES BASE MAS LA XP GUARDADA + RACHA + XP QUE GANO EN PARTIDA
-			long currentplayertotalxpwhithoutchanges = (manager.getTotalplayerxp()+savexp+val);
+			long currentplayertotalxpwhithoutchanges = (manager.getTotalPlayerXpLvl()+savexp+val);
 			//System.out.println("current "+savexp+" "+calcstreaks+" "+val+"= "+currentplayertotalxpwhithoutchanges);
 			//long copyeofcurrentplayertotal = displayxp;
 			
@@ -704,33 +704,49 @@ public class PointsManager {
 		FileConfiguration message = plugin.getMessage();
     	FileConfiguration points = plugin.getPoints();
     	// PRIMERA PARTE
-		HashMap<String, Integer> scores = new HashMap<>();
+		HashMap<String, Long> scores = new HashMap<>();
 
+//		for (String key : points.getConfigurationSection("Players").getKeys(false)) {
+//
+//			int puntaje = Integer.valueOf(points.getString("Players." + key + ".Kills"));
+//			// SE GUARDAN LOS DATOS EN EL HASH MAP
+//			scores.put(key, puntaje);
+//
+//		}
+		
+		
 		for (String key : points.getConfigurationSection("Players").getKeys(false)) {
 
-			int puntaje = Integer.valueOf(points.getString("Players." + key + ".Kills"));
+			long xp = points.getLong("Players." + key + ".Xp");
+			int lvl = points.getInt("Players." + key + ".Level");
+			SystemOfLevels manager = new SystemOfLevels();
+			manager.rangeOfLvl(lvl);
+			long xptotal = xp+manager.getTotalPlayerXpLvl();
 			// SE GUARDAN LOS DATOS EN EL HASH MAP
-			scores.put(key, puntaje);
+			scores.put(key, xptotal);
 
 		}
-
+		
 		// SEGUNDA PARTE CALCULO MUESTRA DE MAYOR A MENOR PUNTAJE
-		List<Map.Entry<String, Integer>> list = new ArrayList<>(scores.entrySet());
+		List<Map.Entry<String, Long>> list = new ArrayList<>(scores.entrySet());
 
-		Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
-			public int compare(Map.Entry<String, Integer> e1, Map.Entry<String, Integer> e2) {
-				return e2.getValue() - e1.getValue();
-			}
-		});
+		//CON EL REVERSED VA DE MAYOR A MENOR SIN EL REVERSED DE MENOR A MAYOR
+		list.sort(Comparator.comparingLong((Map.Entry<String, Long> e)->e.getValue()).reversed());
+//		Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+//			public int compare(Map.Entry<String, Integer> e1, Map.Entry<String, Integer> e2) {
+//				return e2.getValue() - e1.getValue();
+//			}
+//		});
 
 		// TERCERA PARTE IMPRIMIR DATOS DE MAYOR A MENOR
 		
-		  Entry<String, Integer> p = list.get(posicion);
+		  Entry<String, Long> p = list.get(posicion);
 	
 		
 				String texto = message.getString("Top.message-top-global-text");
 				f.append( texto.replaceAll("%player%",p.getKey())
-						.replace("%pointuser%", p.getValue().toString())
+						.replaceAll("%userxp%", p.getValue().toString())
+						.replaceAll("%userlvl%",  points.getString("Players." + p.getKey() + ".Level"))
 						.replaceAll("%place%", Integer.toString(posicion+1)));
 			
 		

@@ -1377,12 +1377,12 @@ public class GameConditions {
 	
 	public boolean isNecessaryObjetivePrimary(String map) {
 		FileConfiguration game = getGameConfig(map);
-	    return game.getBoolean("Primary-Objetive-Opcional");
+	    return game.getBoolean("Primary-Objetive-Mandatory");
 	}
 	
 	public boolean isNecessaryObjetiveSedondary(String map) {
 		FileConfiguration game = getGameConfig(map);
-	    return game.getBoolean("Secondary-Objetive-Opcional");
+	    return game.getBoolean("Secondary-Objetive-Mandatory");
 	}
 	
 	public String getNameOfTheMap(String map) {
@@ -5202,7 +5202,7 @@ public class GameConditions {
 				int prestige = points1.getInt("Players."+target+".Prestige");
 				
 				sof.rangeOfLvl(lvl);
-				long currentxp = xp+sof.getTotalplayerxp();
+				long currentxp = xp+sof.getTotalPlayerXpLvl();
 				
 				if (message.getBoolean("Message-My-Points.message")) {
 					List<String> messagep = message.getStringList("Message-My-Points.message-points-texto");

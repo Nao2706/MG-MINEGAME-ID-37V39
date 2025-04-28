@@ -30,7 +30,7 @@ public class SystemOfLevels {
 	public long getRemaingxp() {
 		return remaingxp;
 	}
-	public long getTotalplayerxp() {
+	public long getTotalPlayerXpLvl() {
 		return totalplayerxp;
 	}
 	public long getXp() {
@@ -54,7 +54,7 @@ public class SystemOfLevels {
 	public void setRemaingxp(long remaingxp) {
 		this.remaingxp = remaingxp;
 	}
-	public void setTotalplayerxp(long totalplayerxp) {
+	public void setTotalPlayerXpLvl(long totalplayerxp) {
 		this.totalplayerxp = totalplayerxp;
 	}
 	public void setPlayerlvl(int playerlvl) {
@@ -100,7 +100,7 @@ public class SystemOfLevels {
     	}
     	//System.out.println(referant+" "+refer); 
     	setTotalxplvlA(referant);
-    	setTotalplayerxp(referant);
+    	setTotalPlayerXpLvl(referant);
     	setTotalxplvlB(refer);
     	
     }
