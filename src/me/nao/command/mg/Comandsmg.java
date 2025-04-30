@@ -2135,7 +2135,7 @@ public class Comandsmg implements CommandExecutor{
 				//TODO REWARD
 			}else if (args[0].equalsIgnoreCase("reward")) {
 					FileConfiguration config = plugin.getConfig();
-					if(config.getBoolean("Join-Reward")) {
+					if(config.getBoolean("Claim-Reward")) {
 						PointsManager p  = new PointsManager(plugin);
 						p.isInTop(player);
 						

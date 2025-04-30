@@ -7,7 +7,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Map.Entry;
 
 import org.bukkit.Bukkit;
@@ -540,31 +539,50 @@ public class PointsManager {
 			FileConfiguration points = plugin.getPoints();
 			
 			
-			if(points.contains("Players."+player.getName()+".Kills")) {
-			// PRIMERA PARTE
-			HashMap<String, Integer> scores = new HashMap<>();
+		if(points.contains("Players."+player.getName())) {
+//			// PRIMERA PARTE
+//			HashMap<String, Integer> scores = new HashMap<>();
+//
+//			for (String key : points.getConfigurationSection("Players").getKeys(false)) {
+//
+//				int puntaje = Integer.valueOf(points.getString("Players." + key + ".Kills"));
+//				// SE GUARDAN LOS DATOS EN EL HASH MAP
+//				scores.put(key, puntaje);
+//
+//			}
+//
+//			// SEGUNDA PARTE CALCULO MUESTRA DE MAYOR A MENOR PUNTAJE
+//			List<Map.Entry<String, Integer>> list = new ArrayList<>(scores.entrySet());
+//
+//			Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+//				public int compare(Map.Entry<String, Integer> e1, Map.Entry<String, Integer> e2) {
+//					return e2.getValue() - e1.getValue();
+//				}
+//			});
 
+			HashMap<String, Long> scores = new HashMap<>();
 			for (String key : points.getConfigurationSection("Players").getKeys(false)) {
 
-				int puntaje = Integer.valueOf(points.getString("Players." + key + ".Kills"));
+				long xp = points.getLong("Players." + key + ".Xp");
+				int lvl = points.getInt("Players." + key + ".Level");
+				SystemOfLevels manager = new SystemOfLevels();
+				manager.rangeOfLvl(lvl);
+				long xptotal = xp+manager.getTotalPlayerXpLvl();
 				// SE GUARDAN LOS DATOS EN EL HASH MAP
-				scores.put(key, puntaje);
+				scores.put(key, xptotal);
 
 			}
 
 			// SEGUNDA PARTE CALCULO MUESTRA DE MAYOR A MENOR PUNTAJE
-			List<Map.Entry<String, Integer>> list = new ArrayList<>(scores.entrySet());
+			List<Map.Entry<String, Long>> list = new ArrayList<>(scores.entrySet());
 
-			Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
-				public int compare(Map.Entry<String, Integer> e1, Map.Entry<String, Integer> e2) {
-					return e2.getValue() - e1.getValue();
-				}
-			});
-
+			list.sort(Comparator.comparingLong((Map.Entry<String, Long> e)->e.getValue()).reversed());
+			
+			
 			// TERCERA PARTE IMPRIMIR DATOS DE MAYOR A MENOR
 
 			int i = 0;
-			for (Map.Entry<String, Integer> e : list) {
+			for (Map.Entry<String, Long> e : list) {
 				
 				i++;
 				if(i <= 10) {
@@ -594,48 +612,60 @@ public class PointsManager {
 		
 		
 	public void ClaimReward(Player player,int pos) {
+		 
 		FileConfiguration cool = plugin.getCooldown();
 		FileConfiguration config = plugin.getConfig();
-		 List<String> rand = config.getStringList("Random-Reward.List");
-		 Random r = new Random();
-		
-		int tiempo = config.getInt("Time-Reward");// 3 horas 3600
-		
-		Cooldown c = new Cooldown (plugin, tiempo); 
-		String pathtime = "Players."+player.getUniqueId()+".Cooldown-Recompensa";  
-		String cooldown = c.getCooldown(player);
+		 List<String> rewards = config.getStringList("Top-Rewards.List");
+			if(rewards.isEmpty()) {
+				player.sendMessage(ChatColor.RED+"No hay Datos para dar Recompensas contacta a un Administrador.");
+				return;
+			}
+			
+			
+			if(rewards.size() > pos) {
+				// Random r = new Random();
+					
+					int tiempo = config.getInt("Time-Reward");// 3 horas 3600
+					
+					Cooldown c = new Cooldown (plugin, tiempo); 
+					String pathtime = "Players."+player.getUniqueId()+".Cooldown-Recompensa";  
+					String cooldown = c.getCooldown(player);
+				
+					if(cooldown.equals("-1")) {
+						long millis = System.currentTimeMillis();   
+						cool.set(pathtime, millis);
+					    plugin.getCooldown().save();
+					    
+					    Fireworks f = new Fireworks(player);
+					    for(int i = 0 ; i < 5; i++) {
+					    	 f.spawnMetodoAyi();
+					    }
+					   
+					    ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+					    console.sendMessage(ChatColor.WHITE+"El Jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" en la Posicion "+ChatColor.GREEN+pos+"#"+ChatColor.WHITE+" del Top Reclamo su Recompensa Diaria.");
+//						for(int i = 0 ; i < (11 - pos) ;i++) {
+//						}
+							 //String commando = rand.get(r.nextInt(rand.size()));
+							 int position = pos-1;
+							 Bukkit.dispatchCommand(console, rewards.get(position).replaceAll("%player%",player.getName()));
+							 console.sendMessage(""+ChatColor.RED+(position)+ChatColor.GOLD+" Premio: "+ChatColor.GREEN+rewards.get(position).replaceAll("%player%",player.getName()));
+					    
+						
+						 player.sendMessage(ChatColor.GOLD+"[Recompensa]: "+ChatColor.GREEN+"Has reclamado tu recompensa felicidades Diaria.");
+						 //player.sendMessage("Como tu posicion en el Top es: "+ChatColor.GREEN+pos+"# \n"+ChatColor.GOLD+" Recibiras "+ChatColor.GREEN+(11 - pos)+ChatColor.GOLD+" Recompensas.");
+						 player.sendMessage("Como tu Posicion en el Top es: "+ChatColor.GREEN+pos+"# \n"+ChatColor.GOLD+" Recibiras la recompensa de esa Posicion.");
+						 
+					}else {
+						
+						player.sendMessage(ChatColor.GOLD+"[Recompensa]: "+ChatColor.RED+"Tu Proxima Recompensa sera en: "+ChatColor.GREEN+cooldown);
+						
+					 }
+			}else {
+				player.sendMessage(Utils.colorTextChatColor("&cNo hay recompensas para tu posicion solo desde la Posicion&7: &61 &chasta &6"+(rewards.size()-1)));
+
+			}
+		 
 	
-		if(cooldown.equals("-1")) {
-			long millis = System.currentTimeMillis();   
-			cool.set(pathtime, millis);
-		    plugin.getCooldown().save();
-		    
-		    Fireworks f = new Fireworks(player);
-		    for(int i = 0 ; i < 5; i++) {
-		    	 f.spawnMetodoAyi();
-		    }
-		   
-		    ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-		    console.sendMessage(ChatColor.WHITE+"El Jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" en la Posicion "+ChatColor.GREEN+pos+"#"+ChatColor.WHITE+" del Top Reclamo su Recompensa Diaria.");
-			for(int i = 0 ; i < (11 - pos) ;i++) {
-		    	
-				 String commando = rand.get(r.nextInt(rand.size()));
-				 Bukkit.dispatchCommand(console, commando.replaceAll("%player%",player.getName()));
-				 console.sendMessage(""+ChatColor.RED+(i+1)+ChatColor.GOLD+" Premio: "+ChatColor.GREEN+commando);
-		    }
-			
-			 player.sendMessage(ChatColor.GOLD+"[Recompensa]: "+ChatColor.GREEN+"Has reclamado tu recompensa felicidades Diaria.");
-			 player.sendMessage("Como tu posicion en el Top es: "+ChatColor.GREEN+pos+"# \n"+ChatColor.GOLD+" Recibiras "+ChatColor.GREEN+(11 - pos)+ChatColor.GOLD+" Recompensas.");
-			 
-			 
-		}
-		
-		// se activa despues de reclamar
-		else {
-			
-			player.sendMessage(ChatColor.GOLD+"[Recompensa]: "+ChatColor.RED+"Tu Proxima Recompensa sera en: "+ChatColor.GREEN+cooldown);
-			
-		 }
 	}
 	
 	 

@@ -798,7 +798,7 @@ public class GameConditions {
 		
 	
 		int puntaje = pl.getGamePoints().getKills();
-		FileConfiguration mision = getGameConfig(name);
+		FileConfiguration mision = ms.getMapData();
 
 		List<String> winreward = mision.getStringList("Win-Rewards.Commands");
 		List<String> win = mision.getStringList("Win.Chat-Message-Win");
@@ -830,7 +830,70 @@ public class GameConditions {
 	     player.sendTitle(ChatColor.translateAlternateColorCodes('&',mision.getString("Win.Tittle-of-Win").replaceAll("%player%", player.getName())), ChatColor.translateAlternateColorCodes('&',mision.getString("Win.SubTittle-of-Win").replaceAll("%player%", player.getName())), aw, aw2, aw3);
 
 		  if(mision.getBoolean("Win.Reward-Position-Top")) {
-			  TopForReward(player, name);
+			  
+				HashMap<String, Integer> scores = new HashMap<>();
+			  
+				if(ms instanceof GameAdventure) {
+					GameAdventure ga = (GameAdventure) ms;
+					
+						List<String> part = ga.getParticipants();
+						List<String> spectador = ga.getSpectators();
+						List<Player> players = ConvertStringToPlayer(part);
+						
+						for(Player user : players) {
+							PlayerInfo pi = plugin.getPlayerInfoPoo().get(user);
+							
+							if(spectador.contains(user.getName())) continue;
+							 scores.put(user.getName(), pi.getGamePoints().getKills());	
+						}
+						
+						
+						List<Map.Entry<String, Integer>> list = new ArrayList<>(scores.entrySet());
+
+						
+						Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+							public int compare(Map.Entry<String, Integer> e1, Map.Entry<String, Integer> e2) {
+								return e2.getValue() - e1.getValue();
+							}
+						});
+						
+						
+						
+						
+						int i = 0;
+						for (Map.Entry<String, Integer> e : list) {
+							
+							i++;
+							if(i <= 10) {
+									if(player.getName().equals(e.getKey())) {
+										
+										if(!winreward.isEmpty()) {
+											player.sendMessage(ChatColor.RED+"No hay Datos para dar Recompensas contacta a un Administrador.");
+											break;
+										}
+										
+										if(winreward.size() > i) {
+											int position = i-1;
+											player.sendMessage(ChatColor.GREEN+"Felicidades Ganaste el Premio de la Posicion "+i+"#");
+											 Bukkit.dispatchCommand(console, winreward.get(position).replaceAll("%player%",player.getName()));
+											 console.sendMessage(""+ChatColor.RED+(position)+ChatColor.GOLD+" Premio: "+ChatColor.GREEN+winreward.get(position).replaceAll("%player%",player.getName()));
+									    
+										}else{
+											player.sendMessage(Utils.colorTextChatColor("&cNo hay recompensas para tu posicion solo desde la Posicion&7: &61 &chasta &6"+(winreward.size()-1)));
+
+										}
+										
+										break;
+									}
+				
+							}else{
+								player.sendMessage(ChatColor.RED+"No estas en el Top 10 asi que no habra Premio.");
+								break;
+							}
+						}
+				
+				}
+				
 		  }else {
 			  if(!winreward.isEmpty()) {
 					for(int i = 0 ; i < winreward.size(); i++) {
@@ -891,7 +954,7 @@ public class GameConditions {
 			pm.LoseGamePoints(player);
 		}
 	 
-		FileConfiguration mision = getGameConfig(name);
+		FileConfiguration mision = ms.getMapData();
 		List<String> lostreward = mision.getStringList("Lost-Rewards.Commands");
 		List<String> lost = mision.getStringList("Lost.Chat-Message-Lost");
 		int puntaje = pl.getGamePoints().getKills();
@@ -3215,74 +3278,6 @@ public class GameConditions {
 		return i =  (~(i -1));
 	}
    	
-	   //TODO TOP
-	public void TopForReward(Player player ,String map) {
-				
-					FileConfiguration mision = getGameConfig(map);
-					ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-
-		// PRIMERA PARTE
-					HashMap<String, Integer> scores = new HashMap<>();
-					
-
-					
-						GameInfo ms = plugin.getGameInfoPoo().get(map);
-						if(ms instanceof GameAdventure) {
-							GameAdventure ga = (GameAdventure) ms;
-							List<Player> joins = ConvertStringToPlayer(ga.getParticipants());
-							List<Player> spectador = ConvertStringToPlayer(ga.getSpectators());
-							List<String> winreward = mision.getStringList("Win-Rewards.Commands");
-							for(Player user : joins) {
-								PlayerInfo pl = plugin.getPlayerInfoPoo().get(user);
-								
-								if(spectador.contains(user)) continue;
-								 scores.put(user.getName(), pl.getGamePoints().getKills());	
-							}
-						
-							
-							// SE GUARDAN LOS DATOS EN EL HASH MAP
-							
-
-						
-
-						// SEGUNDA PARTE CALCULO MUESTRA DE MAYOR A MENOR PUNTAJE
-						List<Map.Entry<String, Integer>> list = new ArrayList<>(scores.entrySet());
-
-						
-						Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
-							public int compare(Map.Entry<String, Integer> e1, Map.Entry<String, Integer> e2) {
-								return e2.getValue() - e1.getValue();
-							}
-						});
-
-						// TERCERA PARTE IMPRIMIR DATOS DE MAYOR A MENOR
-					
-						
-								System.out.println("LOG 1 REWARD-------TOP--------");
-								
-									int i = 0;
-									for (Map.Entry<String, Integer> e : list) {
-										if(i < 3) {
-											if(e.getKey().equals(player.getName())) {
-												if(!winreward.isEmpty()) {
-													
-													if(i < winreward.size()) {
-														String texto = winreward.get(i);
-
-														Bukkit.dispatchCommand(console, ChatColor.translateAlternateColorCodes('&', texto.replaceAll("%player%",player.getName()).replaceAll("%points%",String.valueOf(RewardPointsForItems(e.getValue())))));
-														return;
-													}
-												}
-											}
-											i++;
-											// player.sendMessage(i+" Nombre:"+e.getKey()+" Puntos:"+e.getValue());
-									}}
-							
-						}
-		
-	}	
-   	
-	
 	   //TODO STOP
 	   public void StopGames(Player player , String name,StopMotive motive,String reason) {
 		    
