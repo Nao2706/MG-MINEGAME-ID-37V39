@@ -709,13 +709,13 @@ public class Comandsmg implements CommandExecutor{
 	        				int value = Integer.valueOf(args[1]);
 	        				
 
-	        				if(value <= 359 && value >= 0) {
+	        				if(value <= 99 && value >= 0) {
 	        
 	        					SystemOfLevels sof = new SystemOfLevels();
 	        					sof.rangeOfLvl(value);
 	        					Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor("&c-&6El Nivel &a"+value+" &6Requiere de &a"+sof.getTotalxplvlA()+" &6XP y termina con &a"+sof.getTotalxplvlB()+" &6de XP."));
 	        				}else {
-	        					Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Solo hay 360 niveles.");
+	        					Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Solo hay 100 niveles.");
 	        				}
 	        				
 	        				
@@ -2263,13 +2263,13 @@ public class Comandsmg implements CommandExecutor{
         				
         				int value = Integer.valueOf(args[1]);
         			
-        				if(value <= 359 && value >= 0) {
+        				if(value <= 99 && value >= 0) {
         
         					SystemOfLevels sof = new SystemOfLevels();
         					sof.rangeOfLvl(value);
         					player.sendMessage(Utils.colorTextChatColor("&c-&6El Nivel &a"+value+" &6Requiere de &a"+sof.getTotalxplvlA()+" &6XP y termina con &a"+sof.getTotalxplvlB()+" &6de XP."));
         				}else {
-        					player.sendMessage(ChatColor.GREEN+"Solo hay 360 niveles.");
+        					player.sendMessage(ChatColor.GREEN+"Solo hay 100 niveles.");
         				}
         				
         				

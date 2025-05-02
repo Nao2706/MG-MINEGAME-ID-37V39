@@ -867,16 +867,17 @@ public class GameConditions {
 							if(i <= 10) {
 									if(player.getName().equals(e.getKey())) {
 										
-										if(!winreward.isEmpty()) {
+										if(winreward.isEmpty()) {
 											player.sendMessage(ChatColor.RED+"No hay Datos para dar Recompensas contacta a un Administrador.");
 											break;
 										}
 										
 										if(winreward.size() > i) {
 											int position = i-1;
-											player.sendMessage(ChatColor.GREEN+"Felicidades Ganaste el Premio de la Posicion "+i+"#");
+											 player.sendMessage(ChatColor.GREEN+"Felicidades Ganaste el Premio de la "+i+"# Posicion");
 											 Bukkit.dispatchCommand(console, winreward.get(position).replaceAll("%player%",player.getName()));
-											 console.sendMessage(""+ChatColor.RED+(position)+ChatColor.GOLD+" Premio: "+ChatColor.GREEN+winreward.get(position).replaceAll("%player%",player.getName()));
+											 console.sendMessage(ChatColor.GREEN+"%player% Gano el Premio de la "+i+"# Posicion".replaceAll("%player%",player.getName()));
+											 console.sendMessage(""+ChatColor.RED+i+ChatColor.GOLD+" Premio: "+ChatColor.GREEN+winreward.get(position).replaceAll("%player%",player.getName()));
 									    
 										}else{
 											player.sendMessage(Utils.colorTextChatColor("&cNo hay recompensas para tu posicion solo desde la Posicion&7: &61 &chasta &6"+(winreward.size()-1)));
@@ -902,7 +903,8 @@ public class GameConditions {
 						Bukkit.dispatchCommand(console, ChatColor.translateAlternateColorCodes('&', texto.replaceAll("%player%",player.getName()).replaceAll("%points%",String.valueOf(RewardPointsForItems(puntaje)))));
 						
 				      }
-				}
+				}else {
+					console.sendMessage(ChatColor.RED+"El Mapa: "+ChatColor.GOLD+name+ChatColor.RED+" no tiene establecidas Recompensas.");			}
 		  }
 	  
 		  return;
@@ -5216,7 +5218,7 @@ public class GameConditions {
 								 .replace("%refer%",String.valueOf(refer))
 								 .replace("%xp%", String.valueOf(xp))
 								 .replace("%streaks%",String.valueOf(points))
-								 .replace("%progress%",""+ChatColor.GRAY+ChatColor.BOLD+"["+pm.getProgressBar(xp,refer, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GRAY+ChatColor.BOLD+"]")
+								 .replace("%progress%",""+ChatColor.GRAY+ChatColor.BOLD+"["+pm.showProgressBar(xp,refer,20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.GRAY+ChatColor.BOLD+"]")
 								 .replace("%porcent%",pm.Porcentage(xp,refer))
 								 .replace("%lvl%",String.valueOf(lvl))
 								 .replace("%wins%",String.valueOf(point5))

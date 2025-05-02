@@ -260,15 +260,16 @@ public class CommandsMessage {
 		
 		int savelvl = points.getInt("Players."+player.getName()+".Level");
 		int prestige = points.getInt("Players."+player.getName()+".Prestige");
+		int maxlvl = 100;
 		
-		if(savelvl != 360) {
+		if(savelvl != maxlvl) {
 			player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"!!! NOTIFICACION !!!");
 			player.sendMessage(ChatColor.GRAY+"Este Comando es solo para Jugadores de Nivel 360");
 			player.sendMessage(ChatColor.GRAY+"Tu nivel es: "+ChatColor.GREEN+savelvl);
 			player.sendMessage(ChatColor.GRAY+"Sube de Nivel Rapido para poder Usarlo.");
 			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 100,1);
 			return;
-		}if(savelvl == 360 && prestige == 10) {
+		}if(savelvl == maxlvl && prestige == 10) {
 			player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"!!! MAXIMO NIVEL ALCANZADO !!!");
 			player.sendMessage(ChatColor.GRAY+"Ya has alcanzado el Nivel Maximo.");
 			player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 100,1);

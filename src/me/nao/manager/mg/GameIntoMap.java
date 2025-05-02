@@ -399,8 +399,10 @@ public class GameIntoMap {
 					Fireworks f = new Fireworks(player);
 					f.spawnFireballGreenLarge();
 					gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.GREEN+" llego a la Meta.");
+					
 				}if(gm.getGameType() == GameType.RESISTENCE) {
-			       
+					
+					gmc.playerArriveToTheWin(player, mapa);
 					gmc.EndTptoSpawn(player, mapa);
 				}
 				
@@ -426,8 +428,9 @@ public class GameIntoMap {
 					Fireworks f = new Fireworks(player);
 					f.spawnFireballGreenLarge();
 					gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.GREEN+" llego a la Meta.");
+					
 				}if(gm.getGameType() == GameType.RESISTENCE) {
-			      
+					gmc.playerArriveToTheWin(player, mapa);
 					gmc.EndTptoSpawn(player, mapa);
 				}
 				
@@ -454,8 +457,9 @@ public class GameIntoMap {
 					Fireworks f = new Fireworks(player);
 					f.spawnFireballGreenLarge();
 					gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.GREEN+" llego a la Meta.");
+					
 				}if(gm.getGameType() == GameType.RESISTENCE) {
-
+					gmc.playerArriveToTheWin(player, mapa);
 					gmc.EndTptoSpawn(player, mapa);
 				}
 				
@@ -479,8 +483,10 @@ public class GameIntoMap {
 				Fireworks f = new Fireworks(player);
 				f.spawnFireballGreenLarge();
 				gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.GREEN+" llego a la Meta.");
+				
 			}if(gm.getGameType() == GameType.RESISTENCE) {
-		      
+				
+				gmc.playerArriveToTheWin(player, mapa);
 				gmc.EndTptoSpawn(player, mapa);
 			}
 			isTheRankedGames(player,gm.isRankedMap());

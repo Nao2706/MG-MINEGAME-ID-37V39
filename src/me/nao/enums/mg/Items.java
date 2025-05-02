@@ -54,10 +54,10 @@ import org.bukkit.inventory.meta.ItemMeta;
             REVIVE(""+ChatColor.RED+ChatColor.BOLD+"AUTO REVIVIR", Material.BREWING_STAND,null, 1, ChatColor.GREEN+"Llevalo contigo para Autorevivirte Mantenlo pulsado.", ChatColor.GREEN+"Usalo cuando te Noqueen. (Click Derecho sobre tu Cadaver)", ChatColor.GREEN+"Precio: "+ChatColor.RED+"25 Diamantes"),
             REVIVEP(""+ChatColor.RED+ChatColor.BOLD+"AUTO REVIVIR", Material.BREWING_STAND,null, 1, ChatColor.GREEN+"Llevalo contigo para Autorevivirte.", ChatColor.GREEN+"Usalo cuando te Noqueen. (Click Derecho sobre tu Cadaver)"),
 
-            SPAWNZOMBI(""+ChatColor.RED+ChatColor.BOLD+"SPAWN ZOMBI", Material.BARRIER,null, 1, ChatColor.GREEN+"Spawnea Zombis normales ."),
-            SPAWNBABYZOMBI(""+ChatColor.RED+ChatColor.BOLD+"SPAWN BABY ZOMBI", Material.BARRIER,null, 1, ChatColor.GREEN+"Spawnea Zombis Bebes ."),
-            SPAWNELITEZOMBI(""+ChatColor.RED+ChatColor.BOLD+"SPAWN ELITE ZOMBI", Material.BARRIER,null, 1, ChatColor.GREEN+"Spawnea Zombis Elites ."),
-            SPAWNHORDEZOMBI(""+ChatColor.RED+ChatColor.BOLD+"SPAWN HORDA DE ZOMBIS", Material.BARRIER,null, 1, ChatColor.GREEN+"Spawnea una Horda de Zombis."),
+            SPAWNZOMBI(""+ChatColor.RED+ChatColor.BOLD+"SPAWN ZOMBI", Material.STICK,null, 1, ChatColor.GREEN+"Spawnea Zombis normales ."),
+            SPAWNBABYZOMBI(""+ChatColor.RED+ChatColor.BOLD+"SPAWN BABY ZOMBI", Material.STICK,null, 1, ChatColor.GREEN+"Spawnea Zombis Bebes ."),
+            SPAWNELITEZOMBI(""+ChatColor.RED+ChatColor.BOLD+"SPAWN ELITE ZOMBI", Material.STICK,null, 1, ChatColor.GREEN+"Spawnea Zombis Elites ."),
+            SPAWNHORDEZOMBI(""+ChatColor.RED+ChatColor.BOLD+"SPAWN HORDA DE ZOMBIS", Material.STICK,null, 1, ChatColor.GREEN+"Spawnea una Horda de Zombis."),
             
             CERRAR(""+ChatColor.RED+ChatColor.BOLD+"CERRAR", Material.BARRIER,null, 1, ChatColor.GREEN+"Salir de la Tienda"),
             CERRAR2(""+ChatColor.RED+ChatColor.BOLD+"CERRAR", Material.BARRIER,null, 1, ChatColor.GREEN+"Cerrar Menu."),

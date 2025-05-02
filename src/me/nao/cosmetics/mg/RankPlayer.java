@@ -199,18 +199,18 @@ public class RankPlayer {
 		
 		
 		List<String> l = new ArrayList<>();
-		
-		l.add("&c- &7&l[&8&lNOVATO&7&l]");
-		l.add("&c- &7&l[&f&lCABALLERO&7&l]");
-		l.add("&c- &7&l[&e&lGUARDIAN&7&l]");
-		l.add("&c- &7&l[&c&lCENTINELA&7&l]");
-		l.add("&c- &7&l[&4&lCAMPEON&7&l]");
-		l.add("&c- &7&l[&a&lCONQUISTADOR&7&l]");
-		l.add("&c- &7&l[&2&lTITAN&7&l]");
-		l.add("&c- &7&l[&b&lEMPERADOR&7&l]");
-		l.add("&c- &7&l[&5&l&nREY&7&l]");
-		l.add("&c- &7&l[&1&l&nMAESTRO&7&l]");
-		l.add("&c- &7&l[&6&l&nCELESTIAL&7&l]");
+		l.add("");
+		l.add("&c- &7[&8&lNOVATO&7]");
+		l.add("&c- &7[&f&lCABALLERO&7]");
+		l.add("&c- &7[&e&lGUARDIAN&7]");
+		l.add("&c- &7[&c&lCENTINELA&7]");
+		l.add("&c- &7[&4&lCAMPEON&7]");
+		l.add("&c- &7[&a&lCONQUISTADOR&7]");
+		l.add("&c- &7[&2&lTITAN&7]");
+		l.add("&c- &7[&b&lEMPERADOR&7]");
+		l.add("&c- &7[&5&l&nREY&7]");
+		l.add("&c- &7[&1&l&nMAESTRO&7]");
+		l.add("&c- &7[&6&l&nCELESTIAL&7]");
 
 		
 		if(player != null) {

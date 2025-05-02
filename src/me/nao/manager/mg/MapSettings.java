@@ -117,11 +117,13 @@ public class MapSettings {
 			ym.set("Win.Tittle-of-Win", "Felicidades %player%");
 			ym.set("Win.Tittle-Time", "20-40-20");
 			ym.set("Win.SubTittle-of-Win", "ganaste %player%");
-			ym.set("Win.Reward-Position-Top", false);
+			
 			List<String> win = ym.getStringList("Win.Chat-Message-Win");
 			ym.set("Win.Chat-Message-Win", win);
 			startc.add("Ganaste %player%");
 			ym.set("Win.Sound-of-Win", "ui_toast_challenge_complete;20.0;1");
+			
+			ym.set("Win.Reward-Position-Top", false);
 			List<String> winr = ym.getStringList("Win-Rewards.Commands");
 			ym.set("Win-Rewards.Commands", winr);
 			winr.add("summon minecraft:item ~ ~1 ~ {Item:{id:diamond,Count:1}}");

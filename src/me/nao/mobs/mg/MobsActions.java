@@ -1248,13 +1248,37 @@ public class MobsActions {
 	//TODO Skeletom
     public void skeleton(World world , int x , int y , int z) {
     	Location l2 = new Location(world, x, y+2, z); 			
-		
+    	Random random = new Random();
+
+		int n = random.nextInt(50);
 
 		Skeleton s = (Skeleton) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.SKELETON);
 		s.setCustomName(ChatColor.DARK_PURPLE+"ARQUERO");
 		s.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
 		s.setCanPickupItems(true);
 		
+		
+		if(n == 0) {
+			Skeleton s1 = (Skeleton) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.SKELETON);
+			s1.setCustomName(ChatColor.DARK_PURPLE+"ARQUERO");
+			s1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
+			s1.setCanPickupItems(true);
+			for(int i = 0;i<5;i++) {
+				Skeleton s2 = (Skeleton) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.SKELETON);
+				s2.setCustomName(ChatColor.DARK_PURPLE+"ARQUERO");
+				s2.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
+				s2.setCanPickupItems(true);
+				s1.addPassenger(s2);
+			}
+		}
+		
+		
+		
+		if(n == 10) {
+			Skeleton s1 = (Skeleton) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.SKELETON);
+			s1.setCustomName(ChatColor.DARK_PURPLE+"ARQUERO");
+			s1.getAttribute(Attribute.FOLLOW_RANGE).setBaseValue(150);
+		}
 		
     }
 	
