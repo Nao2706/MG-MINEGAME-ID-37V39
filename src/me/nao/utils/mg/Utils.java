@@ -76,8 +76,8 @@ public class Utils {
 				
 			}
 		
-		//FORMATO DE 1K 1M 1B 1T ETC
-		public static String formatValue(float value) {
+		//FORMATO DE 1K 1M 1B 1T ETC ORIFINALMENTE ERA FLOAT NO LONG
+		public static String formatValue(long value) {
 		    String arr[] = {"", "K", "M", "B", "T", "P", "E"};
 		    int index = 0;
 		    while ((value / 1000) >= 1) {
