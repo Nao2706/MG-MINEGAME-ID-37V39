@@ -100,8 +100,9 @@ public class SystemOfLevels {
     	}
     	//System.out.println(referant+" "+refer); 
     	setTotalxplvlA(referant);
-    	setTotalPlayerXpLvl(referant);
     	setTotalxplvlB(refer);
+    	setTotalPlayerXpLvl(referant);
+    
     	
     }
 	

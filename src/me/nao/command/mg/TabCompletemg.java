@@ -95,6 +95,7 @@ public class TabCompletemg implements TabCompleter{
 			arguments.add("sudo");
 			arguments.add("sudoall");
 			arguments.add("prestiges");
+			arguments.add("xp");
 			
 			
 		}

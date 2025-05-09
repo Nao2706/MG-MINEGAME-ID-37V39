@@ -328,7 +328,7 @@ public class PointsManager {
 		}
 		
 		
-		public void calcReferenceExpAddOrRemove(Player player ,String target,long val) {
+		public void calcReferenceExpAddOrRemove(Player player ,String target,long val,boolean isset) {
 			
 			FileConfiguration points = plugin.getPoints();
 			
@@ -338,11 +338,19 @@ public class PointsManager {
 			//360 sera el tope de niveles , ultimo nivel 359 : pide 1223099 de xp para 360
 			int maxlvl = 100;
 			if(currentlvl == maxlvl) {
-				player.sendMessage(ChatColor.DARK_PURPLE+"Has alcanzado el Nivel Maximo ahora puedes Acceder al Prestigio.");
+				if(player != null) {
+					player.sendMessage(ChatColor.DARK_PURPLE+"Ese Jugador a alcanzado el Nivel Maximo ahora puedes Acceder al Prestigio.");
+
+				}
+				Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_PURPLE+"Ese Jugador a alcanzado el Nivel Maximo ahora puedes Acceder al Prestigio.");
 				return;
 			}
 			if(currentlvl == maxlvl && prestige == 10) {
-				player.sendMessage(ChatColor.DARK_PURPLE+"Has alcanzado el Nivel y Prestigio Maximo.");
+				if(player != null) {
+					player.sendMessage(ChatColor.DARK_PURPLE+"Ese Jugador a alcanzado el Nivel y Prestigio Maximo.");
+				}
+				Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_PURPLE+"Ese Jugador a alcanzado el Nivel y Prestigio Maximo.");
+
 				return;
 			}
 			
@@ -354,16 +362,23 @@ public class PointsManager {
 			SystemOfLevels manager = new SystemOfLevels();
 			//CALCULAR XP DE NIVEL LA BASE Y EL LIMITE
 			manager.rangeOfLvl(currentlvl);
-			long baseoflvlxp = manager.getTotalxplvlA();
-			long limitoflvlxp = manager.getTotalxplvlB();
-		
-		
+			
 			//RECHA
 			
 			//DISPLAY DE XP : LO QUE CONSIGUIO DE XP EN UNA PARTIDA SE POSITIVO O NEGATIVO
 			long displayxp = (savexp+val);
 			//XP REAL: LO QUE EL JUGADOR RALMENTE TIENE DE XP SUMANDO LOS NIVELES BASE MAS LA XP GUARDADA + RACHA + XP QUE GANO EN PARTIDA
 			long currentplayertotalxpwhithoutchanges = (manager.getTotalPlayerXpLvl()+savexp+val);
+			if(isset) {
+				displayxp = (val);
+				//XP REAL: LO QUE EL JUGADOR RALMENTE TIENE DE XP SUMANDO LOS NIVELES BASE MAS LA XP GUARDADA + RACHA + XP QUE GANO EN PARTIDA
+				currentplayertotalxpwhithoutchanges = (manager.getTotalPlayerXpLvl()+val);
+			}else {
+				displayxp = (savexp+val);
+				//XP REAL: LO QUE EL JUGADOR RALMENTE TIENE DE XP SUMANDO LOS NIVELES BASE MAS LA XP GUARDADA + RACHA + XP QUE GANO EN PARTIDA
+				currentplayertotalxpwhithoutchanges = (manager.getTotalPlayerXpLvl()+savexp+val);
+			}
+			
 			//System.out.println("current "+savexp+" "+calcstreaks+" "+val+"= "+currentplayertotalxpwhithoutchanges);
 			//long copyeofcurrentplayertotal = displayxp;
 			
@@ -374,47 +389,54 @@ public class PointsManager {
 			//SE VUELVE A CALCULAR EL NIVEL EN BASE A LA EXPERIENCIA TOTAL 
 			SystemOfLevels manager2 = new SystemOfLevels();
 			manager2.calcXp(currentplayertotalxpwithchanges);
-			
+			Player playeronline = Bukkit.getPlayerExact(target);
 				//SUBE DE NIVEL
 			//SE COMPRUEBA QUE EL TOTAL DE XP CON CAMBIOS SEA MAYOR AL LIMITE DEL NIVEL QUE TUVO PARA VER SI SUBE DE NIVEL
-			if(currentplayertotalxpwithchanges > limitoflvlxp) {
+			if(manager2.getPlayerlvl() > currentlvl) {
 				//LA XP DEL JUEGO SE RESTA - POR LA REFERENCIA BASE DEL NUEVO NIVEL EJEMPLO XP 1002 - BASE -1001 = 1 XP RESTANTE
 			
 				//SI POR ALGUNA RAZON FUERA NEGATIVO SERIA 0 (NO DEBERIA ESTAR ESTO AQUI PUESTO QUE SOLO CALCULA SUBIDA)
-				
-				player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,player.getLocation().add(0.5, 1, 0.5), 100);
-				player.sendMessage("     "+ChatColor.DARK_PURPLE+ChatColor.BOLD+ChatColor.MAGIC+"[]"+ChatColor.GREEN+ChatColor.BOLD+ChatColor.UNDERLINE+" SUBES DE NIVEL "+ChatColor.DARK_PURPLE+ChatColor.BOLD+ChatColor.MAGIC+"[]");
-			  	player.sendMessage("");
-				player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"   DE "+ChatColor.YELLOW+ChatColor.BOLD+"LVL."+currentlvl+ChatColor.GOLD+ChatColor.BOLD+" >>> A >>> "+ChatColor.GREEN+ChatColor.BOLD+"LVL."+manager2.getPlayerlvl());
-				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"             ["+ChatColor.YELLOW+manager2.getRemaingxp()+ChatColor.GOLD+ChatColor.BOLD+"/"+ChatColor.GREEN+manager2.getReferenceB()+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
-				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"            ["+showProgressBar(manager2.getRemaingxp(), manager2.getReferenceB(),20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
-				player.sendMessage(""+ChatColor.DARK_GRAY+"Total de XP General: "+ChatColor.GREEN+ChatColor.BOLD+currentplayertotalxpwithchanges);
-				player.sendMessage("");
-				
-				points.set("Players."+player.getName()+".Level",manager2.getPlayerlvl());
-				points.set("Players."+player.getName()+".Xp",manager2.getRemaingxp());
-				points.set("Players."+player.getName()+".Reference-Xp",manager2.getReferenceB());
+				if(playeronline != null) {
+					playeronline.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,player.getLocation().add(0.5, 1, 0.5), 100);
+					playeronline.sendMessage("     "+ChatColor.DARK_PURPLE+ChatColor.BOLD+ChatColor.MAGIC+"[]"+ChatColor.GREEN+ChatColor.BOLD+ChatColor.UNDERLINE+" SUBES DE NIVEL "+ChatColor.DARK_PURPLE+ChatColor.BOLD+ChatColor.MAGIC+"[]");
+					playeronline.sendMessage("");
+					playeronline.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"   DE "+ChatColor.YELLOW+ChatColor.BOLD+"LVL."+currentlvl+ChatColor.GOLD+ChatColor.BOLD+" >>> A >>> "+ChatColor.GREEN+ChatColor.BOLD+"LVL."+manager2.getPlayerlvl());
+					playeronline.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"             ["+ChatColor.YELLOW+manager2.getRemaingxp()+ChatColor.GOLD+ChatColor.BOLD+"/"+ChatColor.GREEN+manager2.getReferenceB()+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
+					playeronline.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"            ["+showProgressBar(manager2.getRemaingxp(), manager2.getReferenceB(),20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
+					playeronline.sendMessage(""+ChatColor.DARK_GRAY+"Total de XP General: "+ChatColor.GREEN+ChatColor.BOLD+currentplayertotalxpwithchanges);
+					playeronline.sendMessage("");
+					playeronline.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"_____________________________________");
+					playeronline.sendMessage("");
+					
+
+				}
+							
+				points.set("Players."+target+".Level",manager2.getPlayerlvl());
+				points.set("Players."+target+".Xp",manager2.getRemaingxp());
+				points.set("Players."+target+".Reference-Xp",manager2.getReferenceB());
 				
 				saveAll();
 				
 				//BAJA DE NIVEL
 				//COMPRUEBA QUE EL TOTAL DE XP SEA MENOR A LA BASE DEL NIVEL ACTUAL LO QUE SIGNIFICA QUE BAJARIA DE NIVEL , SI ES IGUAL A0 NO SE EJECUTARA POR QUE NO
 				//PUEDES BAJARLE MAS A 0
-			}else if(currentplayertotalxpwithchanges < baseoflvlxp && currentlvl != 0) {
+			}else if(manager2.getPlayerlvl() < currentlvl && currentlvl != 0) {
 				//System.out.println(currentplayertotalxpwithchanges+" "+manager2.getReferenceA()+" ="+(currentplayertotalxpwithchanges-manager2.getReferenceA()));
 				//COMO SE RECALCULA DE NUEVO LA XP SE RESTA DEL TOTAL DE XP LA REFERENCIA BASE
-				
-				player.sendMessage("     "+ChatColor.YELLOW+ChatColor.BOLD+ChatColor.MAGIC+"[]"+ChatColor.RED+ChatColor.BOLD+ChatColor.UNDERLINE+" BAJAS DE NIVEL "+ChatColor.YELLOW+ChatColor.BOLD+ChatColor.MAGIC+"[]");
-			  	player.sendMessage("");
-				player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"   DE "+ChatColor.YELLOW+ChatColor.BOLD+"LVL."+currentlvl+ChatColor.GOLD+ChatColor.BOLD+" >>> A >>> "+ChatColor.RED+ChatColor.BOLD+"LVL."+manager2.getPlayerlvl());
-				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"             ["+ChatColor.YELLOW+manager2.getRemaingxp()+ChatColor.GOLD+ChatColor.BOLD+"/"+ChatColor.GREEN+manager2.getReferenceB()+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
-				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"            ["+showProgressBar(manager2.getRemaingxp(), manager2.getReferenceB(),20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
-				player.sendMessage(""+ChatColor.DARK_GRAY+"Total de XP General: "+ChatColor.GREEN+ChatColor.BOLD+currentplayertotalxpwithchanges);
-				player.sendMessage("");
-				
-				points.set("Players."+player.getName()+".Level",manager2.getPlayerlvl());
-				points.set("Players."+player.getName()+".Xp",manager2.getRemaingxp());
-				points.set("Players."+player.getName()+".Reference-Xp",manager2.getReferenceB());
+				if(playeronline != null) {
+					playeronline.sendMessage("     "+ChatColor.YELLOW+ChatColor.BOLD+ChatColor.MAGIC+"[]"+ChatColor.RED+ChatColor.BOLD+ChatColor.UNDERLINE+" BAJAS DE NIVEL "+ChatColor.YELLOW+ChatColor.BOLD+ChatColor.MAGIC+"[]");
+					playeronline.sendMessage("");
+					playeronline.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"   DE "+ChatColor.YELLOW+ChatColor.BOLD+"LVL."+currentlvl+ChatColor.GOLD+ChatColor.BOLD+" >>> A >>> "+ChatColor.RED+ChatColor.BOLD+"LVL."+manager2.getPlayerlvl());
+					playeronline.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"             ["+ChatColor.YELLOW+manager2.getRemaingxp()+ChatColor.GOLD+ChatColor.BOLD+"/"+ChatColor.GREEN+manager2.getReferenceB()+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
+					playeronline.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"            ["+showProgressBar(manager2.getRemaingxp(), manager2.getReferenceB(),20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
+					playeronline.sendMessage(""+ChatColor.DARK_GRAY+"Total de XP General: "+ChatColor.GREEN+ChatColor.BOLD+currentplayertotalxpwithchanges);
+					playeronline.sendMessage("");
+					playeronline.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"_____________________________________");
+					playeronline.sendMessage("");
+				}
+				points.set("Players."+target+".Level",manager2.getPlayerlvl());
+				points.set("Players."+target+".Xp",manager2.getRemaingxp());
+				points.set("Players."+target+".Reference-Xp",manager2.getReferenceB());
 				
 				saveAll();
 				
@@ -423,34 +445,35 @@ public class PointsManager {
 				//System.out.println(" "+manager.getReferenceB()+" - "+displayxp +" "+(manager.getReferenceB()-displayxp));
 				long result = displayxp < 0 ? 0 : displayxp;
 				long leftpoints = manager2.getReferenceB()- displayxp;
-				String text = displayxp > 0 ? ChatColor.GREEN+" + Subiste." : ChatColor.RED+" - Bajaste.";
-				if(displayxp == savexp) {
-					player.sendMessage(ChatColor.DARK_GRAY+" Te Mantienes en el Mismo Puntaje de Xp "+ChatColor.YELLOW+savexp+ChatColor.DARK_GRAY+" con el que Entraste.");
-					text = ChatColor.YELLOW+" Se Mantiene";
-				}else if(displayxp > savexp) {
+				if(playeronline != null) {
 				
-					player.sendMessage(ChatColor.DARK_GRAY+" Te faltan "+ChatColor.GREEN+leftpoints+ChatColor.DARK_GRAY+" Puntos de XP para Subir de Nivel.");
-				}else if(displayxp < savexp) {
 					
-					player.sendMessage(ChatColor.DARK_GRAY+" Bajaste "+ChatColor.RED+leftpoints+ChatColor.DARK_GRAY+" Puntos de XP para Subir de Nivel.");
+					String text = displayxp > 0 ? ChatColor.GREEN+" + Subiste." : ChatColor.RED+" - Bajaste.";
+					if(displayxp == savexp) {
+						playeronline.sendMessage(ChatColor.DARK_GRAY+" Te Mantienes en el Mismo Puntaje de Xp "+ChatColor.YELLOW+savexp+ChatColor.DARK_GRAY+" con el que Entraste.");
+						text = ChatColor.YELLOW+" Se Mantiene";
+					}else if(displayxp > savexp) {
+					
+						playeronline.sendMessage(ChatColor.DARK_GRAY+" Te faltan "+ChatColor.GREEN+leftpoints+ChatColor.DARK_GRAY+" Puntos de XP para Subir de Nivel.");
+					}else if(displayxp < savexp) {
+						
+						playeronline.sendMessage(ChatColor.DARK_GRAY+" Bajaste "+ChatColor.RED+leftpoints+ChatColor.DARK_GRAY+" Puntos de XP para Subir de Nivel.");
+					}
+					playeronline.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"             ["+ChatColor.YELLOW+result+ChatColor.GOLD+ChatColor.BOLD+"/"+ChatColor.GREEN+refer+ChatColor.DARK_GRAY+ChatColor.BOLD+"]"+text);
+					playeronline.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"            ["+showProgressBar(result, refer,20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
+					playeronline.sendMessage(""+ChatColor.DARK_GRAY+"Total de XP General: "+ChatColor.GREEN+ChatColor.BOLD+currentplayertotalxpwithchanges);
+					playeronline.sendMessage("");
+					playeronline.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"_____________________________________");
+					playeronline.sendMessage("");
 				}
-				
-				
-				
-				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"             ["+ChatColor.YELLOW+result+ChatColor.GOLD+ChatColor.BOLD+"/"+ChatColor.GREEN+refer+ChatColor.DARK_GRAY+ChatColor.BOLD+"]"+text);
-				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"            ["+showProgressBar(result, refer,20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
-				player.sendMessage(""+ChatColor.DARK_GRAY+"Total de XP General: "+ChatColor.GREEN+ChatColor.BOLD+currentplayertotalxpwithchanges);
-				player.sendMessage("");
-				
-				points.set("Players."+player.getName()+".Xp",result);
+				points.set("Players."+target+".Xp",result);
 				saveAll();
 				
 			}
 			
 	
 			
-			player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"_____________________________________");
-			player.sendMessage("");
+			
 			
 		}
 		
@@ -469,13 +492,84 @@ public class PointsManager {
 			
 			SystemOfLevels manager = new SystemOfLevels();
 			manager.rangeOfLvl(lvl);
-			points.set("Players."+player.getName()+".Level",manager.getPlayerlvl());
-			points.set("Players."+player.getName()+".Xp",0);
-			points.set("Players."+player.getName()+".Reference-Xp",manager.getReferenceB());
+			manager.calcXp(manager.getTotalPlayerXpLvl());
+			points.set("Players."+target+".Level",manager.getPlayerlvl());
+			points.set("Players."+target+".Xp",points.getLong("Players."+target+".Xp",0));
+			points.set("Players."+target+".Reference-Xp",manager.getReferenceB());
 			saveAll();
 		}
 		
 		
+		public void addOrRemovePlayerLevelMg(Player player ,String target ,int lvl) {
+			FileConfiguration points = plugin.getPoints();
+			
+			if(!points.contains("Players."+target)) {
+				
+				if(player != null) {
+					player.sendMessage(ChatColor.RED+"El Jugador "+target+" no existe (no hay datos) o su nombre esta mal escrito.");
+				}
+				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El Jugador "+target+" no existe (no hay datos) o su nombre esta mal escrito.");
+				return;
+			}
+			
+			
+			int currentlvl = points.getInt("Players."+target+".Level");
+			
+			int updatelvl = (currentlvl+lvl) < 0 ? 0 : (currentlvl+lvl);
+			
+			SystemOfLevels manager = new SystemOfLevels();
+			manager.rangeOfLvl(updatelvl);
+			manager.calcXp(manager.getTotalPlayerXpLvl());
+			
+			
+			points.set("Players."+target+".Level",manager.getPlayerlvl());
+			points.set("Players."+target+".Xp",points.getLong("Players."+target+".Xp",0));
+			points.set("Players."+target+".Reference-Xp",manager.getReferenceB());
+			saveAll();
+		}
+		
+		public void setPlayerPrestigeMg(Player player ,String target ,int lvl) {
+			FileConfiguration points = plugin.getPoints();
+			
+			if(!points.contains("Players."+target)) {
+				
+				if(player != null) {
+					player.sendMessage(ChatColor.RED+"El Jugador "+target+" no existe (no hay datos) o su nombre esta mal escrito.");
+				}
+				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El Jugador "+target+" no existe (no hay datos) o su nombre esta mal escrito.");
+				return;
+			}
+			
+			int updatelvl = lvl < 0 ? 0 : lvl;
+		
+			points.set("Players."+target+".Prestige",updatelvl);
+			
+			saveAll();
+		}
+		
+		
+		public void addOrRemovePlayerPrestigeMg(Player player ,String target ,int lvl) {
+			FileConfiguration points = plugin.getPoints();
+			
+			if(!points.contains("Players."+target)) {
+				
+				if(player != null) {
+					player.sendMessage(ChatColor.RED+"El Jugador "+target+" no existe (no hay datos) o su nombre esta mal escrito.");
+				}
+				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El Jugador "+target+" no existe (no hay datos) o su nombre esta mal escrito.");
+				return;
+			}
+			
+			
+			int currentprestige = points.getInt("Players."+target+".Prestige");
+			
+			int updatelvl = (currentprestige+lvl) < 0 ? 0 : (currentprestige+lvl);
+			
+		
+			points.set("Players."+target+".Prestige",updatelvl);
+
+			saveAll();
+		}
 		
 		//no tiene muchas condiciones por que esas van en otro lado CommandsMessage
 		public void prestigeMg(Player player) {

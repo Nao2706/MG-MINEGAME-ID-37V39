@@ -642,7 +642,70 @@ public class Comandsmg implements CommandExecutor{
         			
         			rk.showPrestiges(null);
         			return true;
-        		}else if(args[0].equalsIgnoreCase("timegame")) {
+        		}else if(args[0].equalsIgnoreCase("xp")) {
+					
+					//mg xp NAO prestige,level,points set,add,remove 10
+					if(args.length == 5) {
+						 String name = args[1];
+						 String type  = args[2];
+						 String option  = args[3];
+						PointsManager pm = new PointsManager(plugin);
+						 
+						 if(type.equals("prestige")) {
+							 int value = Integer.valueOf(args[4]);
+							 
+							 if(option.equals("set")) {
+								 pm.setPlayerPrestigeMg(null, name, value);
+								 gc.sendMessageToUserAndConsole(null,"&aSe seteo "+value+" de Nivel de Prestigio a &6"+name);
+							 }else if(option.equals("add")) {
+								 pm.addOrRemovePlayerPrestigeMg(null, name, Math.abs(value));
+								 gc.sendMessageToUserAndConsole(null,"&aSe añadio "+Math.abs(value)+" de Nivel de Prestigio a &6"+name);
+							 }else if(option.equals("remove")) {
+								 pm.addOrRemovePlayerPrestigeMg(null, name, -Math.abs(value));
+								 gc.sendMessageToUserAndConsole(null,"&aSe removio "+Math.abs(value)+" de Nivel de Prestigio a &6"+name);
+							 }
+							 
+						 }else if(type.equals("level")) {
+							 int value = Integer.valueOf(args[4]);
+							 
+							 if(option.equals("set")) {
+								 pm.setPlayerLevelMg(null, name, value);
+								 gc.sendMessageToUserAndConsole(null,"&aSe seteo "+value+" de Nivel de XP a &6"+name);
+							 }else if(option.equals("add")) {
+								 pm.addOrRemovePlayerLevelMg(null, name, Math.abs(value));
+								 gc.sendMessageToUserAndConsole(null,"&aSe añadio "+Math.abs(value)+" de Nivel de XP a &6"+name);
+							 }else if(option.equals("remove")) {
+								 pm.addOrRemovePlayerLevelMg(null, name, -Math.abs(value));
+								 gc.sendMessageToUserAndConsole(null,"&aSe removio "+-Math.abs(value)+" de Nivel de XP a &6"+name);
+							 }
+							 
+						 }else if(type.equals("points")) {
+							 long value = Long.valueOf(args[4]);
+							 
+							 if(option.equals("set")) {
+								 	pm.calcReferenceExpAddOrRemove(null, name, value, true);
+								 	gc.sendMessageToUserAndConsole(null,"&aSe seteo "+value+" de XP a &6"+name);
+							 }else if(option.equals("add")) {
+									pm.calcReferenceExpAddOrRemove(null, name, Math.abs(value), false);
+									gc.sendMessageToUserAndConsole(null,"&aSe añadio "+Math.abs(value)+" de XP a &6"+name);
+							 }else if(option.equals("remove")) {
+									pm.calcReferenceExpAddOrRemove(null, name, -Math.abs(value), false);
+									gc.sendMessageToUserAndConsole(null,"&aSe removio "+-Math.abs(value)+" de XP a &6"+name);
+							 }
+						 }
+						 
+						 
+						 
+					
+					}else {
+						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" /mg xp <name> <prestige,level,points> <set,add,remove> <value>");
+						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+"Example: /mg xp NAO2706 points add 10");
+						//gc.checkPlayerInfo(player,player.getName());
+					}
+				
+					return true;
+					
+				}else if(args[0].equalsIgnoreCase("timegame")) {
 						//mg time Tutorial set 0-1-2
 			 		  
 			 		 if(args.length == 4) {
@@ -824,7 +887,7 @@ public class Comandsmg implements CommandExecutor{
 							
 							gc.checkPlayerInfo(null,name);
 						}else {
-							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" /mg check-points <");
+							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" /mg check-points <name>");
 							//gc.checkPlayerInfo(player,player.getName());
 						}
 					
@@ -1655,7 +1718,7 @@ public class Comandsmg implements CommandExecutor{
 						String name = args[1];
 						
 						//				formato viejo		if(points1.getString("Players." + name + ".Kills",null) != null) {
-						if(points1.contains("Players." + name + ".Kills")) {
+						if(points1.contains("Players." + name)) {
 							for (String key : points1.getConfigurationSection("Players").getKeys(false)) {
 
 								
@@ -1716,7 +1779,73 @@ public class Comandsmg implements CommandExecutor{
 						
 						gc.checkPlayerInfo(player,name);
 					}else {
-						player.sendMessage(plugin.nombre+ChatColor.RED+" /mg check-points <");
+						player.sendMessage(plugin.nombre+ChatColor.RED+" /mg check-points <name>");
+						//gc.checkPlayerInfo(player,player.getName());
+					}
+				
+					return true;
+					
+				}else if(args[0].equalsIgnoreCase("xp")) {
+					if(!player.isOp()) {
+						player.sendMessage(plugin.nombre+ChatColor.RED+" No tienes Permiso para usar ese comando");
+						return true;
+					  }
+					//mg xp NAO prestige,level,points set,add,remove 10
+					if(args.length == 5) {
+						 String name = args[1];
+						 String type  = args[2];
+						 String option  = args[3];
+						PointsManager pm = new PointsManager(plugin);
+						 
+						 if(type.equals("prestige")) {
+							 int value = Integer.valueOf(args[4]);
+							 
+							 if(option.equals("set")) {
+								 pm.setPlayerPrestigeMg(player, name, value);
+								 gc.sendMessageToUserAndConsole(player,"&aSe seteo "+value+" de Nivel de Prestigio a &6"+name);
+							 }else if(option.equals("add")) {
+								 pm.addOrRemovePlayerPrestigeMg(player, name, Math.abs(value));
+								 gc.sendMessageToUserAndConsole(player,"&aSe añadio "+Math.abs(value)+" de Nivel de Prestigio a &6"+name);
+							 }else if(option.equals("remove")) {
+								 pm.addOrRemovePlayerPrestigeMg(player, name, -Math.abs(value));
+								 gc.sendMessageToUserAndConsole(player,"&aSe removio "+Math.abs(value)+" de Nivel de Prestigio a &6"+name);
+							 }
+							 
+						 }else if(type.equals("level")) {
+							 int value = Integer.valueOf(args[4]);
+							 
+							 if(option.equals("set")) {
+								 pm.setPlayerLevelMg(player, option, value);
+								 gc.sendMessageToUserAndConsole(player,"&aSe seteo "+value+" de Nivel de XP a &6"+name);
+							 }else if(option.equals("add")) {
+								 pm.addOrRemovePlayerLevelMg(player, name, Math.abs(value));
+								 gc.sendMessageToUserAndConsole(player,"&aSe añadio "+Math.abs(value)+" de Nivel de XP a &6"+name);
+							 }else if(option.equals("remove")) {
+								 pm.addOrRemovePlayerLevelMg(player, name, -Math.abs(value));
+								 gc.sendMessageToUserAndConsole(player,"&aSe removio "+-Math.abs(value)+" de Nivel de XP a &6"+name);
+							 }
+							 
+						 }else if(type.equals("points")) {
+							 long value = Long.valueOf(args[4]);
+							 
+							 if(option.equals("set")) {
+								 	pm.calcReferenceExpAddOrRemove(player, name, value, true);
+								 	gc.sendMessageToUserAndConsole(player,"&aSe seteo "+value+" de XP a &6"+name);
+							 }else if(option.equals("add")) {
+									pm.calcReferenceExpAddOrRemove(player, name, Math.abs(value), false);
+									gc.sendMessageToUserAndConsole(player,"&aSe añadio "+Math.abs(value)+" de XP a &6"+name);
+							 }else if(option.equals("remove")) {
+									pm.calcReferenceExpAddOrRemove(player, name, -Math.abs(value), false);
+									gc.sendMessageToUserAndConsole(player,"&aSe removio "+-Math.abs(value)+" de XP a &6"+name);
+							 }
+						 }
+						 
+						 
+						 
+					
+					}else {
+						player.sendMessage(plugin.nombre+ChatColor.RED+" /mg xp <name> <prestige,level,points> <set,add,remove> <value>");
+						player.sendMessage(plugin.nombre+ChatColor.RED+"Example: /mg xp NAO2706 points add 10");
 						//gc.checkPlayerInfo(player,player.getName());
 					}
 				
