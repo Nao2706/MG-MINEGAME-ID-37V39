@@ -1815,7 +1815,7 @@ public class Comandsmg implements CommandExecutor{
 							 int value = Integer.valueOf(args[4]);
 							 
 							 if(option.equals("set")) {
-								 pm.setPlayerLevelMg(player, option, value);
+								 pm.setPlayerLevelMg(player, name, value);
 								 gc.sendMessageToUserAndConsole(player,"&aSe seteo "+value+" de Nivel de XP a &6"+name);
 							 }else if(option.equals("add")) {
 								 pm.addOrRemovePlayerLevelMg(player, name, Math.abs(value));
