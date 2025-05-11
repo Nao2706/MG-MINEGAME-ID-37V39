@@ -221,6 +221,104 @@ public class Comandsmg implements CommandExecutor{
 					}
 					
 					return true;
+				}else if(args[0].equalsIgnoreCase("tp")){
+				  	
+					if(args.length == 9) {
+						String target = args[1];
+						String map = args[2];
+						String world = args[3];
+						double x = Double.valueOf(args[4]);
+						double y = Double.valueOf(args[5]);
+						double z = Double.valueOf(args[6]);
+						float yaw = Float.valueOf(args[7]);
+						float pitch = Float.valueOf(args[8]);
+						gc.TpPlayerOfGameToLocationSpecific(target, map, world, x, y, z, yaw, pitch);
+					}else if(args.length == 7) {
+						String target = args[1];
+						String map = args[2];
+						String world = args[3];
+						double x = Double.valueOf(args[4]);
+						double y = Double.valueOf(args[5]);
+						double z = Double.valueOf(args[6]);
+						gc.TpPlayerOfGameToLocationSpecific(target, map, world, x, y, z);
+						
+					}else {
+					 gc.sendMessageToUserAndConsole(null, ChatColor.GREEN+"1) Usa /mg tp <target> <map> <world> <x> <y> <z> <yaw> <pitch>");
+					 gc.sendMessageToUserAndConsole(null,ChatColor.GREEN+"2) Usa /mg tp <target> <map> <world> <x> <y> <z>");
+					}
+					
+					
+					//mg tp-all Tutorial World 122 343 34 35 45 - 9
+					//mg tp-all Tutorial World 122 343 34 - 7
+					//mg tp Tutorial NAO World 122 343 34 35 45 - 9
+					//mg tp Tutorial NAO World 122 343 34 - 7
+					
+					return true;
+				}else if(args[0].equalsIgnoreCase("tpall")){
+					
+					if(args.length == 8) {
+						
+						String map = args[1];
+						String world = args[2];
+						double x = Double.valueOf(args[3]);
+						double y = Double.valueOf(args[4]);
+						double z = Double.valueOf(args[5]);
+						float yaw = Float.valueOf(args[6]);
+						float pitch = Float.valueOf(args[7]);
+						gc.TpAllPlayersOfGameToLocationSpecific(map, world, x, y, z, yaw, pitch);
+					}else if(args.length == 6) {
+					
+						String map = args[1];
+						String world = args[2];
+						double x = Double.valueOf(args[3]);
+						double y = Double.valueOf(args[4]);
+						double z = Double.valueOf(args[5]);
+						gc.TpAllPlayersOfGameToLocationSpecific(map, world, x, y, z);
+
+						
+					}else {
+					 gc.sendMessageToUserAndConsole(null, ChatColor.GREEN+"1) Usa /mg tpall <map> <world> <x> <y> <z> <yaw> <pitch>");
+					 gc.sendMessageToUserAndConsole(null,ChatColor.GREEN+"2) Usa /mg tpall <map> <world> <x> <y> <z>");
+					}
+					
+					
+					//mg tp all Tutorial World 122 343 34 35 45 - 9
+					//mg tp all Tutorial World 122 343 34 - 7
+					//mg tp Tutorial NAO World 122 343 34 35 45 - 9
+					//mg tp Tutorial NAO World 122 343 34 - 7
+					
+					return true;
+				}else if(args[0].equalsIgnoreCase("tpall-to-player")){
+					if(args.length == 2) {
+						String target = args[1];
+						Player player = Bukkit.getPlayerExact(target);
+						if(player == null) {
+							 gc.sendMessageToUserAndConsole(null,ChatColor.RED+"Ese jugador no esta en linea o esta mal escrito.");
+							return true;
+						}
+						
+						gc.TpAllPlayersOfGameToLocation(player);
+						
+					 }else {
+						 gc.sendMessageToUserAndConsole(null,ChatColor.RED+"/mg tp-all-to-player <target>");
+					 }
+					
+					return true;
+				}else if(args[0].equalsIgnoreCase("tp-to-player")){
+					if(args.length == 3) {
+						String target1 = args[1];
+						String target2 = args[2];
+						Player player1 = Bukkit.getPlayerExact(target1);
+						if(player1 == null && !gc.isPlayerinGame(player1)) {
+							 gc.sendMessageToUserAndConsole(null,ChatColor.RED+"Ese jugador no esta en linea o esta mal escrito o no esta en juego.");
+							return true;
+						}
+						
+						gc.TpPlayerOfGameToLocation(player1, target2);
+					}else {
+						 gc.sendMessageToUserAndConsole(null,ChatColor.RED+"/mg tp-to-player <target1> <target2>");
+					}
+					return true;
 				}else if(args[0].equalsIgnoreCase("addtag")) {
 					
 					if (args.length == 3) {
@@ -3954,7 +4052,7 @@ public class Comandsmg implements CommandExecutor{
 						double z = Double.valueOf(args[6]);
 						float yaw = Float.valueOf(args[7]);
 						float pitch = Float.valueOf(args[8]);
-						gc.TpPlayerOfGameToLocationSpecific(player, target, map, world, x, y, z, yaw, pitch);
+						gc.TpPlayerOfGameToLocationSpecific(target, map, world, x, y, z, yaw, pitch);
 					}else if(args.length == 7) {
 						String target = args[1];
 						String map = args[2];
@@ -3962,7 +4060,7 @@ public class Comandsmg implements CommandExecutor{
 						double x = Double.valueOf(args[4]);
 						double y = Double.valueOf(args[5]);
 						double z = Double.valueOf(args[6]);
-						gc.TpPlayerOfGameToLocationSpecific(player, target, map, world, x, y, z);
+						gc.TpPlayerOfGameToLocationSpecific(target, map, world, x, y, z);
 						
 					}else {
 					 gc.sendMessageToUserAndConsole(player, ChatColor.GREEN+"1) Usa /mg tp <target> <map> <world> <x> <y> <z> <yaw> <pitch>");
@@ -3987,7 +4085,7 @@ public class Comandsmg implements CommandExecutor{
 						double z = Double.valueOf(args[5]);
 						float yaw = Float.valueOf(args[6]);
 						float pitch = Float.valueOf(args[7]);
-						gc.TpAllPlayersOfGameToLocationSpecific(player, map, world, x, y, z, yaw, pitch);
+						gc.TpAllPlayersOfGameToLocationSpecific(map, world, x, y, z, yaw, pitch);
 					}else if(args.length == 6) {
 					
 						String map = args[1];
@@ -3995,7 +4093,7 @@ public class Comandsmg implements CommandExecutor{
 						double x = Double.valueOf(args[3]);
 						double y = Double.valueOf(args[4]);
 						double z = Double.valueOf(args[5]);
-						gc.TpAllPlayersOfGameToLocationSpecific(player, map, world, x, y, z);
+						gc.TpAllPlayersOfGameToLocationSpecific(map, world, x, y, z);
 
 						
 					}else {

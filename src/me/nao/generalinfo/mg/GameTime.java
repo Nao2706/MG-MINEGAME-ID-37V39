@@ -142,7 +142,7 @@ public class GameTime {
 
 		GameInfo gi = plugin.getGameInfoPoo().get(map);
 		BossBar boss = gi.getBossbar();
-		 boss.setProgress(1.0);
+//		 boss.setProgress(1.0);
 		int totaltimerinseconds = (this.timerhourmg * 3600) + (this.timerminutemg * 60) + this.timersecondmg;
 		
 		int totaladdedseconds = (hour * 3600) + (minute * 60) + seconds;
@@ -183,7 +183,7 @@ public class GameTime {
 		System.out.println("VIEJO TIEMPO: "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s");
 		GameInfo gi = plugin.getGameInfoPoo().get(map);
 		BossBar boss = gi.getBossbar();
-		 boss.setProgress(1.0);
+		 //boss.setProgress(1.0);
 		int totalasettedseconds = (hour * 3600) + (minute * 60) + seconds;
 		
 		int totaltimertime = totalasettedseconds;
@@ -207,7 +207,7 @@ public class GameTime {
 		System.out.println("VIEJO TIEMPO: "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s");
 		GameInfo gi = plugin.getGameInfoPoo().get(map);
 		BossBar boss = gi.getBossbar();
-		 boss.setProgress(1.0);
+		 //boss.setProgress(1.0);
 		int totaltimerinseconds = (this.timerhourmg * 3600) + (this.timerminutemg * 60) + this.timersecondmg;
 		
 		int totalremovedseconds = (hour * 3600) + (minute * 60) + seconds;

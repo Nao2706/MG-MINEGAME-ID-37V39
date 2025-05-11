@@ -1869,7 +1869,7 @@ public class GameConditions {
 		}
 	}
 	
-	public void TpAllPlayersOfGameToLocationSpecific(Player player,String map,String world,double x,double y,double z,float yaw,float pitch) {
+	public void TpAllPlayersOfGameToLocationSpecific(String map,String world,double x,double y,double z,float yaw,float pitch) {
 		
 			if(isMapinGame(map)) {
 				GameInfo gi = plugin.getGameInfoPoo().get(map);
@@ -1889,7 +1889,7 @@ public class GameConditions {
 			}
 	}
 	
-	public void TpAllPlayersOfGameToLocationSpecific(Player player,String map,String world,double x,double y,double z) {
+	public void TpAllPlayersOfGameToLocationSpecific(String map,String world,double x,double y,double z) {
 		
 		if(isMapinGame(map)) {
 			GameInfo gi = plugin.getGameInfoPoo().get(map);
@@ -1915,7 +1915,7 @@ public class GameConditions {
 	}
 	
 	
-	public void TpPlayerOfGameToLocationSpecific(Player player,String target,String map,String world,double x,double y,double z,float yaw,float pitch) {
+	public void TpPlayerOfGameToLocationSpecific(String target,String map,String world,double x,double y,double z,float yaw,float pitch) {
 		
 		if(isMapinGame(map)) {
 			GameInfo gi = plugin.getGameInfoPoo().get(map);
@@ -1941,7 +1941,7 @@ public class GameConditions {
 	
 	}
 	
-	public void TpPlayerOfGameToLocationSpecific(Player player,String target,String map,String world,double x,double y,double z) {
+	public void TpPlayerOfGameToLocationSpecific(String target,String map,String world,double x,double y,double z) {
 		
 		if(isMapinGame(map)) {
 			GameInfo gi = plugin.getGameInfoPoo().get(map);
