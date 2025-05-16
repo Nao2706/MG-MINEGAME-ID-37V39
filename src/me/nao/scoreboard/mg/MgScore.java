@@ -341,7 +341,7 @@ public class MgScore {
 			}else if(priority == 3) {
 				 ob.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"Stats "+player.getName()+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
 			
-				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"=========");
+				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"=========");
 				 show.add(ChatColor.RED+" ");
 				
 				 show.add(" "+ChatColor.GREEN+ChatColor.BOLD+"Kills: "+ChatColor.RED+ChatColor.BOLD+gp.getKills());  
@@ -351,7 +351,7 @@ public class MgScore {
 				 show.add(" "+ChatColor.GREEN+ChatColor.BOLD+"Help-Revive: "+ChatColor.RED+ChatColor.BOLD+gp.getHelpRevive()); 
 				 
 				 show.add(ChatColor.RED+"  ");
-				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"========= ");
+				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"========= ");
 				
 				 
 			}
@@ -383,11 +383,15 @@ public class MgScore {
 			con.add(ChatColor.GREEN+"Un Enigma");
 			con.add(ChatColor.GREEN+"Concentrate para ganar");
 			con.add(ChatColor.GREEN+"Compra cosas buenas");
-			con.add(ChatColor.GREEN+"Perdido??");
-			con.add(ChatColor.GREEN+"Facilito 100%");
+			con.add(ChatColor.GREEN+"Perdido???");
+			con.add(ChatColor.GREEN+"Facilito un 100%");
 			con.add(ChatColor.GREEN+"Dificil? un 1%");
 			con.add(ChatColor.GREEN+"Sigue tu instinto");
 			con.add(ChatColor.GREEN+"Saludos de NAO2706");
+			con.add(ChatColor.GREEN+"Y que intento es este?");
+			con.add(ChatColor.GREEN+"Eres Pro o te crees Pro");
+			con.add(ChatColor.GREEN+"Mejor espectea desde el mas alla");
+			
 			
 			Random r = new Random();
 			
@@ -428,7 +432,7 @@ public class MgScore {
 				}else if(l.get(i).getObjetiveStatusType() == ObjetiveStatusType.WAITING) {
 					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.WHITE+ChatColor.BOLD+l.get(i).getObjetiveName()+" "+ChatColor.GOLD+"("+ChatColor.AQUA+l.get(i).getCurrentValue()+ChatColor.GOLD+"/"+ChatColor.AQUA+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
 				}else if(l.get(i).getObjetiveStatusType() == ObjetiveStatusType.UNKNOW) {
-					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.WHITE+ChatColor.MAGIC+l.get(i).getObjetiveName()+" "+ChatColor.GOLD+"("+ChatColor.WHITE+ChatColor.STRIKETHROUGH+l.get(i).getCurrentValue()+ChatColor.GOLD+"/"+ChatColor.WHITE+ChatColor.STRIKETHROUGH+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
+					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.WHITE+ChatColor.MAGIC+l.get(i).getObjetiveName()+" "+ChatColor.GOLD+ChatColor.MAGIC+"("+ChatColor.WHITE+ChatColor.MAGIC+l.get(i).getCurrentValue()+ChatColor.GOLD+ChatColor.MAGIC+"/"+ChatColor.WHITE+ChatColor.MAGIC+l.get(i).getCompleteValue()+ChatColor.GOLD+ChatColor.MAGIC+")");
 				}else if(l.get(i).getObjetiveStatusType() == ObjetiveStatusType.WARNING) {
 					l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"- "+ChatColor.YELLOW+ChatColor.BOLD+l.get(i).getObjetiveName()+" "+ChatColor.GOLD+"("+ChatColor.YELLOW+l.get(i).getCurrentValue()+ChatColor.GOLD+"/"+ChatColor.YELLOW+l.get(i).getCompleteValue()+ChatColor.GOLD+")");
 				}else if(l.get(i).getObjetiveStatusType() == ObjetiveStatusType.DANGER) {
