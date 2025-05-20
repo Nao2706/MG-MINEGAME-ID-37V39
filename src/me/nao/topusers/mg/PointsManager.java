@@ -217,6 +217,7 @@ public class PointsManager {
 			player.sendMessage(Utils.colorTextChatColor("&aEl Bonus de este Mapa es: &6X"+gi.getPointsBonus()));
 			player.sendMessage(Utils.colorTextChatColor("&7Kills: &a"+gp.getKills()+" &7Muertes: &a"+gp.getDeads()+" &7Revivido: &a"+gp.getRevive()+" &7Ayudas a Revivir: &a"+gp.getHelpRevive()));
 
+			//CAMBIAR ESTA COSA POR MINIMESSAGE Y SUS COMPONENTES
 			player.spigot().sendMessage(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.DARK_GRAY+"- "+net.md_5.bungee.api.ChatColor.GRAY+"Xp de tu Nivel: "+net.md_5.bungee.api.ChatColor.GREEN+manager.getTotalPlayerXpLvl(),"La Experiencia que tu nivel Tiene", net.md_5.bungee.api.ChatColor.GOLD));
 			player.spigot().sendMessage(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.DARK_GRAY+"- "+net.md_5.bungee.api.ChatColor.GRAY+"Xp Guardada: "+net.md_5.bungee.api.ChatColor.GREEN+savexp,"La Experiencia que tenias.", net.md_5.bungee.api.ChatColor.GOLD));
 			player.spigot().sendMessage(Utils.sendTextComponentShow(net.md_5.bungee.api.ChatColor.DARK_GRAY+"- "+net.md_5.bungee.api.ChatColor.GREEN+"Xp Ganada: "+net.md_5.bungee.api.ChatColor.GREEN+val,"La Experiencia Conseguiste.", net.md_5.bungee.api.ChatColor.GOLD));
@@ -456,7 +457,7 @@ public class PointsManager {
 			}else{
 				//System.out.println(" "+manager.getReferenceB()+" - "+displayxp +" "+(manager.getReferenceB()-displayxp));
 				long result = displayxp < 0 ? 0 : displayxp;
-				long leftpoints = manager2.getReferenceB()- displayxp;
+				long leftpoints = manager2.getReferenceB() - displayxp;
 				if(playeronline != null) {
 				
 					playeronline.sendMessage("");
@@ -944,11 +945,14 @@ public class PointsManager {
         int progressBars = (int) (totalBars * percent);
         if(current > max) {
         	System.out.println("ERROR:Es mayor "+current+" que "+max+" Percent:["+percent+"-"+current+"/"+max+"] "+"Progress:["+progressBars+"-"+totalBars+"*"+percent+"]");
-        	
-        }
         
-        return Strings.repeat(""+ completedColor +ChatColor.BOLD + symbol, progressBars) + Strings.repeat("" + notCompletedColor +ChatColor.BOLD+ symbol,totalBars-progressBars);
+        	
+     }
+        
+        return Strings.repeat(""+ completedColor +ChatColor.BOLD + symbol, (progressBars > totalBars ? totalBars : progressBars)) + Strings.repeat("" + notCompletedColor +ChatColor.BOLD+ symbol,totalBars-progressBars);
    }
+	
+	
 	
 	public String Porcentage(long current , long max ) {
 		double percent = current < 0 ? 0 : (double) current/max*100;

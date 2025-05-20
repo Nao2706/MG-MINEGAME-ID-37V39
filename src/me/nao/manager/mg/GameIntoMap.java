@@ -339,13 +339,14 @@ public class GameIntoMap {
 				if(gm.getGameStatus() == GameStatus.JUGANDO || gm.getGameStatus() == GameStatus.PAUSE || gm.getGameStatus() == GameStatus.FREEZE) {
 					if(!dead.contains(player.getName()) && !arrivo.contains(player.getName()) && !spect.contains(player.getName())) {
 						
+					
 						gmc.playerArriveToTheWin(player, mapa);
 						player.setGameMode(GameMode.SPECTATOR);
 						Fireworks f = new Fireworks(player);
 						f.spawnFireballGreenLarge();
 						player.sendMessage(ChatColor.GREEN+"Has Sobrevivido Felicidades.");
 						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.GREEN+" Sobrevivio y Gano.");
-						
+						isTheRankedGames(player,gm.isRankedMap());
 					 return;
 					}
 				}
@@ -354,7 +355,9 @@ public class GameIntoMap {
 			}else if(motivo == StopMotive.WIN && gm.getGameType() == GameType.RESISTENCE) {
 				
 				if(gm.getGameStatus() == GameStatus.JUGANDO || gm.getGameStatus() == GameStatus.PAUSE || gm.getGameStatus() == GameStatus.FREEZE) {
+					
 					gmc.EndTptoSpawn(player, mapa);
+					isTheRankedGames(player,gm.isRankedMap());
 				}
 				
 				return;
@@ -405,7 +408,7 @@ public class GameIntoMap {
 					gmc.playerArriveToTheWin(player, mapa);
 					gmc.EndTptoSpawn(player, mapa);
 				}
-				
+				isTheRankedGames(player,gm.isRankedMap());
 			}else {
 				if(gm.getGameType() == GameType.ADVENTURE) {
 				
@@ -417,7 +420,7 @@ public class GameIntoMap {
 				}
 				
 			}
-			isTheRankedGames(player,gm.isRankedMap());
+			
 			return;
 		}else if(!gomg.isNecessaryObjetivePrimary() && gomg.isNecessaryObjetiveSedondary()) {
 			if(gmc.isAllSecondaryObjetivesComplete(player, mapa)) {
@@ -433,8 +436,8 @@ public class GameIntoMap {
 					gmc.playerArriveToTheWin(player, mapa);
 					gmc.EndTptoSpawn(player, mapa);
 				}
-				
-			}else {
+				isTheRankedGames(player,gm.isRankedMap());
+			}else{
 				
 				if(gm.getGameType() == GameType.ADVENTURE) {
 					gmc.TptoSpawnMapSimple(player);
@@ -446,7 +449,7 @@ public class GameIntoMap {
 				
 				
 			}
-			isTheRankedGames(player,gm.isRankedMap());
+			
 			return;
 		}else if(gomg.isNecessaryObjetivePrimary() && gomg.isNecessaryObjetiveSedondary()) {
 			if(gmc.isAllPrimaryObjetivesComplete(player, mapa) && gmc.isAllSecondaryObjetivesComplete(player, mapa)) {
@@ -462,7 +465,7 @@ public class GameIntoMap {
 					gmc.playerArriveToTheWin(player, mapa);
 					gmc.EndTptoSpawn(player, mapa);
 				}
-				
+				isTheRankedGames(player,gm.isRankedMap());
 			}else {
 				if(gm.getGameType() == GameType.ADVENTURE) {
 					gmc.TptoSpawnMapSimple(player);
@@ -473,7 +476,7 @@ public class GameIntoMap {
 				}
 				
 			}
-			isTheRankedGames(player,gm.isRankedMap());
+			
 			return;
 		}else {
 			if(gm.getGameType() == GameType.ADVENTURE) {
@@ -513,7 +516,7 @@ public class GameIntoMap {
 				/* NUMERO DE PARTICULAS */50, 0.5, 1, 0.5, /* velocidad */0, null, true);
 		
 		if(motivo == StopMotive.LOSE) {
-			 return;
+			return;
 									}
 		if(motivo == StopMotive.ERROR) {
 			 return;
