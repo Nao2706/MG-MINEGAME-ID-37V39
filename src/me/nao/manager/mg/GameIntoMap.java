@@ -37,7 +37,6 @@ import me.nao.enums.mg.StopMotive;
 import me.nao.generalinfo.mg.GameAdventure;
 import me.nao.generalinfo.mg.GameConditions;
 import me.nao.generalinfo.mg.GameInfo;
-import me.nao.generalinfo.mg.GameNexo;
 import me.nao.generalinfo.mg.GameObjetivesMG;
 import me.nao.generalinfo.mg.GamePoints;
 import me.nao.generalinfo.mg.PlayerInfo;
@@ -562,7 +561,7 @@ public class GameIntoMap {
 			}
 		
 			
-		}else if(gi instanceof GameNexo) {
+		}//else if(gi instanceof GameNexo) {
 //			GameNexo gn = (GameNexo) gi;
 //			DestroyNexo dn = new DestroyNexo(plugin);
 //			if(gn.getBlueTeamMg().contains(player.getName())) {
@@ -573,7 +572,7 @@ public class GameIntoMap {
 			
 			
 			
-		}
+		//}
 		
 		
 		

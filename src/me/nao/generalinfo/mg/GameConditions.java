@@ -64,7 +64,6 @@ import me.nao.teams.mg.MgTeams;
 import me.nao.timers.mg.AdventureTemp;
 import me.nao.timers.mg.DialogRun;
 import me.nao.timers.mg.InfectedTemp;
-import me.nao.timers.mg.NexoTemp;
 import me.nao.timers.mg.ResistenceTemp;
 import me.nao.topusers.mg.PointsManager;
 import me.nao.utils.mg.Utils;
@@ -171,39 +170,41 @@ public class GameConditions {
 			 player.sendMessage(ChatColor.GREEN+"Has salido del Mapa "+ChatColor.translateAlternateColorCodes('&',mt.replaceAll("%player%",player.getName())));
 			 RestorePlayer(player);
 			
-		}else if(ms instanceof GameNexo) {
-			GameNexo gn = (GameNexo) ms;
-			List<String> spectador = gn.getSpectators();
-			List<String> join = gn.getParticipants();
-			if(part == GameStatus.ESPERANDO || part == GameStatus.COMENZANDO) {
-				if(join.size() < getMinPlayerMap(pl.getMapName())) {
-					
-					 
-					 int min1 =  getMinPlayerMap(pl.getMapName());
-					 
-					 min1 = min1 - join.size();
-					  
-					 if(min1 == 1) {
-						 sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugador para empezar.");
-					 }else {
-						 sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugadores para empezar.");
-
-			}}}			
-			
-			
-			
-			
-			if(spectador.contains(player.getName())) {
-				sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.WHITE+"El jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" salio del Modo Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size() - 1)+ChatColor.RED+"]");
-			
-			}else {
-				sendMessageToUsersOfSameMapLessPlayer(player,
-							ChatColor.YELLOW+"A Salido "+ChatColor.GREEN+player.getName()+ChatColor.RED+" ("+ChatColor.GOLD+(gn.getParticipants().size()-1)+ChatColor.YELLOW+"/"+ChatColor.GOLD+getMaxPlayerMap(pl.getMapName())+ChatColor.RED+")");			
-			}
-			 String mt = mision.getString("Start.Tittle-of-Mision"); 
-			 player.sendMessage(ChatColor.GREEN+"Has salido del Mapa "+ChatColor.translateAlternateColorCodes('&',mt.replaceAll("%player%",player.getName())));
-			 RestorePlayer(player);
 		}
+		
+//		else if(ms instanceof GameNexo) {
+//			//GameNexo gn = (GameNexo) ms;
+//			List<String> spectador = gn.getSpectators();
+//			List<String> join = gn.getParticipants();
+//			if(part == GameStatus.ESPERANDO || part == GameStatus.COMENZANDO) {
+//				if(join.size() < getMinPlayerMap(pl.getMapName())) {
+//					
+//					 
+//					 int min1 =  getMinPlayerMap(pl.getMapName());
+//					 
+//					 min1 = min1 - join.size();
+//					  
+//					 if(min1 == 1) {
+//						 sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugador para empezar.");
+//					 }else {
+//						 sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugadores para empezar.");
+//
+//			}}}			
+//			
+//			
+//			
+//			
+//			if(spectador.contains(player.getName())) {
+//				sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.WHITE+"El jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" salio del Modo Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size() - 1)+ChatColor.RED+"]");
+//			
+//			}else {
+//				sendMessageToUsersOfSameMapLessPlayer(player,
+//							ChatColor.YELLOW+"A Salido "+ChatColor.GREEN+player.getName()+ChatColor.RED+" ("+ChatColor.GOLD+(gn.getParticipants().size()-1)+ChatColor.YELLOW+"/"+ChatColor.GOLD+getMaxPlayerMap(pl.getMapName())+ChatColor.RED+")");			
+//			}
+//			 String mt = mision.getString("Start.Tittle-of-Mision"); 
+//			 player.sendMessage(ChatColor.GREEN+"Has salido del Mapa "+ChatColor.translateAlternateColorCodes('&',mt.replaceAll("%player%",player.getName())));
+//			 RestorePlayer(player);
+//		}
 		
 	
 		//player.sendMessage("Saliste.");
@@ -743,16 +744,18 @@ public class GameConditions {
 				plugin.getCheckPoint().remove(player);
 				t.RemoveAllPlayer(player);
 			}
-		}else if(mis instanceof GameNexo) {
-			GameNexo ga = (GameNexo) mis;
-			if(ga.getGameType() == GameType.NEXO ) {
-				if(ga.getParticipants().remove(player.getName()));
-				if(ga.getSpectators().remove(player.getName()));
-//				if(ga.getBlueTeamMg().remove(player.getName()))
-//				if(ga.getRedTeamMg().remove(player.getName()))
-				plugin.getPlayerInfoPoo().remove(player);
-			}
 		}
+		
+//		else if(mis instanceof GameNexo) {
+//			GameNexo ga = (GameNexo) mis;
+//			if(ga.getGameType() == GameType.NEXO ) {
+//				if(ga.getParticipants().remove(player.getName()));
+//				if(ga.getSpectators().remove(player.getName()));
+////				if(ga.getBlueTeamMg().remove(player.getName()))
+////				if(ga.getRedTeamMg().remove(player.getName()))
+//				plugin.getPlayerInfoPoo().remove(player);
+//			}
+//		}
 	}
 	
 	public void playerWinnerReward(Player player) {
@@ -1187,14 +1190,14 @@ public class GameConditions {
 			    }else if(type == GameType.NEXO) {
 			    	
 			    	
-			    	GameNexo gn = new GameNexo();
-			    	gn.setMapName(map);
-			    	gn.setTimeMg(time);
-			    	gn.setGameType(type);
-			    	gn.setMaxPlayersinMap(maxplayers);
-			    	gn.setMinPlayersinMap(minplayers);
-			    	gn.setBossbar(boss);	
-			    	gn.setPvpinMap(isPvPAllowed(map));
+//			    	GameNexo gn = new GameNexo();
+//			    	gn.setMapName(map);
+//			    	gn.setTimeMg(time);
+//			    	gn.setGameType(type);
+//			    	gn.setMaxPlayersinMap(maxplayers);
+//			    	gn.setMinPlayersinMap(minplayers);
+//			    	gn.setBossbar(boss);	
+//			    	gn.setPvpinMap(isPvPAllowed(map));
 //			    	List<String> t1 = new ArrayList<>();
 //				    List<String> t2 = new ArrayList<>();
 //			    	
@@ -1285,8 +1288,8 @@ public class GameConditions {
 				}else if(ms.getGameType() == GameType.NEXO) {
 					//DestroyNexo dn = new DestroyNexo(plugin);
 					//dn.RandomTeam(map);
-					NexoTemp t = new NexoTemp(plugin);
-					t.Inicio(ms.getMapName());
+//					NexoTemp t = new NexoTemp(plugin);
+//					t.Inicio(ms.getMapName());
 				}
 			}
 		 }
@@ -2964,19 +2967,20 @@ public class GameConditions {
 					}
 			player.getWorld().spawnParticle(Particle.DRAGON_BREATH, player.getLocation().add(0, 1, 0),
 							/* NUMERO DE PARTICULAS */50, 2, 5, 2, /* velocidad */0, null, true);
-		 }else if(ms instanceof GameNexo) {
-			// GameNexo gn = (GameNexo) ms;
-			    setDefaultHeartsInGame(player);
-				BossBar boss = ms.getBossbar();
-				boss.removePlayer(player);
-				System.out.println("LOG 2 RESTORE ANTES NEXO: "+ms.ShowGame());
-				
-					player.teleport(pl.getLocationMG());
-					pl.restoreAllPlayerMg();
-				
-				removeAllPlayerToGame(player, pl.getMapName());
-				
 		 }
+//		 }else if(ms instanceof GameNexo) {
+//			// GameNexo gn = (GameNexo) ms;
+//			    setDefaultHeartsInGame(player);
+//				BossBar boss = ms.getBossbar();
+//				boss.removePlayer(player);
+//				System.out.println("LOG 2 RESTORE ANTES NEXO: "+ms.ShowGame());
+//				
+//					player.teleport(pl.getLocationMG());
+//					pl.restoreAllPlayerMg();
+//				
+//				removeAllPlayerToGame(player, pl.getMapName());
+//				
+//		 }
 	}
 	
 	public void setKitMg(Player player) {
