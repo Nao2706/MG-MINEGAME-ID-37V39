@@ -92,7 +92,7 @@ public class SourceOfDamage implements Listener{
 		
 		GameConditions gc = new GameConditions(plugin);
 		if(gc.isPlayerinGame(player)) {
-			gc.ForceGameModePlayerRol(player);
+			gc.forceGameModePlayerRol(player);
 			
 		}
 		
@@ -219,7 +219,7 @@ public class SourceOfDamage implements Listener{
 
 		GameConditions gc = new GameConditions(plugin);
 		if(gc.isPlayerinGame(player)) {
-			gc.ForceGameModePlayerRol(player);
+			gc.forceGameModePlayerRol(player);
 			
 		}
 	
@@ -651,6 +651,12 @@ public class SourceOfDamage implements Listener{
 		EntityType mob = e.getEntityType();
 		GameConditions gc = new GameConditions(plugin);
 		if(gc.isPlayerinGame(player)) {
+			
+			
+			if(gc.isGuardian(e.getEntity())) return;
+				
+			
+			
 			if(player != null && player.getType() == EntityType.PLAYER && mob != EntityType.ITEM_FRAME && mob != EntityType.ITEM) {
 				Entity m = e.getEntity();
 				
@@ -682,7 +688,7 @@ public class SourceOfDamage implements Listener{
 				//SoulsArmor(player);
 				
 				 GameIntoMap c = new GameIntoMap(plugin);
-				 c.GamePlayerAddPoints(player);
+				 c.gamePlayerAddPoints(player);
 				 
 				 //iba el otor
 			

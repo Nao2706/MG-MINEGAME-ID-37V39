@@ -1707,7 +1707,8 @@ public class EventRandoms implements Listener{
 							 	 
 							  	pl.getGamePoints().setDamage(pl.getGamePoints().getDamage()+ConvertDoubleToInt(mob.getHealth()-mob.getAttribute(Attribute.MAX_HEALTH).getBaseValue()));
 								//isaHeadShot(player, mob, projectile);
-							  	HeadShoot(player, mob, projectile);
+								if(gc.isGuardian(mob)) return;
+							  	headShoot(player, mob, projectile);
 						 }
 					  	
 					  	
@@ -3015,7 +3016,7 @@ public class EventRandoms implements Listener{
 
 					
 					
-		 public void HeadShoot(Player player, LivingEntity damage, Projectile projectil) {
+		 public void headShoot(Player player, LivingEntity damage, Projectile projectil) {
 						 
 			 			 GameIntoMap c = new GameIntoMap(plugin);
 				         double projectileY = projectil.getLocation().getY();
@@ -3039,6 +3040,7 @@ public class EventRandoms implements Listener{
 				        			 alture = 1.57D; 
 				        		 }
 				        		 
+				        		 if(damage instanceof Snowman || damage instanceof IronGolem) return;
 				        		 if(damage instanceof Animals || damage instanceof AnimalTamer || damage instanceof Spider || damage instanceof CaveSpider || damage instanceof Ambient || damage instanceof WaterMob){
 				        			return; 
 				        		 }
@@ -3063,7 +3065,7 @@ public class EventRandoms implements Listener{
 		         			            	projectil.remove();
 		         			            	player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 		         			            	
-		         							 c.GamePlayerAddPoints(player);
+		         							 c.gamePlayerAddPoints(player);
 		         			            	 
 		                				 }
 		                				 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.RED+ChatColor.BOLD+"CRITICAL HEADSHOT"));

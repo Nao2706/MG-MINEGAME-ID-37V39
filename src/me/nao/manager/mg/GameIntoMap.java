@@ -579,7 +579,7 @@ public class GameIntoMap {
 	}
 	
 	//TODO BORDE DE BIEN
-	public void GamePlayerAddPoints(Player player) {
+	public void gamePlayerAddPoints(Player player) {
 		
 			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		
@@ -599,7 +599,7 @@ public class GameIntoMap {
 		int puntos3 = gp.getRevive();
 		int puntos4 = gp.getHelpRevive();
 		long puntos5 = gp.getDamage();
-		player.sendMessage(""+ChatColor.YELLOW+" [PUNTOS DE LA PARTIDA]");
+		player.sendMessage(""+ChatColor.YELLOW+"   [PUNTOS DE LA PARTIDA]");
 		player.sendMessage(""+ChatColor.GREEN+" Eliminaciones : "+ChatColor.YELLOW+puntos);
 		player.sendMessage(""+ChatColor.GREEN+" Muertes : "+ChatColor.YELLOW+puntos2);
 		player.sendMessage(""+ChatColor.GREEN+" Revivido : "+ChatColor.YELLOW+puntos3);

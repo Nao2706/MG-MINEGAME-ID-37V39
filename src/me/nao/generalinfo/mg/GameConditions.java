@@ -168,7 +168,7 @@ public class GameConditions {
 			
 			 String mt = mision.getString("Start.Tittle-of-Mision"); 
 			 player.sendMessage(ChatColor.GREEN+"Has salido del Mapa "+ChatColor.translateAlternateColorCodes('&',mt.replaceAll("%player%",player.getName())));
-			 RestorePlayer(player);
+			 restorePlayer(player);
 			
 		}
 		
@@ -298,7 +298,7 @@ public class GameConditions {
 			for(Player target : player) {
 				
 				sco.ClearScore(target);
-				RestorePlayer(target);
+				restorePlayer(target);
 				
 			}
 			
@@ -306,7 +306,7 @@ public class GameConditions {
 			 
 			for(Player target : spec) {
 				sco.ClearScore(target);
-				RestorePlayer(target);
+				restorePlayer(target);
 			}
 			
 				checkGenerator(gi);
@@ -534,7 +534,7 @@ public class GameConditions {
 			} 
 	   }   
 	
-	public void ForceGameModePlayerRol(Player player) {
+	public void forceGameModePlayerRol(Player player) {
 		
 		if(isPlayerKnocked(player)) return;
 		
@@ -862,7 +862,7 @@ public class GameConditions {
 						
 						
 						
-						
+						// EN CONSOLA SE PRINTEARA PRIMERO EL PRIMER LUGAR LUEGO EL 2 3 ETC
 						int i = 0;
 						for (Map.Entry<String, Integer> e : list) {
 							
@@ -1532,7 +1532,21 @@ public class GameConditions {
 	    return game.contains("Cuboid-Zones.List");
 	}
 	
-	
+	public boolean isGuardian(Entity e){
+		//System.out.println("MOB :"+e.getType());
+		if(e instanceof LivingEntity) {
+			LivingEntity l = (LivingEntity) e;
+			
+			if(l.getCustomName() == null) return false;
+			 String mobname = ChatColor.stripColor(l.getCustomName());
+			if(mobname.contains("GUARDIA") || mobname.startsWith("GUARDIA")) {
+				//System.out.println("SI");
+				return true;
+			}
+		}
+		//System.out.println("NO");
+		return false;
+	}
 	 
 	//TODO TIME 
 	public void HasTimePath(String time ,String map) {
@@ -2929,7 +2943,7 @@ public class GameConditions {
 	}
 	
 	//TODO RESTORE
-	public void RestorePlayer(Player player) {
+	public void restorePlayer(Player player) {
 	
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		GameInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());

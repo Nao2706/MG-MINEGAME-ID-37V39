@@ -99,6 +99,8 @@ public class MgScore {
 				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Puede que haya");
 				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Puede que no");
 				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Crees Ganar???");
+				 show.add(""+ChatColor.RED+ChatColor.BOLD+"No uses Hacks o Bugs");
+				 show.add(""+ChatColor.RED+ChatColor.BOLD+"Reportalos si los ves.");
 				 show.add(ChatColor.RED+"  ");
 				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"------------- ");
 			 }if(val == 1) {
@@ -108,6 +110,8 @@ public class MgScore {
 				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Te fijaste ");
 				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"en la Dificultad");
 				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"no ?? F");
+				 show.add(""+ChatColor.RED+ChatColor.BOLD+"No uses Hacks o Bugs");
+				 show.add(""+ChatColor.RED+ChatColor.BOLD+"Reportalos si los ves.");
 				 show.add(ChatColor.RED+"  ");
 				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"------------- ");
 			 }if(val == 2) {
@@ -117,6 +121,8 @@ public class MgScore {
 				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Es facil perderse");
 				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Explora con cuidado");
 				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Y trata de no jugar solo");
+				 show.add(""+ChatColor.RED+ChatColor.BOLD+"No uses Hacks o Bugs");
+				 show.add(""+ChatColor.RED+ChatColor.BOLD+"Reportalos si los ves.");
 				 show.add(ChatColor.RED+"  ");
 				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"------------- ");
 			 }if(val == 3) {
@@ -126,6 +132,8 @@ public class MgScore {
 				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"La clave es aprender");
 				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"del mapa y sus trucos");
 				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"o eran los hacks??");
+				 show.add(""+ChatColor.RED+ChatColor.BOLD+"No uses Hacks o Bugs");
+				 show.add(""+ChatColor.RED+ChatColor.BOLD+"Reportalos si los ves.");
 				 show.add(ChatColor.RED+"  ");
 				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"------------- ");
 			 }
@@ -351,7 +359,7 @@ public class MgScore {
 				 show.add(" "+ChatColor.GREEN+ChatColor.BOLD+"Help-Revive: "+ChatColor.RED+ChatColor.BOLD+gp.getHelpRevive()); 
 				 
 				 show.add(ChatColor.RED+"  ");
-				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"========= ");
+				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"========="+ChatColor.WHITE);
 				
 				 
 			}
@@ -391,6 +399,8 @@ public class MgScore {
 			con.add(ChatColor.GREEN+"Y que intento es este?");
 			con.add(ChatColor.GREEN+"Eres Pro o te crees Pro");
 			con.add(ChatColor.GREEN+"Mejor espectea desde el mas alla");
+			con.add(ChatColor.GREEN+"Reporta los Bugs");
+			con.add(ChatColor.GREEN+"No uses Hacks");
 			
 			
 			Random r = new Random();
