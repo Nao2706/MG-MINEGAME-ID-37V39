@@ -61,6 +61,33 @@ public class GameObjetivesMG {
 		return iscompleteobjetivessecondary;
 	}
 	
+	public List<ObjetivesMG> getObjetivesPrimary(){
+		List<ObjetivesMG> l = new ArrayList<>();
+		for(ObjetivesMG obj : getObjetives()) {
+			if(obj.getPriority() != 1) continue;
+			l.add(obj);
+		}
+		return l;
+	}
+	
+	public List<ObjetivesMG> getObjetivesSecondary(){
+		List<ObjetivesMG> l = new ArrayList<>();
+		for(ObjetivesMG obj : getObjetives()) {
+			if(obj.getPriority() <= 1) continue;
+			l.add(obj);
+		}
+		return l;
+	}
+	
+	public List<ObjetivesMG> getObjetivesHostile(){
+		List<ObjetivesMG> l = new ArrayList<>();
+		for(ObjetivesMG obj : getObjetives()) {
+			if(obj.getPriority() >= 1) continue;
+			l.add(obj);
+		}
+		return l;
+	}
+	
 	public List<List<String>> getCompleteAllPrimaryObjetiveForReward(){
 		return CompleteAllPrimaryObjetiveForReward;
 	}

@@ -294,9 +294,10 @@ public class PointsManager {
 				//SE MANTIENE EN EL NIVEL
 			}else{
 				//System.out.println(" "+manager.getReferenceB()+" - "+displayxp +" "+(manager.getReferenceB()-displayxp));
-				long result = displayxp < 0 ? 0 : displayxp;
+				System.out.println("DEBUG: "+displayxp+"/"+refer);
+				long result = displayxp > refer ? refer : displayxp;
 				long leftpoints = manager2.getReferenceB() - displayxp;
-				String text = displayxp > 0 ? ChatColor.GREEN+" + Subiste." : ChatColor.RED+" - Bajaste.";
+				String text = displayxp > savexp ? ChatColor.GREEN+" + Subiste." : ChatColor.RED+" - Bajaste.";
 				if(displayxp == savexp) {
 					player.sendMessage(ChatColor.DARK_GRAY+" Te Mantienes en el Mismo Puntaje de Xp "+ChatColor.YELLOW+savexp+ChatColor.DARK_GRAY+" con el que Entraste.");
 					text = ChatColor.YELLOW+" Se Mantiene";
@@ -305,13 +306,13 @@ public class PointsManager {
 					player.sendMessage(ChatColor.DARK_GRAY+" Te faltan "+ChatColor.GREEN+leftpoints+ChatColor.DARK_GRAY+" Puntos de XP para Subir de Nivel.");
 				}else if(displayxp < savexp) {
 					
-					player.sendMessage(ChatColor.DARK_GRAY+" Bajaste "+ChatColor.RED+leftpoints+ChatColor.DARK_GRAY+" Puntos de XP para Subir de Nivel.");
+					player.sendMessage(ChatColor.DARK_GRAY+" Bajaste "+ChatColor.RED+leftpoints+ChatColor.DARK_GRAY+" Puntos de XP de Nivel.");
 				}
 				
 				
 				
 				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"             ["+ChatColor.YELLOW+result+ChatColor.GOLD+ChatColor.BOLD+"/"+ChatColor.GREEN+refer+ChatColor.DARK_GRAY+ChatColor.BOLD+"]"+text);
-				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"            ["+showProgressBar(result, refer,20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
+				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"            ["+showProgressBar(result,refer,20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
 				player.sendMessage(""+ChatColor.DARK_GRAY+"Total de XP General: "+ChatColor.GREEN+ChatColor.BOLD+(currentplayertotalxpwithchanges < 0 ? 0 : currentplayertotalxpwithchanges));
 				player.sendMessage("");
 				
@@ -465,7 +466,7 @@ public class PointsManager {
 					if(isset) {
 						playeronline.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"XP SETEADA A "+ChatColor.RED+ChatColor.BOLD+updateval);
 					}
-					String text = displayxp > 0 ? ChatColor.GREEN+" + Subiste." : ChatColor.RED+" - Bajaste.";
+					String text = displayxp > savexp ? ChatColor.GREEN+" + Subiste." : ChatColor.RED+" - Bajaste.";
 					if(displayxp == savexp) {
 						playeronline.sendMessage(ChatColor.DARK_GRAY+" Te Mantienes en el Mismo Puntaje de Xp "+ChatColor.YELLOW+savexp+ChatColor.DARK_GRAY+" con el que Entraste.");
 						text = ChatColor.YELLOW+" Se Mantiene";
@@ -943,13 +944,16 @@ public class PointsManager {
 	public String showProgressBar(long current, long max, int totalBars, char symbol, ChatColor completedColor,ChatColor notCompletedColor) {
 		double percent = (double) current/max;
         int progressBars = (int) (totalBars * percent);
+        
+        int fix = progressBars > totalBars ? totalBars : progressBars;
+        
         if(current > max) {
         	System.out.println("ERROR:Es mayor "+current+" que "+max+" Percent:["+percent+"-"+current+"/"+max+"] "+"Progress:["+progressBars+"-"+totalBars+"*"+percent+"]");
         
         	
      }
         
-        return Strings.repeat(""+ completedColor +ChatColor.BOLD + symbol, (progressBars > totalBars ? totalBars : progressBars)) + Strings.repeat("" + notCompletedColor +ChatColor.BOLD+ symbol,totalBars-progressBars);
+        return Strings.repeat(""+ completedColor +ChatColor.BOLD + symbol, (progressBars > totalBars ? totalBars : progressBars)) + Strings.repeat("" + notCompletedColor +ChatColor.BOLD+ symbol,totalBars-fix);
    }
 	
 	

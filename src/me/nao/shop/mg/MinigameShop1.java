@@ -453,16 +453,10 @@ public class MinigameShop1 implements Listener{
 	public void ObjetivesPrimary(Player player) {
 		PlayerInfo p = plugin.getPlayerInfoPoo().get(player);
 		GameInfo gi = plugin.getGameInfoPoo().get(p.getMapName());
-		List<ObjetivesMG> l1 = gi.getGameObjetivesMg().getObjetives();
-		List<ObjetivesMG> l = new ArrayList<>();
+		List<ObjetivesMG> l = gi.getGameObjetivesMg().getObjetivesPrimary();
 		List<ItemStack> li = new ArrayList<>();
 		
-		for(int i = 0; i<l1.size();i++) {
-			if(l1.get(i).getPriority() == 1) {
-				l.add(l1.get(i));
-			}
-			
-		}
+		
 		
 		if(l.isEmpty()) {
 			player.sendMessage(ChatColor.RED+"Este Mapa no incluye Objetivos Primarios.");
@@ -604,16 +598,9 @@ public class MinigameShop1 implements Listener{
 	public void ObjetivesSecondary(Player player) {
 		PlayerInfo p = plugin.getPlayerInfoPoo().get(player);
 		GameInfo gi = plugin.getGameInfoPoo().get(p.getMapName());
-		List<ObjetivesMG> l1 = gi.getGameObjetivesMg().getObjetives();
-		List<ObjetivesMG> l = new ArrayList<>();
-		List<ItemStack> li = new ArrayList<>();
+		List<ObjetivesMG> l = gi.getGameObjetivesMg().getObjetivesSecondary();
 		
-		for(int i = 0; i<l1.size();i++) {
-			if(l1.get(i).getPriority() >= 2) {
-				l.add(l1.get(i));
-			}
-			
-		}
+		List<ItemStack> li = new ArrayList<>();
 		
 		if(l.isEmpty()) {
 			player.sendMessage(ChatColor.RED+"Este Mapa no incluye Objetivos Secundarios.");
@@ -755,16 +742,9 @@ public class MinigameShop1 implements Listener{
 	public void ObjetivesHostile(Player player) {
 		PlayerInfo p = plugin.getPlayerInfoPoo().get(player);
 		GameInfo gi = plugin.getGameInfoPoo().get(p.getMapName());
-		List<ObjetivesMG> l1 = gi.getGameObjetivesMg().getObjetives();
-		List<ObjetivesMG> l = new ArrayList<>();
+		List<ObjetivesMG> l = gi.getGameObjetivesMg().getObjetivesHostile();
 		List<ItemStack> li = new ArrayList<>();
 		
-		for(int i = 0; i<l1.size();i++) {
-			if(l1.get(i).getPriority() <= 0) {
-				l.add(l1.get(i));
-			}
-			
-		}
 		
 		if(l.isEmpty()) {
 			player.sendMessage(ChatColor.RED+"Este Mapa no incluye Objetivos Hostiles.");

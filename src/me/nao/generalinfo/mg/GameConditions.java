@@ -2933,7 +2933,47 @@ public class GameConditions {
 				sendMessageToUserAndConsole(player,comments);
 
 			}
-	
+			
+			
+			sendMessageToConsole(""+ChatColor.RED+"OBJETIVOS ");
+			String comment = ga.getGameObjetivesMg().hasMapObjetives() ? "Si" : "No";
+			sendMessageToConsole(""+ChatColor.GRAY+"Tiene Objetivos: "+ChatColor.RED+comment);
+			if(ga.getGameObjetivesMg().hasMapObjetives()) {
+				
+				if(!ga.getGameObjetivesMg().getObjetivesPrimary().isEmpty()){
+					sendMessageToConsole(""+ChatColor.GOLD+"Objetivos Primarios ");
+					for(ObjetivesMG obj : ga.getGameObjetivesMg().getObjetivesPrimary()) {
+						sendMessageToConsole(ChatColor.RED+"- "+ChatColor.GOLD+obj.getObjetiveName()+" "+ChatColor.AQUA+obj.getObjetiveStatusType()+" "+ChatColor.GREEN+obj.getCurrentValue()+ChatColor.RED+"/"+ChatColor.GREEN+obj.getCompleteValue());
+					}
+				}else {
+					sendMessageToConsole(""+ChatColor.RED+"No Tiene Objetivos Primarios ");
+				}
+				
+				if(!ga.getGameObjetivesMg().getObjetivesSecondary().isEmpty()){
+					sendMessageToConsole(""+ChatColor.GOLD+"Objetivos Secundarios ");
+					for(ObjetivesMG obj : ga.getGameObjetivesMg().getObjetivesSecondary()) {
+						sendMessageToConsole(ChatColor.RED+"- "+ChatColor.GOLD+obj.getObjetiveName()+" "+ChatColor.AQUA+obj.getObjetiveStatusType()+" "+ChatColor.GREEN+obj.getCurrentValue()+ChatColor.RED+"/"+ChatColor.GREEN+obj.getCompleteValue());
+					}
+				}else {
+					sendMessageToConsole(""+ChatColor.RED+"No Tiene Objetivos Secundarios ");
+				}
+				
+				if(!ga.getGameObjetivesMg().getObjetivesHostile().isEmpty()){
+					sendMessageToConsole(""+ChatColor.GOLD+"Objetivos Hostiles ");
+					for(ObjetivesMG obj : ga.getGameObjetivesMg().getObjetivesHostile()) {
+						sendMessageToConsole(ChatColor.RED+"- "+ChatColor.GOLD+obj.getObjetiveName()+" "+ChatColor.AQUA+obj.getObjetiveStatusType()+" "+ChatColor.GREEN+obj.getCurrentValue()+ChatColor.RED+"/"+ChatColor.GREEN+obj.getCompleteValue());
+					}
+				}else {
+					sendMessageToConsole(""+ChatColor.RED+"No Tiene Objetivos Hostiles ");
+				}
+			}
+			
+			sendMessageToUserAndConsole(player,ChatColor.GRAY+"PUNTOS DE LOS PARTICIPANTES");	
+			for(Player part : ConvertStringToPlayer(participants)) {
+				PlayerInfo pi = plugin.getPlayerInfoPoo().get(part);
+				sendMessageToConsole(""+ChatColor.RED+"- "+part.getName()+" K:"+pi.getGamePoints().getKills()+" D:"+pi.getGamePoints().getDeads()+" R:"+pi.getGamePoints().getRevive()+" HR:"+pi.getGamePoints().getHelpRevive());
+			}
+			
 			sendMessageToUserAndConsole(player,ChatColor.GRAY+"=============================");	
 			sendMessageToUserAndConsole(player,"");	
 			

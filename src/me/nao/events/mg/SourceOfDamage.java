@@ -122,7 +122,7 @@ public class SourceOfDamage implements Listener{
 								PlayerInfo tg = plugin.getPlayerInfoPoo().get(target);
 								PlayerInfo user = plugin.getPlayerInfoPoo().get(player);
 								
-								if(user.getMapName().equals(tg.getMapName())){
+								if(user.getMapName().equals(tg.getMapName()) && target.getGameMode() == GameMode.ADVENTURE) {
 									player.sendMessage(ChatColor.GREEN+"Te teletransportaste a "+ChatColor.GOLD+target.getName());
 									player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 20.0F, 1F);
 								}else {
