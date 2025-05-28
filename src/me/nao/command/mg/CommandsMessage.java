@@ -24,7 +24,23 @@ public class CommandsMessage {
 	}
 	
 	@SuppressWarnings("deprecation")
-	public void FormatsMessage(Player player) {
+	public void formatsMessage(Player player) {
+		
+		
+		if(player == null) {
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Advertencia:"+ChatColor.YELLOW+" Respeta cada formato.");
+			
+		    Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + " Formato 1 Lunes Miercoles Viernes : Formato con dias. (Asegurate de colocar los dias correctamente)");
+		    Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + " Formato 2 1)Sabado Viernes 08:35-10:12 2)Sabado Viernes 08:35-10:12,12:35-15:11 :Formato con dias mas horas. (Asegurate de colocar los dias y las horas correctamente)");
+		    Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + " Formato 3 10/01/2023 06:14:00 AM : Formato con fecha. (Asegurate de colocar las fecha correctamente)");
+		    Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + " Formato 4 0/01/2023 06:14:00 AM-13/01/2023 12:14:00 PM : Formato con fecha. (Asegurate de colocar las fechas correctamente)");
+		
+		    Bukkit.getConsoleSender().sendMessage("- Asegurate de escribir bien los dias (lunes martes miercolres etc).");
+		    Bukkit.getConsoleSender().sendMessage("- Si cambias las horas del formato 2 asegurate que la primera hora sea inferior a la segunda hora.");
+		    Bukkit.getConsoleSender().sendMessage("- Similar al formato 4 pero solo usa una fecha");
+		    Bukkit.getConsoleSender().sendMessage("- Si usas el formato 4 que la primera fecha se inferior a la segunda y revisa bien lo del AM y PM");
+			return;
+		}
 		
 		player.sendMessage(ChatColor.RED+"Advertencia:"+ChatColor.YELLOW+" Respeta cada formato.");
 		TextComponent m1 = new TextComponent();
@@ -32,20 +48,20 @@ public class CommandsMessage {
 		TextComponent m3 = new TextComponent();
 		TextComponent m4 = new TextComponent();
 		
-		m1.setText(ChatColor.GREEN + " formato 1");
+		m1.setText(ChatColor.GREEN + " Formato 1");
 		m1.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,new ComponentBuilder("Formato con dias. (Asegurate de colocar los dias correctamente)").color(ChatColor.GOLD).create()));
 	    m1.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,"Lunes Miercoles Viernes"));
 
-		m2.setText(ChatColor.GREEN + " formato 2");
+		m2.setText(ChatColor.GREEN + " Formato 2");
 		m2.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,new ComponentBuilder("Formato con dias mas horas. (Asegurate de colocar los dias y las horas correctamente)").color(ChatColor.GOLD).create()));
 	    m2.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,"1)Sabado Viernes 08:35-10:12 2)Sabado Viernes 08:35-10:12,12:35-15:11"));
 	    
-		m3.setText(ChatColor.GREEN + " formato 3");
+		m3.setText(ChatColor.GREEN + " Formato 3");
 		m3.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,new ComponentBuilder("Formato con fecha. (Asegurate de colocar las fecha correctamente)").color(ChatColor.GOLD).create()));
 	    m3.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,"10/01/2023 06:14:00 AM"));
 		
 		
-	    m4.setText(ChatColor.GREEN + " formato 4");
+	    m4.setText(ChatColor.GREEN + " Formato 4");
 		m4.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,new ComponentBuilder("Formato con fecha. (Asegurate de colocar las fechas correctamente)").color(ChatColor.GOLD).create()));
 	    m4.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND,"10/01/2023 06:14:00 AM-13/01/2023 12:14:00 PM"));
 		

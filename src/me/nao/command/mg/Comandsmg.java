@@ -716,7 +716,7 @@ public class Comandsmg implements CommandExecutor{
 			 		 return true;
 				  }else if(args[0].equalsIgnoreCase("formats")) {
 	              	  CommandsMessage c1 = new CommandsMessage(plugin);
-	              	  c1.FormatsMessage(null);
+	              	  c1.formatsMessage(null);
           			
           			return true;
           			
@@ -2440,7 +2440,7 @@ public class Comandsmg implements CommandExecutor{
 					return true;
 				}else if(args[0].equalsIgnoreCase("formats") && player.isOp()) {
 	              	  CommandsMessage c1 = new CommandsMessage(plugin);
-	              	  c1.FormatsMessage(player);
+	              	  c1.formatsMessage(player);
           			
           			return true;
           			

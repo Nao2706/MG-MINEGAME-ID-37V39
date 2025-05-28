@@ -878,7 +878,7 @@ public class GameConditions {
 										if(winreward.size() > i) {
 											int position = i-1;
 											 player.sendMessage(ChatColor.GREEN+"Felicidades Ganaste el Premio de la "+i+"# Posicion");
-											 Bukkit.dispatchCommand(console, winreward.get(position).replaceAll("%player%",player.getName()));
+											 Bukkit.dispatchCommand(console, winreward.get(position).replaceAll("%player%",player.getName()).replaceAll("%kills%",String.valueOf(puntaje)).replaceAll("%points%",String.valueOf(RewardPointsForItems(puntaje))));
 											 console.sendMessage(ChatColor.GREEN+"%player% Gano el Premio de la "+i+"# Posicion".replaceAll("%player%",player.getName()));
 											 console.sendMessage(""+ChatColor.RED+i+ChatColor.GOLD+" Premio: "+ChatColor.GREEN+winreward.get(position).replaceAll("%player%",player.getName()));
 									    
@@ -903,7 +903,7 @@ public class GameConditions {
 					for(int i = 0 ; i < winreward.size(); i++) {
 						String texto = winreward.get(i);
 						if(!hasPlayerPermissionByLuckPerms(player,texto)) continue;
-						Bukkit.dispatchCommand(console, ChatColor.translateAlternateColorCodes('&', texto.replaceAll("%player%",player.getName()).replaceAll("%points%",String.valueOf(RewardPointsForItems(puntaje)))));
+						Bukkit.dispatchCommand(console, ChatColor.translateAlternateColorCodes('&', texto.replaceAll("%player%",player.getName()).replaceAll("%kills%",String.valueOf(puntaje)).replaceAll("%points%",String.valueOf(RewardPointsForItems(puntaje)))));
 						
 				      }
 				}else {
@@ -996,7 +996,7 @@ public class GameConditions {
 			   for(int i = 0 ; i < lostreward.size(); i++) {
 					String texto = lostreward.get(i);
 					if(!hasPlayerPermissionByLuckPerms(player,texto)) continue;
-					Bukkit.dispatchCommand(console, ChatColor.translateAlternateColorCodes('&', texto.replaceAll("%player%",player.getName()).replaceAll("%points%",String.valueOf(RewardPointsForItems(puntaje)))));
+					Bukkit.dispatchCommand(console, ChatColor.translateAlternateColorCodes('&', texto.replaceAll("%player%",player.getName()).replaceAll("%kills%",String.valueOf(puntaje)).replaceAll("%points%",String.valueOf(RewardPointsForItems(puntaje)))));
 
 			}}
 	}
@@ -2418,12 +2418,12 @@ public class GameConditions {
 
         long seconds = tempDateTime.until( fin, ChronoUnit.SECONDS );
 
-               return years+" :Años,"+
-               months+" :Meses,"+ 
-               days+" :Dias,"+
-               hours+" :Horas,"+
-               minutes+" :Minutos,"+
-               seconds+" :Segundos" ;
+               return years+":Años ,"+
+               months+":Meses ,"+ 
+               days+":Dias ,"+
+               hours+":Horas ,"+
+               minutes+":Minutos ,"+
+               seconds+":Segundos" ;
 	}
 	
 	
@@ -3151,7 +3151,7 @@ public class GameConditions {
 													 .replace("%mvp%",""+ChatColor.GREEN+ChatColor.BOLD+"MVP")
 													 .replace("%player%", e.getKey())
 													 .replace("%place%", Integer.toString(i))
-													 .replace("%pointuser%", Integer.toString(e.getValue()))
+													 .replace("%kills%", Integer.toString(e.getValue()))
 													 .replace("%reward%", Long.toString(RewardPointsForItems(e.getValue())))
 													 .replace("%revive%", Integer.toString(getReviveInfo(e.getKey())))
 													 .replace("%helprevive%", Integer.toString(getReviveAsistenceInfo(e.getKey())))
@@ -3165,7 +3165,7 @@ public class GameConditions {
 													 .replace("%mvp%","")
 													 .replace("%player%", e.getKey())
 													 .replace("%place%", Integer.toString(i))
-													 .replace("%pointuser%", Integer.toString(e.getValue()))
+													 .replace("%kills%", Integer.toString(e.getValue()))
 													 .replace("%reward%", Long.toString(RewardPointsForItems(e.getValue())))
 													 .replace("%revive%", Integer.toString(getReviveInfo(e.getKey())))
 													 .replace("%helprevive%", Integer.toString(getReviveAsistenceInfo(e.getKey())))
