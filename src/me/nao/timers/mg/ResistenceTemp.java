@@ -269,6 +269,7 @@ public class ResistenceTemp {
 					   	}
 				
 						for(Player players : joins) {
+							if(end != 0) {
 							if(end <= 5 && end >= 1) {
 			 	       		  //  RemoveArmorStandsAndItemsInMap(target);
 								players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 2F);
@@ -283,11 +284,12 @@ public class ResistenceTemp {
 					    		}
 							
 								ma.removeEntitysAfterGame(players);
+							}	
 					 
 						}
 					
 						for(Player players : spect) {
-						
+							if(end != 0) {
 							if(end <= 5 && end >= 1) {
 			 	       		  //  RemoveArmorStandsAndItemsInMap(target);
 								players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 2F);
@@ -301,6 +303,9 @@ public class ResistenceTemp {
 					    			//target.sendMessage(ChatColor.GREEN+"La partida termina en "+ChatColor.DARK_PURPLE+end);
 					    		}
 							ma.removeEntitysAfterGame(players);
+							
+							}
+							
 						}
 					
 				

@@ -1114,9 +1114,7 @@ public class SourceOfDamage implements Listener{
 				ci.GamePlayerFallMap(player,DamageCause.VOID);
 			}else if(e.getFinalDamage() >= player.getHealth()) {
 				
-				if(player.getInventory().getItemInMainHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING)) || player.getInventory().getItemInOffHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING))) {
-					return;
-				}
+				if(player.getInventory().getItemInMainHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING)) || player.getInventory().getItemInOffHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING)))return;
 				
 				e.setCancelled(true);
 				if(e instanceof EntityDamageByEntityEvent){
@@ -1133,9 +1131,6 @@ public class SourceOfDamage implements Listener{
 							}else {
 								ci.GameMobDamagerCauses(player, damager);
 							}
-						
-							
-							
 							return;
 					
 				}else{

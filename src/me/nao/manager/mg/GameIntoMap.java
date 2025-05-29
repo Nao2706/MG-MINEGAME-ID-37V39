@@ -674,7 +674,7 @@ public class GameIntoMap {
 	
 	
 	public void GameMobDamagerCauses(Player player ,Entity e) {
-			
+			System.out.println("DEBUG TEST: "+e.getType());
 			GameConditions gmc = new GameConditions(plugin);
 			
 			
@@ -874,7 +874,7 @@ public class GameIntoMap {
 	}
 	
 	public void GameDamageCauses(Player player, EntityDamageEvent.DamageCause c) {
-		
+		  System.out.println("DEBUG TEST2: "+c.toString());
 			GameConditions gmc = new GameConditions(plugin);
 			if(gmc.hasPlayerACheckPoint(player)) return;
 				List<DamageCause> l = new ArrayList<>();
