@@ -1084,7 +1084,7 @@ public class SourceOfDamage implements Listener{
 				return;
 			}
 		
-			if(player.getHealth() <= 3) {
+			
 				Block block = player.getLocation().getBlock();
 				Block b1 = block.getRelative(0, 0, 0);
 				Block b2 = block.getRelative(0, 1, 0);
@@ -1093,17 +1093,24 @@ public class SourceOfDamage implements Listener{
 					
 					if(player.getScoreboardTags().contains("Toxic") || player.getScoreboardTags().contains("ToxicZone")) {
 						if(b1.getType() == Material.WATER || b2.getType() == Material.WATER) {
-							spawnToxicCloud(player,ChatColor.BLUE+"Agua Toxica");
+							if(player.getHealth() <= 10) {
+								spawnToxicCloud(player,ChatColor.BLUE+"Agua Toxica");
+							}
+							
 						}else if(b1.getType() == Material.LAVA || b2.getType() == Material.LAVA) {
-							spawnToxicCloud(player,ChatColor.YELLOW+"Lava Toxica");
+							if(player.getHealth() <= 10) {
+							   spawnToxicCloud(player,ChatColor.YELLOW+"Lava Toxica");
+							}
 						}else if(b1.getType() == Material.AIR) {
-							spawnToxicCloud(player,ChatColor.DARK_GREEN+" Aire Toxico ");
+							if(!isAntiGasMask(player, player.getInventory().getHelmet())) {
+								spawnToxicCloud(player,ChatColor.DARK_GREEN+"Aire Toxico");
+							}
 						}
 					}
 				}
-			}
 			
-			if(e instanceof EntityDamageByEntityEvent &&isAntiGasMask(player, player.getInventory().getHelmet())) {
+			
+			if(e instanceof EntityDamageByEntityEvent && isAntiGasMask(player, player.getInventory().getHelmet())) {
 				breakAntiGasMask(player, player.getInventory().getHelmet());
 			}
 			// CUANDO CAE ENCIMA DEL BARRIER RECIBE DAÑO PERO ESTE NO MUERE PERO SE PUEDE MOVER UNOS SEGS

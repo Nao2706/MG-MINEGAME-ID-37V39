@@ -972,6 +972,8 @@ public class GameIntoMap {
 								 gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"estar en Llamas mientras Trataba de Escapar de "+mob.getType());
 									     	
 							}
+						}else {
+							System.out.println("CREDIT KILL + :"+c.toString());
 						}
 					}
 					
