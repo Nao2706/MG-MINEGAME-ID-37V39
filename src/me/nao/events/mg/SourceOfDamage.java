@@ -1102,7 +1102,7 @@ public class SourceOfDamage implements Listener{
 							   spawnToxicCloud(player,ChatColor.YELLOW+"Lava Toxica");
 							}
 						}else if(b1.getType() == Material.AIR) {
-							if(!isAntiGasMask(player, player.getInventory().getHelmet())) {
+							if(player.getHealth() <= 10 && !isAntiGasMask(player, player.getInventory().getHelmet())) {
 								spawnToxicCloud(player,ChatColor.DARK_GREEN+"Aire Toxico");
 							}
 						}

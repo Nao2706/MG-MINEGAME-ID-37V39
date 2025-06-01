@@ -1,7 +1,11 @@
 package me.nao.manager.mg;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -13,6 +17,7 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
@@ -38,7 +43,6 @@ import me.nao.generalinfo.mg.GameAdventure;
 import me.nao.generalinfo.mg.GameConditions;
 import me.nao.generalinfo.mg.GameInfo;
 import me.nao.generalinfo.mg.GameObjetivesMG;
-import me.nao.generalinfo.mg.GamePoints;
 import me.nao.generalinfo.mg.PlayerInfo;
 import me.nao.main.mg.Minegame;
 import me.nao.revive.mg.RevivePlayer;
@@ -592,19 +596,122 @@ public class GameIntoMap {
 	}
 	
 	public void getPointsOfPlayerGame(Player player) {
-		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
-		GamePoints gp = pl.getGamePoints();
-		int puntos = gp.getKills();
-		int puntos2 = gp.getDeads();
-		int puntos3 = gp.getRevive();
-		int puntos4 = gp.getHelpRevive();
-		long puntos5 = gp.getDamage();
-		player.sendMessage(""+ChatColor.YELLOW+"   [PUNTOS DE LA PARTIDA]");
-		player.sendMessage(""+ChatColor.GREEN+" Eliminaciones : "+ChatColor.YELLOW+puntos);
-		player.sendMessage(""+ChatColor.GREEN+" Muertes : "+ChatColor.YELLOW+puntos2);
-		player.sendMessage(""+ChatColor.GREEN+" Revivido : "+ChatColor.YELLOW+puntos3);
-		player.sendMessage(""+ChatColor.GREEN+" Ayudas a Revivir : "+ChatColor.YELLOW+puntos4);
-		player.sendMessage(""+ChatColor.GREEN+" Daño : "+ChatColor.YELLOW+puntos5);
+			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+			GameConditions gc = new GameConditions(plugin);
+			FileConfiguration message = plugin.getMessage();
+// PRIMERA PARTE
+			HashMap<String, Integer> scores = new HashMap<>();
+
+			GameInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
+			List<Player> joins = new ArrayList<>();
+			List<Player> spectador = new ArrayList<>();
+			
+			 if(ms instanceof GameAdventure) {
+					GameAdventure ga = (GameAdventure) ms;
+					
+					PointsManager pm = new PointsManager(plugin);
+					List<Player> lose = gc.ConvertStringToPlayer(ga.getArrivePlayers());
+					
+					 joins = gc.ConvertStringToPlayer(ga.getParticipants());
+					 spectador = gc.ConvertStringToPlayer(ga.getSpectators());
+					for(Player user : joins) {
+						
+						if(ga.isRankedMap()) {
+							if(!lose.contains(user)) {
+								pm.setGamePoints(user);	
+							}
+						}
+						
+						PlayerInfo pl1 = plugin.getPlayerInfoPoo().get(user);
+						
+						if(spectador.contains(user)) continue;
+						 scores.put(user.getName(), pl1.getGamePoints().getKills());	
+					}
+			 }
+		
+		// SEGUNDA PARTE CALCULO MUESTRA DE MAYOR A MENOR PUNTAJE
+		List<Map.Entry<String, Integer>> list = new ArrayList<>(scores.entrySet());
+
+		 
+		Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+			public int compare(Map.Entry<String, Integer> e1, Map.Entry<String, Integer> e2) {
+				return e2.getValue() - e1.getValue();
+			}
+		});
+
+		// TERCERA PARTE IMPRIMIR DATOS DE MAYOR A MENOR
+	
+		
+				System.out.println("LOG INTO GAME -------TOP--------");
+				
+				
+				
+						
+						
+						int i = 0;
+						player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"");
+						player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"PUNTAJE DE JUGADORES EN PARTIDA");
+						player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"===============================");
+						for (Map.Entry<String, Integer> e : list) {
+							if (i <= message.getInt("Top-Amount")) {
+								i++;
+								// player.sendMessage(i+" Nombre:"+e.getKey()+" Puntos:"+e.getValue());
+
+								if (message.getBoolean("Message.message-top")) {
+									List<String> messagep = message.getStringList("Message.message-top-texto");
+									for (int j = 0; j < messagep.size(); j++) {
+										String texto = messagep.get(j);
+									
+									 		
+											// String time = plugin.getPlayerCronomet().get(e.getKey());
+										if(i == 1) {
+											player.sendMessage(ChatColor.translateAlternateColorCodes('&',texto
+													 .replace("%mvp%",""+ChatColor.GREEN+ChatColor.BOLD+"MVP")
+													 .replace("%player%", e.getKey())
+													 .replace("%place%", Integer.toString(i))
+													 .replace("%kills%", Integer.toString(e.getValue()))
+													 .replace("%reward%", Long.toString(gc.RewardPointsForItems(e.getValue())))
+													 .replace("%revive%", Integer.toString(gc.getReviveInfo(e.getKey())))
+													 .replace("%helprevive%", Integer.toString(gc.getReviveAsistenceInfo(e.getKey())))
+													 .replace("%deads%", Integer.toString(gc.getDeadsInfo(e.getKey())))
+													 .replace("%damage%", Long.toString(gc.getDamageInfo(e.getKey())))
+													 //.replace("%cronomet%", time)
+													
+													 ));
+										}else {
+											player.sendMessage(ChatColor.translateAlternateColorCodes('&',texto
+													 .replace("%mvp%","")
+													 .replace("%player%", e.getKey())
+													 .replace("%place%", Integer.toString(i))
+													 .replace("%kills%", Integer.toString(e.getValue()))
+													 .replace("%reward%", Long.toString(gc.RewardPointsForItems(e.getValue())))
+													 .replace("%revive%", Integer.toString(gc.getReviveInfo(e.getKey())))
+													 .replace("%helprevive%", Integer.toString(gc.getReviveAsistenceInfo(e.getKey())))
+													 .replace("%deads%", Integer.toString(gc.getDeadsInfo(e.getKey())))
+													 .replace("%damage%", Long.toString(gc.getDamageInfo(e.getKey())))
+													 //.replace("%cronomet%", time)
+													
+													 ));
+										}
+											
+							}}}}				
+			
+						player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"===============================");
+						player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"");
+		
+//		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+//		GamePoints gp = pl.getGamePoints();
+//		int puntos = gp.getKills();
+//		int puntos2 = gp.getDeads();
+//		int puntos3 = gp.getRevive();
+//		int puntos4 = gp.getHelpRevive();
+//		long puntos5 = gp.getDamage();
+//		player.sendMessage(""+ChatColor.YELLOW+"   [PUNTOS DE LA PARTIDA]");
+//		player.sendMessage(""+ChatColor.GREEN+" Eliminaciones : "+ChatColor.YELLOW+puntos);
+//		player.sendMessage(""+ChatColor.GREEN+" Muertes : "+ChatColor.YELLOW+puntos2);
+//		player.sendMessage(""+ChatColor.GREEN+" Revivido : "+ChatColor.YELLOW+puntos3);
+//		player.sendMessage(""+ChatColor.GREEN+" Ayudas a Revivir : "+ChatColor.YELLOW+puntos4);
+//		player.sendMessage(""+ChatColor.GREEN+" Daño : "+ChatColor.YELLOW+puntos5);
 		
 	}
 	

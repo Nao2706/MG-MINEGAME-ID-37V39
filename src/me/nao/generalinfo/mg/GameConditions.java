@@ -2866,10 +2866,10 @@ public class GameConditions {
 			sendMessageToUserAndConsole(player,"");	
 			sendMessageToUserAndConsole(player,""+ChatColor.RED+ChatColor.BOLD+"INFORME DEL PROGRESO DEL JUEGO");
 			sendMessageToUserAndConsole(player,ChatColor.GRAY+"=============================");
-			sendMessageToConsole(""+ChatColor.GRAY+"MAPA: "+ChatColor.WHITE+ga.getMapName());
-			sendMessageToConsole(""+ChatColor.GRAY+"DEFAULT TIMER: "+ChatColor.GREEN+ga.getGameTime().getGameTimerDefaultForResult());
-			sendMessageToConsole(""+ChatColor.GRAY+"DURACION: "+ChatColor.WHITE+ga.getGameTime().getGameCronometForResult());
-			sendMessageToConsole(""+ChatColor.GRAY+"TIMER: "+ChatColor.WHITE+ga.getGameTime().getGameTimerForResult());
+			sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"MAPA: "+ChatColor.WHITE+ga.getMapName());
+			sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"DEFAULT TIMER: "+ChatColor.GREEN+ga.getGameTime().getGameTimerDefaultForResult());
+			sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"DURACION: "+ChatColor.WHITE+ga.getGameTime().getGameCronometForResult());
+			sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"TIMER: "+ChatColor.WHITE+ga.getGameTime().getGameTimerForResult());
 			if(participants.isEmpty()) {
 				sendMessageToUserAndConsole(player,""+ChatColor.GRAY+ChatColor.BOLD+"PARTICIPANTES: "+ChatColor.WHITE+"SIN PARTICIPANTES");
 			}else {
@@ -2935,43 +2935,43 @@ public class GameConditions {
 			}
 			
 			
-			sendMessageToConsole(""+ChatColor.RED+"OBJETIVOS ");
+			sendMessageToUserAndConsole(player,""+ChatColor.RED+"OBJETIVOS ");
 			String comment = ga.getGameObjetivesMg().hasMapObjetives() ? "Si" : "No";
-			sendMessageToConsole(""+ChatColor.GRAY+"Tiene Objetivos: "+ChatColor.RED+comment);
+			sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Tiene Objetivos: "+ChatColor.RED+comment);
 			if(ga.getGameObjetivesMg().hasMapObjetives()) {
 				
 				if(!ga.getGameObjetivesMg().getObjetivesPrimary().isEmpty()){
-					sendMessageToConsole(""+ChatColor.GOLD+"Objetivos Primarios ");
+					sendMessageToUserAndConsole(player,""+ChatColor.GOLD+"Objetivos Primarios ");
 					for(ObjetivesMG obj : ga.getGameObjetivesMg().getObjetivesPrimary()) {
-						sendMessageToConsole(ChatColor.RED+"- "+ChatColor.GOLD+obj.getObjetiveName()+" "+ChatColor.AQUA+obj.getObjetiveStatusType()+" "+ChatColor.GREEN+obj.getCurrentValue()+ChatColor.RED+"/"+ChatColor.GREEN+obj.getCompleteValue());
+						sendMessageToUserAndConsole(player,ChatColor.RED+"- "+ChatColor.GOLD+obj.getObjetiveName()+" "+ChatColor.AQUA+obj.getObjetiveStatusType()+" "+ChatColor.GREEN+obj.getCurrentValue()+ChatColor.RED+"/"+ChatColor.GREEN+obj.getCompleteValue());
 					}
 				}else {
-					sendMessageToConsole(""+ChatColor.RED+"No Tiene Objetivos Primarios ");
+					sendMessageToUserAndConsole(player,""+ChatColor.RED+"No Tiene Objetivos Primarios ");
 				}
 				
 				if(!ga.getGameObjetivesMg().getObjetivesSecondary().isEmpty()){
-					sendMessageToConsole(""+ChatColor.GOLD+"Objetivos Secundarios ");
+					sendMessageToUserAndConsole(player,""+ChatColor.GOLD+"Objetivos Secundarios ");
 					for(ObjetivesMG obj : ga.getGameObjetivesMg().getObjetivesSecondary()) {
-						sendMessageToConsole(ChatColor.RED+"- "+ChatColor.GOLD+obj.getObjetiveName()+" "+ChatColor.AQUA+obj.getObjetiveStatusType()+" "+ChatColor.GREEN+obj.getCurrentValue()+ChatColor.RED+"/"+ChatColor.GREEN+obj.getCompleteValue());
+						sendMessageToUserAndConsole(player,ChatColor.RED+"- "+ChatColor.GOLD+obj.getObjetiveName()+" "+ChatColor.AQUA+obj.getObjetiveStatusType()+" "+ChatColor.GREEN+obj.getCurrentValue()+ChatColor.RED+"/"+ChatColor.GREEN+obj.getCompleteValue());
 					}
 				}else {
-					sendMessageToConsole(""+ChatColor.RED+"No Tiene Objetivos Secundarios ");
+					sendMessageToUserAndConsole(player,""+ChatColor.RED+"No Tiene Objetivos Secundarios ");
 				}
 				
 				if(!ga.getGameObjetivesMg().getObjetivesHostile().isEmpty()){
-					sendMessageToConsole(""+ChatColor.GOLD+"Objetivos Hostiles ");
+					sendMessageToUserAndConsole(player,""+ChatColor.GOLD+"Objetivos Hostiles ");
 					for(ObjetivesMG obj : ga.getGameObjetivesMg().getObjetivesHostile()) {
-						sendMessageToConsole(ChatColor.RED+"- "+ChatColor.GOLD+obj.getObjetiveName()+" "+ChatColor.AQUA+obj.getObjetiveStatusType()+" "+ChatColor.GREEN+obj.getCurrentValue()+ChatColor.RED+"/"+ChatColor.GREEN+obj.getCompleteValue());
+						sendMessageToUserAndConsole(player,ChatColor.RED+"- "+ChatColor.GOLD+obj.getObjetiveName()+" "+ChatColor.AQUA+obj.getObjetiveStatusType()+" "+ChatColor.GREEN+obj.getCurrentValue()+ChatColor.RED+"/"+ChatColor.GREEN+obj.getCompleteValue());
 					}
 				}else {
-					sendMessageToConsole(""+ChatColor.RED+"No Tiene Objetivos Hostiles ");
+					sendMessageToUserAndConsole(player,""+ChatColor.RED+"No Tiene Objetivos Hostiles ");
 				}
 			}
 			
 			sendMessageToUserAndConsole(player,ChatColor.GRAY+"PUNTOS DE LOS PARTICIPANTES");	
 			for(Player part : ConvertStringToPlayer(participants)) {
 				PlayerInfo pi = plugin.getPlayerInfoPoo().get(part);
-				sendMessageToConsole(""+ChatColor.RED+"- "+part.getName()+" K:"+pi.getGamePoints().getKills()+" D:"+pi.getGamePoints().getDeads()+" R:"+pi.getGamePoints().getRevive()+" HR:"+pi.getGamePoints().getHelpRevive());
+				sendMessageToUserAndConsole(player,""+ChatColor.GOLD+"- "+part.getName()+ChatColor.RED+" K:"+ChatColor.GREEN+pi.getGamePoints().getKills()+ChatColor.RED+" D:"+ChatColor.GREEN+pi.getGamePoints().getDeads()+ChatColor.RED+" R:"+ChatColor.GREEN+pi.getGamePoints().getRevive()+ChatColor.RED+" HR:"+ChatColor.GREEN+pi.getGamePoints().getHelpRevive());
 			}
 			
 			sendMessageToUserAndConsole(player,ChatColor.GRAY+"=============================");	

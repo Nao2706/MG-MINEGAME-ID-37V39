@@ -444,6 +444,14 @@ public class MobsActions {
 							        z1.getEquipment().setItemInMainHand(target.getInventory().getItemInMainHand());
 						}
 							
+					}if(rand == 9) {
+						target.sendMessage(ChatColor.RED+" JAJAJAJA Cuidado te matas por donde vas ");
+						PotionEffect jump1 = new PotionEffect(PotionEffectType.JUMP_BOOST,/*duration*/ 25*20,/*amplifier:*/50, true ,true,false );
+						PotionEffect speed1 = new PotionEffect(PotionEffectType.SPEED,/*duration*/ 30*20,/*amplifier:*/50, true ,true,false );
+						PotionEffect deb = new PotionEffect(PotionEffectType.WEAKNESS,/*duration*/ 35*20,/*amplifier:*/50, true ,true,false );
+						PotionEffect cieg = new PotionEffect(PotionEffectType.BLINDNESS,/*duration*/ 22*20,/*amplifier:*/50, true ,true,false );
+						target.addPotionEffect(speed1); target.addPotionEffect(cieg);
+						target.addPotionEffect(jump1); 	target.addPotionEffect(deb);
 					}
 			  }
 		  }
@@ -1518,7 +1526,7 @@ public class MobsActions {
 					
 					Creeper s = (Creeper) world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.CREEPER);
 					s.setExplosionRadius(10);
-					s.setMaxFuseTicks(1);
+					s.setMaxFuseTicks(0);
 					s.setCustomName(""+ChatColor.RED+ChatColor.BOLD+"Zombi Super Suicida");
 					s.getAttribute(attribute).setBaseValue(150);
 					zombi1.addPassenger(s);
@@ -1636,6 +1644,22 @@ public class MobsActions {
 					zombi1.addPotionEffect(rapido);
 					zombi1.addPotionEffect(salto);
 			
+				}else if(n == 19) {
+					Zombie zombi1 = (Zombie)  world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
+					zombi1.setCustomName(""+ChatColor.RED+ChatColor.BOLD+"Clavado Penetrador al Estilo Indio");
+					
+					
+					zombi1.addPotionEffect(rapido);
+					
+					zombi1.addPotionEffect(salto);
+				
+					zombi1.getAttribute(attribute).setBaseValue(150);
+					zombi1.getEquipment().setHelmet(new ItemStack(Material.IRON_HELMET));
+					zombi1.getEquipment().setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
+					zombi1.getEquipment().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
+					zombi1.getEquipment().setBoots(new ItemStack(Material.IRON_BOOTS));
+					zombi1.getEquipment().setItemInMainHand(new ItemStack(Material.CROSSBOW));
+					
 				}
 				
 				/*
