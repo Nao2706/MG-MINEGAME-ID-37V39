@@ -505,6 +505,7 @@ public class MobsActions {
 			  } if(mobname.contains("DROPPER")) {
 				  GameIntoMap gim = new GameIntoMap(plugin);
 				  gim.PlayerDropAllItems(player);
+				  player.sendMessage(ChatColor.RED+"Tu inventario se cayo JAJAJAJA");
 				  player.setVelocity(player.getLocation().getDirection().multiply(-1).setY(2));
 			  
 			  }
@@ -1096,7 +1097,7 @@ public class MobsActions {
 					
 					Zombie zombi1 = (Zombie) world.spawnEntity(l2, EntityType.ZOMBIE);
 					zombi1.setCustomName(ChatColor.RED+"DROPPER");
-					
+					zombi1.getEquipment().setHelmet(new ItemStack(Material.REDSTONE_BLOCK));
 					zombi1.addPotionEffect(rapido);
 					zombi1.addPotionEffect(salto);
 			
