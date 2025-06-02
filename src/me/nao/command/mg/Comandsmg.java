@@ -4347,7 +4347,7 @@ public class Comandsmg implements CommandExecutor{
 					if(gc.isPlayerinGame(player)) {
 					//	String arena = plugin.getArenaPlayerInfo().get(player);
 						GameIntoMap cs = new GameIntoMap(plugin);
-						cs.getPointsOfPlayerGame(player);
+						cs.getShowPointsOfPlayersGame(player);
 						
 					}else {
 						player.sendMessage(plugin.nombre+ChatColor.RED+" No estas en ningun Juego.");

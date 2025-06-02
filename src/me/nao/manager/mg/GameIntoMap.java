@@ -595,7 +595,7 @@ public class GameIntoMap {
 		
 	}
 	
-	public void getPointsOfPlayerGame(Player player) {
+	public void getShowPointsOfPlayersGame(Player player) {
 			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 			GameConditions gc = new GameConditions(plugin);
 			FileConfiguration message = plugin.getMessage();
@@ -608,19 +608,10 @@ public class GameIntoMap {
 			
 			 if(ms instanceof GameAdventure) {
 					GameAdventure ga = (GameAdventure) ms;
-					
-					PointsManager pm = new PointsManager(plugin);
-					List<Player> lose = gc.ConvertStringToPlayer(ga.getArrivePlayers());
-					
+				
 					 joins = gc.ConvertStringToPlayer(ga.getParticipants());
 					 spectador = gc.ConvertStringToPlayer(ga.getSpectators());
 					for(Player user : joins) {
-						
-						if(ga.isRankedMap()) {
-							if(!lose.contains(user)) {
-								pm.setGamePoints(user);	
-							}
-						}
 						
 						PlayerInfo pl1 = plugin.getPlayerInfoPoo().get(user);
 						
