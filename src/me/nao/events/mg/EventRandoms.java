@@ -274,7 +274,10 @@ public class EventRandoms implements Listener{
 												target.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.GOLD+" te ayudo a levantarte.");
 												gc.sendMessageToUsersOfSameMapLessTwoPlayers(player, target,""+ChatColor.GREEN+ChatColor.BOLD+"+ "+ChatColor.GOLD+player.getName()+ChatColor.AQUA+" ayudo a "+ChatColor.GREEN+target.getName()+ChatColor.AQUA+" a Levantarse.");
 												PlayerInfo targetrevive = plugin.getPlayerInfoPoo().get(player);
-												targetrevive.getGamePoints().setRevive(targetrevive.getGamePoints().getRevive()+5);
+												targetrevive.getGamePoints().setHelpRevive(targetrevive.getGamePoints().getHelpRevive()+1);
+												
+												PlayerInfo targetrevive2 = plugin.getPlayerInfoPoo().get(target);
+												targetrevive2.getGamePoints().setRevive(targetrevive2.getGamePoints().getRevive()+1);
 												
 											
 											
