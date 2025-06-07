@@ -71,6 +71,7 @@ public class Minegame extends JavaPlugin{
     private Map<String, GameInfo> misioninfopoo;
     private Map<Player,Entity> credit;
     private Map<Player, RevivePlayer> playerrevive;
+    private Map<Entity,String> guardiancredit;
     
     //ITEMS ACTION
     private Map<String,List<Entity>> entitys;
@@ -323,6 +324,7 @@ public class Minegame extends JavaPlugin{
 	    playerinfopoo = new HashMap<>();
 	    misioninfopoo = new HashMap<>();
 	    credit = new HashMap<>();
+	    guardiancredit = new HashMap<>();
 	    playerrevive = new HashMap<>();
 	    
 	    itemmenu = new HashMap<>();
@@ -418,6 +420,10 @@ public class Minegame extends JavaPlugin{
    
    public Map<Player,Long> getTempCooldown(){
 	   return tempcooldown;
+   }
+   
+   public Map<Entity,String> getGuardianCredit(){
+	   return guardiancredit;
    }
    
    //TODO TEAMS

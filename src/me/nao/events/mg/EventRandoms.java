@@ -1059,11 +1059,11 @@ public class EventRandoms implements Listener{
 		 ma.getAttackedZombie(atacante, entidadAtacada);
 		 ma.getZombiettack(atacante, entidadAtacada);
 		 
-	
+		
 		  if(atacante instanceof Player) {
 				Player player = (Player) atacante;
-		  
-				GameConditions gc = new GameConditions(plugin);
+				 GameConditions gc = new GameConditions(plugin);
+				
 				
 				 
 				if(!gc.isPlayerinGame(player)) {
@@ -1096,7 +1096,34 @@ public class EventRandoms implements Listener{
 						plugin.CreditKill().put(player, atacante);
 					}
 			  }
-		  }
+		  }else if(atacante instanceof LivingEntity) {
+			
+				LivingEntity le = (LivingEntity) atacante; 
+				LivingEntity victim = (LivingEntity) entidadAtacada; 
+
+				
+				 GameConditions gc = new GameConditions(plugin);
+				// GameIntoMap c = new GameIntoMap(plugin);
+			
+		
+				if(le.getType() == EntityType.IRON_GOLEM) {
+					 
+					if(victim != null && le.getCustomName() != null) {
+			
+						String name = ChatColor.stripColor(le.getCustomName());
+				
+						if(name.startsWith("GUARDIA DE: ")) {
+						
+							Player target = Bukkit.getPlayer(name.replaceAll("GUARDIA DE: ","").replaceAll(" ",""));
+						
+							if(!gc.isPlayerinGame(target)) return;
+							plugin.getGuardianCredit().put(victim, target.getName());
+							//c.gamePlayerAddPoints(target);
+							//target.playSound(target.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+						}
+					}
+				}
+			} 
 			
 	      
 	   }
@@ -1784,6 +1811,27 @@ public class EventRandoms implements Listener{
 				
 				  
 				 
+			  }else if (projectile.getShooter() instanceof LivingEntity) {
+				  Entity damager =  (Entity) projectile.getShooter();
+				  Entity entidadhit = e.getHitEntity();
+		
+				  if(damager.getType() == EntityType.SNOW_GOLEM) {
+						LivingEntity le = (LivingEntity) damager;
+						LivingEntity victim = (LivingEntity) entidadhit;
+						
+						if(victim != null && le.getCustomName() != null) {
+							
+							String name = ChatColor.stripColor(le.getCustomName());
+							
+							if(name.startsWith("GUARDIA DE: ")) {
+							
+
+								Player target = Bukkit.getPlayer(name.replaceAll("GUARDIA DE: ","").replaceAll(" ",""));
+								if(!gc.isPlayerinGame(target)) return;
+								plugin.getGuardianCredit().put(victim, target.getName());
+							}
+						}
+				  }
 			  }else if(e.getHitBlock() != null) {
 				  Block b = e.getHitBlock();
 				  if(projectile instanceof AbstractArrow) {

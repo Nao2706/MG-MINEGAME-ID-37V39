@@ -305,12 +305,12 @@ public class PointsManager {
 				String text = displayxp > savexp ? ChatColor.GREEN+" + Subiste." : ChatColor.RED+" - Bajaste.";
 				if(displayxp == savexp) {
 					
-					Bukkit.getConsoleSender().sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+player.getName()+""+ChatColor.RED+ChatColor.BOLD+" MANTIENE EL MISMO NIVEL DE XP: "+ChatColor.YELLOW+ChatColor.BOLD+"XP."+ChatColor.GOLD+ChatColor.BOLD+savexp+ChatColor.GREEN+ChatColor.BOLD+"/"+ChatColor.GOLD+ChatColor.BOLD+refer);
+					Bukkit.getConsoleSender().sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+player.getName()+""+ChatColor.YELLOW+ChatColor.BOLD+" MANTIENE EL MISMO NIVEL DE XP: "+ChatColor.YELLOW+ChatColor.BOLD+"XP."+ChatColor.GOLD+ChatColor.BOLD+savexp+ChatColor.GREEN+ChatColor.BOLD+"/"+ChatColor.GOLD+ChatColor.BOLD+refer);
 				
 					player.sendMessage(ChatColor.DARK_GRAY+" Te Mantienes en el Mismo Puntaje de Xp "+ChatColor.YELLOW+savexp+ChatColor.DARK_GRAY+" con el que Entraste.");
 					text = ChatColor.YELLOW+" Se Mantiene";
 				}else if(displayxp > savexp) {
-					Bukkit.getConsoleSender().sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+player.getName()+""+ChatColor.RED+ChatColor.BOLD+" SUBE EL NIVEL DE XP: "+ChatColor.YELLOW+ChatColor.BOLD+"XP"+ChatColor.GOLD+ChatColor.BOLD+result2+ChatColor.GREEN+ChatColor.BOLD+"/"+ChatColor.GOLD+ChatColor.BOLD+refer);
+					Bukkit.getConsoleSender().sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+player.getName()+""+ChatColor.GREEN+ChatColor.BOLD+" SUBE EL NIVEL DE XP: "+ChatColor.YELLOW+ChatColor.BOLD+"XP"+ChatColor.GOLD+ChatColor.BOLD+result2+ChatColor.GREEN+ChatColor.BOLD+"/"+ChatColor.GOLD+ChatColor.BOLD+refer);
 
 					player.sendMessage(ChatColor.DARK_GRAY+" Te faltan "+ChatColor.GREEN+leftpoints+ChatColor.DARK_GRAY+" Puntos de XP para Subir de Nivel.");
 				}else if(displayxp < savexp) {

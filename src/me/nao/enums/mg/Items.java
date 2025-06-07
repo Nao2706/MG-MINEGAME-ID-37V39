@@ -113,8 +113,8 @@ import org.bukkit.inventory.meta.ItemMeta;
             GANCHO(""+ChatColor.RED+ChatColor.BOLD+"GANCHO", Material.FISHING_ROD,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"30 Netherite",ChatColor.YELLOW+ "Desplazate mas rapido."),
             GANCHOP(""+ChatColor.RED+ChatColor.BOLD+"GANCHO", Material.FISHING_ROD,null, 1,ChatColor.YELLOW+ "Desplazate mas rapido."),
 
-            GANCHO2(""+ChatColor.GREEN+ChatColor.BOLD+"GANCHO DE MANIOBRAS", Material.FISHING_ROD,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"50 Netherite",ChatColor.YELLOW+ "Desplazate mas rapido.",ChatColor.YELLOW+ "Sin que el cable toque el piso.",ChatColor.RED+ "Lapislazuli."),
-            GANCHO2P(""+ChatColor.GREEN+ChatColor.BOLD+"GANCHO DE MANIOBRAS", Material.FISHING_ROD,null, 1,ChatColor.YELLOW+ "Desplazate mas rapido.",ChatColor.YELLOW+ "Sin que el cable toque el piso.",ChatColor.RED+ "Lapislazuli."),
+            GANCHO2(""+ChatColor.GREEN+ChatColor.BOLD+"GANCHO DE MANIOBRAS", Material.FISHING_ROD,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"50 Netherite",ChatColor.YELLOW+ "Desplazate mas rapido.",ChatColor.YELLOW+ "Sin que el cable toque el piso.",ChatColor.RED+ "Consume 10 de Lapislazuli."),
+            GANCHO2P(""+ChatColor.GREEN+ChatColor.BOLD+"GANCHO DE MANIOBRAS", Material.FISHING_ROD,null, 1,ChatColor.YELLOW+ "Desplazate mas rapido.",ChatColor.YELLOW+ "Sin que el cable toque el piso.",ChatColor.RED+ "Consume 10 de Lapislazuli."),
 
             
             ARROWL(""+ChatColor.GREEN+ChatColor.BOLD+"ARROW LAUNCHER", Material.BLAZE_ROD,"damage_all,10/knockback,3", 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"64 Netherite",ChatColor.YELLOW+ "Dispara Flechas mas rapido."),

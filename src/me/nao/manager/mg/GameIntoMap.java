@@ -180,6 +180,7 @@ public class GameIntoMap {
 		
 		if(gm instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) gm;
+			List<String> arrive = ga.getArrivePlayers();
 			List<String> vivo = ga.getAlivePlayers();
 			List<String> deaths = ga.getDeadPlayers();
 			List<String> knocked = ga.getKnockedPlayers();
@@ -211,9 +212,16 @@ public class GameIntoMap {
 			    return;
 			}
 			
-			Random r = new Random();
+			 List<String> filterarrive = new ArrayList<>();
+			 
+			 for(String play : vivo) {
+				 if(arrive.contains(play)) continue;	
+				 filterarrive.add(play);
+			 }
 			
-			String t = vivo.get(r.nextInt(vivo.size()));
+			 Random r = new Random();
+			
+			 String t = filterarrive.get(r.nextInt(filterarrive.size()));
 			
 			 Player targetgo = Bukkit.getServer().getPlayerExact(t);
 			 String world = targetgo.getWorld().getName();
@@ -907,6 +915,18 @@ public class GameIntoMap {
 						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+tnt.getCustomName()+" de "+entnt.getCustomName(), 40, 80, 40);
 						player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+tnt.getCustomName()+" de "+entnt.getCustomName());
 						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por. "+ChatColor.YELLOW+tnt.getCustomName()+" de "+entnt.getCustomName());
+
+					}
+				}else {
+					if(EntityHasName(tnt)) {
+						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+tnt.getCustomName(), 40, 80, 40);
+						player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+tnt.getCustomName()+" de "+tnt.getCustomName());
+						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por. "+ChatColor.YELLOW+tnt.getCustomName()+" de "+tnt.getCustomName());
+
+					}else {
+						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+tnt.getType(), 40, 80, 40);
+						player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+tnt.getCustomName()+" de "+tnt.getType());
+						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por. "+ChatColor.YELLOW+tnt.getType()+" de "+tnt.getCustomName());
 
 					}
 				}

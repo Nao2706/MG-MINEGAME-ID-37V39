@@ -4906,10 +4906,12 @@ public class GameConditions {
 			Arrow aw2 = (Arrow) loc2.getWorld().spawnEntity(loc2.add(0, 1.6, 0), EntityType.ARROW);
 			aw.setCritical(true);
 			
+			aw.getLocation().setDirection(loc.getDirection());
 			aw.setKnockbackStrength(1);
 			aw.setFireTicks(1200);
 			aw.setVelocity(loc.getDirection().multiply(6).rotateAroundY(Math.toRadians(1)));
 			aw.setCustomName("Torreta");
+			aw2.getLocation().setDirection(loc.getDirection());
 			aw2.setCritical(true);
 			aw2.setKnockbackStrength(1);
 			aw2.setFireTicks(1200);

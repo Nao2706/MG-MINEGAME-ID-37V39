@@ -646,57 +646,80 @@ public class SourceOfDamage implements Listener{
 	@EventHandler  //METODO
     public void killmobs(EntityDeathEvent e){
 		 
-		
-		Player player = (Player) e.getEntity().getKiller();
-		EntityType mob = e.getEntityType();
+	
 		GameConditions gc = new GameConditions(plugin);
-		if(gc.isPlayerinGame(player)) {
-			
-			
-			if(gc.isGuardian(e.getEntity())) return;
-				
-			
-			
-			if(player != null && player.getType() == EntityType.PLAYER && mob != EntityType.ITEM_FRAME && mob != EntityType.ITEM) {
-				Entity m = e.getEntity();
-				
+		
+		
+		Entity ent = e.getEntity().getKiller();
+		EntityType mob = e.getEntityType();
+		
 
-				Random random = new Random();
-				player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
-				
-				int n = random.nextInt(5);
-				if(n == 1) {
-					m.getWorld().dropItem(m.getLocation(), (new ItemStack(Material.DIAMOND,5)));
-				}
-				else if(n == 2) {
-					m.getWorld().dropItem(m.getLocation(), (new ItemStack(Material.EMERALD,10)));
-				}
-				else if(n == 3) {
-					m.getWorld().dropItem(m.getLocation(), (new ItemStack(Material.GOLD_INGOT,15)));		
-								}
-				else if(n == 4) {
-					m.getWorld().dropItem(m.getLocation(), (new ItemStack(Material.IRON_INGOT,20)));
-				}
-				else if(n == 5) {
-					m.getWorld().dropItem(m.getLocation(), (new ItemStack(Material.NETHERITE_INGOT,2)));
-				}
-				
-				if(m instanceof Zombie) {
-				     MobsActions ma = new MobsActions(plugin);
-					 ma.onDead(player, m);
-				}
-				//SoulsArmor(player);
-				
-				 GameIntoMap c = new GameIntoMap(plugin);
-				 c.gamePlayerAddPoints(player);
-				 
-				 //iba el otor
+		if(ent instanceof Player) {
+			Player player = (Player) ent;
 			
+			if(gc.isPlayerinGame(player)) {
+				
+				
+				if(gc.isGuardian(e.getEntity())) return;
+				 GameIntoMap c = new GameIntoMap(plugin);
+				
+				
+				if(player != null && mob != EntityType.ITEM_FRAME && mob != EntityType.ITEM) {
+					Entity m = e.getEntity();
+					
+
+					Random random = new Random();
+					player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+					
+					int n = random.nextInt(5);
+					if(n == 1) {
+						m.getWorld().dropItem(m.getLocation(), (new ItemStack(Material.DIAMOND,5)));
+					}
+					else if(n == 2) {
+						m.getWorld().dropItem(m.getLocation(), (new ItemStack(Material.EMERALD,10)));
+					}
+					else if(n == 3) {
+						m.getWorld().dropItem(m.getLocation(), (new ItemStack(Material.GOLD_INGOT,15)));		
+									}
+					else if(n == 4) {
+						m.getWorld().dropItem(m.getLocation(), (new ItemStack(Material.IRON_INGOT,20)));
+					}
+					else if(n == 5) {
+						m.getWorld().dropItem(m.getLocation(), (new ItemStack(Material.NETHERITE_INGOT,2)));
+					}
+					
+					if(m instanceof Zombie) {
+					     MobsActions ma = new MobsActions(plugin);
+						 ma.onDead(player, m);
+					}
+					//SoulsArmor(player);
+					
+					
+					 c.gamePlayerAddPoints(player);
+					 
+					 //iba el otor
+				
+				}
 			}
+		}else if(e.getEntity() instanceof Monster) {
+			
+			
+			if(!plugin.getGuardianCredit().containsKey(e.getEntity())) return;
+				
+				GameIntoMap c = new GameIntoMap(plugin);
+				 Player target = gc.ConvertStringToPlayerAlone(plugin.getGuardianCredit().get(e.getEntity()));
+				 if(!gc.isPlayerinGame(target)) return;
+				 c.gamePlayerAddPoints(target);
+				 target.playSound(target.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+					
+			 
+			
 		}
 		
+
 		
-	
+		
+	return;
 		
 		
 	}
@@ -879,6 +902,7 @@ public class SourceOfDamage implements Listener{
 				
 				e.setCancelled(true);
 				Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
+				aw.getLocation().setDirection(s.getLocation().getDirection());
 				aw.setCritical(true);
 				aw.setKnockbackStrength(2);
 				aw.setFireTicks(1200);
