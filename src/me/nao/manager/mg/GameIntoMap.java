@@ -643,24 +643,25 @@ public class GameIntoMap {
 		
 				System.out.println("LOG INTO GAME -------TOP--------");
 				
-				
-				
-						
 						
 						int i = 0;
+						boolean isintop = false;
 						player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"");
 						player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"PUNTAJE DE JUGADORES EN PARTIDA");
 						player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"===============================");
 						for (Map.Entry<String, Integer> e : list) {
+							i++;
 							if (i <= message.getInt("Top-Amount")) {
-								i++;
+								
 								// player.sendMessage(i+" Nombre:"+e.getKey()+" Puntos:"+e.getValue());
 
 								if (message.getBoolean("Message.message-top")) {
 									List<String> messagep = message.getStringList("Message.message-top-texto");
 									for (int j = 0; j < messagep.size(); j++) {
 										String texto = messagep.get(j);
-									
+										if(e.getKey().equals(player.getName())){
+											isintop = true;
+										}
 									 		
 											// String time = plugin.getPlayerCronomet().get(e.getKey());
 										if(i == 1) {
@@ -693,7 +694,36 @@ public class GameIntoMap {
 													 ));
 										}
 											
-							}}}}				
+							}}}
+							if(!isintop) {
+								if(e.getKey().equals(player.getName())){
+									player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"===============================");
+									if (message.getBoolean("Message.message-top")) {
+										List<String> messagep = message.getStringList("Message.message-top-texto");
+										for (int j = 0; j < messagep.size(); j++) {
+											String texto = messagep.get(j);
+					
+												player.sendMessage(ChatColor.translateAlternateColorCodes('&',texto
+														 .replace("%mvp%","")
+														 .replace("%player%", e.getKey())
+														 .replace("%place%", Integer.toString(i))
+														 .replace("%kills%", Integer.toString(e.getValue()))
+														 .replace("%reward%", Long.toString(gc.RewardPointsForItems(e.getValue())))
+														 .replace("%revive%", Integer.toString(gc.getReviveInfo(e.getKey())))
+														 .replace("%helprevive%", Integer.toString(gc.getReviveAsistenceInfo(e.getKey())))
+														 .replace("%deads%", Integer.toString(gc.getDeadsInfo(e.getKey())))
+														 .replace("%damage%", Long.toString(gc.getDamageInfo(e.getKey()))+ChatColor.RED+"Fuera del Top.")
+														 //.replace("%cronomet%", time)
+														
+														 ));
+											
+												
+										}}
+								}
+
+							}
+						
+						}				
 			
 						player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"===============================");
 						player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"");
