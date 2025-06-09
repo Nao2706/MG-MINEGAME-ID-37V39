@@ -2488,7 +2488,7 @@ public class GameConditions {
 						//target.spigot().sendMessage(Utils.sendTextComponentfromBaseComponent(Utils.sendTextComponentShow(rp.getRankPrestigeColor(pl.getMgPlayerPrestige()),"PRESTIGIO",net.md_5.bungee.api.ChatColor.GREEN),Utils.sendTextComponent(text)));
 					}
 				}
-				 Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+map.toUpperCase()+": "+text+Component.text(text1).hoverEvent(it));
+				 Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+map.toUpperCase()+": "+text+" "+text1);
 		 }
 	}
 	
