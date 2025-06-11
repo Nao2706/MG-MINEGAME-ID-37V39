@@ -13,7 +13,7 @@ public class TeamMg {
 	private Color color;
 	private Location spawn;
 	private Location nexo;
-	private int lifeNexo,woolpoints;
+	private int lifeNexo,woolpoints ,maxmembers;
 	private boolean isobliterated;
 	
 	
@@ -66,6 +66,10 @@ public class TeamMg {
 		return woolpoints;
 	}
 
+	public int getMaxmembers() {
+		return maxmembers;
+	}
+	
 	public boolean isNexoDestroyed() {
 		return this.lifeNexo <= 0 ? true : false;
 	}
@@ -98,6 +102,14 @@ public class TeamMg {
 		this.woolpoints = woolpoints;
 	}
 
+	public void setObliterated(boolean isobliterated) {
+		this.isobliterated = isobliterated;
+	}
+
+	public void setMaxmembers(int maxmembers) {
+		this.maxmembers = maxmembers;
+	}		
+	
 	public void addMember(String name) {
 		if(!this.members.contains(name)) {
 			this.members.add(name);
@@ -155,10 +167,10 @@ public class TeamMg {
 	public boolean isObliterated() {
 		return isobliterated;
 	}
+	
 
-	public void setObliterated(boolean isobliterated) {
-		this.isobliterated = isobliterated;
-	}
+
+
 	
 	
 	
