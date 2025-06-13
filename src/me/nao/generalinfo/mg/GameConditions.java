@@ -56,6 +56,7 @@ import me.nao.enums.mg.GameStatus;
 import me.nao.enums.mg.GameType;
 import me.nao.enums.mg.Items;
 import me.nao.enums.mg.ObjetiveStatusType;
+import me.nao.enums.mg.PlayerGameStatus;
 import me.nao.enums.mg.StopMotive;
 import me.nao.main.mg.Minegame;
 import me.nao.manager.mg.GameIntoMap;
@@ -98,7 +99,7 @@ public class GameConditions {
 				mt.JoinTeamLifeMG(player);
 				
 				//Salva al Jugador checa si debe setearle un inv
-				setAndSavePlayer(player, map);
+				setAndSavePlayer(player,PlayerGameStatus.ALIVE, map);
 				addPlayerToGame(player,map);
 				tptoPreLobbyMap(player, map);
 				canStartTheGame(player,map);
@@ -1067,17 +1068,17 @@ public class GameConditions {
 	
 	
 	 
-	public void setAndSavePlayer(Player player,String map) {
+	public void setAndSavePlayer(Player player,PlayerGameStatus status ,String map) {
 		
 		 PlayerInfo pl = null;
 		 
 		 if(canJoinWithYourInventory(map) && !canUseKit(map)) {
 			 	//LO SALVAS
 				if(existLobbyMg()) {
-				    pl = new PlayerInfo(plugin,true,player, getLocationOfLobby(), map,new GamePoints());
-				
+				    pl = new PlayerInfo(plugin,true,player, getLocationOfLobby(), map,new GamePoints(),PlayerGameStatus.ALIVE);
+				   
 				}else {
-					pl = new PlayerInfo(plugin,true,player, player.getLocation(), map,new GamePoints());
+					pl = new PlayerInfo(plugin,true,player, player.getLocation(), map,new GamePoints(),PlayerGameStatus.ALIVE);
 					
 				}
 				pl.clearGamemodePlayerMg();
@@ -1085,10 +1086,10 @@ public class GameConditions {
 				
 				//NO SALVAS SU INVENTARIO
 				if(existLobbyMg()) {
-				    pl = new PlayerInfo(plugin,false,player, getLocationOfLobby(), map,new GamePoints());
+				    pl = new PlayerInfo(plugin,false,player, getLocationOfLobby(), map,new GamePoints(),PlayerGameStatus.ALIVE);
 					
 				}else {
-					pl = new PlayerInfo(plugin,false,player,player.getLocation(), map,new GamePoints());
+					pl = new PlayerInfo(plugin,false,player,player.getLocation(), map,new GamePoints(),PlayerGameStatus.ALIVE);
 	
 				}
 				pl.clearAllPlayerMg();
@@ -1633,7 +1634,7 @@ public class GameConditions {
 	  
 	public void JoinSpectator(Player player ,String map) {
 		 //MODO ESPECTADOR no te uniras como jugador
-		 setAndSavePlayer(player, map);
+		 setAndSavePlayer(player,PlayerGameStatus.SPECTATOR, map);
 		 spectatorAddToGame(player, map);
 		 GameInfo ms = plugin.getGameInfoPoo().get(map);
 		 if(ms instanceof GameAdventure) {

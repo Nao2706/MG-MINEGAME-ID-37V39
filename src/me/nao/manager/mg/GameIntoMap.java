@@ -37,6 +37,7 @@ import me.nao.cosmetics.mg.Fireworks;
 import me.nao.enums.mg.GameStatus;
 import me.nao.enums.mg.GameType;
 import me.nao.enums.mg.Items;
+import me.nao.enums.mg.PlayerGameStatus;
 import me.nao.enums.mg.ReviveStatus;
 import me.nao.enums.mg.StopMotive;
 import me.nao.generalinfo.mg.GameAdventure;
@@ -120,7 +121,8 @@ public class GameIntoMap {
 					
 					target.teleport(l);
 					target.setGameMode(GameMode.ADVENTURE);
-					HealPlayer(target);
+					healPlayer(target);
+					pl.setPlayerGameStatus(PlayerGameStatus.ALIVE);
 					target.sendTitle(ChatColor.GREEN+"Fuiste Revivido",ChatColor.GREEN+"por: "+ChatColor.YELLOW+player.getName(),20,60,20);
 					target.sendMessage(ChatColor.WHITE+"Fuiste Revivido por: "+ChatColor.GREEN+player.getName());
 					player.sendMessage(ChatColor.GREEN+"Reviviste a: "+ChatColor.GOLD+target.getName());
@@ -240,8 +242,8 @@ public class GameIntoMap {
 					
 					target.teleport(l);
 					target.setGameMode(GameMode.ADVENTURE);
-					HealPlayer(target);
-					
+					healPlayer(target);
+					pl.setPlayerGameStatus(PlayerGameStatus.ALIVE);
 					if(player != null) {
 						target.sendTitle(ChatColor.GREEN+"Fuiste Revivido",ChatColor.GREEN+"por: "+ChatColor.YELLOW+player.getName(),20,60,20);
 						target.sendMessage(ChatColor.WHITE+"Fuiste Revivido por: "+ChatColor.GREEN+player.getName());
@@ -291,6 +293,7 @@ public class GameIntoMap {
 				return;
 				
 			}else {
+				pl.setPlayerGameStatus(PlayerGameStatus.DEAD);
 				pl.getGamePoints().setDeads(pl.getGamePoints().getDeads()+1);
 				player.getInventory().clear(); 
 				player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"TE CAISTE DEL MAPA", 40, 80, 40);
@@ -517,7 +520,8 @@ public class GameIntoMap {
 		StopMotive motivo = gm.getStopMotive();
 		
 		gmc.deadPlayerToGame(player, mapa);
-		
+		pl.setPlayerGameStatus(PlayerGameStatus.DEAD);
+		pl.getGamePoints().setDeads(pl.getGamePoints().getDeads()+1);
 		
 		MgTeams t = new MgTeams(plugin);
 		t.JoinTeamDeadMG(player);
@@ -563,7 +567,7 @@ public class GameIntoMap {
 			
 			Fireworks f = new Fireworks(player);
 			f.spawnFireballRedLarge();
-			
+			pl.setPlayerGameStatus(PlayerGameStatus.DEAD);
 			pl.getGamePoints().setDeads(pl.getGamePoints().getDeads()+1);
 			player.setGameMode(GameMode.SPECTATOR);
 			
@@ -1017,7 +1021,7 @@ public class GameIntoMap {
 				spawnPlayerZombi(player);
 			}
 			player.sendMessage("");
-			HealPlayer(player);
+			healPlayer(player);
 			GamePlayerDeadInMap(player);
 	}
 	
@@ -1127,7 +1131,7 @@ public class GameIntoMap {
 					
 					//PARA EVITAR DOBLE MENSAJE DUPLICADO POR LA MISMA CAUSA 
 					player.sendMessage("");
-					HealPlayer(player);
+					healPlayer(player);
 					GamePlayerDeadInMap(player);	
 					return;
 				}
@@ -1285,20 +1289,24 @@ public class GameIntoMap {
 					gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio de "+ChatColor.YELLOW+c.toString()+"?");
 				}
 				player.sendMessage("");
-				HealPlayer(player);
+				healPlayer(player);
 				GamePlayerDeadInMap(player);		
 		//colocar abajo condicion reformada de checkpoint
 		
 	}
 	
-	public void HealPlayer(Player player) {
+	public void healPlayer(Player player) {
 		PotionEffect vid = new PotionEffect(PotionEffectType.REGENERATION,/*duration*/ 10 * 20,/*amplifier:*/10, true ,true,true );
 		PotionEffect comida = new PotionEffect(PotionEffectType.SATURATION,/*duration*/ 10 * 20,/*amplifier:*/10, true ,true,true );
 		PotionEffect abso = new PotionEffect(PotionEffectType.ABSORPTION,/*duration*/ 10 * 20,/*amplifier:*/10, true ,true,true );
+		PotionEffect fireresis = new PotionEffect(PotionEffectType.FIRE_RESISTANCE,/*duration*/ 10 * 20,/*amplifier:*/10, true ,true,true );
+		PotionEffect resis = new PotionEffect(PotionEffectType.RESISTANCE,/*duration*/ 10 * 20,/*amplifier:*/10, true ,true,true );
+
 		player.addPotionEffect(vid);
 		player.addPotionEffect(comida);
 		player.addPotionEffect(abso);
-
+		player.addPotionEffect(fireresis);
+		player.addPotionEffect(resis);
 		return;
 	}
 	

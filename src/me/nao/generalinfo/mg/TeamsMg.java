@@ -84,12 +84,15 @@ public class TeamsMg {
 			player.getInventory().setItem(i, itemDesingTeam(t.getColor(),t));
 			i++;
 		}	
-			
-			
 	 }
 	 
 	 //CUANDO DECIDES UNIRTE A UN EQUIPO
-	 public void joinIntoTeam(Player player) {
+	 public void joinIntoTeam(Player player,ItemStack it) {
+		
+		 
+		 @SuppressWarnings("deprecation")
+		 String name = ChatColor.stripColor(it.getItemMeta().getDisplayName()).replace("EQUIPO ", "").replace(" ", "");
+		 System.out.println(name);
 		 
 	 }
 

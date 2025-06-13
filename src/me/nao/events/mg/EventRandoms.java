@@ -109,6 +109,7 @@ import me.nao.cosmetics.mg.RankPlayer;
 import me.nao.enums.mg.GameInteractions;
 import me.nao.enums.mg.GameStatus;
 import me.nao.enums.mg.Items;
+import me.nao.enums.mg.PlayerGameStatus;
 import me.nao.enums.mg.ReviveStatus;
 import me.nao.flareactions.mg.Flare;
 import me.nao.generalinfo.mg.CuboidZone;
@@ -1141,57 +1142,43 @@ public class EventRandoms implements Listener{
 		 
 		 Player player = e.getPlayer();
 		 String message = e.getMessage();
-		 RankPlayer ra = new RankPlayer(plugin);
+	
 		 
-		 GameConditions gc = new GameConditions(plugin);
+		 GameConditions cm = new GameConditions(plugin);
+		 //ELIMINAR AL JUGADOR PARA QUE NO VEA MENSAJE DE OTROS JUGADORES
 		 Set<Player> c1 = e.getRecipients();
 		 c1.removeIf(t -> plugin.getPlayerInfoPoo().containsKey(t));
-		 if(gc.isPlayerinGame(player)) {
+		 if(cm.isPlayerinGame(player)) {
 			 
-			 GameConditions cm = new GameConditions(plugin);
 			 PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
-			 String mapa = pl.getMapName();
-			 GameInfo gi = plugin.getGameInfoPoo().get(mapa);
-			 RankPlayer rank = new RankPlayer(plugin);
-				if(gi instanceof GameAdventure) {
-					GameAdventure ga = (GameAdventure) gi;
-					
-					List<String> alive1 = ga.getAlivePlayers();
-					List<String> deads1 = ga.getDeadPlayers();
-					List<String> spec = ga.getSpectators();
+			 RankPlayer ra = new RankPlayer(plugin);
+
 				 
-					
-					if(cm.isPlayerinGame(player)) {
-						
 						if(plugin.getKnockedPlayer().containsKey(player)) {
 							RevivePlayer rp = plugin.getKnockedPlayer().get(player);
 							int timelife = rp.getRemainingTimeLife();
 							
 							if(timelife >= 41 && timelife <= 60) {
-								cm.sendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&a&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" \n&6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
+								cm.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&a&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" \n&6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
 
-							
 							}else if(timelife >= 21 && timelife <= 40) {
-								cm.sendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&e&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" \n&6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
+								cm.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&e&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" \n&6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
 
-								
 							}else if(timelife >= 1 && timelife <= 20) {
-								cm.sendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&c&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" \n&6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
+								cm.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&c&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" \n&6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
 
-								
 							}
 							
  
-						}else if(alive1.contains(player.getName())) {
+						}else if(pl.getPlayerGameStatus() == PlayerGameStatus.ALIVE) {
+							cm.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&a&lVIVO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &a"+message);
+							
+						}else if(pl.getPlayerGameStatus() == PlayerGameStatus.DEAD) {
+							cm.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&c&lMUERTO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &e"+message);
 		
-							cm.sendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&a&lVIVO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &a"+message);
-						}else if(deads1.contains(player.getName())) {
-		
-							cm.sendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&c&lMUERTO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &e"+message);
-		
-						}else if(spec.contains(player.getName())) {
-		
-							cm.sendMessageToAllUsersOfSameMap(player,rank.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&f&lESPECTADOR&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &7"+message);
+						}else if(pl.getPlayerGameStatus() == PlayerGameStatus.SPECTATOR) {
+							cm.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&f&lESPECTADOR&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &7"+message);
+							
 						}
 						
 						//USA TEXT COMPONENT
@@ -1227,8 +1214,8 @@ public class EventRandoms implements Listener{
 //						}
 
 					 e.setCancelled(true);
-					}
-				}
+					
+				
 		
 		 }
 		 

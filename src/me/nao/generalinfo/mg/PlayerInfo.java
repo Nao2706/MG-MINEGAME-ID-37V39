@@ -11,12 +11,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
+import me.nao.enums.mg.PlayerGameStatus;
 import me.nao.main.mg.Minegame;
 
 public class PlayerInfo {
 	
 	private Minegame plugin;
 	private boolean isinventorysave;
+	private PlayerGameStatus pgs;
 	private Player player;
 	private Collection<PotionEffect> potions;
 	private ItemStack[] inv;
@@ -41,9 +43,10 @@ public class PlayerInfo {
 	 *
 	 * */
 	
-	public PlayerInfo(Minegame plugin ,boolean isinventorysave,Player player,Location l,String map,GamePoints gp) {
+	public PlayerInfo(Minegame plugin ,boolean isinventorysave,Player player,Location l,String map,GamePoints gp,PlayerGameStatus pgs) {
 	
 		if(isinventorysave) {
+			this.pgs = pgs;
 			this.plugin = plugin;
 			this.isinventorysave = isinventorysave;
 			this.player = player;
@@ -57,6 +60,7 @@ public class PlayerInfo {
 			this.mglvl = 0;
 			this.tags = player.getScoreboardTags();
 		}else{
+			this.pgs = pgs;
 			this.plugin = plugin;
 			this.isinventorysave = isinventorysave;
 			this.player = player;
@@ -82,6 +86,10 @@ public class PlayerInfo {
 		
 	}
 	
+	
+	public PlayerGameStatus getPlayerGameStatus() {
+		return pgs;
+	}
 	
 	public boolean isInventoryAllowedForTheMap() {
 		return isinventorysave;
@@ -173,6 +181,10 @@ public class PlayerInfo {
 
 	public void setGamemodeMG(GameMode gamemode) {
 		this.gamemode = gamemode;
+	}
+	
+	public void setPlayerGameStatus(PlayerGameStatus status) {
+		this.pgs = status;
 	}
 
 	public void setFlyMG(boolean fly) {
