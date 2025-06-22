@@ -1259,17 +1259,19 @@ public class Comandsmg implements CommandExecutor{
 	      			
 	      			return true;
 	      		}else if (args[0].equalsIgnoreCase("show-maps") ) {
-					FileConfiguration config = plugin.getConfig();
+	      			FileConfiguration config = plugin.getConfig();
 					List<String> ac = config.getStringList("Maps-Created.List");
-					if(!ac.isEmpty()) {
-						Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Nombre de Mapas Creadas");
-						for(int i = 0 ; i < ac.size();i++) {
-							Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+"-"+ChatColor.GREEN+ac.get(i));
-						}
+					
+					if(args.length == 1) {
+						pagsOfMaps(null, ac, 1, 10);
 						Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Total de Mapas Creados: "+ChatColor.GOLD+ac.size());
-						
+					}else if(args.length == 2) {
+						int pag = Integer.valueOf(args[1]);
+						pagsOfMaps(null, ac, pag, 10);
+				
+						Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Total de Mapas Creados: "+ChatColor.GOLD+ac.size());
 					}else {
-						Bukkit.getConsoleSender().sendMessage(ChatColor.DARK_PURPLE+" NO HAY MAPAS ");
+						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg show-maps o /mg show-maps 1");
 					}
 					
 					return true;
@@ -2783,22 +2785,21 @@ public class Comandsmg implements CommandExecutor{
 						return true;
 					 }
 					
-						FileConfiguration config = plugin.getConfig();
-						List<String> ac = config.getStringList("Maps-Created.List");
-						if(!ac.isEmpty()) {
-							player.sendMessage(ChatColor.RED+"Nombre de Mapas Creados");
-							for(int i = 0 ; i < ac.size();i++) {
-								player.sendMessage(ChatColor.YELLOW+"-"+ChatColor.GREEN+ac.get(i));
-							}
-							player.sendMessage(ChatColor.GREEN+"Total de Mapass Creados: "+ChatColor.GOLD+ac.size());
-							
-						}else {
-							player.sendMessage(ChatColor.DARK_PURPLE+" NO HAY MAPAS ");
-						}
+					FileConfiguration config = plugin.getConfig();
+					List<String> ac = config.getStringList("Maps-Created.List");
 					
-					
-					
-					
+					if(args.length == 1) {
+						pagsOfMaps(player, ac, 1, 10);
+						player.sendMessage(ChatColor.GREEN+"Total de Mapas Creados: "+ChatColor.GOLD+ac.size());
+					}else if(args.length == 2) {
+						int pag = Integer.valueOf(args[1]);
+						pagsOfMaps(player, ac, pag, 10);
+				
+						player.sendMessage(ChatColor.GREEN+"Total de Mapas Creados: "+ChatColor.GOLD+ac.size());
+					}else {
+						player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg show-maps o /mg show-maps 1");
+					}
+						
 					return true;
 					
 				}else if(args[0].equalsIgnoreCase("force-revive")) {
@@ -4718,6 +4719,53 @@ public class Comandsmg implements CommandExecutor{
 		
 				
 	}
+ 	
+ 	
+	 public void pagsOfMaps(Player player,List<String> l , int pag,int datosperpags) {
+	    	
+	    	if(!l.isEmpty()) {
+	    		int inicio = (pag -1) * datosperpags;
+	    		int fin = inicio + datosperpags;
+	    		
+	    		int sizelista = l.size();
+	    		int numerodepags = (int) Math.ceil((double) sizelista /datosperpags);
+	    		
+	    		if(pag > numerodepags) {
+	    			if(player != null) {
+		    			player.sendMessage(ChatColor.RED+"No hay mas datos para mostrar en la pag: "+ChatColor.GOLD+pag+ChatColor.GREEN+" Paginas en Total: "+ChatColor.RED+((l.size()+datosperpags-1)/datosperpags));
+
+	    			}
+	    			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No hay mas datos para mostrar en la pag: "+ChatColor.GOLD+pag+ChatColor.GREEN+" Paginas en Total: "+ChatColor.RED+((l.size()+datosperpags-1)/datosperpags));
+	    			return;
+	    		}
+	    		if(player != null) {
+	    			player.sendMessage(ChatColor.GOLD+"Lista de Mapas Creados");
+		    		player.sendMessage(ChatColor.GOLD+"Paginas: "+ChatColor.RED+pag+ChatColor.GOLD+"/"+ChatColor.RED+((l.size()+datosperpags-1)/datosperpags));
+	    		}
+	    		
+	    		Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+"Lista de Mapas Creados");
+	    		Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+"Paginas: "+ChatColor.RED+pag+ChatColor.GOLD+"/"+ChatColor.RED+((l.size()+datosperpags-1)/datosperpags));
+	    	
+	    		for(int i = inicio;i < fin && i < l.size();i++) {
+	    			if(player != null) {
+	    				player.sendMessage(""+ChatColor.RED+(i+1)+"). "+ChatColor.WHITE+l.get(i).replaceAll("-"," "));
+	    			}
+	    			
+	    			
+	    			Bukkit.getConsoleSender().sendMessage(""+ChatColor.RED+(i+1)+"). "+ChatColor.WHITE+l.get(i).replaceAll("-"," "));
+	    					
+	    		}
+	    		
+	    	}else {
+	    		if(player != null) {
+		    		player.sendMessage(ChatColor.RED+"No hay datos para mostrar.");
+
+	    		}
+	    		Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No hay datos para mostrar.");
+	    	}
+	    	return;
+	    }
+ 	
  	 
  	public void DialogueArgs(Player player ,String[] args) {
  		//mg dialogue nameyml id Map
