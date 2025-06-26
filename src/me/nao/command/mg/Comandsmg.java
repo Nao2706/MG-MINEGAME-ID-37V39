@@ -1635,27 +1635,44 @@ public class Comandsmg implements CommandExecutor{
 				
 			}else if (args[0].equalsIgnoreCase("set-scale") ) {
 				try {
-				if (args.length == 3) {
-					// /c add n p
-					// mg set nao 10
-					
-					Player target = Bukkit.getServer().getPlayerExact(args[1]);
-					double valor = Double.valueOf(args[2])  ;
-					if(target != null) {
-						//target.setMaxHealth(target.getMaxHealth());
-						target.getAttribute(Attribute.SCALE).setBaseValue(valor);
-						player.sendMessage(plugin.nombre+ChatColor.GREEN+" El Jugador "+ChatColor.GOLD+target.getName()+ChatColor.GREEN+" fue seteado correctamente. ");
-					}else {
-						player.sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+target+ChatColor.RED+" no existe. ");
+					if (args.length == 3 && player.isOp()) {
+						// /c add n p
+						// mg set nao 10
 						
+						Player target = Bukkit.getServer().getPlayerExact(args[1]);
+						double valor = Double.valueOf(args[2])  ;
+						if(target != null) {
+							//target.setMaxHealth(target.getMaxHealth());
+							target.getAttribute(Attribute.SCALE).setBaseValue(valor);
+							player.sendMessage(plugin.nombre+ChatColor.GREEN+" El Jugador "+ChatColor.GOLD+target.getName()+ChatColor.GREEN+" fue seteado correctamente. ");
+						}else {
+							player.sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+target+ChatColor.RED+" no existe. ");
+							
+						}
+						
+						
+					}else if (args.length == 2) {
+						
+						if(!player.hasPermission("mg.scale")) {
+							player.sendMessage(plugin.nombre+ChatColor.RED+" No tienes Permiso de Usar este Comando.");
+							return true;
+						}
+						double valor = Double.valueOf(args[1])  ;
+						player.getAttribute(Attribute.SCALE).setBaseValue(valor);
+						player.sendMessage(plugin.nombre+ChatColor.GREEN+" Fue seteado correctamente la escala a: "+ChatColor.RED+valor);
+						player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 20.0F, 1F);
+					}else {
+						if(player.isOp()) {
+							player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg set-scale <nombre> <1>");
+						}
+						player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg set-scale <1>");
 					}
-					
-					
-				}else {
-					player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg set-scale <nombre> <1>");
-				}
 				}catch(NumberFormatException ex) {
-					player.sendMessage(plugin.nombre+ChatColor.RED+" Ingresa un numero en el 2 Argumento");
+					if(player.isOp()) {
+						player.sendMessage(plugin.nombre+ChatColor.RED+" Ingresa un numero en el 2 Argumento");
+					}
+					player.sendMessage(plugin.nombre+ChatColor.RED+" Ingresa un numero en el 1 Argumento");
+
 					
 				}
 			

@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -243,10 +244,13 @@ public class ReportsManager {
 					sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" ya fue Baneado Permanentemente de los Juegos.");
 
 				}else {
+					sendPlaySoundToTarget(target, Sound.BLOCK_NOTE_BLOCK_PLING);
 					sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue Baneo Permanentemente de los Juegos.");
+					sendToTarget(target,"");
 					sendToTarget(target,""+ChatColor.DARK_RED+ChatColor.BOLD+"Recibiste un Baneo Permanente en los Juegos.");
 					sendToTarget(target,"Razon: "+ChatColor.GREEN+r.getCausa());
 					sendToTarget(target,ChatColor.GREEN+"Moderador: "+ChatColor.AQUA+r.getModerador());
+					sendToTarget(target,"");
 					SetTimeCooldownMg(seconds,r.getReportype(),r.getTarget(),r.DataReport());
 
 				}
@@ -267,11 +271,14 @@ public class ReportsManager {
 							//setear que no tiene
 						}
 				}else {
+					sendPlaySoundToTarget(target, Sound.BLOCK_NOTE_BLOCK_PLING);
 					sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue sancionado por "+ChatColor.GREEN+r.getTimeReport());
+					sendToTarget(target,"");
 					sendToTarget(target,""+ChatColor.RED+ChatColor.BOLD+"Recibiste un Baneo Temporal en los Juegos.");
 					sendToTarget(target,""+ChatColor.GREEN+ChatColor.BOLD+"Tiempo : "+ChatColor.RED+ChatColor.BOLD+ShowInMomentCooldown(seconds, String.valueOf(System.currentTimeMillis())));
 					sendToTarget(target,"Razon: "+ChatColor.GREEN+r.getCausa());
 					sendToTarget(target,ChatColor.GREEN+"Moderador: "+ChatColor.AQUA+r.getModerador());
+					sendToTarget(target,"");
 					SetTimeCooldownMg(seconds,r.getReportype(),r.getTarget(),r.DataReport());
 				}
 				return;
@@ -286,16 +293,22 @@ public class ReportsManager {
 				}
 				return;
 			}else if(gr == GameReportType.WARN) {
+				sendPlaySoundToTarget(target, Sound.BLOCK_NOTE_BLOCK_PLING);
 				sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue Advertido en los Juegos.");
+				sendToTarget(target,"");
 				sendToTarget(target,"Recibiste un Advertencia en los Juegos. ");
 				sendToTarget(target,"Razon: "+ChatColor.GREEN+r.getCausa());
 				sendToTarget(target,ChatColor.GREEN+"Moderador: "+ChatColor.AQUA+r.getModerador());
+				sendToTarget(target,"");
 				SetTimeCooldownMg(seconds,r.getReportype(),r.getTarget(),r.DataReport());
 			}else if(gr == GameReportType.KICK) {
+				sendPlaySoundToTarget(target, Sound.BLOCK_NOTE_BLOCK_PLING);
 				sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue Kickeado de los Juegos.");
+				sendToTarget(target,"");
 				sendToTarget(target,"Recibiste un Kickeo en los Juegos. ");
 				sendToTarget(target,"Razon: "+ChatColor.GREEN+r.getCausa());
 				sendToTarget(target,ChatColor.GREEN+"Moderador: "+ChatColor.AQUA+r.getModerador());
+				sendToTarget(target,"");
 				SetTimeCooldownMg(seconds,r.getReportype(),r.getTarget(),r.DataReport());
 
 			}
@@ -305,34 +318,47 @@ public class ReportsManager {
 			
 		}else {
 			if(gr == GameReportType.WARN) {
+				sendPlaySoundToTarget(target, Sound.BLOCK_NOTE_BLOCK_PLING);
 				sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue Advertido en los Juegos de Aventura.");
+				sendToTarget(target,"");
 				sendToTarget(target,"Recibiste un Advertencia en los Juegos. ");
 				sendToTarget(target,"Razon: "+ChatColor.GREEN+r.getCausa());
 				sendToTarget(target,ChatColor.GREEN+"Moderador: "+ChatColor.AQUA+r.getModerador());
+				sendToTarget(target,"");
 				SetTimeCooldownMg(seconds,r.getReportype(),r.getTarget(),r.DataReport());
 			}else if(gr == GameReportType.KICK) {
+				sendPlaySoundToTarget(target, Sound.BLOCK_NOTE_BLOCK_PLING);
 				sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue Kickeado de los Juegos de Aventura.");
+				sendToTarget(target,"");
 				sendToTarget(target,"Recibiste un Kickeo en los Juegos. ");
 				sendToTarget(target,"Razon: "+ChatColor.GREEN+r.getCausa());
 				sendToTarget(target,ChatColor.GREEN+"Moderador: "+ChatColor.AQUA+r.getModerador());
+				sendToTarget(target,"");
 				SetTimeCooldownMg(seconds,r.getReportype(),r.getTarget(),r.DataReport());
 
 			}else if(gr == GameReportType.BAN) {
+				sendPlaySoundToTarget(target, Sound.BLOCK_NOTE_BLOCK_PLING);
 				sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue Baneo Permanentemente de los Juegos de Aventura.");
+				sendToTarget(target,"");
 				sendToTarget(target,""+ChatColor.DARK_RED+ChatColor.BOLD+"Recibiste un Baneo Permanente en los Juegos.");
 				sendToTarget(target,"Razon: "+ChatColor.GREEN+r.getCausa());
 				sendToTarget(target,ChatColor.GREEN+"Moderador: "+ChatColor.AQUA+r.getModerador());
+				sendToTarget(target,"");
 				SetTimeCooldownMg(seconds,r.getReportype(),r.getTarget(),r.DataReport());
 
 			}else if(gr == GameReportType.TEMPBAN) {
+				sendPlaySoundToTarget(target, Sound.BLOCK_NOTE_BLOCK_PLING);
 				sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue sancionado por "+ChatColor.GREEN+r.getTimeReport());
+				sendToTarget(target,"");
 				sendToTarget(target,""+ChatColor.RED+ChatColor.BOLD+"Recibiste un Baneo Temporal en los Juegos.");
 				sendToTarget(target,""+ChatColor.GREEN+ChatColor.BOLD+"Tiempo : "+ChatColor.RED+ChatColor.BOLD+ShowInMomentCooldown(seconds, String.valueOf(System.currentTimeMillis())));
 				sendToTarget(target,"Razon: "+ChatColor.GREEN+r.getCausa());
 				sendToTarget(target,ChatColor.GREEN+"Moderador: "+ChatColor.AQUA+r.getModerador());
+				sendToTarget(target,"");
 				SetTimeCooldownMg(seconds,r.getReportype(),r.getTarget(),r.DataReport());
 
 			}else if(gr == GameReportType.PARDON) {
+				
 				sendMessageGeneral(player,ChatColor.YELLOW+"No puedes usar Pardon con "+ChatColor.GREEN+target+ChatColor.YELLOW+" porque no esta sancionado.");
 
 			}
@@ -400,9 +426,21 @@ public class ReportsManager {
 		Player target = Bukkit.getServer().getPlayerExact(player);
 		
 			if(target != null) {
+				
 				target.sendMessage(text);
 			}
 		Bukkit.getConsoleSender().sendMessage(text);
+	}
+	
+	//Sound.BLOCK_NOTE_BLOCK_PLING
+	public void sendPlaySoundToTarget(String player, Sound sound) {
+		Player target = Bukkit.getServer().getPlayerExact(player);
+		
+			if(target != null) {
+				
+				target.playSound(target.getLocation(), sound , 50.0F, 1F);
+			}
+	
 	}
 	
 	
@@ -547,13 +585,13 @@ public class ReportsManager {
 								 
 							 }
 				        	 
-				        	 comments = comments+".";
+				        	 comments = comments.trim()+".";
 				        	 
 				        	 if(player != null) {
-									GameReports gr = new GameReports(target,GameReportType.valueOf(type.toUpperCase()),ld.format(formatter).toString(),"SIN TIEMPO",player.getName(),comments.replace("-", " ").replace(",", " "));
+									GameReports gr = new GameReports(target,GameReportType.valueOf(type.toUpperCase()),ld.format(formatter).toString(),"Sin Tiempo",player.getName(),comments.replace("-", " ").replace(",", " "));
 									cool.SetSancionPlayer(player, gr, 0);
 								}else {
-									 GameReports gr = new GameReports(target,GameReportType.valueOf(type.toUpperCase()),ld.format(formatter).toString(),"SIN TIEMPO","CONSOLA",comments.replace("-", " ").replace(",", " "));
+									 GameReports gr = new GameReports(target,GameReportType.valueOf(type.toUpperCase()),ld.format(formatter).toString(),"Sin Tiempo","CONSOLA",comments.replace("-", " ").replace(",", " "));
 										cool.SetSancionPlayer(player, gr, 0);
 								}
 						
@@ -570,16 +608,16 @@ public class ReportsManager {
 									 
 								 }
 					        	
-							     comments = comments+".";
+							     comments = comments.trim()+".";
 								 
 								//String timeg = time;
 								GameConditions gc = new GameConditions(plugin);
 								
 								if(player != null) {
-									GameReports gr = new GameReports(target,GameReportType.valueOf(type.toUpperCase()),ld.format(formatter).toString(),"SIN TIEMPO",player.getName(),comments.replace("-", " ").replace(",", " "));
+									GameReports gr = new GameReports(target,GameReportType.valueOf(type.toUpperCase()),ld.format(formatter).toString(),"Sin Tiempo",player.getName(),comments.replace("-", " ").replace(",", " "));
 									cool.SetSancionPlayer(player, gr, 0);
 								}else {
-									GameReports gr = new GameReports(target,GameReportType.valueOf(type.toUpperCase()),ld.format(formatter).toString(),"SIN TIEMPO","CONSOLA",comments.replace("-", " ").replace(",", " "));
+									GameReports gr = new GameReports(target,GameReportType.valueOf(type.toUpperCase()),ld.format(formatter).toString(),"Sin Tiempo","CONSOLA",comments.replace("-", " ").replace(",", " "));
 									cool.SetSancionPlayer(player, gr, 0);
 								}
 								
@@ -632,7 +670,7 @@ public class ReportsManager {
 									 if(comments.isEmpty()) {
 										 comments = "Sin especificar.";
 									 }else {
-										 comments = comments+".";
+										 comments = comments.trim()+".";
 									 }
 									 
 									int total = (ReturnHourAndMinuteToSecons(time));
@@ -657,7 +695,7 @@ public class ReportsManager {
 									 if(comments.isEmpty()) {
 										 comments = "Sin especificar.";
 									 }else {
-										 comments = comments+".";
+										 comments = comments.trim()+".";
 									 }
 									 
 									int total = (ReturnHourAndMinuteToSecons(time)+ReturnHourAndMinuteToSecons(time2));
@@ -683,7 +721,7 @@ public class ReportsManager {
 									 if(comments.isEmpty()) {
 										 comments = "Sin especificar.";
 									 }else {
-										 comments = comments+".";
+										 comments = comments.trim()+".";
 									 }
 									 
 								
