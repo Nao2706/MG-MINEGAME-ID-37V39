@@ -43,6 +43,7 @@ public class TabCompletemg implements TabCompleter{
 			arguments.add("setprelobby");
 			arguments.add("setspawn");
 			arguments.add("setspawn-spectator");
+			arguments.add("spectator");			
 			arguments.add("enabled");
 			arguments.add("disabled");
 			arguments.add("set-points");

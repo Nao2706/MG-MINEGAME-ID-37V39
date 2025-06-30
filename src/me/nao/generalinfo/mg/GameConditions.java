@@ -35,6 +35,7 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -1075,10 +1076,10 @@ public class GameConditions {
 		 if(canJoinWithYourInventory(map) && !canUseKit(map)) {
 			 	//LO SALVAS
 				if(existLobbyMg()) {
-				    pl = new PlayerInfo(plugin,true,player, getLocationOfLobby(), map,new GamePoints(),PlayerGameStatus.ALIVE);
+				    pl = new PlayerInfo(plugin,true,player, getLocationOfLobby(), map,new GamePoints(),status);
 				   
 				}else {
-					pl = new PlayerInfo(plugin,true,player, player.getLocation(), map,new GamePoints(),PlayerGameStatus.ALIVE);
+					pl = new PlayerInfo(plugin,true,player, player.getLocation(), map,new GamePoints(),status);
 					
 				}
 				pl.clearGamemodePlayerMg();
@@ -1086,10 +1087,10 @@ public class GameConditions {
 				
 				//NO SALVAS SU INVENTARIO
 				if(existLobbyMg()) {
-				    pl = new PlayerInfo(plugin,false,player, getLocationOfLobby(), map,new GamePoints(),PlayerGameStatus.ALIVE);
+				    pl = new PlayerInfo(plugin,false,player, getLocationOfLobby(), map,new GamePoints(),status);
 					
 				}else {
-					pl = new PlayerInfo(plugin,false,player,player.getLocation(), map,new GamePoints(),PlayerGameStatus.ALIVE);
+					pl = new PlayerInfo(plugin,false,player,player.getLocation(), map,new GamePoints(),status);
 	
 				}
 				pl.clearAllPlayerMg();
@@ -1544,6 +1545,8 @@ public class GameConditions {
 				//System.out.println("SI");
 				return true;
 			}
+		}if(e instanceof ArmorStand) {
+			return true;
 		}
 		//System.out.println("NO");
 		return false;
@@ -1632,7 +1635,7 @@ public class GameConditions {
 		
 	}
 	  
-	public void JoinSpectator(Player player ,String map) {
+	public void joinSpectator(Player player ,String map) {
 		 //MODO ESPECTADOR no te uniras como jugador
 		 setAndSavePlayer(player,PlayerGameStatus.SPECTATOR, map);
 		 spectatorAddToGame(player, map);
@@ -1776,7 +1779,7 @@ public class GameConditions {
 						 player.sendMessage(ChatColor.YELLOW+"Estas Baneado o tienes un TempBan pero puedes Observar.");
 					 }
 						 //MODO ESPECTADOR no te uniras como jugador
-					 JoinSpectator(player,map);
+					 joinSpectator(player,map);
 					  
 					 return false;
 				 }if(data.getBoolean("Requires-Permission")) {

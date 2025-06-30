@@ -2921,10 +2921,10 @@ public class Comandsmg implements CommandExecutor{
 							 }else if(al.contains(name) && player.isOp()){
 								 player.sendMessage(plugin.nombre+ChatColor.RED+" Has Entrado como Op a "+ChatColor.GOLD+name+ChatColor.RED+" es un Mapa que esta Bloqueado.");
 							
-								 gc.JoinSpectator(player,name);
+								 gc.joinSpectator(player,name);
 								 return true;
 							 }else {
-								 gc.JoinSpectator(player,name);
+								 gc.joinSpectator(player,name);
 								 return true;
 							 }
 					
