@@ -740,7 +740,33 @@ public class Comandsmg implements CommandExecutor{
         			
         			rk.showPrestiges(null);
         			return true;
-        		}else if(args[0].equalsIgnoreCase("xp")) {
+        		}else if(args[0].equalsIgnoreCase("deletecheckpoint")) {
+					
+					if (args.length == 2) {
+						// /c add n p
+						//mg setlife nao 2
+						Player target = Bukkit.getServer().getPlayerExact(args[1]);
+					   
+					    
+						if(target != null) {
+							if(plugin.getCheckPoint().containsKey(target)) {
+								plugin.getCheckPoint().remove(target);
+								target.sendMessage(ChatColor.RED+"- Tu CheckPoint fue Eliminado.");
+							}
+							
+						}else {
+							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+args[1]+ChatColor.RED+" no existe. ");
+							
+						}
+						
+						
+					}else {
+						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg deletecheckpoint <nombre>");
+					}
+					
+					return true;
+					
+				}else if(args[0].equalsIgnoreCase("xp")) {
 					
 					//mg xp NAO prestige,level,points set,add,remove 10
 					if(args.length == 5) {
@@ -2817,6 +2843,32 @@ public class Comandsmg implements CommandExecutor{
 						player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg show-maps o /mg show-maps 1");
 					}
 						
+					return true;
+					
+				}else if(args[0].equalsIgnoreCase("deletecheckpoint")) {
+					
+					if (args.length == 2) {
+						// /c add n p
+						//mg setlife nao 2
+						Player target = Bukkit.getServer().getPlayerExact(args[1]);
+					   
+					    
+						if(target != null) {
+							if(plugin.getCheckPoint().containsKey(target)) {
+								plugin.getCheckPoint().remove(target);
+								target.sendMessage(ChatColor.RED+"- Tu CheckPoint fue Eliminado.");
+							}
+							
+						}else {
+							player.sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+args[1]+ChatColor.RED+" no existe. ");
+							
+						}
+						
+						
+					}else {
+						player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg deletecheckpoint <nombre>");
+					}
+					
 					return true;
 					
 				}else if(args[0].equalsIgnoreCase("force-revive")) {

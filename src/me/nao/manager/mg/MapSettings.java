@@ -63,7 +63,7 @@ public class MapSettings {
 			plugin.NewYml(name, player);
 			FileConfiguration ym = plugin.getCacheSpecificYML(name);
 			ym.set("Type-Map","Adventure");
-			ym.set("Level-To-Play:",0);
+			ym.set("Level-To-Play",0);
 			ym.set("Revive-System",false);
 			ym.set("CountDownPreLobby",30);
 			ym.set("Max-Player", 5);

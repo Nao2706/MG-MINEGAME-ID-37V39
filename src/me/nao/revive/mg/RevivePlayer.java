@@ -184,6 +184,11 @@ public class RevivePlayer{
 						player.sendMessage(ChatColor.YELLOW+"Has sido Derribado/a por: "+ChatColor.GOLD+ent.getCustomName()+"..");
 						gc.sendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+ent.getCustomName()+"..");
 						
+					}if(ent instanceof Player) {
+						Player sender = (Player) ent;
+						player.sendMessage(ChatColor.YELLOW+"Has sido Derribado/a por: "+ChatColor.GOLD+sender.getName()+"..");
+						gc.sendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+sender.getName()+"..");
+						
 					}else {
 						player.sendMessage(ChatColor.YELLOW+"Has sido Derribado/a por: "+ChatColor.GOLD+ent.getType()+"..");
 						gc.sendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+ent.getType()+"..");
