@@ -1897,6 +1897,7 @@ public class MobsActions {
 		    	
 		    	if(!l.isEmpty()) {
 		    		for(Entity e : l) {
+		    			if(e.getType() == EntityType.ARMOR_STAND) continue;
 		    			if(e instanceof LivingEntity && !(e instanceof Player)) {
 		    				Block block = e.getLocation().getBlock();
 		    				Block r = block.getRelative(0, 0, 0);

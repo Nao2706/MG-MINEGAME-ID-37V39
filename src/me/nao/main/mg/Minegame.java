@@ -106,7 +106,8 @@ public class Minegame extends JavaPlugin{
 
 	PluginDescriptionFile pdffile = getDescription();
 	public String version = pdffile.getVersion();
-	public String nombre = ""+ChatColor.AQUA+ChatColor.BOLD+"["+ChatColor.GREEN+ChatColor.BOLD+pdffile.getName()+ChatColor.AQUA+ChatColor.BOLD+"]";
+	public List<String> autor = pdffile.getAuthors();
+	public String nombre = ""+ChatColor.GREEN+ChatColor.BOLD+"["+ChatColor.RED+ChatColor.BOLD+pdffile.getName()+ChatColor.GREEN+ChatColor.BOLD+"]";
 	
 	
 	
@@ -263,10 +264,10 @@ public class Minegame extends JavaPlugin{
 
 		
 		
-		Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"||||||||||||||||||||||||||||||||||");
-		Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+nombre+ChatColor.GOLD+" Ha sido Activado "+ChatColor.RED+"[Version:"+ChatColor.DARK_GREEN+version+ChatColor.RED+"]");
+		Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+		Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+nombre+ChatColor.GRAY+"\nHa sido Activado "+ChatColor.RED+"\n[Version:"+ChatColor.DARK_GREEN+version+ChatColor.RED+"]");
 		Bukkit.getConsoleSender().sendMessage(ChatColor.BLUE+" Hora de Crear Aventuras. ");
-		Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"||||||||||||||||||||||||||||||||||");
+		Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 		
 		
 		 
@@ -293,11 +294,10 @@ public class Minegame extends JavaPlugin{
 	    }
 	   
 	   
-	    Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"||||||||||||||||||||||||||||||||||");
-		Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+nombre+ChatColor.GOLD+" Ha sido Desactivado "+ChatColor.RED+"[Version:"+ChatColor.DARK_GREEN+version+ChatColor.RED+"]");
-		Bukkit.getConsoleSender().sendMessage(ChatColor.RED+" Hora de Descansar. ");
-		Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"||||||||||||||||||||||||||||||||||");
-		
+	    Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+		Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+nombre+ChatColor.GRAY+"\nHa sido Desactivado "+ChatColor.RED+"\n[Version:"+ChatColor.DARK_GREEN+version+ChatColor.RED+"]");
+		Bukkit.getConsoleSender().sendMessage(ChatColor.BLUE+" Hora de Descansar. ");
+		Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 	}	
  
    public void registrarcomando() {

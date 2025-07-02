@@ -1246,6 +1246,58 @@ public class SourceOfDamage implements Listener{
 		}
 	
 	
+	public void breakMgItem(Player player,ItemStack it,String itembreakmessage) {
+		
+		//Durabilidad 5/5
+		String name = it.getItemMeta().hasCustomName() ? it.getItemMeta().getDisplayName() : "-.No hay Display.-";
+		if(player.getInventory().getContents().length >= 1) {
+			for (ItemStack itemStack : player.getInventory().getContents()) {
+				if(itemStack == null) continue;
+			
+			
+				if(itemStack.getItemMeta().hasDisplayName() && itemStack.getItemMeta().getDisplayName().equals(name))
+				if(itemStack.hasItemMeta() && itemStack.getItemMeta().hasLore()) {
+					if(itemStack.getItemMeta().getLore().size() > 1 && !ChatColor.stripColor(itemStack.getItemMeta().getLore().get(2)).startsWith("Durabilidad:")) continue;
+					
+				}
+			
+				List<String> lore = it.getItemMeta().getLore();
+				ItemMeta meta = it.getItemMeta();
+				String info = ChatColor.stripColor(lore.get(2));
+				String[] letra = info.split(" ");
+				String numero = letra[1];
+				String[] num = numero.split("/");
+				int dur = Integer.valueOf(num[0]);
+				int limit = Integer.valueOf(num[1]);
+				dur = dur -1;
+				if(dur == 0) {
+					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_BREAK, 50.0F, 0F);
+					player.sendMessage(ChatColor.RED+itembreakmessage);
+					if(player.getInventory().getHelmet() != null) {
+						player.getInventory().setHelmet(new ItemStack(Material.AIR));
+					}
+					
+				  return ;
+				}
+				if(dur >= 20 && dur <= 30) {
+					lore.set(2,ChatColor.GOLD+"Durabilidad: "+ChatColor.GREEN+dur+ChatColor.RED+"/"+ChatColor.GREEN+limit);
+				}else if(dur >= 10 && dur <= 19) {
+					lore.set(2,ChatColor.GOLD+"Durabilidad: "+ChatColor.YELLOW+dur+ChatColor.RED+"/"+ChatColor.GREEN+limit);
+				}else if(dur >= 1 && dur <= 9) {
+					lore.set(2,ChatColor.GOLD+"Durabilidad: "+ChatColor.RED+dur+ChatColor.RED+"/"+ChatColor.GREEN+limit);
+				}
+				
+				player.playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 50.0F, 0F);
+				meta.setLore(lore);
+				it.setItemMeta(meta);
+				player.getInventory().setHelmet(it);
+			}}
+		
+
+		
+		return ;
+	}
+	
 //	public void breakAntiGasMask(Player player,ItemStack it,int slot) {
 //		
 //		//Durabilidad 5/5

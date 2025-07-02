@@ -108,7 +108,13 @@ import org.bukkit.inventory.meta.ItemMeta;
             ARROWDIS(""+ChatColor.RED+ChatColor.BOLD+"ARROW DISPENSER 1", Material.BLAZE_ROD,"knockback,7", 1,ChatColor.GREEN+"Genera flechas por dispensador. "),
             ARROWDIS2(""+ChatColor.RED+ChatColor.BOLD+"ARROW DISPENSER 2", Material.BLAZE_ROD,"knockback,7", 1,ChatColor.GREEN+"Genera flechas por dispensador. "),
 
+            SOUL(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"RESPALDO DE ALMA", Material.END_CRYSTAL,"damage_all,10/knockback,3", 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"10 Bloques de Diamantes",ChatColor.RED+ "Debes llevarlo Contigo",ChatColor.GREEN+ "Al ser Revivido Conservaras tus Cosas",ChatColor.GREEN+ "O si Pierdes la Aventura saldras del",ChatColor.GREEN+ "mapa con todo Intacto."),
+            SOULP(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"RESPALDO DE ALMA", Material.END_CRYSTAL,"damage_all,10/knockback,3", 1,ChatColor.RED+ "Debes llevarlo Contigo",ChatColor.GREEN+ "Al ser Revivido Conservaras tus Cosas",ChatColor.GREEN+ "O si Pierdes la Aventura saldras del",ChatColor.GREEN+ "mapa con todo Intacto."),
+
             
+            DASH(""+ChatColor.AQUA+ChatColor.BOLD+"LIGHT DASH", Material.BLAZE_POWDER,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"25 Netherite",ChatColor.YELLOW+ "Desplazate mas rapido.",ChatColor.RED+ "Shiftea para Dropearme"),
+            DASHP(""+ChatColor.AQUA+ChatColor.BOLD+"LIGHT DASH", Material.BLAZE_POWDER,null, 1,ChatColor.YELLOW+ "Desplazate mas rapido.",ChatColor.RED+ "Shiftea para Dropearme"),
+
             
             GANCHO(""+ChatColor.RED+ChatColor.BOLD+"GANCHO", Material.FISHING_ROD,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"30 Netherite",ChatColor.YELLOW+ "Desplazate mas rapido."),
             GANCHOP(""+ChatColor.RED+ChatColor.BOLD+"GANCHO", Material.FISHING_ROD,null, 1,ChatColor.YELLOW+ "Desplazate mas rapido."),
@@ -205,7 +211,7 @@ import org.bukkit.inventory.meta.ItemMeta;
               // luck,1;fire,5;
                 
              
-        
+       
                
               
              // Material.END_CRYSTAL;

@@ -28,6 +28,7 @@ import org.bukkit.entity.TNTPrimed;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
@@ -50,6 +51,7 @@ import me.nao.revive.mg.RevivePlayer;
 import me.nao.shop.mg.MinigameShop1;
 import me.nao.teams.mg.MgTeams;
 import me.nao.topusers.mg.PointsManager;
+import me.nao.utils.mg.Utils;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -782,7 +784,14 @@ public class GameIntoMap {
 		GameConditions gm = new GameConditions(plugin);
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		
+		if(player.getInventory().containsAtLeast(Items.SOULP.getValue(), 1)) {
 		
+			player.sendMessage(Utils.colorTextChatColor("&c- &eHas Usado tu &fAlma &ede Respaldo."));
+			player.getWorld().spawnParticle(Particle.FLAME, player.getLocation().add(0, 0, 0),
+					/* NUMERO DE PARTICULAS */300, 1, 2, 1, /* velocidad */0, null, true);
+			removeItemstackCustom(player, Items.SOUL.getValue(), 1);
+			return;
+		}
 		
 		Location l = null;
 		
@@ -1370,6 +1379,45 @@ public class GameIntoMap {
 //		a.setGravity(false);
 	}
 	
+	//TODO REDUCE
+	public boolean removeItemstackCustom(Player player,ItemStack it,int cant) {
+		
+		
+		Inventory inv = player.getInventory();
+		
+		if(player.getInventory().getItemInMainHand().isSimilar(it)) {
+			if(inv.containsAtLeast(it, cant)) {
+				
+				
+				int slot = inv.first(it);
+				@SuppressWarnings("unused")
+				boolean hasAmmo = false;
+				for (slot = 0; slot < inv.getSize(); slot++) {
+
+					ItemStack item = inv.getItem(slot);// 3
+					if (item != null && item.isSimilar(it)) {
+						hasAmmo = true;
+						
+						int amount = item.getAmount() - cant;
+						if (amount <= 0) {
+							item = new ItemStack(Material.AIR);
+						} else {
+							item.setAmount(amount);
+						}
+						inv.setItem(slot, item);
+						//break;
+						return true;
+					}
+				}
+				
+			}
+		}
+		
+	
+		
+		
+		return false;
+	}
 	
 	public boolean hasEntityCustomItemStack(LivingEntity e) {
 		

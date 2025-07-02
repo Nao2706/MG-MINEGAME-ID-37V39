@@ -76,6 +76,7 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
@@ -634,7 +635,7 @@ public class EventRandoms implements Listener{
 						if(!e.getItem().isSimilar(new ItemStack(Material.AIR))) {
 							 gc.turret(player);
 						}
-					
+					 
 						if(e.getItem().isSimilar( Items.JEDIP.getValue())) {
 							player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EXPLODE, 20.0F, 1F);
 							for(Entity e1 : getNearbyEntities(player.getLocation(),20)) {
@@ -645,12 +646,27 @@ public class EventRandoms implements Listener{
 							
 							removeItemstackCustom(player,e.getItem());
 						}
-						
+						 
 						if(e.getItem().isSimilar(Items.CHECKPOINTP.getValue())) {
 							plugin.getCheckPoint().put(player, player.getLocation());
 							player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 							player.sendMessage(ChatColor.GREEN+"CheckPoint Marcado.");
 							removeItemstackCustom(player,e.getItem());
+						}
+						
+						
+						if(e.getItem().isSimilar(Items.DASHP.getValue())) {
+							
+							if(!player.hasCooldown(Items.DASHP.getValue())) {
+								player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 20.0F, 1F);
+								player.setVelocity(player.getLocation().getDirection().multiply(5).setY(2));
+								player.setCooldown(Items.DASHP.getValue(), 10 * 20);
+							}else {
+								player.sendMessage(ChatColor.RED+"Debes esperar "+ChatColor.GOLD+"10 Segs"+ChatColor.RED+" para Usarlo.");
+							}
+							
+							//player.launchProjectile(org.bukkit.entity.EnderPearl.class);
+			               
 						}
 						
 						
@@ -794,6 +810,33 @@ public class EventRandoms implements Listener{
 		
 
 
+		
+	}
+	
+	@EventHandler
+	public void dropItemMg(PlayerDropItemEvent e) {
+		Player player = (Player) e.getPlayer();
+		
+				if(player.isSneaking()) {
+					if(e.getItemDrop().getItemStack().isSimilar(Items.DASHP.getValue())) {
+						e.setCancelled(false);
+					}
+				}else {
+					e.setCancelled(true);
+					if(!player.hasCooldown(Items.DASHP.getValue())) {
+						player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 20.0F, 1F);
+						player.setVelocity(player.getLocation().getDirection().multiply(5).setY(2));
+						player.setCooldown(Items.DASHP.getValue(), 10 * 20);
+					}else {
+						player.sendMessage(ChatColor.RED+"Debes esperar "+ChatColor.GOLD+player.getCooldown(Items.DASHP.getValue())+ChatColor.RED+" para Usarlo.");
+					}
+				}
+				
+				
+				
+				//player.launchProjectile(org.bukkit.entity.EnderPearl.class);
+               
+			
 		
 	}
 	

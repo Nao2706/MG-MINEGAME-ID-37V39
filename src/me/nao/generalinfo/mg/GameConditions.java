@@ -1045,27 +1045,6 @@ public class GameConditions {
 		return l;
 	}
 	
-	public void returnToLobby(Player player) {
-		    FileConfiguration config = plugin.getConfig();
-			for (String key : config.getConfigurationSection("Lobby-Spawn").getKeys(false)) {
-				
-				String world1 = key;
-				double x = Double.valueOf(config.getString("Lobby-Spawn." + key + ".X"));
-				double y = Double.valueOf(config.getString("Lobby-Spawn." + key + ".Y"));
-				double z = Double.valueOf(config.getString("Lobby-Spawn." + key + ".Z"));
-				float yaw = Float.valueOf(config.getString("Lobby-Spawn." + key + ".Yaw"));
-				float pitch = Float.valueOf(config.getString("Lobby-Spawn." + key + ".Pitch"));
-	
-				Location l = new Location(Bukkit.getWorld(world1), x, y, z, yaw, pitch);
-				player.getWorld().spawnParticle(Particle.LARGE_SMOKE, player.getLocation().add(0, 1, 0),
-						/* NUMERO DE PARTICULAS */20, 10, 10, 10, /* velocidad */0, null, true);
-				player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 20.0F, 1F);
-				player.teleport(l);
-				return;
-			
-	
-		}
-	}
 	
 	
 	 

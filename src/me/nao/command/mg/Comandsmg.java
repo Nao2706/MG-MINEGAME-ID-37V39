@@ -641,8 +641,11 @@ public class Comandsmg implements CommandExecutor{
 					return true;
 				
 				  }else if(args[0].equalsIgnoreCase("version")){
-				
-					Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Version: "+plugin.version);
+					Bukkit.getConsoleSender().sendMessage("");
+					Bukkit.getConsoleSender().sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"MiniGame");
+					Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Autor: "+ChatColor.AQUA+plugin.autor.get(0));		
+					Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Version: "+ChatColor.RED+plugin.version);					
+					Bukkit.getConsoleSender().sendMessage("");
 				    return true;
 				    
 		    	}else if(args[0].equalsIgnoreCase("cloud") ){
@@ -2489,7 +2492,11 @@ public class Comandsmg implements CommandExecutor{
           			
           			return true;
           			
-          		}else if(args[0].equalsIgnoreCase("invite")) {
+          		}else if(args[0].equalsIgnoreCase("itemtest") && player.isOp()) {
+	              	 
+        			return true;
+        			
+        		}else if(args[0].equalsIgnoreCase("invite")) {
           			
           			//mg invite Tutorial
           			
@@ -4106,8 +4113,12 @@ public class Comandsmg implements CommandExecutor{
 					return true;
 				}else if(args[0].equalsIgnoreCase("version") ) {
 					
+					player.sendMessage("");
+					player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"MiniGame");
+					player.sendMessage(ChatColor.GREEN+"Autor: "+ChatColor.AQUA+plugin.autor.get(0));		
+					player.sendMessage(ChatColor.GREEN+"Version: "+ChatColor.RED+plugin.version);					
+					player.sendMessage("");
 					
-					player.sendMessage(ChatColor.GREEN+"Version: "+plugin.version);
 				
 				
 				return true;
