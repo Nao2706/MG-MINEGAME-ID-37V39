@@ -659,7 +659,7 @@ public class EventRandoms implements Listener{
 							
 							if(!player.hasCooldown(Items.DASHP.getValue())) {
 								player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 20.0F, 1F);
-								player.setVelocity(player.getLocation().getDirection().multiply(5).setY(2));
+								player.setVelocity(player.getLocation().getDirection().multiply(4).setY(1.5));
 								player.setCooldown(Items.DASHP.getValue(), 10 * 20);
 							}else {
 								player.sendMessage(ChatColor.RED+"Debes esperar "+ChatColor.GOLD+"10 Segs"+ChatColor.RED+" para Usarlo.");

@@ -789,7 +789,7 @@ public class GameIntoMap {
 			player.sendMessage(Utils.colorTextChatColor("&c- &eHas Usado tu &fAlma &ede Respaldo."));
 			player.getWorld().spawnParticle(Particle.FLAME, player.getLocation().add(0, 0, 0),
 					/* NUMERO DE PARTICULAS */300, 1, 2, 1, /* velocidad */0, null, true);
-			removeItemstackCustom(player, Items.SOUL.getValue(), 1);
+			removeItemstackCustom(player, Items.SOULP.getValue(), 1);
 			return;
 		}
 		
