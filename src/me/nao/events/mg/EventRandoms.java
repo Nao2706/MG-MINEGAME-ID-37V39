@@ -197,6 +197,7 @@ public class EventRandoms implements Listener{
 	
 	
 	
+	
 	//TODO INTERACT
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void ClickEntity(PlayerInteractAtEntityEvent e) {
@@ -522,6 +523,7 @@ public class EventRandoms implements Listener{
 					
 						Block b3 = e.getClickedBlock();
 						Block b1 = b3.getRelative(0, -1, 0);
+						Block checkpoint = b3.getRelative(0, -2, 0);
 					 if(b3.getType() == Material.STONE_BUTTON ) {
 						 
 						 	YouNeedYourFriends(player,b3);
@@ -534,6 +536,27 @@ public class EventRandoms implements Listener{
 							
 					 }
 						
+					 if(e.getHand() == EquipmentSlot.OFF_HAND)return;
+					 if(b3.getType() == Material.LIME_BANNER && checkpoint.getType() == Material.STRUCTURE_BLOCK) {
+						 PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+						 if(pl.getCheckPointMarker() != null) {
+							 if(pl.getCheckPointMarker().equals(b3.getLocation())) {
+								 player.sendMessage(ChatColor.RED+"La Ubicacion ya esta Guardada, encuentra otro sitio para Sobreescribir los Datos.");
+							 }else {
+								 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, b3.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */25, 0.5, 1, 0.5, /* velocidad */0, null, true);
+								 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+								 player.sendMessage(ChatColor.GREEN+"La Ubicacion se Guardado. (Ubicacion Sobreescrita)");
+								 pl.setCheckpointLocationMg(b3.getLocation());
+							 }
+						 }else {
+							 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, b3.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */25, 0.5, 1, 0.5, /* velocidad */0, null, true);
+
+							 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+							 player.sendMessage(ChatColor.GREEN+"La Ubicacion se Guardado.");
+							 pl.setCheckpointLocationMg(b3.getLocation());
+						 }
+						 
+					 }
 						
 					  if(b3.getType() == Material.CHEST ) {
 						  
@@ -658,11 +681,10 @@ public class EventRandoms implements Listener{
 						if(e.getItem().isSimilar(Items.DASHP.getValue())) {
 							
 							if(!player.hasCooldown(Items.DASHP.getValue())) {
-								player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 20.0F, 1F);
-								player.setVelocity(player.getLocation().getDirection().multiply(4).setY(1.5));
 								player.setCooldown(Items.DASHP.getValue(), 10 * 20);
-							}else {
-								player.sendMessage(ChatColor.RED+"Debes esperar "+ChatColor.GOLD+"10 Segs"+ChatColor.RED+" para Usarlo.");
+								player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 20.0F, 1F);
+								player.setVelocity(player.getLocation().getDirection().multiply(5).setY(1));
+								
 							}
 							
 							//player.launchProjectile(org.bukkit.entity.EnderPearl.class);
@@ -817,20 +839,21 @@ public class EventRandoms implements Listener{
 	public void dropItemMg(PlayerDropItemEvent e) {
 		Player player = (Player) e.getPlayer();
 		
-				if(player.isSneaking()) {
-					if(e.getItemDrop().getItemStack().isSimilar(Items.DASHP.getValue())) {
-						e.setCancelled(false);
-					}
-				}else {
-					e.setCancelled(true);
-					if(!player.hasCooldown(Items.DASHP.getValue())) {
-						player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 20.0F, 1F);
-						player.setVelocity(player.getLocation().getDirection().multiply(5).setY(2));
-						player.setCooldown(Items.DASHP.getValue(), 10 * 20);
-					}else {
-						player.sendMessage(ChatColor.RED+"Debes esperar "+ChatColor.GOLD+player.getCooldown(Items.DASHP.getValue())+ChatColor.RED+" para Usarlo.");
-					}
+		
+		if(e.getItemDrop().getItemStack().isSimilar(Items.DASHP.getValue())) {
+			if(player.isSneaking()) {
+				
+			}else {
+				e.setCancelled(true);
+				if(!player.hasCooldown(Items.DASHP.getValue())) {
+					player.setCooldown(Items.DASHP.getValue(), 10 * 20);
+					player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 20.0F, 1F);
+					player.setVelocity(player.getLocation().getDirection().multiply(5).setY(1));
+					
 				}
+			}
+		}
+		
 				
 				
 				

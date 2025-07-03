@@ -64,6 +64,7 @@ import me.nao.fillareas.mg.Data;
 import me.nao.generalinfo.mg.GameConditions;
 import me.nao.generalinfo.mg.GameInfo;
 import me.nao.generalinfo.mg.GameTime;
+import me.nao.generalinfo.mg.PlayerInfo;
 import me.nao.generalinfo.mg.ReportsManager;
 import me.nao.generalinfo.mg.SystemOfLevels;
 import me.nao.main.mg.Minegame;
@@ -749,12 +750,34 @@ public class Comandsmg implements CommandExecutor{
 						// /c add n p
 						//mg setlife nao 2
 						Player target = Bukkit.getServer().getPlayerExact(args[1]);
-					   
+						
+						if(!gc.isPlayerinGame(target)) {
+							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+args[1]+ChatColor.RED+" no esta en Juego. ");
+
+							return true;
+						}
+					 
 					    
 						if(target != null) {
+							
+							PlayerInfo pl = plugin.getPlayerInfoPoo().get(target);
+							
+							if(pl.getCheckPointMarker() != null) {
+								target.sendMessage(ChatColor.RED+"- Tu CheckPoint por Bandera fue Eliminado.");
+								Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" El CheckPoint por Bandera de "+ChatColor.GOLD+args[1]+ChatColor.GREEN+" fue Eliminado");
+
+								pl.setCheckpointLocationMg(null);
+							}
+							
 							if(plugin.getCheckPoint().containsKey(target)) {
 								plugin.getCheckPoint().remove(target);
+								
 								target.sendMessage(ChatColor.RED+"- Tu CheckPoint fue Eliminado.");
+								Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" El CheckPoint de "+ChatColor.GOLD+args[1]+ChatColor.GREEN+" fue Eliminado");
+
+							}else {
+								Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+args[1]+ChatColor.RED+" no tiene CheckPoints Guardados. ");
+
 							}
 							
 						}else {
@@ -1594,11 +1617,18 @@ public class Comandsmg implements CommandExecutor{
 			Player player = (Player) sender ;
 			
 			if(args.length > 0 ) {
-				if(args[0].equalsIgnoreCase("version")) {
-					player.sendMessage(plugin.nombre+ChatColor.GREEN+" La Version del Plugin es: "+ChatColor.YELLOW+plugin.version);
-					return true;
+				if(args[0].equalsIgnoreCase("version") ) {
 					
-				  }else if(args[0].equalsIgnoreCase("list-fa") ) {
+					player.sendMessage("");
+					player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"MiniGame");
+					player.sendMessage(ChatColor.GREEN+"Autor: "+ChatColor.AQUA+plugin.autor.get(0));		
+					player.sendMessage(ChatColor.GREEN+"Version: "+ChatColor.RED+plugin.version);					
+					player.sendMessage("");
+					
+				
+				
+				return true;
+			  }else if(args[0].equalsIgnoreCase("list-fa") ) {
 					
 					player.sendMessage("Lista de Timers activos");
 					if(!plugin.getTimerAction().isEmpty()) {
@@ -2861,9 +2891,25 @@ public class Comandsmg implements CommandExecutor{
 					   
 					    
 						if(target != null) {
+							
+							PlayerInfo pl = plugin.getPlayerInfoPoo().get(target);
+							
+							if(pl.getCheckPointMarker() != null) {
+								target.sendMessage(ChatColor.RED+"- Tu CheckPoint por Bandera fue Eliminado.");
+								player.sendMessage(plugin.nombre+ChatColor.GREEN+" El CheckPoint por Bandera de "+ChatColor.GOLD+args[1]+ChatColor.GREEN+" fue Eliminado");
+
+								pl.setCheckpointLocationMg(null);
+							}
+							
 							if(plugin.getCheckPoint().containsKey(target)) {
 								plugin.getCheckPoint().remove(target);
+								
 								target.sendMessage(ChatColor.RED+"- Tu CheckPoint fue Eliminado.");
+								player.sendMessage(plugin.nombre+ChatColor.GREEN+" El CheckPoint de "+ChatColor.GOLD+args[1]+ChatColor.GREEN+" fue Eliminado");
+
+							}else {
+								player.sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+args[1]+ChatColor.RED+" no tiene CheckPoints Guardados. ");
+
 							}
 							
 						}else {
@@ -3729,6 +3775,38 @@ public class Comandsmg implements CommandExecutor{
           			}
         			//mg sudo nao say hola
         			return true;
+        		}else if(args[0].equalsIgnoreCase("goto-checkpoint")) {
+        			if(!gc.isPlayerinGame(player)) {
+        				player.sendMessage(ChatColor.RED+"No estas en ningun Juego para usar este Comando.");
+        				return true;
+        			}
+        			
+        			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+        			
+        			if(pl.getCheckPointMarker() == null) {
+        				player.sendMessage(ChatColor.RED+"No tienes Ningun CheckPoint Marcado.");
+        				player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 20.0F, 1F);
+        				return true;
+        			}
+        			
+        			player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, player.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */25, 0.5, 1, 0.5, /* velocidad */0, null, true);
+					player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+					
+					//
+					
+					
+					player.teleport( new Location(pl.getCheckPointMarker().getWorld(),pl.getCheckPointMarker().getX(), pl.getCheckPointMarker().getY(), pl.getCheckPointMarker().getZ(),player.getLocation().getYaw(),player.getLocation().getPitch()).add(0.5, 0, 0.5));
+//        			if(tpcheckpoint.getBlock().getBlockData() instanceof Rotatable) {
+//        				Rotatable rt = (Rotatable) tpcheckpoint.getBlock().getBlockData();
+//        				player.getLocation().setDirection(rt.getRotation().getDirection());
+//        				player.teleport(tpcheckpoint);
+//        			
+//        			}
+        			
+        			//player.getLocation().setDirection(tpcheckpoint.getBlock().);
+        			player.sendTitle(""+ChatColor.BLUE+ChatColor.BOLD+">>> "+ChatColor.GREEN+ChatColor.BOLD+"REGRESANDO"+ChatColor.BLUE+ChatColor.BOLD+"  <<<",ChatColor.YELLOW+"Punto de Control", 20, 40, 20);
+        			
+        			return true;
         		}else if(args[0].equalsIgnoreCase("sudo")) {
         			if(!player.isOp()) {
 						
@@ -4111,18 +4189,7 @@ public class Comandsmg implements CommandExecutor{
 				
 							
 					return true;
-				}else if(args[0].equalsIgnoreCase("version") ) {
-					
-					player.sendMessage("");
-					player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"MiniGame");
-					player.sendMessage(ChatColor.GREEN+"Autor: "+ChatColor.AQUA+plugin.autor.get(0));		
-					player.sendMessage(ChatColor.GREEN+"Version: "+ChatColor.RED+plugin.version);					
-					player.sendMessage("");
-					
-				
-				
-				return true;
-			  }else if(args[0].equalsIgnoreCase("tp")){
+				}else if(args[0].equalsIgnoreCase("tp")){
 				  	
 					if(args.length == 9) {
 						String target = args[1];

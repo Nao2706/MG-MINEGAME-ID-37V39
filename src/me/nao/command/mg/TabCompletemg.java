@@ -51,6 +51,7 @@ public class TabCompletemg implements TabCompleter{
 			arguments.add("top");
 			arguments.add("check-points");
 			//arguments.add("my-points");
+			arguments.add("goto-checkpoint");
 			arguments.add("deletecheckpoint");
 			arguments.add("reward");
 			arguments.add("setspawn-end");

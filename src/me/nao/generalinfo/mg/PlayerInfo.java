@@ -35,6 +35,8 @@ public class PlayerInfo {
 	private String teamname;
 	private Set<String> tags;
 	private SystemOfLevels sl;
+	private Location checkpoint;
+	
 	
 	/** 
 	 *Crear Objeto PlayerInfo para poder definir si en un juego este entrara sin sus cosas(inventario , vida , posiones , exp ) variante que guarda su inventario y otra informacion.
@@ -59,6 +61,7 @@ public class PlayerInfo {
 			this.teamname = "NINGUNO";
 			this.mglvl = 0;
 			this.tags = player.getScoreboardTags();
+			this.checkpoint = null;
 		}else{
 			this.pgs = pgs;
 			this.plugin = plugin;
@@ -81,6 +84,7 @@ public class PlayerInfo {
 			this.mglvl = 0;
 			this.mgprestige = 0;
 			this.tags = player.getScoreboardTags();
+			this.checkpoint = null;
 		}
 		sl = null;
 		
@@ -141,6 +145,10 @@ public class PlayerInfo {
 	
 	public Location getLocationMG() {
 		return l;
+	}
+	
+	public Location getCheckPointMarker() {
+		return checkpoint;
 	}
 	
 	public String getMapName() {
@@ -217,6 +225,10 @@ public class PlayerInfo {
 	
 	public void setLocationMg(Location lo) {
 		this.l = lo;
+	}
+	
+	public void setCheckpointLocationMg(Location checkpoint) {
+		this.checkpoint = checkpoint;
 	}
 	
 	public void setMisionName(String map) {

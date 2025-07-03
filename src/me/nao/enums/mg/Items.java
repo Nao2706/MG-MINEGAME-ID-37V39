@@ -112,8 +112,8 @@ import org.bukkit.inventory.meta.ItemMeta;
             SOULP(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"RESPALDO DE ALMA", Material.END_CRYSTAL,"damage_all,10/knockback,3", 1,ChatColor.RED+ "Debes llevarlo Contigo",ChatColor.GREEN+ "Al ser Revivido Conservaras tus Cosas",ChatColor.GREEN+ "O si Pierdes la Aventura saldras del",ChatColor.GREEN+ "mapa con todo Intacto."),
 
             
-            DASH(""+ChatColor.AQUA+ChatColor.BOLD+"LIGHT DASH", Material.BLAZE_POWDER,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"25 Netherite",ChatColor.YELLOW+ "Desplazate mas rapido.",ChatColor.RED+ "Shiftea para Dropearme"),
-            DASHP(""+ChatColor.AQUA+ChatColor.BOLD+"LIGHT DASH", Material.BLAZE_POWDER,null, 1,ChatColor.YELLOW+ "Desplazate mas rapido.",ChatColor.RED+ "Shiftea para Dropearme"),
+            DASH(""+ChatColor.AQUA+ChatColor.BOLD+"LIGHT DASH", Material.BLAZE_POWDER,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"25 Netherite",ChatColor.YELLOW+ "Desplazate mas rapido.",ChatColor.RED+ "Shiftea para Dropearme",ChatColor.GOLD+ "Cooldown: "+ChatColor.GREEN+"10 Segundos"),
+            DASHP(""+ChatColor.AQUA+ChatColor.BOLD+"LIGHT DASH", Material.BLAZE_POWDER,null, 1,ChatColor.YELLOW+ "Desplazate mas rapido.",ChatColor.RED+ "Shiftea para Dropearme",ChatColor.GOLD+ "Cooldown: "+ChatColor.GREEN+"10 Segundos"),
 
             
             GANCHO(""+ChatColor.RED+ChatColor.BOLD+"GANCHO", Material.FISHING_ROD,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"30 Netherite",ChatColor.YELLOW+ "Desplazate mas rapido."),
