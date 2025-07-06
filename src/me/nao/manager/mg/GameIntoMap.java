@@ -527,11 +527,14 @@ public class GameIntoMap {
 		
 		MgTeams t = new MgTeams(plugin);
 		t.JoinTeamDeadMG(player);
-		PlayerDropAllItems(player);
+		if(gm.hasDeleteInventoryByTimeOut()) {
+			PlayerDropAllItems(player);
+		}
+		
 		player.setGameMode(GameMode.SPECTATOR);
 		player.getWorld().spawnParticle(Particle.CLOUD, player.getLocation().add(0, 0, 0),
 				/* NUMERO DE PARTICULAS */50, 0.5, 1, 0.5, /* velocidad */0, null, true);
-		
+		 
 		if(motivo == StopMotive.LOSE) {
 			return;
 									}
@@ -1385,10 +1388,6 @@ public class GameIntoMap {
 		
 		Inventory inv = player.getInventory();
 		
-		if(player.getInventory().getItemInMainHand().isSimilar(it)) {
-			if(inv.containsAtLeast(it, cant)) {
-				
-				
 				int slot = inv.first(it);
 				@SuppressWarnings("unused")
 				boolean hasAmmo = false;
@@ -1410,11 +1409,6 @@ public class GameIntoMap {
 					}
 				}
 				
-			}
-		}
-		
-	
-		
 		
 		return false;
 	}
@@ -1439,5 +1433,6 @@ public class GameIntoMap {
 		return false;
 	}
 	
+
 
  }

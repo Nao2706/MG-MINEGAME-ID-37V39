@@ -752,7 +752,7 @@ public class Comandsmg implements CommandExecutor{
 						Player target = Bukkit.getServer().getPlayerExact(args[1]);
 						
 						if(!gc.isPlayerinGame(target)) {
-							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+args[1]+ChatColor.RED+" no esta en Juego. ");
+							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+" El Jugador "+ChatColor.GOLD+args[1]+ChatColor.RED+" no esta en Juego. ");
 
 							return true;
 						}
@@ -764,7 +764,7 @@ public class Comandsmg implements CommandExecutor{
 							
 							if(pl.getCheckPointMarker() != null) {
 								target.sendMessage(ChatColor.RED+"- Tu CheckPoint por Bandera fue Eliminado.");
-								Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" El CheckPoint por Bandera de "+ChatColor.GOLD+args[1]+ChatColor.GREEN+" fue Eliminado");
+								Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+" El CheckPoint por Bandera de "+ChatColor.GOLD+args[1]+ChatColor.GREEN+" fue Eliminado");
 
 								pl.setCheckpointLocationMg(null);
 							}
@@ -773,15 +773,15 @@ public class Comandsmg implements CommandExecutor{
 								plugin.getCheckPoint().remove(target);
 								
 								target.sendMessage(ChatColor.RED+"- Tu CheckPoint fue Eliminado.");
-								Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" El CheckPoint de "+ChatColor.GOLD+args[1]+ChatColor.GREEN+" fue Eliminado");
+								Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+" El CheckPoint de "+ChatColor.GOLD+args[1]+ChatColor.GREEN+" fue Eliminado");
 
 							}else {
-								Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+args[1]+ChatColor.RED+" no tiene CheckPoints Guardados. ");
+								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+" El Jugador "+ChatColor.GOLD+args[1]+ChatColor.RED+" no tiene CheckPoints Guardados. ");
 
 							}
 							
 						}else {
-							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+args[1]+ChatColor.RED+" no existe. ");
+							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+" El Jugador "+ChatColor.GOLD+args[1]+ChatColor.RED+" no existe. ");
 							
 						}
 						
@@ -2896,7 +2896,7 @@ public class Comandsmg implements CommandExecutor{
 							
 							if(pl.getCheckPointMarker() != null) {
 								target.sendMessage(ChatColor.RED+"- Tu CheckPoint por Bandera fue Eliminado.");
-								player.sendMessage(plugin.nombre+ChatColor.GREEN+" El CheckPoint por Bandera de "+ChatColor.GOLD+args[1]+ChatColor.GREEN+" fue Eliminado");
+								player.sendMessage(ChatColor.GREEN+" El CheckPoint por Bandera de "+ChatColor.GOLD+args[1]+ChatColor.GREEN+" fue Eliminado");
 
 								pl.setCheckpointLocationMg(null);
 							}
@@ -2905,15 +2905,15 @@ public class Comandsmg implements CommandExecutor{
 								plugin.getCheckPoint().remove(target);
 								
 								target.sendMessage(ChatColor.RED+"- Tu CheckPoint fue Eliminado.");
-								player.sendMessage(plugin.nombre+ChatColor.GREEN+" El CheckPoint de "+ChatColor.GOLD+args[1]+ChatColor.GREEN+" fue Eliminado");
+								player.sendMessage(ChatColor.GREEN+" El CheckPoint de "+ChatColor.GOLD+args[1]+ChatColor.GREEN+" fue Eliminado");
 
 							}else {
-								player.sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+args[1]+ChatColor.RED+" no tiene CheckPoints Guardados. ");
+								player.sendMessage(ChatColor.RED+" El Jugador "+ChatColor.GOLD+args[1]+ChatColor.RED+" no tiene CheckPoints Guardados. ");
 
 							}
 							
 						}else {
-							player.sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+args[1]+ChatColor.RED+" no existe. ");
+							player.sendMessage(ChatColor.RED+" El Jugador "+ChatColor.GOLD+args[1]+ChatColor.RED+" no existe. ");
 							
 						}
 						

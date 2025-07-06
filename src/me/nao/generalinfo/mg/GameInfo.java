@@ -10,25 +10,27 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import me.nao.enums.mg.GameStatus;
 import me.nao.enums.mg.GameType;
+import me.nao.enums.mg.MapStatus;
 import me.nao.enums.mg.StopMotive;
 import me.nao.utils.mg.Utils;
 
 public class GameInfo {
 	
 	
-	private String name , time , stopreason;
+	private String name , time , stopreason ,cooldown;
 	private int minlvltoplay, maxplayers,minplayers, loottablemax , itemspawnrange , spawnmobrange , countdownstart, toxiczonerange, dispenserrange;
 	private int pointsperkills, pointsperdeads , pointsperrevive ,pointsperhelprevive , pointsbonus , pointsloseporcent;
 	private List<String> participants,spectators;
 	private GameType type;
 	private GameStatus estpart;
 	private StopMotive motivo;
+	private MapStatus mapstatus;
 	private BossBar boss;
 	private GameObjetivesMG objetives;
 	private List<GameTimeActions> gametimeactions;
 	private List<CuboidZone> cuboidzones;	
 	private List<Location> generators,mobsgenerators;	
-	private boolean pvp,barriers,allowinventory,ranked;
+	private boolean pvp,barriers,allowinventory,ranked,deleinventorybytimeout,hascooldown,cleanmapfromentitys;
 	private GameTime gt;
 	private FileConfiguration data;
 	
@@ -47,6 +49,7 @@ public class GameInfo {
 		this.type = null;
 		this.estpart = GameStatus.ESPERANDO;
 		this.motivo = StopMotive.NINGUNO;
+		this.mapstatus = MapStatus.UNKNOW;
 		this.boss = null;
 		this.time = "0";
 		this.objetives = null;
@@ -70,6 +73,10 @@ public class GameInfo {
 		this.dispenserrange = 0;
 		this.ranked = false;
 		this.pointsloseporcent = 0;
+		this.deleinventorybytimeout = true;
+		this.hascooldown = false;
+		this.cooldown = "0,0,0";
+		this.cleanmapfromentitys = true;
 		
 	}
 	
@@ -77,7 +84,11 @@ public class GameInfo {
 	public String getMapName() {
 		return name;
 	}
-
+	
+	public String getCooldown() {
+		return cooldown;
+	}
+	
 	public int getSpawnMobRange() {
 		return spawnmobrange;
 	}
@@ -112,6 +123,10 @@ public class GameInfo {
 
 	public StopMotive getStopMotive() {
 		return motivo;
+	}
+	
+	public MapStatus getMapStatus() {
+		return mapstatus;
 	}
 	
 	public String getStopReason() {
@@ -158,6 +173,10 @@ public class GameInfo {
 		return pvp;
 	}
 	
+	public boolean hasMapCooldown() {
+		return hascooldown;
+	}
+	
 	public boolean hasBarriersinMap() {
 		return barriers;
 	}
@@ -168,6 +187,14 @@ public class GameInfo {
 	
 	public boolean isAllowedJoinWithOwnInventory() {
 		return allowinventory;
+	}
+	
+	public boolean hasDeleteInventoryByTimeOut() {
+		return deleinventorybytimeout;
+	}
+	
+	public boolean hasMapCleanedFromEntitys() {
+		return cleanmapfromentitys;
 	}
 	
 	public GameTime getGameTime() {
@@ -258,6 +285,10 @@ public class GameInfo {
 		this.motivo = motivo;
 	}
 	
+	public void setMapStatus(MapStatus mapstatus) {
+		this.mapstatus = mapstatus;
+	}
+	
 	public void setStopReason(String stopreason) {
 		this.stopreason = stopreason;
 	}
@@ -298,7 +329,15 @@ public class GameInfo {
 		this.ranked = ranked;
 	}
 	
+	public void setDeleteInventoryByTimeOut(boolean deleinventorybytimeout) {
+		this.deleinventorybytimeout = deleinventorybytimeout;
+	}
+	 
 	public void setAllowedJoinWithOwnInventory(boolean allowinventory) {
+		this.allowinventory = allowinventory;
+	}
+	
+	public void setCleanMapFromEntitys(boolean allowinventory) {
 		this.allowinventory = allowinventory;
 	}
 	
@@ -346,6 +385,13 @@ public class GameInfo {
 		this.minlvltoplay = minlvltoplay;
 	}
 
+	public void setMapCooldown(boolean hascooldown) {
+		this.hascooldown = hascooldown;
+	}
+	
+	public void setMapTimeCooldown(String cooldown) {
+		this.cooldown = cooldown;
+	}
 
 	public String ShowGame() {
 		return getMapName()+" "+getMaxPlayers()+" "+getMinPlayers()+" "+getGameType().toString()+" "+getGameStatus().toString()+" "+

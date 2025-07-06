@@ -74,14 +74,18 @@ public class MapSettings {
 			ym.set("Secondary-Objetive-Mandatory",false); 
 			ym.set("Set-Hearts",20);
 			ym.set("Dispenser-Range",30);
+			ym.set("CleanMapFromEntitys",true);
+			ym.set("DeleteInventoryByTimeOut",true); 			
 			ym.set("Map-hasBarriers",true); 
 			ym.set("Anti-Void",false); 
 			ym.set("Allow-Inventory",false);
 			ym.set("Allow-PVP",false);
 			ym.set("Has-Kit",false);
 			ym.set("Start-Kit","example");
-			ym.set("Has-Time",false);
-			ym.set("Usage-Time","Lunes Viernes");
+			ym.set("Play-Time.Has-Time",false);
+			ym.set("Play-Time.Usage-Time","Lunes Viernes");
+			ym.set("Cooldown-For-Replay.Has-Cooldown",false);
+			ym.set("Cooldown-For-Replay.Cooldown-Time","0,1,0");			
 			ym.set("Requires-Permission",false);
 			ym.set("Permission-To-Play","my.permission.use");
 			

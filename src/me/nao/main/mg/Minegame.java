@@ -2,6 +2,7 @@ package me.nao.main.mg;
 
 import java.io.File;
 import java.sql.Connection;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,6 +73,7 @@ public class Minegame extends JavaPlugin{
     private Map<Player,Entity> credit;
     private Map<Player, RevivePlayer> playerrevive;
     private Map<Entity,String> guardiancredit;
+    private Map<String,LocalDateTime> cooldownmap;
     
     //ITEMS ACTION
     private Map<String,List<Entity>> entitys;
@@ -326,6 +328,7 @@ public class Minegame extends JavaPlugin{
 	    credit = new HashMap<>();
 	    guardiancredit = new HashMap<>();
 	    playerrevive = new HashMap<>();
+	    cooldownmap = new HashMap<>();
 	    
 	    itemmenu = new HashMap<>();
 	    //items
@@ -412,6 +415,11 @@ public class Minegame extends JavaPlugin{
    public Map<Player,RevivePlayer> getKnockedPlayer(){
 	   return playerrevive;
    }
+   
+   public Map<String,LocalDateTime> getCooldownMap(){
+	   return cooldownmap;
+   }
+   
    ////////////ITEMS
    
    public Map<String ,List<Entity>> getEntitiesFromFlare(){

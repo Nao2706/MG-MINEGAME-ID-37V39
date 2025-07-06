@@ -283,7 +283,9 @@ public class ResistenceTemp {
 					    			//target.sendMessage(ChatColor.GREEN+"La partida termina en "+ChatColor.DARK_PURPLE+end);
 					    		}
 							
+							if(ga.hasMapCleanedFromEntitys()) {
 								ma.removeEntitysAfterGame(players);
+							}
 							}	
 					 
 						}
@@ -302,7 +304,12 @@ public class ResistenceTemp {
 	
 					    			//target.sendMessage(ChatColor.GREEN+"La partida termina en "+ChatColor.DARK_PURPLE+end);
 					    		}
-							ma.removeEntitysAfterGame(players);
+							
+							if(ga.hasMapCleanedFromEntitys()) {
+								ma.removeEntitysAfterGame(players);
+							}
+							
+						
 							
 							}
 							

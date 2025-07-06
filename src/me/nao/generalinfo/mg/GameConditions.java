@@ -56,6 +56,7 @@ import me.nao.enums.mg.GameInteractions;
 import me.nao.enums.mg.GameStatus;
 import me.nao.enums.mg.GameType;
 import me.nao.enums.mg.Items;
+import me.nao.enums.mg.MapStatus;
 import me.nao.enums.mg.ObjetiveStatusType;
 import me.nao.enums.mg.PlayerGameStatus;
 import me.nao.enums.mg.StopMotive;
@@ -295,13 +296,20 @@ public class GameConditions {
 			GameAdventure ga = (GameAdventure) gi;
 			List<Player> player = ConvertStringToPlayer(ga.getParticipants());
 			
+			
+			if(!ga.getArrivePlayers().isEmpty()) {
+				ga.setMapStatus(MapStatus.COMPLETE);
+			}else {
+				ga.setMapStatus(MapStatus.INCOMPLETE);
+			}
+			
 			MgScore sco = new MgScore(plugin);
 		
 			for(Player target : player) {
 				
 				sco.ClearScore(target);
 				restorePlayer(target);
-				
+				 
 			}
 			
 			List<Player> spec = ConvertStringToPlayer(ga.getSpectators());
@@ -310,10 +318,18 @@ public class GameConditions {
 				sco.ClearScore(target);
 				restorePlayer(target);
 			}
+			 
+			if(ga.getMapStatus() == MapStatus.COMPLETE) {
+				if(ga.hasMapCooldown()) {
+					setCooldownMap(name, ga.getCooldown());
+				}
+			}
+			
 			
 				checkGenerator(gi);
 				//System.out.println("LOG END GAME RESULT: "+plugin.getGameInfoPoo().get(name).ShowGame());
 				//System.out.println("ENTIDADES MARCADAS: "+plugin.getEntitiesFromFlare().size());
+				
 				plugin.getEntitiesFromFlare().remove(name);
 				plugin.getGameInfoPoo().remove(name);
 				//System.out.println("LOG MAP OF GAMES: "+plugin.getGameInfoPoo().toString());
@@ -322,6 +338,19 @@ public class GameConditions {
 		
 	}
 	
+	public void setCooldownMap(String map , String date) {
+		 String cooldownreplay = date;
+		 
+		 String[] split = cooldownreplay.split(",");
+		 
+		 int hour = Integer.valueOf(split[0]);
+		 int minute = Integer.valueOf(split[1]);
+		 int seconds = Integer.valueOf(split[1]);
+		 
+		 LocalDateTime time = LocalDateTime.now().plusHours(hour).plusMinutes(minute).plusSeconds(seconds);
+		 plugin.getCooldownMap().put(map, time);
+		return;
+	}
 	
 	 //TODO TP AL PRELOBBY DEL MAPA
 	   public void tptoPreLobbyMap(Player player ,String map){
@@ -1152,7 +1181,7 @@ public class GameConditions {
 			    	ga.setSpawnItemRange(getSpawnItemRange(map));
 			    	ga.setSpawnMobRange(getSpawnMobRange(map));
 			    	ga.setToxicZoneRange(getToxicZoneRange(map));
-			    	 
+			    	  
 			    	ga.setPointsPerKills(getPointsPerKills(map));
 			    	ga.setPointsPerDeads(getPointsPerDeads(map));
 			    	ga.setPointsPerRevive(getPointsPerRevive(map));
@@ -1163,6 +1192,12 @@ public class GameConditions {
 			    	ga.setPointsLosePorcent(getPointsLosePorcent(map));
 			    	ga.setMapData(game);			    	
 			    	ga.setlvltoPlay(getLvlToPlay(map));		
+			    	
+			    	ga.setDeleteInventoryByTimeOut(hasDeleteInventoryByTimeOut(map));
+			    	ga.setMapCooldown(getMapCooldownData(map));
+			    	ga.setMapTimeCooldown(getMapTimeCooldownData(map));
+			    	ga.setCleanMapFromEntitys(hasMapCleanedData(map));
+			    	
 			    	
 			    	System.out.println("LOG-1 MISION: "+ga.ShowGame());
 					
@@ -1304,6 +1339,10 @@ public class GameConditions {
     	gi.setRankedMap(isMapRanked(map));
     	gi.setPointsLosePorcent(getPointsLosePorcent(map));
     	gi.setMapData(getGameConfig(map));
+    	gi.setDeleteInventoryByTimeOut(hasDeleteInventoryByTimeOut(map));
+    	gi.setMapCooldown(getMapCooldownData(map));
+    	gi.setMapTimeCooldown(getMapTimeCooldownData(map));
+    	gi.setCleanMapFromEntitys(hasMapCleanedData(map));
     	
 	}
 	
@@ -1508,9 +1547,29 @@ public class GameConditions {
 		return game.getBoolean("Revive-System");
 	}
 	
+	public boolean hasDeleteInventoryByTimeOut(String map) {
+		FileConfiguration game = getGameConfig(map);
+		return game.getBoolean("DeleteInventoryByTimeOut");
+	}
+	
 	public boolean hasCuboidZones(String map) {
 		FileConfiguration game = getGameConfig(map);
 	    return game.contains("Cuboid-Zones.List");
+	}
+	
+	public boolean getMapCooldownData(String map) {
+		FileConfiguration game = getGameConfig(map);
+	    return game.getBoolean("Cooldown-For-Replay.Has-Cooldown");
+	}
+	
+	public boolean hasMapCleanedData(String map) {
+		FileConfiguration game = getGameConfig(map);
+	    return game.getBoolean("CleanMapFromEntitys");
+	}	
+	
+	public String getMapTimeCooldownData(String map) {
+		FileConfiguration game = getGameConfig(map);
+	    return game.getString("Cooldown-For-Replay.Cooldown-Time");
 	}
 	
 	public boolean isGuardian(Entity e){
@@ -1780,8 +1839,8 @@ public class GameConditions {
 		 					
 		 					return false;
 		 				}
-		 		 }if(data.getBoolean("Has-Time")) {
-		 			 	String time = data.getString("Usage-Time");
+		 		 }if(data.getBoolean("Play-Time.Has-Time")) {
+		 			 	String time = data.getString("Play-Time.Usage-Time");
 				    	if(time == null || time.isEmpty()){
 				    		if(player.isOp()) {
  
@@ -1794,7 +1853,38 @@ public class GameConditions {
 				    	}
 		 			 	
 				        if(!elapsedTime(player,time)) return false;
+				 }if(ga.hasMapCooldown()) { 
+					if(plugin.getCooldownMap().containsKey(map)){
+						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss a",Locale.ENGLISH);
+						LocalDateTime cooldownmap = plugin.getCooldownMap().get(map);
+						LocalDateTime lt = LocalDateTime.now();
+						
+						
+						if(lt.isBefore(cooldownmap)) {
+							//antes de llegar a la fecha
+							player.sendMessage(ChatColor.GREEN+"================================================");
+							player.sendMessage("");
+							player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"                     [MAPA CON COOLDOWN] ");
+							player.sendMessage(ChatColor.AQUA+"Me temo que hay un Cooldown y aun no es el Tiempo para Ingresar ");
+							player.sendMessage(""+ChatColor.DARK_RED+ChatColor.BOLD+"                [El Mapa Regresa en] ");
+							player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"["+ChatColor.GREEN+TimeDiferenceMg(lt, cooldownmap)+ChatColor.GOLD+ChatColor.BOLD+"]");
+							player.sendMessage(ChatColor.AQUA+"Que tal un Descanso???");
+							player.sendMessage(ChatColor.GOLD+"Fecha Actual: "+ChatColor.GREEN+lt.format(formatter));
+							player.sendMessage(ChatColor.GREEN+"Fecha de Apertura: "+ChatColor.AQUA+cooldownmap.format(formatter));
+							player.sendMessage("");
+							player.sendMessage(ChatColor.GREEN+"================================================");
+							//isJoinRunning(player);
+							return false;
+						}
+						
+						
+					}
+					
 				 }
+		 		 
+		 		 
+		 		
+		 		
 			 		boss.addPlayer(player);
 			 		return true;
 				
@@ -2107,7 +2197,7 @@ public class GameConditions {
 					    	//player.sendMessage("estas en la fecha correcta");
 							return true;
 						}else {
-							
+							 
 							if(lt.isBefore(t)) {
 								//antes de llegar a la fecha
 								player.sendMessage(ChatColor.GREEN+"================================================");
@@ -5178,9 +5268,8 @@ public class GameConditions {
 					 it.setLore(menu.getStringList(map+".Lore-Item"));
 					 it.setMaintenance(hasMaintenance());
 					 it.setRanked(isMapRanked(map));
-					 it.setTime(game.getBoolean("Has-Time"));
-					 it.setDatetime(map);
-					 it.setDatetime(game.getString("Usage-Time"));
+					 it.setTime(game.getBoolean("Play-Time.Has-Time"));
+					 it.setDatetime(game.getString("Play-Time.Usage-Time"));
 					 it.setPermission(game.getBoolean("Requires-Permission"));
 					 it.setPermissionforplay(game.getString("Permission-To-Play"));
 					 it.setPermissionmessage(game.getStringList("How-Get-Permission.Message"));
