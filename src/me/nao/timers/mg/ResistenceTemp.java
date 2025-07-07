@@ -270,28 +270,35 @@ public class ResistenceTemp {
 				
 						for(Player players : joins) {
 							if(end != 0) {
-							if(end <= 5 && end >= 1) {
-			 	       		  //  RemoveArmorStandsAndItemsInMap(target);
-								players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 2F);
-								players.sendTitle(""+ChatColor.GOLD+ChatColor.BOLD+String.valueOf(end),""+ChatColor.GOLD+ChatColor.BOLD+"La partida termina en ", 20, 20, 20);
-						    	//	players.sendMessage(ChatColor.RED+"No hay jugadores suficientes para empezar la partida :(");
-					    		}else {
-					    			//RemoveArmorStandsAndItemsInMap(target);
-					    			players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
-					    			players.sendTitle("",ChatColor.GREEN+"La partida termina en "+ChatColor.DARK_PURPLE+end, 20, 20, 20);
-	
-					    			//target.sendMessage(ChatColor.GREEN+"La partida termina en "+ChatColor.DARK_PURPLE+end);
-					    		}
+								
+								if(ga.hasMapCleanedFromEntitys()) {
+									ma.removeEntitysAfterGame(players);
+								}
+								
+								if(end <= 5 && end >= 1) {
+				 	       		  //  RemoveArmorStandsAndItemsInMap(target);
+									players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 2F);
+									players.sendTitle(""+ChatColor.GOLD+ChatColor.BOLD+String.valueOf(end),""+ChatColor.GOLD+ChatColor.BOLD+"La partida termina en ", 20, 20, 20);
+							    	//	players.sendMessage(ChatColor.RED+"No hay jugadores suficientes para empezar la partida :(");
+						    		}else {
+						    			//RemoveArmorStandsAndItemsInMap(target);
+						    			players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+						    			players.sendTitle("",ChatColor.GREEN+"La partida termina en "+ChatColor.DARK_PURPLE+end, 20, 20, 20);
+		
+						    			//target.sendMessage(ChatColor.GREEN+"La partida termina en "+ChatColor.DARK_PURPLE+end);
+						    		}
 							
-							if(ga.hasMapCleanedFromEntitys()) {
-								ma.removeEntitysAfterGame(players);
-							}
-							}	
+							
+						  }	
 					 
 						}
 					
 						for(Player players : spect) {
 							if(end != 0) {
+								if(ga.hasMapCleanedFromEntitys()) {
+									ma.removeEntitysAfterGame(players);
+								}
+								
 							if(end <= 5 && end >= 1) {
 			 	       		  //  RemoveArmorStandsAndItemsInMap(target);
 								players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 2F);
@@ -305,9 +312,7 @@ public class ResistenceTemp {
 					    			//target.sendMessage(ChatColor.GREEN+"La partida termina en "+ChatColor.DARK_PURPLE+end);
 					    		}
 							
-							if(ga.hasMapCleanedFromEntitys()) {
-								ma.removeEntitysAfterGame(players);
-							}
+							
 							
 						
 							

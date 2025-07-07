@@ -31,6 +31,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Evoker;
 import org.bukkit.entity.Fireball;
+import org.bukkit.entity.Golem;
 import org.bukkit.entity.Husk;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
@@ -40,6 +41,7 @@ import org.bukkit.entity.Pillager;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.TNTPrimed;
+import org.bukkit.entity.Villager;
 import org.bukkit.entity.Vindicator;
 import org.bukkit.entity.Witch;
 import org.bukkit.entity.WitherSkeleton;
@@ -2011,7 +2013,7 @@ public class MobsActions {
 			    	if(!l.isEmpty()) {
 			    		for(Entity e : l) {
 			        		
-			        		if(e.getType() != EntityType.PLAYER || e.getType() != EntityType.PAINTING || e.getType() != EntityType.ITEM_FRAME || e.getType() != EntityType.GLOW_ITEM_FRAME) {
+			        		if(e instanceof Monster || e instanceof Villager || e instanceof Golem || e instanceof Item) {
 			        			if(e.getType() == EntityType.ITEM) {
 			        				Item ite = (Item) e;
 			        				if(ite.getOwner() != null) continue;

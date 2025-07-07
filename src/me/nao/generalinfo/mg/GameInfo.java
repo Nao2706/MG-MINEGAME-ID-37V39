@@ -337,8 +337,8 @@ public class GameInfo {
 		this.allowinventory = allowinventory;
 	}
 	
-	public void setCleanMapFromEntitys(boolean allowinventory) {
-		this.allowinventory = allowinventory;
+	public void setCleanMapFromEntitys(boolean cleanmapfromentitys) {
+		this.cleanmapfromentitys = cleanmapfromentitys;
 	}
 	
 	public void setGameTime(GameTime gt) {
