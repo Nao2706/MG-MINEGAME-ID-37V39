@@ -539,16 +539,24 @@ public class EventRandoms implements Listener{
 					 if(e.getHand() == EquipmentSlot.OFF_HAND)return;
 					 if(b3.getType() == Material.LIME_BANNER && checkpoint.getType() == Material.STRUCTURE_BLOCK) {
 						 PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+						 if(!player.getInventory().containsAtLeast(Items.CHECKPOINTFLAG.getValue(),1)) {
+							 player.getInventory().addItem(Items.CHECKPOINTFLAG.getValue());
+						 }
 						 if(pl.getCheckPointMarker() != null) {
 							 if(pl.getCheckPointMarker().equals(b3.getLocation())) {
 								 player.sendMessage(ChatColor.RED+"La Ubicacion ya esta Guardada, encuentra otro sitio para Sobreescribir los Datos.");
 							 }else {
+				        		 player.sendTitle(""+ChatColor.BLUE+ChatColor.BOLD+">>> "+ChatColor.GREEN+ChatColor.BOLD+"CHECKPOINT GUARDADO"+ChatColor.BLUE+ChatColor.BOLD+"  <<<",ChatColor.YELLOW+"Punto de Control", 20, 40, 20);
+
 								 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, b3.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */25, 0.5, 1, 0.5, /* velocidad */0, null, true);
 								 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 								 player.sendMessage(ChatColor.GREEN+"La Ubicacion se Guardado. (Ubicacion Sobreescrita)");
 								 pl.setCheckpointLocationMg(b3.getLocation());
 							 }
 						 }else {
+							 
+			        		 player.sendTitle(""+ChatColor.BLUE+ChatColor.BOLD+">>> "+ChatColor.GREEN+ChatColor.BOLD+"CHECKPOINT GUARDADO"+ChatColor.BLUE+ChatColor.BOLD+"  <<<",ChatColor.YELLOW+"Punto de Control", 20, 40, 20);
+
 							 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, b3.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */25, 0.5, 1, 0.5, /* velocidad */0, null, true);
 
 							 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
@@ -709,7 +717,25 @@ public class EventRandoms implements Listener{
 									removeItemstackCustom(player,e.getItem());
 						}
 						
+						if(e.getItem().isSimilar(Items.CHECKPOINTFLAG.getValue())) {
+		        			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+		        			
+		        			if(pl.getCheckPointMarker() == null) {
+		        				player.sendMessage(ChatColor.RED+"No tienes Ningun CheckPoint Marcado.");
+		        				player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 20.0F, 1F);
+		        				return;
+		        			}
+		        			
+		        			player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, player.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */25, 0.5, 1, 0.5, /* velocidad */0, null, true);
+							player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 					
+							
+							
+							player.teleport( new Location(pl.getCheckPointMarker().getWorld(),pl.getCheckPointMarker().getX(), pl.getCheckPointMarker().getY(), pl.getCheckPointMarker().getZ(),player.getLocation().getYaw(),player.getLocation().getPitch()).add(0.5, 0, 0.5));
+		        			
+		        			player.sendTitle(""+ChatColor.BLUE+ChatColor.BOLD+">>> "+ChatColor.GREEN+ChatColor.BOLD+"REGRESANDO"+ChatColor.BLUE+ChatColor.BOLD+"  <<<",ChatColor.YELLOW+"REGRESASTE A TU CHECKPOINT", 20, 40, 20);
+		        			
+						}
 						
 						if (e.getItem().isSimilar(Items.OBJETIVOSP.getValue())) {
 							MinigameShop1 ms = new MinigameShop1(plugin);

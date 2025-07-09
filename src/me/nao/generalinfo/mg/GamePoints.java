@@ -5,7 +5,7 @@ public class GamePoints {
 	
 	
 	private int kills , deads , revive, helprevive;
-	private long damage;
+	private long damage, time;
 	
 	/**
 	 * Clase destinada a almacenar datos de Jugador Kills Deads Revive HelpRevive Damage
@@ -42,6 +42,10 @@ public class GamePoints {
 		return helprevive;
 	}
 	
+	public long getCronometSeconds() {
+		return time;
+	}
+	
 	public void setKills(int kills) {
 		this.kills = kills;
 	}
@@ -49,6 +53,7 @@ public class GamePoints {
 	public void setDeads(int deads) {
 		this.deads = deads;
 	}
+	
 	public void setRevive(int revive) {
 		this.revive = revive;
 	}
@@ -61,5 +66,8 @@ public class GamePoints {
 		this.damage = damage;
 	}
 	
+	public void setCronometinSeconds(long time) {
+		this.time = time;
+	}	
 	
 }

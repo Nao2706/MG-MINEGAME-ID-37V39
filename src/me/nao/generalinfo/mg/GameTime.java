@@ -139,9 +139,9 @@ public class GameTime {
 	public void addTimeToTimer(String map ,int hour , int minute , int seconds) {
 			
 		System.out.println("VIEJO TIEMPO: "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s");
-
-		GameInfo gi = plugin.getGameInfoPoo().get(map);
-		BossBar boss = gi.getBossbar();
+		//OCULTE ESTO
+		//GameInfo gi = plugin.getGameInfoPoo().get(map);
+		//BossBar boss = gi.getBossbar();
 //		 boss.setProgress(1.0);
 		int totaltimerinseconds = (this.timerhourmg * 3600) + (this.timerminutemg * 60) + this.timersecondmg;
 		
@@ -169,9 +169,10 @@ public class GameTime {
 		setTimersecondmg(segundos);
 		
 		System.out.println("NUEVO TIEMPO ADD: "+horas+"h "+minutos+"m "+segundos+"s");
-		
-		this.bossbartime = 1.0 / totaltimertime;
-		boss.setProgress(this.bossbarpro);
+		this.bossbartotal = totaltimertime;
+		//OCULTE ESTO 2
+//		this.bossbartime = 1.0 / totaltimertime;
+//		boss.setProgress(this.bossbarpro);
 		
 		this.showaddedtime = 3;
 		return;
@@ -181,8 +182,8 @@ public class GameTime {
 		
 		
 		System.out.println("VIEJO TIEMPO: "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s");
-		GameInfo gi = plugin.getGameInfoPoo().get(map);
-		BossBar boss = gi.getBossbar();
+//		GameInfo gi = plugin.getGameInfoPoo().get(map);
+//		BossBar boss = gi.getBossbar();
 		 //boss.setProgress(1.0);
 		int totalasettedseconds = (hour * 3600) + (minute * 60) + seconds;
 		
@@ -196,17 +197,17 @@ public class GameTime {
 		setTimerminutemg(minutos);
 		setTimersecondmg(segundos);
 		System.out.println("NUEVO TIEMPO SET: "+horas+"h "+minutos+"m "+segundos+"s");
-		
-		this.bossbartime = 1.0 / totaltimertime;
-		boss.setProgress(this.bossbarpro);
+		this.bossbartotal = totaltimertime;
+//		this.bossbartime = 1.0 / totaltimertime;
+//		boss.setProgress(this.bossbarpro);
 		
 	}
 	
 	public void removeTimeToTimer(String map ,int hour , int minute , int seconds) {
 			
 		System.out.println("VIEJO TIEMPO: "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s");
-		GameInfo gi = plugin.getGameInfoPoo().get(map);
-		BossBar boss = gi.getBossbar();
+//		GameInfo gi = plugin.getGameInfoPoo().get(map);
+//		BossBar boss = gi.getBossbar();
 		 //boss.setProgress(1.0);
 		int totaltimerinseconds = (this.timerhourmg * 3600) + (this.timerminutemg * 60) + this.timersecondmg;
 		
@@ -238,9 +239,9 @@ public class GameTime {
 			
 			System.out.println("NUEVO TIEMPO REMOVE: "+horas+"h "+minutos+"m "+segundos+"s");
 
-			
-			this.bossbartime = 1.0 / totaltimertime;
-			boss.setProgress(this.bossbarpro);
+			this.bossbartotal = totaltimertime;
+//			this.bossbartime = 1.0 / totaltimertime;
+//			boss.setProgress(this.bossbarpro);
 			
 			
 			this.showremovetime = 3;
@@ -256,9 +257,9 @@ public class GameTime {
 			setTimersecondmg(0);
 			
 			System.out.println("NUEVO TIEMPO REMOVE: 0 0 0 ");
-
-			this.bossbartime = 1.0 / 0.0;
-		    boss.setProgress(this.bossbarpro);
+			this.bossbartotal = 0;
+//			this.bossbartime = 1.0 / 0.0;
+//		    boss.setProgress(this.bossbarpro);
 			
 			this.showremovetime = 3;
 		}
@@ -524,11 +525,27 @@ public class GameTime {
 
 	}
 	
+	public long getTotalSecondsofCronomet() {
+		
+		long total = 0;
+		total = (getCronomethour() * 3600) + (getCronometminute() * 60) + getCronometsecond();
+		return total;
+	}
+	
 	private String showTimerFormat(int value) {
 		 String val = String.format("%02d", value);
 		 return val;
 	}
 	
-	
+	public String getSecondsConvertToCronomet(long seconds) {
+		long totaltimertime = seconds;
+		long horas = totaltimertime / 3600;
+		long minutos = (totaltimertime % 3600) / 60;
+		long segundos = totaltimertime % 60;
+		 String seg = String.format("%02d", segundos);
+		 String min = String.format("%02d", minutos);
+		 String hor = String.format("%02d", horas);
+		return ""+hor+":"+min+":"+seg;
+	}
 	
 }

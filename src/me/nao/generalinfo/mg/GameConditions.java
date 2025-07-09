@@ -235,11 +235,13 @@ public class GameConditions {
 				Block block = player.getLocation().getBlock();
 				Block b = block.getRelative(0, -2, 0);
 				if(b.getType() != Material.STRUCTURE_BLOCK) {
+    				 player.playSound(player.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 20.0F, 1F);
+    				 player.sendMessage("");
 					 player.sendMessage(""+ChatColor.YELLOW+ChatColor.BOLD+" !!! ADVERTENCIA !!!");
 					 player.sendMessage(ChatColor.YELLOW+"- Debes estar dentro de una Zona Segura para Salirte.");
 					 player.sendMessage(ChatColor.YELLOW+"- Oh debes haber muerto.");
 					 player.sendMessage(ChatColor.RED+"⚠ Si te Desconectas fuera de una Zona segura tu Inventario se Dropeara ⚠");
-					 
+					 player.sendMessage("");
 				}else {
 					mgLeaveOfTheGame(player);
 				}
@@ -302,7 +304,7 @@ public class GameConditions {
 			}else {
 				ga.setMapStatus(MapStatus.INCOMPLETE);
 			}
-			
+			 
 			MgScore sco = new MgScore(plugin);
 		
 			for(Player target : player) {
@@ -3180,7 +3182,7 @@ public class GameConditions {
 
 		// SEGUNDA PARTE CALCULO MUESTRA DE MAYOR A MENOR PUNTAJE
 		List<Map.Entry<String, Integer>> list = new ArrayList<>(scores.entrySet());
-
+		
 		 
 		Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
 			public int compare(Map.Entry<String, Integer> e1, Map.Entry<String, Integer> e2) {
@@ -3192,7 +3194,7 @@ public class GameConditions {
 	
 		
 				System.out.println("LOG 1 -------TOP--------");
-				
+				ms.setPlayersTop(list);
 				
 				
 					for(Player player : joins) {

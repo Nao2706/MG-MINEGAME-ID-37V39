@@ -103,6 +103,8 @@ import org.bukkit.inventory.meta.ItemMeta;
             COHETE(""+ChatColor.GOLD+ChatColor.BOLD+"COHETE", Material.FIRE_CHARGE,"fire_aspect,3/knockback,4", 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"40 Netherite",ChatColor.GREEN+"Proyectil:"+ChatColor.RED+" Usalo con una bazuka"),
             COHETEP(""+ChatColor.GOLD+ChatColor.BOLD+"COHETE", Material.FIRE_CHARGE,"fire_aspect,3/knockback,4", 1,ChatColor.GREEN+"Proyectil:"+ChatColor.RED+" Usalo con una bazuka"),
 
+            CHECKPOINTFLAG(""+ChatColor.BLUE+ChatColor.BOLD+"CHECKPOINT DE BANDERAS", Material.LIME_BANNER,"knockback,7", 1,ChatColor.GREEN+"Da Click Derecho para ir al Checkpoint.",ChatColor.GREEN+"de una Bandera.",ChatColor.AQUA+"Usalo de Forma Infinita."),
+
             
             ZOMBIPALO(""+ChatColor.RED+ChatColor.BOLD+"ANTI-LOOT", Material.STICK,"knockback,7", 1,ChatColor.GREEN+"Aparece por tu ambicion."),
             ARROWDIS(""+ChatColor.RED+ChatColor.BOLD+"ARROW DISPENSER 1", Material.BLAZE_ROD,"knockback,7", 1,ChatColor.GREEN+"Genera flechas por dispensador. "),

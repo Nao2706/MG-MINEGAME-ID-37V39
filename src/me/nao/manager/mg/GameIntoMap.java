@@ -361,6 +361,8 @@ public class GameIntoMap {
 						Fireworks f = new Fireworks(player);
 						f.spawnFireballGreenLarge();
 						player.sendMessage(ChatColor.GREEN+"Has Sobrevivido Felicidades.");
+						pl.setTotalSecondsOfCronomet(gm.getGameTime().getTotalSecondsofCronomet());
+						pl.setPlayerCronomet(gm.getGameTime().getSecondsConvertToCronomet(gm.getGameTime().getTotalSecondsofCronomet()));
 						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.GREEN+" Sobrevivio y Gano.");
 						isTheRankedGames(player,gm.isRankedMap());
 					 return;
@@ -371,7 +373,9 @@ public class GameIntoMap {
 			}else if(motivo == StopMotive.WIN && gm.getGameType() == GameType.RESISTENCE) {
 				
 				if(gm.getGameStatus() == GameStatus.JUGANDO || gm.getGameStatus() == GameStatus.PAUSE || gm.getGameStatus() == GameStatus.FREEZE) {
-					
+					pl.setTotalSecondsOfCronomet(gm.getGameTime().getTotalSecondsofCronomet());
+					pl.setPlayerCronomet(gm.getGameTime().getSecondsConvertToCronomet(gm.getGameTime().getTotalSecondsofCronomet()));
+
 					gmc.EndTptoSpawn(player, mapa);
 					isTheRankedGames(player,gm.isRankedMap());
 				}
@@ -388,7 +392,7 @@ public class GameIntoMap {
 					Block b = block.getRelative(0, -1, 0);
 					Block b2 = block.getRelative(0, -2, 0);
 					if(player.getGameMode() == GameMode.ADVENTURE && b.getType() == Material.LIME_STAINED_GLASS && b2.getType() == Material.BEACON) {
-						
+						 
 						ObjetivesInGame(player,mapa);
 						return;
 					}
@@ -407,7 +411,7 @@ public class GameIntoMap {
 		GameConditions gmc = new GameConditions(plugin);
 		GameInfo gm = plugin.getGameInfoPoo().get(mapa);
 		GameObjetivesMG gomg = gm.getGameObjetivesMg();
-
+		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		if(gomg.isNecessaryObjetivePrimary() && !gomg.isNecessaryObjetiveSedondary()) {
 			if(gmc.isAllPrimaryObjetivesComplete(player, mapa)) {
 				
@@ -417,6 +421,8 @@ public class GameIntoMap {
 					player.setGameMode(GameMode.SPECTATOR);
 					Fireworks f = new Fireworks(player);
 					f.spawnFireballGreenLarge();
+					
+
 					gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.GREEN+" llego a la Meta.");
 					
 				}if(gm.getGameType() == GameType.RESISTENCE) {
@@ -424,6 +430,8 @@ public class GameIntoMap {
 					gmc.playerArriveToTheWin(player, mapa);
 					gmc.EndTptoSpawn(player, mapa);
 				}
+				pl.setTotalSecondsOfCronomet(gm.getGameTime().getTotalSecondsofCronomet());
+				pl.setPlayerCronomet(gm.getGameTime().getSecondsConvertToCronomet(gm.getGameTime().getTotalSecondsofCronomet()));
 				isTheRankedGames(player,gm.isRankedMap());
 			}else {
 				if(gm.getGameType() == GameType.ADVENTURE) {
@@ -440,6 +448,7 @@ public class GameIntoMap {
 			return;
 		}else if(!gomg.isNecessaryObjetivePrimary() && gomg.isNecessaryObjetiveSedondary()) {
 			if(gmc.isAllSecondaryObjetivesComplete(player, mapa)) {
+				
 				if(gm.getGameType() == GameType.ADVENTURE) {
 					gmc.playerArriveToTheWin(player, mapa);
 					player.sendMessage(ChatColor.GREEN+"Has llegado a la Meta.");
@@ -452,6 +461,8 @@ public class GameIntoMap {
 					gmc.playerArriveToTheWin(player, mapa);
 					gmc.EndTptoSpawn(player, mapa);
 				}
+				pl.setTotalSecondsOfCronomet(gm.getGameTime().getTotalSecondsofCronomet());
+				pl.setPlayerCronomet(gm.getGameTime().getSecondsConvertToCronomet(gm.getGameTime().getTotalSecondsofCronomet()));
 				isTheRankedGames(player,gm.isRankedMap());
 			}else{
 				
@@ -468,6 +479,7 @@ public class GameIntoMap {
 			
 			return;
 		}else if(gomg.isNecessaryObjetivePrimary() && gomg.isNecessaryObjetiveSedondary()) {
+			
 			if(gmc.isAllPrimaryObjetivesComplete(player, mapa) && gmc.isAllSecondaryObjetivesComplete(player, mapa)) {
 				if(gm.getGameType() == GameType.ADVENTURE) {
 					gmc.playerArriveToTheWin(player, mapa);
@@ -481,6 +493,8 @@ public class GameIntoMap {
 					gmc.playerArriveToTheWin(player, mapa);
 					gmc.EndTptoSpawn(player, mapa);
 				}
+				pl.setTotalSecondsOfCronomet(gm.getGameTime().getTotalSecondsofCronomet());
+				pl.setPlayerCronomet(gm.getGameTime().getSecondsConvertToCronomet(gm.getGameTime().getTotalSecondsofCronomet()));
 				isTheRankedGames(player,gm.isRankedMap());
 			}else {
 				if(gm.getGameType() == GameType.ADVENTURE) {
@@ -508,6 +522,8 @@ public class GameIntoMap {
 				gmc.playerArriveToTheWin(player, mapa);
 				gmc.EndTptoSpawn(player, mapa);
 			}
+			pl.setTotalSecondsOfCronomet(gm.getGameTime().getTotalSecondsofCronomet());
+			pl.setPlayerCronomet(gm.getGameTime().getSecondsConvertToCronomet(gm.getGameTime().getTotalSecondsofCronomet()));
 			isTheRankedGames(player,gm.isRankedMap());
 			return;
 		}

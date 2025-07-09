@@ -3,6 +3,7 @@ package me.nao.generalinfo.mg;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Location;
 import org.bukkit.boss.BossBar;
@@ -33,7 +34,7 @@ public class GameInfo {
 	private boolean pvp,barriers,allowinventory,ranked,deleinventorybytimeout,hascooldown,cleanmapfromentitys;
 	private GameTime gt;
 	private FileConfiguration data;
-	
+	private List<Map.Entry<String, Integer>> top ;
 	// @param GameInfo Sirve para modo aventura y resistencia
 	/**
 	 * Constructor Base para futuros tipos de Juegos 
@@ -59,6 +60,7 @@ public class GameInfo {
 		this.cuboidzones = new ArrayList<>();
 		this.generators = new ArrayList<>();
 		this.mobsgenerators = new ArrayList<>();
+		this.top = new ArrayList<>();
 		this.pvp = false;
 		this.barriers = true;
 		this.allowinventory = false;
@@ -79,7 +81,7 @@ public class GameInfo {
 		this.cleanmapfromentitys = true;
 		
 	}
-	
+
 	
 	public String getMapName() {
 		return name;
@@ -241,6 +243,10 @@ public class GameInfo {
 		return data;
 	}
 	
+	public List<Map.Entry<String, Integer>> getPlayersTop(){
+		return top;
+	}
+	
 	public void setMapName(String name) {
 		this.name = name;
 	}
@@ -391,6 +397,10 @@ public class GameInfo {
 	
 	public void setMapTimeCooldown(String cooldown) {
 		this.cooldown = cooldown;
+	}
+	
+	public void setPlayersTop(List<Map.Entry<String, Integer>> top) {
+		this.top = top;
 	}
 
 	public String ShowGame() {
