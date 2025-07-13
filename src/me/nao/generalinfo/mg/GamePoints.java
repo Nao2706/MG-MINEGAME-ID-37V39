@@ -19,6 +19,7 @@ public class GamePoints {
 		this.revive = 0;
 		this.helprevive = 0;
 		this.damage = 0;
+		this.time = 0;
 	}
 
 
@@ -34,14 +35,14 @@ public class GamePoints {
 		return revive;
 	}
 	
-	public long getDamage() {
+	public long getDamage() {		
 		return damage;
 	}
 	
 	public int getHelpRevive() {
 		return helprevive;
 	}
-	
+
 	public long getCronometSeconds() {
 		return time;
 	}

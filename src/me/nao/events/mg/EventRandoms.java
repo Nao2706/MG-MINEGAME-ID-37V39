@@ -76,6 +76,7 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerGameModeChangeEvent;
@@ -160,7 +161,16 @@ public class EventRandoms implements Listener{
 		
 	}
 	
-	
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void sleepmg(PlayerBedEnterEvent e) {
+		
+		Player player = (Player) e.getPlayer();
+		GameConditions gc = new GameConditions(plugin);
+		
+		if(gc.isPlayerinGame(player)) {
+			e.setCancelled(true);
+		}
+	}
 	
  
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -721,6 +731,7 @@ public class EventRandoms implements Listener{
 		        			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		        			
 		        			if(pl.getCheckPointMarker() == null) {
+		        				player.setCooldown(Items.CHECKPOINTFLAG.getValue(), 20*10);
 		        				player.sendMessage(ChatColor.RED+"No tienes Ningun CheckPoint Marcado.");
 		        				player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 20.0F, 1F);
 		        				return;

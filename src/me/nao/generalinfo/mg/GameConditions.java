@@ -3142,6 +3142,8 @@ public class GameConditions {
 	}
 	
 	
+
+	
 	   //TODO TOP
    	public void topGame(String map) {
    					FileConfiguration message = plugin.getMessage();
@@ -3194,7 +3196,7 @@ public class GameConditions {
 	
 		
 				System.out.println("LOG 1 -------TOP--------");
-				ms.setPlayersTop(list);
+				//ms.setPlayersTop(list);
 				
 				
 					for(Player player : joins) {

@@ -303,39 +303,51 @@ public class SourceOfDamage implements Listener{
 				
 				//if(player.hasPermission("mg.toxiczone")) {
 				Block block = player.getLocation().getBlock();
-				Block c1 = block.getRelative(0, 1, 0);
+				Block c1 = block.getRelative(0, 0, 0);
 				Block c2 = block.getRelative(0, -2, 0);
 				
-				 if(c1.getType() == Material.LIME_BANNER && c2.getType() == Material.STRUCTURE_BLOCK) {
-					 PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
-					 if(!player.getInventory().containsAtLeast(Items.CHECKPOINTFLAG.getValue(),1)) {
-						 player.getInventory().addItem(Items.CHECKPOINTFLAG.getValue());
-					 }
-					 if(pl.getCheckPointMarker() != null) {
-						 if(pl.getCheckPointMarker().equals(block.getLocation())) {
-							 player.sendMessage(ChatColor.RED+"La Ubicacion ya esta Guardada, encuentra otro sitio para Sobreescribir los Datos.");
-							 return;
-						 }else {
-			        		 player.sendTitle(""+ChatColor.BLUE+ChatColor.BOLD+">>> "+ChatColor.GREEN+ChatColor.BOLD+"CHECKPOINT GUARDADO"+ChatColor.BLUE+ChatColor.BOLD+"  <<<",ChatColor.YELLOW+"Punto de Control", 20, 40, 20);
-
-							 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, block.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */25, 0.5, 1, 0.5, /* velocidad */0, null, true);
-							 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
-							 player.sendMessage(ChatColor.GREEN+"La Ubicacion se Guardado. (Ubicacion Sobreescrita) , Utiliza el Item de CheckPoint de Banderas para regresar.\"");
-							 pl.setCheckpointLocationMg(block.getLocation());
 					
+				
+				
+				
+				if(player.getGameMode() == GameMode.ADVENTURE) {
+					
+					if(c1.getType() == Material.LIME_BANNER && c2.getType() == Material.STRUCTURE_BLOCK) {
+						 PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+						 if(!player.getInventory().containsAtLeast(Items.CHECKPOINTFLAG.getValue(),1)) {
+							 player.getInventory().addItem(Items.CHECKPOINTFLAG.getValue());
 						 }
-					 }else {
-		        		 player.sendTitle(""+ChatColor.BLUE+ChatColor.BOLD+">>> "+ChatColor.GREEN+ChatColor.BOLD+"CHECKPOINT GUARDADO"+ChatColor.BLUE+ChatColor.BOLD+"  <<<",ChatColor.YELLOW+"Punto de Control", 20, 40, 20);
- 
+						 if(pl.getCheckPointMarker() != null) {
+							 if(pl.getCheckPointMarker().equals(block.getLocation())) {
+								 return;
+							 }else {
+					   		 player.sendTitle(""+ChatColor.BLUE+ChatColor.BOLD+">>> "+ChatColor.GREEN+ChatColor.BOLD+"CHECKPOINT GUARDADO"+ChatColor.BLUE+ChatColor.BOLD+"  <<<",ChatColor.YELLOW+"Punto de Control", 20, 40, 20);
+					
+								 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, block.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */25, 0.5, 1, 0.5, /* velocidad */0, null, true);
+								 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+								 player.sendMessage(ChatColor.GREEN+"La Ubicacion se Guardado. (Ubicacion Sobreescrita) , Utiliza el Item de CheckPoint de Banderas para regresar.\"");
+								 pl.setCheckpointLocationMg(block.getLocation());
+						
+							 }
+						 }else {
+							 player.sendTitle(""+ChatColor.BLUE+ChatColor.BOLD+">>> "+ChatColor.GREEN+ChatColor.BOLD+"CHECKPOINT GUARDADO"+ChatColor.BLUE+ChatColor.BOLD+"  <<<",ChatColor.YELLOW+"Punto de Control", 20, 40, 20);
+					
+					
+							 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, block.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */25, 0.5, 1, 0.5, /* velocidad */0, null, true);
+					
+							 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+							 player.sendMessage(ChatColor.GREEN+"La Ubicacion se Guardado, Utiliza el Item de CheckPoint de Banderas para regresar.");
+							 pl.setCheckpointLocationMg(block.getLocation());
+						 }
+						 
+					}
+					
+				}
+				
 			
-						 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, block.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */25, 0.5, 1, 0.5, /* velocidad */0, null, true);
+			
+				
 
-						 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
-						 player.sendMessage(ChatColor.GREEN+"La Ubicacion se Guardado, Utiliza el Item de CheckPoint de Banderas para regresar.");
-						 pl.setCheckpointLocationMg(block.getLocation());
-					 }
-					 
-				 }
 				
 				
 				if(player.getScoreboardTags().contains("Toxic") && player.getGameMode() == GameMode.ADVENTURE) {

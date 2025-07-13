@@ -46,6 +46,7 @@ import me.nao.generalinfo.mg.GameConditions;
 import me.nao.generalinfo.mg.GameInfo;
 import me.nao.generalinfo.mg.GameObjetivesMG;
 import me.nao.generalinfo.mg.PlayerInfo;
+import me.nao.generalinfo.mg.TimeRecord;
 import me.nao.main.mg.Minegame;
 import me.nao.revive.mg.RevivePlayer;
 import me.nao.shop.mg.MinigameShop1;
@@ -78,10 +79,14 @@ public class GameIntoMap {
 			List<String> deaths = ga.getDeadPlayers();
 			
 		 	player.playSound(player.getLocation(), Sound.BLOCK_SHULKER_BOX_OPEN, 20.0F, 1F);
-			if(!player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND), 35)) {
-				player.sendMessage(ChatColor.RED+"Necesitas 35 Diamantes para Revivir a ese Jugador");
-				return;
-			}
+		 	
+		 
+		 		if(!player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND), 35)) {
+					player.sendMessage(ChatColor.RED+"Necesitas 35 Diamantes para Revivir a ese Jugador");
+					return;
+				}
+		 	
+			
 			
 			if(!deaths.contains(name)) {
 				
@@ -101,7 +106,7 @@ public class GameIntoMap {
 				
 				
 					GameConditions cm = new GameConditions(plugin);
-					cm.setHeartsInGame(player, mapa);
+					cm.setHeartsInGame(target, mapa);
 					cm.revivePlayerToGame(target, mapa);
 				
 					cm.setKitMg(target);
@@ -121,19 +126,25 @@ public class GameIntoMap {
 					MgTeams t = new MgTeams(plugin);
 					t.JoinTeamLifeMG(target);
 					
-					target.teleport(l);
+					
 					target.setGameMode(GameMode.ADVENTURE);
 					healPlayer(target);
 					pl.setPlayerGameStatus(PlayerGameStatus.ALIVE);
+					
+			
+					target.teleport(l);
 					target.sendTitle(ChatColor.GREEN+"Fuiste Revivido",ChatColor.GREEN+"por: "+ChatColor.YELLOW+player.getName(),20,60,20);
 					target.sendMessage(ChatColor.WHITE+"Fuiste Revivido por: "+ChatColor.GREEN+player.getName());
 					player.sendMessage(ChatColor.GREEN+"Reviviste a: "+ChatColor.GOLD+target.getName());
-	
-					cm.sendMessageToUsersOfSameMapLessTwoPlayers(player, target,ChatColor.GOLD+player.getName()+ChatColor.GREEN+" Revivio a "+ChatColor.WHITE+target.getName());
+		
+					cm.sendMessageToUsersOfSameMapLessTwoPlayers(player, target,""+ChatColor.RED+ChatColor.BOLD+"+ "+ChatColor.GOLD+player.getName()+ChatColor.GREEN+" Revivio a "+ChatColor.WHITE+target.getName());
+
+						
+						 //BORRAR ICONO DE MUERTE
+					player.getInventory().removeItem(new ItemStack(Material.DIAMOND,35));
 
 					
-					 //BORRAR ICONO DE MUERTE
-					player.getInventory().removeItem(new ItemStack(Material.DIAMOND,35));
+				
 					pl.getGamePoints().setHelpRevive(pl.getGamePoints().getHelpRevive()+1);
 					
 					PlayerInfo targetrevive = plugin.getPlayerInfoPoo().get(target);
@@ -147,6 +158,8 @@ public class GameIntoMap {
 					 }else {
 						 player.closeInventory();
 					 }
+				
+
 		}
 		
 				
@@ -198,12 +211,12 @@ public class GameIntoMap {
 					target.sendTitle(ChatColor.GREEN+"Fuiste Revivido",ChatColor.GREEN+"por: "+ChatColor.YELLOW+player.getName(),20,60,20);
 					target.sendMessage(ChatColor.WHITE+"Fuiste Revivido por: "+ChatColor.GREEN+player.getName());
 					cm.sendMessageToUserAndConsole(player,ChatColor.GREEN+"Reviviste a: "+ChatColor.GOLD+target.getName());
-					cm.sendMessageToUsersOfSameMapLessTwoPlayers(player,target,ChatColor.GOLD+player.getName()+ChatColor.GREEN+" Revivio a "+ChatColor.WHITE+target.getName());
+					cm.sendMessageToUsersOfSameMapLessTwoPlayers(player,target,""+ChatColor.RED+ChatColor.BOLD+"+ "+ChatColor.GOLD+player.getName()+ChatColor.GREEN+" Revivio a "+ChatColor.WHITE+target.getName());
 				}else {
 					target.sendTitle(ChatColor.GREEN+"Fuiste Revivido",ChatColor.GREEN+"por: "+ChatColor.YELLOW+"Consola",20,60,20);
 					target.sendMessage(ChatColor.WHITE+"Fuiste Revivido por: "+ChatColor.GREEN+"Consola");
 					cm.sendMessageToUserAndConsole(null,ChatColor.GREEN+"Reviviste a: "+ChatColor.GOLD+target.getName());
-					cm.sendMessageToUsersOfSameMapLessTwoPlayers(null,target,ChatColor.GOLD+"Consola"+ChatColor.GREEN+" Revivio a "+ChatColor.WHITE+target.getName());
+					cm.sendMessageToUsersOfSameMapLessTwoPlayers(null,target,""+ChatColor.RED+ChatColor.BOLD+"+ "+ChatColor.GOLD+"Consola"+ChatColor.GREEN+" Revivio a "+ChatColor.WHITE+target.getName());
 
 				}
 				
@@ -361,8 +374,7 @@ public class GameIntoMap {
 						Fireworks f = new Fireworks(player);
 						f.spawnFireballGreenLarge();
 						player.sendMessage(ChatColor.GREEN+"Has Sobrevivido Felicidades.");
-						pl.setTotalSecondsOfCronomet(gm.getGameTime().getTotalSecondsofCronomet());
-						pl.setPlayerCronomet(gm.getGameTime().getSecondsConvertToCronomet(gm.getGameTime().getTotalSecondsofCronomet()));
+						pl.setPlayerCronomet(new TimeRecord(player.getName(),gm.getGameTime().getGameCronometForPlayer()));
 						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.GREEN+" Sobrevivio y Gano.");
 						isTheRankedGames(player,gm.isRankedMap());
 					 return;
@@ -373,8 +385,7 @@ public class GameIntoMap {
 			}else if(motivo == StopMotive.WIN && gm.getGameType() == GameType.RESISTENCE) {
 				
 				if(gm.getGameStatus() == GameStatus.JUGANDO || gm.getGameStatus() == GameStatus.PAUSE || gm.getGameStatus() == GameStatus.FREEZE) {
-					pl.setTotalSecondsOfCronomet(gm.getGameTime().getTotalSecondsofCronomet());
-					pl.setPlayerCronomet(gm.getGameTime().getSecondsConvertToCronomet(gm.getGameTime().getTotalSecondsofCronomet()));
+					pl.setPlayerCronomet(new TimeRecord(player.getName(),gm.getGameTime().getGameCronometForPlayer()));
 
 					gmc.EndTptoSpawn(player, mapa);
 					isTheRankedGames(player,gm.isRankedMap());
@@ -391,11 +402,52 @@ public class GameIntoMap {
 					Block block = player.getLocation().getBlock();
 					Block b = block.getRelative(0, -1, 0);
 					Block b2 = block.getRelative(0, -2, 0);
-					if(player.getGameMode() == GameMode.ADVENTURE && b.getType() == Material.LIME_STAINED_GLASS && b2.getType() == Material.BEACON) {
-						 
-						ObjetivesInGame(player,mapa);
-						return;
+					Block b3 = block.getRelative(0, -3, 0);
+					
+					
+					if(!ga.getSpectators().contains(player.getName())) {
+						if(player.getGameMode() == GameMode.ADVENTURE) {
+							if(b.getType() == Material.LIME_STAINED_GLASS && b2.getType() == Material.BEACON && b3.getType() == Material.BEDROCK) {
+								 
+								ObjetivesInGame(player,mapa);
+								return;
+							}
+						}
+					
+						if(player.getGameMode() == GameMode.SPECTATOR && pl.getPlayerGameStatus() == PlayerGameStatus.DEAD) {
+							Block c1 = block.getRelative(0, 0, 0);
+							Block c2 = block.getRelative(0, -2, 0);
+							if(c1.getType() == Material.LIME_BANNER && c2.getType() == Material.STRUCTURE_BLOCK) {
+								 if(pl.getCheckPointMarker() != null) {
+									 if(pl.getCheckPointMarker().equals(block.getLocation())) {
+										 pl.getGamePoints().setHelpRevive(pl.getGamePoints().getHelpRevive()+1);
+										 player.sendTitle(""+ChatColor.BLUE+ChatColor.BOLD+">>> "+ChatColor.GREEN+ChatColor.BOLD+"RESPAWNEANDO EN CHECKPOINT"+ChatColor.BLUE+ChatColor.BOLD+"  <<<",ChatColor.YELLOW+"Reviviendo en Punto de Control", 20, 40, 20);
+										 player.setGameMode(GameMode.ADVENTURE);
+										 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, block.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */25, 0.5, 1, 0.5, /* velocidad */0, null, true);
+										 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+										 player.teleport( new Location(pl.getCheckPointMarker().getWorld(),pl.getCheckPointMarker().getX(), pl.getCheckPointMarker().getY(), pl.getCheckPointMarker().getZ(),player.getLocation().getYaw(),player.getLocation().getPitch()).add(0.5, 0, 0.5));
+										 player.sendMessage(ChatColor.GREEN+"Te Reviviste con: "+ChatColor.AQUA+"Bandera de CheckPoint");
+										
+										gmc.sendMessageToUsersOfSameMapLessPlayer(player,""+ChatColor.RED+ChatColor.BOLD+"+ "+ChatColor.AQUA+"Bandera de CheckPoint"+ChatColor.GREEN+" Revivio a "+ChatColor.WHITE+player.getName());
+
+										 return;
+									 }else {
+										 player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"XXX "+ChatColor.YELLOW+ChatColor.BOLD+"CHECKPOINT FALLIDO"+ChatColor.RED+ChatColor.BOLD+"  XXX",ChatColor.YELLOW+"Ese CheckPoint no esta Marcado.", 20, 40, 20);
+										 return;
+									 }
+								 }else {
+									 player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"XXX "+ChatColor.YELLOW+ChatColor.BOLD+"CHECKPOINT FALLIDO"+ChatColor.RED+ChatColor.BOLD+"  XXX",ChatColor.YELLOW+"Nunca Marcaste un CheckPoint", 20, 40, 20);
+
+								 }
+							
+								return;
+							}
+						}
+						
+						
 					}
+				
+					
 				}
 			
 				
@@ -430,8 +482,7 @@ public class GameIntoMap {
 					gmc.playerArriveToTheWin(player, mapa);
 					gmc.EndTptoSpawn(player, mapa);
 				}
-				pl.setTotalSecondsOfCronomet(gm.getGameTime().getTotalSecondsofCronomet());
-				pl.setPlayerCronomet(gm.getGameTime().getSecondsConvertToCronomet(gm.getGameTime().getTotalSecondsofCronomet()));
+				pl.setPlayerCronomet(new TimeRecord(player.getName(),gm.getGameTime().getGameCronometForPlayer()));
 				isTheRankedGames(player,gm.isRankedMap());
 			}else {
 				if(gm.getGameType() == GameType.ADVENTURE) {
@@ -461,8 +512,7 @@ public class GameIntoMap {
 					gmc.playerArriveToTheWin(player, mapa);
 					gmc.EndTptoSpawn(player, mapa);
 				}
-				pl.setTotalSecondsOfCronomet(gm.getGameTime().getTotalSecondsofCronomet());
-				pl.setPlayerCronomet(gm.getGameTime().getSecondsConvertToCronomet(gm.getGameTime().getTotalSecondsofCronomet()));
+				pl.setPlayerCronomet(new TimeRecord(player.getName(),gm.getGameTime().getGameCronometForPlayer()));
 				isTheRankedGames(player,gm.isRankedMap());
 			}else{
 				
@@ -493,8 +543,7 @@ public class GameIntoMap {
 					gmc.playerArriveToTheWin(player, mapa);
 					gmc.EndTptoSpawn(player, mapa);
 				}
-				pl.setTotalSecondsOfCronomet(gm.getGameTime().getTotalSecondsofCronomet());
-				pl.setPlayerCronomet(gm.getGameTime().getSecondsConvertToCronomet(gm.getGameTime().getTotalSecondsofCronomet()));
+				pl.setPlayerCronomet(new TimeRecord(player.getName(),gm.getGameTime().getGameCronometForPlayer()));
 				isTheRankedGames(player,gm.isRankedMap());
 			}else {
 				if(gm.getGameType() == GameType.ADVENTURE) {
@@ -522,8 +571,8 @@ public class GameIntoMap {
 				gmc.playerArriveToTheWin(player, mapa);
 				gmc.EndTptoSpawn(player, mapa);
 			}
-			pl.setTotalSecondsOfCronomet(gm.getGameTime().getTotalSecondsofCronomet());
-			pl.setPlayerCronomet(gm.getGameTime().getSecondsConvertToCronomet(gm.getGameTime().getTotalSecondsofCronomet()));
+			pl.setPlayerCronomet(new TimeRecord(player.getName(),gm.getGameTime().getGameCronometForPlayer()));
+		
 			isTheRankedGames(player,gm.isRankedMap());
 			return;
 		}

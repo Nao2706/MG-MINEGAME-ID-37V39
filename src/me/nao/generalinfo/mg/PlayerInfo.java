@@ -30,13 +30,14 @@ public class PlayerInfo {
 	private int lvlxp , mglvl, mgprestige;
 	private float xp;
 	private Location l;
-	private String map , cronomet;
+	private String map;
 	private GamePoints gp;
 	private String teamname;
 	private Set<String> tags;
 	private SystemOfLevels sl;
 	private Location checkpoint;
-	private long totalsecondscronomet;
+	private TimeRecord tr;
+
 	
 	/** 
 	 *Crear Objeto PlayerInfo para poder definir si en un juego este entrara sin sus cosas(inventario , vida , posiones , exp ) variante que guarda su inventario y otra informacion.
@@ -62,8 +63,8 @@ public class PlayerInfo {
 			this.mglvl = 0;
 			this.tags = player.getScoreboardTags();
 			this.checkpoint = null;
-			this.cronomet = "Sin Datos";
-			this.totalsecondscronomet = 0;
+		
+			
 		}else{
 			this.pgs = pgs;
 			this.plugin = plugin;
@@ -87,9 +88,10 @@ public class PlayerInfo {
 			this.mgprestige = 0;
 			this.tags = player.getScoreboardTags();
 			this.checkpoint = null;
-			this.cronomet = "Sin Datos";
-			this.totalsecondscronomet = 0;
+
+		
 		}
+		tr = null;
 		sl = null;
 		
 	}
@@ -147,10 +149,6 @@ public class PlayerInfo {
 		return xp;
 	}
 	
-	public long getTotalSecondsOfCronomet() {
-		return totalsecondscronomet;
-	}
-	
 	public Location getLocationMG() {
 		return l;
 	}
@@ -171,8 +169,8 @@ public class PlayerInfo {
 		return teamname;
 	}
 	
-	public String getPlayerCronomet() {
-		return cronomet;
+	public TimeRecord getPlayerCronomet() {
+		return tr;
 	}
 	
 	public int getMgPlayerLvl() {
@@ -235,10 +233,6 @@ public class PlayerInfo {
 		this.xp = xp;
 	}
 	
-	public void setTotalSecondsOfCronomet(long totalsecondscronomet) {
-		this.totalsecondscronomet = totalsecondscronomet;
-	}
-	
 	public void setLocationMg(Location lo) {
 		this.l = lo;
 	}
@@ -255,8 +249,8 @@ public class PlayerInfo {
 		this.teamname = teamname;
 	}
 	
-	public void setPlayerCronomet(String cronomet) {
-		this.cronomet = cronomet;
+	public void setPlayerCronomet(TimeRecord tr) {
+		this.tr = tr;
 	}
 	
 	public void setMgPlayerLvl(int value) {

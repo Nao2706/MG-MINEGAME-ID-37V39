@@ -1,9 +1,17 @@
 package me.nao.generalinfo.mg;
 
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BossBar;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import me.nao.enums.mg.GameStatus;
 import me.nao.enums.mg.GameType;
@@ -170,6 +178,7 @@ public class GameTime {
 		
 		System.out.println("NUEVO TIEMPO ADD: "+horas+"h "+minutos+"m "+segundos+"s");
 		this.bossbartotal = totaltimertime;
+		this.bossbartime = 1.0 / this.bossbartotal;
 		//OCULTE ESTO 2
 //		this.bossbartime = 1.0 / totaltimertime;
 //		boss.setProgress(this.bossbarpro);
@@ -198,6 +207,7 @@ public class GameTime {
 		setTimersecondmg(segundos);
 		System.out.println("NUEVO TIEMPO SET: "+horas+"h "+minutos+"m "+segundos+"s");
 		this.bossbartotal = totaltimertime;
+		this.bossbartime = 1.0 / this.bossbartotal;
 //		this.bossbartime = 1.0 / totaltimertime;
 //		boss.setProgress(this.bossbarpro);
 		
@@ -240,6 +250,7 @@ public class GameTime {
 			System.out.println("NUEVO TIEMPO REMOVE: "+horas+"h "+minutos+"m "+segundos+"s");
 
 			this.bossbartotal = totaltimertime;
+			this.bossbartime = 1.0 / this.bossbartotal;
 //			this.bossbartime = 1.0 / totaltimertime;
 //			boss.setProgress(this.bossbarpro);
 			
@@ -258,6 +269,7 @@ public class GameTime {
 			
 			System.out.println("NUEVO TIEMPO REMOVE: 0 0 0 ");
 			this.bossbartotal = 0;
+			this.bossbartime = 1.0 / this.bossbartotal;
 //			this.bossbartime = 1.0 / 0.0;
 //		    boss.setProgress(this.bossbarpro);
 			
@@ -525,6 +537,14 @@ public class GameTime {
 
 	}
 	
+	public String getGameCronometForPlayer() {
+		
+		 String seg = String.format("%02d", getCronometsecond());
+		 String min = String.format("%02d", getCronometminute());
+		 String hor = String.format("%02d", getCronomethour());
+		return hor+":"+min+":"+seg;
+	}
+	
 	public long getTotalSecondsofCronomet() {
 		
 		long total = 0;
@@ -548,4 +568,38 @@ public class GameTime {
 		return ""+hor+":"+min+":"+seg;
 	}
 	
+	
+	public void setRecordTime(String map) {
+		FileConfiguration record = plugin.getRecordTime();
+		//GameInfo gi = plugin.getGameInfoPoo().get(this.map);
+		HashMap<String,Integer> cronomet =  new HashMap<>();
+		
+//		for(Map.Entry<String, Integer> user : gi.getPlayersTop()) {
+//			//PlayerInfo pl = plugin.getPlayerInfoPoo().get(user);
+//		}
+//		
+		List<Map.Entry<String, Integer>> list = new ArrayList<>(cronomet.entrySet());
+		
+		 
+		Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+			public int compare(Map.Entry<String, Integer> e1, Map.Entry<String, Integer> e2) {
+				return e2.getValue() - e1.getValue();
+			}
+		});
+		
+		if(!record.contains(map)) {
+			
+		
+			
+			List<String> times = record.getStringList(map+".Players-Record-Time");
+			record.set(map+".Players-Record-Time", times);
+			times.add("Hola %player% como estas.");
+			return;
+		}
+		
+
+	
+		
+		
+	}
 }
