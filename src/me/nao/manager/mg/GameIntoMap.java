@@ -357,6 +357,7 @@ public class GameIntoMap {
 		
 		if(gm instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) gm;
+			
 			StopMotive motivo = gm.getStopMotive();
 			List<String> spect = ga.getSpectators();
 			List<String> dead = ga.getDeadPlayers();
@@ -402,7 +403,7 @@ public class GameIntoMap {
 					Block block = player.getLocation().getBlock();
 					Block b = block.getRelative(0, -1, 0);
 					Block b2 = block.getRelative(0, -2, 0);
-					Block b3 = block.getRelative(0, -3, 0);
+					Block b3 = block.getRelative(0, -4, 0);
 					
 					
 					if(!ga.getSpectators().contains(player.getName())) {
@@ -412,14 +413,39 @@ public class GameIntoMap {
 								ObjetivesInGame(player,mapa);
 								return;
 							}
-						}
-					
-						if(player.getGameMode() == GameMode.SPECTATOR && pl.getPlayerGameStatus() == PlayerGameStatus.DEAD) {
+						}else if(player.getGameMode() == GameMode.SPECTATOR && pl.getPlayerGameStatus() == PlayerGameStatus.DEAD) {
 							Block c1 = block.getRelative(0, 0, 0);
 							Block c2 = block.getRelative(0, -2, 0);
 							if(c1.getType() == Material.LIME_BANNER && c2.getType() == Material.STRUCTURE_BLOCK) {
 								 if(pl.getCheckPointMarker() != null) {
 									 if(pl.getCheckPointMarker().equals(block.getLocation())) {
+											
+											GameConditions cm = new GameConditions(plugin);
+											cm.setHeartsInGame(player, mapa);
+											cm.revivePlayerToGame(player, mapa);
+										
+											cm.setKitMg(player);
+											if(gm.getGameObjetivesMg().hasMapObjetives()) {
+												if(player.getInventory().getItemInMainHand() != null) {
+													if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
+														player.getInventory().setItemInMainHand(Items.OBJETIVOSP.getValue());
+														
+													}else {
+														ItemStack item = player.getInventory().getItemInMainHand();
+														player.getWorld().dropItem(player.getLocation(),item);
+														player.getInventory().setItemInMainHand(Items.OBJETIVOSP.getValue());
+													}
+													
+												}
+											}
+											MgTeams t = new MgTeams(plugin);
+											t.JoinTeamLifeMG(player);
+											
+											
+											player.setGameMode(GameMode.ADVENTURE);
+											healPlayer(player);
+											pl.setPlayerGameStatus(PlayerGameStatus.ALIVE);
+										
 										 pl.getGamePoints().setHelpRevive(pl.getGamePoints().getHelpRevive()+1);
 										 player.sendTitle(""+ChatColor.BLUE+ChatColor.BOLD+">>> "+ChatColor.GREEN+ChatColor.BOLD+"RESPAWNEANDO EN CHECKPOINT"+ChatColor.BLUE+ChatColor.BOLD+"  <<<",ChatColor.YELLOW+"Reviviendo en Punto de Control", 20, 40, 20);
 										 player.setGameMode(GameMode.ADVENTURE);
@@ -877,6 +903,8 @@ public class GameIntoMap {
 						Item it = (Item) l.getWorld().spawnEntity(l,EntityType.ITEM);
 						it.setItemStack(itemStack);
 						it.setOwner(player.getUniqueId());
+						it.setUnlimitedLifetime(true);
+					
 					}else {
 						l.getWorld().dropItemNaturally(l, itemStack);
 					}	

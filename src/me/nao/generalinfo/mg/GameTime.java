@@ -178,6 +178,7 @@ public class GameTime {
 		
 		System.out.println("NUEVO TIEMPO ADD: "+horas+"h "+minutos+"m "+segundos+"s");
 		this.bossbartotal = totaltimertime;
+		this.bossbarpro = 1.0;
 		this.bossbartime = 1.0 / this.bossbartotal;
 		//OCULTE ESTO 2
 //		this.bossbartime = 1.0 / totaltimertime;
@@ -207,6 +208,7 @@ public class GameTime {
 		setTimersecondmg(segundos);
 		System.out.println("NUEVO TIEMPO SET: "+horas+"h "+minutos+"m "+segundos+"s");
 		this.bossbartotal = totaltimertime;
+		this.bossbarpro = 1.0;
 		this.bossbartime = 1.0 / this.bossbartotal;
 //		this.bossbartime = 1.0 / totaltimertime;
 //		boss.setProgress(this.bossbarpro);
@@ -250,6 +252,7 @@ public class GameTime {
 			System.out.println("NUEVO TIEMPO REMOVE: "+horas+"h "+minutos+"m "+segundos+"s");
 
 			this.bossbartotal = totaltimertime;
+			this.bossbarpro = 1.0;
 			this.bossbartime = 1.0 / this.bossbartotal;
 //			this.bossbartime = 1.0 / totaltimertime;
 //			boss.setProgress(this.bossbarpro);
@@ -269,6 +272,7 @@ public class GameTime {
 			
 			System.out.println("NUEVO TIEMPO REMOVE: 0 0 0 ");
 			this.bossbartotal = 0;
+			this.bossbarpro = 1.0;
 			this.bossbartime = 1.0 / this.bossbartotal;
 //			this.bossbartime = 1.0 / 0.0;
 //		    boss.setProgress(this.bossbarpro);

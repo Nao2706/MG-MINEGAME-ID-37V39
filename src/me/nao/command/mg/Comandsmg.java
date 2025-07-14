@@ -907,8 +907,8 @@ public class Comandsmg implements CommandExecutor{
 			 			 }
 			 			 
 			 		 }else {
-			 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"/mg time <map> <add,set,remove> <time>");
-			 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Example /mg time Tutorial add 0-2-1 (h-m-s)");
+			 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"/mg timegame <map> <add,set,remove> <time>");
+			 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Example /mg timegame Tutorial add 0-2-1 (h-m-s)");
 			 		 }
 			 			
 				
@@ -3167,8 +3167,8 @@ public class Comandsmg implements CommandExecutor{
 				 			 }
 				 			 
 				 		 }else {
-				 			 player.sendMessage(ChatColor.GREEN+"/mg time <map> <add,set,remove> <time>");
-				 			 player.sendMessage(ChatColor.GREEN+"Example /mg time Tutorial add 0-2-1 (h-m-s)");
+				 			 player.sendMessage(ChatColor.GREEN+"/mg timegame <map> <add,set,remove> <time>");
+				 			 player.sendMessage(ChatColor.GREEN+"Example /mg timegame Tutorial add 0-2-1 (h-m-s)");
 				 		 }
 				 			
 					
