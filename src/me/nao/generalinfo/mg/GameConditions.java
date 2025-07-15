@@ -50,6 +50,7 @@ import org.bukkit.util.Vector;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.ViaAPI;
 
+
 import me.nao.cosmetics.mg.RankPlayer;
 //import me.nao.cosmetics.mg.RankPlayer;
 import me.nao.enums.mg.GameInteractions;
@@ -320,13 +321,13 @@ public class GameConditions {
 				sco.ClearScore(target);
 				restorePlayer(target);
 			}
-			 
+		 	 
 			if(ga.getMapStatus() == MapStatus.COMPLETE) {
 				if(ga.hasMapCooldown()) {
 					setCooldownMap(name, ga.getCooldown());
 				}
 			}
-			
+			//set timer
 			
 				checkGenerator(gi);
 				//System.out.println("LOG END GAME RESULT: "+plugin.getGameInfoPoo().get(name).ShowGame());
@@ -336,6 +337,40 @@ public class GameConditions {
 				plugin.getGameInfoPoo().remove(name);
 				//System.out.println("LOG MAP OF GAMES: "+plugin.getGameInfoPoo().toString());
 
+		}
+		
+	}
+	
+	
+	public void setTimeOfRecordinMao(String map,List<String> participants) {
+		FileConfiguration rt = plugin.getRecordTime();
+		
+		
+	
+		
+		if(!rt.contains(map)) {
+			List<TimeRecord> data = new ArrayList<>();
+			List<String> times = rt.getStringList(map+".Players-Record-Time");
+			rt.set(map+".Players-Record-Time", times);
+			
+			
+			for(Player users : ConvertStringToPlayer(participants)) {
+				PlayerInfo pl = plugin.getPlayerInfoPoo().get(users);
+				data.add(pl.getPlayerCronomet());
+			}
+			 Collections.sort(data, Comparator.comparingLong(TimeRecord::getCronometTotalSeconds));
+			  if(data.size() >= 10) {
+				  //TimeRecord lastmemberoftop = data.get(data.size() - 1);
+			
+				  //TimeRecord utlimolugardeltop = data.get(9);
+				  for(Player users : ConvertStringToPlayer(participants)) {
+					  users.sendMessage("");
+				  }
+			  }
+			
+		}else {
+			
+			
 		}
 		
 	}
@@ -805,24 +840,16 @@ public class GameConditions {
 				List<String> arrivo = ga.getArrivePlayers();
 				List<String> spectador = ga.getSpectators();
 				
-				if(spectador.contains(player.getName())) {
-					return;
-				}
-				if(!arrivo.contains(player.getName())) {
-					return;
-				}
+				if(spectador.contains(player.getName()) || !arrivo.contains(player.getName())) return;
+			
 			}
 			
 			if(ms.getGameType() == GameType.RESISTENCE) {
 				List<String> vivo = ga.getAlivePlayers();
 				List<String> spectador = ga.getSpectators();
 				
-				if(spectador.contains(player.getName())) {
-					return;
-				}
-				if(!vivo.contains(player.getName())) {
-					return;
-				}
+				if(spectador.contains(player.getName()) || !vivo.contains(player.getName())) return;
+				
 			}
 		}	
 		
@@ -963,12 +990,8 @@ public class GameConditions {
 				List<String> arrivo = ga.getArrivePlayers();
 				List<String> spectador = ga.getSpectators();
 				
-				if(spectador.contains(player.getName())) {
-					return;
-				}
-				if(arrivo.contains(player.getName())) {
-					return;
-				}
+				if(spectador.contains(player.getName()) || arrivo.contains(player.getName())) return;
+			
 			}
 			
 			
@@ -976,12 +999,8 @@ public class GameConditions {
 				List<String> vivo = ga.getAlivePlayers();
 				List<String> spectador = ga.getSpectators();
 				
-				if(spectador.contains(player.getName())) {
-					return;
-				}
-				if(vivo.contains(player.getName())) {
-					return;
-				}
+				if(spectador.contains(player.getName()) || vivo.contains(player.getName())) return;
+
 			}
 		
 		}

@@ -727,6 +727,14 @@ public class EventRandoms implements Listener{
 									removeItemstackCustom(player,e.getItem());
 						}
 						
+						if(e.getItem().isSimilar(new ItemStack(Material.FIREWORK_ROCKET))) {
+							player.setCooldown(e.getItem(),20*20);
+						}
+						
+						if(e.getItem().isSimilar(new ItemStack(Material.ENDER_PEARL))) {
+							player.setCooldown(e.getItem(),25*20);
+						}
+						
 						if(e.getItem().isSimilar(Items.CHECKPOINTFLAG.getValue())) {
 		        			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		        			

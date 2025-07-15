@@ -6,27 +6,33 @@ public class TimeRecord {
 
 	
 	
-   private String nombre;
-   private long segundos;
-
+   private String name;
+   private long seconds;
+  
+   
     public TimeRecord(String nombre, String tiempo) {
-        this.nombre = nombre;
+        this.name = nombre;
         String[] partes = tiempo.split(":");
-        this.segundos = Integer.parseInt(partes[0]) * 3600 + Integer.parseInt(partes[1]) * 60 + Integer.parseInt(partes[2]);
+        this.seconds = Integer.parseInt(partes[0]) * 3600 + Integer.parseInt(partes[1]) * 60 + Integer.parseInt(partes[2]);
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getCronometPlayerName() {
+        return name;
     }
 
-    public long getSegundos() {
-        return segundos;
+    public long getCronometTotalSeconds() {
+        return seconds;
     }
 
-    public String getTiempo() {
-        long horas = segundos / 3600;
-        long minutos = (segundos % 3600) / 60;
-        long segundosRestantes = segundos % 60;
+    public void setNewRecord(String name , long segundos) {
+    	this.name = name;
+    	this.seconds = segundos;
+    }
+    
+    public String getCronometTime() {
+        long horas = seconds / 3600;
+        long minutos = (seconds % 3600) / 60;
+        long segundosRestantes = seconds % 60;
         return String.format("%02d:%02d:%02d", horas, minutos, segundosRestantes);
     }
 }
