@@ -876,6 +876,22 @@ public class GameIntoMap {
 	//TODO DROP
 	public void PlayerDropAllItems(Player player) {
 		GameConditions gm = new GameConditions(plugin);
+		
+		
+		if(!gm.isPlayerinGame(player)) {
+			if(player.getInventory().getContents().length >= 1) {
+				for (ItemStack itemStack : player.getInventory().getContents()) {
+					if(itemStack == null) continue;
+					
+						player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
+							
+	                    player.getInventory().removeItem(itemStack);
+	              }
+					player.getInventory().clear(); 
+			}
+			return;
+		}
+		
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		
 		if(player.getInventory().containsAtLeast(Items.SOULP.getValue(), 1)) {

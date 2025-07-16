@@ -50,7 +50,7 @@ public class TabCompletemg implements TabCompleter{
 			arguments.add("set-life");
 			arguments.add("top");
 			arguments.add("check-points");
-			//arguments.add("my-points");
+			arguments.add("dropplayer");
 			arguments.add("goto-checkpoint");
 			arguments.add("deletecheckpoint");
 			arguments.add("reward");
@@ -74,7 +74,7 @@ public class TabCompletemg implements TabCompleter{
 			arguments.add("tp-to-player");
 			arguments.add("misions");
 			arguments.add("message");
-			arguments.add("tittle");
+			arguments.add("title");
 			arguments.add("generator");
 			arguments.add("delgenerator");
 			arguments.add("mobgenerator");
@@ -99,6 +99,7 @@ public class TabCompletemg implements TabCompleter{
 			arguments.add("sudoall");
 			arguments.add("prestiges");
 			arguments.add("xp");
+			arguments.add("maprecordtime");
 			
 			
 		}

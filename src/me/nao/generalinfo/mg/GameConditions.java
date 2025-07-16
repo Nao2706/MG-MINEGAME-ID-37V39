@@ -50,7 +50,6 @@ import org.bukkit.util.Vector;
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.ViaAPI;
 
-
 import me.nao.cosmetics.mg.RankPlayer;
 //import me.nao.cosmetics.mg.RankPlayer;
 import me.nao.enums.mg.GameInteractions;
@@ -301,6 +300,7 @@ public class GameConditions {
 			
 			
 			if(!ga.getArrivePlayers().isEmpty()) {
+				setTimeOfRecordinMap(name,ga.getArrivePlayers());
 				ga.setMapStatus(MapStatus.COMPLETE);
 			}else {
 				ga.setMapStatus(MapStatus.INCOMPLETE);
@@ -342,36 +342,146 @@ public class GameConditions {
 	}
 	
 	
-	public void setTimeOfRecordinMao(String map,List<String> participants) {
-		FileConfiguration rt = plugin.getRecordTime();
-		
-		
+	public void setTimeOfRecordinMap(String map,List<String> participants) {
+			FileConfiguration rt = plugin.getRecordTime();
 	
-		
-		if(!rt.contains(map)) {
 			List<TimeRecord> data = new ArrayList<>();
+		
+			if(!rt.contains(map+".Players-Record-Time")) {
+				
+				List<String> times = rt.getStringList(map+".Players-Record-Time");
+				rt.set(map+".Players-Record-Time", times);
+				
+				
+				for(Player users : ConvertStringToPlayer(participants)) {
+					PlayerInfo pl = plugin.getPlayerInfoPoo().get(users);
+					data.add(pl.getPlayerCronomet());
+				}
+				 Collections.sort(data, Comparator.comparingLong(TimeRecord::getCronometTotalSeconds));
+				 
+				  if(data.size() > 10) {
+					  //TimeRecord lastmemberoftop = data.get(data.size() - 1);
+					  List<TimeRecord> outoftop = data.subList(11, data.size());
+					  TimeRecord lastoftop = data.get(9);
+					  //TimeRecord utlimolugardeltop = data.get(9);
+					  for(TimeRecord users : outoftop) {
+						  Player player = ConvertStringToPlayerAlone(users.getCronometPlayerName());
+						  
+						  if (lastoftop.getCronometTotalSeconds() > users.getCronometTotalSeconds()) {
+							  player.sendMessage(ChatColor.RED+users.getCronometPlayerName() + ChatColor.DARK_GRAY+" Tu tiempo de: "+ChatColor.RED+ users.getCronometTotalSeconds() +  ChatColor.DARK_GRAY+" es demasiado largo para entrar al top. El 10mo mejor Tiempo es de: "+ChatColor.GREEN+lastoftop.getCronometPlayerName()+ ChatColor.DARK_GRAY+" con : " +ChatColor.AQUA+ lastoftop.getCronometTotalSeconds());
+				                //System.out.println("El tiempo de " + users.getCronometPlayerName() + " (" + users.getCronometTotalSeconds() + ") es demasiado largo para entrar al top. El 10mo mejor tiempo es de: "+lastoftop.getCronometPlayerName()+" : " + lastoftop.getCronometTotalSeconds());
+				            }
+						  
+					  }
+				  }
+				  
+				  
+				  int limittop = Math.min(10, data.size());
+				  for(int i = 0; i < limittop;i++) {
+					  times.add(data.get(i).getResult());
+				  }
+				  
+				  
+				  	plugin.getRecordTime().save();
+					plugin.getRecordTime().reload();
+				return;
+			}
+			
+			
+			List<TimeRecord> olddata = new ArrayList<>();
 			List<String> times = rt.getStringList(map+".Players-Record-Time");
-			rt.set(map+".Players-Record-Time", times);
+			
+			
+			for(String regis : times) {
+				String[] split = regis.split("-");
+				olddata.add(new TimeRecord(split[0],split[1]));
+			}
 			
 			
 			for(Player users : ConvertStringToPlayer(participants)) {
 				PlayerInfo pl = plugin.getPlayerInfoPoo().get(users);
 				data.add(pl.getPlayerCronomet());
 			}
-			 Collections.sort(data, Comparator.comparingLong(TimeRecord::getCronometTotalSeconds));
-			  if(data.size() >= 10) {
-				  //TimeRecord lastmemberoftop = data.get(data.size() - 1);
 			
+			
+			
+	        for (TimeRecord nuevoParticipante : data) {
+	           // boolean encontrado = false;
+	            
+	            for (TimeRecord regis : olddata) {
+	            
+	                if (regis.getCronometPlayerName().equals(nuevoParticipante.getCronometPlayerName())) {
+	                	Player player = ConvertStringToPlayerAlone(nuevoParticipante.getCronometPlayerName());
+	                   // encontrado = true;
+	                    if (nuevoParticipante.getCronometTotalSeconds() < regis.getCronometTotalSeconds()) {
+	                    	
+	                    
+	                    	player.sendMessage(ChatColor.AQUA+nuevoParticipante.getCronometPlayerName() + ChatColor.DARK_GRAY+" has roto tu récord! Nuevo tiempo: " +ChatColor.AQUA+ nuevoParticipante.getCronometTime()+" Anterior: "+ChatColor.GREEN+regis.getCronometTime());
+	                        //registro.segundos = nuevoParticipante.getSegundos(); // SETEAR DATOS EN LISTA
+	                        regis.setNewRecord(nuevoParticipante.getCronometPlayerName() ,nuevoParticipante.getCronometTotalSeconds());
+	                         //System.out.println(nuevoParticipante.getCronometPlayerName()+" "+nuevoParticipante.getCronometTime());
+	                       
+	                    } else {
+	                    	player.sendMessage(ChatColor.RED+nuevoParticipante.getCronometPlayerName() +ChatColor.DARK_GRAY+" no alcanzaste a Romper tu récord. "+ChatColor.DARK_GRAY+"Mejor tiempo: " + ChatColor.GREEN+regis.getCronometTime());
+	                    }
+	                    break;
+	                }
+	            }
+//	            if (!encontrado) {
+//	                data.add(nuevoParticipante);
+//	                System.out.println(nuevoParticipante.getCronometPlayerName() + " es un nuevo participante!");
+//	            }
+	        }
+			
+			
+			 Collections.sort(data, Comparator.comparingLong(TimeRecord::getCronometTotalSeconds));
+			 
+			  if(data.size() > 10) {
+				  //TimeRecord lastmemberoftop = data.get(data.size() - 1);
+				  List<TimeRecord> outoftop = data.subList(11, data.size());
+				  TimeRecord lastoftop = data.get(9);
 				  //TimeRecord utlimolugardeltop = data.get(9);
-				  for(Player users : ConvertStringToPlayer(participants)) {
-					  users.sendMessage("");
+				  for(TimeRecord users : outoftop) {
+					  Player player = ConvertStringToPlayerAlone(users.getCronometPlayerName());
+					  
+					  if (lastoftop.getCronometTotalSeconds() > users.getCronometTotalSeconds()) {
+						  player.sendMessage(ChatColor.RED+users.getCronometPlayerName() + ChatColor.DARK_GRAY+" Tu tiempo de: "+ChatColor.RED+ users.getCronometTotalSeconds() +  ChatColor.DARK_GRAY+" es demasiado largo para entrar al top. El 10mo mejor Tiempo es de: "+ChatColor.GREEN+lastoftop.getCronometPlayerName()+ ChatColor.DARK_GRAY+" con : " +ChatColor.AQUA+ lastoftop.getCronometTotalSeconds());
+			                //System.out.println("El tiempo de " + users.getCronometPlayerName() + " (" + users.getCronometTotalSeconds() + ") es demasiado largo para entrar al top. El 10mo mejor tiempo es de: "+lastoftop.getCronometPlayerName()+" : " + lastoftop.getCronometTotalSeconds());
+			            }
+					  
 				  }
 			  }
+			  
+			  rt.set(map+".Players-Record-Time", times);
+			  int limittop = Math.min(10, data.size());
+			  for(int i = 0; i < limittop;i++) {
+				  times.add(data.get(i).getResult());
+			  }
+			  
+			  
+			  
+			plugin.getRecordTime().save();
+			plugin.getRecordTime().reload();
+		
+	}
+	
+	public void showRecordTimeofMap(String map, Player player) {
+		FileConfiguration rt = plugin.getRecordTime();
+		if(!rt.contains(map+".Players-Record-Time")) {
+			sendMessageToUserAndConsole(player,ChatColor.RED+"No hay Registros de Tiempos para el Mapa: "+ ChatColor.GOLD+map);
 			
-		}else {
-			
-			
+			return;
 		}
+		
+		List<String> times = rt.getStringList(map+".Players-Record-Time");
+		sendMessageToUserAndConsole(player,ChatColor.GREEN+"Top Registro de Tiempos de el Mapa: "+ ChatColor.AQUA+map);
+		int pos = 0;
+		for(int i = 0 ;i < times.size();i++) {
+			pos++;
+			String[] split = times.get(i).split("_");
+			sendMessageToUserAndConsole(player,ChatColor.RED+String.valueOf(pos)+"). "+ ChatColor.GREEN+split[0]+" "+ChatColor.GOLD+split[1]);
+		}
+		
 		
 	}
 	

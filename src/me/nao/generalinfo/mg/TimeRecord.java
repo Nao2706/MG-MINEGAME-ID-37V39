@@ -35,6 +35,11 @@ public class TimeRecord {
         long segundosRestantes = seconds % 60;
         return String.format("%02d:%02d:%02d", horas, minutos, segundosRestantes);
     }
+    
+    
+    public String getResult() {
+    	return name+"-"+getCronometTime();
+    }
 }
 
 

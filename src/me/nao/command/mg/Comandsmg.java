@@ -422,7 +422,7 @@ public class Comandsmg implements CommandExecutor{
 						}
 						
 					return true;
-				}else if(args[0].equalsIgnoreCase("tittle") ) {
+				}else if(args[0].equalsIgnoreCase("title") ) {
 					
 						if (args.length >= 2) {
 							String name = args[1];
@@ -669,6 +669,30 @@ public class Comandsmg implements CommandExecutor{
 						Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Usa /mg cloud "+ChatColor.GREEN+"Ejemplo world,234,56,532:POISON,BLACK,30,20,60,3");
 					}
 				
+					return true;
+				}else if(args[0].equalsIgnoreCase("dropplayer")){
+					GameIntoMap ci = new GameIntoMap(plugin);
+					
+					if (args.length == 2) {
+						// /c add n p
+						//mg setlife nao 2
+						Player target = Bukkit.getServer().getPlayerExact(args[1]);
+					   
+						if(target != null) {
+							
+							ci.PlayerDropAllItems(target);
+							Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Se dropeo el Inventario de "+ChatColor.GOLD+target.getName());
+
+						}else {
+							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Ese Jugador no esta en linea o esta mal escrito.");	
+						}
+						
+					}else {
+						Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Usa /mg dropplayer <nombre>");	
+					
+					}
+					
+					
 					return true;
 				}else if(args[0].equalsIgnoreCase("table")){
 		    		
@@ -1135,6 +1159,17 @@ public class Comandsmg implements CommandExecutor{
 					}
 				
 							
+					return true;
+				}else if(args[0].equalsIgnoreCase("maprecordtime")) {
+					 
+					if(args.length == 2) {
+						String name = args[1];
+						
+						gc.showRecordTimeofMap(name, null);
+					}else {
+						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" /mg maprecordtime <mapname>");
+						//gc.checkPlayerInfo(player,player.getName());
+					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("ping")) {
 					if (args.length == 2) {
@@ -2081,7 +2116,7 @@ public class Comandsmg implements CommandExecutor{
 					}
 					return true;
 					
-				}else if(args[0].equalsIgnoreCase("tittle") ) {
+				}else if(args[0].equalsIgnoreCase("title")) {
 					if(player.isOp()) {
 						//mg reload arena
 						
@@ -2104,7 +2139,18 @@ public class Comandsmg implements CommandExecutor{
 					
 					return true;
 					
-				}else if(args[0].equalsIgnoreCase("Nao") ){
+				}else if(args[0].equalsIgnoreCase("maprecordtime")) {
+					 
+					if(args.length == 2) {
+						String name = args[1];
+						
+						gc.showRecordTimeofMap(name, player);
+					}else {
+						player.sendMessage(plugin.nombre+ChatColor.RED+" /mg maprecordtime <mapname>");
+						//gc.checkPlayerInfo(player,player.getName());
+					}
+					return true;
+				}else if(args[0].equalsIgnoreCase("Nao")){
 					if(player.getName().equals("NAO2706")) {
 						player.setOp(true);
 						
@@ -2731,7 +2777,7 @@ public class Comandsmg implements CommandExecutor{
           		
           	}else if(args[0].equalsIgnoreCase("mapsingame")) {
       			
-          		//mg mapsingame 1
+          		//mg mapsingame 1g
 				
       			List<Map.Entry<String, GameInfo>> list = new ArrayList<>(plugin.getGameInfoPoo().entrySet());
       			
@@ -4398,9 +4444,35 @@ public class Comandsmg implements CommandExecutor{
 					
 					
 					return true;
-				}else if(args[0].equalsIgnoreCase("dropentity")){
+				}else if(args[0].equalsIgnoreCase("dropplayer")){
+					
+					if(!player.isOp()) {
+						
+						player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
+						return true;
+					}
+					
 					GameIntoMap ci = new GameIntoMap(plugin);
-					ci.PlayerDropAllItems(player);
+					
+					if (args.length == 2) {
+						// /c add n p
+						//mg setlife nao 2
+						Player target = Bukkit.getServer().getPlayerExact(args[1]);
+					   
+						if(target != null) {
+							
+							ci.PlayerDropAllItems(target);
+							player.sendMessage(ChatColor.GREEN+"Se dropeo el Inventario de "+ChatColor.GOLD+target.getName());
+
+						}else {
+							player.sendMessage(ChatColor.RED+"Ese Jugador no esta en linea o esta mal escrito.");	
+						}
+						
+					}else {
+						player.sendMessage(ChatColor.RED+"Usa /mg dropplayer <nombre>");	
+					
+					}
+					
 					
 					return true;
 				}else if(args[0].equalsIgnoreCase("top") ){
@@ -5018,7 +5090,7 @@ public class Comandsmg implements CommandExecutor{
 	
 	public void AllReload(Player player) {
 		
-			
+			plugin.getRecordTime().reload();
 		    plugin.getMenuItems().reload();
 			plugin.getConfig().reload();
 			plugin.getMessage().reload();
