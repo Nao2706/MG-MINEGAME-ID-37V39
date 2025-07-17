@@ -356,8 +356,12 @@ public class GameConditions {
 				for(Player users : ConvertStringToPlayer(participants)) {
 					PlayerInfo pl = plugin.getPlayerInfoPoo().get(users);
 					data.add(pl.getPlayerCronomet());
+					users.sendMessage(ChatColor.RED+pl.getPlayerCronomet().getCronometPlayerName() + ChatColor.DARK_GRAY+" Tu tiempo fue de: "+ChatColor.GREEN+ pl.getPlayerCronomet().getCronometTime());
 				}
 				 Collections.sort(data, Comparator.comparingLong(TimeRecord::getCronometTotalSeconds));
+				 
+				 
+				 
 				 
 				  if(data.size() > 10) {
 					  //TimeRecord lastmemberoftop = data.get(data.size() - 1);
@@ -401,12 +405,14 @@ public class GameConditions {
 			for(Player users : ConvertStringToPlayer(participants)) {
 				PlayerInfo pl = plugin.getPlayerInfoPoo().get(users);
 				data.add(pl.getPlayerCronomet());
+				users.sendMessage(ChatColor.RED+pl.getPlayerCronomet().getCronometPlayerName() + ChatColor.DARK_GRAY+" Tu tiempo fue de: "+ChatColor.GREEN+ pl.getPlayerCronomet().getCronometTime());
+
 			}
 			
 			
 			
 	        for (TimeRecord nuevoParticipante : data) {
-	           // boolean encontrado = false;
+	         //   boolean encontrado = false;
 	            
 	            for (TimeRecord regis : olddata) {
 	            
@@ -416,24 +422,35 @@ public class GameConditions {
 	                    if (nuevoParticipante.getCronometTotalSeconds() < regis.getCronometTotalSeconds()) {
 	                    	
 	                    
-	                    	player.sendMessage(ChatColor.AQUA+nuevoParticipante.getCronometPlayerName() + ChatColor.DARK_GRAY+" has roto tu récord! Nuevo tiempo: " +ChatColor.AQUA+ nuevoParticipante.getCronometTime()+" Anterior: "+ChatColor.GREEN+regis.getCronometTime());
+	                    	player.sendMessage(ChatColor.AQUA+nuevoParticipante.getCronometPlayerName() + ChatColor.DARK_GRAY+" has roto tu récord! Nuevo tiempo: " +ChatColor.AQUA+ nuevoParticipante.getCronometTime()+ChatColor.GOLD+" Anterior: "+ChatColor.GREEN+regis.getCronometTime());
 	                        //registro.segundos = nuevoParticipante.getSegundos(); // SETEAR DATOS EN LISTA
-	                        regis.setNewRecord(nuevoParticipante.getCronometPlayerName() ,nuevoParticipante.getCronometTotalSeconds());
+	                        //regis.setNewRecord(nuevoParticipante.getCronometPlayerName() ,nuevoParticipante.getCronometTotalSeconds());
 	                         //System.out.println(nuevoParticipante.getCronometPlayerName()+" "+nuevoParticipante.getCronometTime());
 	                       
 	                    } else {
-	                    	player.sendMessage(ChatColor.RED+nuevoParticipante.getCronometPlayerName() +ChatColor.DARK_GRAY+" no alcanzaste a Romper tu récord. "+ChatColor.DARK_GRAY+"Mejor tiempo: " + ChatColor.GREEN+regis.getCronometTime());
+	                    	
+	                    	player.sendMessage(ChatColor.RED+nuevoParticipante.getCronometPlayerName() +ChatColor.DARK_GRAY+" no alcanzaste a Romper tu récord. "+ChatColor.GOLD+"Mejor tiempo: " + ChatColor.GREEN+regis.getCronometTime());
+	                    	nuevoParticipante.setNewRecord(regis.getCronometPlayerName() ,regis.getCronometTotalSeconds());
 	                    }
 	                    break;
 	                }
 	            }
 //	            if (!encontrado) {
 //	                data.add(nuevoParticipante);
-//	                System.out.println(nuevoParticipante.getCronometPlayerName() + " es un nuevo participante!");
+//	                //System.out.println(nuevoParticipante.getCronometPlayerName() + " es un nuevo participante!");
 //	            }
 	        }
-			
-			
+	        
+	    
+	        for (TimeRecord regis : olddata) {
+	        	if(!data.stream().filter(o -> o.getCronometPlayerName().equals(regis.getCronometPlayerName())).findFirst().isPresent()) {
+		    		data.add(regis);
+		    	}
+	        }
+	        
+			// DE MAYOR A MENOR
+	         //Collections.sort(data, Comparator.comparingLong(TimeRecord::getCronometTotalSeconds).reversed());
+	        //DE MENOR A MAYOR
 			 Collections.sort(data, Comparator.comparingLong(TimeRecord::getCronometTotalSeconds));
 			 
 			  if(data.size() > 10) {
@@ -445,7 +462,7 @@ public class GameConditions {
 					  Player player = ConvertStringToPlayerAlone(users.getCronometPlayerName());
 					  
 					  if (lastoftop.getCronometTotalSeconds() > users.getCronometTotalSeconds()) {
-						  player.sendMessage(ChatColor.RED+users.getCronometPlayerName() + ChatColor.DARK_GRAY+" Tu tiempo de: "+ChatColor.RED+ users.getCronometTotalSeconds() +  ChatColor.DARK_GRAY+" es demasiado largo para entrar al top. El 10mo mejor Tiempo es de: "+ChatColor.GREEN+lastoftop.getCronometPlayerName()+ ChatColor.DARK_GRAY+" con : " +ChatColor.AQUA+ lastoftop.getCronometTotalSeconds());
+						  player.sendMessage(ChatColor.RED+users.getCronometPlayerName() + ChatColor.DARK_GRAY+" Tu tiempo de: "+ChatColor.RED+ users.getCronometTotalSeconds() +  ChatColor.DARK_GRAY+" es demasiado largo para entrar al top."+ChatColor.AQUA+" El 10mo mejor Tiempo es de: "+ChatColor.GREEN+lastoftop.getCronometPlayerName()+ ChatColor.DARK_GRAY+" con : " +ChatColor.AQUA+ lastoftop.getCronometTotalSeconds());
 			                //System.out.println("El tiempo de " + users.getCronometPlayerName() + " (" + users.getCronometTotalSeconds() + ") es demasiado largo para entrar al top. El 10mo mejor tiempo es de: "+lastoftop.getCronometPlayerName()+" : " + lastoftop.getCronometTotalSeconds());
 			            }
 					  
@@ -453,6 +470,7 @@ public class GameConditions {
 			  }
 			  
 			  rt.set(map+".Players-Record-Time", times);
+			  times.clear();
 			  int limittop = Math.min(10, data.size());
 			  for(int i = 0; i < limittop;i++) {
 				  times.add(data.get(i).getResult());
@@ -475,14 +493,14 @@ public class GameConditions {
 		
 		List<String> times = rt.getStringList(map+".Players-Record-Time");
 		sendMessageToUserAndConsole(player,ChatColor.GREEN+"Top Registro de Tiempos de el Mapa: "+ ChatColor.AQUA+map);
-		int pos = 0;
-		for(int i = 0 ;i < times.size();i++) {
-			pos++;
-			String[] split = times.get(i).split("_");
-			sendMessageToUserAndConsole(player,ChatColor.RED+String.valueOf(pos)+"). "+ ChatColor.GREEN+split[0]+" "+ChatColor.GOLD+split[1]);
+	
+		for(int i = 0 ;i  < times.size();i++) {
+			
+			String[] split = times.get(i).split("-");
+			sendMessageToUserAndConsole(player,ChatColor.RED+String.valueOf(i+1)+"). "+ ChatColor.GREEN+split[0]+" "+ChatColor.GOLD+split[1]);
 		}
 		
-		
+		return;
 	}
 	
 	public void setCooldownMap(String map , String date) {
