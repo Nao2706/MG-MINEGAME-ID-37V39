@@ -1,17 +1,10 @@
 package me.nao.generalinfo.mg;
 
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BossBar;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import me.nao.enums.mg.GameStatus;
 import me.nao.enums.mg.GameType;
@@ -184,7 +177,7 @@ public class GameTime {
 //		this.bossbartime = 1.0 / totaltimertime;
 //		boss.setProgress(this.bossbarpro);
 		
-		this.showaddedtime = 3;
+		this.showaddedtime = 5;
 		return;
 	}
 	
@@ -258,7 +251,7 @@ public class GameTime {
 //			boss.setProgress(this.bossbarpro);
 			
 			
-			this.showremovetime = 3;
+			this.showremovetime = 5;
 		}else {
 			
 			this.removehour = rhoras;
@@ -277,7 +270,7 @@ public class GameTime {
 //			this.bossbartime = 1.0 / 0.0;
 //		    boss.setProgress(this.bossbarpro);
 			
-			this.showremovetime = 3;
+			this.showremovetime = 5;
 		}
 		
 	
@@ -573,37 +566,4 @@ public class GameTime {
 	}
 	
 	
-	public void setRecordTime(String map) {
-		FileConfiguration record = plugin.getRecordTime();
-		//GameInfo gi = plugin.getGameInfoPoo().get(this.map);
-		HashMap<String,Integer> cronomet =  new HashMap<>();
-		
-//		for(Map.Entry<String, Integer> user : gi.getPlayersTop()) {
-//			//PlayerInfo pl = plugin.getPlayerInfoPoo().get(user);
-//		}
-//		
-		List<Map.Entry<String, Integer>> list = new ArrayList<>(cronomet.entrySet());
-		
-		 
-		Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
-			public int compare(Map.Entry<String, Integer> e1, Map.Entry<String, Integer> e2) {
-				return e2.getValue() - e1.getValue();
-			}
-		});
-		
-		if(!record.contains(map)) {
-			
-		
-			
-			List<String> times = record.getStringList(map+".Players-Record-Time");
-			record.set(map+".Players-Record-Time", times);
-			times.add("Hola %player% como estas.");
-			return;
-		}
-		
-
-	
-		
-		
-	}
 }

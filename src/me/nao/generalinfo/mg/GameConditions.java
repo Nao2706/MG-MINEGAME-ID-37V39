@@ -298,7 +298,7 @@ public class GameConditions {
 			GameAdventure ga = (GameAdventure) gi;
 			List<Player> player = ConvertStringToPlayer(ga.getParticipants());
 			
-			
+			 
 			if(!ga.getArrivePlayers().isEmpty()) {
 				setTimeOfRecordinMap(name,ga.getArrivePlayers());
 				ga.setMapStatus(MapStatus.COMPLETE);
