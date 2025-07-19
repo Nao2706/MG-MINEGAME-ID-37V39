@@ -27,6 +27,7 @@ public class TabCompletemg implements TabCompleter{
 	public List <String> onTabComplete(CommandSender sender, Command cmd,String label,String[]args){
 		
 		if(arguments.isEmpty()) {
+			arguments.add("tntrain");
 			arguments.add("pardon");
 			arguments.add("ban");
 			arguments.add("kick");

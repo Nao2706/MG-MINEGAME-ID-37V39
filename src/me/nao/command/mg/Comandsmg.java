@@ -1028,7 +1028,42 @@ public class Comandsmg implements CommandExecutor{
 				 		  }
 			 		  
 			 		  return true;
-			 	  }else if (args[0].equalsIgnoreCase("cparticle")) {
+			 	  }else if(args[0].equalsIgnoreCase("tntrain")){
+						
+				 		 if(args.length == 4) {
+				 			 String location = args[1];
+				 			 String radius  = args[2];
+				 			 String amount  = args[3];
+				 		
+				 			 
+				 			 String[] split = location.split(",");
+				 			 
+				 			 World world = Bukkit.getWorld(split[0]);
+				 			 if(world == null) {
+				 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El mundo "+ChatColor.GOLD+split[0]+ChatColor.RED+" no existe.");
+				 				 return true;
+				 			 }
+				 			
+				 			 
+				 			 int cant = Integer.valueOf(amount);
+				 			 
+				 			 if(cant == 0) {
+				 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No puedes dejar en 0 el monto.");
+				 				 return true;
+				 			 }
+				 			gc.tntrain(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])), Double.valueOf(radius),Integer.valueOf(amount));
+				 			
+				 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Lluvia enviada a las Coordenadas");
+
+				 			 
+				 		 }else{
+				 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa mg tntrain <world,x,y,z> <radius> <amount>");
+				 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Ejemplo mg tntrain world,12,23,34 10 5");
+				 		 }
+						
+						
+						return true;
+					}else if (args[0].equalsIgnoreCase("cparticle")) {
 			 		//mg lparticle world 124 34 546 234 67 457 smoke 5
 			 		  if(args.length == 10) {
 			 			 World mundo = Bukkit.getWorld(args[1]);
@@ -2160,7 +2195,45 @@ public class Comandsmg implements CommandExecutor{
 					}
 				
 					return true;
-				}else if(args[0].equalsIgnoreCase("cloud") ){
+				}else if(args[0].equalsIgnoreCase("tntrain")){
+					if(!player.isOp()) {
+						player.sendMessage(plugin.nombre+ChatColor.RED+" No tienes Permiso para usar ese comando");
+						return true;
+					  }
+			 		 if(args.length == 4) {
+			 			 String location = args[1];
+			 			 String radius  = args[2];
+			 			 String amount  = args[3];
+			 		
+			 			 
+			 			 String[] split = location.split(",");
+			 			 
+			 			 World world = Bukkit.getWorld(split[0]);
+			 			 if(world == null) {
+			 				player.sendMessage(ChatColor.RED+"El mundo "+ChatColor.GOLD+split[0]+ChatColor.RED+" no existe.");
+			 				 return true;
+			 			 }
+			 			
+			 			 
+			 			 int cant = Integer.valueOf(amount);
+			 			 
+			 			 if(cant == 0) {
+			 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No puedes dejar en 0 el monto.");
+			 				 return true;
+			 			 }
+			 			gc.tntrain(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])), Double.valueOf(radius),Integer.valueOf(amount));
+			 			
+			 			player.sendMessage(ChatColor.GREEN+"Lluvia enviada a las Coordenadas");
+
+			 			 
+			 		 }else{
+			 			player.sendMessage(ChatColor.GREEN+"Usa mg tntrain <world,x,y,z> <radius> <amount>");
+			 			player.sendMessage(ChatColor.GREEN+"Ejemplo mg tntrain world,12,23,34 10 5");
+			 		 }
+					
+					
+					return true;
+				}else if(args[0].equalsIgnoreCase("cloud")){
 					//mg cloud world,1223,34,45:POISON,BLACK,30,20
 					if(args.length == 2) {
 						String data = args[1];

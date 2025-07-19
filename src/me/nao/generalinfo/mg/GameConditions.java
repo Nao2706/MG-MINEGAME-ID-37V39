@@ -41,6 +41,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -5525,6 +5526,29 @@ public class GameConditions {
 		}
 		
 	}
+	
+	
+	public void tntrain(Location center, double radius, int amount) {
+	    for (int i = 0; i < amount; i++) {
+	        // Generar un ángulo aleatorio y una distancia aleatoria dentro del radio
+	        double angulo = Math.random() * 2 * Math.PI;
+	        double distancia = Math.random() * radius;
+	        
+	        // Calcular las coordenadas X y Z
+	        double x = Math.cos(angulo) * distancia;
+	        double z = Math.sin(angulo) * distancia;
+	        
+	        // Crear una nueva ubicación relativa al centro
+	        Location loc = center.clone().add(x, 0, z);
+	        
+	        // Spawnear TNT
+	        TNTPrimed tnt = loc.getWorld().spawn(loc, TNTPrimed.class);
+	        // Puedes configurar el fuse del TNT si lo deseas
+	        tnt.setFuseTicks(5*20);
+	        tnt.setCustomName(ChatColor.RED+"LLUVIA DE TNT");
+	    }
+	}
+	
 	
 	
 }
