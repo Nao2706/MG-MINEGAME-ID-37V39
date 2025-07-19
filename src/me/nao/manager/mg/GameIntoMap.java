@@ -290,7 +290,7 @@ public class GameIntoMap {
 		Block block = player.getLocation().getBlock();
 		Block b = block.getRelative(0, -1, 0);
 		
-		if(b.getType() == Material.BARRIER && player.getGameMode() == GameMode.ADVENTURE || player.getGameMode() == GameMode.ADVENTURE && d != null && d == DamageCause.VOID) {
+		if(b.getType() == Material.BARRIER && player.getGameMode() == GameMode.ADVENTURE || player.getGameMode() == GameMode.ADVENTURE && d != null && d == DamageCause.VOID || d == DamageCause.FALL) {
 			
 			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 			String mapa = pl.getMapName();

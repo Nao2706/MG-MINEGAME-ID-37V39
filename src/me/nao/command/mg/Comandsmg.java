@@ -378,6 +378,39 @@ public class Comandsmg implements CommandExecutor{
 						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg removetag <nombre> <texto>");
 					}
 					return true;
+				}else if(args[0].equalsIgnoreCase("showtags")) {
+					
+				
+					if (args.length == 2) {
+						// /c add n p
+						//mg setlife nao 2
+						Player target = Bukkit.getServer().getPlayerExact(args[1]);
+					    
+					  
+						if(target != null) {
+							//target.setMaxHealth(target.getMaxHealth());
+							if(!target.getScoreboardTags().isEmpty()) {
+								Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" El Jugador "+ChatColor.GOLD+target.getName()+ChatColor.GREEN+" Tiene las Siguientes Tags. ");
+
+								for(String t : target.getScoreboardTags()) {
+									Bukkit.getConsoleSender().sendMessage(t);
+								}
+							}else {
+								Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" El Jugador "+ChatColor.GOLD+target.getName()+ChatColor.GREEN+" no tiene la Tags ");
+
+							}
+							
+							
+						}else {
+							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" El Jugador "+ChatColor.GOLD+args[1]+ChatColor.RED+" no existe. ");
+							
+						}
+						
+						
+					}else {
+						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg showtags <nombre> ");
+					}
+					return true;
 				}else if(args[0].equalsIgnoreCase("isban")) {
 					
 					if(args.length == 2) {
@@ -669,6 +702,16 @@ public class Comandsmg implements CommandExecutor{
 						Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Usa /mg cloud "+ChatColor.GREEN+"Ejemplo world,234,56,532:POISON,BLACK,30,20,60,3");
 					}
 				
+					return true;
+				}else if(args[0].equalsIgnoreCase("tagsingame")) {
+					if(args.length == 1) {
+						gc.showTagsInGame(null,1);
+					}else if(args.length == 2) {
+						int pag = Integer.valueOf(args[1]);
+						
+						gc.showTagsInGame(null,pag);
+					}
+					
 					return true;
 				}else if(args[0].equalsIgnoreCase("dropplayer")){
 					GameIntoMap ci = new GameIntoMap(plugin);
@@ -3661,6 +3704,33 @@ public class Comandsmg implements CommandExecutor{
 					player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg showtags <nombre> ");
 				}
 				return true;
+			}else if(args[0].equalsIgnoreCase("mytags")) {
+				
+						//target.setMaxHealth(target.getMaxHealth());
+						if(!player.getScoreboardTags().isEmpty()) {
+							player.sendMessage(ChatColor.GOLD+player.getName()+ChatColor.GREEN+" Tienes las Siguientes Tags. ");
+
+							for(String t : player.getScoreboardTags()) {
+								player.sendMessage(ChatColor.RED+"- "+ChatColor.GREEN+t);
+							}
+							player.sendMessage(ChatColor.GREEN+"Usa /mg tagsingame para ver el Singficado.");
+							player.sendMessage(ChatColor.RED+"Sino sale algunas es que fue colocada por algun otro Plugin");
+						}else {
+							player.sendMessage(ChatColor.RED+"No tieneS Tags.");
+
+						}
+				
+				return true;
+			}else if(args[0].equalsIgnoreCase("tagsingame")) {
+				if(args.length == 1) {
+					gc.showTagsInGame(player,1);
+				}else if(args.length == 2) {
+					int pag = Integer.valueOf(args[1]);
+					
+					gc.showTagsInGame(player,pag);
+				}
+				
+				return true;
 			}else if(args[0].equalsIgnoreCase("enabled")) {
 					if(!player.isOp()) {
 						
@@ -3908,7 +3978,7 @@ public class Comandsmg implements CommandExecutor{
         				return true;
         			}
         			
-        			player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, player.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */25, 0.5, 1, 0.5, /* velocidad */0, null, true);
+					player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, player.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
 					player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 					
 					//

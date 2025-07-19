@@ -558,7 +558,7 @@ public class EventRandoms implements Listener{
 							 }else {
 				        		 player.sendTitle(""+ChatColor.BLUE+ChatColor.BOLD+">>> "+ChatColor.GREEN+ChatColor.BOLD+"CHECKPOINT GUARDADO"+ChatColor.BLUE+ChatColor.BOLD+"  <<<",ChatColor.YELLOW+"Punto de Control", 20, 40, 20);
 
-								 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, b3.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */25, 0.5, 1, 0.5, /* velocidad */0, null, true);
+								 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, b3.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
 								 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 								 player.sendMessage(ChatColor.GREEN+"La Ubicacion se Guardado. (Ubicacion Sobreescrita)");
 								 pl.setCheckpointLocationMg(b3.getLocation());
@@ -567,7 +567,7 @@ public class EventRandoms implements Listener{
 							 
 			        		 player.sendTitle(""+ChatColor.BLUE+ChatColor.BOLD+">>> "+ChatColor.GREEN+ChatColor.BOLD+"CHECKPOINT GUARDADO"+ChatColor.BLUE+ChatColor.BOLD+"  <<<",ChatColor.YELLOW+"Punto de Control", 20, 40, 20);
 
-							 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, b3.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */25, 0.5, 1, 0.5, /* velocidad */0, null, true);
+							 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, b3.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
 
 							 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 							 player.sendMessage(ChatColor.GREEN+"La Ubicacion se Guardado.");
@@ -699,7 +699,7 @@ public class EventRandoms implements Listener{
 						if(e.getItem().isSimilar(Items.DASHP.getValue())) {
 							
 							if(!player.hasCooldown(Items.DASHP.getValue())) {
-								player.setCooldown(Items.DASHP.getValue(), 10 * 20);
+								player.setCooldown(Items.DASHP.getValue(), 20 * 20);
 								player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 20.0F, 1F);
 								player.setVelocity(player.getLocation().getDirection().multiply(5).setY(1));
 								
@@ -727,13 +727,24 @@ public class EventRandoms implements Listener{
 									removeItemstackCustom(player,e.getItem());
 						}
 						
-						if(e.getItem().isSimilar(new ItemStack(Material.FIREWORK_ROCKET))) {
-							player.setCooldown(e.getItem(),20*20);
+						if(!player.getScoreboardTags().contains("Rockets")) {
+							if(e.getItem().isSimilar(new ItemStack(Material.FIREWORK_ROCKET))) {
+								player.setCooldown(e.getItem(),25*20);
+							}
+						}else {
+							player.sendMessage(ChatColor.RED+"No puedes usar los Fireworks Rocket");
+						}
+					
+						
+						if(!player.getScoreboardTags().contains("Enderpearls")) {
+							if(e.getItem().isSimilar(new ItemStack(Material.ENDER_PEARL))) {
+								player.setCooldown(e.getItem(),30*20);
+							}
+						}else {
+							player.sendMessage(ChatColor.RED+"No puedes usar las Enderpearls");
 						}
 						
-						if(e.getItem().isSimilar(new ItemStack(Material.ENDER_PEARL))) {
-							player.setCooldown(e.getItem(),25*20);
-						}
+						
 						
 						if(e.getItem().isSimilar(Items.CHECKPOINTFLAG.getValue())) {
 		        			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
@@ -1184,8 +1195,12 @@ public class EventRandoms implements Listener{
 				
 					PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 					 if(entidadAtacada instanceof LivingEntity) {
-						 LivingEntity mob = (LivingEntity) entidadAtacada;
+						    LivingEntity mob = (LivingEntity) entidadAtacada;
 						  	pl.getGamePoints().setDamage(pl.getGamePoints().getDamage()+ConvertDoubleToInt(mob.getHealth()-mob.getAttribute(Attribute.MAX_HEALTH).getBaseValue()));
+						  	if(player.getScoreboardTags().contains("Instakillmob")) {
+						  		mob.setHealth(0);
+						  	}
+						  	
 					 }
 					 
 					  if(entidadAtacada instanceof Player || entidadAtacada instanceof Villager) {
@@ -3166,6 +3181,19 @@ public class EventRandoms implements Listener{
 					
 					
 		 public void headShoot(Player player, LivingEntity damage, Projectile projectil) {
+						 
+						 if(player.getScoreboardTags().contains("Instakillmob")) {
+							 damage.setHealth(0);
+							 return;
+						  }
+			 			
+						 if(damage.isInvulnerable() && !player.getScoreboardTags().contains("Invulnerable")) {
+							 
+							 player.sendTitle(ChatColor.RED+"Daño Bloqueado", ChatColor.YELLOW+"Ese Mob es Invulnerable al Daño.", 20, 40, 20);
+							 return;
+						 }
+						 
+						
 						 
 			 			 GameIntoMap c = new GameIntoMap(plugin);
 				         double projectileY = projectil.getLocation().getY();

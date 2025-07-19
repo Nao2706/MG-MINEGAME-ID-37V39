@@ -5528,6 +5528,27 @@ public class GameConditions {
 	}
 	
 	
+	
+	public void showTagsInGame(Player player,int pag) {
+		
+		sendMessageToUserAndConsole(player,""+ChatColor.GREEN+ChatColor.BOLD+"<<< Tags del Juego >>>");
+		List<String> tags = new ArrayList<>();
+		tags.add(""+ChatColor.RED+"Tener estas Tags Pueden ser Ventaja o Desventaja en base al Mapa.");
+		tags.add(""+ChatColor.GOLD+"Toxic: "+ChatColor.WHITE+"Vuelve el Agua y Lava Toxica.");
+		tags.add(""+ChatColor.GOLD+"ToxicZone: "+ChatColor.WHITE+"Vuelve el Agua y Lava Toxica en Zonas Fijas (Por Generadores)");
+		tags.add(""+ChatColor.GOLD+"Rockets: "+ChatColor.WHITE+"Bloquea el uso de Rockets");
+		tags.add(""+ChatColor.GOLD+"Enderpearls: "+ChatColor.WHITE+"Bloquea el uso de Enderpears");
+		tags.add(""+ChatColor.GOLD+"Invulnerable: "+ChatColor.WHITE+"Permite hacer Daño por Headshoot a Mobs");
+		tags.add(""+ChatColor.GOLD+"Instadeadall: "+ChatColor.WHITE+"Moriras Instantaneamente por cualquier Daño.");
+		tags.add(""+ChatColor.GOLD+"Instadeadbyfall: "+ChatColor.WHITE+"Moriras Instantaneamente por cualquier Daño por Caida.");
+		tags.add(""+ChatColor.GOLD+"Instakillmob: "+ChatColor.WHITE+"Eliminaras a Mobs con hacerles Daño.");
+	
+		
+		pagsSystem(player, tags, pag, 10);
+		
+	
+	}
+	
 	public void tntrain(Location center, double radius, int amount) {
 	    for (int i = 0; i < amount; i++) {
 	        // Generar un ángulo aleatorio y una distancia aleatoria dentro del radio

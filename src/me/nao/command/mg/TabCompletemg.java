@@ -90,6 +90,8 @@ public class TabCompletemg implements TabCompleter{
 			arguments.add("addtag");
 			arguments.add("removetag");
 			arguments.add("showtags");
+			arguments.add("tagsingame");
+			arguments.add("mytags");
 			arguments.add("prestige");
 			arguments.add("querylevel");
 			arguments.add("mapsingame");

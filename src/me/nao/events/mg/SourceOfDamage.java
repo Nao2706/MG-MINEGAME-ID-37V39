@@ -323,7 +323,7 @@ public class SourceOfDamage implements Listener{
 							 }else {
 					   		 player.sendTitle(""+ChatColor.BLUE+ChatColor.BOLD+">>> "+ChatColor.GREEN+ChatColor.BOLD+"CHECKPOINT GUARDADO"+ChatColor.BLUE+ChatColor.BOLD+"  <<<",ChatColor.YELLOW+"Punto de Control", 20, 40, 20);
 					
-								 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, block.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */25, 0.5, 1, 0.5, /* velocidad */0, null, true);
+								 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, block.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
 								 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 								 player.sendMessage(ChatColor.GREEN+"La Ubicacion se Guardado. (Ubicacion Sobreescrita) , Utiliza el Item de CheckPoint de Banderas para regresar.\"");
 								 pl.setCheckpointLocationMg(block.getLocation());
@@ -333,7 +333,7 @@ public class SourceOfDamage implements Listener{
 							 player.sendTitle(""+ChatColor.BLUE+ChatColor.BOLD+">>> "+ChatColor.GREEN+ChatColor.BOLD+"CHECKPOINT GUARDADO"+ChatColor.BLUE+ChatColor.BOLD+"  <<<",ChatColor.YELLOW+"Punto de Control", 20, 40, 20);
 					
 					
-							 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, block.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */25, 0.5, 1, 0.5, /* velocidad */0, null, true);
+							 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, block.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
 					
 							 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 							 player.sendMessage(ChatColor.GREEN+"La Ubicacion se Guardado, Utiliza el Item de CheckPoint de Banderas para regresar.");
@@ -1187,9 +1187,60 @@ public class SourceOfDamage implements Listener{
 			if(e instanceof EntityDamageByEntityEvent && isAntiGasMask(player, player.getInventory().getHelmet())) {
 				breakAntiGasMask(player, player.getInventory().getHelmet());
 			}
+			
+			if(player.getScoreboardTags().contains("Instadeadall")) {
+				if(player.getInventory().getItemInMainHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING)) || player.getInventory().getItemInOffHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING)))return;
+					
+					e.setCancelled(true);
+					if(e instanceof EntityDamageByEntityEvent){
+								
+								
+								Entity damager = ((EntityDamageByEntityEvent)e).getDamager();
+						
+								if(gc.isEnabledReviveSystem(pi.getMapName())) {
+									ArmorStand armor = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
+									RevivePlayer pr = new RevivePlayer(player,0,60,ReviveStatus.BLEEDING,damager,null,armor ,plugin);
+									pr.Knocked();
+									plugin.getKnockedPlayer().put(player, pr);
+									
+								}else {
+									ci.GameMobDamagerCauses(player, damager);
+								}
+								return;
+						
+					}else{
+						//bloque de daño por causas externas
+								if(gc.isEnabledReviveSystem(pi.getMapName())) {
+									ArmorStand armor = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
+									RevivePlayer pr = new RevivePlayer(player,0,60,ReviveStatus.BLEEDING,null,e.getCause(),armor ,plugin);
+									pr.Knocked();
+									plugin.getKnockedPlayer().put(player, pr);
+									
+								}else {
+									ci.GameDamageCauses(player, e.getCause());
+								}
+								return;
+					}
+			}
+			
+			if(e.getCause() == DamageCause.FALL && player.getScoreboardTags().contains("Instadeadbyfall")) {
+				if(player.getInventory().getItemInMainHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING)) || player.getInventory().getItemInOffHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING)))return;
+				e.setCancelled(true);
+				if(gc.isEnabledReviveSystem(pi.getMapName())) {
+					ArmorStand armor = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
+					RevivePlayer pr = new RevivePlayer(player,0,60,ReviveStatus.BLEEDING,null,e.getCause(),armor ,plugin);
+					pr.Knocked();
+					plugin.getKnockedPlayer().put(player, pr);
+					
+				}else {
+					ci.GameDamageCauses(player, e.getCause());
+				}
+			}
+			
 			// CUANDO CAE ENCIMA DEL BARRIER RECIBE DAÑO PERO ESTE NO MUERE PERO SE PUEDE MOVER UNOS SEGS
 			if(player.getHealth() > e.getFinalDamage() && e.getCause() == DamageCause.FALL) {
-				ci.GamePlayerFallMap(player,null);
+				ci.GamePlayerFallMap(player,DamageCause.FALL);
+				
 			}if(e.getCause() == DamageCause.VOID) {
 				e.setCancelled(true);
 				ci.GamePlayerFallMap(player,DamageCause.VOID);
