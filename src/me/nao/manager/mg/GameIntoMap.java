@@ -290,63 +290,65 @@ public class GameIntoMap {
 		Block block = player.getLocation().getBlock();
 		Block b = block.getRelative(0, -1, 0);
 		
-		if(b.getType() == Material.BARRIER && player.getGameMode() == GameMode.ADVENTURE || player.getGameMode() == GameMode.ADVENTURE && d != null && d == DamageCause.VOID || d == DamageCause.FALL) {
-			
-			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
-			String mapa = pl.getMapName();
-			GameInfo gi = plugin.getGameInfoPoo().get(mapa);
-			GameConditions gmc = new GameConditions(plugin);
-			
-			if(gmc.hasPlayerACheckPoint(player)) {
-				return;
-			}else if(gmc.hasAntiVoid(player) && gi.getGameType() != GameType.NEXO){
-				
-				gmc.TptoSpawnMapSimple(player);
-				player.sendTitle(ChatColor.GREEN+"Anti Void Activado",ChatColor.GREEN+"No te Caigas",20,60,20);
-				player.sendMessage(ChatColor.GREEN+"- Que suerte el Mapa tiene Anti Void pero Siempre Regresaras al Inicio del Mapa Ojo con el Tiempo.");
-				player.sendMessage(ChatColor.GREEN+"- Mmmm no estoy seguro si el Daño por Caida esta Anulado asi que ten Cuidado.");
-				return;
-				
-			}else {
-				pl.setPlayerGameStatus(PlayerGameStatus.DEAD);
-				pl.getGamePoints().setDeads(pl.getGamePoints().getDeads()+1);
-				player.getInventory().clear(); 
-				player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"TE CAISTE DEL MAPA", 40, 80, 40);
-				
-				if(plugin.CreditKill().containsKey(player)) {
-					Entity mob = plugin.CreditKill().get(player);
-					if(!mob.isDead()) {
-						if(EntityHasName(mob)) {
-							player.sendMessage(ChatColor.RED+"Moriste por que "+ChatColor.YELLOW+"Te Caiste fuera del Mapa mientras escapabas de "+mob.getCustomName());
-							gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"Caerse Fuera del Mapa mientras Trataba de Escapar de "+mob.getCustomName());
+		
+		
+			if(player.getGameMode() == GameMode.ADVENTURE) {
+				if(b.getType() == Material.BARRIER && d == DamageCause.FALL || block.getType() == Material.AIR && d == DamageCause.VOID) {
+					PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+					String mapa = pl.getMapName();
+					GameInfo gi = plugin.getGameInfoPoo().get(mapa);
+					GameConditions gmc = new GameConditions(plugin);
+					
+					if(gmc.hasPlayerACheckPoint(player)) {
+						return;
+					}else if(gmc.hasAntiVoid(player) && gi.getGameType() != GameType.NEXO){
+						
+						gmc.TptoSpawnMapSimple(player);
+						player.sendTitle(ChatColor.GREEN+"Anti Void Activado",ChatColor.GREEN+"No te Caigas",20,60,20);
+						player.sendMessage(ChatColor.GREEN+"- Que suerte el Mapa tiene Anti Void pero Siempre Regresaras al Inicio del Mapa Ojo con el Tiempo.");
+						player.sendMessage(ChatColor.GREEN+"- Mmmm no estoy seguro si el Daño por Caida esta Anulado asi que ten Cuidado.");
+						return;
+						
+					}else {
+						pl.setPlayerGameStatus(PlayerGameStatus.DEAD);
+						pl.getGamePoints().setDeads(pl.getGamePoints().getDeads()+1);
+						player.getInventory().clear(); 
+						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"TE CAISTE DEL MAPA", 40, 80, 40);
+						
+						if(plugin.CreditKill().containsKey(player)) {
+							Entity mob = plugin.CreditKill().get(player);
+							if(!mob.isDead()) {
+								if(EntityHasName(mob)) {
+									player.sendMessage(ChatColor.RED+"Moriste por que "+ChatColor.YELLOW+"Te Caiste fuera del Mapa mientras escapabas de "+mob.getCustomName());
+									gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"Caerse Fuera del Mapa mientras Trataba de Escapar de "+mob.getCustomName());
 
+								}else {
+									player.sendMessage(ChatColor.RED+"Moriste por que "+ChatColor.YELLOW+"Caerte Fuera del Mapa  mientras escapabas de un "+mob.getType());
+									gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"Caerse Fuera del Mapa mientras Trataba de Escapar de un "+mob.getType());
+
+								}
+							}
+							
 						}else {
-							player.sendMessage(ChatColor.RED+"Moriste por que "+ChatColor.YELLOW+"Caerte Fuera del Mapa  mientras escapabas de un "+mob.getType());
-							gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"Caerse Fuera del Mapa mientras Trataba de Escapar de un "+mob.getType());
+							player.sendMessage(ChatColor.RED+"Moriste por que "+ChatColor.YELLOW+"Te caiste fuera del Mapa");
+							gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"Caerse Fuera del Mapa.");
 
 						}
+							player.sendMessage(ChatColor.RED+"\nUsa la hotbar para ver a otros jugadores. "+ChatColor.YELLOW+"\n!!!Solo podras ver a los que estan en tu partida");
+							player.sendMessage(ChatColor.GREEN+"Puedes ser revivido por tus compañeros.\n(Siempre que hayan cofres de Revivir)");
+							
+						 	MgTeams t = new MgTeams(plugin);;
+							t.JoinTeamDeadMG(player);
+							gmc.deadPlayerToGame(player, mapa);
+							gmc.DeathTptoSpawn(player, mapa);
+							player.setGameMode(GameMode.SPECTATOR);
+							
+							
+						
 					}
-					
-				}else {
-					player.sendMessage(ChatColor.RED+"Moriste por que "+ChatColor.YELLOW+"Te caiste fuera del Mapa");
-					gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"Caerse Fuera del Mapa.");
-
 				}
-					player.sendMessage(ChatColor.RED+"\nUsa la hotbar para ver a otros jugadores. "+ChatColor.YELLOW+"\n!!!Solo podras ver a los que estan en tu partida");
-					player.sendMessage(ChatColor.GREEN+"Puedes ser revivido por tus compañeros.\n(Siempre que hayan cofres de Revivir)");
-					
-				 	MgTeams t = new MgTeams(plugin);;
-					t.JoinTeamDeadMG(player);
-					gmc.deadPlayerToGame(player, mapa);
-					gmc.DeathTptoSpawn(player, mapa);
-					player.setGameMode(GameMode.SPECTATOR);
-					
-					
-				
 			}
-			
-		}
-		return;
+		
 	}
 	
 	public void GamePlayerWin(Player player) {

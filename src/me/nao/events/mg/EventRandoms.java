@@ -481,7 +481,7 @@ public class EventRandoms implements Listener{
 		
 		GameConditions gc = new GameConditions(plugin);
 		if(gc.isPlayerinGame(player)) {
-			 
+			if(e.getHand() == EquipmentSlot.OFF_HAND)return;
 				
 				
 				if(e.getAction() == Action.PHYSICAL) {
@@ -731,7 +731,8 @@ public class EventRandoms implements Listener{
 							if(e.getItem().isSimilar(new ItemStack(Material.FIREWORK_ROCKET))) {
 								player.setCooldown(e.getItem(),25*20);
 							}
-						}else {
+						}
+						if(player.getScoreboardTags().contains("Rockets") && e.getItem().isSimilar(new ItemStack(Material.FIREWORK_ROCKET))) {
 							player.sendMessage(ChatColor.RED+"No puedes usar los Fireworks Rocket");
 						}
 					
@@ -740,7 +741,9 @@ public class EventRandoms implements Listener{
 							if(e.getItem().isSimilar(new ItemStack(Material.ENDER_PEARL))) {
 								player.setCooldown(e.getItem(),30*20);
 							}
-						}else {
+						}
+						
+						if(player.getScoreboardTags().contains("Enderpearls") && e.getItem().isSimilar(new ItemStack(Material.ENDER_PEARL))) {
 							player.sendMessage(ChatColor.RED+"No puedes usar las Enderpearls");
 						}
 						
