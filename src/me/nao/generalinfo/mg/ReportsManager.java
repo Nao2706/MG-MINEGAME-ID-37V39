@@ -163,16 +163,18 @@ public class ReportsManager {
 	
 	public boolean HasSancionPlayer(Player player) {
 		FileConfiguration report = plugin.getReportsYaml();
+		GameConditions gc = new GameConditions(plugin);
 		
 		if(!report.contains("Players."+player.getName())) {
-			System.out.println("LOG SI TIENE SANCION: Limpio :)");
+			//System.out.println("LOG SI TIENE SANCION: Limpio :)");
 			return false;
 		}
 		
 		
 		GameReportType statusconfig = GameReportType.valueOf(report.getString("Players."+player.getName()+".Status").toUpperCase());
 		if(statusconfig == GameReportType.BAN) {
-			player.sendMessage(ChatColor.RED+"Estas Baneado Permanentemente de los Juegos de Aventura");
+			player.sendMessage(ChatColor.RED+"Estas Baneado Permanentemente de los Juegos");
+			gc.sendMessageToConsole(ChatColor.GOLD+player.getName()+ChatColor.RED+" Esta Baneado Permanentemente de los Juegos.");
 			return true;
 		}else if(statusconfig == GameReportType.TEMPBAN) {
 			int time = report.getInt("Players."+player.getName()+".TempBanTime");

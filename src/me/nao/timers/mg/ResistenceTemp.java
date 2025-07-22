@@ -259,13 +259,13 @@ public class ResistenceTemp {
 						}
 				
 					   	if(end == 0) {
-					   			System.out.println("ANTES MISION MISION RUN : "+ms.ShowGame());
+					   			//System.out.println("ANTES MISION MISION RUN : "+ms.ShowGame());
 			    	
 								gc.mgEndTheGame(name);
 								gc.endGameActions(name);
 				   
-				    		Bukkit.getScheduler().cancelTask(taskID);	
-				    		System.out.println("SE DETUVO ;)");
+				    		Bukkit.getScheduler().cancelTask(taskID);
+				    		//System.out.println("SE DETUVO ;)");
 					   	}
 				
 						for(Player players : joins) {

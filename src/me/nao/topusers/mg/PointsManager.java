@@ -296,7 +296,7 @@ public class PointsManager {
 				//SE MANTIENE EN EL NIVEL
 			}else{
 				//System.out.println(" "+manager.getReferenceB()+" - "+displayxp +" "+(manager.getReferenceB()-displayxp));
-				System.out.println("DEBUG: "+displayxp+"/"+refer);
+				//System.out.println("DEBUG: "+displayxp+"/"+refer);
 				
 				long result = displayxp > refer ? refer : displayxp;
 				long result2 = result < 0 ? 0 : result;
@@ -960,8 +960,7 @@ public class PointsManager {
         if(current > max) {
         	System.out.println("ERROR:Es mayor "+current+" que "+max+" Percent:["+percent+"-"+current+"/"+max+"] "+"Progress:["+progressBars+"-"+totalBars+"*"+percent+"]");
         
-        	
-     }
+        }
         
         return Strings.repeat(""+ completedColor +ChatColor.BOLD + symbol, (progressBars > totalBars ? totalBars : progressBars)) + Strings.repeat("" + notCompletedColor +ChatColor.BOLD+ symbol,totalBars-fix);
    }

@@ -38,7 +38,7 @@ public class TimeRecord {
     
     
     public String getResult() {
-    	return name+"-"+getCronometTime();
+    	return name+" "+getCronometTime();
     }
 }
 

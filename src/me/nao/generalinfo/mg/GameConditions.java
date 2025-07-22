@@ -398,7 +398,7 @@ public class GameConditions {
 			
 			
 			for(String regis : times) {
-				String[] split = regis.split("-");
+				String[] split = regis.split(" ");
 				olddata.add(new TimeRecord(split[0],split[1]));
 			}
 			
@@ -525,7 +525,7 @@ public class GameConditions {
 		   if(ym.contains("Pre-Lobby")) {
 			   player.getWorld().spawnParticle(Particle.DRAGON_BREATH, player.getLocation().add(0, 1, 0),
 						/* NUMERO DE PARTICULAS */100, 1, 2, 1, /* velocidad */0, null, true);
-			    System.out.println("El jugador "+player.getName()+" fue hacia el prelobby con exito");
+			    //System.out.println("El jugador "+player.getName()+" fue hacia el prelobby con exito");
 			    String[] coords = ym.getString("Pre-Lobby").split("/");
 			    String world = coords[0];
 			    double x = Double.valueOf(coords[1]);
@@ -1349,7 +1349,7 @@ public class GameConditions {
 			    	ga.setCleanMapFromEntitys(hasMapCleanedData(map));
 			    	
 			    	
-			    	System.out.println("LOG-1 MISION: "+ga.ShowGame());
+			    	//System.out.println("LOG-1 MISION: "+ga.ShowGame());
 					
 					plugin.getEntitiesFromFlare().put(map,entities);
 					plugin.getGameInfoPoo().put(map, ga);
@@ -1402,26 +1402,26 @@ public class GameConditions {
 		
 		// NO ESTA INCLUIDO LA CONDICION DE SI AL EMPEZAR EL MAPA CON LOS JUGADORES MINIMOS Y UNO DURANTE LA FASE DE COMENZANDO SE SALE ESTA SE DETENGA
 		 GameInfo ms = plugin.getGameInfoPoo().get(map);
-		 if(ms instanceof GameAdventure) {
+		 
 //			 	CommandsMessage cm = new CommandsMessage(plugin);
 //			 	cm.joinannounce(player,map);
 			 
-				 GameAdventure ga = (GameAdventure) ms;
-				 System.out.println("LOG-2 CANSTART MISION: "+ms.ShowGame());
+				 
+				 //System.out.println("LOG-2 CANSTART MISION: "+ms.ShowGame());
 				 player.sendMessage("");
 				 player.sendMessage(ChatColor.GREEN+"Has Entrado en el Mapa "+ChatColor.translateAlternateColorCodes('&',getNameOfTheMap(map).replace("%player%",player.getName())));
 
-				 player.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.YELLOW+" Te has unido"+ChatColor.RED+" ("+ChatColor.GOLD+ga.getParticipants().size()+ChatColor.YELLOW+"/"+ChatColor.GOLD+ getMaxPlayerMap(map)+ChatColor.RED+")");
+				 player.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.YELLOW+" Te has unido"+ChatColor.RED+" ("+ChatColor.GOLD+ms.getParticipants().size()+ChatColor.YELLOW+"/"+ChatColor.GOLD+ getMaxPlayerMap(map)+ChatColor.RED+")");
 
 				sendMessageToUsersOfSameMapLessPlayer(player,
-				ChatColor.YELLOW+"Se a unido "+ChatColor.GREEN+player.getName()+ChatColor.RED+" ("+ChatColor.GOLD+ga.getParticipants().size()+ChatColor.YELLOW+"/"+ChatColor.GOLD+getMaxPlayerMap(map)+ChatColor.RED+")");
+				ChatColor.YELLOW+"Se a unido "+ChatColor.GREEN+player.getName()+ChatColor.RED+" ("+ChatColor.GOLD+ms.getParticipants().size()+ChatColor.YELLOW+"/"+ChatColor.GOLD+getMaxPlayerMap(map)+ChatColor.RED+")");
 				MgScore sc = new MgScore(plugin);
 				sc.LoadScore(player);
 				
-				 if(getMinPlayerMap(map) > ga.getParticipants().size()) {
+				 if(getMinPlayerMap(map) > ms.getParticipants().size()) {
 					 
 					 int min1 = getMinPlayerMap(map);
-					 min1 = min1 - ga.getParticipants().size();
+					 min1 = min1 - ms.getParticipants().size();
 					 //TEXTO 
 					 if(min1 == 1) {
 						 player.sendMessage(ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugador para empezar.");
@@ -1433,10 +1433,10 @@ public class GameConditions {
 					 } 
 			   }
 				 
-			if(getMinPlayerMap(map) == ga.getParticipants().size()){
+			if(getMinPlayerMap(map) == ms.getParticipants().size()){
 				ms.setGameStatus(GameStatus.COMENZANDO);
 				if(ms.getGameStatus() == GameStatus.COMENZANDO) {
-				     int  segundo = ga.getCountDownStart();
+				     int  segundo = ms.getCountDownStart();
 				
 					 sendMessageToAllUsersOfSameMap(player, ChatColor.GREEN+"\nSe a alcanzado el minimo de Jugadores necesarios.\n"+ChatColor.GOLD+"La partida Comenzara en: "+ChatColor.RED+segundo+ChatColor.GREEN+" segundos.\n ");
 			 
@@ -1458,7 +1458,7 @@ public class GameConditions {
 //					t.Inicio(ms.getMapName());
 				}
 			}
-		 }
+		 
 		return true;
 	}
 	
@@ -3343,7 +3343,7 @@ public class GameConditions {
 		// TERCERA PARTE IMPRIMIR DATOS DE MAYOR A MENOR
 	
 		
-				System.out.println("LOG 1 -------TOP--------");
+				//System.out.println("LOG 1 -------TOP--------");
 				//ms.setPlayersTop(list);
 				
 				
@@ -3469,7 +3469,7 @@ public class GameConditions {
 		// TERCERA PARTE IMPRIMIR DATOS DE MAYOR A MENOR
 		
 		
-				System.out.println("LOG 1-------TOP-------- CONSOLE");
+				//System.out.println("LOG 1-------TOP-------- CONSOLE");
 				
 				
 					if (message.getBoolean("Message.message-top")) {

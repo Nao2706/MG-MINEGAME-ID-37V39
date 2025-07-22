@@ -110,7 +110,7 @@ public class Minegame extends JavaPlugin{
 	PluginDescriptionFile pdffile = getDescription();
 	public String version = pdffile.getVersion();
 	public List<String> autor = pdffile.getAuthors();
-	public String nombre = ""+ChatColor.GREEN+ChatColor.BOLD+"["+ChatColor.RED+ChatColor.BOLD+pdffile.getName()+ChatColor.GREEN+ChatColor.BOLD+"]";
+	public String nombre = ""+ChatColor.GREEN+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+pdffile.getName()+ChatColor.GREEN+ChatColor.BOLD+"]";
 	
 	
 	

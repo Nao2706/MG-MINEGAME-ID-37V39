@@ -283,11 +283,12 @@ public class AdventureTemp {
 						}
 				 
 					   	if(end == 0) {
-					   			System.out.println("ANTES ADVENTURE RUN : "+ms.ShowGame());
+					   			//System.out.println("ANTES ADVENTURE RUN : "+ms.ShowGame());
 								gc.mgEndTheGame(name);
 								gc.endGameActions(name);
 								Bukkit.getScheduler().cancelTask(taskID);	
-								System.out.println("SE DETUVO ;)");
+								//System.out.println("SE DETUVO ;)");
+							    //Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Terminando.");
 				        }
 			 	
 						for(String target : joins) {
