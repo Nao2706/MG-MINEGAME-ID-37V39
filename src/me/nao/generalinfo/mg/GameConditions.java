@@ -495,10 +495,10 @@ public class GameConditions {
 		List<String> times = rt.getStringList(map+".Players-Record-Time");
 		sendMessageToUserAndConsole(player,ChatColor.GREEN+"Top Registro de Tiempos de el Mapa: "+ ChatColor.AQUA+map);
 	
-		for(int i = 0 ;i  < times.size();i++) {
+		for(int i = 0 ; i  < times.size();i++) {
 			
-			String[] split = times.get(i).split("-");
-			sendMessageToUserAndConsole(player,ChatColor.RED+String.valueOf(i+1)+"). "+ ChatColor.GREEN+split[0]+" "+ChatColor.GOLD+split[1]);
+			String[] split = times.get(i).split(" ");
+			sendMessageToUserAndConsole(player,ChatColor.GREEN+String.valueOf(i+1)+"). "+ ChatColor.GOLD+split[0]+" "+ChatColor.AQUA+split[1]);
 		}
 		
 		return;
