@@ -1149,7 +1149,7 @@ public class GameIntoMap {
 	}
 	
 	public void GameDamageCauses(Player player, EntityDamageEvent.DamageCause c) {
-		  System.out.println("DEBUG TEST2: "+c.toString());
+		  //System.out.println("DEBUG TEST2: "+c.toString());
 			GameConditions gmc = new GameConditions(plugin);
 			if(gmc.hasPlayerACheckPoint(player)) return;
 				List<DamageCause> l = new ArrayList<>();

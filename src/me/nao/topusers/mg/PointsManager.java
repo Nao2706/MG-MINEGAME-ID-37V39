@@ -250,11 +250,11 @@ public class PointsManager {
 				//LA XP DEL JUEGO SE RESTA - POR LA REFERENCIA BASE DEL NUEVO NIVEL EJEMPLO XP 1002 - BASE -1001 = 1 XP RESTANTE
 			
 				//SI POR ALGUNA RAZON FUERA NEGATIVO SERIA 0 (NO DEBERIA ESTAR ESTO AQUI PUESTO QUE SOLO CALCULA SUBIDA)
-				Bukkit.getConsoleSender().sendMessage(""+ChatColor.AQUA+ChatColor.BOLD+player.getName()+""+ChatColor.GREEN+ChatColor.BOLD+" SUBE DE NIVEL DE: "+ChatColor.YELLOW+ChatColor.BOLD+"LVL."+currentlvl+ChatColor.GOLD+ChatColor.BOLD+" >>> A >>> "+ChatColor.GREEN+ChatColor.BOLD+"LVL."+manager2.getPlayerlvl());
+				Bukkit.getConsoleSender().sendMessage(""+ChatColor.AQUA+ChatColor.BOLD+player.getName()+""+ChatColor.GREEN+ChatColor.BOLD+" SUBE DE NIVEL DE: "+ChatColor.GREEN+ChatColor.BOLD+"LVL."+currentlvl+ChatColor.DARK_PURPLE+ChatColor.BOLD+" >>> "+ChatColor.GREEN+ChatColor.BOLD+"A"+ChatColor.DARK_PURPLE+ChatColor.BOLD+" >>> "+ChatColor.AQUA+ChatColor.BOLD+"LVL."+manager2.getPlayerlvl());
 				player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,player.getLocation().add(0.5, 1, 0.5), 100);
 				player.sendMessage("     "+ChatColor.DARK_PURPLE+ChatColor.BOLD+ChatColor.MAGIC+"[]"+ChatColor.GREEN+ChatColor.BOLD+ChatColor.UNDERLINE+" SUBES DE NIVEL "+ChatColor.DARK_PURPLE+ChatColor.BOLD+ChatColor.MAGIC+"[]");
 			  	player.sendMessage("");
-				player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"   DE "+ChatColor.YELLOW+ChatColor.BOLD+"LVL."+currentlvl+ChatColor.GOLD+ChatColor.BOLD+" >>> A >>> "+ChatColor.GREEN+ChatColor.BOLD+"LVL."+manager2.getPlayerlvl());
+				player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"   DE "+ChatColor.GREEN+ChatColor.BOLD+"LVL."+currentlvl+ChatColor.DARK_PURPLE+ChatColor.BOLD+" >>> "+ChatColor.GREEN+ChatColor.BOLD+"A"+ChatColor.DARK_PURPLE+ChatColor.BOLD+" >>> "+ChatColor.AQUA+ChatColor.BOLD+"LVL."+manager2.getPlayerlvl());
 				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"             ["+ChatColor.YELLOW+manager2.getRemaingxp()+ChatColor.GOLD+ChatColor.BOLD+"/"+ChatColor.GREEN+manager2.getReferenceB()+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
 				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"            ["+showProgressBar(manager2.getRemaingxp(), manager2.getReferenceB(),20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
 				player.sendMessage(""+ChatColor.DARK_GRAY+"Total de XP General: "+ChatColor.GREEN+ChatColor.BOLD+(currentplayertotalxpwithchanges < 0 ? 0 : currentplayertotalxpwithchanges));
@@ -272,14 +272,14 @@ public class PointsManager {
 				//PUEDES BAJARLE MAS A 0
 				return;
 			}else if(manager2.getPlayerlvl() < currentlvl && currentlvl != 0) {
-				Bukkit.getConsoleSender().sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+player.getName()+""+ChatColor.RED+ChatColor.BOLD+" BAJA DE NIVEL DE: "+ChatColor.YELLOW+ChatColor.BOLD+"LVL."+currentlvl+ChatColor.GOLD+ChatColor.BOLD+" >>> A >>> "+ChatColor.GREEN+ChatColor.BOLD+"LVL."+manager2.getPlayerlvl());
+				Bukkit.getConsoleSender().sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+player.getName()+""+ChatColor.RED+ChatColor.BOLD+" BAJA DE NIVEL DE: "+ChatColor.GREEN+ChatColor.BOLD+"LVL."+currentlvl+ChatColor.DARK_PURPLE+ChatColor.BOLD+" >>> "+ChatColor.RED+ChatColor.BOLD+"A"+ChatColor.DARK_PURPLE+ChatColor.BOLD+" >>> "+ChatColor.YELLOW+ChatColor.BOLD+"LVL."+manager2.getPlayerlvl());
 
 				//System.out.println(currentplayertotalxpwithchanges+" "+manager2.getReferenceA()+" ="+(currentplayertotalxpwithchanges-manager2.getReferenceA()));
 				//COMO SE RECALCULA DE NUEVO LA XP SE RESTA DEL TOTAL DE XP LA REFERENCIA BASE
 				
 				player.sendMessage("     "+ChatColor.YELLOW+ChatColor.BOLD+ChatColor.MAGIC+"[]"+ChatColor.RED+ChatColor.BOLD+ChatColor.UNDERLINE+" BAJAS DE NIVEL "+ChatColor.YELLOW+ChatColor.BOLD+ChatColor.MAGIC+"[]");
 			  	player.sendMessage("");
-				player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"   DE "+ChatColor.YELLOW+ChatColor.BOLD+"LVL."+currentlvl+ChatColor.GOLD+ChatColor.BOLD+" >>> A >>> "+ChatColor.RED+ChatColor.BOLD+"LVL."+manager2.getPlayerlvl());
+				player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"   DE "+ChatColor.GREEN+ChatColor.BOLD+"LVL."+currentlvl+ChatColor.DARK_PURPLE+ChatColor.BOLD+" >>> "+ChatColor.RED+ChatColor.BOLD+"A"+ChatColor.DARK_PURPLE+ChatColor.BOLD+" >>> "+"LVL."+manager2.getPlayerlvl());
 				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"             ["+ChatColor.YELLOW+manager2.getRemaingxp()+ChatColor.GOLD+ChatColor.BOLD+"/"+ChatColor.GREEN+manager2.getReferenceB()+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
 				player.sendMessage(""+ChatColor.DARK_GRAY+ChatColor.BOLD+"            ["+showProgressBar(manager2.getRemaingxp(), manager2.getReferenceB(),20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.DARK_GRAY+ChatColor.BOLD+"]");
 				player.sendMessage(""+ChatColor.DARK_GRAY+"Total de XP General: "+ChatColor.GREEN+ChatColor.BOLD+(currentplayertotalxpwithchanges < 0 ? 0 : currentplayertotalxpwithchanges));

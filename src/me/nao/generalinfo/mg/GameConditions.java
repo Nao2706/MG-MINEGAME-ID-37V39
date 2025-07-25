@@ -331,12 +331,9 @@ public class GameConditions {
 			//set timer
 			
 				checkGenerator(gi);
-				//System.out.println("LOG END GAME RESULT: "+plugin.getGameInfoPoo().get(name).ShowGame());
-				//System.out.println("ENTIDADES MARCADAS: "+plugin.getEntitiesFromFlare().size());
 				
 				plugin.getEntitiesFromFlare().remove(name);
 				plugin.getGameInfoPoo().remove(name);
-				//System.out.println("LOG MAP OF GAMES: "+plugin.getGameInfoPoo().toString());
 
 		}
 		
@@ -525,7 +522,6 @@ public class GameConditions {
 		   if(ym.contains("Pre-Lobby")) {
 			   player.getWorld().spawnParticle(Particle.DRAGON_BREATH, player.getLocation().add(0, 1, 0),
 						/* NUMERO DE PARTICULAS */100, 1, 2, 1, /* velocidad */0, null, true);
-			    //System.out.println("El jugador "+player.getName()+" fue hacia el prelobby con exito");
 			    String[] coords = ym.getString("Pre-Lobby").split("/");
 			    String world = coords[0];
 			    double x = Double.valueOf(coords[1]);
@@ -1348,9 +1344,7 @@ public class GameConditions {
 			    	ga.setMapTimeCooldown(getMapTimeCooldownData(map));
 			    	ga.setCleanMapFromEntitys(hasMapCleanedData(map));
 			    	
-			    	
-			    	//System.out.println("LOG-1 MISION: "+ga.ShowGame());
-					
+			    						
 					plugin.getEntitiesFromFlare().put(map,entities);
 					plugin.getGameInfoPoo().put(map, ga);
 			    }else if(type == GameType.NEXO) {
@@ -1406,9 +1400,7 @@ public class GameConditions {
 //			 	CommandsMessage cm = new CommandsMessage(plugin);
 //			 	cm.joinannounce(player,map);
 			 
-				 
-				 //System.out.println("LOG-2 CANSTART MISION: "+ms.ShowGame());
-				 player.sendMessage("");
+				 				 player.sendMessage("");
 				 player.sendMessage(ChatColor.GREEN+"Has Entrado en el Mapa "+ChatColor.translateAlternateColorCodes('&',getNameOfTheMap(map).replace("%player%",player.getName())));
 
 				 player.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.YELLOW+" Te has unido"+ChatColor.RED+" ("+ChatColor.GOLD+ms.getParticipants().size()+ChatColor.YELLOW+"/"+ChatColor.GOLD+ getMaxPlayerMap(map)+ChatColor.RED+")");
@@ -1723,20 +1715,19 @@ public class GameConditions {
 	}
 	
 	public boolean isGuardian(Entity e){
-		//System.out.println("MOB :"+e.getType());
+		
 		if(e instanceof LivingEntity) {
 			LivingEntity l = (LivingEntity) e;
 			
 			if(l.getCustomName() == null) return false;
 			 String mobname = ChatColor.stripColor(l.getCustomName());
 			if(mobname.contains("GUARDIA") || mobname.startsWith("GUARDIA")) {
-				//System.out.println("SI");
+				
 				return true;
 			}
 		}if(e instanceof ArmorStand) {
 			return true;
 		}
-		//System.out.println("NO");
 		return false;
 	}
 	 
@@ -3100,7 +3091,7 @@ public class GameConditions {
 				for(int i = 0 ; i < participants.size();i++) {
 					comments = comments+ChatColor.GREEN+participants.get(i)+ChatColor.GOLD+",";
 				}
-				comments = comments+ChatColor.GRAY+ChatColor.BOLD+" PARTICIPARON: "+ChatColor.GREEN+participants.size();
+				comments = comments+ChatColor.GRAY+ChatColor.BOLD+" PARTICIPAN: "+ChatColor.GREEN+participants.size();
 				sendMessageToUserAndConsole(player,comments);
 			}
 			
@@ -3216,8 +3207,7 @@ public class GameConditions {
 				setDefaultHeartsInGame(player);
 				BossBar boss = ms.getBossbar();
 				boss.removePlayer(player);
-				
-				//System.out.println("LOG-1 RESTORE ANTES MAP: "+ms.ShowGame());
+		
 				
 					//SE SECCIONA POR QUE HAY QUE VER SI SE SALVO O NO SU INVENTARIO
 					if(ms.isAllowedJoinWithOwnInventory()) {
@@ -3250,7 +3240,6 @@ public class GameConditions {
 //			    setDefaultHeartsInGame(player);
 //				BossBar boss = ms.getBossbar();
 //				boss.removePlayer(player);
-//				System.out.println("LOG 2 RESTORE ANTES NEXO: "+ms.ShowGame());
 //				
 //					player.teleport(pl.getLocationMG());
 //					pl.restoreAllPlayerMg();
@@ -3342,9 +3331,7 @@ public class GameConditions {
 
 		// TERCERA PARTE IMPRIMIR DATOS DE MAYOR A MENOR
 	
-		
-				//System.out.println("LOG 1 -------TOP--------");
-				//ms.setPlayersTop(list);
+					//ms.setPlayersTop(list);
 				
 				
 					for(Player player : joins) {
@@ -3467,10 +3454,7 @@ public class GameConditions {
 		});
 
 		// TERCERA PARTE IMPRIMIR DATOS DE MAYOR A MENOR
-		
-		
-				//System.out.println("LOG 1-------TOP-------- CONSOLE");
-				
+						
 				
 					if (message.getBoolean("Message.message-top")) {
 						List<String> messagep1 = message.getStringList("Message.message-top-decoracion1");
@@ -3735,7 +3719,6 @@ public class GameConditions {
 					String coord1 = split[0];
 					String coord2 = split[1];
 					String status = split[2];
-					//System.out.println(coord1+" "+coord2+" "+status);
 					
 					zones.add(new CuboidZone(convertStringLocationToLocations(coord1),convertStringLocationToLocations(coord2),convertStringToGameInteractions(status)));
 				}
