@@ -1238,14 +1238,14 @@ public class Comandsmg implements CommandExecutor{
 				
 							
 					return true;
-				}else if(args[0].equalsIgnoreCase("maprecordtime")) {
+				}else if(args[0].equalsIgnoreCase("maprecord")) {
 					 
 					if(args.length == 2) {
 						String name = args[1];
 						
 						gc.showRecordTimeofMap(name, null);
 					}else {
-						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" /mg maprecordtime <mapname>");
+						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" /mg maprecord <mapname>");
 						//gc.checkPlayerInfo(player,player.getName());
 					}
 					return true;
@@ -2217,14 +2217,14 @@ public class Comandsmg implements CommandExecutor{
 					
 					return true;
 					
-				}else if(args[0].equalsIgnoreCase("maprecordtime")) {
+				}else if(args[0].equalsIgnoreCase("maprecord")) {
 					 
 					if(args.length == 2) {
 						String name = args[1];
 						
 						gc.showRecordTimeofMap(name, player);
 					}else {
-						player.sendMessage(plugin.nombre+ChatColor.RED+" /mg maprecordtime <mapname>");
+						player.sendMessage(plugin.nombre+ChatColor.RED+" /mg maprecord <mapname>");
 						//gc.checkPlayerInfo(player,player.getName());
 					}
 					return true;

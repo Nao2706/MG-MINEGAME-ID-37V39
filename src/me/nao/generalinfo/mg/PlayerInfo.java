@@ -36,7 +36,7 @@ public class PlayerInfo {
 	private Set<String> tags;
 	private SystemOfLevels sl;
 	private Location checkpoint;
-	private TimeRecord tr;
+	private MapRecords tr;
 
 	
 	/** 
@@ -169,7 +169,7 @@ public class PlayerInfo {
 		return teamname;
 	}
 	
-	public TimeRecord getPlayerCronomet() {
+	public MapRecords getPlayerCronomet() {
 		return tr;
 	}
 	
@@ -249,7 +249,7 @@ public class PlayerInfo {
 		this.teamname = teamname;
 	}
 	
-	public void setPlayerCronomet(TimeRecord tr) {
+	public void setPlayerCronomet(MapRecords tr) {
 		this.tr = tr;
 	}
 	

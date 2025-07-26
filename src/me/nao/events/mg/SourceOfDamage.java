@@ -1121,7 +1121,7 @@ public class SourceOfDamage implements Listener{
 		aw.setShooter((ProjectileSource) e);
 	}
 	
-	@EventHandler  //TODO MUERTES METODO
+	@EventHandler(priority = EventPriority.LOWEST)  //TODO MUERTES METODO
     public void damageInGame(EntityDamageEvent e){
 		
 		if(e.getEntity().getType() != EntityType.ITEM_FRAME || e.getEntity().getType() != EntityType.GLOW_ITEM_FRAME || e.getEntity().getType() != EntityType.ITEM) {
@@ -1249,9 +1249,9 @@ public class SourceOfDamage implements Listener{
 				if(player.getInventory().getItemInMainHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING)) || player.getInventory().getItemInOffHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING)))return;
 				
 				e.setCancelled(true);
+				
 				if(e instanceof EntityDamageByEntityEvent){
-							
-							
+						
 							Entity damager = ((EntityDamageByEntityEvent)e).getDamager();
 					
 							if(gc.isEnabledReviveSystem(pi.getMapName())) {

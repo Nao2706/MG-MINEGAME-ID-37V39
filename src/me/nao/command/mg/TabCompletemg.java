@@ -102,7 +102,7 @@ public class TabCompletemg implements TabCompleter{
 			arguments.add("sudoall");
 			arguments.add("prestiges");
 			arguments.add("xp");
-			arguments.add("maprecordtime");
+			arguments.add("maprecord");
 			
 			
 		}

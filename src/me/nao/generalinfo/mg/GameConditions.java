@@ -343,7 +343,7 @@ public class GameConditions {
 	public void setTimeOfRecordinMap(String map,List<String> participants) {
 			FileConfiguration rt = plugin.getRecordTime();
 	
-			List<TimeRecord> data = new ArrayList<>();
+			List<MapRecords> data = new ArrayList<>();
 		
 			if(!rt.contains(map+".Players-Record-Time")) {
 				
@@ -356,17 +356,17 @@ public class GameConditions {
 					data.add(pl.getPlayerCronomet());
 					users.sendMessage(ChatColor.RED+pl.getPlayerCronomet().getCronometPlayerName() + ChatColor.DARK_GRAY+" Tu tiempo fue de: "+ChatColor.GREEN+ pl.getPlayerCronomet().getCronometTime());
 				}
-				 Collections.sort(data, Comparator.comparingLong(TimeRecord::getCronometTotalSeconds));
-				 
-				 
+				 //Collections.sort(data, Comparator.comparingLong(MapRecords::getCronometTotalSeconds));
+				 //ORDENA PRIMERO LOS TIEMPOS DE MENOR A MAYOR Y DESPUES LAS KILLS DE MAYOR A MENOR A CAUSA DEL REVERSED
+				 data.sort(Comparator.comparingLong(MapRecords::getCronometTotalSeconds).thenComparingInt(MapRecords::getKills).reversed());
 				 
 				 
 				  if(data.size() > 10) {
 					  //TimeRecord lastmemberoftop = data.get(data.size() - 1);
-					  List<TimeRecord> outoftop = data.subList(11, data.size());
-					  TimeRecord lastoftop = data.get(9);
+					  List<MapRecords> outoftop = data.subList(11, data.size());
+					  MapRecords lastoftop = data.get(9);
 					  //TimeRecord utlimolugardeltop = data.get(9);
-					  for(TimeRecord users : outoftop) {
+					  for(MapRecords users : outoftop) {
 						  Player player = ConvertStringToPlayerAlone(users.getCronometPlayerName());
 						  
 						  if (lastoftop.getCronometTotalSeconds() > users.getCronometTotalSeconds()) {
@@ -390,13 +390,14 @@ public class GameConditions {
 			}
 			
 			
-			List<TimeRecord> olddata = new ArrayList<>();
+			List<MapRecords> olddata = new ArrayList<>();
 			List<String> times = rt.getStringList(map+".Players-Record-Time");
 			
 			
 			for(String regis : times) {
 				String[] split = regis.split(" ");
-				olddata.add(new TimeRecord(split[0],split[1]));
+				int kills = split.length > 2 ? Integer.valueOf(split[2]) : 0 ;
+				olddata.add(new MapRecords(split[0],split[1],kills));
 			}
 			
 			
@@ -409,10 +410,10 @@ public class GameConditions {
 			
 			
 			
-	        for (TimeRecord nuevoParticipante : data) {
+	        for (MapRecords nuevoParticipante : data) {
 	         //   boolean encontrado = false;
 	            
-	            for (TimeRecord regis : olddata) {
+	            for (MapRecords regis : olddata) {
 	            
 	                if (regis.getCronometPlayerName().equals(nuevoParticipante.getCronometPlayerName())) {
 	                	Player player = ConvertStringToPlayerAlone(nuevoParticipante.getCronometPlayerName());
@@ -440,7 +441,7 @@ public class GameConditions {
 	        }
 	        
 	    
-	        for (TimeRecord regis : olddata) {
+	        for (MapRecords regis : olddata) {
 	        	if(!data.stream().filter(o -> o.getCronometPlayerName().equals(regis.getCronometPlayerName())).findFirst().isPresent()) {
 		    		data.add(regis);
 		    	}
@@ -449,14 +450,16 @@ public class GameConditions {
 			// DE MAYOR A MENOR
 	         //Collections.sort(data, Comparator.comparingLong(TimeRecord::getCronometTotalSeconds).reversed());
 	        //DE MENOR A MAYOR
-			 Collections.sort(data, Comparator.comparingLong(TimeRecord::getCronometTotalSeconds));
-			 
+			 //Collections.sort(data, Comparator.comparingLong(MapRecords::getCronometTotalSeconds));
+	         //ORDENA PRIMERO LOS TIEMPOS DE MENOR A MAYOR Y DESPUES LAS KILLS DE MAYOR A MENOR A CAUSA DEL REVERSED
+			 data.sort(Comparator.comparingLong(MapRecords::getCronometTotalSeconds).thenComparingInt(MapRecords::getKills).reversed()); 
+	        
 			  if(data.size() > 10) {
 				  //TimeRecord lastmemberoftop = data.get(data.size() - 1);
-				  List<TimeRecord> outoftop = data.subList(11, data.size());
-				  TimeRecord lastoftop = data.get(9);
+				  List<MapRecords> outoftop = data.subList(11, data.size());
+				  MapRecords lastoftop = data.get(9);
 				  //TimeRecord utlimolugardeltop = data.get(9);
-				  for(TimeRecord users : outoftop) {
+				  for(MapRecords users : outoftop) {
 					  Player player = ConvertStringToPlayerAlone(users.getCronometPlayerName());
 					  
 					  if (lastoftop.getCronometTotalSeconds() > users.getCronometTotalSeconds()) {
@@ -490,12 +493,13 @@ public class GameConditions {
 		}
 		
 		List<String> times = rt.getStringList(map+".Players-Record-Time");
-		sendMessageToUserAndConsole(player,ChatColor.GREEN+"Top Registro de Tiempos de el Mapa: "+ ChatColor.AQUA+map);
+		sendMessageToUserAndConsole(player,ChatColor.GREEN+"Top Registro de Tiempos y Kills de el Mapa: "+ ChatColor.AQUA+map);
 	
 		for(int i = 0 ; i  < times.size();i++) {
 			
 			String[] split = times.get(i).split(" ");
-			sendMessageToUserAndConsole(player,ChatColor.GREEN+String.valueOf(i+1)+"). "+ ChatColor.GOLD+split[0]+" "+ChatColor.AQUA+split[1]);
+			String kills = split.length > 2 ? split[2] : "0" ;
+			sendMessageToUserAndConsole(player,ChatColor.GREEN+String.valueOf(i+1)+"). "+ ChatColor.GOLD+split[0]+" "+ChatColor.GREEN+"T:"+ChatColor.AQUA+split[1]+" "+ChatColor.RED+"K:"+ChatColor.GOLD+kills);
 		}
 		
 		return;

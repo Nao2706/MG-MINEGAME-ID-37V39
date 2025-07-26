@@ -46,7 +46,7 @@ import me.nao.generalinfo.mg.GameConditions;
 import me.nao.generalinfo.mg.GameInfo;
 import me.nao.generalinfo.mg.GameObjetivesMG;
 import me.nao.generalinfo.mg.PlayerInfo;
-import me.nao.generalinfo.mg.TimeRecord;
+import me.nao.generalinfo.mg.MapRecords;
 import me.nao.main.mg.Minegame;
 import me.nao.revive.mg.RevivePlayer;
 import me.nao.shop.mg.MinigameShop1;
@@ -377,7 +377,7 @@ public class GameIntoMap {
 						Fireworks f = new Fireworks(player);
 						f.spawnFireballGreenLarge();
 						player.sendMessage(ChatColor.GREEN+"Has Sobrevivido Felicidades.");
-						pl.setPlayerCronomet(new TimeRecord(player.getName(),gm.getGameTime().getGameCronometForPlayer()));
+						pl.setPlayerCronomet(new MapRecords(player.getName(),gm.getGameTime().getGameCronometForPlayer(),pl.getGamePoints().getKills()));
 						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.GREEN+" Sobrevivio y Gano.");
 						isTheRankedGames(player,gm.isRankedMap());
 					 return;
@@ -388,7 +388,8 @@ public class GameIntoMap {
 			}else if(motivo == StopMotive.WIN && gm.getGameType() == GameType.RESISTENCE) {
 				
 				if(gm.getGameStatus() == GameStatus.JUGANDO || gm.getGameStatus() == GameStatus.PAUSE || gm.getGameStatus() == GameStatus.FREEZE) {
-					pl.setPlayerCronomet(new TimeRecord(player.getName(),gm.getGameTime().getGameCronometForPlayer()));
+					pl.setPlayerCronomet(new MapRecords(player.getName(),gm.getGameTime().getGameCronometForPlayer(),pl.getGamePoints().getKills()));
+
 
 					gmc.EndTptoSpawn(player, mapa);
 					isTheRankedGames(player,gm.isRankedMap());
@@ -510,7 +511,8 @@ public class GameIntoMap {
 					gmc.playerArriveToTheWin(player, mapa);
 					gmc.EndTptoSpawn(player, mapa);
 				}
-				pl.setPlayerCronomet(new TimeRecord(player.getName(),gm.getGameTime().getGameCronometForPlayer()));
+				pl.setPlayerCronomet(new MapRecords(player.getName(),gm.getGameTime().getGameCronometForPlayer(),pl.getGamePoints().getKills()));
+
 				isTheRankedGames(player,gm.isRankedMap());
 			}else {
 				if(gm.getGameType() == GameType.ADVENTURE) {
@@ -540,7 +542,8 @@ public class GameIntoMap {
 					gmc.playerArriveToTheWin(player, mapa);
 					gmc.EndTptoSpawn(player, mapa);
 				}
-				pl.setPlayerCronomet(new TimeRecord(player.getName(),gm.getGameTime().getGameCronometForPlayer()));
+				pl.setPlayerCronomet(new MapRecords(player.getName(),gm.getGameTime().getGameCronometForPlayer(),pl.getGamePoints().getKills()));
+
 				isTheRankedGames(player,gm.isRankedMap());
 			}else{
 				
@@ -571,7 +574,8 @@ public class GameIntoMap {
 					gmc.playerArriveToTheWin(player, mapa);
 					gmc.EndTptoSpawn(player, mapa);
 				}
-				pl.setPlayerCronomet(new TimeRecord(player.getName(),gm.getGameTime().getGameCronometForPlayer()));
+				pl.setPlayerCronomet(new MapRecords(player.getName(),gm.getGameTime().getGameCronometForPlayer(),pl.getGamePoints().getKills()));
+
 				isTheRankedGames(player,gm.isRankedMap());
 			}else {
 				if(gm.getGameType() == GameType.ADVENTURE) {
@@ -599,8 +603,8 @@ public class GameIntoMap {
 				gmc.playerArriveToTheWin(player, mapa);
 				gmc.EndTptoSpawn(player, mapa);
 			}
-			pl.setPlayerCronomet(new TimeRecord(player.getName(),gm.getGameTime().getGameCronometForPlayer()));
-		
+			pl.setPlayerCronomet(new MapRecords(player.getName(),gm.getGameTime().getGameCronometForPlayer(),pl.getGamePoints().getKills()));
+
 			isTheRankedGames(player,gm.isRankedMap());
 			return;
 		}
@@ -743,7 +747,7 @@ public class GameIntoMap {
 		// TERCERA PARTE IMPRIMIR DATOS DE MAYOR A MENOR
 	
 		
-				System.out.println("LOG INTO GAME -------TOP--------");
+				//System.out.println("LOG INTO GAME -------TOP--------");
 				
 						
 						int i = 0;
@@ -1154,9 +1158,6 @@ public class GameIntoMap {
 			if(gmc.hasPlayerACheckPoint(player)) return;
 				List<DamageCause> l = new ArrayList<>();
 				
-				
-				
-				
 				player.sendMessage("");
 				if(plugin.CreditKill().containsKey(player)) {
 					Entity mob = plugin.CreditKill().get(player);
@@ -1245,6 +1246,18 @@ public class GameIntoMap {
 							}else {
 							     player.sendMessage(ChatColor.RED+"Moriste por "+ChatColor.YELLOW+"estar en Llamas mientras Tratabas de Escapar de "+mob.getType());
 								 gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"estar en Llamas mientras Trataba de Escapar de "+mob.getType());
+									     	
+							}
+						}if(c == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION || c == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
+							player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"Explosion.", 40, 80, 40);
+							
+							if(EntityHasName(mob)) {
+								  player.sendMessage(ChatColor.RED+"Moriste por "+ChatColor.YELLOW+"una Explosion mientras Tratabas de Escapar de "+mob.getCustomName());
+								  gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"una Explosion mientras Trataba de Escapar de "+mob.getCustomName());
+										   
+							}else {
+							     player.sendMessage(ChatColor.RED+"Moriste por "+ChatColor.YELLOW+"una Explosion mientras Tratabas de Escapar de "+mob.getType());
+								 gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"una Explosion mientras Trataba de Escapar de "+mob.getType());
 									     	
 							}
 						}else {

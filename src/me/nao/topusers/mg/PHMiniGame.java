@@ -265,6 +265,10 @@ public class PHMiniGame extends PlaceholderExpansion{
         	//mg_objetive_Tutorial,Puerta1
         	return 	getPlayerprestigemg(player);
  
+        }else if(identifier.startsWith("prestigelevel")){
+        	//mg_objetive_Tutorial,Puerta1
+        	return 	getPlayerprestigelvlmg(player);
+ 
         }
         
         // We return null if an invalid placeholder (f.e. %someplugin_placeholder3%) 
@@ -362,6 +366,18 @@ public class PHMiniGame extends PlaceholderExpansion{
 		return text;
 	}
 	
+	public String getPlayerprestigelvlmg(Player player) {
+		FileConfiguration lvl = plugin.getPoints();
+		String text = "";
+		if(lvl.contains("Players."+player.getName())) {
+			text = String.valueOf(lvl.getInt("Players."+player.getName()+".Prestige"));
+			
+		}else {
+			text = String.valueOf(0);	
+		}
+		
+		return text;
+	}
 	
 	
 	
