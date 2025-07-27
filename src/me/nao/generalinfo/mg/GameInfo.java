@@ -19,7 +19,7 @@ public class GameInfo {
 	
 	
 	private String name , time , stopreason ,cooldown;
-	private int minlvltoplay, maxplayers,minplayers, loottablemax , itemspawnrange , spawnmobrange , countdownstart, toxiczonerange, dispenserrange;
+	private int minprestigetoplay , minlvltoplay, maxplayers,minplayers, loottablemax , itemspawnrange , spawnmobrange , countdownstart, toxiczonerange, dispenserrange;
 	private int pointsperkills, pointsperdeads , pointsperrevive ,pointsperhelprevive , pointsbonus , pointsloseporcent;
 	private List<String> participants,spectators;
 	private GameType type;
@@ -79,6 +79,8 @@ public class GameInfo {
 		this.hascooldown = false;
 		this.cooldown = "0,0,0";
 		this.cleanmapfromentitys = true;
+		this.minlvltoplay = 0;
+		this.minprestigetoplay = 0;
 		
 	}
 
@@ -235,7 +237,11 @@ public class GameInfo {
 		return pointsloseporcent;
 	}
 	
-	public int getlvltoPlay() {
+	public int getPrestigelvltoPlay() {
+		return minprestigetoplay;
+	}
+	
+	public int getLvltoPlay() {
 		return minlvltoplay;
 	}
 	
@@ -387,7 +393,11 @@ public class GameInfo {
 		this.data = data;
 	}
 
-	public void setlvltoPlay(int minlvltoplay) {
+	public void setPrestigelvltoPlay(int minprestigetoplay) {
+		this.minprestigetoplay = minprestigetoplay;
+	}
+	
+	public void setLvltoPlay(int minlvltoplay) {
 		this.minlvltoplay = minlvltoplay;
 	}
 

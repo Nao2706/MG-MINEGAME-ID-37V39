@@ -11,7 +11,6 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -71,7 +70,6 @@ public class Minegame extends JavaPlugin{
     
     private Map<Player, PlayerInfo> playerinfopoo;
     private Map<String, GameInfo> misioninfopoo;
-    private Map<Player,Entity> credit;
     private Map<Player, RevivePlayer> playerrevive;
     private Map<Entity,String> guardiancredit;
     private Map<String,LocalDateTime> cooldownmap;
@@ -87,7 +85,6 @@ public class Minegame extends JavaPlugin{
 	private Map<String,YamlFile>getAllYmlsdialog ; 
 	
 	private HashMap <String,String> logsmg ; 
-	private HashMap <Player,Location> checkpoint ; 
 	private HashMap <String,String> cronomet ;
 	private HashMap <String,String> aretime ;
 	private HashMap<Player,Integer>pags;
@@ -327,7 +324,6 @@ public class Minegame extends JavaPlugin{
 	   
 	    playerinfopoo = new HashMap<>();
 	    misioninfopoo = new HashMap<>();
-	    credit = new HashMap<>();
 	    guardiancredit = new HashMap<>();
 	    playerrevive = new HashMap<>();
 	    cooldownmap = new HashMap<>();
@@ -337,7 +333,6 @@ public class Minegame extends JavaPlugin{
 	    entitys = new HashMap<>();
 	    tempcooldown = new HashMap<>();
 	
-		checkpoint = new HashMap<Player,Location>();
 		getAllYmls = new HashMap<>();
 		getAllYmlsdialog  = new HashMap<>();
 	
@@ -408,10 +403,6 @@ public class Minegame extends JavaPlugin{
    
    public Map<String,GameInfo> getGameInfoPoo(){
 	   return misioninfopoo;
-   }
-   
-   public Map<Player,Entity> CreditKill(){
-	   return credit;
    }
    
    public Map<Player,RevivePlayer> getKnockedPlayer(){
@@ -539,10 +530,6 @@ public class Minegame extends JavaPlugin{
 //   }
 //   
   
-   public HashMap <Player,Location> getCheckPoint(){
-	   return checkpoint;
-   }
-   
    public HashMap <String,String> getPlayerCronomets(){
 	   return cronomet;
    }

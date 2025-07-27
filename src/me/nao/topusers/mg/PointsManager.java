@@ -21,6 +21,7 @@ import com.google.common.base.Strings;
 
 import me.nao.cooldown.mg.Cooldown;
 import me.nao.cosmetics.mg.Fireworks;
+import me.nao.cosmetics.mg.RankPlayer;
 import me.nao.generalinfo.mg.GameAdventure;
 import me.nao.generalinfo.mg.GameInfo;
 import me.nao.generalinfo.mg.GamePoints;
@@ -926,20 +927,18 @@ public class PointsManager {
 //		});
 
 		// TERCERA PARTE IMPRIMIR DATOS DE MAYOR A MENOR
-		
+		  RankPlayer rp = new RankPlayer(plugin);
 		  Entry<String, Long> p = list.get(posicion);
 	
 		
 				String texto = message.getString("Top.message-top-global-text");
 				f.append( texto.replaceAll("%player%",p.getKey())
 						.replaceAll("%userxp%", p.getValue().toString())
-						.replaceAll("%userlvl%",  points.getString("Players." + p.getKey() + ".Level"))
+						.replaceAll("%userprestige%", rp.getRankPrestigePlaceHolder(points.getInt("Players."+p.getKey()+".Prestige",0)))
+						.replaceAll("%userprestigelvl%",points.getString("Players."+p.getKey()+".Prestige","0"))
+						.replaceAll("%userlvl%",  points.getString("Players." + p.getKey() + ".Level","0"))
 						.replaceAll("%place%", Integer.toString(posicion+1)));
 			
-		
-		
-		
-		
 		
 		
 		String top = f.toString();
@@ -950,6 +949,8 @@ public class PointsManager {
 	}
 		 
 	}
+
+	
 	
 	public String showProgressBar(long current, long max, int totalBars, char symbol, ChatColor completedColor,ChatColor notCompletedColor) {
 		double percent = (double) current/max;

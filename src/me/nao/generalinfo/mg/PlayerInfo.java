@@ -7,6 +7,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -35,8 +36,9 @@ public class PlayerInfo {
 	private String teamname;
 	private Set<String> tags;
 	private SystemOfLevels sl;
-	private Location checkpoint;
+	private Location checkpoint,itemcheckpoint,respawn;
 	private MapRecords tr;
+	private Entity creditkill;
 
 	
 	/** 
@@ -88,9 +90,12 @@ public class PlayerInfo {
 			this.mgprestige = 0;
 			this.tags = player.getScoreboardTags();
 			this.checkpoint = null;
-
+			this.itemcheckpoint = null;
+			this.respawn = null;
+			
 		
 		}
+		this.creditkill = null;
 		tr = null;
 		sl = null;
 		
@@ -157,6 +162,14 @@ public class PlayerInfo {
 		return checkpoint;
 	}
 	
+	public Location getCheckPointItem() {
+		return itemcheckpoint;
+	}
+	
+	public Location getRespawn() {
+		return respawn;
+	}
+	
 	public String getMapName() {
 		return map;
 	}
@@ -189,6 +202,10 @@ public class PlayerInfo {
 		return sl;
 	}
 
+	public Entity getCreditKillMob() {
+		return creditkill;
+	}
+	
 	public void setPlayerMG(Player player) {
 		this.player = player;
 	}
@@ -241,6 +258,14 @@ public class PlayerInfo {
 		this.checkpoint = checkpoint;
 	}
 	
+	public void setCheckpointItemLocationMg(Location itemcheckpoint) {
+		this.itemcheckpoint = itemcheckpoint;
+	}
+	
+	public void setRespawnLocationMg(Location respawn) {
+		this.respawn = respawn;
+	}
+	
 	public void setMisionName(String map) {
 		this.map = map;
 	}
@@ -263,6 +288,10 @@ public class PlayerInfo {
 	
 	public void setSl(SystemOfLevels sl) {
 		this.sl = sl;
+	}
+	
+	public void setCreditKillMob(Entity creditkill) {
+		 this.creditkill = creditkill;
 	}
 
 

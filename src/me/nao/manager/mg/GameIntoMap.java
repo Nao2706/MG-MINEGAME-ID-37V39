@@ -107,7 +107,7 @@ public class GameIntoMap {
 				
 					GameConditions cm = new GameConditions(plugin);
 					cm.setHeartsInGame(target, mapa);
-					cm.revivePlayerToGame(target, mapa);
+					
 				
 					cm.setKitMg(target);
 					if(gomg.hasMapObjetives()) {
@@ -125,8 +125,8 @@ public class GameIntoMap {
 					}
 					MgTeams t = new MgTeams(plugin);
 					t.JoinTeamLifeMG(target);
-					
-					
+					cm.revivePlayerToGame(target, mapa);
+					pl.getGamePoints().setHelpRevive(pl.getGamePoints().getHelpRevive()+1);
 					target.setGameMode(GameMode.ADVENTURE);
 					healPlayer(target);
 					pl.setPlayerGameStatus(PlayerGameStatus.ALIVE);
@@ -145,7 +145,7 @@ public class GameIntoMap {
 
 					
 				
-					pl.getGamePoints().setHelpRevive(pl.getGamePoints().getHelpRevive()+1);
+					
 					
 					PlayerInfo targetrevive = plugin.getPlayerInfoPoo().get(target);
 					targetrevive.getGamePoints().setRevive(targetrevive.getGamePoints().getRevive()+1);
@@ -249,16 +249,19 @@ public class GameIntoMap {
 			 Location l = new Location(Bukkit.getWorld(world), x, y, z);
 			
 					
-					cm.revivePlayerToGame(target, mapa);
+					
 					cm.setKitMg(target);
 					
 					MgTeams te = new MgTeams(plugin);
 					te.JoinTeamLifeMG(target);
+					cm.revivePlayerToGame(target, mapa);
+					pl.setPlayerGameStatus(PlayerGameStatus.ALIVE);
+					healPlayer(target);
 					
 					target.teleport(l);
 					target.setGameMode(GameMode.ADVENTURE);
-					healPlayer(target);
-					pl.setPlayerGameStatus(PlayerGameStatus.ALIVE);
+					
+					
 					if(player != null) {
 						target.sendTitle(ChatColor.GREEN+"Fuiste Revivido",ChatColor.GREEN+"por: "+ChatColor.YELLOW+player.getName(),20,60,20);
 						target.sendMessage(ChatColor.WHITE+"Fuiste Revivido por: "+ChatColor.GREEN+player.getName());
@@ -284,6 +287,63 @@ public class GameIntoMap {
 		
 	}
 	
+	
+	//TODO CLEAR
+	public void GamePlayerDeadInMap(Player player) {
+		GameConditions gmc = new GameConditions(plugin);
+		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+		String mapa = pl.getMapName();
+		GameInfo gi = plugin.getGameInfoPoo().get(mapa);
+		PlayerDropAllItems(player);
+		player.getWorld().spawnParticle(Particle.CLOUD, player.getLocation(),
+				/* NUMERO DE PARTICULAS */100, 1, 2, 1, /* velocidad */0, null, true);
+		
+	
+		if(gi instanceof GameAdventure) {
+			GameAdventure ga = (GameAdventure) gi;
+			
+			
+			
+			Fireworks f = new Fireworks(player);
+			f.spawnFireballRedLarge();
+			
+			if(pl.getRespawn() != null) {
+				pl.getGamePoints().setDeads(pl.getGamePoints().getDeads()+1);
+				revivePlayerRespawn(player);
+				return;
+			}
+			
+			
+			pl.setPlayerGameStatus(PlayerGameStatus.DEAD);
+			pl.getGamePoints().setDeads(pl.getGamePoints().getDeads()+1);
+		 	MgTeams t = new MgTeams(plugin);;
+			t.JoinTeamDeadMG(player);
+			gmc.deadPlayerToGame(player, mapa); 
+			//gmc.DeathTptoSpawn(player, mapa);COMO MUERE EN EL MAPA NO HAY QUE TEPEARLO 
+			player.setGameMode(GameMode.SPECTATOR);
+			
+			if(!ga.getAlivePlayers().isEmpty()) {
+				player.sendMessage(ChatColor.RED+"Usa la hotbar para Espectear a otros Jugadores. "+ChatColor.YELLOW+"\nSolo podras ver a los que estan en tu Partida");
+				player.sendMessage(ChatColor.WHITE+"Puedes ser "+ChatColor.GREEN+"Revivido "+ChatColor.WHITE+"por tus compañeros"+ChatColor.GOLD+"\n(Siempre que hayan cofres de Revivir)");
+			}
+		
+			
+		}//else if(gi instanceof GameNexo) {
+//			GameNexo gn = (GameNexo) gi;
+//			DestroyNexo dn = new DestroyNexo(plugin);
+//			if(gn.getBlueTeamMg().contains(player.getName())) {
+//				player.teleport(dn.TpSpawnBlue(mapa));
+//			}else if(gn.getRedTeamMg().contains(player.getName())){
+//				player.teleport(dn.TpSpawnRed(mapa));
+//			}
+			
+			
+			
+		//}
+		
+	}
+	
+	//TODO CLEAR
 	public void GamePlayerFallMap(Player player,DamageCause d) {
 		
 	
@@ -293,7 +353,7 @@ public class GameIntoMap {
 		
 		
 			if(player.getGameMode() == GameMode.ADVENTURE) {
-				if(b.getType() == Material.BARRIER && d == DamageCause.FALL || block.getType() == Material.AIR && d == DamageCause.VOID) {
+				if(b.getType() == Material.BARRIER || b.getType() == Material.BARRIER && d == DamageCause.FALL || block.getType() == Material.AIR && d == DamageCause.VOID) {
 					PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 					String mapa = pl.getMapName();
 					GameInfo gi = plugin.getGameInfoPoo().get(mapa);
@@ -310,13 +370,12 @@ public class GameIntoMap {
 						return;
 						
 					}else {
-						pl.setPlayerGameStatus(PlayerGameStatus.DEAD);
-						pl.getGamePoints().setDeads(pl.getGamePoints().getDeads()+1);
+						
 						player.getInventory().clear(); 
 						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"TE CAISTE DEL MAPA", 40, 80, 40);
 						
-						if(plugin.CreditKill().containsKey(player)) {
-							Entity mob = plugin.CreditKill().get(player);
+						if(pl.getCreditKillMob() != null) {
+							Entity mob = pl.getCreditKillMob();
 							if(!mob.isDead()) {
 								if(EntityHasName(mob)) {
 									player.sendMessage(ChatColor.RED+"Moriste por que "+ChatColor.YELLOW+"Te Caiste fuera del Mapa mientras escapabas de "+mob.getCustomName());
@@ -334,13 +393,23 @@ public class GameIntoMap {
 							gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"Caerse Fuera del Mapa.");
 
 						}
+							
+							if(pl.getRespawn() != null) {
+								pl.getGamePoints().setDeads(pl.getGamePoints().getDeads()+1);
+								revivePlayerRespawn(player);
+								return;
+							}
+							
 							player.sendMessage(ChatColor.RED+"\nUsa la hotbar para ver a otros jugadores. "+ChatColor.YELLOW+"\n!!!Solo podras ver a los que estan en tu partida");
 							player.sendMessage(ChatColor.GREEN+"Puedes ser revivido por tus compañeros.\n(Siempre que hayan cofres de Revivir)");
+							
+							pl.getGamePoints().setDeads(pl.getGamePoints().getDeads()+1);
+							pl.setPlayerGameStatus(PlayerGameStatus.DEAD);
 							
 						 	MgTeams t = new MgTeams(plugin);;
 							t.JoinTeamDeadMG(player);
 							gmc.deadPlayerToGame(player, mapa);
-							gmc.DeathTptoSpawn(player, mapa);
+							gmc.DeathTptoSpawn(player, mapa);//COMO MUERE FUERA DEL MAPA SE LO TEPEA
 							player.setGameMode(GameMode.SPECTATOR);
 							
 							
@@ -487,6 +556,20 @@ public class GameIntoMap {
 		
 	}
 	
+	 
+	public void revivePlayerRespawn(Player player){
+		//GameConditions gc = new GameConditions(plugin);
+		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+		pl.getGamePoints().setRevive(pl.getGamePoints().getRevive()+1);
+		healPlayer(player);
+		player.teleport(pl.getRespawn().add(0.5, 0, 0.5));
+		player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+">>> "+ChatColor.AQUA+ChatColor.BOLD+"RESPAWNASTE"+ChatColor.GREEN+ChatColor.BOLD+"  <<<",ChatColor.GREEN+"Punto de Control", 20, 40, 20);
+		player.setGameMode(GameMode.ADVENTURE);
+		player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, pl.getRespawn().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
+		player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+	}
+
+
 	
 	public void ObjetivesInGame(Player player,String mapa) {
 		GameConditions gmc = new GameConditions(plugin);
@@ -511,9 +594,10 @@ public class GameIntoMap {
 					gmc.playerArriveToTheWin(player, mapa);
 					gmc.EndTptoSpawn(player, mapa);
 				}
-				pl.setPlayerCronomet(new MapRecords(player.getName(),gm.getGameTime().getGameCronometForPlayer(),pl.getGamePoints().getKills()));
+			
 
 				isTheRankedGames(player,gm.isRankedMap());
+				pl.setPlayerCronomet(new MapRecords(player.getName(),gm.getGameTime().getGameCronometForPlayer(),pl.getGamePoints().getKills()));
 			}else {
 				if(gm.getGameType() == GameType.ADVENTURE) {
 				
@@ -542,9 +626,10 @@ public class GameIntoMap {
 					gmc.playerArriveToTheWin(player, mapa);
 					gmc.EndTptoSpawn(player, mapa);
 				}
-				pl.setPlayerCronomet(new MapRecords(player.getName(),gm.getGameTime().getGameCronometForPlayer(),pl.getGamePoints().getKills()));
+			
 
 				isTheRankedGames(player,gm.isRankedMap());
+				pl.setPlayerCronomet(new MapRecords(player.getName(),gm.getGameTime().getGameCronometForPlayer(),pl.getGamePoints().getKills()));
 			}else{
 				
 				if(gm.getGameType() == GameType.ADVENTURE) {
@@ -574,9 +659,10 @@ public class GameIntoMap {
 					gmc.playerArriveToTheWin(player, mapa);
 					gmc.EndTptoSpawn(player, mapa);
 				}
-				pl.setPlayerCronomet(new MapRecords(player.getName(),gm.getGameTime().getGameCronometForPlayer(),pl.getGamePoints().getKills()));
+				
 
 				isTheRankedGames(player,gm.isRankedMap());
+				pl.setPlayerCronomet(new MapRecords(player.getName(),gm.getGameTime().getGameCronometForPlayer(),pl.getGamePoints().getKills()));
 			}else {
 				if(gm.getGameType() == GameType.ADVENTURE) {
 					gmc.TptoSpawnMapSimple(player);
@@ -603,9 +689,10 @@ public class GameIntoMap {
 				gmc.playerArriveToTheWin(player, mapa);
 				gmc.EndTptoSpawn(player, mapa);
 			}
-			pl.setPlayerCronomet(new MapRecords(player.getName(),gm.getGameTime().getGameCronometForPlayer(),pl.getGamePoints().getKills()));
+		
 
 			isTheRankedGames(player,gm.isRankedMap());
+			pl.setPlayerCronomet(new MapRecords(player.getName(),gm.getGameTime().getGameCronometForPlayer(),pl.getGamePoints().getKills()));
 			return;
 		}
 	}
@@ -623,6 +710,8 @@ public class GameIntoMap {
 		pl.getGamePoints().setDeads(pl.getGamePoints().getDeads()+1);
 		
 		MgTeams t = new MgTeams(plugin);
+		
+		
 		t.JoinTeamDeadMG(player);
 		if(gm.hasDeleteInventoryByTimeOut()) {
 			PlayerDropAllItems(player);
@@ -649,52 +738,6 @@ public class GameIntoMap {
 		
 	}
 	
-	public void GamePlayerDeadInMap(Player player) {
-		GameConditions gmc = new GameConditions(plugin);
-		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
-		String mapa = pl.getMapName();
-		GameInfo gi = plugin.getGameInfoPoo().get(mapa);
-		PlayerDropAllItems(player);
-		player.getWorld().spawnParticle(Particle.CLOUD, player.getLocation().add(0, 0, 0),
-				/* NUMERO DE PARTICULAS */100, 1, 2, 1, /* velocidad */0, null, true);
-		
-	
-		if(gi instanceof GameAdventure) {
-			GameAdventure ga = (GameAdventure) gi;
-			gmc.deadPlayerToGame(player, mapa);
-			
-		
-			MgTeams t = new MgTeams(plugin);
-			t.JoinTeamDeadMG(player);
-			
-			Fireworks f = new Fireworks(player);
-			f.spawnFireballRedLarge();
-			pl.setPlayerGameStatus(PlayerGameStatus.DEAD);
-			pl.getGamePoints().setDeads(pl.getGamePoints().getDeads()+1);
-			player.setGameMode(GameMode.SPECTATOR);
-			
-			if(!ga.getAlivePlayers().isEmpty()) {
-				player.sendMessage(ChatColor.RED+"Usa la hotbar para Espectear a otros Jugadores. "+ChatColor.YELLOW+"\nSolo podras ver a los que estan en tu Partida");
-				player.sendMessage(ChatColor.WHITE+"Puedes ser "+ChatColor.GREEN+"Revivido "+ChatColor.WHITE+"por tus compañeros"+ChatColor.GOLD+"\n(Siempre que hayan cofres de Revivir)");
-			}
-		
-			
-		}//else if(gi instanceof GameNexo) {
-//			GameNexo gn = (GameNexo) gi;
-//			DestroyNexo dn = new DestroyNexo(plugin);
-//			if(gn.getBlueTeamMg().contains(player.getName())) {
-//				player.teleport(dn.TpSpawnBlue(mapa));
-//			}else if(gn.getRedTeamMg().contains(player.getName())){
-//				player.teleport(dn.TpSpawnRed(mapa));
-//			}
-			
-			
-			
-		//}
-		
-		
-		
-	}
 	
 	//TODO BORDE DE BIEN
 	public void gamePlayerAddPoints(Player player) {
@@ -1155,12 +1198,13 @@ public class GameIntoMap {
 	public void GameDamageCauses(Player player, EntityDamageEvent.DamageCause c) {
 		  //System.out.println("DEBUG TEST2: "+c.toString());
 			GameConditions gmc = new GameConditions(plugin);
+			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 			if(gmc.hasPlayerACheckPoint(player)) return;
 				List<DamageCause> l = new ArrayList<>();
 				
 				player.sendMessage("");
-				if(plugin.CreditKill().containsKey(player)) {
-					Entity mob = plugin.CreditKill().get(player);
+				if(pl.getCreditKillMob() != null) {
+					Entity mob = pl.getCreditKillMob();
 					if(!mob.isDead()) {
 						if(c == EntityDamageEvent.DamageCause.FALL) {
 							player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"CAIDA", 40, 80, 40);

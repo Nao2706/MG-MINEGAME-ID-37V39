@@ -369,7 +369,7 @@ public class GameConditions {
 					  for(MapRecords users : outoftop) {
 						  Player player = ConvertStringToPlayerAlone(users.getCronometPlayerName());
 						  
-						  if (lastoftop.getCronometTotalSeconds() > users.getCronometTotalSeconds()) {
+						  if (users.getCronometTotalSeconds() > lastoftop.getCronometTotalSeconds()) {
 							  player.sendMessage(ChatColor.RED+users.getCronometPlayerName() + ChatColor.DARK_GRAY+" Tu tiempo de: "+ChatColor.RED+ users.getCronometTotalSeconds() +  ChatColor.DARK_GRAY+" es demasiado largo para entrar al top. El 10mo mejor Tiempo es de: "+ChatColor.GREEN+lastoftop.getCronometPlayerName()+ ChatColor.DARK_GRAY+" con : " +ChatColor.AQUA+ lastoftop.getCronometTotalSeconds());
 				                //System.out.println("El tiempo de " + users.getCronometPlayerName() + " (" + users.getCronometTotalSeconds() + ") es demasiado largo para entrar al top. El 10mo mejor tiempo es de: "+lastoftop.getCronometPlayerName()+" : " + lastoftop.getCronometTotalSeconds());
 				            }
@@ -418,18 +418,20 @@ public class GameConditions {
 	                if (regis.getCronometPlayerName().equals(nuevoParticipante.getCronometPlayerName())) {
 	                	Player player = ConvertStringToPlayerAlone(nuevoParticipante.getCronometPlayerName());
 	                   // encontrado = true;
-	                    if (nuevoParticipante.getCronometTotalSeconds() < regis.getCronometTotalSeconds()) {
+	                    if (nuevoParticipante.getCronometTotalSeconds() < regis.getCronometTotalSeconds() && nuevoParticipante.getKills() > regis.getKills()) {
 	                    	
-	                    
-	                    	player.sendMessage(ChatColor.AQUA+nuevoParticipante.getCronometPlayerName() + ChatColor.DARK_GRAY+" has roto tu récord! Nuevo tiempo: " +ChatColor.AQUA+ nuevoParticipante.getCronometTime()+ChatColor.GOLD+" Anterior: "+ChatColor.GREEN+regis.getCronometTime());
+	                  
+	                    	player.sendMessage(ChatColor.AQUA+nuevoParticipante.getCronometPlayerName() + ChatColor.GREEN+" has roto tu récord! Nuevo tiempo: " +ChatColor.AQUA+ nuevoParticipante.getCronometTime()+ChatColor.GREEN+" Kills: "+ChatColor.AQUA+nuevoParticipante.getKills()+
+	                    			ChatColor.RED+"\nAnterior: "+ChatColor.GOLD+regis.getCronometTime()+ChatColor.RED+" Kills: "+ChatColor.GOLD+regis.getKills());
 	                        //registro.segundos = nuevoParticipante.getSegundos(); // SETEAR DATOS EN LISTA
 	                        //regis.setNewRecord(nuevoParticipante.getCronometPlayerName() ,nuevoParticipante.getCronometTotalSeconds());
 	                         //System.out.println(nuevoParticipante.getCronometPlayerName()+" "+nuevoParticipante.getCronometTime());
 	                       
 	                    } else {
-	                    	
-	                    	player.sendMessage(ChatColor.RED+nuevoParticipante.getCronometPlayerName() +ChatColor.DARK_GRAY+" no alcanzaste a Romper tu récord. "+ChatColor.GOLD+"Mejor tiempo: " + ChatColor.GREEN+regis.getCronometTime());
-	                    	nuevoParticipante.setNewRecord(regis.getCronometPlayerName() ,regis.getCronometTotalSeconds());
+	                    	 
+	                    	player.sendMessage(ChatColor.RED+nuevoParticipante.getCronometPlayerName() +ChatColor.DARK_GRAY+" no alcanzaste a Romper tu récord. "+ChatColor.GOLD+"Mejor tiempo: " + ChatColor.GREEN+regis.getCronometTime()+ChatColor.GOLD+" Kills:"+ChatColor.GREEN+regis.getKills()+
+	                    			ChatColor.RED+"\nTiempo Actual: "+ChatColor.GOLD+ nuevoParticipante.getCronometTime()+ChatColor.RED+" Kills: "+ChatColor.GOLD+nuevoParticipante.getKills());
+	                    	nuevoParticipante.setNewRecord(regis.getCronometPlayerName() ,regis.getCronometTotalSeconds(),regis.getKills());
 	                    }
 	                    break;
 	                }
@@ -462,8 +464,9 @@ public class GameConditions {
 				  for(MapRecords users : outoftop) {
 					  Player player = ConvertStringToPlayerAlone(users.getCronometPlayerName());
 					  
-					  if (lastoftop.getCronometTotalSeconds() > users.getCronometTotalSeconds()) {
-						  player.sendMessage(ChatColor.RED+users.getCronometPlayerName() + ChatColor.DARK_GRAY+" Tu tiempo de: "+ChatColor.RED+ users.getCronometTotalSeconds() +  ChatColor.DARK_GRAY+" es demasiado largo para entrar al top."+ChatColor.AQUA+" El 10mo mejor Tiempo es de: "+ChatColor.GREEN+lastoftop.getCronometPlayerName()+ ChatColor.DARK_GRAY+" con : " +ChatColor.AQUA+ lastoftop.getCronometTotalSeconds());
+					  if (users.getCronometTotalSeconds() > lastoftop.getCronometTotalSeconds() && users.getKills() < lastoftop.getKills()) {
+						  player.sendMessage(ChatColor.RED+users.getCronometPlayerName() + ChatColor.DARK_GRAY+" Tu tiempo de: "+ChatColor.RED+ users.getCronometTotalSeconds() +  ChatColor.DARK_GRAY+" es demasiado largo y tus Kills: "+ChatColor.RED+users.getKills()+" no son suficientes para entrar al Top."+ChatColor.AQUA+" El 10mo mejor Tiempo es de: "+
+					  ChatColor.GREEN+lastoftop.getCronometPlayerName()+ ChatColor.DARK_GRAY+" con : " +ChatColor.AQUA+ lastoftop.getCronometTotalSeconds()+ChatColor.DARK_GRAY+" Kills:"+ChatColor.GOLD+lastoftop.getKills());
 			                //System.out.println("El tiempo de " + users.getCronometPlayerName() + " (" + users.getCronometTotalSeconds() + ") es demasiado largo para entrar al top. El 10mo mejor tiempo es de: "+lastoftop.getCronometPlayerName()+" : " + lastoftop.getCronometTotalSeconds());
 			            }
 					  
@@ -936,9 +939,7 @@ public class GameConditions {
 				if(ga.getDeadPlayers().remove(player.getName()));
 				if(ga.getArrivePlayers().remove(player.getName()));
 				if(ga.getSpectators().remove(player.getName()));
-				plugin.CreditKill().remove(player);
 				plugin.getPlayerInfoPoo().remove(player);
-				plugin.getCheckPoint().remove(player);
 				t.RemoveAllPlayer(player);
 			}
 		}
@@ -1341,7 +1342,8 @@ public class GameConditions {
 			    	ga.setRankedMap(isMapRanked(map));
 			    	ga.setPointsLosePorcent(getPointsLosePorcent(map));
 			    	ga.setMapData(game);			    	
-			    	ga.setlvltoPlay(getLvlToPlay(map));		
+			    	ga.setLvltoPlay(getLvlToPlay(map));
+			    	ga.setPrestigelvltoPlay(getprestigeLvlToPlay(map));
 			    	
 			    	ga.setDeleteInventoryByTimeOut(hasDeleteInventoryByTimeOut(map));
 			    	ga.setMapCooldown(getMapCooldownData(map));
@@ -1489,6 +1491,8 @@ public class GameConditions {
     	gi.setMapCooldown(getMapCooldownData(map));
     	gi.setMapTimeCooldown(getMapTimeCooldownData(map));
     	gi.setCleanMapFromEntitys(hasMapCleanedData(map));
+    	gi.setLvltoPlay(getLvlToPlay(map));
+    	gi.setPrestigelvltoPlay(getprestigeLvlToPlay(map));
     	
 	}
 	
@@ -1526,6 +1530,11 @@ public class GameConditions {
 		int vida = game.getInt("Set-Hearts");
 		player.getAttribute(Attribute.MAX_HEALTH).setBaseValue(vida);
 		return;
+	}
+	
+	public int getprestigeLvlToPlay(String map) {
+		FileConfiguration game = getGameConfig(map); 
+		return game.getInt("Prestige-To-Play");
 	}
 	
 	public int getLvlToPlay(String map) {
@@ -1936,18 +1945,36 @@ public class GameConditions {
 					 return false;
 				 }
 				  
-				 if(playerlvl < minfo.getlvltoPlay()) {
+				 if(playerlvl < minfo.getPrestigelvltoPlay()) {
 					 if(!player.isOp()) {
 						 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 20.0F, 1F);
 						 player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"NIVEL INSUFICIENTE DETECTADO");
 						 player.sendMessage(ChatColor.GRAY+"Tu Nivel es Demasiado Bajo para Jugar en este Mapa.");
-						 player.sendMessage(ChatColor.GOLD+"Nivel del Mapa: "+ChatColor.RED+minfo.getlvltoPlay()+ChatColor.GRAY+" Tu Nivel: "+ChatColor.GREEN+playerlvl);
+						 player.sendMessage(ChatColor.GOLD+"Nivel del Mapa: "+ChatColor.RED+minfo.getPrestigelvltoPlay()+ChatColor.GRAY+" Tu Nivel: "+ChatColor.GREEN+playerlvl);
+						 player.sendMessage(ChatColor.GRAY+"Sube tu Nivel de Prestigio. ");
+						 return false;
+					 }else {
+						 player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"NIVEL INSUFICIENTE DETECTADO OP BYPASS");
+						 player.sendMessage(ChatColor.GRAY+"Puedes Acceder pero revisa si el Nivel para Jugar del Mapa es el Correcto.");
+						 player.sendMessage(ChatColor.GOLD+"Nivel del Mapa: "+ChatColor.RED+minfo.getPrestigelvltoPlay()+ChatColor.GRAY+" Tu Nivel: "+ChatColor.GREEN+playerlvl);
+						 player.sendMessage(ChatColor.GRAY+"Sube tu Nivel de Prestigio. ");
+					 }
+					
+				 }
+				 
+				 
+				 if(playerlvl < minfo.getLvltoPlay()) {
+					 if(!player.isOp()) {
+						 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 20.0F, 1F);
+						 player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"NIVEL INSUFICIENTE DETECTADO");
+						 player.sendMessage(ChatColor.GRAY+"Tu Nivel es Demasiado Bajo para Jugar en este Mapa.");
+						 player.sendMessage(ChatColor.GOLD+"Nivel del Mapa: "+ChatColor.RED+minfo.getLvltoPlay()+ChatColor.GRAY+" Tu Nivel: "+ChatColor.GREEN+playerlvl);
 						 player.sendMessage(ChatColor.GRAY+"Sube tu Nivel. ");
 						 return false;
 					 }else {
 						 player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"NIVEL INSUFICIENTE DETECTADO OP BYPASS");
 						 player.sendMessage(ChatColor.GRAY+"Puedes Acceder pero revisa si el Nivel para Jugar del Mapa es el Correcto.");
-						 player.sendMessage(ChatColor.GOLD+"Nivel del Mapa: "+ChatColor.RED+minfo.getlvltoPlay()+ChatColor.GRAY+" Tu Nivel: "+ChatColor.GREEN+playerlvl);
+						 player.sendMessage(ChatColor.GOLD+"Nivel del Mapa: "+ChatColor.RED+minfo.getLvltoPlay()+ChatColor.GRAY+" Tu Nivel: "+ChatColor.GREEN+playerlvl);
 						 player.sendMessage(ChatColor.GRAY+"Sube tu Nivel. ");
 					 }
 					
@@ -2045,7 +2072,12 @@ public class GameConditions {
 	
 	public boolean hasPlayerACheckPoint(Player player) {
 		
-		if(plugin.getCheckPoint().containsKey(player)) {
+		GameConditions gc = new GameConditions(plugin);
+		if(gc.isPlayerinGame(player));
+		
+		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+		
+		if(pl.getCheckPointItem() != null) {
 			player.setNoDamageTicks(20*5);
 		    PotionEffect vid = new PotionEffect(PotionEffectType.HEALTH_BOOST,/*duration*/ 10 * 20,/*amplifier:*/5, true ,true,true );
 		    PotionEffect reg = new PotionEffect(PotionEffectType.REGENERATION,/*duration*/ 10 * 20,/*amplifier:*/5, true ,true,true );
@@ -2058,8 +2090,8 @@ public class GameConditions {
 			player.setFireTicks(0);
 		    player.sendMessage(ChatColor.GREEN+"Has usado tu checkpoint..");
 		    player.sendMessage(ChatColor.YELLOW+"(coloca otro si puedes para evitar morir.)");
-			player.teleport(plugin.getCheckPoint().get(player));
-			plugin.getCheckPoint().remove(player);
+			player.teleport(pl.getCheckPointItem());
+			pl.setCheckpointItemLocationMg(null);
 			return true;
 		}
 		
@@ -5290,14 +5322,17 @@ public class GameConditions {
 		int wins = mf.getInt("MapFrequency."+map+".Winning-Players");
 		int revives = mf.getInt("MapFrequency."+map+".Revive-Players");
 		int deads = mf.getInt("MapFrequency."+map+".Dead-Players");
-		int lvltoplay = getLvlToPlay(map);
-		 
+		int prestigetoplay = getprestigeLvlToPlay(map);
+		int lvltoplay = getLvlToPlay(map); 
+		
+		
 		MapStatistics ms = new MapStatistics(timesplayed,participants,wins,revives,deads);
 		sendMessageToUserAndConsole(player,"");
 		sendMessageToUserAndConsole(player,"======================================");
 		sendMessageToUserAndConsole(player,""+ChatColor.RED+ChatColor.BOLD+"Informacion del Mapa: "+ChatColor.GREEN+map);
 		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Modo: "+ChatColor.GREEN+type.getValue());
 		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Tiene Sistema de Revivir: "+ChatColor.GREEN+rs);
+		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Nivel de Prestigio Para Jugarlo: "+ChatColor.GREEN+prestigetoplay);
 		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Nivel Para Jugarlo: "+ChatColor.GREEN+lvltoplay);
 		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Ranked: "+ChatColor.GREEN+rk);
 		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Puedes Usar tu Inventario: "+ChatColor.GREEN+ci);

@@ -689,7 +689,9 @@ public class EventRandoms implements Listener{
 						}
 						 
 						if(e.getItem().isSimilar(Items.CHECKPOINTP.getValue())) {
-							plugin.getCheckPoint().put(player, player.getLocation());
+							if(gc.isPlayerinGame(player));
+							PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+							pl.setCheckpointItemLocationMg(player.getLocation());
 							player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 							player.sendMessage(ChatColor.GREEN+"CheckPoint Marcado.");
 							removeItemstackCustom(player,e.getItem());
@@ -850,11 +852,14 @@ public class EventRandoms implements Listener{
 					}	
 					
 						if(e.getItem().isSimilar(Items.BENGALAROJAP.getValue()) || e.getItem().isSimilar(Items.BENGALAVERDEP.getValue())) {
+							
 							new Flare(player, player.getInventory().getItemInMainHand(),player.getEyeLocation(),plugin);
+							player.setCooldown(e.getItem(), 10*20);
 							removeItemstackCustom(player,e.getItem());
 						}
 						
 						if(e.getItem().isSimilar(Items.BENGALAMARCADORAP.getValue())) {
+							player.setCooldown(e.getItem(), 5*20);
 							new Flare(player, player.getInventory().getItemInMainHand(),player.getEyeLocation(),plugin);
 							removeItemstackCustom(player,e.getItem());
 						}
@@ -1223,7 +1228,8 @@ public class EventRandoms implements Listener{
 				    Player player = (Player) entidadAtacada;
 					GameConditions gc = new GameConditions(plugin);
 					if(gc.isPlayerinGame(player)) {
-						plugin.CreditKill().put(player, atacante);
+						PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+						pl.setCreditKillMob(atacante);
 					}
 			  }
 		  }else if(atacante instanceof LivingEntity) {
@@ -1539,7 +1545,7 @@ public class EventRandoms implements Listener{
 					names.add("Suicida");
 					names.add("Cohete");
 					names.add("Super TNT");
-					
+					names.add("Explosivo Zombi");				
 					
 					//names.stream().filter(o -> o.contains(ChatColor.stripColor(ent.getCustomName()))).findFirst().isPresent() || 
 					if(names.stream().filter(o -> o.startsWith(mobname)).findFirst().isPresent()) {
@@ -1919,7 +1925,8 @@ public class EventRandoms implements Listener{
 				  if(entidadhit instanceof Player) {
 					  Player player = (Player) entidadhit;
 						if(gc.isPlayerinGame(player)) {
-							 plugin.CreditKill().put(player, damager);
+							PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+							pl.setCreditKillMob(damager);
 						}
 					 
 				  }

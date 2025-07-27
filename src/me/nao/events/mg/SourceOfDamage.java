@@ -64,6 +64,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
+import me.nao.enums.mg.GameStatus;
 import me.nao.enums.mg.Items;
 import me.nao.enums.mg.Posion;
 import me.nao.enums.mg.ReviveStatus;
@@ -291,13 +292,14 @@ public class SourceOfDamage implements Listener{
 				ci.GamePlayerWin(player);
 //				ci.PlayerFallMap(player);	
 //				ci.PlayerWin(player);
-				
-				if(plugin.CreditKill().containsKey(player)) {
-					Entity mob = plugin.CreditKill().get(player);
+				PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+		
+				if(pl.getCreditKillMob() != null) {
+					Entity mob = pl.getCreditKillMob();
 					if(mob.isDead()) {
-						plugin.CreditKill().remove(player);
+						pl.setCreditKillMob(null);
 					}else if(player.getLocation().distance(mob.getLocation()) >= 50) {
-						plugin.CreditKill().remove(player);
+						pl.setCreditKillMob(null);
 					}
 				}
 				
@@ -313,7 +315,7 @@ public class SourceOfDamage implements Listener{
 				if(player.getGameMode() == GameMode.ADVENTURE) {
 					
 					if(c1.getType() == Material.LIME_BANNER && c2.getType() == Material.STRUCTURE_BLOCK) {
-						 PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+						
 						 if(!player.getInventory().containsAtLeast(Items.CHECKPOINTFLAG.getValue(),1)) {
 							 player.getInventory().addItem(Items.CHECKPOINTFLAG.getValue());
 						 }
@@ -325,7 +327,7 @@ public class SourceOfDamage implements Listener{
 					
 								 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, block.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
 								 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
-								 player.sendMessage(ChatColor.GREEN+"La Ubicacion se Guardado. (Ubicacion Sobreescrita) , Utiliza el Item de CheckPoint de Banderas para regresar.\"");
+								 player.sendMessage(ChatColor.GREEN+"La Ubicacion se Guardado. (Ubicacion Sobreescrita) , Utiliza el Item de CheckPoint de Banderas para regresar.");
 								 pl.setCheckpointLocationMg(block.getLocation());
 						
 							 }
@@ -340,7 +342,34 @@ public class SourceOfDamage implements Listener{
 							 pl.setCheckpointLocationMg(block.getLocation());
 						 }
 						 
+					}else if(c1.getType() == Material.LIGHT_BLUE_BANNER && c2.getType() == Material.STRUCTURE_BLOCK) {
+						
+					
+						 if(pl.getRespawn() != null) {
+							 if(pl.getRespawn().equals(block.getLocation())) {
+								 return;
+							 }else {
+					   		    player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+">>> "+ChatColor.AQUA+ChatColor.BOLD+"RESPAWN GUARDADO"+ChatColor.GREEN+ChatColor.BOLD+"  <<<",ChatColor.GREEN+"Punto de Control", 20, 40, 20);
+					
+								 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, block.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
+								 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+								 player.sendMessage(ChatColor.AQUA+"La Ubicacion del Respawn se Guardado. (Ubicacion Sobreescrita).");
+								 pl.setRespawnLocationMg(block.getLocation());
+						
+							 }
+						 }else {
+							 player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+">>> "+ChatColor.AQUA+ChatColor.BOLD+"RESPAWN GUARDADO"+ChatColor.GREEN+ChatColor.BOLD+"  <<<",ChatColor.GREEN+"Punto de Control", 20, 40, 20);
+					
+					
+							 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, block.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
+					
+							 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+							 player.sendMessage(ChatColor.AQUA+"La Ubicacion del Respawn se Guardado");
+							 pl.setRespawnLocationMg(block.getLocation());
+						 }
+						 
 					}
+					
 					
 				}
 				
@@ -413,7 +442,7 @@ public class SourceOfDamage implements Listener{
 					
 					if(b1.getType() != Material.AIR)return;
 				
-					PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+					
 					GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
 					
 					
@@ -712,8 +741,10 @@ public class SourceOfDamage implements Listener{
 				
 				if(gc.isGuardian(e.getEntity())) return;
 				 GameIntoMap c = new GameIntoMap(plugin);
-				
-				
+				 PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+				 GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
+				if(gi.getGameStatus() == GameStatus.TERMINANDO)return;
+				 
 				if(player != null && mob != EntityType.ITEM_FRAME && mob != EntityType.ITEM) {
 					Entity m = e.getEntity();
 					

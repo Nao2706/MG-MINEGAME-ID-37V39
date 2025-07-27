@@ -30,9 +30,10 @@ public class MapRecords {
         return seconds;
     }
 
-    public void setNewRecord(String name , long segundos) {
+    public void setNewRecord(String name , long segundos,int kills) {
     	this.name = name;
     	this.seconds = segundos;
+    	 this.kills = kills;
     }
     
     public String getCronometTime() {

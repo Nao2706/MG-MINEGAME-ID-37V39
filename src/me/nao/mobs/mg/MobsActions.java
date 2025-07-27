@@ -320,7 +320,7 @@ public class MobsActions {
 	
 	
 
-	
+	//CUANDO ATACAS
 	public void getAttackedZombie(Entity atacante ,Entity atacada) {
 		
 		
@@ -480,10 +480,20 @@ public class MobsActions {
 					  AreaPotion(z,z.getLocation(),PotionEffectType.SLOWNESS,"PURPLE",35,15,20,3);
 					 
 					  
-				 }
+				}if(mobname.contains("Zombi Super Suicida")) {
+					
+					  	TNTPrimed ptnt = (TNTPrimed) z.getWorld().spawnEntity(z.getLocation().add(0.5,0,0.5),EntityType.TNT);
+						ptnt.setFuseTicks(0);
+						ptnt.setSource(z);
+						ptnt.setCustomName(ChatColor.DARK_GREEN+"Explosivo Zombi");
+						ptnt.setYield(7);
+					
+			  
+			  }
 		  }
 	}
 	 
+	//CUANDO EL ZOMBI ATACA
 	public void getZombiettack(Entity atacante ,Entity atacada) {
 		 if(atacante instanceof Zombie && atacada instanceof Player) {
 			 Player player = (Player) atacada;
@@ -510,6 +520,17 @@ public class MobsActions {
 				  gim.PlayerDropAllItems(player);
 				  player.sendMessage(ChatColor.RED+"Tu inventario se cayo JAJAJAJA");
 				  player.setVelocity(player.getLocation().getDirection().multiply(-1).setY(2));
+			  
+			  }if(mobname.contains("Zombi Super Suicida")) {
+					
+				
+					  	TNTPrimed ptnt = (TNTPrimed) z.getWorld().spawnEntity(z.getLocation().add(0.5,0,0.5),EntityType.TNT);
+						ptnt.setFuseTicks(0);
+						//ptnt.setSource(z);
+						ptnt.setCustomName(ChatColor.DARK_GREEN+"Explosivo Zombi");
+						ptnt.setYield(7);
+					
+
 			  
 			  }
 					
@@ -860,7 +881,7 @@ public class MobsActions {
 					zombi1.addPotionEffect(rapido);
 					
 					zombi1.addPotionEffect(salto);
-				
+					zombi1.getAttribute(Attribute.MAX_HEALTH).setBaseValue(200);
 					zombi1.getAttribute(attribute).setBaseValue(150);
 					zombi1.getEquipment().setHelmet(new ItemStack(Material.DIAMOND_HELMET));
 					zombi1.getEquipment().setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
@@ -978,6 +999,7 @@ public class MobsActions {
 					zombi1.addPotionEffect(salto);
 				
 					zombi1.getAttribute(attribute).setBaseValue(150);
+					zombi1.getAttribute(Attribute.MAX_HEALTH).setBaseValue(50);
 					zombi1.getEquipment().setHelmet(new ItemStack(Material.IRON_HELMET));
 					zombi1.getEquipment().setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
 					zombi1.getEquipment().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
@@ -991,7 +1013,7 @@ public class MobsActions {
 					zombi1.addPotionEffect(salto);
 				
 					zombi1.getAttribute(attribute).setBaseValue(150);
-					zombi1.getEquipment().setHelmet(new ItemStack(Material.DIAMOND_HELMET));
+					zombi1.getEquipment().setHelmet(new ItemStack(Material.TNT));
 					zombi1.getEquipment().setChestplate(new ItemStack(Material.NETHERITE_CHESTPLATE));
 					zombi1.getEquipment().setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
 					zombi1.getEquipment().setBoots(new ItemStack(Material.DIAMOND_BOOTS));
@@ -1441,6 +1463,7 @@ public class MobsActions {
 					zombi1.addPotionEffect(salto);
 				
 					zombi1.getAttribute(attribute).setBaseValue(150);
+					zombi1.getAttribute(Attribute.MAX_HEALTH).setBaseValue(100);
 					zombi1.getEquipment().setHelmet(new ItemStack(Material.NETHERITE_HELMET));
 					zombi1.getEquipment().setChestplate(new ItemStack(Material.NETHERITE_CHESTPLATE));
 					zombi1.getEquipment().setLeggings(new ItemStack(Material.NETHERITE_LEGGINGS));
@@ -1512,7 +1535,7 @@ public class MobsActions {
 					zombi1.getEquipment().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
 					zombi1.getEquipment().setBoots(new ItemStack(Material.IRON_BOOTS));
 					zombi1.getEquipment().setItemInMainHand(new ItemStack(Material.CROSSBOW));
-					
+					  
 				}else if(n == 10) {
 					Zombie zombi1 = (Zombie)  world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
 					zombi1.setCustomName(""+ChatColor.WHITE+ChatColor.BOLD+"Zombi Super Suicida");
@@ -1621,6 +1644,7 @@ public class MobsActions {
 					
 					zombi1.addPotionEffect(rapido2);
 					zombi1.addPotionEffect(salto2);
+					zombi1.getAttribute(Attribute.MAX_HEALTH).setBaseValue(200);
 					zombi1.getEquipment().setHelmet(new ItemStack(Material.NETHERITE_HELMET));
 					zombi1.getEquipment().setChestplate(new ItemStack(Material.NETHERITE_CHESTPLATE));
 					zombi1.getEquipment().setLeggings(new ItemStack(Material.NETHERITE_LEGGINGS));

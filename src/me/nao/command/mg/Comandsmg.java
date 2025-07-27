@@ -836,8 +836,17 @@ public class Comandsmg implements CommandExecutor{
 								pl.setCheckpointLocationMg(null);
 							}
 							
-							if(plugin.getCheckPoint().containsKey(target)) {
-								plugin.getCheckPoint().remove(target);
+							
+							if(pl.getRespawn() != null) {
+								target.sendMessage(ChatColor.RED+"- Tu Respawn fue Eliminado.");
+								Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+" El Respawn de "+ChatColor.GOLD+args[1]+ChatColor.GREEN+" fue Eliminado");
+
+								pl.setRespawnLocationMg(null);
+							}
+							
+							
+							if(pl.getCheckPointItem() != null) {
+								pl.setCheckpointLocationMg(null);
 								
 								target.sendMessage(ChatColor.RED+"- Tu CheckPoint fue Eliminado.");
 								Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+" El CheckPoint de "+ChatColor.GOLD+args[1]+ChatColor.GREEN+" fue Eliminado");
@@ -1347,14 +1356,15 @@ public class Comandsmg implements CommandExecutor{
 
 						long xp = points1.getLong("Players." + key + ".Xp");
 						int lvl = points1.getInt("Players." + key + ".Level");
+						int prestige = points1.getInt("Players." + key + ".Prestige");
 						SystemOfLevels manager = new SystemOfLevels();
 						manager.rangeOfLvl(lvl);
-						long xptotal = xp+manager.getTotalPlayerXpLvl();
+						long xptotal = xp+manager.getTotalPlayerXpLvl()+(prestige*312232);
 						// SE GUARDAN LOS DATOS EN EL HASH MAP
 						scores.put(key, xptotal);
 
 					}
-
+ 
 					// SEGUNDA PARTE CALCULO MUESTRA DE MAYOR A MENOR PUNTAJE
 					List<Map.Entry<String, Long>> list = new ArrayList<>(scores.entrySet());
 
@@ -1367,6 +1377,7 @@ public class Comandsmg implements CommandExecutor{
 //					});
 
 					// TERCERA PARTE IMPRIMIR DATOS DE MAYOR A MENOR
+					 RankPlayer rp = new RankPlayer(plugin);
 
 					int i = 0;
 					for (Map.Entry<String, Long> e : list) {
@@ -1381,7 +1392,9 @@ public class Comandsmg implements CommandExecutor{
 									String texto = messagep.get(j);
 									Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&',
 											texto.replaceAll("%player%", e.getKey())
-													.replaceAll("%xp%", e.getValue().toString())
+													.replaceAll("%userxp%", e.getValue().toString())
+													.replaceAll("%userprestige%", rp.getRankPrestigePlaceHolder(points1.getInt("Players."+e.getKey()+".Prestige",0)))
+													.replaceAll("%userprestigelvl%",points1.getString("Players."+e.getKey()+".Prestige","0"))
 													.replaceAll("%userlvl%",  points1.getString("Players." + e.getKey() + ".Level"))
 													.replaceAll("%place%", Integer.toString(i))));
 								
@@ -3063,8 +3076,15 @@ public class Comandsmg implements CommandExecutor{
 								pl.setCheckpointLocationMg(null);
 							}
 							
-							if(plugin.getCheckPoint().containsKey(target)) {
-								plugin.getCheckPoint().remove(target);
+							if(pl.getRespawn() != null) {
+								target.sendMessage(ChatColor.RED+"- Tu Respawn fue Eliminado.");
+								player.sendMessage(ChatColor.GREEN+" El Respawn de "+ChatColor.GOLD+args[1]+ChatColor.GREEN+" fue Eliminado");
+
+								pl.setRespawnLocationMg(null);
+							}
+							
+							if(pl.getCheckPointItem() != null) {
+								pl.setCheckpointLocationMg(null);
 								
 								target.sendMessage(ChatColor.RED+"- Tu CheckPoint fue Eliminado.");
 								player.sendMessage(ChatColor.GREEN+" El CheckPoint de "+ChatColor.GOLD+args[1]+ChatColor.GREEN+" fue Eliminado");
@@ -4634,12 +4654,13 @@ public class Comandsmg implements CommandExecutor{
 
 							long xp = points1.getLong("Players." + key + ".Xp");
 							int lvl = points1.getInt("Players." + key + ".Level");
+							int prestige = points1.getInt("Players." + key + ".Prestige");
 							SystemOfLevels manager = new SystemOfLevels();
 							manager.rangeOfLvl(lvl);
-							long xptotal = xp+manager.getTotalPlayerXpLvl();
+							long xptotal = xp+manager.getTotalPlayerXpLvl()+(prestige*312232);
 							// SE GUARDAN LOS DATOS EN EL HASH MAP
 							scores.put(key, xptotal);
-
+ 
 						}
 
 						// SEGUNDA PARTE CALCULO MUESTRA DE MAYOR A MENOR PUNTAJE
@@ -4664,7 +4685,7 @@ public class Comandsmg implements CommandExecutor{
 //						});
 
 						// TERCERA PARTE IMPRIMIR DATOS DE MAYOR A MENOR
-
+						 RankPlayer rp = new RankPlayer(plugin);
 						int i = 0;
 						for (Map.Entry<String, Long> e : list) {
 
@@ -4678,9 +4699,11 @@ public class Comandsmg implements CommandExecutor{
 										String texto = messagep.get(j);
 										player.sendMessage(ChatColor.translateAlternateColorCodes('&',
 												texto.replaceAll("%player%", e.getKey())
-												.replaceAll("%xp%", e.getValue().toString())
+												.replaceAll("%userxp%", e.getValue().toString())
+												.replaceAll("%userprestige%", rp.getRankPrestigePlaceHolder(points1.getInt("Players."+e.getKey()+".Prestige",0)))
+												.replaceAll("%userprestigelvl%",points1.getString("Players."+e.getKey()+".Prestige","0"))
 												.replaceAll("%userlvl%",  points1.getString("Players." + e.getKey() + ".Level"))
-														.replaceAll("%place%", Integer.toString(i))));
+												.replaceAll("%place%", Integer.toString(i))));
 									}
 
 								}
