@@ -5295,6 +5295,9 @@ public class Comandsmg implements CommandExecutor{
  			l.add(ChatColor.GOLD+"/mg formats"+ChatColor.AQUA+" Obten el Formato de tiempo para usarlo en los Mapas.");
  			l.add(ChatColor.GOLD+"/mg dropplayer <user>"+ChatColor.AQUA+" Dropeale el Inventario a un Jugador.");
  			l.add(ChatColor.GOLD+"/mg deletecheckpoint <user>"+ChatColor.AQUA+" Borra los Todos Checkpoints de un Jugador cuando esta en un Mapa.");
+ 			l.add(ChatColor.GOLD+"/mg title <map>"+ChatColor.AQUA+" Manda un Titulo a los Jugadores de un Mapa.");
+ 			l.add(ChatColor.GOLD+"/mg message <map>"+ChatColor.AQUA+" Manda un Mensaje a los Jugadores de un Mapa.");
+ 			l.add(ChatColor.GOLD+"/mg tntrain "+ChatColor.AQUA+" Lanza una Lluvia de TNT.");
  			
  			
  			
