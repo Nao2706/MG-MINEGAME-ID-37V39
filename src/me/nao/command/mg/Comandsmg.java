@@ -222,6 +222,19 @@ public class Comandsmg implements CommandExecutor{
 					}
 					
 					return true;
+				}else if (args[0].equalsIgnoreCase("info")) {
+					if(args.length == 1) {
+						
+						infomg(null,1);
+					
+					}else if(args.length == 2){
+						
+						int pag = Integer.valueOf(args[1]);
+						infomg(null,pag);
+					}
+
+					return true;
+					
 				}else if(args[0].equalsIgnoreCase("tp")){
 				  	
 					if(args.length == 9) {
@@ -1441,11 +1454,11 @@ public class Comandsmg implements CommandExecutor{
 					List<String> ac = config.getStringList("Maps-Created.List");
 					
 					if(args.length == 1) {
-						pagsOfMaps(null, ac, 1, 10);
+						pagsOfMaps(null, ac, 1, 10, "Lista de Mapas Creados");
 						Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Total de Mapas Creados: "+ChatColor.GOLD+ac.size());
 					}else if(args.length == 2) {
 						int pag = Integer.valueOf(args[1]);
-						pagsOfMaps(null, ac, pag, 10);
+						pagsOfMaps(null, ac, pag, 10, "Lista de Mapas Creados");
 				
 						Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Total de Mapas Creados: "+ChatColor.GOLD+ac.size());
 					}else {
@@ -1713,17 +1726,34 @@ public class Comandsmg implements CommandExecutor{
 					
 					if (args.length == 2) {
 						String name = args[1];
-						FileConfiguration menu = plugin.getMenuItems();
-						if(menu.contains(name)) {
-							   
-							   
-								menu.set(name,null);
-							   plugin.getMenuItems().save();
-							   plugin.getMenuItems().reload();
+						
+						if(!plugin.getDeleteMaps().containsKey(name)) {
+							plugin.getDeleteMaps().put(name, true);
+							Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+" Deseas Borrar el Mapa "+ChatColor.RED+name+ChatColor.YELLOW+"???");
+							Bukkit.getScheduler().runTaskLater(plugin, () -> {
+								if(plugin.getDeleteMaps().containsKey(name)) {
+									plugin.getDeleteMaps().remove(name);
+									Bukkit.getConsoleSender().sendMessage(ChatColor.RED+" La confirmacion del Borrado de Mapa "+ChatColor.GOLD+name+ChatColor.RED+" Expiro.");
+								}
+								
+							}, 200L);// 10 SEGS
+						}else {
+							if(plugin.getDeleteMaps().containsKey(name)) {
+								plugin.getDeleteMaps().remove(name);
+								
+								FileConfiguration menu = plugin.getMenuItems();
+								if(menu.contains(name)) {
+									   
+									   
+									   menu.set(name,null);
+									   plugin.getMenuItems().save();
+									   plugin.getMenuItems().reload();
+								}
+								YamlFilePlus y = new YamlFilePlus(plugin);
+								y.deleteSpecificConsole(name);
+							}
 						}
-						YamlFilePlus y = new YamlFilePlus(plugin);
-						y.deleteSpecificConsole(name);
-					
+						
 					}else {
 						Bukkit.getConsoleSender()
 						.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg delete <nombre-yml> ");
@@ -2011,6 +2041,12 @@ public class Comandsmg implements CommandExecutor{
 			   }
 			   
 			  
+			   return true;
+		   }else if (args[0].equalsIgnoreCase("arrow2") && player.isOp()) {
+			  
+				  spawnArrows(player); 
+			   
+			   
 			   return true;
 		   }else if (args[0].equalsIgnoreCase("set-points") && player.isOp()) {
 					try {
@@ -2421,16 +2457,24 @@ public class Comandsmg implements CommandExecutor{
 				    return true;
 				    
 				}else if (args[0].equalsIgnoreCase("info")) {
+					if(args.length == 1) {
+						
+						infomg(player,1);
 					
-					if(player.isOp()) {
-						player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa los Comandos \n");
-						player.sendMessage(plugin.nombre+ChatColor.RED+" /mg join");
-						player.sendMessage(plugin.nombre+ChatColor.RED+" /mg leave");
-
-					}else {
-						player.sendMessage(plugin.nombre+ChatColor.RED+" Preguntale al NAO el hizo esta cosa.");
-
+					}else if(args.length == 2){
+						
+						int pag = Integer.valueOf(args[1]);
+						infomg(player,pag);
 					}
+//					if(player.isOp()) {
+//						player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa los Comandos \n");
+//						player.sendMessage(plugin.nombre+ChatColor.RED+" /mg join");
+//						player.sendMessage(plugin.nombre+ChatColor.RED+" /mg leave");
+//
+//					}else {
+//						player.sendMessage(plugin.nombre+ChatColor.RED+" Preguntale al NAO el hizo esta cosa.");
+//
+//					}
 					return true;
 					
 				}else if (args[0].equalsIgnoreCase("piston")) {
@@ -3012,17 +3056,36 @@ public class Comandsmg implements CommandExecutor{
 					 }
 						if (args.length == 2) {
 							String name = args[1];
-							FileConfiguration menu = plugin.getMenuItems();
-
-							if(menu.contains(name)) {
-								   
-								   menu.set(name,null);
-								   plugin.getMenuItems().save();
-								   plugin.getMenuItems().reload();
-							}
 							
-							YamlFilePlus y = new YamlFilePlus(plugin);
-							y.deleteSpecificPlayer(player, name);
+							
+							
+							
+							if(!plugin.getDeleteMaps().containsKey(name)) {
+								plugin.getDeleteMaps().put(name, true);
+								Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+" Deseas Borrar el Mapa "+ChatColor.RED+name+ChatColor.YELLOW+"???");
+								Bukkit.getScheduler().runTaskLater(plugin, () -> {
+									if(plugin.getDeleteMaps().containsKey(name)) {
+										plugin.getDeleteMaps().remove(name);
+										Bukkit.getConsoleSender().sendMessage(ChatColor.RED+" La confirmacion del Borrado de Mapa "+ChatColor.GOLD+name+ChatColor.RED+" Expiro.");
+									}
+									
+								}, 200L);// 10 SEGS
+							}else {
+								if(plugin.getDeleteMaps().containsKey(name)) {
+									plugin.getDeleteMaps().remove(name);
+									
+									FileConfiguration menu = plugin.getMenuItems();
+									if(menu.contains(name)) {
+										   
+										   
+										   menu.set(name,null);
+										   plugin.getMenuItems().save();
+										   plugin.getMenuItems().reload();
+									}
+									YamlFilePlus y = new YamlFilePlus(plugin);
+									y.deleteSpecificPlayer(player, name);
+								}
+							}
 							//plugin.yml = new YamlFile(plugin,name, new File(plugin.getDataFolder().getAbsolutePath()+carpeta));;
 						
 						
@@ -3044,11 +3107,11 @@ public class Comandsmg implements CommandExecutor{
 					List<String> ac = config.getStringList("Maps-Created.List");
 					
 					if(args.length == 1) {
-						pagsOfMaps(player, ac, 1, 10);
+						pagsOfMaps(player, ac, 1, 10,"Lista de Mapas Creados");
 						player.sendMessage(ChatColor.GREEN+"Total de Mapas Creados: "+ChatColor.GOLD+ac.size());
 					}else if(args.length == 2) {
 						int pag = Integer.valueOf(args[1]);
-						pagsOfMaps(player, ac, pag, 10);
+						pagsOfMaps(player, ac, pag, 10,"Lista de Mapas Creados");
 				
 						player.sendMessage(ChatColor.GREEN+"Total de Mapas Creados: "+ChatColor.GOLD+ac.size());
 					}else {
@@ -4556,8 +4619,6 @@ public class Comandsmg implements CommandExecutor{
 							}
 							
 							
-							
-							
 						}//mg objetive tutorial CASA COMPLETE
 					}else if(args.length == 5){
 						String map = args[1];
@@ -4833,8 +4894,7 @@ public class Comandsmg implements CommandExecutor{
 							.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg saveInv <kit> ");
 						 }
 						
-				
-				
+	
 				return true;
 			}else if(args[0].equalsIgnoreCase("start-timer")) {
 					
@@ -5106,7 +5166,7 @@ public class Comandsmg implements CommandExecutor{
 	}
  	
  	
-	 public void pagsOfMaps(Player player,List<String> l , int pag,int datosperpags) {
+	 public void pagsOfMaps(Player player,List<String> l , int pag,int datosperpags,String title) {
 	    	
 	    	if(!l.isEmpty()) {
 	    		int inicio = (pag -1) * datosperpags;
@@ -5124,11 +5184,11 @@ public class Comandsmg implements CommandExecutor{
 	    			return;
 	    		}
 	    		if(player != null) {
-	    			player.sendMessage(ChatColor.GOLD+"Lista de Mapas Creados");
+	    			player.sendMessage(title);
 		    		player.sendMessage(ChatColor.GOLD+"Paginas: "+ChatColor.RED+pag+ChatColor.GOLD+"/"+ChatColor.RED+((l.size()+datosperpags-1)/datosperpags));
 	    		}
 	    		
-	    		Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+"Lista de Mapas Creados");
+	    		Bukkit.getConsoleSender().sendMessage(title);
 	    		Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+"Paginas: "+ChatColor.RED+pag+ChatColor.GOLD+"/"+ChatColor.RED+((l.size()+datosperpags-1)/datosperpags));
 	    	
 	    		for(int i = inicio;i < fin && i < l.size();i++) {
@@ -5171,6 +5231,79 @@ public class Comandsmg implements CommandExecutor{
  		return;
  	}
  	
+ 	
+ 	
+ 	
+ 	public void infomg(Player player,int pag) {
+	 	List<String> l = new ArrayList<>();
+	 		l.add(ChatColor.GREEN+"/mg join <map>"+ChatColor.AQUA+" Podras entrar a un Mapa.");
+	 		l.add(ChatColor.GREEN+"/mg spectator <map>"+ChatColor.AQUA+" Entra como Espectador a un Mapa.");
+	 		l.add(ChatColor.GREEN+"/mg leave"+ChatColor.AQUA+" Podras salir del Mapa si estas dentro.");
+	 		l.add(ChatColor.GREEN+"/mg mapinfo <map>"+ChatColor.AQUA+" Podras ver informacion General del Mapa.");
+	 		l.add(ChatColor.GREEN+"/mg check-points <player>"+ChatColor.AQUA+" Podras ver informacion de un Jugador.");
+	 		l.add(ChatColor.GREEN+"/mg prestige"+ChatColor.AQUA+" Podras subir de Prestigio.");
+			l.add(ChatColor.GREEN+"/mg querylevel <1>"+ChatColor.AQUA+" Consulta la XP del un Nivel.");
+	 		l.add(ChatColor.GREEN+"/mg prestiges"+ChatColor.AQUA+" Lista de Prestigios.");
+	 		l.add(ChatColor.GREEN+"/mg maprecord <map>"+ChatColor.AQUA+" Comprueba el Top 10 de Records del Mapa.");
+	 		l.add(ChatColor.GREEN+"/mg invite <map>"+ChatColor.AQUA+" Manda una Invitacion a todos los Jugadores.");
+	 		l.add(ChatColor.GREEN+"/mg mytags <map>"+ChatColor.AQUA+" Muestra las Tags que tienes.");
+	 		l.add(ChatColor.GREEN+"/mg tagsingame <map>"+ChatColor.AQUA+" Muestra las Tags del Juego.");
+	 		l.add(ChatColor.GREEN+"/mg top"+ChatColor.AQUA+" Muestra el Top General de los 10 Mejores Jugadores.");
+	 		l.add(ChatColor.GREEN+"/mg reward"+ChatColor.AQUA+" Reclama la Recompensa si estas en el Top.");
+	 		l.add(ChatColor.GREEN+"/mg misions"+ChatColor.AQUA+" Muestra el Menu de Misiones Publicas.");
+	 		l.add(ChatColor.GREEN+"/mg time"+ChatColor.AQUA+" Muestra el Tiempo del Server (Util para ciertas Misiones).");
+	 		l.add(ChatColor.GREEN+"/mg version"+ChatColor.AQUA+" Muestra la Version del Plugin.");
+	 		l.add(ChatColor.GREEN+"/mg objetives"+ChatColor.AQUA+" Muestra los Objetivos de un Mapa.");
+ 		if(player != null && player.isOp() || player == null) {
+ 			l.add(ChatColor.GOLD+"/mg reload"+ChatColor.AQUA+" Recarga las Configuraciones.");
+ 			l.add(ChatColor.GOLD+"/mg reload <map>"+ChatColor.AQUA+" Recarga las Configuraciones de un Mapa especifico.");
+ 			l.add(ChatColor.GOLD+"/mg mapsingame"+ChatColor.AQUA+" Muestra los Mapas que estan en Juego.");
+ 			l.add(ChatColor.GOLD+"/mg gamedetails <map>"+ChatColor.AQUA+" Muestra los Detalles del Mapa.");
+ 	 		l.add(ChatColor.GOLD+"/mg stop"+ChatColor.AQUA+" Deten una partida (revisa las indicaciones del Comando).");
+ 	 		l.add(ChatColor.GOLD+"/mg maintenance"+ChatColor.AQUA+" Activa/Desactiva el Modo de Mantenimiento.");
+ 	 		l.add(ChatColor.GOLD+"/mg enabled <map>"+ChatColor.AQUA+" Habilita el Mapa en caso de estar Deshabilitado.");
+ 	 		l.add(ChatColor.GOLD+"/mg disabled <map>"+ChatColor.AQUA+" Deshabilita el Mapa en caso de estar Habilitado.");
+ 	 		l.add(ChatColor.GOLD+"/mg timegame <map>"+ChatColor.AQUA+" Establece el Tiempo de Duracion de un Mapa.");
+ 	 		l.add(ChatColor.GOLD+"/mg xp <user>"+ChatColor.AQUA+" Establece la Experiencia de un Jugador.");
+ 	 		l.add(ChatColor.GOLD+"/mg show-maps"+ChatColor.AQUA+" Muestra los Mapas Creados.");
+ 	 		l.add(ChatColor.GOLD+"/mg reportlogs <user>"+ChatColor.AQUA+" Muestra los Reportes de un Jugador.");
+ 	 		l.add(ChatColor.GOLD+"/mg warn,kick,tempan,ban,pardon"+ChatColor.AQUA+" Advierte , Kickea , da Tembans , Banea o Perdona a un Jugador.");
+ 	 		l.add(ChatColor.GOLD+"/mg isban"+ChatColor.AQUA+" Comprueba si un Jugador esta Baneado de los Juegos.");
+ 	 		l.add(ChatColor.GOLD+"/mg create <map>"+ChatColor.AQUA+" Crea un Mapa nuevo.");
+ 	 		l.add(ChatColor.GOLD+"/mg setlobby"+ChatColor.AQUA+" Establece el Lobby de Salida de los Mapas.");
+	 		l.add(ChatColor.GOLD+"/mg setprelobby"+ChatColor.AQUA+" Establece el PreLobby de un Mapa.");
+	 		l.add(ChatColor.GOLD+"/mg setspawn"+ChatColor.AQUA+" Establece el Spawn de un Mapa.");
+	 		l.add(ChatColor.GOLD+"/mg setspawn-spectator"+ChatColor.AQUA+" Establece el Spawn de Espectadores de un Mapa.");
+	 		l.add(ChatColor.GOLD+"/mg setspawn-end"+ChatColor.AQUA+" Establece el Spawn Final de un Mapa.(Para Modo Resistencia)");
+ 	 		l.add(ChatColor.GOLD+"/mg delete <map>"+ChatColor.AQUA+" Borra un Mapa.");
+ 	 		l.add(ChatColor.GOLD+"/mg objetive"+ChatColor.AQUA+" Cambia o Modifica un Objetivo.");
+ 	 		l.add(ChatColor.GOLD+"/mg generator"+ChatColor.AQUA+" Agrega un Generador de Ores al Mapa. (Usa Combinacion de Bloques)");
+ 	 		l.add(ChatColor.GOLD+"/mg delgenerator"+ChatColor.AQUA+" Borra un Generador de Ores del Mapa. (Usa Combinacion de Bloques)");
+ 	 		l.add(ChatColor.GOLD+"/mg mobgenerator"+ChatColor.AQUA+" Agrega un Generador de Mobs del Mapa. (Usa Combinacion de Bloques)");
+ 	 		l.add(ChatColor.GOLD+"/mg delmobgenerator"+ChatColor.AQUA+" Borra un Generador de Mobs del Mapa. (Usa Combinacion de Bloques)");
+ 	 		l.add(ChatColor.GOLD+"/mg god"+ChatColor.AQUA+" Activa el Modo Invulnerable.");
+ 	 		l.add(ChatColor.GOLD+"/mg ungod"+ChatColor.AQUA+" Desactiva el Modo Invulnerable.");
+ 	 		l.add(ChatColor.GOLD+"/mg addtag"+ChatColor.AQUA+" Añade una Tag a un Jugador.");
+ 	 		l.add(ChatColor.GOLD+"/mg removetag"+ChatColor.AQUA+" Remueve una Tag a un Jugador.");
+ 	 		l.add(ChatColor.GOLD+"/mg showtags"+ChatColor.AQUA+" Muestra las Tags de un Jugador.");
+ 			l.add(ChatColor.GOLD+"/mg force-revive"+ChatColor.AQUA+" Revive a la Fuerza a un Jugador.");
+ 			l.add(ChatColor.GOLD+"/mg set-life"+ChatColor.AQUA+" Establece los Corazones de un Jugador.");
+ 			l.add(ChatColor.GOLD+"/mg set-scale"+ChatColor.AQUA+" Establece los la Escala/Tamaño de un Jugador.");
+ 			l.add(ChatColor.GOLD+"/mg getInv"+ChatColor.AQUA+" Obten un Inventario Guardado.");
+ 			l.add(ChatColor.GOLD+"/mg saveInv"+ChatColor.AQUA+" Guarda un Inventario.");
+ 			l.add(ChatColor.GOLD+"/mg pause"+ChatColor.AQUA+" Pausa el tiempo de un Mapa.");
+ 			l.add(ChatColor.GOLD+"/mg formats"+ChatColor.AQUA+" Obten el Formato de tiempo para usarlo en los Mapas.");
+ 			l.add(ChatColor.GOLD+"/mg dropplayer <user>"+ChatColor.AQUA+" Dropeale el Inventario a un Jugador.");
+ 			l.add(ChatColor.GOLD+"/mg deletecheckpoint <user>"+ChatColor.AQUA+" Borra los Todos Checkpoints de un Jugador cuando esta en un Mapa.");
+ 			
+ 			
+ 			
+ 		}
+ 		
+ 		pagsOfMaps(player, l, pag, 10,""+ChatColor.RED+ChatColor.BOLD+"Informacion de Comandos.");
+ 		
+ 		
+ 	}
  		// 		1					2	3  	4 = 5
  	
  	
@@ -5253,6 +5386,36 @@ public class Comandsmg implements CommandExecutor{
 			aw.setShooter(player);
 			//((Arrow) h1).setShooter(player);
 		}
+		
+		@SuppressWarnings("removal")
+		public void spawnArrows(Player player) {
+			
+			
+			Random r = new Random();
+			player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 20.0F, 1F);
+			Location loc = player.getLocation();
+			for(int i = 0 ; i < 100 ;i++) {
+				Vector v = new Vector(
+						r.nextDouble() * 2 - 1, 
+						r.nextDouble() * 2 - 1,
+						r.nextDouble() * 2 - 1
+						).normalize().multiply(2);
+				Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);// originamente loc.getEyelocation ,v , 2f 0f
+				aw.setVelocity(v.multiply(5));
+				aw.setCritical(true);
+				aw.setKnockbackStrength(2);
+				//aw.setFireTicks(1200);
+				aw.setShooter(player);
+			}
+		
+			
+			
+			
+		
+			
+			//((Arrow) h1).setShooter(player);
+		}
+		
 	
 	public void AllReload(Player player) {
 		

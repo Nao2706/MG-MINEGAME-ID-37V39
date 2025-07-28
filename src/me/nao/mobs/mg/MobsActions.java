@@ -482,11 +482,14 @@ public class MobsActions {
 					  
 				}if(mobname.contains("Zombi Super Suicida")) {
 					
+					for(int i = 0; i<4;i++) {
 					  	TNTPrimed ptnt = (TNTPrimed) z.getWorld().spawnEntity(z.getLocation().add(0.5,0,0.5),EntityType.TNT);
 						ptnt.setFuseTicks(0);
 						ptnt.setSource(z);
 						ptnt.setCustomName(ChatColor.DARK_GREEN+"Explosivo Zombi");
 						ptnt.setYield(7);
+					}
+
 					
 			  
 			  }
@@ -518,18 +521,19 @@ public class MobsActions {
 			  } if(mobname.contains("DROPPER")) {
 				  GameIntoMap gim = new GameIntoMap(plugin);
 				  gim.PlayerDropAllItems(player);
-				  player.sendMessage(ChatColor.RED+"Tu inventario se cayo JAJAJAJA");
+				  player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Dropper", ChatColor.YELLOW+"Un Dropper te a tocado.", 20, 40, 20);
+				  player.sendMessage(ChatColor.RED+"");
 				  player.setVelocity(player.getLocation().getDirection().multiply(-1).setY(2));
 			  
 			  }if(mobname.contains("Zombi Super Suicida")) {
 					
-				
+					for(int i = 0; i<4;i++) {
 					  	TNTPrimed ptnt = (TNTPrimed) z.getWorld().spawnEntity(z.getLocation().add(0.5,0,0.5),EntityType.TNT);
 						ptnt.setFuseTicks(0);
 						//ptnt.setSource(z);
 						ptnt.setCustomName(ChatColor.DARK_GREEN+"Explosivo Zombi");
 						ptnt.setYield(7);
-					
+					}
 
 			  
 			  }
@@ -1110,7 +1114,17 @@ public class MobsActions {
 				
 					Zombie zombi1 = (Zombie) world.spawnEntity(l2, EntityType.ZOMBIE);
 					zombi1.setCustomName(ChatColor.RED+"VIRUS");
+					zombi1.getEquipment().setHelmet(new ItemStack(Material.GREEN_CONCRETE));
+					zombi1.addPotionEffect(rapido);
+					zombi1.addPotionEffect(salto);
+
 					
+			
+				}else if(n == 17) {
+				
+					Zombie zombi1 = (Zombie) world.spawnEntity(l2, EntityType.ZOMBIE);
+					zombi1.setCustomName(ChatColor.RED+"HARDCORE VIRUS");
+					zombi1.getEquipment().setHelmet(new ItemStack(Material.RED_CONCRETE));
 					zombi1.addPotionEffect(rapido);
 					zombi1.addPotionEffect(salto);
 
@@ -1122,6 +1136,7 @@ public class MobsActions {
 					
 					Zombie zombi1 = (Zombie) world.spawnEntity(l2, EntityType.ZOMBIE);
 					zombi1.setCustomName(ChatColor.RED+"DROPPER");
+					zombi1.getEquipment().setHelmet(new ItemStack(Material.DROPPER));
 					zombi1.getEquipment().setHelmet(new ItemStack(Material.REDSTONE_BLOCK));
 					zombi1.addPotionEffect(rapido);
 					zombi1.addPotionEffect(salto);

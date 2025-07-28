@@ -67,7 +67,7 @@ public class Minegame extends JavaPlugin{
     private YamlFile recordtime;
    
 
-    
+    private Map<String, Boolean> delete;
     private Map<Player, PlayerInfo> playerinfopoo;
     private Map<String, GameInfo> misioninfopoo;
     private Map<Player, RevivePlayer> playerrevive;
@@ -344,7 +344,7 @@ public class Minegame extends JavaPlugin{
 		timeract = new ArrayList<String>();
 		//playerlookingmgmenu = new ArrayList<String>();
 	
-		
+		delete = new HashMap<>();
 		pags = new HashMap <Player,Integer>();
 		
 		//es test estos dos
@@ -411,6 +411,10 @@ public class Minegame extends JavaPlugin{
    
    public Map<String,LocalDateTime> getCooldownMap(){
 	   return cooldownmap;
+   }
+   
+   public Map<String,Boolean> getDeleteMaps(){
+	   return delete;
    }
    
    ////////////ITEMS

@@ -265,7 +265,7 @@ public class PHMiniGame extends PlaceholderExpansion{
         	//mg_objetive_Tutorial,Puerta1
         	return 	getPlayerprestigemg(player);
  
-        }else if(identifier.startsWith("prestigelevel")){
+        }else if(identifier.startsWith("numberprestige")){
         	//mg_objetive_Tutorial,Puerta1
         	return 	getPlayerprestigelvlmg(player);
  
@@ -341,11 +341,9 @@ public class PHMiniGame extends PlaceholderExpansion{
 	public String getPlayerlvlmg(Player player) {
 		FileConfiguration lvl = plugin.getPoints();
 		String text = "";
-		if(lvl.contains("Players."+player.getName())) {
-			text = lvl.getString("Players."+player.getName()+".Level");
-		}else {
-			text = "0";
-		}
+	
+		text = lvl.getString("Players."+player.getName()+".Level","0");
+		
 		
 		return text;
 	}
@@ -353,15 +351,9 @@ public class PHMiniGame extends PlaceholderExpansion{
 	
 	public String getPlayerprestigemg(Player player) {
 		FileConfiguration lvl = plugin.getPoints();
-		int prestigelvl = 0;
 		RankPlayer rp = new RankPlayer(plugin);
 		String text = "";
-		if(lvl.contains("Players."+player.getName())) {
-			prestigelvl = lvl.getInt("Players."+player.getName()+".Prestige");
-			text = rp.getRankPrestigePlaceHolder(prestigelvl);
-		}else {
-			text = rp.getRankPrestigePlaceHolder(0);
-		}
+		text = rp.getRankPrestigePlaceHolder(lvl.getInt("Players."+player.getName()+".Prestige",0));
 		
 		return text;
 	}
@@ -369,12 +361,7 @@ public class PHMiniGame extends PlaceholderExpansion{
 	public String getPlayerprestigelvlmg(Player player) {
 		FileConfiguration lvl = plugin.getPoints();
 		String text = "";
-		if(lvl.contains("Players."+player.getName())) {
-			text = String.valueOf(lvl.getInt("Players."+player.getName()+".Prestige"));
-			
-		}else {
-			text = String.valueOf(0);	
-		}
+		text = lvl.getString("Players."+player.getName()+".Prestige","0");
 		
 		return text;
 	}
