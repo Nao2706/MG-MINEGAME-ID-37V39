@@ -418,7 +418,7 @@ public class GameConditions {
 	                if (regis.getCronometPlayerName().equals(nuevoParticipante.getCronometPlayerName())) {
 	                	Player player = ConvertStringToPlayerAlone(nuevoParticipante.getCronometPlayerName());
 	                   // encontrado = true;
-	                    if (nuevoParticipante.getCronometTotalSeconds() < regis.getCronometTotalSeconds() && nuevoParticipante.getKills() > regis.getKills()) {
+	                    if (nuevoParticipante.getCronometTotalSeconds() <= regis.getCronometTotalSeconds() && nuevoParticipante.getKills() > regis.getKills()) {
 	                    	
 	                  
 	                    	player.sendMessage(ChatColor.AQUA+nuevoParticipante.getCronometPlayerName() + ChatColor.GREEN+" has roto tu récord! Nuevo tiempo: " +ChatColor.AQUA+ nuevoParticipante.getCronometTime()+ChatColor.GREEN+" Kills: "+ChatColor.AQUA+nuevoParticipante.getKills()+
@@ -427,7 +427,7 @@ public class GameConditions {
 	                        //regis.setNewRecord(nuevoParticipante.getCronometPlayerName() ,nuevoParticipante.getCronometTotalSeconds());
 	                         //System.out.println(nuevoParticipante.getCronometPlayerName()+" "+nuevoParticipante.getCronometTime());
 	                       
-	                    } else {
+	                    }else{
 	                    	 
 	                    	player.sendMessage(ChatColor.RED+nuevoParticipante.getCronometPlayerName() +ChatColor.DARK_GRAY+" no alcanzaste a Romper tu récord. "+ChatColor.GOLD+"Mejor tiempo: " + ChatColor.GREEN+regis.getCronometTime()+ChatColor.GOLD+" Kills:"+ChatColor.GREEN+regis.getKills()+
 	                    			ChatColor.RED+"\nTiempo Actual: "+ChatColor.GOLD+ nuevoParticipante.getCronometTime()+ChatColor.RED+" Kills: "+ChatColor.GOLD+nuevoParticipante.getKills());

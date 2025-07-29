@@ -547,8 +547,9 @@ public class EventRandoms implements Listener{
 					 }
 						
 					 if(e.getHand() == EquipmentSlot.OFF_HAND)return;
+					 PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 					 if(b3.getType() == Material.LIME_BANNER && checkpoint.getType() == Material.STRUCTURE_BLOCK) {
-						 PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+						
 						 if(!player.getInventory().containsAtLeast(Items.CHECKPOINTFLAG.getValue(),1)) {
 							 player.getInventory().addItem(Items.CHECKPOINTFLAG.getValue());
 						 }
@@ -574,7 +575,35 @@ public class EventRandoms implements Listener{
 							 pl.setCheckpointLocationMg(b3.getLocation());
 						 }
 						 
-					 }
+					 }else if(b3.getType() == Material.LIGHT_BLUE_BANNER && checkpoint.getType() == Material.STRUCTURE_BLOCK) {
+						
+					
+						 if(pl.getRespawn() != null) {
+							 if(pl.getRespawn().equals(b3.getLocation())) {
+								 player.sendMessage(ChatColor.RED+"La Ubicacion ya esta Guardada, encuentra otro sitio para Sobreescribir los Datos.");
+
+								 return;
+							 }else {
+					   		    player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+">>> "+ChatColor.AQUA+ChatColor.BOLD+"RESPAWN GUARDADO"+ChatColor.GREEN+ChatColor.BOLD+"  <<<",ChatColor.GREEN+"Punto de Control", 20, 40, 20);
+					
+								 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, b3.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
+								 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+								 player.sendMessage(ChatColor.AQUA+"La Ubicacion del Respawn se Guardado. (Ubicacion Sobreescrita).");
+								 pl.setRespawnLocationMg(b3.getLocation());
+						
+							 }
+						 }else {
+							 player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+">>> "+ChatColor.AQUA+ChatColor.BOLD+"RESPAWN GUARDADO"+ChatColor.GREEN+ChatColor.BOLD+"  <<<",ChatColor.GREEN+"Punto de Control", 20, 40, 20);
+					
+					
+							 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, b3.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
+					
+							 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+							 player.sendMessage(ChatColor.AQUA+"La Ubicacion del Respawn se Guardado");
+							 pl.setRespawnLocationMg(b3.getLocation());
+						 }
+						 
+					}
 						
 					  if(b3.getType() == Material.CHEST ) {
 						  
@@ -753,9 +782,9 @@ public class EventRandoms implements Listener{
 						
 						if(e.getItem().isSimilar(Items.CHECKPOINTFLAG.getValue())) {
 		        			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
-		        			
+		        			player.setCooldown(Items.CHECKPOINTFLAG.getValue(), 20*10);
 		        			if(pl.getCheckPointMarker() == null) {
-		        				player.setCooldown(Items.CHECKPOINTFLAG.getValue(), 20*10);
+		        				
 		        				player.sendMessage(ChatColor.RED+"No tienes Ningun CheckPoint Marcado.");
 		        				player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 20.0F, 1F);
 		        				return;
@@ -766,7 +795,7 @@ public class EventRandoms implements Listener{
 					
 							
 							
-							player.teleport( new Location(pl.getCheckPointMarker().getWorld(),pl.getCheckPointMarker().getX(), pl.getCheckPointMarker().getY(), pl.getCheckPointMarker().getZ(),player.getLocation().getYaw(),player.getLocation().getPitch()).add(0.5, 0, 0.5));
+							player.teleport(new Location(pl.getCheckPointMarker().getWorld(),pl.getCheckPointMarker().getX(), pl.getCheckPointMarker().getY(), pl.getCheckPointMarker().getZ(),player.getLocation().getYaw(),player.getLocation().getPitch()).add(0.5, 0, 0.5));
 		        			
 		        			player.sendTitle(""+ChatColor.BLUE+ChatColor.BOLD+">>> "+ChatColor.GREEN+ChatColor.BOLD+"REGRESANDO"+ChatColor.BLUE+ChatColor.BOLD+"  <<<",ChatColor.YELLOW+"REGRESASTE A TU CHECKPOINT", 20, 40, 20);
 		        			

@@ -559,13 +559,16 @@ public class GameIntoMap {
 	 
 	public void revivePlayerRespawn(Player player){
 		//GameConditions gc = new GameConditions(plugin);
+		GameConditions cm = new GameConditions(plugin);
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		pl.getGamePoints().setRevive(pl.getGamePoints().getRevive()+1);
+		cm.setHeartsInGame(player, pl.getMapName());
+		cm.setKitMg(player);
 		healPlayer(player);
-		player.teleport(pl.getRespawn().add(0.5, 0, 0.5));
-		player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+">>> "+ChatColor.AQUA+ChatColor.BOLD+"RESPAWNASTE"+ChatColor.GREEN+ChatColor.BOLD+"  <<<",ChatColor.GREEN+"Punto de Control", 20, 40, 20);
+		player.teleport(new Location(pl.getRespawn().getWorld(),pl.getRespawn().getX(), pl.getRespawn().getY(), pl.getRespawn().getZ(),player.getLocation().getYaw(),player.getLocation().getPitch()).add(0.5, 0, 0.5));
+		player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+">>> "+ChatColor.AQUA+ChatColor.BOLD+"RESPAWNEASTE"+ChatColor.GREEN+ChatColor.BOLD+"  <<<",ChatColor.GREEN+"Punto de Control", 20, 40, 20);
 		player.setGameMode(GameMode.ADVENTURE);
-		player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, pl.getRespawn().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
+		player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,new Location(pl.getRespawn().getWorld(),pl.getRespawn().getX(), pl.getRespawn().getY(), pl.getRespawn().getZ()).add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
 		player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 	}
 

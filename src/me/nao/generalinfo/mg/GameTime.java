@@ -77,6 +77,7 @@ public class GameTime {
 	public void timerRunMg() {
 		GameInfo gi = plugin.getGameInfoPoo().get(this.map);
 		
+		if(gi.getGameStatus() == GameStatus.TERMINANDO)return;
 		if(this.cronometsecondmg != 60 ){
 		   this.cronometsecondmg++;
 			

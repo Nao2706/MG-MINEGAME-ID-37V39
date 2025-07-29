@@ -321,6 +321,7 @@ public class MobsActions {
 	
 
 	//CUANDO ATACAS
+	@SuppressWarnings("removal")
 	public void getAttackedZombie(Entity atacante ,Entity atacada) {
 		
 		
@@ -345,7 +346,7 @@ public class MobsActions {
           				}
           			}
 			   
-				}if(mobname.contains("Stargeteed")) {
+				}if(mobname.contains("Leader")) {
 				
 					
 					List<Entity> list = getNearbyEntities(z.getLocation(),50);
@@ -365,7 +366,20 @@ public class MobsActions {
         				}
         			}
 			   
-				}if(mobname.contains(ChatColor.RED+"Summon")) {
+				}if(mobname.contains("Zombi Puas")) {
+			    	
+				  for(int i = 0;i<10;i++) {
+						Location loc = z.getLocation();
+						
+						Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
+						aw.setVelocity(loc.getDirection().add(new Vector(RandomV(),0.3,RandomV())).multiply(3));
+						aw.setCritical(true);
+						aw.setKnockbackStrength(2);
+						aw.setFireTicks(1200);
+						aw.setShooter(z);
+						//((Arrow) h1).setShooter(player);
+					}
+			}if(mobname.contains(ChatColor.RED+"Summon")) {
 					for(int i =0 ; i< 10;i++) {
 						Location loc = z.getLocation();
 						Zombie z1 = (Zombie) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ZOMBIE);
@@ -403,10 +417,10 @@ public class MobsActions {
 						//player.getInventory().removeItem(new ItemStack(Material.TNT,1));
 						Location lm = new Location(target.getWorld(),target.getLocation().getBlockX(),256,target.getLocation().getBlockZ());
 						Location l = z.getLocation();
-						Entity fb = l.getWorld().spawnEntity(lm.add(0.5, 0, 0.5), EntityType.FIREBALL);
+						
 						//fb.setCustomName("Mortero");
 						
-						Fireball f = (Fireball) fb;
+						Fireball f =  (Fireball) l.getWorld().spawnEntity(lm.add(0.5, 0, 0.5), EntityType.FIREBALL);
 						f.setYield(10);
 						f.setDirection(new Vector (0,-3,0));
 						f.setVelocity(f.getDirection().multiply(3));
@@ -436,7 +450,7 @@ public class MobsActions {
 								Location loc = z.getLocation();
 								
 								Zombie z1 = (Zombie) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ZOMBIE);
-								z1.setCustomName(ChatColor.GREEN+" Soy la Copia de: "+ChatColor.GOLD+target.getName());
+								z1.setCustomName(ChatColor.GREEN+"Copia de: "+ChatColor.GOLD+target.getName());
 								z1.addPotionEffect(speed);
 								z1.addPotionEffect(jump);
 								 ItemStack[] inv = target.getInventory().getArmorContents();
@@ -461,6 +475,7 @@ public class MobsActions {
 		
 	}
 	
+	@SuppressWarnings("removal")
 	public void onDead(Entity atacante ,Entity atacada) {
 		  if(atacante instanceof Entity && atacada instanceof Zombie) {
 			  Zombie z = (Zombie) atacada;
@@ -470,6 +485,8 @@ public class MobsActions {
 			    if(mobname.contains("VIRUS")) {
 				  AreaPotion(z,z.getLocation(),PotionEffectType.POISON,"GREEN",15,20,20,5);
 				  AreaPotion(z,z.getLocation(),PotionEffectType.INSTANT_DAMAGE,"RED",15,20,20,2);
+					
+				  
 				  
 			    }if(mobname.contains("HARDCORE VIRUS")) {
 			    	
@@ -492,11 +509,27 @@ public class MobsActions {
 
 					
 			  
-			  }
+			  }if(mobname.contains("Puas")) {
+			    	
+				  for(int i = 0;i<10;i++) {
+						Location loc = z.getLocation();
+						
+						
+						
+						Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
+						aw.setVelocity(loc.getDirection().add(new Vector(RandomV(),0.3,RandomV())).multiply(3));
+						aw.setCritical(true);
+						aw.setKnockbackStrength(2);
+						aw.setFireTicks(1200);
+						aw.setShooter(z);
+						//((Arrow) h1).setShooter(player);
+					}
+			}
 		  }
 	}
 	 
 	//CUANDO EL ZOMBI ATACA
+	@SuppressWarnings("removal")
 	public void getZombiettack(Entity atacante ,Entity atacada) {
 		 if(atacante instanceof Zombie && atacada instanceof Player) {
 			 Player player = (Player) atacada;
@@ -536,7 +569,22 @@ public class MobsActions {
 					}
 
 			  
-			  }
+			  }if(mobname.contains("Zombi Puas")) {
+			    	
+				  for(int i = 0;i<10;i++) {
+						Location loc = z.getLocation();
+						
+						
+						
+						Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
+						aw.setVelocity(loc.getDirection().add(new Vector(RandomV(),0.3,RandomV())).multiply(3));
+						aw.setCritical(true);
+						aw.setKnockbackStrength(2);
+						aw.setFireTicks(1200);
+						aw.setShooter(z);
+						//((Arrow) h1).setShooter(player);
+					}
+			}
 					
 			 
 		 }
@@ -1689,7 +1737,23 @@ public class MobsActions {
 			
 				}else if(n == 19) {
 					Zombie zombi1 = (Zombie)  world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
-					zombi1.setCustomName(""+ChatColor.RED+ChatColor.BOLD+"Clavado Penetrador al Estilo Indio");
+					zombi1.setCustomName(""+ChatColor.RED+ChatColor.BOLD+"Zombi Puas");
+					
+					
+					zombi1.addPotionEffect(rapido);
+					
+					zombi1.addPotionEffect(salto);
+				
+					zombi1.getAttribute(attribute).setBaseValue(150);
+					zombi1.getEquipment().setHelmet(new ItemStack(Material.IRON_HELMET));
+					zombi1.getEquipment().setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE));
+					zombi1.getEquipment().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
+					zombi1.getEquipment().setBoots(new ItemStack(Material.IRON_BOOTS));
+					zombi1.getEquipment().setItemInMainHand(new ItemStack(Material.CROSSBOW));
+					
+				}else if(n == 19) {
+					Zombie zombi1 = (Zombie)  world.spawnEntity(l2.add(0.5, 0, 0.5), EntityType.ZOMBIE);
+					zombi1.setCustomName(""+ChatColor.RED+ChatColor.BOLD+"Leader");
 					
 					
 					zombi1.addPotionEffect(rapido);
@@ -2071,7 +2135,12 @@ public class MobsActions {
 			    	
 		}
     
-		public int randomPosOrNeg(int i){
+		 
+	 public double RandomV() {
+				return Math.random() * 2 - 1;
+	}
+		 
+	public int randomPosOrNeg(int i){
 				Random r = new Random();
 				int v = r.nextInt(i+1);
 				//genera aleatoriedad si es 0 devuelve el valor como tal si es 1 devuelve un valor positivo o negativo
@@ -2080,11 +2149,11 @@ public class MobsActions {
 					return v;
 				}
 				return transformPosOrNeg(v);
-		}
+	}
 			
-		public int transformPosOrNeg(int i){
+	public int transformPosOrNeg(int i){
 				return i =  (~(i -1));
-		}	 
+	}	 
 		 
 	public int randomBetweenValue(int min ,int max) {
 		

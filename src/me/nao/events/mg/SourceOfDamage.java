@@ -307,12 +307,22 @@ public class SourceOfDamage implements Listener{
 				Block block = player.getLocation().getBlock();
 				Block c1 = block.getRelative(0, 0, 0);
 				Block c2 = block.getRelative(0, -2, 0);
-				
+				Block c3 = block.getRelative(0, -3, 0);
 					
 				
 				
 				
-				if(player.getGameMode() == GameMode.ADVENTURE) {
+				if(player.getGameMode() == GameMode.ADVENTURE && player.isOnGround()) {
+					
+					if(c2.getType() == Material.REDSTONE_BLOCK && c3.getType() == Material.STRUCTURE_BLOCK) {
+						if(pl.getBackAllTagsMg() != null || pl.getCheckPointMarker() != null || pl.getRespawn() != null) {
+							pl.setCheckpointItemLocationMg(null);
+							pl.setCheckpointLocationMg(null);
+							pl.setRespawnLocationMg(null);
+					   		player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"!!! "+ChatColor.YELLOW+ChatColor.BOLD+"ADVERTENCIA"+ChatColor.RED+ChatColor.BOLD+"  !!!",ChatColor.YELLOW+"CheckPoints Eliminados", 20, 40, 20);
+
+						}
+					}
 					
 					if(c1.getType() == Material.LIME_BANNER && c2.getType() == Material.STRUCTURE_BLOCK) {
 						
@@ -320,17 +330,17 @@ public class SourceOfDamage implements Listener{
 							 player.getInventory().addItem(Items.CHECKPOINTFLAG.getValue());
 						 }
 						 if(pl.getCheckPointMarker() != null) {
-							 if(pl.getCheckPointMarker().equals(block.getLocation())) {
-								 return;
-							 }else {
-					   		 player.sendTitle(""+ChatColor.BLUE+ChatColor.BOLD+">>> "+ChatColor.GREEN+ChatColor.BOLD+"CHECKPOINT GUARDADO"+ChatColor.BLUE+ChatColor.BOLD+"  <<<",ChatColor.YELLOW+"Punto de Control", 20, 40, 20);
+							 if(pl.getCheckPointMarker().equals(block.getLocation()))return;
+								 
+							
+					   		     player.sendTitle(""+ChatColor.BLUE+ChatColor.BOLD+">>> "+ChatColor.GREEN+ChatColor.BOLD+"CHECKPOINT GUARDADO"+ChatColor.BLUE+ChatColor.BOLD+"  <<<",ChatColor.YELLOW+"Punto de Control", 20, 40, 20);
 					
 								 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, block.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
 								 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 								 player.sendMessage(ChatColor.GREEN+"La Ubicacion se Guardado. (Ubicacion Sobreescrita) , Utiliza el Item de CheckPoint de Banderas para regresar.");
 								 pl.setCheckpointLocationMg(block.getLocation());
 						
-							 }
+							 
 						 }else {
 							 player.sendTitle(""+ChatColor.BLUE+ChatColor.BOLD+">>> "+ChatColor.GREEN+ChatColor.BOLD+"CHECKPOINT GUARDADO"+ChatColor.BLUE+ChatColor.BOLD+"  <<<",ChatColor.YELLOW+"Punto de Control", 20, 40, 20);
 					
@@ -346,17 +356,19 @@ public class SourceOfDamage implements Listener{
 						
 					
 						 if(pl.getRespawn() != null) {
-							 if(pl.getRespawn().equals(block.getLocation())) {
-								 return;
-							 }else {
-					   		    player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+">>> "+ChatColor.AQUA+ChatColor.BOLD+"RESPAWN GUARDADO"+ChatColor.GREEN+ChatColor.BOLD+"  <<<",ChatColor.GREEN+"Punto de Control", 20, 40, 20);
+							 if(pl.getRespawn().equals(block.getLocation()))return;
+							 System.out.println("BL: "+block.getLocation());
+							 System.out.println("SAVE: "+pl.getRespawn());
+								//&& pl.getRespawn().distance(block.getLocation()) > 2
+						
+					   		     player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+">>> "+ChatColor.AQUA+ChatColor.BOLD+"RESPAWN GUARDADO"+ChatColor.GREEN+ChatColor.BOLD+"  <<<",ChatColor.GREEN+"Punto de Control", 20, 40, 20);
 					
 								 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, block.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
 								 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 								 player.sendMessage(ChatColor.AQUA+"La Ubicacion del Respawn se Guardado. (Ubicacion Sobreescrita).");
 								 pl.setRespawnLocationMg(block.getLocation());
 						
-							 }
+							 
 						 }else {
 							 player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+">>> "+ChatColor.AQUA+ChatColor.BOLD+"RESPAWN GUARDADO"+ChatColor.GREEN+ChatColor.BOLD+"  <<<",ChatColor.GREEN+"Punto de Control", 20, 40, 20);
 					
