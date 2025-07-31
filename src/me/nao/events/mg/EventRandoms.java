@@ -119,6 +119,7 @@ import me.nao.generalinfo.mg.GameAdventure;
 import me.nao.generalinfo.mg.GameConditions;
 import me.nao.generalinfo.mg.GameInfo;
 import me.nao.generalinfo.mg.PlayerInfo;
+import me.nao.generalinfo.mg.RespawnLife;
 import me.nao.main.mg.Minegame;
 import me.nao.manager.mg.GameIntoMap;
 import me.nao.mobs.mg.MobsActions;
@@ -449,10 +450,10 @@ public class EventRandoms implements Listener{
 		Player player = e.getPlayer();
 		
 		
-		if(player.getInventory().getItemInMainHand() != null && player.getInventory().getItemInMainHand().isSimilar(Items.BENGALAROJA.getValue()) || player.getInventory().getItemInMainHand().isSimilar(Items.BENGALAVERDE.getValue())) {
-			new Flare(player, player.getInventory().getItemInMainHand(),player.getEyeLocation(),plugin);
-			return;
-		}
+//		if(player.getInventory().getItemInMainHand() != null && player.getInventory().getItemInMainHand().isSimilar(Items.BENGALAROJA.getValue()) || player.getInventory().getItemInMainHand().isSimilar(Items.BENGALAVERDE.getValue())) {
+//			new Flare(player, player.getInventory().getItemInMainHand(),player.getEyeLocation(),plugin);
+//			return;
+//		}
 		
 		if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
 			if (e.getItem() != null) {
@@ -534,6 +535,7 @@ public class EventRandoms implements Listener{
 						Block b3 = e.getClickedBlock();
 						Block b1 = b3.getRelative(0, -1, 0);
 						Block checkpoint = b3.getRelative(0, -2, 0);
+						Block c4 = b3.getRelative(0, -4, 0);
 					 if(b3.getType() == Material.STONE_BUTTON ) {
 						 
 						 	YouNeedYourFriends(player,b3);
@@ -601,6 +603,35 @@ public class EventRandoms implements Listener{
 							 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 							 player.sendMessage(ChatColor.AQUA+"La Ubicacion del Respawn se Guardado");
 							 pl.setRespawnLocationMg(b3.getLocation());
+						 }
+						 
+					}else if(b3.getType() == Material.RED_BANNER && checkpoint.getType() == Material.STRUCTURE_BLOCK) {
+						
+						
+						 if(pl.getRespawnLife()!= null) {
+							 RespawnLife rl = pl.getRespawnLife();
+							 if(rl.getLocRespawnLife().equals(b3.getLocation())) {
+								 player.sendMessage(ChatColor.RED+"La Ubicacion ya esta Guardada, encuentra otro sitio para Sobreescribir los Datos.");
+
+								 return;
+							 }else {
+					   		    player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+">>> "+ChatColor.RED+ChatColor.BOLD+"RESPAWN GUARDADO"+ChatColor.GREEN+ChatColor.BOLD+"  <<<",ChatColor.GREEN+"Punto de Control", 20, 40, 20);
+					
+								 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, b3.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
+								 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+								 player.sendMessage(ChatColor.RED+"La Ubicacion del Respawn se Guardado. (Ubicacion Sobreescrita).");
+								 pl.setRespawnLifeLocationMg(new RespawnLife(b3.getLocation(),gc.setLifeByBlock(c4.getLocation())));
+						
+							 }
+						 }else {
+							 player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+">>> "+ChatColor.RED+ChatColor.BOLD+"RESPAWN GUARDADO"+ChatColor.GREEN+ChatColor.BOLD+"  <<<",ChatColor.GREEN+"Punto de Control", 20, 40, 20);
+					
+					
+							 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, b3.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
+					
+							 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+							 player.sendMessage(ChatColor.RED+"La Ubicacion del Respawn se Guardado");
+							 pl.setRespawnLifeLocationMg(new RespawnLife(b3.getLocation(),gc.setLifeByBlock(c4.getLocation())));
 						 }
 						 
 					}
@@ -729,12 +760,12 @@ public class EventRandoms implements Listener{
 						
 						if(e.getItem().isSimilar(Items.DASHP.getValue())) {
 							
-							if(!player.hasCooldown(Items.DASHP.getValue())) {
+							if(player.hasCooldown(Items.DASHP.getValue())) return;
 								player.setCooldown(Items.DASHP.getValue(), 20 * 20);
 								player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 20.0F, 1F);
 								player.setVelocity(player.getLocation().getDirection().multiply(5).setY(1));
 								
-							}
+							
 							
 							//player.launchProjectile(org.bukkit.entity.EnderPearl.class);
 			               
@@ -759,7 +790,9 @@ public class EventRandoms implements Listener{
 						}
 						
 						if(!player.getScoreboardTags().contains("Rockets")) {
+							
 							if(e.getItem().isSimilar(new ItemStack(Material.FIREWORK_ROCKET))) {
+							if(player.hasCooldown(e.getItem())) return;
 								player.setCooldown(e.getItem(),25*20);
 							}
 						}
@@ -770,6 +803,7 @@ public class EventRandoms implements Listener{
 						
 						if(!player.getScoreboardTags().contains("Enderpearls")) {
 							if(e.getItem().isSimilar(new ItemStack(Material.ENDER_PEARL))) {
+							if(player.hasCooldown(e.getItem())) return;
 								player.setCooldown(e.getItem(),30*20);
 							}
 						}
@@ -781,6 +815,7 @@ public class EventRandoms implements Listener{
 						
 						
 						if(e.getItem().isSimilar(Items.CHECKPOINTFLAG.getValue())) {
+							if(player.hasCooldown(Items.CHECKPOINTFLAG.getValue())) return;
 		        			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		        			player.setCooldown(Items.CHECKPOINTFLAG.getValue(), 20*10);
 		        			if(pl.getCheckPointMarker() == null) {
@@ -807,7 +842,7 @@ public class EventRandoms implements Listener{
 						}
 
 						
-						if(e.getItem().isSimilar( Items.REFUERZOSP.getValue())) {
+						if(e.getItem().isSimilar(Items.REFUERZOSP.getValue())) {
 					
 							Location loc = player.getLocation();
 							IronGolem ih = (IronGolem) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.IRON_GOLEM);
@@ -881,13 +916,14 @@ public class EventRandoms implements Listener{
 					}	
 					
 						if(e.getItem().isSimilar(Items.BENGALAROJAP.getValue()) || e.getItem().isSimilar(Items.BENGALAVERDEP.getValue())) {
-							
+							if(player.hasCooldown(Items.BENGALAROJAP.getValue()) || player.hasCooldown(Items.BENGALAVERDEP.getValue())) return;
 							new Flare(player, player.getInventory().getItemInMainHand(),player.getEyeLocation(),plugin);
 							player.setCooldown(e.getItem(), 10*20);
 							removeItemstackCustom(player,e.getItem());
 						}
 						
 						if(e.getItem().isSimilar(Items.BENGALAMARCADORAP.getValue())) {
+							if(player.hasCooldown(Items.BENGALAMARCADORAP.getValue())) return;
 							player.setCooldown(e.getItem(), 5*20);
 							new Flare(player, player.getInventory().getItemInMainHand(),player.getEyeLocation(),plugin);
 							removeItemstackCustom(player,e.getItem());
@@ -1556,6 +1592,7 @@ public class EventRandoms implements Listener{
 		
 	
 		
+		@SuppressWarnings("removal")
 		@EventHandler
 		public void onExplodeEntity(EntityExplodeEvent e) {
 			
@@ -1574,9 +1611,27 @@ public class EventRandoms implements Listener{
 					names.add("Suicida");
 					names.add("Cohete");
 					names.add("Super TNT");
-					names.add("Explosivo Zombi");				
+					names.add("Explosivo Zombi");
+					names.add("LLUVIA DE TNT");	
+					names.add("LLUVIA DE TNT CON PUAS");	
 					
 					//names.stream().filter(o -> o.contains(ChatColor.stripColor(ent.getCustomName()))).findFirst().isPresent() || 
+					
+					if(mobname.equals("LLUVIA DE TNT CON PUAS")){
+						 for(int i = 0;i<10;i++) {
+								Location loc = ent.getLocation();
+								Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
+								aw.setVelocity(getRandomVector());
+								aw.setCritical(true);
+								aw.setKnockbackStrength(2);
+								aw.setFireTicks(1200);
+								aw.setCustomName(ChatColor.RED+"Pua de TNT");
+								aw.setDamage(15);
+								//aw.setShooter(z);
+								//((Arrow) h1).setShooter(player);
+							}
+					}
+					
 					if(names.stream().filter(o -> o.startsWith(mobname)).findFirst().isPresent()) {
 						
 						List<Material> mat = new ArrayList<>();
@@ -1967,7 +2022,7 @@ public class EventRandoms implements Listener{
 				  Entity damager =  (Entity) projectile.getShooter();
 				  Entity entidadhit = e.getHitEntity();
 		
-				  if(damager.getType() == EntityType.SNOW_GOLEM) {
+				  if(damager.getType() == EntityType.SNOW_GOLEM && entidadhit instanceof LivingEntity) {
 						LivingEntity le = (LivingEntity) damager;
 						LivingEntity victim = (LivingEntity) entidadhit;
 						
@@ -3585,7 +3640,20 @@ public class EventRandoms implements Listener{
 		        return Strings.repeat(""+ completedColor +ChatColor.BOLD + symbol, progressBars) + Strings.repeat("" + notCompletedColor +ChatColor.BOLD+ symbol, totalBars - progressBars);
 		   }
 		 
-					
+		   public double RandomV() {
+			  return Math.random() * 2 - 1;
+		   }
+		 	
+		   public Vector getRandomVector() {
+			   double u = Math.random();
+			   double v = Math.random() * 2 * Math.PI;
+			   double x = Math.sqrt(u) * Math.cos(v);
+			   double y = Math.sqrt(1 - u);
+			   double z = Math.sqrt(u) * Math.sin(v);
+			   
+			   Vector vect = new Vector(x,y,z).multiply(3);
+			   return vect;
+	 	   }
 					
 		}
 		

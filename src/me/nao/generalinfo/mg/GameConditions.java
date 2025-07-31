@@ -30,6 +30,7 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
+import org.bukkit.block.Chest;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
@@ -5571,7 +5572,7 @@ public class GameConditions {
 	
 	}
 	
-	public void tntrain(Location center, double radius, int amount) {
+	public void tntrain(Location center, double radius, int amount ,int type) {
 	    for (int i = 0; i < amount; i++) {
 	        // Generar un ángulo aleatorio y una distancia aleatoria dentro del radio
 	        double angulo = Math.random() * 2 * Math.PI;
@@ -5588,10 +5589,31 @@ public class GameConditions {
 	        TNTPrimed tnt = loc.getWorld().spawn(loc, TNTPrimed.class);
 	        // Puedes configurar el fuse del TNT si lo deseas
 	        tnt.setFuseTicks(5*20);
-	        tnt.setCustomName(ChatColor.RED+"LLUVIA DE TNT");
+	        tnt.setYield(10);
+	        if(type == 1) {
+	        	  tnt.setCustomName(ChatColor.RED+"LLUVIA DE TNT CON PUAS");
+	        }else {
+	        	  tnt.setCustomName(ChatColor.RED+"LLUVIA DE TNT");
+	        }
+	      
 	    }
 	}
 	
+	
+	
+	public int setLifeByBlock(Location loc) {
+		int lifes = 0;
+		 if(loc.getBlock().getType() == Material.CHEST) {
+			  Chest chest = (Chest) loc.getBlock().getState();
+			  if(chest.getCustomName() != null){
+				  String name = ChatColor.stripColor(chest.getCustomName());
+				  lifes = Integer.valueOf(name);
+			  }
+		 }else {
+			 lifes = 1;
+		 }
+		return lifes;
+	}
 	
 	
 }

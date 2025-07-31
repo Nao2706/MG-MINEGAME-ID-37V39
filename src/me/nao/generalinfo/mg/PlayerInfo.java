@@ -37,6 +37,7 @@ public class PlayerInfo {
 	private Set<String> tags;
 	private SystemOfLevels sl;
 	private Location checkpoint,itemcheckpoint,respawn;
+	private RespawnLife respawnlife;
 	private MapRecords tr;
 	private Entity creditkill;
 
@@ -64,9 +65,7 @@ public class PlayerInfo {
 			this.teamname = "NINGUNO";
 			this.mglvl = 0;
 			this.tags = player.getScoreboardTags();
-			this.checkpoint = null;
 		
-			
 		}else{
 			this.pgs = pgs;
 			this.plugin = plugin;
@@ -89,12 +88,13 @@ public class PlayerInfo {
 			this.mglvl = 0;
 			this.mgprestige = 0;
 			this.tags = player.getScoreboardTags();
-			this.checkpoint = null;
-			this.itemcheckpoint = null;
-			this.respawn = null;
-			
-		
+	
 		}
+		
+		this.checkpoint = null;
+		this.itemcheckpoint = null;
+		this.respawn = null;
+		this.respawnlife = null;
 		this.creditkill = null;
 		tr = null;
 		sl = null;
@@ -168,6 +168,10 @@ public class PlayerInfo {
 	
 	public Location getRespawn() {
 		return respawn;
+	}
+	
+	public RespawnLife getRespawnLife() {
+		return respawnlife;
 	}
 	
 	public String getMapName() {
@@ -264,6 +268,10 @@ public class PlayerInfo {
 	
 	public void setRespawnLocationMg(Location respawn) {
 		this.respawn = respawn;
+	}
+	
+	public void setRespawnLifeLocationMg(RespawnLife respawnlife) {
+		this.respawnlife = respawnlife;
 	}
 	
 	public void setMisionName(String map) {

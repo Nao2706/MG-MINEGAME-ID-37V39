@@ -372,7 +372,7 @@ public class MobsActions {
 						Location loc = z.getLocation();
 						
 						Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
-						aw.setVelocity(loc.getDirection().add(new Vector(RandomV(),0.3,RandomV())).multiply(3));
+						aw.setVelocity(getRandomVector());
 						aw.setCritical(true);
 						aw.setKnockbackStrength(2);
 						aw.setFireTicks(1200);
@@ -509,7 +509,7 @@ public class MobsActions {
 
 					
 			  
-			  }if(mobname.contains("Puas")) {
+			  }if(mobname.contains("Zombi Puas")) {
 			    	
 				  for(int i = 0;i<10;i++) {
 						Location loc = z.getLocation();
@@ -517,7 +517,7 @@ public class MobsActions {
 						
 						
 						Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
-						aw.setVelocity(loc.getDirection().add(new Vector(RandomV(),0.3,RandomV())).multiply(3));
+						aw.setVelocity(getRandomVector());
 						aw.setCritical(true);
 						aw.setKnockbackStrength(2);
 						aw.setFireTicks(1200);
@@ -577,7 +577,7 @@ public class MobsActions {
 						
 						
 						Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
-						aw.setVelocity(loc.getDirection().add(new Vector(RandomV(),0.3,RandomV())).multiply(3));
+						aw.setVelocity(getRandomVector());
 						aw.setCritical(true);
 						aw.setKnockbackStrength(2);
 						aw.setFireTicks(1200);
@@ -1806,7 +1806,7 @@ public class MobsActions {
 		if(!l.isEmpty()) {
 			for(Location loc : l) {
 				
-				if(player.getLocation().distance(loc) <= rango) {
+				if(player.getWorld().getName().equals(loc.getWorld().getName()) && player.getLocation().distance(loc) <= rango) {
 				
 				Block a = loc.getBlock();
 				Block b = a.getRelative(0,-1, 0);
@@ -1880,7 +1880,7 @@ public class MobsActions {
 			if(!l.isEmpty()) {
 				for(Location loc : l) {
 					
-					if(player.getLocation().distance(loc) <= rango) {
+					if(player.getWorld().getName().equals(loc.getWorld().getName()) && player.getLocation().distance(loc) <= rango) {
 					
 					Block a = loc.getBlock();
 					Block b = a.getRelative(0,-1, 0);
@@ -2138,7 +2138,7 @@ public class MobsActions {
 		 
 	 public double RandomV() {
 				return Math.random() * 2 - 1;
-	}
+	 }
 		 
 	public int randomPosOrNeg(int i){
 				Random r = new Random();
@@ -2154,6 +2154,17 @@ public class MobsActions {
 	public int transformPosOrNeg(int i){
 				return i =  (~(i -1));
 	}	 
+	
+	   public Vector getRandomVector() {
+		   double u = Math.random();
+		   double v = Math.random() * 2 * Math.PI;
+		   double x = Math.sqrt(u) * Math.cos(v);
+		   double y = Math.sqrt(1 - u);
+		   double z = Math.sqrt(u) * Math.sin(v);
+		   
+		   Vector vect = new Vector(x,y,z).multiply(3);
+		   return vect;
+ 	   }
 		 
 	public int randomBetweenValue(int min ,int max) {
 		

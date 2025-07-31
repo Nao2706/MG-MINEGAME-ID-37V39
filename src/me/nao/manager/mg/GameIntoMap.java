@@ -46,6 +46,7 @@ import me.nao.generalinfo.mg.GameConditions;
 import me.nao.generalinfo.mg.GameInfo;
 import me.nao.generalinfo.mg.GameObjetivesMG;
 import me.nao.generalinfo.mg.PlayerInfo;
+import me.nao.generalinfo.mg.RespawnLife;
 import me.nao.generalinfo.mg.MapRecords;
 import me.nao.main.mg.Minegame;
 import me.nao.revive.mg.RevivePlayer;
@@ -303,7 +304,7 @@ public class GameIntoMap {
 			GameAdventure ga = (GameAdventure) gi;
 			
 			
-			
+			 
 			Fireworks f = new Fireworks(player);
 			f.spawnFireballRedLarge();
 			
@@ -313,6 +314,14 @@ public class GameIntoMap {
 				return;
 			}
 			
+			if(pl.getRespawnLife() != null) {
+				RespawnLife rl = pl.getRespawnLife();
+				if(rl.getLifes() != 0) {
+					pl.getGamePoints().setDeads(pl.getGamePoints().getDeads()+1);
+					revivePlayerRespawnLife(player);
+					return;
+				} 
+			}
 			
 			pl.setPlayerGameStatus(PlayerGameStatus.DEAD);
 			pl.getGamePoints().setDeads(pl.getGamePoints().getDeads()+1);
@@ -393,11 +402,20 @@ public class GameIntoMap {
 							gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"Caerse Fuera del Mapa.");
 
 						}
-							
+							 
 							if(pl.getRespawn() != null) {
 								pl.getGamePoints().setDeads(pl.getGamePoints().getDeads()+1);
 								revivePlayerRespawn(player);
 								return;
+							}
+							
+							if(pl.getRespawnLife() != null) {
+								RespawnLife rl = pl.getRespawnLife();
+								if(rl.getLifes() != 0) {
+									pl.getGamePoints().setDeads(pl.getGamePoints().getDeads()+1);
+									revivePlayerRespawnLife(player);
+									return;
+								} 
 							}
 							
 							player.sendMessage(ChatColor.RED+"\nUsa la hotbar para ver a otros jugadores. "+ChatColor.YELLOW+"\n!!!Solo podras ver a los que estan en tu partida");
@@ -547,15 +565,40 @@ public class GameIntoMap {
 				
 					
 				}
-			
-				
 			}
 		}
-		
-		
-		
 	}
 	
+	 
+	public void revivePlayerRespawnLife(Player player){
+		//GameConditions gc = new GameConditions(plugin);
+		GameConditions cm = new GameConditions(plugin);
+		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+		
+		
+		RespawnLife rl = pl.getRespawnLife();
+		if(rl.getLifes() == 0 ) return;
+		
+		pl.getGamePoints().setRevive(pl.getGamePoints().getRevive()+1);
+	
+		cm.setHeartsInGame(player, pl.getMapName());
+		cm.setKitMg(player);
+		healPlayer(player);
+		rl.setLifes(rl.getLifes()-1);
+	
+		player.teleport(new Location(rl.getLocRespawnLife().getWorld(),rl.getLocRespawnLife().getX(), rl.getLocRespawnLife().getY(), rl.getLocRespawnLife().getZ(),player.getLocation().getYaw(),player.getLocation().getPitch()).add(0.5, 0, 0.5));
+		
+		if(rl.getLifes() != 0 ) {
+			player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+">>> "+ChatColor.AQUA+ChatColor.BOLD+"RESPAWNEASTE"+ChatColor.RED+ChatColor.BOLD+"  <<<",ChatColor.GREEN+"Te quedan "+rl.getLifes()+ChatColor.GREEN+" Vidas.", 20, 40, 20);
+
+		}else {
+			player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+">>> "+ChatColor.AQUA+ChatColor.BOLD+"RESPAWNEASTE"+ChatColor.RED+ChatColor.BOLD+"  <<<",ChatColor.RED+"No tienes mas Vidas", 20, 40, 20);
+
+		}
+		player.setGameMode(GameMode.ADVENTURE);
+		player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,new Location(rl.getLocRespawnLife().getWorld(),rl.getLocRespawnLife().getX(), rl.getLocRespawnLife().getY(), rl.getLocRespawnLife().getZ()).add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
+		player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+	}
 	 
 	public void revivePlayerRespawn(Player player){
 		//GameConditions gc = new GameConditions(plugin);

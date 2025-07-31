@@ -71,6 +71,7 @@ import me.nao.enums.mg.ReviveStatus;
 import me.nao.generalinfo.mg.GameConditions;
 import me.nao.generalinfo.mg.GameInfo;
 import me.nao.generalinfo.mg.PlayerInfo;
+import me.nao.generalinfo.mg.RespawnLife;
 import me.nao.main.mg.Minegame;
 import me.nao.manager.mg.GameIntoMap;
 import me.nao.mobs.mg.MobsActions;
@@ -308,20 +309,21 @@ public class SourceOfDamage implements Listener{
 				Block c1 = block.getRelative(0, 0, 0);
 				Block c2 = block.getRelative(0, -2, 0);
 				Block c3 = block.getRelative(0, -3, 0);
-					
+				Block c4 = block.getRelative(0, -4, 0);
 				
 				
 				
-				if(player.getGameMode() == GameMode.ADVENTURE && player.isOnGround()) {
+				if(player.getGameMode() == GameMode.ADVENTURE) {
 					
 					if(c2.getType() == Material.REDSTONE_BLOCK && c3.getType() == Material.STRUCTURE_BLOCK) {
-						if(pl.getBackAllTagsMg() != null || pl.getCheckPointMarker() != null || pl.getRespawn() != null) {
+						if(pl.getBackAllTagsMg() != null || pl.getCheckPointMarker() != null || pl.getRespawn() != null || pl.getRespawnLife() != null) return;
 							pl.setCheckpointItemLocationMg(null);
 							pl.setCheckpointLocationMg(null);
 							pl.setRespawnLocationMg(null);
-					   		player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"!!! "+ChatColor.YELLOW+ChatColor.BOLD+"ADVERTENCIA"+ChatColor.RED+ChatColor.BOLD+"  !!!",ChatColor.YELLOW+"CheckPoints Eliminados", 20, 40, 20);
+							pl.setRespawnLifeLocationMg(null);
+					   		player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"!!! "+ChatColor.YELLOW+ChatColor.BOLD+"ADVERTENCIA"+ChatColor.RED+ChatColor.BOLD+"  !!!",ChatColor.YELLOW+"CheckPoints y Respawns Eliminados", 20, 40, 20);
 
-						}
+						
 					}
 					
 					if(c1.getType() == Material.LIME_BANNER && c2.getType() == Material.STRUCTURE_BLOCK) {
@@ -357,8 +359,7 @@ public class SourceOfDamage implements Listener{
 					
 						 if(pl.getRespawn() != null) {
 							 if(pl.getRespawn().equals(block.getLocation()))return;
-							 System.out.println("BL: "+block.getLocation());
-							 System.out.println("SAVE: "+pl.getRespawn());
+							
 								//&& pl.getRespawn().distance(block.getLocation()) > 2
 						
 					   		     player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+">>> "+ChatColor.AQUA+ChatColor.BOLD+"RESPAWN GUARDADO"+ChatColor.GREEN+ChatColor.BOLD+"  <<<",ChatColor.GREEN+"Punto de Control", 20, 40, 20);
@@ -378,6 +379,35 @@ public class SourceOfDamage implements Listener{
 							 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 							 player.sendMessage(ChatColor.AQUA+"La Ubicacion del Respawn se Guardado");
 							 pl.setRespawnLocationMg(block.getLocation());
+						 }
+						 
+					}else if(c1.getType() == Material.RED_BANNER && c2.getType() == Material.STRUCTURE_BLOCK) {
+						
+						
+						 if(pl.getRespawnLife() != null) {
+							 RespawnLife rl = pl.getRespawnLife();
+							 if(rl.getLocRespawnLife().equals(block.getLocation()))return;
+							
+								//&& pl.getRespawn().distance(block.getLocation()) > 2
+						
+					   		     player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+">>> "+ChatColor.RED+ChatColor.BOLD+"RESPAWN GUARDADO"+ChatColor.GREEN+ChatColor.BOLD+"  <<<",ChatColor.GOLD+"Tienes "+ChatColor.GREEN+gc.setLifeByBlock(c4.getLocation())+ChatColor.GOLD+" Vidas.", 20, 40, 20);
+					
+								 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, block.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
+								 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+								 player.sendMessage(ChatColor.RED+"La Ubicacion del Respawn Limitado se Guardado. (Ubicacion Sobreescrita).");
+								 pl.setRespawnLifeLocationMg(new RespawnLife(block.getLocation(),gc.setLifeByBlock(c4.getLocation())));
+						
+							 
+						 }else {
+				   		     player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+">>> "+ChatColor.RED+ChatColor.BOLD+"RESPAWN GUARDADO"+ChatColor.GREEN+ChatColor.BOLD+"  <<<",ChatColor.GOLD+"Tienes "+ChatColor.GREEN+gc.setLifeByBlock(c4.getLocation())+ChatColor.GOLD+" Vidas.", 20, 40, 20);
+					
+					
+							 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, block.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
+					
+							 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+							 player.sendMessage(ChatColor.RED+"La Ubicacion del Respawn Limitado se Guardado");
+							
+							 pl.setRespawnLifeLocationMg(new RespawnLife(block.getLocation(),gc.setLifeByBlock(c4.getLocation())));
 						 }
 						 
 					}

@@ -103,7 +103,7 @@ public class Comandsmg implements CommandExecutor{
 	//Captador de mensaje 
 
 	
-	public boolean onCommand( CommandSender sender,  Command comando,  String label, String[] args) {
+	public boolean onCommand(CommandSender sender,  Command comando,  String label, String[] args) {
 		FileConfiguration message = plugin.getMessage();
 		FileConfiguration points1 = plugin.getPoints();		
 	
@@ -857,6 +857,13 @@ public class Comandsmg implements CommandExecutor{
 								pl.setRespawnLocationMg(null);
 							}
 							
+							if(pl.getRespawnLife() != null) {
+								target.sendMessage(ChatColor.RED+"- Tu Respawn Limitado fue Eliminado.");
+								Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+" El Respawn Limitado de "+ChatColor.GOLD+args[1]+ChatColor.GREEN+" fue Eliminado");
+
+								pl.setRespawnLifeLocationMg(null);
+							}
+							
 							
 							if(pl.getCheckPointItem() != null) {
 								pl.setCheckpointLocationMg(null);
@@ -1095,7 +1102,33 @@ public class Comandsmg implements CommandExecutor{
 			 		  return true;
 			 	  }else if(args[0].equalsIgnoreCase("tntrain")){
 						
-				 		 if(args.length == 4) {
+				 		 if(args.length == 5) {
+				 			 String location = args[1];
+				 			 String radius  = args[2];
+				 			 String amount  = args[3];
+				 			 int type = Integer.valueOf(args[4]);
+				 			 
+				 			 String[] split = location.split(",");
+				 			 
+				 			 World world = Bukkit.getWorld(split[0]);
+				 			 if(world == null) {
+				 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El mundo "+ChatColor.GOLD+split[0]+ChatColor.RED+" no existe.");
+				 				 return true;
+				 			 }
+				 			
+				 			 
+				 			 int cant = Integer.valueOf(amount);
+				 			 
+				 			 if(cant == 0) {
+				 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No puedes dejar en 0 el monto.");
+				 				 return true;
+				 			 }
+				 			gc.tntrain(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])), Double.valueOf(radius),Integer.valueOf(amount),type);
+				 			
+				 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Lluvia enviada a las Coordenadas");
+
+				 			return true;
+				 		 }else if(args.length == 4) {
 				 			 String location = args[1];
 				 			 String radius  = args[2];
 				 			 String amount  = args[3];
@@ -1116,14 +1149,14 @@ public class Comandsmg implements CommandExecutor{
 				 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No puedes dejar en 0 el monto.");
 				 				 return true;
 				 			 }
-				 			gc.tntrain(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])), Double.valueOf(radius),Integer.valueOf(amount));
+				 			gc.tntrain(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])), Double.valueOf(radius),Integer.valueOf(amount),0);
 				 			
 				 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Lluvia enviada a las Coordenadas");
 
 				 			 
 				 		 }else{
-				 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa mg tntrain <world,x,y,z> <radius> <amount>");
-				 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Ejemplo mg tntrain world,12,23,34 10 5");
+				 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa mg tntrain <world,x,y,z> <radius> <amount> <optional: 1>");
+				 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Ejemplo mg tntrain world,12,23,34 10 5 1");
 				 		 }
 						
 						
@@ -2292,7 +2325,33 @@ public class Comandsmg implements CommandExecutor{
 						player.sendMessage(plugin.nombre+ChatColor.RED+" No tienes Permiso para usar ese comando");
 						return true;
 					  }
-			 		 if(args.length == 4) {
+			 		 if(args.length == 5) {
+			 			 String location = args[1];
+			 			 String radius  = args[2];
+			 			 String amount  = args[3];
+			 			 int type  = Integer.valueOf(args[4]);
+			 			 
+			 			 String[] split = location.split(",");
+			 			 
+			 			 World world = Bukkit.getWorld(split[0]);
+			 			 if(world == null) {
+			 				player.sendMessage(ChatColor.RED+"El mundo "+ChatColor.GOLD+split[0]+ChatColor.RED+" no existe.");
+			 				 return true;
+			 			 }
+			 			
+			 			 
+			 			 int cant = Integer.valueOf(amount);
+			 			 
+			 			 if(cant == 0) {
+			 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No puedes dejar en 0 el monto.");
+			 				 return true;
+			 			 }
+			 			gc.tntrain(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])), Double.valueOf(radius),Integer.valueOf(amount),type);
+			 			
+			 			player.sendMessage(ChatColor.GREEN+"Lluvia enviada a las Coordenadas");
+
+			 			return true;
+			 		 }if(args.length == 4) {
 			 			 String location = args[1];
 			 			 String radius  = args[2];
 			 			 String amount  = args[3];
@@ -2313,14 +2372,14 @@ public class Comandsmg implements CommandExecutor{
 			 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No puedes dejar en 0 el monto.");
 			 				 return true;
 			 			 }
-			 			gc.tntrain(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])), Double.valueOf(radius),Integer.valueOf(amount));
+			 			gc.tntrain(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])), Double.valueOf(radius),Integer.valueOf(amount),0);
 			 			
 			 			player.sendMessage(ChatColor.GREEN+"Lluvia enviada a las Coordenadas");
 
 			 			 
 			 		 }else{
-			 			player.sendMessage(ChatColor.GREEN+"Usa mg tntrain <world,x,y,z> <radius> <amount>");
-			 			player.sendMessage(ChatColor.GREEN+"Ejemplo mg tntrain world,12,23,34 10 5");
+			 			player.sendMessage(ChatColor.GREEN+"Usa mg tntrain <world,x,y,z> <radius> <amount> <optional: 1>");
+			 			player.sendMessage(ChatColor.GREEN+"Ejemplo mg tntrain world,12,23,34 10 5 1");
 			 		 }
 					
 					
@@ -3144,6 +3203,13 @@ public class Comandsmg implements CommandExecutor{
 								player.sendMessage(ChatColor.GREEN+" El Respawn de "+ChatColor.GOLD+args[1]+ChatColor.GREEN+" fue Eliminado");
 
 								pl.setRespawnLocationMg(null);
+							}
+							
+							if(pl.getRespawnLife() != null) {
+								target.sendMessage(ChatColor.RED+"- Tu Respawn Limitado fue Eliminado.");
+								player.sendMessage(ChatColor.GREEN+" El Respawn Limitado de "+ChatColor.GOLD+args[1]+ChatColor.GREEN+" fue Eliminado");
+
+								pl.setRespawnLifeLocationMg(null);
 							}
 							
 							if(pl.getCheckPointItem() != null) {
