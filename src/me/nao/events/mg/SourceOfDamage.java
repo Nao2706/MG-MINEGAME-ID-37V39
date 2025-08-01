@@ -309,14 +309,14 @@ public class SourceOfDamage implements Listener{
 				Block c1 = block.getRelative(0, 0, 0);
 				Block c2 = block.getRelative(0, -2, 0);
 				Block c3 = block.getRelative(0, -3, 0);
-				Block c4 = block.getRelative(0, -4, 0);
+				
 				
 				
 				
 				if(player.getGameMode() == GameMode.ADVENTURE) {
 					
 					if(c2.getType() == Material.REDSTONE_BLOCK && c3.getType() == Material.STRUCTURE_BLOCK) {
-						if(pl.getBackAllTagsMg() != null || pl.getCheckPointMarker() != null || pl.getRespawn() != null || pl.getRespawnLife() != null) return;
+						if(pl.getBackAllTagsMg() == null || pl.getCheckPointMarker() == null || pl.getRespawn() == null || pl.getRespawnLife() == null) return;
 							pl.setCheckpointItemLocationMg(null);
 							pl.setCheckpointLocationMg(null);
 							pl.setRespawnLocationMg(null);
@@ -390,16 +390,16 @@ public class SourceOfDamage implements Listener{
 							
 								//&& pl.getRespawn().distance(block.getLocation()) > 2
 						
-					   		     player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+">>> "+ChatColor.RED+ChatColor.BOLD+"RESPAWN GUARDADO"+ChatColor.GREEN+ChatColor.BOLD+"  <<<",ChatColor.GOLD+"Tienes "+ChatColor.GREEN+gc.setLifeByBlock(c4.getLocation())+ChatColor.GOLD+" Vidas.", 20, 40, 20);
+					   		     player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+">>> "+ChatColor.RED+ChatColor.BOLD+"RESPAWN GUARDADO"+ChatColor.GREEN+ChatColor.BOLD+"  <<<",ChatColor.GOLD+"Tienes "+ChatColor.GREEN+gc.setLifeByBlock(c3.getLocation())+ChatColor.GOLD+" Vidas.", 20, 40, 20);
 					
 								 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, block.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
 								 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 								 player.sendMessage(ChatColor.RED+"La Ubicacion del Respawn Limitado se Guardado. (Ubicacion Sobreescrita).");
-								 pl.setRespawnLifeLocationMg(new RespawnLife(block.getLocation(),gc.setLifeByBlock(c4.getLocation())));
+								 pl.setRespawnLifeLocationMg(new RespawnLife(block.getLocation(),gc.setLifeByBlock(c3.getLocation())));
 						
 							 
 						 }else {
-				   		     player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+">>> "+ChatColor.RED+ChatColor.BOLD+"RESPAWN GUARDADO"+ChatColor.GREEN+ChatColor.BOLD+"  <<<",ChatColor.GOLD+"Tienes "+ChatColor.GREEN+gc.setLifeByBlock(c4.getLocation())+ChatColor.GOLD+" Vidas.", 20, 40, 20);
+				   		     player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+">>> "+ChatColor.RED+ChatColor.BOLD+"RESPAWN GUARDADO"+ChatColor.GREEN+ChatColor.BOLD+"  <<<",ChatColor.GOLD+"Tienes "+ChatColor.GREEN+gc.setLifeByBlock(c3.getLocation())+ChatColor.GOLD+" Vidas.", 20, 40, 20);
 					
 					
 							 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, block.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
@@ -407,7 +407,7 @@ public class SourceOfDamage implements Listener{
 							 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 							 player.sendMessage(ChatColor.RED+"La Ubicacion del Respawn Limitado se Guardado");
 							
-							 pl.setRespawnLifeLocationMg(new RespawnLife(block.getLocation(),gc.setLifeByBlock(c4.getLocation())));
+							 pl.setRespawnLifeLocationMg(new RespawnLife(block.getLocation(),gc.setLifeByBlock(c3.getLocation())));
 						 }
 						 
 					}

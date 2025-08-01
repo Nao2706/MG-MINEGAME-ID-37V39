@@ -4179,7 +4179,7 @@ public class Comandsmg implements CommandExecutor{
 							if(target != null) {
 							
 								if(SQLInfo.isPlayerinDB(plugin.getMySQL(), target.getUniqueId())) {
-									player.sendMessage(ChatColor.RED+"El jugador esta en la base de datos.");
+									player.sendMessage(ChatColor.GREEN+"El jugador esta en la base de datos.");
 								}else {
 									player.sendMessage(ChatColor.RED+"El jugador no esta en la base de datos.");
 								}
@@ -4190,7 +4190,7 @@ public class Comandsmg implements CommandExecutor{
 							}
 						}else {
 							if(SQLInfo.isPlayerinDB(plugin.getMySQL(), player.getUniqueId())) {
-								player.sendMessage(ChatColor.RED+"El jugador esta en la base de datos.");
+								player.sendMessage(ChatColor.GREEN+"El jugador esta en la base de datos.");
 							}else {
 								player.sendMessage(ChatColor.RED+"El jugador no esta en la base de datos.");
 							}
@@ -4216,6 +4216,7 @@ public class Comandsmg implements CommandExecutor{
 						Player target = Bukkit.getPlayerExact(user);
 						if(target != null) {
 							SQLInfo.DeleteUserInventory(plugin.getMySQL(),target.getUniqueId(), target);
+							player.sendMessage(ChatColor.GREEN+"Jugador Borrado de la Base de Datos");
 						}else {
 							player.sendMessage(ChatColor.RED+"El jugador no esta conectado o no existe.");
 						}
@@ -4223,6 +4224,7 @@ public class Comandsmg implements CommandExecutor{
 						
 					}else {
 						SQLInfo.DeleteUserInventory(plugin.getMySQL(),player.getUniqueId(), player);
+						player.sendMessage(ChatColor.GREEN+"Tus datos fueron Borrados de la Base de Datos");
 					}
 					
 					return true;

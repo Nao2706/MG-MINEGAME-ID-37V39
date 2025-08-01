@@ -186,7 +186,7 @@ public class SQLInfo {
 	public static void DeleteUserInventory(Connection connection,UUID uuid,Player player) {
 		try {
 			
-			if(!isPlayerinDB(connection, uuid)) {
+			if(isPlayerinDB(connection, uuid)) {
 				PreparedStatement statement = connection.prepareStatement("DELETE FROM Inventory WHERE (UUID=?)");
 				statement.setString(1,uuid.toString());
 				statement.executeUpdate();

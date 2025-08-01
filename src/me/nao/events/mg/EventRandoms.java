@@ -535,7 +535,7 @@ public class EventRandoms implements Listener{
 						Block b3 = e.getClickedBlock();
 						Block b1 = b3.getRelative(0, -1, 0);
 						Block checkpoint = b3.getRelative(0, -2, 0);
-						Block c4 = b3.getRelative(0, -4, 0);
+						Block c4 = b3.getRelative(0, -3, 0);
 					 if(b3.getType() == Material.STONE_BUTTON ) {
 						 
 						 	YouNeedYourFriends(player,b3);
@@ -778,6 +778,8 @@ public class EventRandoms implements Listener{
 							//player.launchProjectile(org.bukkit.entity.EnderPearl.class);
 			               	for(int i = 0;i<20;i++) {
 									SpawnArrows(player, RandomPosOrNeg(10),RandomPosOrNeg(5));
+			               			//SpawnArrowsUpgrade(player);
+									
 								}
 			               	removeItemstackCustom(player,e.getItem());
 						}
@@ -1618,15 +1620,16 @@ public class EventRandoms implements Listener{
 					//names.stream().filter(o -> o.contains(ChatColor.stripColor(ent.getCustomName()))).findFirst().isPresent() || 
 					
 					if(mobname.equals("LLUVIA DE TNT CON PUAS")){
-						 for(int i = 0;i<10;i++) {
+						 for(int i = 0;i<20;i++) {
 								Location loc = ent.getLocation();
 								Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
 								aw.setVelocity(getRandomVector());
 								aw.setCritical(true);
 								aw.setKnockbackStrength(2);
 								aw.setFireTicks(1200);
+								aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
 								aw.setCustomName(ChatColor.RED+"Pua de TNT");
-								aw.setDamage(15);
+								aw.setDamage(25);
 								//aw.setShooter(z);
 								//((Arrow) h1).setShooter(player);
 							}
@@ -1912,6 +1915,26 @@ public class EventRandoms implements Listener{
 			  Projectile projectile = e.getEntity();
 			  GameConditions gc = new GameConditions(plugin);
 			  
+			   
+			  if(e.getHitBlock() != null) {
+				  Block b = e.getHitBlock();
+				  if(projectile instanceof AbstractArrow) {
+					  AbstractArrow arrow = (AbstractArrow) projectile;
+					  if(arrow.getCustomName() != null) {
+						  String text = ChatColor.stripColor(arrow.getCustomName());
+						  if(text.equals("Flecha Trampa") || text.equals("Flecha Trampa Mejorada") || text.equals("Pua de TNT")) {
+							arrow.remove();
+						  }else if(text.startsWith("Torreta")) {
+							arrow.remove();
+						  }
+						  
+					  }else{
+						  if(b.getType() == Material.BARRIER) {
+							  arrow.remove();
+						  }
+					  }
+				  }
+			  }
 			  
 			  if(projectile.getShooter() instanceof Snowman) {
 				  
@@ -2038,23 +2061,6 @@ public class EventRandoms implements Listener{
 								plugin.getGuardianCredit().put(victim, target.getName());
 							}
 						}
-				  }
-			  }else if(e.getHitBlock() != null) {
-				  Block b = e.getHitBlock();
-				  if(projectile instanceof AbstractArrow) {
-					  AbstractArrow arrow = (AbstractArrow) projectile;
-					  if(arrow.getCustomName() != null) {
-						  if(arrow.getCustomName().equals("Flecha Trampa") || arrow.getCustomName().equals("Flecha Trampa Mejorada")) {
-							arrow.remove();
-						  }else if(arrow.getCustomName().startsWith("Torreta")) {
-							arrow.remove();
-						  }
-						  
-					  }else{
-						  if(b.getType() == Material.BARRIER) {
-							  arrow.remove();
-						  }
-					  }
 				  }
 			  }
 			  
@@ -3452,6 +3458,21 @@ public class EventRandoms implements Listener{
 			}
 			
 			@SuppressWarnings("removal")
+			public void SpawnArrowsUpgrade(Player player) {
+				player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 20.0F, 1F);
+				Location loc = player.getLocation();
+				Vector v = loc.getDirection();
+				
+				Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
+				aw.setVelocity( getRandomVectorShoot(v));
+				aw.setCritical(true);
+				aw.setKnockbackStrength(2);
+				//aw.setFireTicks(1200);
+				aw.setShooter(player);
+				//((Arrow) h1).setShooter(player);
+			}
+			
+			@SuppressWarnings("removal")
 			public void SpawnArrowsFire(Player player,float addy ,float addp ) {
 				player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 20.0F, 1F);
 				Location loc = player.getLocation();
@@ -3651,8 +3672,21 @@ public class EventRandoms implements Listener{
 			   double y = Math.sqrt(1 - u);
 			   double z = Math.sqrt(u) * Math.sin(v);
 			   
-			   Vector vect = new Vector(x,y,z).multiply(3);
+			   Vector vect = new Vector(x,y,z).multiply(1.5);//3
 			   return vect;
+	 	   }
+		   
+		   public Vector getRandomVectorShoot(Vector vec) {
+			   
+			   double angle = Math.toRadians(45);
+			   
+			   Vector velocity;
+			   Vector perpendicular = vec.clone().crossProduct(new Vector(0,1,0)).normalize();
+			   Vector randomVector = perpendicular.clone().multiply(Math.random() * Math.tan(angle));
+			   randomVector.add(vec);
+			   velocity = randomVector.normalize().multiply(0.5);
+			   
+			   return velocity;
 	 	   }
 					
 		}

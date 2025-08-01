@@ -5589,11 +5589,13 @@ public class GameConditions {
 	        TNTPrimed tnt = loc.getWorld().spawn(loc, TNTPrimed.class);
 	        // Puedes configurar el fuse del TNT si lo deseas
 	        tnt.setFuseTicks(5*20);
-	        tnt.setYield(10);
+	     
 	        if(type == 1) {
 	        	  tnt.setCustomName(ChatColor.RED+"LLUVIA DE TNT CON PUAS");
+	        	  tnt.setYield(0);
 	        }else {
 	        	  tnt.setCustomName(ChatColor.RED+"LLUVIA DE TNT");
+	        	  tnt.setYield(10);
 	        }
 	      
 	    }
