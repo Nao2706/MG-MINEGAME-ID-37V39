@@ -459,7 +459,7 @@ public class EventRandoms implements Listener{
 			if (e.getItem() != null) {
 				if(e.getItem().isSimilar(Items.TNTARROW.getValue())) {
 					TNTPrimed ptnt = (TNTPrimed) player.getWorld().spawnEntity(player.getLocation().add(0.5,1,0.5),EntityType.TNT);
-					ptnt.setFuseTicks(10*20);
+					ptnt.setFuseTicks(5*20);
 					ptnt.setVelocity(player.getLocation().getDirection().multiply(2.5));
 					ptnt.setCustomName(ChatColor.GREEN+"TNT de Flechas");
 					ptnt.setSource(player);
@@ -1635,7 +1635,7 @@ public class EventRandoms implements Listener{
 					names.add("TNT de Flechas");
 					
 					if(mobname.equals("TNT de Flechas")){
-						 for(int i = 0;i<50;i++) {
+						 for(int i = 0;i<100;i++) {
 								Location loc = ent.getLocation();
 								Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
 								aw.setVelocity(getRandomVector());
