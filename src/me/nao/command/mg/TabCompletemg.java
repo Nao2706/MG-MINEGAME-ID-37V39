@@ -29,6 +29,8 @@ public class TabCompletemg implements TabCompleter{
 		if(arguments.isEmpty()) {
 			arguments.add("info");
 			arguments.add("tntrain");
+			arguments.add("entityrain");
+			arguments.add("arrowrain");
 			arguments.add("pardon");
 			arguments.add("ban");
 			arguments.add("kick");

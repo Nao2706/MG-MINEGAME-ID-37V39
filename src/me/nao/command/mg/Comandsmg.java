@@ -1100,7 +1100,84 @@ public class Comandsmg implements CommandExecutor{
 				 		  }
 			 		  
 			 		  return true;
-			 	  }else if(args[0].equalsIgnoreCase("tntrain")){
+			 	  }else if(args[0].equalsIgnoreCase("entityrain")){
+						 
+				 		if(args.length == 5) {
+				 			 String location = args[1];
+				 			 String radius  = args[2];
+				 			 String amount  = args[3];
+				 			 String type  = args[4];
+				 			 
+				 			 String[] split = location.split(",");
+				 			 
+				 			 World world = Bukkit.getWorld(split[0]);
+				 			 if(world == null) {
+				 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El mundo "+ChatColor.GOLD+split[0]+ChatColor.RED+" no existe.");
+				 				 return true;
+				 			 }
+				 			
+				 			 
+				 			 int cant = Integer.valueOf(amount);
+				 			 
+				 			 if(cant == 0) {
+				 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No puedes dejar en 0 el monto.");
+				 				 return true;
+				 			 }
+				 			 
+				 			 EntityType ent = EntityType.valueOf(type);
+				 			if(ent == null) {
+				 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"La Entidad "+ChatColor.GOLD+type+ChatColor.RED+" no existe.");
+				 				 return true;
+				 			 }
+				 			 
+				 			gc.entityRain(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])), Integer.valueOf(radius),Integer.valueOf(amount),ent);
+				 			
+				 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Lluvia de Mobs enviada a las Coordenadas");
+
+				 			 
+				 		 }else{
+				 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa mg entityrain <world,x,y,z> <radius> <amount> <mobtype>");
+				 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Ejemplo mg entityrain world,12,23,34 10 5 Creeper");
+				 		 }
+						
+						
+						return true;
+					}else if(args[0].equalsIgnoreCase("arrowrain")){
+						 
+				 		if(args.length == 4) {
+				 			 String location = args[1];
+				 			 String radius  = args[2];
+				 			 String amount  = args[3];
+				 		
+				 			 
+				 			 String[] split = location.split(",");
+				 			 
+				 			 World world = Bukkit.getWorld(split[0]);
+				 			 if(world == null) {
+				 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El mundo "+ChatColor.GOLD+split[0]+ChatColor.RED+" no existe.");
+				 				 return true;
+				 			 }
+				 			
+				 			 
+				 			 int cant = Integer.valueOf(amount);
+				 			 
+				 			 if(cant == 0) {
+				 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No puedes dejar en 0 el monto.");
+				 				 return true;
+				 			 }
+				 			gc.arrowRain(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])), Integer.valueOf(radius),Integer.valueOf(amount));
+				 			
+				 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Lluvia de Flechas enviada a las Coordenadas");
+
+				 			 
+				 		 }else{
+				 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa mg arrowrain <world,x,y,z> <radius> <amount>");
+				 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Ejemplo mg arrowrain world,12,23,34 10 5");
+				 		 }
+						
+						
+						return true;
+					}else if(args[0].equalsIgnoreCase("tntrain")){
 						
 				 		 if(args.length == 5) {
 				 			 String location = args[1];
@@ -1123,9 +1200,9 @@ public class Comandsmg implements CommandExecutor{
 				 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No puedes dejar en 0 el monto.");
 				 				 return true;
 				 			 }
-				 			gc.tntrain(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])), Double.valueOf(radius),Integer.valueOf(amount),type);
+				 			gc.tntRain(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])), Double.valueOf(radius),Integer.valueOf(amount),type);
 				 			
-				 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Lluvia enviada a las Coordenadas");
+				 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Lluvia de TNT enviada a las Coordenadas");
 
 				 			return true;
 				 		 }else if(args.length == 4) {
@@ -1149,7 +1226,7 @@ public class Comandsmg implements CommandExecutor{
 				 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No puedes dejar en 0 el monto.");
 				 				 return true;
 				 			 }
-				 			gc.tntrain(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])), Double.valueOf(radius),Integer.valueOf(amount),0);
+				 			gc.tntRain(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])), Double.valueOf(radius),Integer.valueOf(amount),0);
 				 			
 				 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Lluvia enviada a las Coordenadas");
 
@@ -2320,6 +2397,91 @@ public class Comandsmg implements CommandExecutor{
 					}
 				
 					return true;
+				}else if(args[0].equalsIgnoreCase("entityrain")){
+					 
+					if(!player.isOp()) {
+						player.sendMessage(plugin.nombre+ChatColor.RED+" No tienes Permiso para usar ese comando");
+						return true;
+					  }
+					
+			 		if(args.length == 5) {
+			 			 String location = args[1];
+			 			 String radius  = args[2];
+			 			 String amount  = args[3];
+			 			 String type  = args[4];
+			 			 
+			 			 String[] split = location.split(",");
+			 			 
+			 			 World world = Bukkit.getWorld(split[0]);
+			 			 if(world == null) {
+			 				player.sendMessage(ChatColor.RED+"El mundo "+ChatColor.GOLD+split[0]+ChatColor.RED+" no existe.");
+			 				 return true;
+			 			 }
+			 			
+			 			 
+			 			 int cant = Integer.valueOf(amount);
+			 			 
+			 			 if(cant == 0) {
+			 				player.sendMessage(ChatColor.RED+"No puedes dejar en 0 el monto.");
+			 				 return true;
+			 			 }
+			 			 
+			 			 EntityType ent = EntityType.valueOf(type);
+			 			if(ent == null) {
+			 				player.sendMessage(ChatColor.RED+"La Entidad "+ChatColor.GOLD+type+ChatColor.RED+" no existe.");
+			 				 return true;
+			 			 }
+			 			 
+			 			gc.entityRain(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])), Integer.valueOf(radius),Integer.valueOf(amount),ent);
+			 			
+			 			player.sendMessage(ChatColor.GREEN+"Lluvia de Mobs enviada a las Coordenadas");
+
+			 			 
+			 		 }else{
+			 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa mg entityrain <world,x,y,z> <radius> <amount> <mobtype>");
+			 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Ejemplo mg entityrain world,12,23,34 10 5 Creeper");
+			 		 }
+					
+					
+					return true;
+				}else if(args[0].equalsIgnoreCase("arrowrain")){
+					if(!player.isOp()) {
+						player.sendMessage(plugin.nombre+ChatColor.RED+" No tienes Permiso para usar ese comando");
+						return true;
+					  }
+			 		if(args.length == 4) {
+			 			 String location = args[1];
+			 			 String radius  = args[2];
+			 			 String amount  = args[3];
+			 		
+			 			 
+			 			 String[] split = location.split(",");
+			 			 
+			 			 World world = Bukkit.getWorld(split[0]);
+			 			 if(world == null) {
+			 				player.sendMessage(ChatColor.RED+"El mundo "+ChatColor.GOLD+split[0]+ChatColor.RED+" no existe.");
+			 				 return true;
+			 			 }
+			 			
+			 			 
+			 			 int cant = Integer.valueOf(amount);
+			 			 
+			 			 if(cant == 0) {
+			 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No puedes dejar en 0 el monto.");
+			 				 return true;
+			 			 }
+			 			gc.arrowRain(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])), Integer.valueOf(radius),Integer.valueOf(amount));
+			 			
+			 			player.sendMessage(ChatColor.GREEN+"Lluvia de Flechas enviada a las Coordenadas");
+
+			 			 
+			 		 }else{
+			 			player.sendMessage(ChatColor.GREEN+"Usa mg arrowrain <world,x,y,z> <radius> <amount>");
+			 			player.sendMessage(ChatColor.GREEN+"Ejemplo mg arrowrain world,12,23,34 10 5");
+			 		 }
+					
+					
+					return true;
 				}else if(args[0].equalsIgnoreCase("tntrain")){
 					if(!player.isOp()) {
 						player.sendMessage(plugin.nombre+ChatColor.RED+" No tienes Permiso para usar ese comando");
@@ -2346,9 +2508,9 @@ public class Comandsmg implements CommandExecutor{
 			 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No puedes dejar en 0 el monto.");
 			 				 return true;
 			 			 }
-			 			gc.tntrain(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])), Double.valueOf(radius),Integer.valueOf(amount),type);
+			 			gc.tntRain(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])), Double.valueOf(radius),Integer.valueOf(amount),type);
 			 			
-			 			player.sendMessage(ChatColor.GREEN+"Lluvia enviada a las Coordenadas");
+			 			player.sendMessage(ChatColor.GREEN+"Lluvia de TNT enviada a las Coordenadas");
 
 			 			return true;
 			 		 }if(args.length == 4) {
@@ -2372,7 +2534,7 @@ public class Comandsmg implements CommandExecutor{
 			 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No puedes dejar en 0 el monto.");
 			 				 return true;
 			 			 }
-			 			gc.tntrain(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])), Double.valueOf(radius),Integer.valueOf(amount),0);
+			 			gc.tntRain(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])), Double.valueOf(radius),Integer.valueOf(amount),0);
 			 			
 			 			player.sendMessage(ChatColor.GREEN+"Lluvia enviada a las Coordenadas");
 
@@ -4323,6 +4485,7 @@ public class Comandsmg implements CommandExecutor{
 					player.getInventory().addItem(Items.ARROWDIS.getValue());
 					player.getInventory().addItem(Items.ARROWDIS2.getValue());
 					player.getInventory().addItem(Items.REVIVE.getValue());
+					player.getInventory().addItem(Items.TNTARROW.getValue());
 					 
 					return true;
 				}else if(args[0].equalsIgnoreCase("lock")) {
@@ -5366,7 +5529,8 @@ public class Comandsmg implements CommandExecutor{
  			l.add(ChatColor.GOLD+"/mg title <map>"+ChatColor.AQUA+" Manda un Titulo a los Jugadores de un Mapa.");
  			l.add(ChatColor.GOLD+"/mg message <map>"+ChatColor.AQUA+" Manda un Mensaje a los Jugadores de un Mapa.");
  			l.add(ChatColor.GOLD+"/mg tntrain "+ChatColor.AQUA+" Lanza una Lluvia de TNT.");
- 			
+ 			l.add(ChatColor.GOLD+"/mg arrowrain "+ChatColor.AQUA+" Lanza una Lluvia de Flechas.");
+ 			l.add(ChatColor.GOLD+"/mg entityrain "+ChatColor.AQUA+" Lanza una Lluvia de Flechas.");
  			
  			
  		}

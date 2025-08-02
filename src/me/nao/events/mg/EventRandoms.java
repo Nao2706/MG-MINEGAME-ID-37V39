@@ -457,6 +457,20 @@ public class EventRandoms implements Listener{
 		
 		if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
 			if (e.getItem() != null) {
+				if(e.getItem().isSimilar(Items.TNTARROW.getValue())) {
+					TNTPrimed ptnt = (TNTPrimed) player.getWorld().spawnEntity(player.getLocation().add(0.5,1,0.5),EntityType.TNT);
+					ptnt.setFuseTicks(10*20);
+					ptnt.setVelocity(player.getLocation().getDirection().multiply(2.5));
+					ptnt.setCustomName(ChatColor.GREEN+"TNT de Flechas");
+					ptnt.setSource(player);
+					ptnt.setYield(0);
+					
+					removeItemstackCustom(player,e.getItem());
+				}
+			}}
+		
+		if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
+			if (e.getItem() != null) {
 				if(e.getItem().isSimilar(Items.SPAWNZOMBI.getValue())) {
 					MobsActions ma = new MobsActions(plugin);
 					ma.spawnManualZombi(player.getLocation());
@@ -718,6 +732,8 @@ public class EventRandoms implements Listener{
 						
 					
 				}
+				
+				
 				
 				if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
 					if (e.getItem() != null) {
@@ -1616,7 +1632,23 @@ public class EventRandoms implements Listener{
 					names.add("Explosivo Zombi");
 					names.add("LLUVIA DE TNT");	
 					names.add("LLUVIA DE TNT CON PUAS");	
+					names.add("TNT de Flechas");
 					
+					if(mobname.equals("TNT de Flechas")){
+						 for(int i = 0;i<50;i++) {
+								Location loc = ent.getLocation();
+								Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
+								aw.setVelocity(getRandomVector());
+								aw.setCritical(true);
+								aw.setKnockbackStrength(2);
+								aw.setFireTicks(1200);
+								//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+								aw.setCustomName(ChatColor.RED+"Pua de TNT Especial");
+								aw.setDamage(2000);
+								//aw.setShooter(z); 
+								//((Arrow) h1).setShooter(player);
+							}
+					}
 					//names.stream().filter(o -> o.contains(ChatColor.stripColor(ent.getCustomName()))).findFirst().isPresent() || 
 					
 					if(mobname.equals("LLUVIA DE TNT CON PUAS")){
@@ -1627,9 +1659,9 @@ public class EventRandoms implements Listener{
 								aw.setCritical(true);
 								aw.setKnockbackStrength(2);
 								aw.setFireTicks(1200);
-								aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+								//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
 								aw.setCustomName(ChatColor.RED+"Pua de TNT");
-								aw.setDamage(25);
+								aw.setDamage(2000);
 								//aw.setShooter(z);
 								//((Arrow) h1).setShooter(player);
 							}
@@ -1922,7 +1954,7 @@ public class EventRandoms implements Listener{
 					  AbstractArrow arrow = (AbstractArrow) projectile;
 					  if(arrow.getCustomName() != null) {
 						  String text = ChatColor.stripColor(arrow.getCustomName());
-						  if(text.equals("Flecha Trampa") || text.equals("Flecha Trampa Mejorada") || text.equals("Pua de TNT")) {
+						  if(text.equals("Flecha Trampa") || text.equals("Flecha Trampa Mejorada") || text.equals("Pua de TNT") || text.equals("Pua de TNT Especial")) {
 							arrow.remove();
 						  }else if(text.startsWith("Torreta")) {
 							arrow.remove();

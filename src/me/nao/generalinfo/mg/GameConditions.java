@@ -5572,7 +5572,7 @@ public class GameConditions {
 	
 	}
 	
-	public void tntrain(Location center, double radius, int amount ,int type) {
+	public void tntRain(Location center, double radius, int amount ,int type) {
 	    for (int i = 0; i < amount; i++) {
 	        // Generar un ángulo aleatorio y una distancia aleatoria dentro del radio
 	        double angulo = Math.random() * 2 * Math.PI;
@@ -5601,7 +5601,112 @@ public class GameConditions {
 	    }
 	}
 	
+    @SuppressWarnings("removal")
+	public void arrowRain(Location centro, int radio, int cantidad) {
+        // Calcula la cantidad de bloques en el radio
+        int bloquesEnRadio = (2 * radio + 1) * (2 * radio + 1);
+
+        // Si la cantidad de flechas es igual o mayor al número de bloques en el radio
+        if (cantidad >= bloquesEnRadio) {
+            // Spawnea una flecha en cada bloque del radio
+            for (int x = -radio; x <= radio; x++) {
+                for (int z = -radio; z <= radio; z++) {
+                    Location loc = centro.clone().add(x, 0, z);
+                    Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc, EntityType.ARROW);
+                	aw.setVelocity(new Vector (0,-3,0));
+					aw.setCritical(true);
+					aw.setKnockbackStrength(2);
+					aw.setFireTicks(1200);
+					//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+					aw.setCustomName(ChatColor.AQUA+"Lluvia de Flechas");
+					aw.setDamage(2000);
+                }
+            }
+
+            // Spawnea las flechas restantes de manera aleatoria
+            int flechasRestantes = cantidad - bloquesEnRadio;
+            for (int i = 0; i < flechasRestantes; i++) {
+                Location loc = getLocacionAleatoria(centro, radio);
+                Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc, EntityType.ARROW);
+                aw.setVelocity(new Vector (0,-3,0));
+				aw.setCritical(true);
+				aw.setKnockbackStrength(2);
+				aw.setFireTicks(1200);
+				//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+				aw.setCustomName(ChatColor.AQUA+"Lluvia de Flechas");
+				aw.setDamage(2000);
+            }
+        } else {
+            // Spawnea las flechas de manera aleatoria
+            for (int i = 0; i < cantidad; i++) {
+                Location loc = getLocacionAleatoria(centro, radio);
+                Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc, EntityType.ARROW);
+                aw.setVelocity(new Vector (0,-3,0));
+				aw.setCritical(true);
+				aw.setKnockbackStrength(2);
+				aw.setFireTicks(1200);
+				//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+				aw.setCustomName(ChatColor.AQUA+"Lluvia de Flechas");
+				aw.setDamage(2000);
+            }
+        }
+    }
 	
+    
+   
+	public void entityRain(Location centro, int radio, int cantidad,EntityType e) {
+        // Calcula la cantidad de bloques en el radio
+        int bloquesEnRadio = (2 * radio + 1) * (2 * radio + 1);
+
+        // Si la cantidad de flechas es igual o mayor al número de bloques en el radio
+        if (cantidad >= bloquesEnRadio) {
+            // Spawnea una flecha en cada bloque del radio
+            for (int x = -radio; x <= radio; x++) {
+                for (int z = -radio; z <= radio; z++) {
+                    Location loc = centro.clone().add(x, 0, z);
+                    Entity ent = (Arrow) loc.getWorld().spawnEntity(loc,e);
+                    ent.setCustomName(ChatColor.GREEN+"Lluvia de: "+ChatColor.GOLD+e);
+                    ent.setVelocity(new Vector (0,-3,0));
+                }
+            }
+
+            // Spawnea las flechas restantes de manera aleatoria
+            int flechasRestantes = cantidad - bloquesEnRadio;
+            for (int i = 0; i < flechasRestantes; i++) {
+                Location loc = getLocacionAleatoria(centro, radio);
+                Entity ent = (Arrow) loc.getWorld().spawnEntity(loc,e);
+                ent.setCustomName(ChatColor.GREEN+"Lluvia de: "+ChatColor.GOLD+e);
+                ent.setVelocity(new Vector (0,-3,0));
+            }
+        } else {
+            // Spawnea las flechas de manera aleatoria
+            for (int i = 0; i < cantidad; i++) {
+                Location loc = getLocacionAleatoria(centro, radio);
+                Entity ent = (Arrow) loc.getWorld().spawnEntity(loc, e);
+                ent.setCustomName(ChatColor.GREEN+"Lluvia de: "+ChatColor.GOLD+e);
+                ent.setVelocity(new Vector (0,-3,0));
+			
+            }
+        }
+    }
+    
+    public Location getLocacionAleatoria(Location centro, int radio) {
+        double x = centro.getX() + (Math.random() * 2 - 1) * radio;
+        double z = centro.getZ() + (Math.random() * 2 - 1) * radio;
+        double y = centro.getWorld().getHighestBlockYAt((int) x, (int) z);
+        return new Location(centro.getWorld(), x, y, z);
+    }
+	
+	   public Vector getRandomVector() {
+		   double u = Math.random();
+		   double v = Math.random() * 2 * Math.PI;
+		   double x = Math.sqrt(u) * Math.cos(v);
+		   double y = Math.sqrt(1 - u);
+		   double z = Math.sqrt(u) * Math.sin(v);
+		   
+		   Vector vect = new Vector(x,y,z).multiply(1.5);//3
+		   return vect;
+ 	   }
 	
 	public int setLifeByBlock(Location loc) {
 		int lifes = 0;
