@@ -5619,7 +5619,7 @@ public class GameConditions {
 					aw.setFireTicks(1200);
 					//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
 					aw.setCustomName(ChatColor.AQUA+"Lluvia de Flechas");
-					aw.setDamage(2000);
+					aw.setDamage(1000);
                 }
             }
 
@@ -5634,7 +5634,7 @@ public class GameConditions {
 				aw.setFireTicks(1200);
 				//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
 				aw.setCustomName(ChatColor.AQUA+"Lluvia de Flechas");
-				aw.setDamage(2000);
+				aw.setDamage(1000);
             }
         } else {
             // Spawnea las flechas de manera aleatoria
@@ -5647,7 +5647,7 @@ public class GameConditions {
 				aw.setFireTicks(1200);
 				//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
 				aw.setCustomName(ChatColor.AQUA+"Lluvia de Flechas");
-				aw.setDamage(2000);
+				aw.setDamage(1000);
             }
         }
     }

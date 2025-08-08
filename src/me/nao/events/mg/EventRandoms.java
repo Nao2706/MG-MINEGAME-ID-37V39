@@ -458,6 +458,7 @@ public class EventRandoms implements Listener{
 		if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
 			if (e.getItem() != null) {
 				if(e.getItem().isSimilar(Items.TNTARROW.getValue())) {
+					e.setCancelled(true);
 					TNTPrimed ptnt = (TNTPrimed) player.getWorld().spawnEntity(player.getLocation().add(0.5,1,0.5),EntityType.TNT);
 					ptnt.setFuseTicks(5*20);
 					ptnt.setVelocity(player.getLocation().getDirection().multiply(2.5));
@@ -1635,7 +1636,7 @@ public class EventRandoms implements Listener{
 					names.add("TNT de Flechas");
 					
 					if(mobname.equals("TNT de Flechas")){
-						 for(int i = 0;i<100;i++) {
+						 for(int i = 0;i<200;i++) {
 								Location loc = ent.getLocation();
 								Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
 								aw.setVelocity(getRandomVector());
@@ -1644,7 +1645,7 @@ public class EventRandoms implements Listener{
 								aw.setFireTicks(1200);
 								//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
 								aw.setCustomName(ChatColor.RED+"Pua de TNT Especial");
-								aw.setDamage(2000);
+								aw.setDamage(1000);
 								//aw.setShooter(z); 
 								//((Arrow) h1).setShooter(player);
 							}
@@ -1661,7 +1662,7 @@ public class EventRandoms implements Listener{
 								aw.setFireTicks(1200);
 								//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
 								aw.setCustomName(ChatColor.RED+"Pua de TNT");
-								aw.setDamage(2000);
+								aw.setDamage(1000);
 								//aw.setShooter(z);
 								//((Arrow) h1).setShooter(player);
 							}
