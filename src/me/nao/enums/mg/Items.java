@@ -132,6 +132,9 @@ import org.bukkit.inventory.meta.ItemMeta;
             TNTP(""+ChatColor.GREEN+ChatColor.BOLD+"TNT LANZABLE", Material.TNT,"fire_aspect,3/knockback,3", 1,ChatColor.YELLOW+ "Lanza la TNT a tus Enemigos."),
 
             TNTARROW(""+ChatColor.GREEN+ChatColor.BOLD+"TNT ARROW", Material.TNT,"fire_aspect,3/knockback,3", 1,ChatColor.YELLOW+ "Lanza la TNT que Explota con Muchas Flechas."),
+            TNTARROW2(""+ChatColor.YELLOW+ChatColor.BOLD+"TNT ARROW 2", Material.TNT,"fire_aspect,3/knockback,3", 1,ChatColor.RED+ "Lanza la TNT que Explota con Muchas Flechas."),
+            TNTARROW3(""+ChatColor.RED+ChatColor.BOLD+"TNT ARROW 3", Material.TNT,"fire_aspect,3/knockback,3", 1,ChatColor.RED+ "Lanza la TNT que Explota con Muchas Flechas."),
+            TNTARROW4(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"TNT ARROW 4", Material.TNT,"fire_aspect,3/knockback,3", 1,ChatColor.RED+ "Lanza la TNT que Explota con Muchas Flechas."),
 
             
             MEDICO(""+ChatColor.RED+ChatColor.BOLD+"MEDICO", Material.EMERALD,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"30 Netherite",ChatColor.YELLOW+ "Llama a un Aldeano medico"),

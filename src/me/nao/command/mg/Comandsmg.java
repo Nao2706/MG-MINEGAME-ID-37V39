@@ -103,6 +103,7 @@ public class Comandsmg implements CommandExecutor{
 	//Captador de mensaje 
 
 	
+	@SuppressWarnings("removal")
 	public boolean onCommand(CommandSender sender,  Command comando,  String label, String[] args) {
 		FileConfiguration message = plugin.getMessage();
 		FileConfiguration points1 = plugin.getPoints();		
@@ -2145,6 +2146,26 @@ public class Comandsmg implements CommandExecutor{
 			
 			   		return true;
 			
+		   }else if (args[0].equalsIgnoreCase("arrow0") && player.isOp()) {
+			  
+					 for(int i = 0;i<20;i++) {
+							Location loc = player.getLocation();
+							Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
+							aw.setVelocity(getRandomVector(30,player.getLocation().getDirection()));
+							aw.setCritical(true);
+							aw.setKnockbackStrength(2);
+							aw.setFireTicks(1200);
+							aw.setShooter(player);
+							//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+							//aw.setCustomName(ChatColor.RED+"Pua de TNT Especial");
+							//aw.setDamage(1000);
+							//aw.setShooter(z); 
+							//((Arrow) h1).setShooter(player);
+						}
+			   
+			   
+			  
+			   return true;
 		   }else if (args[0].equalsIgnoreCase("arrow1") && player.isOp()) {
 			   for(int i = 0; i< 20;i++) {
 				   spawnArrows2(player); 
@@ -4482,11 +4503,13 @@ public class Comandsmg implements CommandExecutor{
 			 		  return true;
 			 	  }else if(args[0].equalsIgnoreCase("arrow")) {
 					
-					player.getInventory().addItem(Items.ARROWDIS.getValue());
-					player.getInventory().addItem(Items.ARROWDIS2.getValue());
-					player.getInventory().addItem(Items.REVIVE.getValue());
+//					player.getInventory().addItem(Items.ARROWDIS.getValue());
+//					player.getInventory().addItem(Items.ARROWDIS2.getValue());
+//					player.getInventory().addItem(Items.REVIVE.getValue());
 					player.getInventory().addItem(Items.TNTARROW.getValue());
-					 
+					player.getInventory().addItem(Items.TNTARROW2.getValue());
+					player.getInventory().addItem(Items.TNTARROW3.getValue());
+					player.getInventory().addItem(Items.TNTARROW4.getValue());
 					return true;
 				}else if(args[0].equalsIgnoreCase("lock")) {
 						Block b = player.getTargetBlock((Set<Material>) null, 5);
@@ -5584,6 +5607,28 @@ public class Comandsmg implements CommandExecutor{
 //	        return block;
 //	    }
 	
+ 	
+	   public Vector getRandomVector(double angle,Vector direction) {
+		   double u = Math.random();
+		   double v = Math.random() * 2 * Math.PI;
+		   double theta = Math.toRadians(angle / 2);
+		   double phi = Math.acos(1 - u *(1 - Math.cos(theta)));
+		   double x = Math.cos(phi);
+		   double y = Math.sin(phi) * Math.sin(v);
+		   double z = Math.sin(phi) * Math.cos(v);
+		   
+		   Vector vect = new Vector(x,y,z).multiply(1.5);//3
+		   vect = roteteVector(vect, direction);
+		   return vect;
+ 	   }
+	   
+	   public Vector roteteVector(Vector vec, Vector direc) {
+		   double angle = Math.acos(vec.dot(direc) / (vec.length()* direc.length()));
+		   Vector axis = vec.crossProduct(direc);
+		   vec = vec.rotateAroundAxis(axis, angle);
+		   return vec;
+	   }
+ 	
 	 public double randomPosOrNeg(int i){
 			Random r = new Random();
 			double v = r.nextDouble() * i;

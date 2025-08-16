@@ -2394,7 +2394,7 @@ public class GameConditions {
 							}else if(lt.isAfter(t2)) {
 								player.sendMessage(ChatColor.RED+"================================================");
 								player.sendMessage("");
-								player.sendMessage(""+ChatColor.YELLOW+ChatColor.BOLD+"                     [CERRADO] ");
+								player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"                     [CERRADO] ");
 								player.sendMessage(ChatColor.YELLOW+"Me temo que el Tiempo para Ingresar ya paso.");
 								player.sendMessage(""+ChatColor.YELLOW+ChatColor.BOLD+"                [A Trasncurrido] ");
 								player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"["+ChatColor.RED+TimeDiferenceMg(t2, lt)+ChatColor.GOLD+ChatColor.BOLD+"]");
@@ -2558,7 +2558,7 @@ public class GameConditions {
 							String times = sb.toString();
 							player.sendMessage(ChatColor.AQUA+"================================================");
 							player.sendMessage("");
-							player.sendMessage(""+ChatColor.YELLOW+ChatColor.BOLD+"                     [CERRADO] ");
+							player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"                     [CERRADO] ");
 							player.sendMessage(ChatColor.YELLOW+"Me temo que el Tiempo para Ingresar ya paso.");
 							player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"Cerrado: "+ChatColor.GOLD+"Solo funciona los dias "+times.replaceAll(",",ChatColor.YELLOW+","));
 							player.sendMessage(ChatColor.GOLD+"Fecha Actual: "+ChatColor.GREEN+lt.format(formatter));
@@ -2633,7 +2633,7 @@ public class GameConditions {
 				
 					String times = sb.toString();
 					player.sendMessage(ChatColor.BLUE+"================================================");
-					player.sendMessage(""+ChatColor.YELLOW+ChatColor.BOLD+"                     [CERRADO] ");
+					player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"                     [CERRADO] ");
 					player.sendMessage(ChatColor.YELLOW+"Me temo que el Tiempo para Ingresar ya paso.");
 					player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"Cerrado: "+ChatColor.GOLD+"Solo funciona los dias "+times.replaceAll(",",ChatColor.YELLOW+","));
 					player.sendMessage(ChatColor.GOLD+"Fecha Actual: "+ChatColor.GREEN+lt.format(formatter));
@@ -5707,6 +5707,7 @@ public class GameConditions {
 		   Vector vect = new Vector(x,y,z).multiply(1.5);//3
 		   return vect;
  	   }
+	   
 	
 	public int setLifeByBlock(Location loc) {
 		int lifes = 0;
