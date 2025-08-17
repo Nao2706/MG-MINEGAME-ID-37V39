@@ -1670,6 +1670,7 @@ public class EventRandoms implements Listener{
 					names.add("TNT de Flechas 2");
 					names.add("TNT de Flechas 3");
 					names.add("TNT de Flechas 4");
+					names.add("TNT RACIMO");
 					
 					if(mobname.equals("TNT de Flechas")){
 						 for(int i = 0;i<200;i++) {
@@ -1757,6 +1758,22 @@ public class EventRandoms implements Listener{
 								//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
 								aw.setCustomName(ChatColor.DARK_PURPLE+"Pua de TNT Especial 4");
 								aw.setDamage(1000);
+								//aw.setShooter(z); 
+								//((Arrow) h1).setShooter(player);
+							}
+					}if(mobname.equals("LLUVIA DE TNT RACIMO")){
+						 for(int i = 0;i<5;i++) {
+								Location loc = ent.getLocation();
+								TNTPrimed tnt = (TNTPrimed) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.TNT);
+								//ESTE GRADO O DIRECCION VA AL ESTE 
+								tnt.setVelocity(getRandomVector());//
+//								aw.setCritical(true);
+//								aw.setKnockbackStrength(2);
+//								aw.setFireTicks(1200);
+								//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+								tnt.setCustomName(ChatColor.YELLOW+"TNT RACIMO");
+								tnt.setYield(10);
+								//aw.setDamage(1000);
 								//aw.setShooter(z); 
 								//((Arrow) h1).setShooter(player);
 							}

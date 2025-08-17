@@ -5591,10 +5591,20 @@ public class GameConditions {
 	        tnt.setFuseTicks(5*20);
 	     
 	        if(type == 1) {
-	        	  tnt.setCustomName(ChatColor.RED+"LLUVIA DE TNT CON PUAS");
+	        	  tnt.setCustomName(ChatColor.GREEN+"LLUVIA DE TNT CON PUAS");
 	        	  tnt.setYield(0);
+	        }else if(type == 2) {
+	        	  tnt.setCustomName(ChatColor.GOLD+"LLUVIA DE TNT DESTRUCTIVA");
+	        	  tnt.setYield(10);
+	        }else if(type == 3) {
+	        	  tnt.setCustomName(ChatColor.DARK_PURPLE+"LLUVIA DE TNT RACIMO");
+	        	  tnt.setYield(0);
+	        }else if(type == 4) {
+	        	  tnt.setCustomName(ChatColor.RED+"LLUVIA DE TNT DESTRUCTIVA");
+	        	  tnt.setYield(10);
+	        	  tnt.setIsIncendiary(true);
 	        }else {
-	        	  tnt.setCustomName(ChatColor.RED+"LLUVIA DE TNT");
+	        	  tnt.setCustomName(ChatColor.YELLOW+"LLUVIA DE TNT");
 	        	  tnt.setYield(10);
 	        }
 	      
@@ -5690,12 +5700,25 @@ public class GameConditions {
         }
     }
     
-    public Location getLocacionAleatoria(Location centro, int radio) {
-        double x = centro.getX() + (Math.random() * 2 - 1) * radio;
-        double z = centro.getZ() + (Math.random() * 2 - 1) * radio;
-        double y = centro.getWorld().getHighestBlockYAt((int) x, (int) z);
-        return new Location(centro.getWorld(), x, y, z);
-    }
+//    public Location getLocacionAleatoria(Location centro, int radio) {
+//        double x = centro.getX() + (Math.random() * 2 - 1) * radio;
+//        double z = centro.getZ() + (Math.random() * 2 - 1) * radio;
+//        double y = centro.getWorld().getHighestBlockYAt((int) x, (int) z);
+//        return new Location(centro.getWorld(), x, y+1, z);
+//    }
+	
+	
+		@SuppressWarnings("removal")
+		public Location getLocacionAleatoria(Location centro, int radio) {
+				double x = centro.getX() + (Math.random() * 2 - 1) * radio;
+				double z = centro.getZ() + (Math.random() * 2 - 1) * radio;
+	            World world = centro.getWorld();
+	            int y = world.getHighestBlockYAt((int) x, (int) z);
+	             while (y > 0 && (world.getBlockAt((int) x, y, (int) z).getType().isTransparent() || world.getBlockAt((int) x, y, (int) z).getType() == Material.BARRIER)) {
+	                          y--;
+	               }
+	        return new Location(world, x, y + 1, z);
+	    }
 	
 	   public Vector getRandomVector() {
 		   double u = Math.random();
