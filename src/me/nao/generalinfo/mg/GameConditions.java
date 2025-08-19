@@ -5674,7 +5674,7 @@ public class GameConditions {
             for (int x = -radio; x <= radio; x++) {
                 for (int z = -radio; z <= radio; z++) {
                     Location loc = centro.clone().add(x, 0, z);
-                    Entity ent = (Entity) loc.getWorld().spawnEntity(loc,e);
+                    Entity ent = (Entity) loc.getWorld().spawnEntity(loc.add(0.5, 0, 0.5),e);
                     ent.setCustomName(ChatColor.GREEN+"Lluvia de: "+ChatColor.GOLD+e);
                     ent.setVelocity(new Vector (0,-3,0));
                 }
@@ -5684,7 +5684,7 @@ public class GameConditions {
             int flechasRestantes = cantidad - bloquesEnRadio;
             for (int i = 0; i < flechasRestantes; i++) {
                 Location loc = getLocacionAleatoria(centro, radio);
-                Entity ent = (Entity) loc.getWorld().spawnEntity(loc,e);
+                Entity ent = (Entity) loc.getWorld().spawnEntity(loc.add(0.5, 0, 0.5),e);
                 ent.setCustomName(ChatColor.GREEN+"Lluvia de: "+ChatColor.GOLD+e);
                 ent.setVelocity(new Vector (0,-3,0));
             }
@@ -5692,7 +5692,7 @@ public class GameConditions {
             // Spawnea las flechas de manera aleatoria
             for (int i = 0; i < cantidad; i++) {
                 Location loc = getLocacionAleatoria(centro, radio);
-                Entity ent = (Entity) loc.getWorld().spawnEntity(loc, e);
+                Entity ent = (Entity) loc.getWorld().spawnEntity(loc.add(0.5, 0, 0.5), e);
                 ent.setCustomName(ChatColor.GREEN+"Lluvia de: "+ChatColor.GOLD+e);
                 ent.setVelocity(new Vector (0,-3,0));
 			

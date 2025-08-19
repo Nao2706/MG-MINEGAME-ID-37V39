@@ -2459,8 +2459,8 @@ public class Comandsmg implements CommandExecutor{
 
 			 			 
 			 		 }else{
-			 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa mg entityrain <world,x,y,z> <radius> <amount> <mobtype>");
-			 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Ejemplo mg entityrain world,12,23,34 10 5 Creeper");
+			 			player.sendMessage(ChatColor.GREEN+"Usa mg entityrain <world,x,y,z> <radius> <amount> <mobtype>");
+			 			player.sendMessage(ChatColor.GREEN+"Ejemplo mg entityrain world,12,23,34 10 5 Creeper");
 			 		 }
 					
 					
