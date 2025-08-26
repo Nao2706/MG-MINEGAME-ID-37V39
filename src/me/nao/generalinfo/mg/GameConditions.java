@@ -5747,4 +5747,9 @@ public class GameConditions {
 	}
 	
 	
+	public boolean isWorldAllowedForItem(String world) {
+		FileConfiguration config = plugin.getConfig();
+		return config.getStringList("Worlds-Allowed-Items.List").contains(world);
+	}
+	
 }

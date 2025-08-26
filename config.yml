@@ -1,6 +1,6 @@
 Remove-Armor-Stands: 30
 Chest-Particle-Range: 10
-Join-Reward: false
+Claim-Reward: false
 Time-Reward: 30
 Anti-Void: true
 Country-Time: "Ecuador"
@@ -29,7 +29,7 @@ Regen-Explosion:
 Maps-Ranked:
     List:
     - example  
-Random-Reward:
+Top-Rewards:
     List:
     - example1
     - example2    
@@ -42,5 +42,9 @@ Worlds-Animation:
 FallingBlock-Remove-If-Touch-Ground:
     List:
     - example1
-    - example2 
+    - example2
+Worlds-Allowed-Items:
+	List:
+	- example1
+	- example2  	 
  

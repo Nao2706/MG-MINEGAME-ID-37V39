@@ -65,7 +65,6 @@ public class Minegame extends JavaPlugin{
     private YamlFile reports;
     private YamlFile mapfrequency;
     private YamlFile recordtime;
-   
 
     private Map<String, Boolean> delete;
     private Map<Player, PlayerInfo> playerinfopoo;

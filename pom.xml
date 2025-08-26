@@ -38,17 +38,20 @@
 			<layout>default</layout>
 		  </repository>
 		  
-  
+  		  <repository>
+			<id>papermc</id>
+			<url>https://repo.papermc.io/repository/maven-public/</url>
+		  </repository>
   	
-		 <repository>
+		  <repository>
             <id>placeholderapi</id>
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
-        </repository>
+          </repository>
 		
-		<repository>
+		  <repository>
 		    <id>viaversion-repo</id>
 		    <url>https://repo.viaversion.com</url>
-		</repository>
+		  </repository>
 		
   
   </repositories>
@@ -57,6 +60,26 @@
  
   
   <dependencies>
+  
+	      <dependency>
+	        <groupId>net.md-5</groupId>
+	        <artifactId>bungeecord-api</artifactId>
+	        <version>1.21-R0.2</version>
+	        <scope>provided</scope>
+	      </dependency>
+  
+		 <dependency>
+		    <groupId>io.papermc.paper</groupId>
+		    <artifactId>paper-api</artifactId>
+		    <version>1.21.4-R0.1-SNAPSHOT</version>
+		    <scope>provided</scope>
+		  </dependency>
+  
+		  <dependency>
+		    <groupId>net.kyori</groupId>
+		    <artifactId>adventure-api</artifactId>
+		    <version>4.19.0</version>
+		  </dependency>
   
 		  <dependency>
 		    <groupId>com.viaversion</groupId>
@@ -79,11 +102,11 @@
 	  		<scope>provided</scope>
 	  	</dependency>
   
-	   <dependency>
+	    <dependency>
 		   <groupId>de.tr7zw</groupId>
 		   <artifactId>item-nbt-api-plugin</artifactId>
 		   <version>2.14.1</version>
-	  </dependency>
+	    </dependency>
   
   
   </dependencies>

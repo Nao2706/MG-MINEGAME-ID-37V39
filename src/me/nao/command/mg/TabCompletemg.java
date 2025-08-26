@@ -1,8 +1,12 @@
 package me.nao.command.mg;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -136,6 +140,22 @@ public class TabCompletemg implements TabCompleter{
 						}
 						return result;
 					} 
+					
+					if(args[0].equalsIgnoreCase("coord")){
+							Player player = (Player) sender;
+							Block b = player.getTargetBlock((Set<Material>) null, 150);
+							List<String> result = new ArrayList<String>();
+					       if(!b.getType().isSolid()) {
+					    	   result.add("Apunta a un Bloque Solido");
+					       }else {
+					    	   	NumberFormat nf = NumberFormat.getInstance();
+								nf.setGroupingUsed(false);
+								nf.setMaximumFractionDigits(0);
+								
+					    	   result.add(player.getWorld().getName()+";"+nf.format(player.getLocation().getX())+";"+nf.format(player.getLocation().getY())+";"+nf.format(player.getLocation().getZ()));
+					       }
+					       return result;
+					}
 					
 					if(args[0].equalsIgnoreCase("getInv")) {
 						FileConfiguration invs = plugin.getInventorysYaml();

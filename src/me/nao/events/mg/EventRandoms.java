@@ -23,6 +23,7 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
 import org.bukkit.block.EnchantingTable;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.Levelled;
 import org.bukkit.block.data.type.Dispenser;
 //import org.bukkit.block.sign.SignSide;
 import org.bukkit.command.ConsoleCommandSender;
@@ -37,6 +38,7 @@ import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.SmallFireball;
+import org.bukkit.entity.Snowball;
 import org.bukkit.entity.Snowman;
 import org.bukkit.entity.Spider;
 import org.bukkit.entity.TNTPrimed;
@@ -103,6 +105,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
 import org.bukkit.projectiles.ProjectileSource;
+import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
 import com.google.common.base.Strings;
@@ -454,9 +457,68 @@ public class EventRandoms implements Listener{
 //			new Flare(player, player.getInventory().getItemInMainHand(),player.getEyeLocation(),plugin);
 //			return;
 //		}
-		
+		GameConditions gc = new GameConditions(plugin);
 		if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
 			if (e.getItem() != null) {
+				
+				
+				
+				if(e.getItem().isSimilar(Items.INTERCAMB.getValue())) {
+					
+					if(gc.isWorldAllowedForItem(player.getLocation().getWorld().getName())) {
+						e.setCancelled(true);
+						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Mundo Bloqueado",ChatColor.GRAY+"No puedes usar ese Item Aqui.", 20, 20,20);
+						return;
+					}
+					
+					Location loc = player.getLocation();
+					Snowball sn = (Snowball) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.SNOWBALL);
+					sn.setVelocity(loc.getDirection().multiply(3));
+					sn.setCustomName("intercamb");
+					sn.setShooter(player);
+					e.setCancelled(true);
+					removeItemstackCustom(player,e.getItem());
+				}
+				
+				if(e.getItem().isSimilar(Items.DROPPER.getValue())) {
+					
+					if(gc.isWorldAllowedForItem(player.getLocation().getWorld().getName())) {
+						e.setCancelled(true);
+						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Mundo Bloqueado",ChatColor.GRAY+"No puedes usar ese Item Aqui.", 20, 20,20);
+						return;
+					}
+					
+					Location loc = player.getLocation();
+					Snowball sn = (Snowball) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.SNOWBALL);
+					sn.setVelocity(loc.getDirection().multiply(3));
+					sn.setCustomName("dropper");
+					sn.setShooter(player);
+					e.setCancelled(true);
+					removeItemstackCustom(player,e.getItem());
+				}
+				
+				if(e.getItem().isSimilar(Items.GLASSHIELD.getValue())) {
+					
+					if(gc.isWorldAllowedForItem(player.getLocation().getWorld().getName())) {
+						e.setCancelled(true);
+						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Mundo Bloqueado",ChatColor.GRAY+"No puedes usar ese Item Aqui.", 20, 20,20);
+						return;
+					}
+					
+					Location loc = player.getLocation();
+					for(int i = 0 ; i < 2 ; i++) {
+							FallingBlock f =  player.getWorld().spawnFallingBlock(loc.add(0,i,0), Material.GREEN_STAINED_GLASS.createBlockData());
+							f.setGravity(false);
+							f.setInvulnerable(true);
+							f.setTicksLived(100);
+							f.setDropItem(false);
+					}
+					e.setCancelled(true);
+					removeItemstackCustom(player,e.getItem());
+				}
+				if(e.getItem().isSimilar(Items.TNTARROW.getValue())) {
+				
+				}
 				if(e.getItem().isSimilar(Items.TNTARROW.getValue())) {
 					e.setCancelled(true);
 					TNTPrimed ptnt = (TNTPrimed) player.getWorld().spawnEntity(player.getLocation().add(0.5,1,0.5),EntityType.TNT);
@@ -498,6 +560,66 @@ public class EventRandoms implements Listener{
 					ptnt.setCustomName(ChatColor.DARK_PURPLE+"TNT de Flechas 4");
 					ptnt.setSource(player);
 					ptnt.setYield(0);
+					 
+					removeItemstackCustom(player,e.getItem());
+				}if(e.getItem().isSimilar(Items.TNTARROW8.getValue())) {
+					e.setCancelled(true);
+					TNTPrimed ptnt = (TNTPrimed) player.getWorld().spawnEntity(player.getLocation(),EntityType.TNT);
+					ptnt.setFuseTicks(5*20);
+					ptnt.setVelocity(player.getLocation().getDirection().multiply(2.5));
+					ptnt.setCustomName(ChatColor.DARK_PURPLE+"TNT de Flechas 5");
+					ptnt.setSource(player);
+					ptnt.setYield(0);
+					
+					removeItemstackCustom(player,e.getItem());
+				}if(e.getItem().isSimilar(Items.TNTARROW9.getValue())) {
+					e.setCancelled(true);
+					TNTPrimed ptnt = (TNTPrimed) player.getWorld().spawnEntity(player.getLocation(),EntityType.TNT);
+					ptnt.setFuseTicks(5*20);
+					ptnt.setVelocity(player.getLocation().getDirection().multiply(2.5));
+					ptnt.setCustomName(ChatColor.DARK_PURPLE+"TNT de Flechas 6");
+					ptnt.setSource(player);
+					ptnt.setYield(0);
+					
+					removeItemstackCustom(player,e.getItem());
+				}if(e.getItem().isSimilar(Items.TNTARROW5.getValue())) {
+					e.setCancelled(true);
+					TNTPrimed ptnt = (TNTPrimed) player.getWorld().spawnEntity(player.getLocation(),EntityType.TNT);
+					ptnt.setFuseTicks(5*20);
+					ptnt.setVelocity(player.getLocation().getDirection().multiply(2.5));
+					ptnt.setCustomName(ChatColor.DARK_PURPLE+"TNT DIRECTION");
+					ptnt.setSource(player);
+					ptnt.setYield(0);
+				
+					removeItemstackCustom(player,e.getItem());
+				}if(e.getItem().isSimilar(Items.TNTARROW6.getValue())) {
+					e.setCancelled(true);
+					TNTPrimed ptnt = (TNTPrimed) player.getWorld().spawnEntity(player.getLocation(),EntityType.TNT);
+					ptnt.setFuseTicks(5*20);
+					ptnt.setVelocity(player.getLocation().getDirection().multiply(2.5));
+					ptnt.setCustomName(ChatColor.DARK_PURPLE+"TNT LOOKER");
+					ptnt.setSource(player);
+					ptnt.setYield(0);
+					 
+					removeItemstackCustom(player,e.getItem());
+				}if(e.getItem().isSimilar(Items.TNTARROW7.getValue())) {
+					e.setCancelled(true);
+					TNTPrimed ptnt = (TNTPrimed) player.getWorld().spawnEntity(player.getLocation(),EntityType.TNT);
+					ptnt.setFuseTicks(5*20);
+					ptnt.setVelocity(player.getLocation().getDirection().multiply(2.5));
+					ptnt.setCustomName(ChatColor.DARK_PURPLE+"TNT BLOCK BREAKER");
+					ptnt.setSource(player);
+					ptnt.setYield(0);
+					
+					removeItemstackCustom(player,e.getItem());
+				}if(e.getItem().isSimilar(Items.TNTARROW10.getValue())) {
+					e.setCancelled(true);
+					TNTPrimed ptnt = (TNTPrimed) player.getWorld().spawnEntity(player.getLocation(),EntityType.TNT);
+					ptnt.setFuseTicks(5*20);
+					ptnt.setVelocity(player.getLocation().getDirection().multiply(2.5));
+					ptnt.setCustomName(ChatColor.DARK_PURPLE+"TNT LAVA");
+					ptnt.setSource(player);
+					ptnt.setYield(0);
 					
 					removeItemstackCustom(player,e.getItem());
 				}
@@ -528,7 +650,7 @@ public class EventRandoms implements Listener{
 		}
 		
 		
-		GameConditions gc = new GameConditions(plugin);
+		
 		if(gc.isPlayerinGame(player)) {
 			if(e.getHand() == EquipmentSlot.OFF_HAND)return;
 				
@@ -1652,6 +1774,9 @@ public class EventRandoms implements Listener{
 				Entity ent = e.getEntity();
 				 
 				if(ent.getCustomName() != null){
+					
+					if(ent instanceof TNTPrimed);
+					TNTPrimed tnt1 = (TNTPrimed) ent;
 					String mobname = ChatColor.stripColor(ent.getCustomName());
 					
 					
@@ -1761,6 +1886,83 @@ public class EventRandoms implements Listener{
 								//aw.setShooter(z); 
 								//((Arrow) h1).setShooter(player);
 							}
+					}if(mobname.equals("TNT de Flechas 5")){
+						
+						 for(int i = 0;i<50;i++) {
+								Location loc = ent.getLocation();
+								Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
+								//ESTE GRADO O DIRECCION VA AL ESTE 
+								aw.setVelocity(getRandomVector2(75));//
+								aw.setCritical(true);
+								aw.setKnockbackStrength(2);
+								aw.setFireTicks(1200);
+								//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+								aw.setCustomName(ChatColor.YELLOW+"Pua de TNT Especial 5");
+								aw.setDamage(1000);
+								
+								
+								Location loc1 = ent.getLocation();
+								Arrow aw1 = (Arrow) loc1.getWorld().spawnEntity(loc1.add(0, 1, 0), EntityType.ARROW);
+								//ESTE GRADO O DIRECCION VA AL ESTE 
+								aw1.setVelocity(getRandomVector2(75));//
+								aw1.setCritical(true);
+								aw1.setKnockbackStrength(2);
+								aw1.setFireTicks(1200);
+								aw1.setCustomName(ChatColor.YELLOW+"Pua de TNT Especial 5");
+								aw1.setDamage(1000);
+						
+								Location loc2 = ent.getLocation();
+								Arrow aw2 = (Arrow) loc2.getWorld().spawnEntity(loc2.add(0, 2, 0), EntityType.ARROW);
+								//ESTE GRADO O DIRECCION VA AL ESTE 
+								aw2.setVelocity(getRandomVector2(75));//
+								aw2.setCritical(true);
+								aw2.setKnockbackStrength(2);
+								aw2.setFireTicks(1200);
+								aw2.setCustomName(ChatColor.YELLOW+"Pua de TNT Especial 5");
+								aw2.setDamage(1000);
+							}
+						
+					}if(mobname.equals("TNT de Flechas 6")){
+						 for(int i = 0;i<100;i++) {
+								Location loc = ent.getLocation();
+								Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
+								//ESTE GRADO O DIRECCION VA AL ESTE 
+								//aw.setVelocity(getRandomVector3());
+								aw.setVelocity(getRandomVector3());//
+								aw.setCritical(true);
+								aw.setKnockbackStrength(2);
+								aw.setFireTicks(1200);
+								//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+								aw.setCustomName(ChatColor.RED+"Pua de TNT Especial 6");
+								aw.setDamage(1000);
+								 
+								
+								Location loc1 = ent.getLocation();
+								Arrow aw1 = (Arrow) loc1.getWorld().spawnEntity(loc1.add(0, 1, 0), EntityType.ARROW);
+								//ESTE GRADO O DIRECCION VA AL ESTE 
+								//aw.setVelocity(getRandomVector3());
+								aw1.setVelocity(getRandomVector3());//
+								aw1.setCritical(true);
+								aw1.setKnockbackStrength(2);
+								aw1.setFireTicks(1200);
+								//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+								aw1.setCustomName(ChatColor.RED+"Pua de TNT Especial 6");
+								aw1.setDamage(1000);
+							
+								
+								Location loc2 = ent.getLocation();
+								Arrow aw2 = (Arrow) loc2.getWorld().spawnEntity(loc2.add(0, 2, 0), EntityType.ARROW);
+								//ESTE GRADO O DIRECCION VA AL ESTE 
+								//aw.setVelocity(getRandomVector3());
+								aw2.setVelocity(getRandomVector3());//
+								aw2.setCritical(true);
+								aw2.setKnockbackStrength(2);
+								aw2.setFireTicks(1200);
+								//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+								aw2.setCustomName(ChatColor.RED+"Pua de TNT Especial 6");
+								aw2.setDamage(1000);
+								
+							}
 					}if(mobname.equals("LLUVIA DE TNT RACIMO")){
 						 for(int i = 0;i<5;i++) {
 								Location loc = ent.getLocation();
@@ -1782,6 +1984,7 @@ public class EventRandoms implements Listener{
 					
 					if(mobname.equals("LLUVIA DE TNT CON PUAS")){
 						 for(int i = 0;i<20;i++) {
+					
 								Location loc = ent.getLocation();
 								Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
 								aw.setVelocity(getRandomVector());
@@ -1792,9 +1995,59 @@ public class EventRandoms implements Listener{
 								aw.setCustomName(ChatColor.RED+"Pua de TNT");
 								aw.setDamage(1000);
 								//aw.setShooter(z);
+							}
+					}if(mobname.equals("TNT LOOKER")){
+						
+							if(tnt1.getSource() != null && tnt1.getSource() instanceof Player) {
+								
+								 Player player = (Player) tnt1.getSource();	
+								 getRandomVectorLooker(player , tnt1.getLocation(), 25);
+							}
+							
+							 
+							
+						
+					}if(mobname.equals("TNT DIRECTION")){
+						if(tnt1.getSource() != null && tnt1.getSource() instanceof Player) {
+							
+							 Player player = (Player) tnt1.getSource();	
+							 getRandomVectorLook(player , tnt1.getLocation(), 25);
+						}
+						
+					}if(mobname.equals("TNT LAVA")){
+						 for(int i = 0;i<200;i++) {
+								Location loc = ent.getLocation();
+								Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
+								aw.setVelocity(getRandomVector());
+								aw.setCritical(true);
+								aw.setKnockbackStrength(2);
+								aw.setFireTicks(1200);
+								//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+								aw.setCustomName(ChatColor.RED+"Pua de TNT LAVA");
+								aw.setDamage(1000);
+								//aw.setShooter(z); 
 								//((Arrow) h1).setShooter(player);
 							}
+						
+					}if(mobname.equals("TNT BLOCK BREAKER")){
+						 for(int i = 0;i<200;i++) {
+								Location loc = ent.getLocation();
+								Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
+								aw.setVelocity(getRandomVector());
+								aw.setCritical(true);
+								aw.setKnockbackStrength(2);
+								aw.setFireTicks(1200);
+								//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+								aw.setCustomName(ChatColor.GOLD+"Pua de TNT Rompedora");
+								aw.setDamage(1000);
+								//aw.setShooter(z); 
+								//((Arrow) h1).setShooter(player);
+							}
+						
 					}
+						
+
+					
 					
 					if(names.stream().filter(o -> o.startsWith(mobname)).findFirst().isPresent()) {
 						
@@ -2077,18 +2330,94 @@ public class EventRandoms implements Listener{
 			  GameConditions gc = new GameConditions(plugin);
 			  
 			   
+			  if(e.getHitEntity() != null) {
+				  if(projectile instanceof AbstractArrow) {
+					  AbstractArrow arrow = (AbstractArrow) projectile;
+					  if(arrow.getCustomName() != null) {
+						  String text = ChatColor.stripColor(arrow.getCustomName());
+						  if(text.equals("Pua de TNT LAVA")) {
+							  
+								Block block = e.getHitEntity().getLocation().getBlock();
+					        	Block r = block.getRelative(0, 0, 0);
+					        	for (int x = -2; x < 3; x++) {
+									for (int y = -2; y < 3; y++) {
+										for (int z = -2; z < 3; z++) {
+											
+											Block a = r.getRelative(x, y, z);
+											if (y == 2 || x == 2 || z == 2 || y == -2 || x == -2 || z == -2) {
+												if(!a.getType().equals(Material.AIR))continue;
+												a.setType(Material.LAVA);
+												Levelled waterLevel = (Levelled) a.getBlockData();
+									        	waterLevel.setLevel(4);
+									        	a.setBlockData(waterLevel);
+											}
+
+											else if (y == 1 || x == 1 || z == 1 || y == -1 || x == -1 || z == -1) {
+												if(!a.getType().equals(Material.AIR))continue;
+												a.setType(Material.LAVA);
+												Levelled waterLevel = (Levelled) a.getBlockData();
+									        	waterLevel.setLevel(4);
+									        	a.setBlockData(waterLevel);
+											}
+
+											else if (y == -1 || x == 0 || z == 0 || y == 0 || x == 0 || z == 0) {
+												if(!a.getType().equals(Material.AIR))continue;
+												a.setType(Material.LAVA);
+												Levelled waterLevel = (Levelled) a.getBlockData();
+									        	waterLevel.setLevel(4);
+									        	a.setBlockData(waterLevel);
+
+											}
+											
+									}}}	
+							  
+						  }
+						  
+						  
+					  }
+				  }
+				
+				  
+				 
+			  }
+			  
 			  if(e.getHitBlock() != null) {
 				  Block b = e.getHitBlock();
 				  if(projectile instanceof AbstractArrow) {
 					  AbstractArrow arrow = (AbstractArrow) projectile;
 					  if(arrow.getCustomName() != null) {
 						  String text = ChatColor.stripColor(arrow.getCustomName());
-						  if(text.equals("Flecha Trampa") || text.equals("Flecha Trampa Mejorada") || text.equals("Pua de TNT") ||
-						     text.equals("Pua de TNT Especial") || text.equals("Pua de TNT Especial 2") || text.equals("Pua de TNT Especial 3") || text.equals("Pua de TNT Especial 4")) {
+						  
+						  List<String> names = new ArrayList<>();
+						  names.add("Flecha Trampa");
+						  names.add("Flecha Trampa Mejorada");
+						  names.add("Pua de TNT");
+						  names.add("Pua de TNT Especial");
+						  names.add("Pua de TNT Especial 2");
+						  names.add("Pua de TNT Especial 3");
+						  names.add("Pua de TNT Especial 4");
+						  names.add("Pua de TNT Especial 5");
+						  names.add("Pua de TNT Especial 6");
+						  names.add("Torreta");
+						   
+						if(names.contains(text)) {
 							arrow.remove();
-						  }else if(text.startsWith("Torreta")) {
-							arrow.remove();
-						  }
+							
+						}else if(text.equals("Pua de TNT Rompedora")) {
+							
+							if(b.getType() != Material.BARRIER || b.getType() != Material.BEDROCK || b.getType() != Material.OBSIDIAN) {
+								b.breakNaturally();
+								arrow.remove();
+							}
+							
+						}else if(text.equals("Pua de TNT LAVA")) {
+							
+							if(b.getType() != Material.BARRIER || b.getType() != Material.BEDROCK || b.getType() != Material.OBSIDIAN) {
+								b.setType(Material.LAVA);
+								arrow.remove();
+							}
+							
+						}
 						  
 					  }else{
 						  if(b.getType() == Material.BARRIER) {
@@ -2097,6 +2426,9 @@ public class EventRandoms implements Listener{
 					  }
 				  }
 			  }
+			  
+			  
+			
 			  
 			  if(projectile.getShooter() instanceof Snowman) {
 				  
@@ -2116,8 +2448,85 @@ public class EventRandoms implements Listener{
 				  Entity entidadhit = e.getHitEntity();
 				 
 				  if(entidadhit != null) {
-					    if(!gc.isPlayerinGame(player)) return;
-					    
+					  		
+					  		if(projectile.getCustomName() != null) {
+					  			String nameprojec = ChatColor.stripColor(projectile.getCustomName());
+								  if(nameprojec.equals("intercamb")) {
+						        	  Player shooter = (Player) projectile.getShooter();
+						  	        
+			
+						  	          Location savedLocation = shooter.getLocation();
+						  	          Location victim = entidadhit.getLocation();
+						  	          
+						  	          shooter.teleport(victim);
+						  	          entidadhit.teleport(savedLocation);
+						          }
+								   
+								  if(nameprojec.equals("dropper")) {
+						        	  Player shooter = (Player) projectile.getShooter();
+						  	          
+							        	  if(entidadhit instanceof Player) {
+							        		  Player target = (Player) entidadhit;
+							        		  
+							        		  if(target.getInventory().getContents().length >= 1) {
+													for (ItemStack itemStack : target.getInventory().getContents()) {
+													if(itemStack == null) continue;
+															
+														  target.getWorld().dropItemNaturally(target.getLocation(), itemStack);
+									                       target.getInventory().removeItem(itemStack);
+								                    }
+													target.getInventory().clear();
+													
+												}
+											
+							        		  		if(target.getName().equals(shooter.getName())) {
+							        		  		
+														shooter.sendMessage(ChatColor.GREEN + "Te Autotiraste el Inventario");
+							        		  		}else {
+							        		  			target.sendMessage(ChatColor.GREEN+shooter.getName() + ChatColor.YELLOW + " tiro tu inventario al piso para robarte.");
+														shooter.sendMessage(ChatColor.GREEN + "Le Tiraste el Inventario a "+ChatColor.GOLD+target.getName());
+							        		  		}
+							        		  
+													target.setVelocity(projectile.getLocation().getDirection().multiply(3).setY(2));
+												
+													
+										        	  
+													//INVENTORY HOLDER NO APLICA PARA ENTIDADES COMO ZOMBIS , SINO COMO CABALLOS ETC 		  
+								          }if(entidadhit instanceof LivingEntity) {
+							        			  	LivingEntity liv =  (LivingEntity) entidadhit;
+							        			  	
+							        			  	if(liv.getEquipment() == null) return;
+							        			  	
+							        			  	if(liv.getEquipment().getArmorContents().length >= 1) {
+							        			  		for(ItemStack it : liv.getEquipment().getArmorContents()) {
+							        			  			liv.getWorld().dropItemNaturally(liv.getLocation(), it);
+				
+							        			  		}
+							        			  		
+							        			  	}
+							        			  	if(liv.getEquipment().getItemInMainHand() != null) {
+							        			  		liv.getWorld().dropItemNaturally(liv.getLocation(), liv.getEquipment().getItemInMainHand());
+							        			  	}
+							        			  	
+							        			  	if(liv.getEquipment().getItemInOffHand() != null) {
+							        			  		liv.getWorld().dropItemNaturally(liv.getLocation(), liv.getEquipment().getItemInOffHand());
+
+							        			  	}
+							        			  	
+							        			  	liv.getEquipment().clear();
+							        			  	
+							        			  	
+								        	   }
+								        		  
+								          
+						        	  }
+						        	  
+						        	  
+						  			
+					  		}
+					  	
+					  
+					    if(!gc.isPlayerinGame(player)) return;  
 					    
 					     MobsActions ma = new MobsActions(plugin);
 						 ma.getAttackedZombie(player, entidadhit);
@@ -3909,7 +4318,94 @@ public class EventRandoms implements Listener{
 			   
 			   return velocity;
 	 	   }
+		   
+		   
+		   @SuppressWarnings("removal")
+		public void getRandomVectorLook(Player player,Location loc,int shoots) {
+			
+			 // Obtener el jugador
+			Vector direction = player.getLocation().getDirection();
+			Vector up = new Vector(0, 1, 0);
+			Vector perpendicular = direction.clone().crossProduct(up).normalize();
+			
+			int numVectors = shoots;//ORIGINALMENTE ERAN 10
+			double radius = 10;
+			for (int i = 0; i < numVectors; i++) {
+			    double angle = 2 * Math.PI * i / numVectors;
+			    Vector coneVector = direction.clone().add(perpendicular.clone().multiply(Math.cos(angle) * radius)).add(direction.clone().crossProduct(perpendicular).multiply(Math.sin(angle) * radius));
+			    // Utiliza el vector coneVector como desees
+				Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
+				aw.setVelocity(coneVector);
+				aw.setCritical(true);
+				aw.setKnockbackStrength(2);
+				aw.setFireTicks(1200);
+				//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+				aw.setCustomName(ChatColor.RED+"Pua de TNT DIRECTION");
+				aw.setDamage(1000);
+			    //System.out.println(coneVector);
+			}
+			
+		   }
+		   
+				
+		   @SuppressWarnings("removal")
+			public void getRandomVectorLooker(Player player,Location loc,int shoots) {
+				
+				 // Obtener el jugador
+			   
+			   
+			   
+			   
+				Vector direction = player.getLocation().getDirection();
+				Vector up = new Vector(0, 1, 0);
+				Vector perpendicular = direction.clone().crossProduct(up).normalize();
+				
+				
+				RayTraceResult rt = player.getWorld().rayTraceEntities(player.getEyeLocation().add(player.getLocation().getDirection()),player.getLocation().getDirection() , 150.0D);
+				Location pl = null;
+			
+				if(rt != null && rt.getHitEntity() != null) {
+					pl = rt.getHitEntity().getLocation();
 					
+					
+				}else if(rt != null && rt.getHitBlock() != null){
+					
+					pl = rt.getHitBlock().getLocation();
+				}else {
+					
+					pl = player.getLocation();
+				}
+				
+				Location sl = new Location(Bukkit.getWorld(pl.getWorld().getName()), pl.getX(), pl.getY()+1, pl.getZ());
+				
+				int numVectors = shoots;//ORIGINALMENTE ERAN 10
+				double radius = 10;
+				for (int i = 0; i < numVectors; i++) {
+				    double angle = 2 * Math.PI * i / numVectors;
+				    Vector coneVector = direction.clone().add(perpendicular.clone().multiply(Math.cos(angle) * radius)).add(direction.clone().crossProduct(perpendicular).multiply(Math.sin(angle) * radius));
+				    // Utiliza el vector coneVector como desees
+					Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
+				
+					Vector v = sl.toVector().subtract(aw.getLocation().toVector());
+					Location en = aw.getLocation();
+					en.setDirection(v);
+					aw.teleport(en);
+					aw.setVelocity(aw.getLocation().getDirection().multiply(6));
+					aw.setVelocity(coneVector);
+					
+					
+					aw.setCritical(true);
+					aw.setKnockbackStrength(2);
+					aw.setFireTicks(1200);
+					//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+					aw.setCustomName(ChatColor.RED+"Pua de TNT LOOKER");
+					aw.setDamage(1000);
+				    //System.out.println(coneVector);
+				}
+				
+			   }
+		   
+		   
 		}
 		
 

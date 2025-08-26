@@ -4501,6 +4501,16 @@ public class Comandsmg implements CommandExecutor{
 			 		  }
 			 		  
 			 		  return true;
+			 	  }else if(args[0].equalsIgnoreCase("coord")) {
+			 		  //mg coord world;x;y;z
+			 		  if(args.length == 2) {
+			 			  String text = args[1];
+			 			  player.sendMessage("Coordenadas: "+ChatColor.GREEN+text);
+			 			  
+			 			  
+			 		  }
+			 		  
+			 		  return true;
 			 	  }else if(args[0].equalsIgnoreCase("arrow")) {
 					
 //					player.getInventory().addItem(Items.ARROWDIS.getValue());
@@ -4510,6 +4520,17 @@ public class Comandsmg implements CommandExecutor{
 					player.getInventory().addItem(Items.TNTARROW2.getValue());
 					player.getInventory().addItem(Items.TNTARROW3.getValue());
 					player.getInventory().addItem(Items.TNTARROW4.getValue());
+					player.getInventory().addItem(Items.TNTARROW5.getValue());
+					player.getInventory().addItem(Items.TNTARROW6.getValue());
+					player.getInventory().addItem(Items.TNTARROW7.getValue());
+					player.getInventory().addItem(Items.TNTARROW8.getValue());
+					player.getInventory().addItem(Items.TNTARROW9.getValue());
+					player.getInventory().addItem(Items.TNTARROW10.getValue());
+					
+					
+					player.getInventory().addItem(Items.GLASSHIELD.getValue());
+					player.getInventory().addItem(Items.INTERCAMB.getValue());
+					player.getInventory().addItem(Items.DROPPER.getValue());
 					return true;
 				}else if(args[0].equalsIgnoreCase("lock")) {
 						Block b = player.getTargetBlock((Set<Material>) null, 5);
@@ -4564,6 +4585,16 @@ public class Comandsmg implements CommandExecutor{
 			    	   }
 				       
 					return true ;
+				}else if(args[0].equalsIgnoreCase("a1")) {
+					testcode(player);
+					return true;
+				}else if(args[0].equalsIgnoreCase("a2")) {
+					testcode2(player);
+					return true;
+				}else if(args[0].equalsIgnoreCase("a2")) {
+					testcode(player);
+					testcode2(player);
+					return true;
 				}else if(args[0].equalsIgnoreCase("generator")) {
 					if(!player.isOp()) {
 						
@@ -5695,8 +5726,55 @@ public class Comandsmg implements CommandExecutor{
 			
 			//((Arrow) h1).setShooter(player);
 		}
+		//HACE UN CIRCULO DE AREA EXTERNO  NO INTERNO
+		@SuppressWarnings("removal")
+		public void testcode(Player player) {
+			  
+			   Vector direction = player.getLocation().getDirection();
+			   Vector up = new Vector(0, 1, 0);
+			   Vector perpendicular = direction.clone().crossProduct(up).normalize();
+
+			   int numVectors = 20;
+			   double radius = 1;
+			   for (int i = 0; i < numVectors; i++) {
+			         double angle = 2 * Math.PI * i / numVectors;
+			         Vector coneVector = direction.clone().add(perpendicular.clone().multiply(Math.cos(angle) * radius)).add(perpendicular.clone().crossProduct(direction).multiply(Math.sin(angle) * radius));
+			         coneVector = direction.clone().add(coneVector.clone().normalize().multiply(radius));
+			                   // Utiliza el vector coneVector como desees
+			         	Arrow aw = (Arrow) player.getLocation().getWorld().spawnEntity(player.getLocation().add(0, 1, 0), EntityType.ARROW);
+						aw.setVelocity(coneVector);
+						aw.setCritical(true);
+						aw.setKnockbackStrength(2);
+						aw.setFireTicks(1200);
+			     }
+		   }
 		
-	
+		
+		@SuppressWarnings("removal")
+		public void testcode2(Player player) {
+			
+			   Vector direction = player.getLocation().getDirection();
+			   Vector up = new Vector(0, 1, 0);
+			   Vector perpendicular = direction.clone().crossProduct(up).normalize();
+			
+			Random random = new Random();
+			int numVectors = 20;
+			double circleRadius = 5; // Tamaño del círculo
+			for (int i = 0; i < numVectors; i++) {
+						double angle = 2 * Math.PI * random.nextDouble();
+						double radius = circleRadius * random.nextDouble();
+			            Vector coneVector = direction.clone().add(perpendicular.clone().multiply(Math.cos(angle) * radius)).add(perpendicular.clone().crossProduct(direction).multiply(Math.sin(angle) * radius));
+			             coneVector = direction.clone().add(coneVector.clone().normalize().multiply(radius));
+			                    // Utiliza el vector coneVector como desees
+			                       // System.out.println(coneVector);
+			             Arrow aw = (Arrow) player.getLocation().getWorld().spawnEntity(player.getLocation().add(0, 1, 0), EntityType.ARROW);
+							aw.setVelocity(coneVector);
+							aw.setCritical(true);
+							aw.setKnockbackStrength(2);
+							aw.setFireTicks(1200);
+			             
+			   }
+		}
 	public void AllReload(Player player) {
 		
 			plugin.getRecordTime().reload();
