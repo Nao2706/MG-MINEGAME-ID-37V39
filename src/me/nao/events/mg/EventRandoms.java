@@ -622,6 +622,26 @@ public class EventRandoms implements Listener{
 					ptnt.setYield(0);
 					
 					removeItemstackCustom(player,e.getItem());
+				}if(e.getItem().isSimilar(Items.TNTARROW11.getValue())) {
+					e.setCancelled(true);
+					TNTPrimed ptnt = (TNTPrimed) player.getWorld().spawnEntity(player.getLocation(),EntityType.TNT);
+					ptnt.setFuseTicks(5*20);
+					ptnt.setVelocity(player.getLocation().getDirection().multiply(2.5));
+					ptnt.setCustomName(ChatColor.BLUE+"TNT AGUA");
+					ptnt.setSource(player);
+					ptnt.setYield(0);
+					
+					removeItemstackCustom(player,e.getItem());
+				}if(e.getItem().isSimilar(Items.TNTARROW12.getValue())) {
+					e.setCancelled(true);
+					TNTPrimed ptnt = (TNTPrimed) player.getWorld().spawnEntity(player.getLocation(),EntityType.TNT);
+					ptnt.setFuseTicks(5*20);
+					ptnt.setVelocity(player.getLocation().getDirection().multiply(2.5));
+					ptnt.setCustomName(ChatColor.WHITE+"TNT PORTAL");
+					ptnt.setSource(player);
+					ptnt.setYield(0);
+					
+					removeItemstackCustom(player,e.getItem());
 				}
 			}}
 		
@@ -2001,7 +2021,8 @@ public class EventRandoms implements Listener{
 							if(tnt1.getSource() != null && tnt1.getSource() instanceof Player) {
 								
 								 Player player = (Player) tnt1.getSource();	
-								 getRandomVectorLooker(player , tnt1.getLocation(), 25);
+								 testcode3(player , tnt1.getLocation(),1);
+								 //getRandomVectorLooker(player , tnt1.getLocation(), 25);
 							}
 							
 							 
@@ -2010,8 +2031,9 @@ public class EventRandoms implements Listener{
 					}if(mobname.equals("TNT DIRECTION")){
 						if(tnt1.getSource() != null && tnt1.getSource() instanceof Player) {
 							
-							 Player player = (Player) tnt1.getSource();	
-							 getRandomVectorLook(player , tnt1.getLocation(), 25);
+							 Player player = (Player) tnt1.getSource();
+							 testcode2(player , tnt1.getLocation(),1);
+							
 						}
 						
 					}if(mobname.equals("TNT LAVA")){
@@ -2027,6 +2049,30 @@ public class EventRandoms implements Listener{
 								aw.setDamage(1000);
 								//aw.setShooter(z); 
 								//((Arrow) h1).setShooter(player);
+							}
+						
+					}if(mobname.equals("TNT AGUA")){
+						 for(int i = 0;i<200;i++) {
+								Location loc = ent.getLocation();
+								Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
+								aw.setVelocity(getRandomVector());
+								aw.setCritical(true);
+								aw.setKnockbackStrength(2);
+								aw.setFireTicks(1200);
+								aw.setCustomName(ChatColor.BLUE+"Pua de TNT AGUA");
+								aw.setDamage(1000);
+							}
+						
+					}if(mobname.equals("TNT PORTAL")){
+						 for(int i = 0;i<200;i++) {
+								Location loc = ent.getLocation();
+								Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
+								aw.setVelocity(getRandomVector());
+								aw.setCritical(true);
+								aw.setKnockbackStrength(2);
+								aw.setFireTicks(1200);
+								aw.setCustomName(ChatColor.WHITE+"Pua de TNT PORTAL");
+								aw.setDamage(1000);
 							}
 						
 					}if(mobname.equals("TNT BLOCK BREAKER")){
@@ -2371,6 +2417,48 @@ public class EventRandoms implements Listener{
 											
 									}}}	
 							  
+						  }else if(text.equals("Pua de TNT AGUA")) {
+							  
+								Block block = e.getHitEntity().getLocation().getBlock();
+					        	Block r = block.getRelative(0, 0, 0);
+					        	for (int x = -2; x < 3; x++) {
+									for (int y = -2; y < 3; y++) {
+										for (int z = -2; z < 3; z++) {
+											
+											Block a = r.getRelative(x, y, z);
+											if (y == 2 || x == 2 || z == 2 || y == -2 || x == -2 || z == -2) {
+												if(!a.getType().equals(Material.AIR))continue;
+												a.setType(Material.WATER);
+												Levelled waterLevel = (Levelled) a.getBlockData();
+									        	waterLevel.setLevel(4);
+									        	a.setBlockData(waterLevel);
+											}
+
+											else if (y == 1 || x == 1 || z == 1 || y == -1 || x == -1 || z == -1) {
+												if(!a.getType().equals(Material.AIR))continue;
+												a.setType(Material.WATER);
+												Levelled waterLevel = (Levelled) a.getBlockData();
+									        	waterLevel.setLevel(4);
+									        	a.setBlockData(waterLevel);
+											}
+
+											else if (y == -1 || x == 0 || z == 0 || y == 0 || x == 0 || z == 0) {
+												if(!a.getType().equals(Material.AIR))continue;
+												a.setType(Material.WATER);
+												Levelled waterLevel = (Levelled) a.getBlockData();
+									        	waterLevel.setLevel(4);
+									        	a.setBlockData(waterLevel);
+
+											}
+											
+									}}}	
+							  
+						  }else if(text.equals("Pua de TNT PORTAL")) {
+							  
+								Block block = e.getHitEntity().getLocation().getBlock();
+					        	Block r = block.getRelative(0, 0, 0);
+					        	r.setType(Material.END_PORTAL);
+							  
 						  }
 						  
 						  
@@ -2417,7 +2505,20 @@ public class EventRandoms implements Listener{
 								arrow.remove();
 							}
 							
-						}
+						}else if(text.equals("Pua de TNT AGUA")) {
+							
+							if(b.getType() != Material.BARRIER || b.getType() != Material.BEDROCK || b.getType() != Material.OBSIDIAN) {
+								b.setType(Material.WATER);
+								arrow.remove();
+							}
+							
+						}else if(text.equals("Pua de TNT PORTAL")) {
+								if(b.getType() != Material.BARRIER || b.getType() != Material.BEDROCK || b.getType() != Material.OBSIDIAN) {
+									b.setType(Material.END_PORTAL);
+									arrow.remove();
+								}
+							  
+						  }
 						  
 					  }else{
 						  if(b.getType() == Material.BARRIER) {
@@ -4403,9 +4504,92 @@ public class EventRandoms implements Listener{
 				    //System.out.println(coneVector);
 				}
 				
-			   }
+			 }
+		    
 		   
+			@SuppressWarnings("removal")
+			public void testcode2(Player player,Location tnt,double raiuscircle) {
+				
+				   Vector direction = player.getLocation().getDirection();
+				   Vector up = new Vector(0, 1, 0);
+				   Vector perpendicular = direction.clone().crossProduct(up).normalize();
+				
+				Random random = new Random();
+				int numVectors = 20;
+				double circleRadius = raiuscircle; // Tamaño del círculo
+				for (int i = 0; i < numVectors; i++) {
+							double angle = 2 * Math.PI * random.nextDouble();
+							double radius = circleRadius * random.nextDouble();
+				            Vector coneVector = direction.clone().add(perpendicular.clone().multiply(Math.cos(angle) * radius)).add(perpendicular.clone().crossProduct(direction).multiply(Math.sin(angle) * radius));
+				             coneVector = direction.clone().add(coneVector.clone().normalize().multiply(radius));
+				                    // Utiliza el vector coneVector como desees
+				                       // System.out.println(coneVector);
+				             	Arrow aw = (Arrow) tnt.getWorld().spawnEntity(tnt.add(0, 0, 0), EntityType.ARROW);
+								aw.setVelocity(coneVector);
+								aw.setCritical(true);
+								aw.setKnockbackStrength(2);
+								aw.setFireTicks(1200);
+				             
+				   }
+		  }
 		   
+			
+			@SuppressWarnings("removal")
+			public void testcode3(Player player,Location tnt,double raiuscircle) {
+				
+				   Vector direction = player.getLocation().getDirection();
+				   Vector up = new Vector(0, 1, 0);
+				   Vector perpendicular = direction.clone().crossProduct(up).normalize();
+				
+					RayTraceResult rt = player.getWorld().rayTraceEntities(player.getEyeLocation().add(player.getLocation().getDirection()),player.getLocation().getDirection() , 150.0D);
+					Location pl = null;
+				
+					if(rt != null && rt.getHitEntity() != null) {
+						pl = rt.getHitEntity().getLocation();
+						
+						
+					}else if(rt != null && rt.getHitBlock() != null){
+						
+						pl = rt.getHitBlock().getLocation();
+					}else {
+						
+						pl = player.getLocation();
+					}
+					
+					Location sl = new Location(Bukkit.getWorld(pl.getWorld().getName()), pl.getX(), pl.getY()+1, pl.getZ());
+				   
+				   
+				Random random = new Random();
+				int numVectors = 20;
+				double circleRadius = raiuscircle; // Tamaño del círculo
+				for (int i = 0; i < numVectors; i++) {
+							double angle = 2 * Math.PI * random.nextDouble();
+							double radius = circleRadius * random.nextDouble();
+				            Vector coneVector = direction.clone().add(perpendicular.clone().multiply(Math.cos(angle) * radius)).add(perpendicular.clone().crossProduct(direction).multiply(Math.sin(angle) * radius));
+				             coneVector = direction.clone().add(coneVector.clone().normalize().multiply(radius));
+				                    // Utiliza el vector coneVector como desees
+				                       // System.out.println(coneVector);
+				             	Arrow aw = (Arrow) tnt.getWorld().spawnEntity(tnt.add(0, 0, 0), EntityType.ARROW);
+				             	Vector v = sl.toVector().subtract(aw.getLocation().toVector());
+								Location en = aw.getLocation();
+								en.setDirection(v);
+								aw.teleport(en);
+				             	
+								aw.setVelocity(coneVector);
+								aw.setCritical(true);
+								aw.setKnockbackStrength(2);
+								aw.setFireTicks(1200);
+				             
+				   }
+		  }	
+			
+			
+			
+			
+			
+			
+			
+			
 		}
 		
 

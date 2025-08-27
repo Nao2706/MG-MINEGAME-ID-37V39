@@ -137,10 +137,12 @@ import org.bukkit.inventory.meta.ItemMeta;
             TNTARROW4(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"TNT ARROW 4", Material.TNT,"fire_aspect,3/knockback,3", 1,ChatColor.RED+ "Lanza la TNT que Explota con Muchas Flechas."),
             TNTARROW5(""+ChatColor.BLUE+ChatColor.BOLD+"TNT DIRECTION", Material.TNT,"fire_aspect,3/knockback,3", 1,ChatColor.RED+ "Lanza la TNT que Explota con Muchas Flechas en la Direccion que mires."),
             TNTARROW6(""+ChatColor.DARK_GREEN+ChatColor.BOLD+"TNT LOOKER", Material.TNT,"fire_aspect,3/knockback,3", 1,ChatColor.RED+ "Lanza la TNT que Explota con Muchas Flechas en la Ubicacion que mires."),
-            TNTARROW7(""+ChatColor.YELLOW+ChatColor.BOLD+"TNT BLOCK BREAKER", Material.TNT,"fire_aspect,3/knockback,3", 1,ChatColor.RED+ "Lanza la TNT que Explota con Muchas Flechas que Rompen el Primer Bloque."),
+            TNTARROW7(""+ChatColor.YELLOW+ChatColor.BOLD+"TNT BLOCK BREAKER", Material.TNT,"fire_aspect,3/knockback,3", 1,ChatColor.RED+ "Lanza la TNT que Explota con Muchas Flechas",ChatColor.GOLD+"Que Rompen el Primer Bloque."),
             TNTARROW8(""+ChatColor.GREEN+ChatColor.BOLD+"TNT ARROW 5", Material.TNT,"fire_aspect,3/knockback,3", 1,ChatColor.RED+ "Lanza la TNT que Explota con Muchas Flechas con forma de Pilar Circular."),
-            TNTARROW9(""+ChatColor.DARK_AQUA+ChatColor.BOLD+"TNT ARROW 6", Material.TNT,"fire_aspect,3/knockback,3", 1,ChatColor.RED+ "Lanza la TNT que Explota con Muchas Flechas con forma de Pilar."),
-            TNTARROW10(""+ChatColor.RED+ChatColor.BOLD+"TNT DE LAVA", Material.TNT,"fire_aspect,3/knockback,3", 1,ChatColor.RED+ "Lanza la TNT que Explota con Muchas Flechas estas al Impactar colocaran Lava."),
+            TNTARROW9(""+ChatColor.DARK_AQUA+ChatColor.BOLD+"TNT ARROW 6", Material.TNT,"fire_aspect,3/knockback,3", 1,ChatColor.RED+ "Lanza la TNT que Explota con Muchas Flechas",ChatColor.YELLOW+"con forma de Pilar."),
+            TNTARROW10(""+ChatColor.RED+ChatColor.BOLD+"TNT DE LAVA", Material.TNT,"fire_aspect,3/knockback,3", 1,ChatColor.RED+ "Lanza la TNT que Explota con Muchas Flechas",ChatColor.RED+"estas al Impactar colocaran Lava."),
+            TNTARROW11(""+ChatColor.BLUE+ChatColor.BOLD+"TNT DE AGUA", Material.TNT,"fire_aspect,3/knockback,3", 1,ChatColor.RED+ "Lanza la TNT que Explota con Muchas Flechas",ChatColor.BLUE+"estas al Impactar colocaran Agua."),
+            TNTARROW12(""+ChatColor.RED+ChatColor.BOLD+"TNT DE PORTAL", Material.TNT,"fire_aspect,3/knockback,3", 1,ChatColor.RED+ "Lanza la TNT que Explota con Muchas Flechas",ChatColor.WHITE+"estas al Impactar colocaran Un Portal al End."),
 
             
             

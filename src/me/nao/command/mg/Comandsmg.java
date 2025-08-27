@@ -4526,6 +4526,8 @@ public class Comandsmg implements CommandExecutor{
 					player.getInventory().addItem(Items.TNTARROW8.getValue());
 					player.getInventory().addItem(Items.TNTARROW9.getValue());
 					player.getInventory().addItem(Items.TNTARROW10.getValue());
+					player.getInventory().addItem(Items.TNTARROW11.getValue());
+					player.getInventory().addItem(Items.TNTARROW12.getValue());
 					
 					
 					player.getInventory().addItem(Items.GLASSHIELD.getValue());
@@ -4589,11 +4591,20 @@ public class Comandsmg implements CommandExecutor{
 					testcode(player);
 					return true;
 				}else if(args[0].equalsIgnoreCase("a2")) {
-					testcode2(player);
+					testcode2(player,0.1);
 					return true;
-				}else if(args[0].equalsIgnoreCase("a2")) {
-					testcode(player);
-					testcode2(player);
+				}else if(args[0].equalsIgnoreCase("a3")) {
+				
+					testcode2(player,1);//APROVED
+					return true;
+				}else if(args[0].equalsIgnoreCase("a4")) {
+					testcode2(player,1.5);
+					return true;
+				}else if(args[0].equalsIgnoreCase("a5")) {
+					testcode2(player,2);
+					return true;
+				}else if(args[0].equalsIgnoreCase("a6")) {
+					testcode2(player,2.5);
 					return true;
 				}else if(args[0].equalsIgnoreCase("generator")) {
 					if(!player.isOp()) {
@@ -5593,26 +5604,8 @@ public class Comandsmg implements CommandExecutor{
  		
  		
  	}
- 		// 		1					2	3  	4 = 5
  	
- 	
- 	
- 	
-	
-//	public String mapNamemg(String[] arg, int positionstart) {
-//			String text = "";
-// 			int comas = arg.split(",").lenght -1; 	
-//	   	 for(int i = positionstart ;i < arg.length; i++) {
-//	   		 text = text+arg[i]+" "; 
-//				 
-//			}
-//	   	 
-//	   	 return text;
-//	}
 
-	
- 	
-	
 	
 	
 //	  public char getBlock(int x, int y, int z, final World bukkitWorld) {
@@ -5751,7 +5744,7 @@ public class Comandsmg implements CommandExecutor{
 		
 		
 		@SuppressWarnings("removal")
-		public void testcode2(Player player) {
+		public void testcode2(Player player,double raiuscircle) {
 			
 			   Vector direction = player.getLocation().getDirection();
 			   Vector up = new Vector(0, 1, 0);
@@ -5759,7 +5752,7 @@ public class Comandsmg implements CommandExecutor{
 			
 			Random random = new Random();
 			int numVectors = 20;
-			double circleRadius = 5; // Tamaño del círculo
+			double circleRadius = raiuscircle; // Tamaño del círculo
 			for (int i = 0; i < numVectors; i++) {
 						double angle = 2 * Math.PI * random.nextDouble();
 						double radius = circleRadius * random.nextDouble();
