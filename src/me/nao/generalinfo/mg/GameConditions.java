@@ -449,13 +449,14 @@ public class GameConditions {
 		    		data.add(regis);
 		    	}
 	        }
-	        
+	        //PENDIENTE NO SE PUEDE CLASIFICAR TIEMPO MAS KILLS TODAVIA  EL CODIGO ESTA COMENTADO
 			// DE MAYOR A MENOR
 	         //Collections.sort(data, Comparator.comparingLong(TimeRecord::getCronometTotalSeconds).reversed());
 	        //DE MENOR A MAYOR
 			 //Collections.sort(data, Comparator.comparingLong(MapRecords::getCronometTotalSeconds));
 	         //ORDENA PRIMERO LOS TIEMPOS DE MENOR A MAYOR Y DESPUES LAS KILLS DE MAYOR A MENOR A CAUSA DEL REVERSED
-			 data.sort(Comparator.comparingLong(MapRecords::getCronometTotalSeconds).thenComparingInt(MapRecords::getKills).reversed()); 
+	          data.sort(Comparator.comparingLong(MapRecords::getCronometTotalSeconds).reversed().thenComparingInt(MapRecords::getKills).reversed()); 
+			 //data.sort(Comparator.comparingLong(MapRecords::getCronometTotalSeconds)); 
 	        
 			  if(data.size() > 10) {
 				  //TimeRecord lastmemberoftop = data.get(data.size() - 1);
