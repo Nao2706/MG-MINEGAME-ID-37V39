@@ -746,7 +746,7 @@ public class EventRandoms implements Listener{
 							 player.getInventory().addItem(Items.CHECKPOINTFLAG.getValue());
 						 }
 						 if(pl.getCheckPointMarker() != null) {
-							 if(pl.getCheckPointMarker().equals(b3.getLocation())) {
+							 if(pl.getCheckPointMarkerPosition().equals(b3.getLocation())) {
 								 player.sendMessage(ChatColor.RED+"La Ubicacion ya esta Guardada, encuentra otro sitio para Sobreescribir los Datos.");
 							 }else {
 				        		 player.sendTitle(""+ChatColor.BLUE+ChatColor.BOLD+">>> "+ChatColor.GREEN+ChatColor.BOLD+"CHECKPOINT GUARDADO"+ChatColor.BLUE+ChatColor.BOLD+"  <<<",ChatColor.YELLOW+"Punto de Control", 20, 40, 20);
@@ -754,7 +754,7 @@ public class EventRandoms implements Listener{
 								 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, b3.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
 								 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 								 player.sendMessage(ChatColor.GREEN+"La Ubicacion se Guardado. (Ubicacion Sobreescrita)");
-								 pl.setCheckpointLocationMg(b3.getLocation());
+								 pl.setCheckpointLocationMg(new Location(Bukkit.getWorld(b3.getLocation().getWorld().getName()),b3.getLocation().getBlockX(),b3.getLocation().getBlockY(),b3.getLocation().getBlockZ(),player.getLocation().getYaw(),player.getLocation().getPitch()));
 							 }
 						 }else {
 							 
@@ -764,14 +764,14 @@ public class EventRandoms implements Listener{
 
 							 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 							 player.sendMessage(ChatColor.GREEN+"La Ubicacion se Guardado.");
-							 pl.setCheckpointLocationMg(b3.getLocation());
+							 pl.setCheckpointLocationMg(new Location(Bukkit.getWorld(b3.getLocation().getWorld().getName()),b3.getLocation().getBlockX(),b3.getLocation().getBlockY(),b3.getLocation().getBlockZ(),player.getLocation().getYaw(),player.getLocation().getPitch()));
 						 }
 						 
 					 }else if(b3.getType() == Material.LIGHT_BLUE_BANNER && checkpoint.getType() == Material.STRUCTURE_BLOCK) {
 						
 					
 						 if(pl.getRespawn() != null) {
-							 if(pl.getRespawn().equals(b3.getLocation())) {
+							 if(pl.getRespawnPosition().equals(b3.getLocation())) {
 								 player.sendMessage(ChatColor.RED+"La Ubicacion ya esta Guardada, encuentra otro sitio para Sobreescribir los Datos.");
 
 								 return;
@@ -781,7 +781,7 @@ public class EventRandoms implements Listener{
 								 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, b3.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
 								 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 								 player.sendMessage(ChatColor.AQUA+"La Ubicacion del Respawn se Guardado. (Ubicacion Sobreescrita).");
-								 pl.setRespawnLocationMg(b3.getLocation());
+								 pl.setRespawnLocationMg(new Location(Bukkit.getWorld(b3.getLocation().getWorld().getName()),b3.getLocation().getBlockX(),b3.getLocation().getBlockY(),b3.getLocation().getBlockZ(),player.getLocation().getYaw(),player.getLocation().getPitch()));
 						
 							 }
 						 }else {
@@ -792,7 +792,7 @@ public class EventRandoms implements Listener{
 					
 							 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 							 player.sendMessage(ChatColor.AQUA+"La Ubicacion del Respawn se Guardado");
-							 pl.setRespawnLocationMg(b3.getLocation());
+							 pl.setRespawnLocationMg(new Location(Bukkit.getWorld(b3.getLocation().getWorld().getName()),b3.getLocation().getBlockX(),b3.getLocation().getBlockY(),b3.getLocation().getBlockZ(),player.getLocation().getYaw(),player.getLocation().getPitch()));
 						 }
 						 
 					}else if(b3.getType() == Material.RED_BANNER && checkpoint.getType() == Material.STRUCTURE_BLOCK) {
@@ -800,7 +800,7 @@ public class EventRandoms implements Listener{
 						
 						 if(pl.getRespawnLife()!= null) {
 							 RespawnLife rl = pl.getRespawnLife();
-							 if(rl.getLocRespawnLife().equals(b3.getLocation())) {
+							 if(rl.getLocRespawnLifePosition().equals(b3.getLocation())) {
 								 player.sendMessage(ChatColor.RED+"La Ubicacion ya esta Guardada, encuentra otro sitio para Sobreescribir los Datos.");
 
 								 return;
@@ -810,7 +810,7 @@ public class EventRandoms implements Listener{
 								 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, b3.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
 								 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 								 player.sendMessage(ChatColor.RED+"La Ubicacion del Respawn se Guardado. (Ubicacion Sobreescrita).");
-								 pl.setRespawnLifeLocationMg(new RespawnLife(b3.getLocation(),gc.setLifeByBlock(c4.getLocation())));
+								 pl.setRespawnLifeLocationMg(new RespawnLife(new Location(Bukkit.getWorld(b3.getLocation().getWorld().getName()),b3.getLocation().getBlockX(),b3.getLocation().getBlockY(),b3.getLocation().getBlockZ(),player.getLocation().getYaw(),player.getLocation().getPitch()),gc.setLifeByBlock(c4.getLocation())));
 						
 							 }
 						 }else {
@@ -821,7 +821,7 @@ public class EventRandoms implements Listener{
 					
 							 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 							 player.sendMessage(ChatColor.RED+"La Ubicacion del Respawn se Guardado");
-							 pl.setRespawnLifeLocationMg(new RespawnLife(b3.getLocation(),gc.setLifeByBlock(c4.getLocation())));
+							 pl.setRespawnLifeLocationMg(new RespawnLife(new Location(Bukkit.getWorld(b3.getLocation().getWorld().getName()),b3.getLocation().getBlockX(),b3.getLocation().getBlockY(),b3.getLocation().getBlockZ(),player.getLocation().getYaw(),player.getLocation().getPitch()),gc.setLifeByBlock(c4.getLocation())));
 						 }
 						 
 					}
@@ -983,29 +983,31 @@ public class EventRandoms implements Listener{
 									removeItemstackCustom(player,e.getItem());
 						}
 						
-						if(!player.getScoreboardTags().contains("Rockets")) {
+			
 							
 							if(e.getItem().isSimilar(new ItemStack(Material.FIREWORK_ROCKET))) {
-							if(player.hasCooldown(e.getItem())) return;
-								player.setCooldown(e.getItem(),25*20);
+								if(!player.getScoreboardTags().contains("Rockets")) {
+									if(player.hasCooldown(e.getItem())) return;
+									player.setCooldown(e.getItem(),25*20);
+								}else {
+									player.sendMessage(ChatColor.RED+"No puedes usar los Fireworks Rocket");
+									e.setCancelled(true);								}
 							}
-						}
-						if(player.getScoreboardTags().contains("Rockets") && e.getItem().isSimilar(new ItemStack(Material.FIREWORK_ROCKET))) {
-							player.sendMessage(ChatColor.RED+"No puedes usar los Fireworks Rocket");
-						}
-					
 						
-						if(!player.getScoreboardTags().contains("Enderpearls")) {
+						
 							if(e.getItem().isSimilar(new ItemStack(Material.ENDER_PEARL))) {
-							if(player.hasCooldown(e.getItem())) return;
-								player.setCooldown(e.getItem(),30*20);
+								if(!player.getScoreboardTags().contains("Enderpearls")) {
+									if(player.hasCooldown(e.getItem())) return;
+										e.setCancelled(false);
+										player.setCooldown(e.getItem(),30*20);
+									
+										return;
+								}else {
+									player.sendMessage(ChatColor.RED+"No puedes usar las Enderpearls");
+									e.setCancelled(true);				
+								}
 							}
-						}
-						
-						if(player.getScoreboardTags().contains("Enderpearls") && e.getItem().isSimilar(new ItemStack(Material.ENDER_PEARL))) {
-							player.sendMessage(ChatColor.RED+"No puedes usar las Enderpearls");
-						}
-						
+								
 						
 						
 						if(e.getItem().isSimilar(Items.CHECKPOINTFLAG.getValue())) {
@@ -1024,7 +1026,7 @@ public class EventRandoms implements Listener{
 					
 							
 							
-							player.teleport(new Location(pl.getCheckPointMarker().getWorld(),pl.getCheckPointMarker().getX(), pl.getCheckPointMarker().getY(), pl.getCheckPointMarker().getZ(),player.getLocation().getYaw(),player.getLocation().getPitch()).add(0.5, 0, 0.5));
+							player.teleport(pl.getCheckPointMarker().add(0.5, 0, 0.5));
 		        			
 		        			player.sendTitle(""+ChatColor.BLUE+ChatColor.BOLD+">>> "+ChatColor.GREEN+ChatColor.BOLD+"REGRESANDO"+ChatColor.BLUE+ChatColor.BOLD+"  <<<",ChatColor.YELLOW+"REGRESASTE A TU CHECKPOINT", 20, 40, 20);
 		        			

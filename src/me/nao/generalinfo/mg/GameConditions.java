@@ -1408,7 +1408,7 @@ public class GameConditions {
 //			 	CommandsMessage cm = new CommandsMessage(plugin);
 //			 	cm.joinannounce(player,map);
 			 
-				 				 player.sendMessage("");
+				 player.sendMessage("");
 				 player.sendMessage(ChatColor.GREEN+"Has Entrado en el Mapa "+ChatColor.translateAlternateColorCodes('&',getNameOfTheMap(map).replace("%player%",player.getName())));
 
 				 player.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.YELLOW+" Te has unido"+ChatColor.RED+" ("+ChatColor.GOLD+ms.getParticipants().size()+ChatColor.YELLOW+"/"+ChatColor.GOLD+ getMaxPlayerMap(map)+ChatColor.RED+")");

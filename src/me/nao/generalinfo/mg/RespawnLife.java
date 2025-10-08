@@ -1,5 +1,6 @@
 package me.nao.generalinfo.mg;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 public class RespawnLife {
@@ -14,7 +15,13 @@ public class RespawnLife {
 	}
 
 	public Location getLocRespawnLife() {
+		
 		return loc;
+	}
+	
+	public Location getLocRespawnLifePosition() {
+		
+		return new Location(Bukkit.getWorld(loc.getWorld().getName()),loc.getX(),loc.getY(),loc.getZ());
 	}
 	
 	public int getLifes() {

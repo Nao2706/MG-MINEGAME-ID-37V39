@@ -3,6 +3,7 @@ package me.nao.generalinfo.mg;
 import java.util.Collection;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
@@ -162,15 +163,26 @@ public class PlayerInfo {
 		return checkpoint;
 	}
 	
+	public Location getCheckPointMarkerPosition() {
+		return new Location(Bukkit.getWorld(checkpoint.getWorld().getName()),checkpoint.getX(),checkpoint.getY(),checkpoint.getZ());
+	}
+	
 	public Location getCheckPointItem() {
 		return itemcheckpoint;
 	}
 	
 	public Location getRespawn() {
+		
 		return respawn;
 	}
 	
+	public Location getRespawnPosition() {
+		
+		return new Location(Bukkit.getWorld(respawn.getWorld().getName()),respawn.getX(),respawn.getY(),respawn.getZ());
+	}
+	
 	public RespawnLife getRespawnLife() {
+		
 		return respawnlife;
 	}
 	

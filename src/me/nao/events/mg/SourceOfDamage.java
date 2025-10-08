@@ -332,7 +332,7 @@ public class SourceOfDamage implements Listener{
 							 player.getInventory().addItem(Items.CHECKPOINTFLAG.getValue());
 						 }
 						 if(pl.getCheckPointMarker() != null) {
-							 if(pl.getCheckPointMarker().equals(block.getLocation()))return;
+							 if(pl.getCheckPointMarkerPosition().equals(block.getLocation()))return;
 								 
 							
 					   		     player.sendTitle(""+ChatColor.BLUE+ChatColor.BOLD+">>> "+ChatColor.GREEN+ChatColor.BOLD+"CHECKPOINT GUARDADO"+ChatColor.BLUE+ChatColor.BOLD+"  <<<",ChatColor.YELLOW+"Punto de Control", 20, 40, 20);
@@ -340,7 +340,7 @@ public class SourceOfDamage implements Listener{
 								 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, block.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
 								 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 								 player.sendMessage(ChatColor.GREEN+"La Ubicacion se Guardado. (Ubicacion Sobreescrita) , Utiliza el Item de CheckPoint de Banderas para regresar.");
-								 pl.setCheckpointLocationMg(block.getLocation());
+								 pl.setCheckpointLocationMg(new Location(Bukkit.getWorld(block.getLocation().getWorld().getName()),block.getLocation().getBlockX(),block.getLocation().getBlockY(),block.getLocation().getBlockZ(),player.getLocation().getYaw(),player.getLocation().getPitch()));
 						
 							 
 						 }else {
@@ -351,14 +351,14 @@ public class SourceOfDamage implements Listener{
 					
 							 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 							 player.sendMessage(ChatColor.GREEN+"La Ubicacion se Guardado, Utiliza el Item de CheckPoint de Banderas para regresar.");
-							 pl.setCheckpointLocationMg(block.getLocation());
+							 pl.setCheckpointLocationMg(new Location(Bukkit.getWorld(block.getLocation().getWorld().getName()),block.getLocation().getBlockX(),block.getLocation().getBlockY(),block.getLocation().getBlockZ(),player.getLocation().getYaw(),player.getLocation().getPitch()));
 						 }
 						 
 					}else if(c1.getType() == Material.LIGHT_BLUE_BANNER && c2.getType() == Material.STRUCTURE_BLOCK) {
 						
 					
 						 if(pl.getRespawn() != null) {
-							 if(pl.getRespawn().equals(block.getLocation()))return;
+							 if(pl.getRespawnPosition().equals(block.getLocation()))return;
 							
 								//&& pl.getRespawn().distance(block.getLocation()) > 2
 						
@@ -367,7 +367,7 @@ public class SourceOfDamage implements Listener{
 								 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, block.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
 								 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 								 player.sendMessage(ChatColor.AQUA+"La Ubicacion del Respawn se Guardado. (Ubicacion Sobreescrita).");
-								 pl.setRespawnLocationMg(block.getLocation());
+								 pl.setRespawnLocationMg(new Location(Bukkit.getWorld(block.getLocation().getWorld().getName()),block.getLocation().getBlockX(),block.getLocation().getBlockY(),block.getLocation().getBlockZ(),player.getLocation().getYaw(),player.getLocation().getPitch()));
 						
 							 
 						 }else {
@@ -378,7 +378,7 @@ public class SourceOfDamage implements Listener{
 					
 							 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 							 player.sendMessage(ChatColor.AQUA+"La Ubicacion del Respawn se Guardado");
-							 pl.setRespawnLocationMg(block.getLocation());
+							 pl.setRespawnLocationMg(new Location(Bukkit.getWorld(block.getLocation().getWorld().getName()),block.getLocation().getBlockX(),block.getLocation().getBlockY(),block.getLocation().getBlockZ(),player.getLocation().getYaw(),player.getLocation().getPitch()));
 						 }
 						 
 					}else if(c1.getType() == Material.RED_BANNER && c2.getType() == Material.STRUCTURE_BLOCK) {
@@ -386,7 +386,7 @@ public class SourceOfDamage implements Listener{
 						
 						 if(pl.getRespawnLife() != null) {
 							 RespawnLife rl = pl.getRespawnLife();
-							 if(rl.getLocRespawnLife().equals(block.getLocation()))return;
+							 if(rl.getLocRespawnLifePosition().equals(block.getLocation()))return;
 							
 								//&& pl.getRespawn().distance(block.getLocation()) > 2
 						
@@ -395,7 +395,7 @@ public class SourceOfDamage implements Listener{
 								 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, block.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
 								 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 								 player.sendMessage(ChatColor.RED+"La Ubicacion del Respawn Limitado se Guardado. (Ubicacion Sobreescrita).");
-								 pl.setRespawnLifeLocationMg(new RespawnLife(block.getLocation(),gc.setLifeByBlock(c3.getLocation())));
+								 pl.setRespawnLifeLocationMg(new RespawnLife(new Location(Bukkit.getWorld(block.getLocation().getWorld().getName()),block.getLocation().getBlockX(),block.getLocation().getBlockY(),block.getLocation().getBlockZ(),player.getLocation().getYaw(),player.getLocation().getPitch()),gc.setLifeByBlock(c3.getLocation())));
 						
 							 
 						 }else {
@@ -407,7 +407,7 @@ public class SourceOfDamage implements Listener{
 							 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 							 player.sendMessage(ChatColor.RED+"La Ubicacion del Respawn Limitado se Guardado");
 							
-							 pl.setRespawnLifeLocationMg(new RespawnLife(block.getLocation(),gc.setLifeByBlock(c3.getLocation())));
+							 pl.setRespawnLifeLocationMg(new RespawnLife(new Location(Bukkit.getWorld(block.getLocation().getWorld().getName()),block.getLocation().getBlockX(),block.getLocation().getBlockY(),block.getLocation().getBlockZ(),player.getLocation().getYaw(),player.getLocation().getPitch()),gc.setLifeByBlock(c3.getLocation())));
 						 }
 						 
 					}
