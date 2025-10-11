@@ -539,7 +539,7 @@ public class GameConditions {
 			    float yaw = Float.valueOf(coords[4]);
 			    float pitch = Float.valueOf(coords[5]);
 				player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 20.0F, 1F);
-				Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch);
+				Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch).add(0.5,0,0.5);
 				player.setInvulnerable(true);
 				player.teleport(l);
 				return;
@@ -562,7 +562,7 @@ public class GameConditions {
 			   
 			    player.setInvulnerable(false);
 				player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 20.0F, 1F);
-				Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch);
+				Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch).add(0.5,0,0.5);
 				Random r = new Random();
 				
 				List<String> point1 = new ArrayList<>();
@@ -596,7 +596,7 @@ public class GameConditions {
 			   
 			    player.setInvulnerable(false);
 				player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 20.0F, 1F);
-				Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch);
+				Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch).add(0.5,0,0.5);
 				player.teleport(l);
 			
 				return;
@@ -619,7 +619,7 @@ public class GameConditions {
 			    Double z = Double.valueOf(coords[3]);
 			    Float yaw = Float.valueOf(coords[4]);
 			    Float pitch = Float.valueOf(coords[5]);
-				Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch);
+				Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch).add(0.5,0,0.5);
 				player.teleport(l);
 				return;
 		   }
@@ -665,7 +665,7 @@ public class GameConditions {
 			       }
 			
 			    player.setInvulnerable(false);
-				Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch);
+				Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch).add(0.5,0,0.5);
 				player.teleport(l);
 				setHeartsInGame(player, map);
 				//este send message es un separador de chat contra la cuenta atras xd

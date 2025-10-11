@@ -331,7 +331,7 @@ public class SourceOfDamage implements Listener{
 						 if(!player.getInventory().containsAtLeast(Items.CHECKPOINTFLAG.getValue(),1)) {
 							 player.getInventory().addItem(Items.CHECKPOINTFLAG.getValue());
 						 }
-						 if(pl.getCheckPointMarker() != null) {
+						 if(pl.getCheckPointMarkerPosition() != null) {
 							 if(pl.getCheckPointMarkerPosition().equals(block.getLocation()))return;
 								 
 							
@@ -354,10 +354,10 @@ public class SourceOfDamage implements Listener{
 							 pl.setCheckpointLocationMg(new Location(Bukkit.getWorld(block.getLocation().getWorld().getName()),block.getLocation().getBlockX(),block.getLocation().getBlockY(),block.getLocation().getBlockZ(),player.getLocation().getYaw(),player.getLocation().getPitch()));
 						 }
 						 
-					}else if(c1.getType() == Material.LIGHT_BLUE_BANNER && c2.getType() == Material.STRUCTURE_BLOCK) {
+					}if(c1.getType() == Material.LIGHT_BLUE_BANNER && c2.getType() == Material.STRUCTURE_BLOCK) {
 						
 					
-						 if(pl.getRespawn() != null) {
+						 if(pl.getRespawnPosition() != null) {
 							 if(pl.getRespawnPosition().equals(block.getLocation()))return;
 							
 								//&& pl.getRespawn().distance(block.getLocation()) > 2
@@ -381,10 +381,10 @@ public class SourceOfDamage implements Listener{
 							 pl.setRespawnLocationMg(new Location(Bukkit.getWorld(block.getLocation().getWorld().getName()),block.getLocation().getBlockX(),block.getLocation().getBlockY(),block.getLocation().getBlockZ(),player.getLocation().getYaw(),player.getLocation().getPitch()));
 						 }
 						 
-					}else if(c1.getType() == Material.RED_BANNER && c2.getType() == Material.STRUCTURE_BLOCK) {
+					}if(c1.getType() == Material.RED_BANNER && c2.getType() == Material.STRUCTURE_BLOCK) {
 						
 						
-						 if(pl.getRespawnLife() != null) {
+						 if(pl.getRespawnLife().getLocRespawnLifePosition() != null) {
 							 RespawnLife rl = pl.getRespawnLife();
 							 if(rl.getLocRespawnLifePosition().equals(block.getLocation()))return;
 							

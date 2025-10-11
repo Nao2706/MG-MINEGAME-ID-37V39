@@ -309,7 +309,7 @@ public class MapSettings {
 			nf.setMaximumFractionDigits(0);
 		
 			
-				ym.set("Pre-Lobby",player.getLocation().getWorld().getName()+"/"+nf.format(player.getLocation().getX())+"/"+nf.format(player.getLocation().getY())+"/"+nf.format(player.getLocation().getZ())+"/"+nf.format(player.getLocation().getYaw())+"/"+nf.format(player.getLocation().getPitch()));
+				ym.set("Pre-Lobby",player.getLocation().getWorld().getName()+"/"+nf.format(player.getLocation().blockX())+"/"+nf.format(player.getLocation().blockY())+"/"+nf.format(player.getLocation().blockZ())+"/"+nf.format(player.getLocation().getYaw())+"/"+nf.format(player.getLocation().getPitch()));
 				plugin.getCacheSpecificYML(name).save();
 				plugin.getCacheSpecificYML(name).reload();
 			
@@ -338,7 +338,7 @@ public class MapSettings {
 			NumberFormat nf = NumberFormat.getInstance();
 			nf.setGroupingUsed(false);
 			nf.setMaximumFractionDigits(0);
-				ym.set("Spawn",player.getLocation().getWorld().getName()+"/"+nf.format(player.getLocation().getX())+"/"+nf.format(player.getLocation().getY())+"/"+nf.format(player.getLocation().getZ())+"/"+nf.format(player.getLocation().getYaw())+"/"+nf.format(player.getLocation().getPitch()));
+				ym.set("Spawn",player.getLocation().getWorld().getName()+"/"+nf.format(player.getLocation().blockX())+"/"+nf.format(player.getLocation().blockY())+"/"+nf.format(player.getLocation().blockZ())+"/"+nf.format(player.getLocation().getYaw())+"/"+nf.format(player.getLocation().getPitch()));
 				
 				
 			

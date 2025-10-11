@@ -585,8 +585,8 @@ public class GameIntoMap {
 		cm.setKitMg(player);
 		healPlayer(player);
 		rl.setLifes(rl.getLifes()-1);
-	
-		player.teleport(rl.getLocRespawnLife().add(0.5, 0, 0.5));
+		Location copy = rl.getLocRespawnLife().clone();
+		player.teleport(copy.add(0.5, 0, 0.5));
 		
 		if(rl.getLifes() != 0 ) {
 			player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+">>> "+ChatColor.AQUA+ChatColor.BOLD+"RESPAWNEASTE"+ChatColor.RED+ChatColor.BOLD+"  <<<",ChatColor.GREEN+"Te quedan "+rl.getLifes()+ChatColor.GREEN+" Vidas.", 20, 40, 20);
@@ -608,7 +608,8 @@ public class GameIntoMap {
 		cm.setHeartsInGame(player, pl.getMapName());
 		cm.setKitMg(player);
 		healPlayer(player);
-		player.teleport(pl.getRespawn().add(0.5, 0, 0.5));
+		Location copy = pl.getRespawn().clone();
+		player.teleport(copy.add(0.5, 0, 0.5));
 		player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+">>> "+ChatColor.AQUA+ChatColor.BOLD+"RESPAWNEASTE"+ChatColor.GREEN+ChatColor.BOLD+"  <<<",ChatColor.GREEN+"Punto de Control", 20, 40, 20);
 		player.setGameMode(GameMode.ADVENTURE);
 		player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,new Location(pl.getRespawn().getWorld(),pl.getRespawn().getX(), pl.getRespawn().getY(), pl.getRespawn().getZ()).add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);

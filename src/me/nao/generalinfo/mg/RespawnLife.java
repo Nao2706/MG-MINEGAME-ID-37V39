@@ -20,8 +20,10 @@ public class RespawnLife {
 	}
 	
 	public Location getLocRespawnLifePosition() {
-		
-		return new Location(Bukkit.getWorld(loc.getWorld().getName()),loc.getX(),loc.getY(),loc.getZ());
+		if(this.loc != null) {
+			return new Location(Bukkit.getWorld(loc.getWorld().getName()),loc.getBlockX(),loc.getBlockY(),loc.getBlockZ());
+		}
+		return null;
 	}
 	
 	public int getLifes() {

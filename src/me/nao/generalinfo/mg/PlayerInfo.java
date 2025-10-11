@@ -164,7 +164,10 @@ public class PlayerInfo {
 	}
 	
 	public Location getCheckPointMarkerPosition() {
-		return new Location(Bukkit.getWorld(checkpoint.getWorld().getName()),checkpoint.getX(),checkpoint.getY(),checkpoint.getZ());
+		if(this.checkpoint != null) {
+		  return new Location(Bukkit.getWorld(checkpoint.getWorld().getName()),checkpoint.getBlockX(),checkpoint.getBlockY(),checkpoint.getBlockZ());
+		}
+		return null;
 	}
 	
 	public Location getCheckPointItem() {
@@ -178,7 +181,10 @@ public class PlayerInfo {
 	
 	public Location getRespawnPosition() {
 		
-		return new Location(Bukkit.getWorld(respawn.getWorld().getName()),respawn.getX(),respawn.getY(),respawn.getZ());
+		if(this.respawn != null) {
+			return new Location(Bukkit.getWorld(respawn.getWorld().getName()),respawn.getBlockX(),respawn.getBlockY(),respawn.getBlockZ());
+		}
+		return null;
 	}
 	
 	public RespawnLife getRespawnLife() {
