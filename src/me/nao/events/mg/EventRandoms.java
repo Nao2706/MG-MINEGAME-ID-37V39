@@ -2602,6 +2602,7 @@ public class EventRandoms implements Listener{
 							        			  	
 							        			  	if(liv.getEquipment().getArmorContents().length >= 1) {
 							        			  		for(ItemStack it : liv.getEquipment().getArmorContents()) {
+							        			  			if(it == null) continue;
 							        			  			liv.getWorld().dropItemNaturally(liv.getLocation(), it);
 				
 							        			  		}
