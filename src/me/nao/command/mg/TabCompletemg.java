@@ -110,7 +110,8 @@ public class TabCompletemg implements TabCompleter{
 			arguments.add("prestiges");
 			arguments.add("xp");
 			arguments.add("maprecord");
-			
+			arguments.add("delete-all-tempcooldown");
+			arguments.add("delete-tempcooldown");
 			
 		}
 		

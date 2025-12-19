@@ -144,7 +144,21 @@ public class Comandsmg implements CommandExecutor{
 					return true;
 					
 					
-				}else if(args[0].equalsIgnoreCase("time")) {
+				}else if(args[0].equalsIgnoreCase("delete-all-tempcooldown")) {
+					gc.deleteAllPlayersTempCooldown(null);
+          			
+          			return true;
+          			
+          		}else if(args[0].equalsIgnoreCase("delete-tempcooldown")) {
+					if (args.length == 2) {
+						String name = args[1];
+						
+						gc.deletePlayerTempCooldown(null, name);
+					}
+          			
+          			return true;
+          			
+          		}else if(args[0].equalsIgnoreCase("time")) {
         			FileConfiguration config = plugin.getConfig();
         			String country = config.getString("Country-Time","Unknow");
               		LocalDateTime lt = LocalDateTime.now();
@@ -2418,7 +2432,21 @@ public class Comandsmg implements CommandExecutor{
 					}
 				
 					return true;
-				}else if(args[0].equalsIgnoreCase("entityrain")){
+				}else if(args[0].equalsIgnoreCase("delete-all-tempcooldown")) {
+					gc.deleteAllPlayersTempCooldown(player);
+          			
+          			return true;
+          			
+          		}else if(args[0].equalsIgnoreCase("delete-tempcooldown")) {
+					if (args.length == 2) {
+						String name = args[1];
+						
+						gc.deletePlayerTempCooldown(player, name);
+					}
+          			
+          			return true;
+          			
+          		}else if(args[0].equalsIgnoreCase("entityrain")){
 					 
 					if(!player.isOp()) {
 						player.sendMessage(plugin.nombre+ChatColor.RED+" No tienes Permiso para usar ese comando");
@@ -5596,7 +5624,8 @@ public class Comandsmg implements CommandExecutor{
  			l.add(ChatColor.GOLD+"/mg tntrain "+ChatColor.AQUA+" Lanza una Lluvia de TNT.");
  			l.add(ChatColor.GOLD+"/mg arrowrain "+ChatColor.AQUA+" Lanza una Lluvia de Flechas.");
  			l.add(ChatColor.GOLD+"/mg entityrain "+ChatColor.AQUA+" Lanza una Lluvia de Flechas.");
- 			
+ 			l.add(ChatColor.GOLD+"/mg delete-all-tempcooldown "+ChatColor.AQUA+" Borra el Cooldown Temporal de Todos los Jugadores.");
+ 			l.add(ChatColor.GOLD+"/mg delete-tempcooldown "+ChatColor.AQUA+" Borra el Cooldown Temporal de un Jugador Especifico.");
  			
  		}
  		

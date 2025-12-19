@@ -5133,6 +5133,29 @@ public class GameConditions {
 		return;
 	}
 	
+	public void deletePlayerTempCooldown(Player player ,String target) {
+		
+		Player pl = ConvertStringToPlayerAlone(target);
+		
+		if(pl == null) {
+			
+			sendMessageToUserAndConsole(player,ChatColor.RED+"El Jugador "+target+" no existe o esta mal escrito.");
+			
+			return;
+		}
+		if(!plugin.getTempCooldown().containsKey(pl)){
+			sendMessageToUserAndConsole(player,ChatColor.RED+"El Jugador "+target+" no tiene Datos de Cooldown Temporal.");
+			return;
+		}
+		sendMessageToUserAndConsole(player,ChatColor.GREEN+"El Jugador "+target+" fue removido.");
+		
+		plugin.getTempCooldown().remove(pl);
+	}
+	
+	public void deleteAllPlayersTempCooldown(Player player) {
+		sendMessageToUserAndConsole(player,ChatColor.GREEN+"Datos de Cooldown Temporal Eliminados.");
+		plugin.getTempCooldown().clear();
+	}
 	
 	
 	@SuppressWarnings("removal")
