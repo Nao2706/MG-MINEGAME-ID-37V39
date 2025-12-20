@@ -1476,6 +1476,95 @@ public class Comandsmg implements CommandExecutor{
 							
 					return true;
 					
+				}else if(args[0].equalsIgnoreCase("get-kit-db")) {
+        			
+					
+					if (args.length == 3) {
+						String name = args[1];
+						String target = args[2];
+						Player player = gc.ConvertStringToPlayerAlone(target);
+						
+						try {
+								SQLInfo.getKitData(plugin.getMySQL(), player, name);
+						} catch (IllegalArgumentException | ClassNotFoundException | IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+						}
+					
+        			}else {
+        				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"/mg get-kit-db <name> <player>");
+        			}
+        			return true;
+        			
+        		}else if(args[0].equalsIgnoreCase("get-item-db")) {
+        			
+          			
+    				if (args.length == 3) {
+							String name = args[1];
+							String target = args[2];
+						   Player player = gc.ConvertStringToPlayerAlone(target);
+							
+							if(player == null) {
+								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+" No existe ese Jugador o no esta en linea.");
+								return true;
+							}
+							Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+" Le diste el Item "+name+" a "+target);
+    						try {
+    								SQLInfo.getItemData(plugin.getMySQL(), player, name);
+    						} catch (IllegalArgumentException | ClassNotFoundException | IOException e) {
+    								// TODO Auto-generated catch block
+    								e.printStackTrace();
+    						}
+    					
+            			}else {
+            				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"/mg get-item-db <name> <player>");
+            			}
+        			
+        			return true;
+        			
+        		}else if (args[0].equalsIgnoreCase("getkit")) {
+					
+        			if (args.length == 3) {
+							String name = args[1];
+							String target = args[2];
+							Player t = gc.ConvertStringToPlayerAlone(target);
+							if(t == null) {
+								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+" No existe ese Jugador o no esta en linea.");
+								return true;
+							}
+							Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+" Le diste el Item "+name+" a "+target);
+							getKitMg(name, t);
+			
+					}else {
+						Bukkit.getConsoleSender()
+						.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg getInv <kit> <player>");
+					 }
+			
+        			return true;
+			
+        		}else if (args[0].equalsIgnoreCase("getitem")) {
+				
+					if(args.length == 3) {
+							String name = args[1];
+							String target = args[2];
+							Player t = gc.ConvertStringToPlayerAlone(target);
+							if(t == null) {
+								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+" No existe ese Jugador o no esta en linea.");
+								return true;
+							}
+							Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+" Le diste el Item "+name+" a "+target);
+							getItemMg(name, t);
+			
+					 }else {
+					
+						Bukkit.getConsoleSender()
+						.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg getInv <kit> <player>");
+					 }
+					
+			 
+			
+					return true;
+			
 				}else if(args[0].equalsIgnoreCase("top") ){
 					
 					if(points1.contains("Players")) {
@@ -4272,6 +4361,236 @@ public class Comandsmg implements CommandExecutor{
 					player.getInventory().addItem(Items.SPAWNZOMBI.getValue());
 					player.getInventory().addItem(Items.SPAWNHORDEZOMBI.getValue());
 					return true;
+					
+				}else if(args[0].equalsIgnoreCase("save-item-db")) {
+        			
+					if(!player.isOp()) {
+						
+						player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
+						return true;
+					}
+					
+					if (args.length == 2) {
+						String name = args[1];
+						try {
+							SQLInfo.SavePlayerItem(plugin.getMySQL(),player,name,BukkitSerialization.serializarOneItem(player.getInventory().getItemInMainHand()));
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+        			}else {
+        				player.sendMessage(ChatColor.RED+"/mg save-kit-db <name>");
+        			}
+        			
+        			
+        			return true;
+        			
+        		}else if(args[0].equalsIgnoreCase("get-item-db")) {
+        			
+          			if(!player.isOp()) {
+						
+    						player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
+    						return true;
+    					}
+    					
+    					if (args.length == 2) {
+    						String name = args[1];
+    						try {
+    								SQLInfo.getItemData(plugin.getMySQL(), player, name);
+    						} catch (IllegalArgumentException | ClassNotFoundException | IOException e) {
+    								// TODO Auto-generated catch block
+    								e.printStackTrace();
+    						}
+    					
+            			}else {
+            				player.sendMessage(ChatColor.RED+"/mg get-item-db <name>");
+            			}
+        			
+        			return true;
+        			
+        		}else if(args[0].equalsIgnoreCase("check-item-db")) {
+        			
+           			if(!player.isOp()) {
+						
+        				player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
+       					return true;
+        			 }
+        					
+        					if (args.length == 2) {
+        						String name = args[1];
+        					
+        							if(SQLInfo.isItemInDB(plugin.getMySQL(), name)) {
+        								player.sendMessage(ChatColor.GREEN+"El Item "+ChatColor.GOLD+name+ChatColor.GREEN+" esta en la Base de Datos.");
+        							}else {
+        								player.sendMessage(ChatColor.RED+"El Item "+ChatColor.GOLD+name+ChatColor.RED+" no en la Base de Datos.");
+        							}
+        					
+                			}else {
+                				player.sendMessage(ChatColor.RED+"/mg check-item-db <name>");
+                			}
+        			return true;
+        			
+        		}else if(args[0].equalsIgnoreCase("delete-item-db")) {
+        			
+        			if(!player.isOp()) {
+						
+						player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
+						return true;
+					}
+					
+					if (args.length == 2) {
+						String name = args[1];
+					
+						SQLInfo.DeleteItem(plugin.getMySQL(), player, name);
+						
+        			}else {
+        				player.sendMessage(ChatColor.RED+"/mg delete-item-db <name>");
+        			}
+        			return true;
+        			
+        		}else if(args[0].equalsIgnoreCase("save-kit-db")) {
+					if(!player.isOp()) {
+						
+						player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
+						return true;
+					}
+					
+					if (args.length == 2) {
+						String name = args[1];
+						try {
+							SQLInfo.SavePlayerKit(plugin.getMySQL(),player,name,BukkitSerialization.serializarMultipleItems(player.getInventory().getContents()));
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+        			}else {
+        				player.sendMessage(ChatColor.RED+"/mg save-kit-db <name>");
+        			}
+        			return true;
+        			
+        		}else if(args[0].equalsIgnoreCase("get-kit-db")) {
+        			if(!player.isOp()) {
+						
+						player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
+						return true;
+					}
+					
+					if (args.length == 2) {
+						String name = args[1];
+						try {
+								SQLInfo.getKitData(plugin.getMySQL(), player, name);
+						} catch (IllegalArgumentException | ClassNotFoundException | IOException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+						}
+					
+        			}else {
+        				player.sendMessage(ChatColor.RED+"/mg get-kit-db <name>");
+        			}
+        			return true;
+        			 
+        		}else if(args[0].equalsIgnoreCase("check-kit-db")) {
+        			if(!player.isOp()) {
+						
+						player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
+						return true;
+					}
+					
+					if (args.length == 2) {
+						String name = args[1];
+					
+							if(SQLInfo.isItemInDB(plugin.getMySQL(), name)) {
+								player.sendMessage(ChatColor.GREEN+"El Kit "+ChatColor.GOLD+name+ChatColor.GREEN+" esta en la Base de Datos.");
+							}else {
+								player.sendMessage(ChatColor.RED+"El Kit "+ChatColor.GOLD+name+ChatColor.RED+" no en la Base de Datos.");
+							}
+					
+        			}else {
+        				player.sendMessage(ChatColor.RED+"/mg check-kit-db <name>");
+        			}
+        			return true;
+        			
+        		}else if(args[0].equalsIgnoreCase("delete-kit-db")) {
+        			if(!player.isOp()) {
+						
+    						player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
+    						return true;
+    					}
+    					
+    					if (args.length == 2) {
+    						String name = args[1];
+    					
+    						SQLInfo.DeleteKit(plugin.getMySQL(), player, name);
+    						
+            			}else {
+            				player.sendMessage(ChatColor.RED+"/mg delete-kit-db <name>");
+            			}
+        			return true;
+        			
+        		}else if(args[0].equalsIgnoreCase("dbcheck")) {
+					if(!player.isOp()) {
+						
+						player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
+						return true;
+					}
+					try {
+						if(args.length == 2) { 
+							String user = args[1];
+							
+							Player target = Bukkit.getPlayerExact(user);
+							if(target != null) {
+							
+								if(SQLInfo.isPlayerinDB(plugin.getMySQL(), target.getUniqueId())) {
+									player.sendMessage(ChatColor.GREEN+"El jugador esta en la base de datos.");
+								}else {
+									player.sendMessage(ChatColor.RED+"El jugador no esta en la base de datos.");
+								}
+								
+								
+							}else {
+								player.sendMessage(ChatColor.RED+"El jugador no esta conectado o no existe.");
+							}
+						}else {
+							if(SQLInfo.isPlayerinDB(plugin.getMySQL(), player.getUniqueId())) {
+								player.sendMessage(ChatColor.GREEN+"El jugador esta en la base de datos.");
+							}else {
+								player.sendMessage(ChatColor.RED+"El jugador no esta en la base de datos.");
+							}
+						}
+						
+					
+					} catch (IllegalArgumentException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					return true;
+					 
+				}else if(args[0].equalsIgnoreCase("dbdelete")) {
+					if(!player.isOp()) {
+						
+						player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
+						return true;
+					}
+					//mg dbdelete NAO
+					if(args.length == 2) { 
+						String user = args[1];
+						
+						Player target = Bukkit.getPlayerExact(user);
+						if(target != null) {
+							SQLInfo.DeleteUserInventory(plugin.getMySQL(),target.getUniqueId(), target);
+							player.sendMessage(ChatColor.GREEN+"Jugador Borrado de la Base de Datos");
+						}else {
+							player.sendMessage(ChatColor.RED+"El jugador no esta conectado o no existe.");
+						}
+						
+						
+					}else {
+						SQLInfo.DeleteUserInventory(plugin.getMySQL(),player.getUniqueId(), player);
+						player.sendMessage(ChatColor.GREEN+"Tus datos fueron Borrados de la Base de Datos");
+					}
+					
+					return true;
 				}else if(args[0].equalsIgnoreCase("dbsave")) {
 					if(!player.isOp()) {
 						
@@ -4279,7 +4598,7 @@ public class Comandsmg implements CommandExecutor{
 						return true;
 					}
 					try {
-						SQLInfo.SavePlayerInventory(plugin.getMySQL(), player.getUniqueId(), player.getName(), BukkitSerialization.serializar(player.getInventory().getContents()),player);
+						SQLInfo.SavePlayerInventory(plugin.getMySQL(), player.getUniqueId(), player.getName(), BukkitSerialization.serializarMultipleItems(player.getInventory().getContents()),player);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -4302,6 +4621,7 @@ public class Comandsmg implements CommandExecutor{
 					}
 					
 					return true;
+					
 				}else if(args[0].equalsIgnoreCase("sudoall")) {
 					
 					if(!player.isOp()) {
@@ -4376,70 +4696,7 @@ public class Comandsmg implements CommandExecutor{
           			}
         			
         			return true;
-        		}else if(args[0].equalsIgnoreCase("dbcheck")) {
-					if(!player.isOp()) {
-						
-						player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
-						return true;
-					}
-					try {
-						if(args.length == 2) { 
-							String user = args[1];
-							
-							Player target = Bukkit.getPlayerExact(user);
-							if(target != null) {
-							
-								if(SQLInfo.isPlayerinDB(plugin.getMySQL(), target.getUniqueId())) {
-									player.sendMessage(ChatColor.GREEN+"El jugador esta en la base de datos.");
-								}else {
-									player.sendMessage(ChatColor.RED+"El jugador no esta en la base de datos.");
-								}
-								
-								
-							}else {
-								player.sendMessage(ChatColor.RED+"El jugador no esta conectado o no existe.");
-							}
-						}else {
-							if(SQLInfo.isPlayerinDB(plugin.getMySQL(), player.getUniqueId())) {
-								player.sendMessage(ChatColor.GREEN+"El jugador esta en la base de datos.");
-							}else {
-								player.sendMessage(ChatColor.RED+"El jugador no esta en la base de datos.");
-							}
-						}
-						
-					
-					} catch (IllegalArgumentException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
-					return true;
-				}else if(args[0].equalsIgnoreCase("dbdelete")) {
-					if(!player.isOp()) {
-						
-						player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
-						return true;
-					}
-					//mg dbdelete NAO
-					if(args.length == 2) { 
-						String user = args[1];
-						
-						Player target = Bukkit.getPlayerExact(user);
-						if(target != null) {
-							SQLInfo.DeleteUserInventory(plugin.getMySQL(),target.getUniqueId(), target);
-							player.sendMessage(ChatColor.GREEN+"Jugador Borrado de la Base de Datos");
-						}else {
-							player.sendMessage(ChatColor.RED+"El jugador no esta conectado o no existe.");
-						}
-						
-						
-					}else {
-						SQLInfo.DeleteUserInventory(plugin.getMySQL(),player.getUniqueId(), player);
-						player.sendMessage(ChatColor.GREEN+"Tus datos fueron Borrados de la Base de Datos");
-					}
-					
-					return true;
-				}else if(args[0].equalsIgnoreCase("dialogue")) {
+        		}else if(args[0].equalsIgnoreCase("dialogue")) {
 					DialogueArgs(player,args);
 					
 					return true;
@@ -5179,7 +5436,7 @@ public class Comandsmg implements CommandExecutor{
 				
 				return true;
 				
-			}else if (args[0].equalsIgnoreCase("getInv")) {
+			}else if (args[0].equalsIgnoreCase("getKit")) {
 						if(!player.isOp()) {
 							
 							player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
@@ -5188,19 +5445,30 @@ public class Comandsmg implements CommandExecutor{
 						if (args.length == 2) {
 							String name = args[1];
 						
-							getInventoryY(name, player);
+							getKitMg(name, player);
 			
-						 }else {
-							player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg getInv <kit> ");
+						 }else if (args.length == 3) {
+								String name = args[1];
+								String target = args[2];
+								Player t = gc.ConvertStringToPlayerAlone(target);
+								if(t == null) {
+									player.sendMessage(ChatColor.RED+" No existe ese Jugador o no esta en linea.");
+									return true;
+								}
+								player.sendMessage(ChatColor.GREEN+" Le diste el Item "+name+" a "+target);
+								getKitMg(name, t);
+				
+						}else {
+							player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg getInv <kit> <player>(opcional)");
 							Bukkit.getConsoleSender()
-							.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg getInv <kit> ");
+							.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg getInv <kit> <player>(opcional)");
 						 }
 						
-				
+				 
 				
 				return true;
 				
-			}else if (args[0].equalsIgnoreCase("saveInv")) {
+			}else if (args[0].equalsIgnoreCase("saveKit")) {
 						if(!player.isOp()) {
 							
 							player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
@@ -5209,7 +5477,7 @@ public class Comandsmg implements CommandExecutor{
 						if (args.length == 2) {
 							String name = args[1];
 				
-						    saveInventoryY(name, player);
+						    saveKitMg(name, player);
 						
 							
 						 }else {
@@ -5220,7 +5488,59 @@ public class Comandsmg implements CommandExecutor{
 						
 	
 				return true;
-			}else if(args[0].equalsIgnoreCase("start-timer")) {
+				}else if (args[0].equalsIgnoreCase("getItem")) {
+					if(!player.isOp()) {
+						
+						player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
+						return true;
+					}
+					if (args.length == 2) {
+						String name = args[1];
+					
+						getItemMg(name, player);
+		
+					 }else	if(args.length == 3) {
+							String name = args[1];
+							String target = args[2];
+							Player t = gc.ConvertStringToPlayerAlone(target);
+							if(t == null) {
+								player.sendMessage(ChatColor.RED+" No existe ese Jugador o no esta en linea.");
+								return true;
+							}
+							player.sendMessage(ChatColor.GREEN+" Le diste el Item "+name+" a "+target);
+							getItemMg(name, t);
+			
+					 }else {
+						player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg getInv <kit> <player>(opcional)");
+						Bukkit.getConsoleSender()
+						.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg getInv <kit> <player>(opcional)");
+					 }
+					
+			 
+			
+					return true;
+			
+				}else if (args[0].equalsIgnoreCase("saveItem")) {
+					if(!player.isOp()) {
+						
+						player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
+						return true;
+					}
+					if (args.length == 2) {
+						String name = args[1];
+			
+					    saveItemMg(name, player);
+					
+						
+					 }else {
+						player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg saveInv <kit> ");
+						Bukkit.getConsoleSender()
+						.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg saveInv <kit> ");
+					 }
+					
+	
+			return true;
+		}else if(args[0].equalsIgnoreCase("start-timer")) {
 					
 			
 					player.sendMessage(plugin.nombre+ChatColor.GREEN+" A iniciado el Temporizador ");
@@ -5294,48 +5614,73 @@ public class Comandsmg implements CommandExecutor{
 	}
 	
 	
-	public void saveInventoryY(String name , Player player) {
-		FileConfiguration invt = plugin.getInventorysYaml();
-		if(invt.contains("Inventory."+name)) {
+	public void saveKitMg(String name , Player player) {
+		FileConfiguration invt = plugin.getKitsYaml();
+		if(invt.contains("Kits."+name)) {
 			//String cla = invt.getString("Inventory."+name);
-			invt.set("Inventory."+name, player.getInventory().getContents());
-			plugin.getInventorysYaml().save();
-			plugin.getInventorysYaml().reload();
+			invt.set("Kits."+name, player.getInventory().getContents());
+			plugin.getKitsYaml().save();
+			plugin.getKitsYaml().reload();
 	    	player.sendMessage(ChatColor.GREEN+"Se a Actualizado el Kit "+ChatColor.RED+name);
 
 	      return;
 	    }
-		invt.set("Inventory."+name, player.getInventory().getContents());
+		invt.set("Kits."+name, player.getInventory().getContents());
 		player.sendMessage(ChatColor.GREEN+"Se a salvado el Kit "+ChatColor.RED+name);
-		plugin.getInventorysYaml().save();
-		plugin.getInventorysYaml().reload();
+		plugin.getKitsYaml().save();
+		plugin.getKitsYaml().reload();
+
+	}
+	
+	
+	public void saveItemMg(String name , Player player) {
+		FileConfiguration invt = plugin.getItemsYaml();
+		if(invt.contains("Items."+name)) {
+			//String cla = invt.getString("Inventory."+name);
+			invt.set("Items."+name, player.getInventory().getItemInMainHand());
+			plugin.getItemsYaml().save();
+			plugin.getItemsYaml().reload();
+	    	player.sendMessage(ChatColor.GREEN+"Se a Actualizado el Item "+ChatColor.RED+name);
+
+	      return;
+	    }
+		invt.set("Items."+name, player.getInventory().getItemInMainHand());
+		player.sendMessage(ChatColor.GREEN+"Se a salvado el Item "+ChatColor.RED+name);
+		plugin.getItemsYaml().save();
+		plugin.getItemsYaml().reload();
 
 	}
 	
 	 
  	
-	public void getInventoryY(String name , Player player) {
-		FileConfiguration invt = plugin.getInventorysYaml();
+	public void getKitMg(String name , Player player) {
+		FileConfiguration invt = plugin.getKitsYaml();
 			
-			if(!invt.contains("Inventory."+name)) {
+			if(!invt.contains("Kits."+name)) {
 				player.sendMessage(ChatColor.RED+"Ese Kit no existe.");
 				return;
 			}
 			
-			for (String key : invt.getConfigurationSection("Inventory").getKeys(false)) {
-				if(key.equals(name)) {
-					@SuppressWarnings("unchecked")
-					ItemStack[] content = ((List<ItemStack>) invt.get("Inventory."+ key)).toArray(new ItemStack[0]);
-					player.getInventory().setContents(content);
-				}
-				
-			}
+			@SuppressWarnings("unchecked")
+			ItemStack[] content = ((List<ItemStack>) invt.get("Kits."+ name)).toArray(new ItemStack[0]);
+			player.getInventory().setContents(content);
+		
 			
-			
-		player.sendMessage(ChatColor.GREEN+"Obtuviste la clase "+ChatColor.RED+name);
+		player.sendMessage(ChatColor.GREEN+"Obtuviste el Kit "+ChatColor.RED+name);
 	}
 	
-	
+	public void getItemMg(String name , Player player) {
+		FileConfiguration invt = plugin.getItemsYaml();
+			
+			if(!invt.contains("Items."+name)) {
+				player.sendMessage(ChatColor.RED+"Ese Item no existe.");
+				return;
+			}
+			ItemStack item = (ItemStack) invt.get("Items."+ name);
+			player.getInventory().setItemInMainHand(item);
+				
+		player.sendMessage(ChatColor.GREEN+"Obtuviste el Item "+ChatColor.RED+name);
+	}
  
  	
  	public ObjetiveStatusType convertStringToObjetiveStatusType(Player player,String text) {
@@ -5613,8 +5958,10 @@ public class Comandsmg implements CommandExecutor{
  			l.add(ChatColor.GOLD+"/mg force-revive"+ChatColor.AQUA+" Revive a la Fuerza a un Jugador.");
  			l.add(ChatColor.GOLD+"/mg set-life"+ChatColor.AQUA+" Establece los Corazones de un Jugador.");
  			l.add(ChatColor.GOLD+"/mg set-scale"+ChatColor.AQUA+" Establece los la Escala/Tamaño de un Jugador.");
- 			l.add(ChatColor.GOLD+"/mg getInv"+ChatColor.AQUA+" Obten un Inventario Guardado.");
- 			l.add(ChatColor.GOLD+"/mg saveInv"+ChatColor.AQUA+" Guarda un Inventario.");
+ 			l.add(ChatColor.GOLD+"/mg getKit"+ChatColor.AQUA+" Obten un Inventario Guardado.");
+ 			l.add(ChatColor.GOLD+"/mg saveKit"+ChatColor.AQUA+" Guarda un Inventario.");
+ 			l.add(ChatColor.GOLD+"/mg getItem"+ChatColor.AQUA+" Obten un Item Guardado.");
+ 			l.add(ChatColor.GOLD+"/mg saveItem"+ChatColor.AQUA+" Guarda un solo Item.");
  			l.add(ChatColor.GOLD+"/mg pause"+ChatColor.AQUA+" Pausa el tiempo de un Mapa.");
  			l.add(ChatColor.GOLD+"/mg formats"+ChatColor.AQUA+" Obten el Formato de tiempo para usarlo en los Mapas.");
  			l.add(ChatColor.GOLD+"/mg dropplayer <user>"+ChatColor.AQUA+" Dropeale el Inventario a un Jugador.");
@@ -5626,6 +5973,17 @@ public class Comandsmg implements CommandExecutor{
  			l.add(ChatColor.GOLD+"/mg entityrain "+ChatColor.AQUA+" Lanza una Lluvia de Flechas.");
  			l.add(ChatColor.GOLD+"/mg delete-all-tempcooldown "+ChatColor.AQUA+" Borra el Cooldown Temporal de Todos los Jugadores.");
  			l.add(ChatColor.GOLD+"/mg delete-tempcooldown "+ChatColor.AQUA+" Borra el Cooldown Temporal de un Jugador Especifico.");
+ 			
+ 			
+ 			l.add(ChatColor.GOLD+"/mg save-item-db "+ChatColor.AQUA+" Guarda un Item en la Base de Datos.");
+ 			l.add(ChatColor.GOLD+"/mg get-item-db "+ChatColor.AQUA+" Obten un Item en la Base de Datos.");
+ 			l.add(ChatColor.GOLD+"/mg check-item-db "+ChatColor.AQUA+" Chequea un Item si esta en la Base de Datos.");
+ 			l.add(ChatColor.GOLD+"/mg delete-item-db "+ChatColor.AQUA+" Borra un Item en la Base de Datos.");
+ 			
+ 			l.add(ChatColor.GOLD+"/mg save-kit-db "+ChatColor.AQUA+" Guarda un Kit en la Base de Datos.");
+ 			l.add(ChatColor.GOLD+"/mg get-kit-db "+ChatColor.AQUA+" Obten un Kit en la Base de Datos.");
+ 			l.add(ChatColor.GOLD+"/mg check-kit-db "+ChatColor.AQUA+" Chequea un Kit si esta en la Base de Datos.");
+ 			l.add(ChatColor.GOLD+"/mg delete-kit-db "+ChatColor.AQUA+" Borra un Kit en la Base de Datos.");
  			
  		}
  		
@@ -5805,7 +6163,8 @@ public class Comandsmg implements CommandExecutor{
 			plugin.getMessage().reload();
 			plugin.getPoints().reload();
 			plugin.getCommandsMg().reload();
-			plugin.getInventorysYaml().reload();
+			plugin.getKitsYaml().reload();
+			plugin.getItemsYaml().reload();
 			plugin.getCooldown().reload();	
 			plugin.getReportsYaml().reload();
 			GameConditions gc = new GameConditions(plugin);

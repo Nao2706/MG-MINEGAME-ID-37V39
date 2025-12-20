@@ -55,10 +55,16 @@ public class SQLInfo {
 	}
 	
 	
+	public static boolean isConnected(Connection connection) {
+	    try {
+	        return connection != null && !connection.isClosed();
+	    } catch (SQLException e) {
+	        return false;
+	    }
+	}
 	
 	
-	
-	//set info 
+	//set info ejemplos
 	public static void createtable(Connection connection) {
 		try {
 		
@@ -78,8 +84,14 @@ public class SQLInfo {
 		
 	}
 	
-	
+	//EN USO
 	public static void createtableInventory(Connection connection) {
+		
+		if(!isConnected(connection)) {
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Error: "+ChatColor.YELLOW+" La configuracion de la Base de Datos esta en "+ChatColor.GOLD+"true"+ChatColor.YELLOW+" pero no se esta Conectada a la Base de Datos.");
+			return;
+		}
+		
 		try {
 			
 			PreparedStatement statement = connection.prepareStatement("CREATE TABLE IF NOT EXISTS Inventory ("+ 
@@ -99,8 +111,53 @@ public class SQLInfo {
 		
 	}
 	
+	public static void createTableItems(Connection connection) {
+		
+		if(!isConnected(connection)) {
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Error: "+ChatColor.YELLOW+" La configuracion de la Base de Datos esta en "+ChatColor.GOLD+"true"+ChatColor.YELLOW+" pero no se esta Conectada a la Base de Datos.");
+			return;
+		}
+		
+	    try {
+	        PreparedStatement statement = connection.prepareStatement(
+	            "CREATE TABLE IF NOT EXISTS Items (" +
+	            "ID VARCHAR(40) NOT NULL PRIMARY KEY," +
+	            "ItemData TEXT" +
+	            ");"
+	        );
+	        statement.executeUpdate();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	public static void createTableKits(Connection connection) {
+		
+		if(!isConnected(connection)) {
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Error: "+ChatColor.YELLOW+" La configuracion de la Base de Datos esta en "+ChatColor.GOLD+"true"+ChatColor.YELLOW+" pero no se esta Conectada a la Base de Datos.");
+			return;
+		}
+		
+	    try {
+	        PreparedStatement statement = connection.prepareStatement(
+	            "CREATE TABLE IF NOT EXISTS Kits (" +
+	            "ID VARCHAR(40) NOT NULL PRIMARY KEY," +
+	            "ItemData TEXT" +
+	            ");"
+	        );
+	        statement.executeUpdate();
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
 	
 	public static boolean isPlayerinDB(Connection connection,UUID uuid) {
+		
+		if(!isConnected(connection)) {
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Error: "+ChatColor.YELLOW+" La configuracion de la Base de Datos esta en "+ChatColor.GOLD+"true"+ChatColor.YELLOW+" pero no se esta Conectada a la Base de Datos.");
+			return false;
+		}
+		
 		try {
 				PreparedStatement statement = connection.prepareStatement("SELECT * FROM Inventory WHERE (UUID=?)");
 				statement.setString(1,uuid.toString());
@@ -116,8 +173,57 @@ public class SQLInfo {
 		}
 	
 	
+	public static boolean isItemInDB(Connection connection, String id) {
+		
+		if(!isConnected(connection)) {
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Error: "+ChatColor.YELLOW+" La configuracion de la Base de Datos esta en "+ChatColor.GOLD+"true"+ChatColor.YELLOW+" pero no se esta Conectada a la Base de Datos.");
+			return false;
+		}
+		
+	    try {
+	        PreparedStatement statement = connection.prepareStatement("SELECT * FROM Items WHERE ID = ?");
+	        statement.setString(1, id);
+	        ResultSet resultado = statement.executeQuery();
+	        if (resultado.next()) {
+	            return true;
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return false;
+	}
+	
+	
+	public static boolean isKitInDB(Connection connection, String id) {
+		
+		if(!isConnected(connection)) {
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Error: "+ChatColor.YELLOW+" La configuracion de la Base de Datos esta en "+ChatColor.GOLD+"true"+ChatColor.YELLOW+" pero no se esta Conectada a la Base de Datos.");
+			return false;
+		}
+		
+	    try {
+	        PreparedStatement statement = connection.prepareStatement("SELECT * FROM Kits WHERE ID = ?");
+	        statement.setString(1, id);
+	        ResultSet resultado = statement.executeQuery();
+	        if (resultado.next()) {
+	            return true;
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return false;
+	}
+	
+	
+	
 	//TODO SAVE
 	public static void SavePlayerInventory(Connection connection , UUID uuid , String name,String inv,Player player) {
+		
+		
+		if(!isConnected(connection)) {
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Error: "+ChatColor.YELLOW+" La configuracion de la Base de Datos esta en "+ChatColor.GOLD+"true"+ChatColor.YELLOW+" pero no se esta Conectada a la Base de Datos.");
+			return;
+		}
 		
 		try {	
 		
@@ -130,7 +236,7 @@ public class SQLInfo {
 			    
 			  player.sendMessage(ChatColor.GREEN+"Inventario Salvado con Exito ...");
 			}else{
-				setNewInventory(connection, uuid, inv,player);
+				setUpdateInventory(connection, uuid, inv,player);
 			}
 			
 			
@@ -141,7 +247,63 @@ public class SQLInfo {
 	}
 	
 	
+	
+	public static void SavePlayerItem(Connection connection,Player player,String id,String item) {
+		
+		if(!isConnected(connection)) {
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Error: "+ChatColor.YELLOW+" La configuracion de la Base de Datos esta en "+ChatColor.GOLD+"true"+ChatColor.YELLOW+" pero no se esta Conectada a la Base de Datos.");
+			return;
+		}
+		
+	    try {
+	        if (!isItemInDB(connection, id)) {
+	            PreparedStatement statement = connection.prepareStatement("INSERT INTO Item (ID, ItemData) VALUES (?, ?)");
+	            statement.setString(1, id.toString());
+	            statement.setString(2, item);
+	            statement.executeUpdate();
+	            player.sendMessage(ChatColor.GREEN + "Item Salvado con Exito ...");
+	        } else {
+	           //setNewInventory(connection, uuid, inv, player);
+	        	setUpdateItem(connection, player, id, item);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+	
+	
+	public static void SavePlayerKit(Connection connection,Player player,String id,String kit) {
+		
+		
+		if(!isConnected(connection)) {
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Error: "+ChatColor.YELLOW+" La configuracion de la Base de Datos esta en "+ChatColor.GOLD+"true"+ChatColor.YELLOW+" pero no se esta Conectada a la Base de Datos.");
+			return;
+		}
+		
+	    try {
+	        if (!isKitInDB(connection, id)) {
+	            PreparedStatement statement = connection.prepareStatement("INSERT INTO Kits (ID, ItemData) VALUES (?, ?)");
+	            statement.setString(1, id.toString());
+	            statement.setString(2, kit);
+	            statement.executeUpdate();
+	            player.sendMessage(ChatColor.GREEN + "Kit Salvado con Exito ...");
+	        } else {
+	           //setNewInventory(connection, uuid, inv, player);
+	        	setUpdateItem(connection, player, id, kit);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+	
 	public static void GetPlayerInventory(Connection connection,UUID uuid,Player player) throws IllegalArgumentException, IOException ,ClassNotFoundException{
+		
+		
+		if(!isConnected(connection)) {
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Error: "+ChatColor.YELLOW+" La configuracion de la Base de Datos esta en "+ChatColor.GOLD+"true"+ChatColor.YELLOW+" pero no se esta Conectada a la Base de Datos.");
+			return;
+		}
+		
 		try {
 			//VanishManager v = new VanishManager(null);
 		
@@ -154,7 +316,7 @@ public class SQLInfo {
 					String inv = resultado.getString("Inventario");
 			
 					//Inventory invi = BukkitSerialization.fromBase64(inv);
-					ItemStack[] items = BukkitSerialization.deserializar(inv);
+					ItemStack[] items = BukkitSerialization.deserializarMultipleItems(inv);
 				
 					player.getInventory().setContents(items);
 					
@@ -169,7 +331,93 @@ public class SQLInfo {
 		
 	}
 	
-	public static void setNewInventory(Connection connection,UUID uuid,String inv,Player player) {
+
+	//TODO ITEM
+	public static void getItemData(Connection connection,Player player, String id) throws IllegalArgumentException, IOException, ClassNotFoundException {
+		
+		if(!isConnected(connection)) {
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Error: "+ChatColor.YELLOW+" La configuracion de la Base de Datos esta en "+ChatColor.GOLD+"true"+ChatColor.YELLOW+" pero no se esta Conectada a la Base de Datos.");
+			return;
+		}
+		
+	    try {
+	        PreparedStatement statement = connection.prepareStatement("SELECT ItemData FROM Items WHERE ID = ?");
+	        statement.setString(1, id);
+	        ResultSet resultado = statement.executeQuery();
+	        if (resultado.next()) {
+	        	String itemData = resultado.getString("ItemData");
+	        	
+	        	  
+	       		if (itemData != null) {
+	       		    ItemStack item = BukkitSerialization.deserializarOneItem(itemData);
+	       		  
+	       		 if(player.getInventory().firstEmpty() == -1) {
+	    			 player.sendMessage(ChatColor.RED+"Tu Inventario esta lleno el Item se Dropeara al Piso.");
+	    			 player.getWorld().dropItem(player.getLocation(), item);
+	       		 }else{
+	       			 
+	       			 if(player.getInventory().getItemInMainHand() == null) {
+	       				player.getInventory().setItemInMainHand(item);
+	       			 }else {
+	       				player.getInventory().addItem(item);
+	       			 }
+	       			 
+	       		
+	       		 }
+	       		    
+	       		    player.sendMessage(ChatColor.GREEN + "Item cargado con éxito...");
+	       		}else {
+	       		    player.sendMessage(ChatColor.RED + "No se encontró el item en la base de datos.");
+	       		}
+	           
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	 
+	}
+	
+	public static void getKitData(Connection connection,Player player, String id) throws IllegalArgumentException, IOException, ClassNotFoundException {
+		
+		if(!isConnected(connection)) {
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Error: "+ChatColor.YELLOW+" La configuracion de la Base de Datos esta en "+ChatColor.GOLD+"true"+ChatColor.YELLOW+" pero no se esta Conectada a la Base de Datos.");
+			return;
+		}
+		
+	    try {
+	        PreparedStatement statement = connection.prepareStatement("SELECT ItemData FROM Kits WHERE ID = ?");
+	        statement.setString(1, id);
+	        ResultSet resultado = statement.executeQuery();
+	        if (resultado.next()) {
+	        	String itemData = resultado.getString("ItemData");
+	        	
+	        	  
+	       		if (itemData != null) {
+	    
+	       		  
+	       			ItemStack[] kit = BukkitSerialization.deserializarMultipleItems(itemData);
+					
+					player.getInventory().setContents(kit);
+	       		    
+	       		    player.sendMessage(ChatColor.GREEN + "Kit cargado con éxito...");
+	       		} else {
+	       		    player.sendMessage(ChatColor.RED + "No se encontró el Kit en la base de datos.");
+	       		}
+	           
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	 
+	}
+	
+	public static void setUpdateInventory(Connection connection,UUID uuid,String inv,Player player) {
+		
+		if(!isConnected(connection)) {
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Error: "+ChatColor.YELLOW+" La configuracion de la Base de Datos esta en "+ChatColor.GOLD+"true"+ChatColor.YELLOW+" pero no se esta Conectada a la Base de Datos.");
+			return;
+		}
+		
 		try {
 				PreparedStatement statement = connection.prepareStatement("UPDATE Inventory SET Inventario=? WHERE (UUID=?)");
 				statement.setString(1,inv);
@@ -182,8 +430,54 @@ public class SQLInfo {
 			
 		}
 	
+	//TODO ITEM
+	public static void setUpdateItem(Connection connection,Player player,String id , String item) {
+		
+		if(!isConnected(connection)) {
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Error: "+ChatColor.YELLOW+" La configuracion de la Base de Datos esta en "+ChatColor.GOLD+"true"+ChatColor.YELLOW+" pero no se esta Conectada a la Base de Datos.");
+			return;
+		}
+		
+		try {
+				PreparedStatement statement = connection.prepareStatement("UPDATE Items SET ItemData=? WHERE (ID=?)");
+				statement.setString(1,id);
+				statement.setString(2, item);
+				statement.executeUpdate();
+				player.sendMessage(ChatColor.GREEN+"Item Actualizado con Exito.");
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+			
+		}
+	
+	
+	//TODO ITEM
+	public static void setUpdateKit(Connection connection,Player player,String id , String kit) {
+		
+		if(!isConnected(connection)) {
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Error: "+ChatColor.YELLOW+" La configuracion de la Base de Datos esta en "+ChatColor.GOLD+"true"+ChatColor.YELLOW+" pero no se esta Conectada a la Base de Datos.");
+			return;
+		}
+		
+		try {
+				PreparedStatement statement = connection.prepareStatement("UPDATE Kits SET ItemData=? WHERE (ID=?)");
+				statement.setString(1,id);
+				statement.setString(2, kit);
+				statement.executeUpdate();
+				player.sendMessage(ChatColor.GREEN+"Kit Actualizado con Exito.");
+			}catch(SQLException e) {
+				e.printStackTrace();
+			}
+			
+		}
 	
 	public static void DeleteUserInventory(Connection connection,UUID uuid,Player player) {
+		
+		if(!isConnected(connection)) {
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Error: "+ChatColor.YELLOW+" La configuracion de la Base de Datos esta en "+ChatColor.GOLD+"true"+ChatColor.YELLOW+" pero no se esta Conectada a la Base de Datos.");
+			return;
+		}
+		
 		try {
 			
 			if(isPlayerinDB(connection, uuid)) {
@@ -200,6 +494,64 @@ public class SQLInfo {
 		}
 		
 	}
+	
+	
+	//TODO ITEM
+	public static void DeleteItem(Connection connection,Player player,String id) {
+		
+		if(!isConnected(connection)) {
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Error: "+ChatColor.YELLOW+" La configuracion de la Base de Datos esta en "+ChatColor.GOLD+"true"+ChatColor.YELLOW+" pero no se esta Conectada a la Base de Datos.");
+			return;
+		}
+		
+		try {
+			
+			if(isItemInDB(connection, id)) {
+				PreparedStatement statement = connection.prepareStatement("DELETE FROM Items WHERE (ID=?)");
+				statement.setString(1,id);
+				statement.executeUpdate();
+			
+				player.sendMessage(ChatColor.GREEN+"El Kit "+id+" fue Borrado.");
+				
+			}else {
+				player.sendMessage(ChatColor.RED+"El Kit "+id+" no existe o fue Borrado.");
+			}
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	//TODO ITEM
+	public static void DeleteKit(Connection connection,Player player,String id) {
+		
+		if(!isConnected(connection)) {
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Error: "+ChatColor.YELLOW+" La configuracion de la Base de Datos esta en "+ChatColor.GOLD+"true"+ChatColor.YELLOW+" pero no se esta Conectada a la Base de Datos.");
+			return;
+		}
+		
+		try {
+			
+			if(isKitInDB(connection, id)) {
+				PreparedStatement statement = connection.prepareStatement("DELETE FROM Kits WHERE (ID=?)");
+				statement.setString(1,id);
+				statement.executeUpdate();
+			
+				player.sendMessage(ChatColor.GREEN+"El Item "+id+" fue Borrado.");
+				
+			}else {
+				player.sendMessage(ChatColor.RED+"El Item "+id+" no existe o fue Borrado.");
+			}
+			
+		}catch(SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	
 	
 	
 	

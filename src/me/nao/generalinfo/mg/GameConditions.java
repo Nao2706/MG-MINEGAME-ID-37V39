@@ -1571,10 +1571,10 @@ public class GameConditions {
 	
 	public boolean existKit(String map) {
 		 FileConfiguration game = getGameConfig(map);
-		 FileConfiguration invt = plugin.getInventorysYaml();
+		 FileConfiguration kits = plugin.getKitsYaml();
 		
 		 String kit = game.getString("Start-Kit");
-		return invt.contains("Inventory."+kit);
+		return kits.contains("Kits."+kit);
 	}
 	
 	public boolean existProblemBetweenInventorys(String map) {
@@ -3288,7 +3288,7 @@ public class GameConditions {
 	}
 	
 	public void setKitMg(Player player) {
-		FileConfiguration invt = plugin.getInventorysYaml();
+		FileConfiguration invt = plugin.getKitsYaml();
 		String map = plugin.getPlayerInfoPoo().get(player).getMapName();
 		FileConfiguration mision = getGameConfig(map);
 		
@@ -3306,10 +3306,10 @@ public class GameConditions {
 		   }
 
 		      String kit = mision.getString("Start-Kit");
-			for (String key : invt.getConfigurationSection("Inventory").getKeys(false)) {
+			for (String key : invt.getConfigurationSection("Kits").getKeys(false)) {
 				if(key.equals(kit)) {
 					@SuppressWarnings("unchecked")
-					ItemStack[] content = ((List<ItemStack>) invt.get("Inventory."+ key)).toArray(new ItemStack[0]);
+					ItemStack[] content = ((List<ItemStack>) invt.get("Kits."+ key)).toArray(new ItemStack[0]);
 					player.getInventory().setContents(content);
 				}
 				
@@ -4623,17 +4623,17 @@ public class GameConditions {
 	
 	//TODO OBTENER KIT DE CARTEL
 	public void getInventorySing(String name , Player player) {
-		FileConfiguration invt = plugin.getInventorysYaml();
+		FileConfiguration invt = plugin.getKitsYaml();
 		
-		if(!invt.contains("Inventory."+name)) {
+		if(!invt.contains("Kits."+name)) {
 			player.sendMessage(ChatColor.RED+"Ese Kit no existe.");
 			return;
 		}
 		
-		for (String key : invt.getConfigurationSection("Inventory").getKeys(false)) {
+		for (String key : invt.getConfigurationSection("Kits").getKeys(false)) {
 			if(key.equals(name)) {
 				@SuppressWarnings("unchecked")
-				ItemStack[] content = ((List<ItemStack>) invt.get("Inventory."+ key)).toArray(new ItemStack[0]);
+				ItemStack[] content = ((List<ItemStack>) invt.get("Kits."+ key)).toArray(new ItemStack[0]);
 				player.getInventory().setContents(content);
 			}
 			

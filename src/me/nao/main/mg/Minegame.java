@@ -60,7 +60,8 @@ public class Minegame extends JavaPlugin{
     private YamlFile cooldown;
     private YamlFile levels;
     private YamlFile commands;    
-    private YamlFile inventorys;
+    private YamlFile kits;
+    private YamlFile items;
     private YamlFile itemsmenu;
     private YamlFile reports;
     private YamlFile mapfrequency;
@@ -230,6 +231,9 @@ public class Minegame extends JavaPlugin{
 			  SQLInfo sql = new SQLInfo(this);
 			  this.conexion = new ConexionMySQL(sql.Host(),sql.Puerto(),sql.BaseDeDatos(),sql.Usuario(),sql.Clave());
 			  SQLInfo.createtableInventory(getMySQL());
+			  SQLInfo.createTableItems(getMySQL());
+			  SQLInfo.createTableKits(getMySQL());
+			  
 			  Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Se esta usando Base de Datos");
 		}else {
 			Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+"No se esta usando Base de Datos");
@@ -250,17 +254,18 @@ public class Minegame extends JavaPlugin{
 			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+" PlaceholderAPI no encontrado para MG");
 		}
 		
-		this.reports = new YamlFile(this, "reports");
-		this.itemsmenu = new YamlFile(this, "menuitems");
-		this.messages = new YamlFile(this, "messages");
-		this.config = new YamlFile(this, "config");
-		this.points = new YamlFile(this, "points");
-		this.cooldown = new YamlFile(this, "cooldowns");
-		this.levels = new YamlFile(this, "levels");
-		this.commands = new YamlFile(this, "commands");
-		this.inventorys = new YamlFile(this, "inventorys");
-		this.mapfrequency = new YamlFile(this, "mapfrequency");
-		this.recordtime = new YamlFile(this, "record-time");
+		this.reports = new YamlFile(this, "Reports");
+		this.itemsmenu = new YamlFile(this, "Menuitems");
+		this.messages = new YamlFile(this, "Messages");
+		this.config = new YamlFile(this, "Config");
+		this.points = new YamlFile(this, "Points");
+		this.cooldown = new YamlFile(this, "Cooldowns");
+		this.levels = new YamlFile(this, "Levels");
+		this.commands = new YamlFile(this, "Commands");
+		this.kits = new YamlFile(this, "Kits");
+		this.items = new YamlFile(this, "Items");
+		this.mapfrequency = new YamlFile(this, "Mapfrequency");
+		this.recordtime = new YamlFile(this, "Record-time");
 
 		
 		
@@ -503,8 +508,12 @@ public class Minegame extends JavaPlugin{
        return commands; 
    }
    
-   public YamlFile getInventorysYaml() {
-       return inventorys; 
+   public YamlFile getKitsYaml() {
+       return kits; 
+   }
+   
+   public YamlFile getItemsYaml() {
+       return items; 
    }
    
    public YamlFile getReportsYaml() {

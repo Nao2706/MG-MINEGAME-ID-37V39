@@ -112,7 +112,19 @@ public class TabCompletemg implements TabCompleter{
 			arguments.add("maprecord");
 			arguments.add("delete-all-tempcooldown");
 			arguments.add("delete-tempcooldown");
-			
+			arguments.add("getKit");
+			arguments.add("saveKit");
+			arguments.add("getItem");
+			arguments.add("saveItem");
+			arguments.add("save-item-db");
+			arguments.add("get-item-db");
+			arguments.add("check-item-db");
+			arguments.add("delete-item-db");
+			arguments.add("save-kit-db");
+			arguments.add("get-kit-db");
+			arguments.add("check-kit-db");
+			arguments.add("delete-kit-db");
+
 		}
 		
 		
@@ -158,11 +170,11 @@ public class TabCompletemg implements TabCompleter{
 					       return result;
 					}
 					
-					if(args[0].equalsIgnoreCase("getInv")) {
-						FileConfiguration invs = plugin.getInventorysYaml();
+					if(args[0].equalsIgnoreCase("getKit")) {
+						FileConfiguration invs = plugin.getKitsYaml();
 						List<String> result = new ArrayList<String>();
-						if(invs.contains("Inventory")) {
-							for (String key : invs.getConfigurationSection("Inventory").getKeys(false)) {
+						if(invs.contains("Kits")) {
+							for (String key : invs.getConfigurationSection("Kits").getKeys(false)) {
 								if(args.length == 2) {
 									if(key.toLowerCase().startsWith(args[1].toLowerCase())) 
 										result.add(key);
