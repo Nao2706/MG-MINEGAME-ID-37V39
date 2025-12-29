@@ -2,8 +2,10 @@ package me.nao.command.mg;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -13,6 +15,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
+import me.nao.enums.mg.GameCheats;
 import me.nao.main.mg.Minegame;
 
 
@@ -124,7 +127,9 @@ public class TabCompletemg implements TabCompleter{
 			arguments.add("get-kit-db");
 			arguments.add("check-kit-db");
 			arguments.add("delete-kit-db");
-
+			arguments.add("report");
+			
+			
 		}
 		
 		
@@ -142,7 +147,7 @@ public class TabCompletemg implements TabCompleter{
 						List<String> arguments2 = config.getStringList("Maps-Created.List");
 						if(!arguments2.isEmpty()) {
 							
-							for(String a : arguments2 ) {
+							for(String a : arguments2) {
 								if(args.length == 2) {
 									if(a.toLowerCase().startsWith(args[1].toLowerCase())) 
 										result.add(a);
@@ -150,10 +155,21 @@ public class TabCompletemg implements TabCompleter{
 								
 							}
 						
-						}
+						}//mg repor tot xd
 						return result;
 					} 
 					
+					if(args[0].equalsIgnoreCase("report")){
+						//Player player = (Player) sender;
+						if(args.length == 3) {
+							   List<String> result = Arrays.stream(GameCheats.values()).map(Object:: toString).collect(Collectors.toList());
+							
+							
+							   
+						       return result;
+						}
+				
+				    }
 					if(args[0].equalsIgnoreCase("coord")){
 							Player player = (Player) sender;
 							Block b = player.getTargetBlock((Set<Material>) null, 150);

@@ -1900,7 +1900,7 @@ public class GameConditions {
 				 BossBar boss = minfo.getBossbar();
 				 GameType misiontype = minfo.getGameType();
 				 int maxplayers = minfo.getMaxPlayers();
-				 ReportsManager cooldown = new ReportsManager(plugin) ;
+				 ModerationManager cooldown = new ModerationManager(plugin) ;
 				 
 				 if(cooldown.HasSancionPlayer(player)) {
 						 

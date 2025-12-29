@@ -63,9 +63,10 @@ import me.nao.events.mg.ItemNBT;
 import me.nao.fillareas.mg.Data;
 import me.nao.generalinfo.mg.GameConditions;
 import me.nao.generalinfo.mg.GameInfo;
+import me.nao.generalinfo.mg.GameReportsManager;
 import me.nao.generalinfo.mg.GameTime;
 import me.nao.generalinfo.mg.PlayerInfo;
-import me.nao.generalinfo.mg.ReportsManager;
+import me.nao.generalinfo.mg.ModerationManager;
 import me.nao.generalinfo.mg.SystemOfLevels;
 import me.nao.main.mg.Minegame;
 import me.nao.manager.mg.GameIntoMap;
@@ -222,14 +223,14 @@ public class Comandsmg implements CommandExecutor{
 					
 					if(args.length == 2) {
 							String name = args[1];
-							ReportsManager cool = new ReportsManager(plugin);
-							cool.sendReportLogs(null, name, 1);
+							ModerationManager cool = new ModerationManager(plugin);
+							cool.sendModerationLogs(null, name, 1);
 							
 					}else if(args.length == 3){
 						String name = args[1];
 						int pag = Integer.valueOf(args[2]);
-						ReportsManager cool = new ReportsManager(plugin);
-						cool.sendReportLogs(null, name, pag);
+						ModerationManager cool = new ModerationManager(plugin);
+						cool.sendModerationLogs(null, name, pag);
 						
 					}else {
 						Bukkit.getConsoleSender().sendMessage("Usa /mg reportlogs <player>");
@@ -443,7 +444,7 @@ public class Comandsmg implements CommandExecutor{
 					
 					if(args.length == 2) {
 							String name = args[1];
-							ReportsManager cool = new ReportsManager(plugin);
+							ModerationManager cool = new ModerationManager(plugin);
 							cool.HasSancionPlayerConsoleOrOp(null, name);
 							
 					}else {
@@ -456,8 +457,8 @@ public class Comandsmg implements CommandExecutor{
 					
 					  if(args.length >= 3) {
 						  
-						  	ReportsManager rm = new ReportsManager(plugin);
-				        	 rm.IdentifierReports(null,args);
+						  	ModerationManager rm = new ModerationManager(plugin);
+				        	 rm.IdentifierModerationReports(null,args);
 			        
 						}else {
 							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Usa /mg ban,kick,warn <player> <obligatorio una razon> Para especificar tiempo porfavor usa los siguientes 1D 1H 1M 1S 1d 1h 1m 1s .");
@@ -2069,7 +2070,7 @@ public class Comandsmg implements CommandExecutor{
 						// mg set nao 10
 						
 						Player target = Bukkit.getServer().getPlayerExact(args[1]);
-						double valor = Double.valueOf(args[2])  ;
+						double valor = Double.valueOf(args[2]);
 						if(target != null) {
 							//target.setMaxHealth(target.getMaxHealth());
 							target.getAttribute(Attribute.SCALE).setBaseValue(valor);
@@ -3016,7 +3017,7 @@ public class Comandsmg implements CommandExecutor{
 				return true;
 				
 				//TODO REWARD
-			}else if (args[0].equalsIgnoreCase("reward")) {
+				}else if (args[0].equalsIgnoreCase("reward")) {
 					FileConfiguration config = plugin.getConfig();
 					if(config.getBoolean("Claim-Reward")) {
 						PointsManager p  = new PointsManager(plugin);
@@ -3026,6 +3027,42 @@ public class Comandsmg implements CommandExecutor{
 						player.sendMessage(plugin.nombre+ChatColor.RED+" Las Recompensas han sido Deshabilitadas contacta con un Op.");
 					}
 					
+					
+					return true;
+				}else if (args[0].equalsIgnoreCase("report")) {
+				
+					if(!gc.isPlayerinGame(player)) {
+						player.sendMessage(ChatColor.RED+" Debes estar en un MiniJuego para usar este Comando.");
+						return true;
+					}
+					
+					GameReportsManager grm = new GameReportsManager(plugin);
+					//mg report NAO XRAY Ese perro esta usando hacks
+					if(args.length == 3) {
+						String target = args[1];
+						String reason = args[2];
+						
+						grm.setReporttoTarget(player, target, reason,"Ninguno.");
+						
+						
+					}else if(args.length >= 4) {
+						
+						 String target = args[1];
+						 String reason = args[2];
+						 String comments = "";
+			        	 for(int i = 3 ;i < args.length; i++) {
+			        		 comments = comments+args[i]+" "; 
+							 
+						 }
+			        	 
+			        	 comments = comments.trim()+".";
+			     	
+						
+						grm.setReporttoTarget(player, target, reason,comments);
+						
+					}else {
+						player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg report <nombre> <motivo> <comentario opcional>");
+					}
 					
 					return true;
 				}else if(args[0].equalsIgnoreCase("dura")) {
@@ -3589,14 +3626,14 @@ public class Comandsmg implements CommandExecutor{
 					
 					if(args.length == 2) {
 							String name = args[1];
-							ReportsManager cool = new ReportsManager(plugin);
-							cool.sendReportLogs(player, name, 1);
+							ModerationManager cool = new ModerationManager(plugin);
+							cool.sendModerationLogs(player, name, 1);
 							
 					}else if(args.length == 3){
 						String name = args[1];
 						int pag = Integer.valueOf(args[2]);
-						ReportsManager cool = new ReportsManager(plugin);
-						cool.sendReportLogs(player, name, pag);
+						ModerationManager cool = new ModerationManager(plugin);
+						cool.sendModerationLogs(player, name, pag);
 						
 					}else {
 						player.sendMessage("Usa /mg reportlogs <player>");
@@ -3612,7 +3649,7 @@ public class Comandsmg implements CommandExecutor{
 					}
 					if (args.length == 2) {
 						String name = args[1];
-						ReportsManager cool = new ReportsManager(plugin);
+						ModerationManager cool = new ModerationManager(plugin);
 						cool.HasSancionPlayerConsoleOrOp(player, name);
 						
 					}else {
@@ -5145,8 +5182,8 @@ public class Comandsmg implements CommandExecutor{
 						return true;
 					}
 					if(args.length >= 3) {
-						 ReportsManager rm = new ReportsManager(plugin);
-			        	 rm.IdentifierReports(player,args);
+						 ModerationManager rm = new ModerationManager(plugin);
+			        	 rm.IdentifierModerationReports(player,args);
 			        	 //mg warn NAO HOLA Q HACES BRO
 			         		 
 					}else {
@@ -6165,8 +6202,9 @@ public class Comandsmg implements CommandExecutor{
 			plugin.getCommandsMg().reload();
 			plugin.getKitsYaml().reload();
 			plugin.getItemsYaml().reload();
-			plugin.getCooldown().reload();	
-			plugin.getReportsYaml().reload();
+			plugin.getCooldown().reload();
+			plugin.getReportsYamls().reload();
+			plugin.getPlayersHistoryYaml().reload();
 			GameConditions gc = new GameConditions(plugin);
 			gc.loadItemMenu();
 			if(player != null) {

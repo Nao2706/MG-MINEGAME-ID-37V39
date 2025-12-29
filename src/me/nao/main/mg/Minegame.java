@@ -28,6 +28,7 @@ import me.nao.events.mg.EventRandoms;
 import me.nao.events.mg.SourceOfDamage;
 import me.nao.generalinfo.mg.GameConditions;
 import me.nao.generalinfo.mg.GameInfo;
+import me.nao.generalinfo.mg.GameReport;
 import me.nao.generalinfo.mg.ItemMenu;
 import me.nao.generalinfo.mg.PlayerInfo;
 import me.nao.revive.mg.RevivePlayer;
@@ -64,6 +65,7 @@ public class Minegame extends JavaPlugin{
     private YamlFile items;
     private YamlFile itemsmenu;
     private YamlFile reports;
+    private YamlFile playershistory;
     private YamlFile mapfrequency;
     private YamlFile recordtime;
 
@@ -73,10 +75,11 @@ public class Minegame extends JavaPlugin{
     private Map<Player, RevivePlayer> playerrevive;
     private Map<Entity,String> guardiancredit;
     private Map<String,LocalDateTime> cooldownmap;
-    
+    private Map<String,GameReport> gamereports;
     //ITEMS ACTION
     private Map<String,List<Entity>> entitys;
     private Map<Player,Long> tempcooldown;
+    private Map<Player,Long> tempcooldownreport;
 
     
     
@@ -255,6 +258,7 @@ public class Minegame extends JavaPlugin{
 		}
 		
 		this.reports = new YamlFile(this, "Reports");
+		this.playershistory = new YamlFile(this, "Players-History");
 		this.itemsmenu = new YamlFile(this, "Menuitems");
 		this.messages = new YamlFile(this, "Messages");
 		this.config = new YamlFile(this, "Config");
@@ -331,6 +335,8 @@ public class Minegame extends JavaPlugin{
 	    guardiancredit = new HashMap<>();
 	    playerrevive = new HashMap<>();
 	    cooldownmap = new HashMap<>();
+	    gamereports = new HashMap<>();
+	    tempcooldownreport = new HashMap<>();
 	    
 	    itemmenu = new HashMap<>();
 	    //items
@@ -421,6 +427,10 @@ public class Minegame extends JavaPlugin{
 	   return delete;
    }
    
+   public Map<String,GameReport> getGameReports(){
+	   return gamereports;
+   }
+   
    ////////////ITEMS
    
    public Map<String ,List<Entity>> getEntitiesFromFlare(){
@@ -429,6 +439,10 @@ public class Minegame extends JavaPlugin{
    
    public Map<Player,Long> getTempCooldown(){
 	   return tempcooldown;
+   }
+   
+   public Map<Player,Long> getTempCooldownReport(){
+	   return tempcooldownreport;
    }
    
    public Map<Entity,String> getGuardianCredit(){
@@ -516,10 +530,14 @@ public class Minegame extends JavaPlugin{
        return items; 
    }
    
-   public YamlFile getReportsYaml() {
+   public YamlFile getReportsYamls() {
        return reports; 
    }    
   
+   public YamlFile getPlayersHistoryYaml() {
+       return playershistory; 
+   }    
+   
    public YamlFile getMapFrequency() {
        return mapfrequency; 
    }   
