@@ -5,6 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -26,23 +27,23 @@ public class GameReportsManager {
 	
 	
 	
-	public void setReporttoTarget(Player user ,String target,String motive, String comment) {
+	public void setReporttoTarget(Player user ,String target,String motive,String map, String comment) {
 		
 		 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss a",Locale.ENGLISH);
 		 LocalDateTime ld = LocalDateTime.now();
 		
 		 if(hasPlayerTempCooldownReport(user,60)) return;
 		 
-			if(hasReportsPlayer(user)) {
+			if(hasReportsPlayer(target)) {
 				GameReport gr = plugin.getGameReports().get(target);
 				List<String> l = gr.getReports();
-				l.add("Fecha: "+ld.format(formatter).toString()+" Reporta: "+user.getName()+" Motivo: "+motive+" Comentarios: "+comment);
+				l.add("Fecha: "+ld.format(formatter).toString()+" Reporta: "+user.getName()+" Motivo: "+motive+" Mapa: "+map+" Comentarios: "+comment);
 				
 				saveData(plugin.getGameReports().get(target));
 				
 			}else {
 				List<String> l = new ArrayList<>();
-				l.add("Fecha: "+ld.format(formatter).toString()+" Reporta: "+user.getName()+" Motivo: "+motive+" Comentarios: "+comment);
+				l.add("Fecha: "+ld.format(formatter).toString()+" Reporta: "+user.getName()+" Motivo: "+motive+" Mapa: "+map+" Comentarios: "+comment);
 				
 				plugin.getGameReports().put(target,new GameReport(target,ld,l));
 				
@@ -51,20 +52,60 @@ public class GameReportsManager {
 		
 		user.sendMessage(ChatColor.RED+"Reportaste"+ChatColor.GRAY+" a "+ChatColor.GOLD+target+ChatColor.GRAY+" por "+ChatColor.GOLD+motive+ChatColor.GOLD+" Comentarios:"+ChatColor.DARK_PURPLE+comment);
 		
-		GameConditions gc = new GameConditions(plugin);
-		Player t = gc.ConvertStringToPlayerAlone(target);
-		
-		if(t != null) {
-			
-		}
+//		GameConditions gc = new GameConditions(plugin);
+//		Player t = gc.ConvertStringToPlayerAlone(target);
+//		
+//		if(t != null) {
+//			
+//		}
 		
 		return;
 		
 	}
 	
 	
-	public boolean hasReportsPlayer(Player target) {
-		return plugin.getTempCooldownReport().containsKey(target);
+	public void checkReportsDay(Player player,int pag) {
+		
+		if(plugin.getGameReports().isEmpty()) {
+			
+			if(player != null) {
+				player.sendMessage(ChatColor.RED+"Game-Reports: "+ChatColor.YELLOW+"No hay Reportes el Dia de Hoy.");
+
+			}
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Game-Reports: "+ChatColor.YELLOW+"No hay Reportes el Dia de Hoy.");
+			return;
+			
+		}
+		
+		sendPagesToPlayerMap(player, plugin.getGameReports(), pag, 10);
+		
+	}
+	
+	
+	public void checkReportOfPlayerDay(Player player, String target,int pag) {
+		
+		
+		if(!hasReportsPlayer(target)) {
+			
+			if(player != null) {
+				player.sendMessage(ChatColor.RED+"Game-Reports: "+ChatColor.YELLOW+"Ese Jugador no tiene Ningun Reporte el dia de Hoy.");
+
+			}
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Game-Reports: "+ChatColor.YELLOW+"Ese Jugador no tiene Ningun Reporte el dia de Hoy.");
+			
+			return;
+		}
+		
+		GameReport gr = plugin.getGameReports().get(target);
+		
+		pagssendtoPlayer(player,gr.getReports(),pag,10,target,"De Hoy");
+		
+		
+	}
+	
+	
+	public boolean hasReportsPlayer(String target) {
+		return plugin.getGameReports().containsKey(target);
 	}
 	
 	
@@ -126,11 +167,11 @@ public class GameReportsManager {
     
 		List<String> list = report.getStringList("Reports."+target+".Game-Reports");
 		
-		pagssendtoPlayer(player,list,pag,5,target);
+		pagssendtoPlayer(player,list,pag,10,target,"Generales");
 		
 	}
  /// PRIMERO PEDIMOS UNA LISTA , LUEGO LA PAGINA A VISUALIZAR , POR ULTIMO CUANTOS DATOS CONFORMAN UNA PAGINA
-	 public void pagssendtoPlayer(Player player,List<String> l , int pag,int datosperpags,String target) {
+	 public void pagssendtoPlayer(Player player,List<String> l , int pag,int datosperpags,String target,String message) {
 	    	
 	    	if(!l.isEmpty()) {
 	    		int inicio = (pag -1) * datosperpags;
@@ -148,11 +189,11 @@ public class GameReportsManager {
 	    			return;
 	    		}
 	    		if(player != null) {
-	    			player.sendMessage(ChatColor.GOLD+"Reportes de: "+ChatColor.GREEN+target);
+	    			player.sendMessage(ChatColor.GOLD+"Reportes "+message+" de: "+ChatColor.GREEN+target);
 		    		player.sendMessage(ChatColor.GOLD+"Paginas: "+ChatColor.RED+pag+ChatColor.GOLD+"/"+ChatColor.RED+((l.size()+datosperpags-1)/datosperpags));
 	    		}
 	    		
-	    		Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+"Reportes de: "+ChatColor.GREEN+target);
+	    		Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+"Reportes "+message+" de: "+ChatColor.GREEN+target);
 	    		Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+"Paginas: "+ChatColor.RED+pag+ChatColor.GOLD+"/"+ChatColor.RED+((l.size()+datosperpags-1)/datosperpags));
 	    	
 	    		for(int i = inicio;i < fin && i < l.size();i++) {
@@ -180,6 +221,48 @@ public class GameReportsManager {
 	    	}
 	    	return;
 	    }
+	 
+	 
+	 public void sendPagesToPlayerMap(Player player, Map<String, GameReport> reportMap, int page, int itemsPerPage) {
+		    if (!reportMap.isEmpty()) {
+		        int startIndex = (page - 1) * itemsPerPage;
+		        int endIndex = startIndex + itemsPerPage;
+		        int mapSize = reportMap.size();
+		        int numberOfPages = (int) Math.ceil((double) mapSize / itemsPerPage);
+
+		        if (page > numberOfPages) {
+		            // Mensaje de error: no hay más datos
+		            return;
+		        }
+
+		        // Mensajes de encabezado
+		        if (player != null) {
+		            player.sendMessage(ChatColor.GOLD + "Reportes del Dia de Hoy");
+		            player.sendMessage(ChatColor.GOLD + "Páginas: " + ChatColor.RED + page + ChatColor.GOLD + "/" + ChatColor.RED + numberOfPages);
+		        }
+		        Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "Reportes del Dia de Hoy");
+		        Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD + "Páginas: " + ChatColor.RED + page + ChatColor.GOLD + "/" + ChatColor.RED + numberOfPages);
+
+		        // Convertir el map a una lista de entradas para poder paginar
+		        List<Map.Entry<String, GameReport>> entryList = new ArrayList<>(reportMap.entrySet());
+		        
+		        for (int i = startIndex; i < endIndex && i < mapSize; i++) {
+		            Map.Entry<String, GameReport> entry = entryList.get(i);
+		            String playerName = entry.getKey();
+		            GameReport reports = entry.getValue();
+		            int reportCount = reports.getReports().size(); // Asumiendo que getReports() devuelve la lista de reports
+
+		            String message = ""+ChatColor.RED + (i + 1) + "). " + ChatColor.RED + playerName + ChatColor.RED +" - Reportes: " +ChatColor.GOLD + reportCount;
+		            if (player != null) {
+		                player.sendMessage(message);
+		            }
+		            Bukkit.getConsoleSender().sendMessage(message);
+		        }
+		    } else {
+		        // Mensaje de error: no hay datos
+		    }
+		}
+	 
 	
 	
 }

@@ -1,0 +1,50 @@
+Remove-Armor-Stands: 30
+Chest-Particle-Range: 10
+Claim-Reward: false
+Time-Reward: 30
+Anti-Void: true
+Country-Time: "Ecuador"
+Dispenser-Range: 30
+Loot-Table-Limit: 10
+Maintenance: false
+Data-Base:
+    Enabled: false     
+    Host: "sql9.freesqldatabase.com"
+    Puerto: 3306
+    BaseDeDatos: "sql9581887"  
+    Usuario: "sql9581887"
+    Clave: "6QGbkafXab"       
+Maps-Created:
+    List:
+    - example
+Maps-Blocked:
+    List:    
+    - example
+HeadShoot-World:
+    List:
+    - example
+Regen-Explosion:
+    List:
+    - example    
+Maps-Ranked:
+    List:
+    - example  
+Top-Rewards:
+    List:
+    - example1
+    - example2    
+Max-Animation: 1    
+Min-Animation: 2    
+Worlds-Animation:
+    List:
+    - example1
+    - example2        
+FallingBlock-Remove-If-Touch-Ground:
+    List:
+    - example1
+    - example2
+Worlds-Allowed-Items:
+	List:
+	- example1
+	- example2  	 
+ 

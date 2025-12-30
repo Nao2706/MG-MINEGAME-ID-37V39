@@ -1,0 +1,7 @@
+Format-Example:
+	Is-Working: true
+	Is-Enchanted: false
+    Material: "STONE"
+    Display-Name: "A Big Adventure"
+    Lore-Item:
+    - "Descripcion: Be carefull"

@@ -3029,6 +3029,19 @@ public class Comandsmg implements CommandExecutor{
 					
 					
 					return true;
+				}else if (args[0].equalsIgnoreCase("reportlog")) {
+					//mg reportlog user
+					if(args.length == 2) {
+						
+					}else {
+						
+						
+						
+					}
+					
+					
+					
+					return true;
 				}else if (args[0].equalsIgnoreCase("report")) {
 				
 					if(!gc.isPlayerinGame(player)) {
@@ -3036,13 +3049,15 @@ public class Comandsmg implements CommandExecutor{
 						return true;
 					}
 					
+					PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+					
 					GameReportsManager grm = new GameReportsManager(plugin);
 					//mg report NAO XRAY Ese perro esta usando hacks
 					if(args.length == 3) {
 						String target = args[1];
 						String reason = args[2];
 						
-						grm.setReporttoTarget(player, target, reason,"Ninguno.");
+						grm.setReporttoTarget(player, target, reason,pl.getMapName(),"Ninguno.");
 						
 						
 					}else if(args.length >= 4) {
@@ -3058,7 +3073,7 @@ public class Comandsmg implements CommandExecutor{
 			        	 comments = comments.trim()+".";
 			     	
 						
-						grm.setReporttoTarget(player, target, reason,comments);
+						grm.setReporttoTarget(player, target, reason,pl.getMapName(),comments);
 						
 					}else {
 						player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg report <nombre> <motivo> <comentario opcional>");

@@ -1,0 +1,40 @@
+Message: 
+   message-top: true
+   message-top-decoracion1: 
+     - "&a==============TOP======================"
+   message-top-texto: 
+     - "&a&l%place%#&6Lugar &4%player% &5%pointuser%  recompensa Obtenida &7%reward%"
+   message-top-decoracion2: 
+     - "&a==================================== "  
+Top-Amount: 10   
+
+Top: 
+   message-top-global: true
+   message-top-global-text: "&a&l%place%#&6Lugar &4%player% &5%pointuser% "
+Top-Amount-Global: 10     
+
+
+Command: 
+   message-top: true
+   message-top-decoracion1: 
+     - "&a==============TOP=KILLS=GLOBAL====================="
+   message-top-texto: 
+     - "&a&l%place%#&6Lugar &4%player% &5%pointuser% "
+   message-top-decoracion2: 
+     - "&a==================================== "  
+Top-Amount-Command: 10   
+
+Message-My-Points: 
+   message: true
+   message-points-decoracion1: 
+     - "&a==============TUS==PUNTOS=================="
+   message-points-texto: 
+     - "&a&l Jugador: &6%player% | Puntos:&5%pointuser% "
+   message-points-decoracion2: 
+     - "&a======================================== " 
+     
+Message-Check-Player:
+   message: 
+     - "&a&l===============CHECK==================="
+     - " &6Jugador &4%player% &6Puntos &a%points%"     
+     - "&a&l========================================"
