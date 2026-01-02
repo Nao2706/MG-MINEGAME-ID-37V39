@@ -655,7 +655,41 @@ public class Comandsmg implements CommandExecutor{
 					}
 					
 					return true;
-		    	}else if(args[0].equalsIgnoreCase("spawnzombi")) {
+		    	}else if (args[0].equalsIgnoreCase("reportlog")) {
+					//mg reportlog NAO2706 1
+					GameReportsManager grm = new GameReportsManager(plugin); 
+					String value = args[1];
+					
+					if(args.length == 2) {
+						
+						//ES UN NUMERO?
+						if(value.matches("\\d+")){
+							int pag = Integer.valueOf(value);
+							grm.checkReportsDay(null, pag);
+							
+						}else {
+							grm.checkReportOfPlayerDay(null, value, 0);
+						}
+						
+						
+					}else if(args.length == 3) {
+						String pag = args[2];
+						//SI ES UN NUMERO
+						if(pag.matches("\\d+")){
+							
+							Bukkit.getConsoleSender().sendMessage("Usa /reportlog <pag o jugador> <pag number>");
+							
+						}else {
+							int val = Integer.valueOf(pag);
+							grm.checkReportOfPlayerDay(null, value, val);
+						}
+						
+						
+					}else {
+						grm.checkReportsDay(null, 0);
+					}
+					return true;
+				}else if(args[0].equalsIgnoreCase("spawnzombi")) {
 			 		//H Z BZ EZ
 					//mg spawnzombi wolrd,12,23,34 50 H
 			 		 if(args.length == 4) {
@@ -3030,17 +3064,38 @@ public class Comandsmg implements CommandExecutor{
 					
 					return true;
 				}else if (args[0].equalsIgnoreCase("reportlog")) {
-					//mg reportlog user
+					//mg reportlog NAO2706 1
+					GameReportsManager grm = new GameReportsManager(plugin); 
+					String value = args[1];
+					
 					if(args.length == 2) {
 						
+						//ES UN NUMERO?
+						if(value.matches("\\d+")){
+							int pag = Integer.valueOf(value);
+							grm.checkReportsDay(player, pag);
+							
+						}else {
+							grm.checkReportOfPlayerDay(player, value, 0);
+						}
+						
+						
+					}else if(args.length == 3) {
+						String pag = args[2];
+						//SI ES UN NUMERO
+						if(pag.matches("\\d+")){
+							
+							player.sendMessage("Usa /reportlog <pag o jugador> <pag number>");
+							
+						}else {
+							int val = Integer.valueOf(pag);
+							grm.checkReportOfPlayerDay(player, value, val);
+						}
+						
+						
 					}else {
-						
-						
-						
+						grm.checkReportsDay(player, 0);
 					}
-					
-					
-					
 					return true;
 				}else if (args[0].equalsIgnoreCase("report")) {
 				
@@ -6025,7 +6080,7 @@ public class Comandsmg implements CommandExecutor{
  			l.add(ChatColor.GOLD+"/mg entityrain "+ChatColor.AQUA+" Lanza una Lluvia de Flechas.");
  			l.add(ChatColor.GOLD+"/mg delete-all-tempcooldown "+ChatColor.AQUA+" Borra el Cooldown Temporal de Todos los Jugadores.");
  			l.add(ChatColor.GOLD+"/mg delete-tempcooldown "+ChatColor.AQUA+" Borra el Cooldown Temporal de un Jugador Especifico.");
- 			
+ 			l.add(ChatColor.GOLD+"/mg reporlog "+ChatColor.AQUA+" Revisa los reportes a Jugadores del Dia de hoy o los que ya tengna Historial.");	
  			
  			l.add(ChatColor.GOLD+"/mg save-item-db "+ChatColor.AQUA+" Guarda un Item en la Base de Datos.");
  			l.add(ChatColor.GOLD+"/mg get-item-db "+ChatColor.AQUA+" Obten un Item en la Base de Datos.");

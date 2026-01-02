@@ -128,6 +128,7 @@ public class TabCompletemg implements TabCompleter{
 			arguments.add("check-kit-db");
 			arguments.add("delete-kit-db");
 			arguments.add("report");
+			arguments.add("reportlog");
 			
 			
 		}
@@ -164,8 +165,6 @@ public class TabCompletemg implements TabCompleter{
 						if(args.length == 3) {
 							   List<String> result = Arrays.stream(GameCheats.values()).map(Object:: toString).collect(Collectors.toList());
 							
-							
-							   
 						       return result;
 						}
 				
