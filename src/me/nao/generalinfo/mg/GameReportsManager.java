@@ -93,8 +93,8 @@ public class GameReportsManager {
 			}
 			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Game-Reports: "+ChatColor.YELLOW+"Ese Jugador no tiene Ningun Reporte el dia de Hoy.");
 			
-			
-			sendReportLogs(player,target,pag);
+			hasMoreReports(player,target);
+			//sendReportLogs(player,target,pag);
 			return;
 		}
 		
@@ -102,7 +102,7 @@ public class GameReportsManager {
 		
 		pagssendtoPlayer(player,gr.getReports(),pag,10,target,"De Hoy");
 		
-		sendReportLogs(player,target,pag);
+		//sendReportLogs(player,target,pag);
 	}
 	
 	
@@ -152,6 +152,19 @@ public class GameReportsManager {
 		
 	}
 	
+	
+	public void hasMoreReports(Player player, String target) {
+		FileConfiguration report = plugin.getReportsYamls();
+		if(report.contains("Reports."+target)) {
+			
+			if(player != null) {
+				player.sendMessage(ChatColor.GOLD+"Pero si tiene Registros Anteriores, Usa para ver: "+ChatColor.GREEN+"/mg reportslogs details <target>");
+			}
+			Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+"Pero si tiene Registros Anteriores, Usa para ver: "+ChatColor.GREEN+"/mg reportslogs details <target>");
+			
+			return;
+		}
+	}
 	
 	public void sendReportLogs(Player player, String target,int pag) {
 		

@@ -258,7 +258,7 @@ public class Comandsmg implements CommandExecutor{
 			        Bukkit.getConsoleSender().sendMessage("Restauración realizada con éxito");
 			        return true;
 			        
-			    }else if(args[0].equalsIgnoreCase("reportlogs")) {
+			    }else if(args[0].equalsIgnoreCase("reportslogs")) {
 					 //mg reportlogs nao 1
 					
 					if(args.length == 2) {
@@ -273,8 +273,8 @@ public class Comandsmg implements CommandExecutor{
 						cool.sendModerationLogs(null, name, pag);
 						
 					}else {
-						Bukkit.getConsoleSender().sendMessage("Usa /mg reportlogs <player>");
-						Bukkit.getConsoleSender().sendMessage("Usa /mg reportlogs <player> <pag>");
+						Bukkit.getConsoleSender().sendMessage("Usa /mg reportslogs <player>");
+						Bukkit.getConsoleSender().sendMessage("Usa /mg reportslogs <player> <pag>");
 					}
 					
 					return true;
@@ -3141,8 +3141,13 @@ public class Comandsmg implements CommandExecutor{
 					
 					
 					return true;
-				}else if (args[0].equalsIgnoreCase("reportlogs")) {
-					//mg reportlog NAO2706 1
+				}else if (args[0].equalsIgnoreCase("reportslogs")) {
+					//mg reportlog details NAO2706 1 == 4
+					//mg reportlog details NAO2706 == 3
+					//mg reportlog
+					//mg reportlog nao
+					//mg reportlog nao 1
+					
 					GameReportsManager grm = new GameReportsManager(plugin); 
 				
 					
@@ -3150,29 +3155,58 @@ public class Comandsmg implements CommandExecutor{
 						String value = args[1];
 						//ES UN NUMERO?
 						if(value.matches("\\d+")){
+							
+							//mg reportlog 2 con pag
 							int pag = Integer.valueOf(value);
 							grm.checkReportsDay(player, pag);
 							
 						}else {
+							//mg reportlog nao
 							grm.checkReportOfPlayerDay(player, value, 1);
 						}
 						
 						
 					}else if(args.length == 3) {
 						String value = args[1];
-						String pag = args[2];
+						String data = args[2];
 						//SI ES UN NUMERO
-						if(pag.matches("\\d+")){
+						if(data.matches("\\d+")){
+							player.sendMessage(ChatColor.GREEN+"Usa /reportslogs");
+							player.sendMessage(ChatColor.GREEN+"Usa /reportslogs <pag>");
+							player.sendMessage(ChatColor.GREEN+"Usa /reportslogs <jugador> <pag number>");
+							player.sendMessage(ChatColor.GREEN+"Usa /reportslogs details <jugador> <pag number>");
 							
-							player.sendMessage("Usa /reportlogs <pag o jugador> <pag number>");
+						}else if(value.equals("details")) {
+							//mg reportlog details NAO2706 == 3
+							grm.sendReportLogs(player, data, 1);
 							
 						}else {
-							int val = Integer.valueOf(pag);
+							//mg reportlog nao 2
+							int val = Integer.valueOf(data);
 							grm.checkReportOfPlayerDay(player, value, val);
 						}
 						
 						 
+					}else if(args.length == 4) {
+						
+						String value = args[1];
+						
+						if(value.equals("details")) {
+							//mg reportlog details NAO2706 1 == 4
+							String target = args[2];
+							int  pag = Integer.valueOf(args[3]);
+							grm.sendReportLogs(player, target, pag);
+							
+						}else {
+							player.sendMessage(ChatColor.GREEN+"Usa /reportslogs");
+							player.sendMessage(ChatColor.GREEN+"Usa /reportslogs <pag>");
+							player.sendMessage(ChatColor.GREEN+"Usa /reportslogs <jugador> <pag number>");
+							player.sendMessage(ChatColor.GREEN+"Usa /reportslogs details <jugador> <pag number>");
+						}
+
+						
 					}else {
+						//mg reportlog
 						grm.checkReportsDay(player, 1);
 					}
 					return true;
@@ -6096,7 +6130,7 @@ public class Comandsmg implements CommandExecutor{
  	 		l.add(ChatColor.GOLD+"/mg timegame <map>"+ChatColor.AQUA+" Establece el Tiempo de Duracion de un Mapa.");
  	 		l.add(ChatColor.GOLD+"/mg xp <user>"+ChatColor.AQUA+" Establece la Experiencia de un Jugador.");
  	 		l.add(ChatColor.GOLD+"/mg show-maps"+ChatColor.AQUA+" Muestra los Mapas Creados.");
- 	 		l.add(ChatColor.GOLD+"/mg reportlogs <user>"+ChatColor.AQUA+" Muestra los Reportes de un Jugador.");
+ 			l.add(ChatColor.GOLD+"/mg reporlogs "+ChatColor.AQUA+" Revisa los reportes que hayan o de Jugadores del Dia de hoy o los que ya tengna Historial.");
  	 		l.add(ChatColor.GOLD+"/mg warn,kick,tempan,ban,pardon"+ChatColor.AQUA+" Advierte , Kickea , da Tembans , Banea o Perdona a un Jugador.");
  	 		l.add(ChatColor.GOLD+"/mg isban"+ChatColor.AQUA+" Comprueba si un Jugador esta Baneado de los Juegos.");
  	 		l.add(ChatColor.GOLD+"/mg create <map>"+ChatColor.AQUA+" Crea un Mapa nuevo.");
@@ -6134,7 +6168,7 @@ public class Comandsmg implements CommandExecutor{
  			l.add(ChatColor.GOLD+"/mg entityrain "+ChatColor.AQUA+" Lanza una Lluvia de Flechas.");
  			l.add(ChatColor.GOLD+"/mg delete-all-tempcooldown "+ChatColor.AQUA+" Borra el Cooldown Temporal de Todos los Jugadores.");
  			l.add(ChatColor.GOLD+"/mg delete-tempcooldown "+ChatColor.AQUA+" Borra el Cooldown Temporal de un Jugador Especifico.");
- 			l.add(ChatColor.GOLD+"/mg reporlog "+ChatColor.AQUA+" Revisa los reportes a Jugadores del Dia de hoy o los que ya tengna Historial.");	
+	
  			
  			l.add(ChatColor.GOLD+"/mg save-item-db "+ChatColor.AQUA+" Guarda un Item en la Base de Datos.");
  			l.add(ChatColor.GOLD+"/mg get-item-db "+ChatColor.AQUA+" Obten un Item en la Base de Datos.");
