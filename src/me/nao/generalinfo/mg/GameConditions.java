@@ -538,6 +538,16 @@ public class GameConditions {
 			    double z = Double.valueOf(coords[3]);
 			    float yaw = Float.valueOf(coords[4]);
 			    float pitch = Float.valueOf(coords[5]);
+				
+				
+				World w = Bukkit.getWorld(world);
+				
+				if(w == null) {
+					
+					sendMessageToUserAndConsole(player, ChatColor.RED+"Error: No existe el Mundo: "+world);
+					return;
+				}
+				
 				player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 20.0F, 1F);
 				Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch).add(0.5,0,0.5);
 				player.setInvulnerable(true);

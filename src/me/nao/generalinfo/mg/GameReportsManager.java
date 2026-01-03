@@ -51,7 +51,7 @@ public class GameReportsManager {
 			} 
 		
 		user.sendMessage(ChatColor.RED+"Reportaste"+ChatColor.GRAY+" a "+ChatColor.GOLD+target+ChatColor.GRAY+" por "+ChatColor.GOLD+motive+ChatColor.GOLD+" Comentarios:"+ChatColor.DARK_PURPLE+comment);
-		
+		setPlayerTempCooldowns(user);
 //		GameConditions gc = new GameConditions(plugin);
 //		Player t = gc.ConvertStringToPlayerAlone(target);
 //		
@@ -93,6 +93,8 @@ public class GameReportsManager {
 			}
 			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Game-Reports: "+ChatColor.YELLOW+"Ese Jugador no tiene Ningun Reporte el dia de Hoy.");
 			
+			
+			sendReportLogs(player,target,pag);
 			return;
 		}
 		
@@ -100,7 +102,7 @@ public class GameReportsManager {
 		
 		pagssendtoPlayer(player,gr.getReports(),pag,10,target,"De Hoy");
 		
-		
+		sendReportLogs(player,target,pag);
 	}
 	
 	
@@ -157,9 +159,9 @@ public class GameReportsManager {
 		if(!report.contains("Reports."+target)) {
 			
 			if(player != null) {
-				player.sendMessage(ChatColor.GOLD+"El Jugador "+target+" no existe o no tiene ningun Reporte.");
+				player.sendMessage(ChatColor.GOLD+"El Jugador "+target+" no existe o no tiene ningun Registro Reporte.");
 			}
-			Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+"El Jugador "+target+" no existe o no tiene ningun Reporte.");
+			Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+"El Jugador "+target+" no existe o no tiene ningun Registro Reporte.");
 			
 			return;
 		}
@@ -200,14 +202,14 @@ public class GameReportsManager {
 	    			if(player != null) {
 	    				player.sendMessage(""+ChatColor.RED+(i+1)+"). "+ChatColor.WHITE+l.get(i).replaceAll("-"," ")
 	    						.replaceAll("Fecha:",ChatColor.GOLD+"Fecha:"+ChatColor.GREEN)
-		    					.replaceAll("Reporta:",ChatColor.GOLD+"Reporta:"+ChatColor.GREEN).replaceAll("Motivo:",ChatColor.GOLD+"Motivo:"+ChatColor.GREEN)
+		    					.replaceAll("Reporta:",ChatColor.GOLD+"Reporta:"+ChatColor.GREEN).replaceAll("Mapa:",ChatColor.GOLD+"Mapa:"+ChatColor.GREEN).replaceAll("Motivo:",ChatColor.GOLD+"Motivo:"+ChatColor.GREEN)
 		    					.replaceAll("Comentarios:",ChatColor.GOLD+"Comentarios:"+ChatColor.GREEN));
 	    			}
 	    			
 	    			
 	    			Bukkit.getConsoleSender().sendMessage(""+ChatColor.RED+(i+1)+"). "+ChatColor.WHITE+l.get(i).replaceAll("-"," ")
     						.replaceAll("Fecha:",ChatColor.GOLD+"Fecha:"+ChatColor.GREEN)
-	    					.replaceAll("Reporta:",ChatColor.GOLD+"Reporta:"+ChatColor.GREEN).replaceAll("Motivo:",ChatColor.GOLD+"Motivo:"+ChatColor.GREEN)
+	    					.replaceAll("Reporta:",ChatColor.GOLD+"Reporta:"+ChatColor.GREEN).replaceAll("Mapa:",ChatColor.GOLD+"Mapa:"+ChatColor.GREEN).replaceAll("Motivo:",ChatColor.GOLD+"Motivo:"+ChatColor.GREEN)
 	    					.replaceAll("Comentarios:",ChatColor.GOLD+"Comentarios:"+ChatColor.GREEN));
 	    					
 	    		}

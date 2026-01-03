@@ -2,6 +2,7 @@ package me.nao.command.mg;
 
 
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,7 +18,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
- 
+
+import org.apache.commons.io.FileUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -72,6 +74,7 @@ import me.nao.main.mg.Minegame;
 import me.nao.manager.mg.GameIntoMap;
 import me.nao.manager.mg.InfectedGame;
 import me.nao.manager.mg.MapSettings;
+import me.nao.manager.mg.WorldRestore;
 import me.nao.mobs.mg.MobsActions;
 import me.nao.shop.mg.MinigameShop1;
 import me.nao.timers.mg.Countdown2;
@@ -218,7 +221,44 @@ public class Comandsmg implements CommandExecutor{
           			
           			
           			return true;
-          		}else if(args[0].equalsIgnoreCase("reportlogs")) {
+          		}else if(args[0].equalsIgnoreCase("backup")) {
+			        if (args.length == 0) {
+			        	Bukkit.getConsoleSender().sendMessage("Uso: /mg backup <mapa>");
+			            return false;
+			        }
+			        String mapa = args[1];
+			        File mapaFolder = new File(Bukkit.getWorldContainer(), mapa);
+			        //File mapaFolder = new File("/home/container/" + mapa);
+			        File backupFolder = new File(plugin.getDataFolder(), "MapsBackUps/" + mapa);			        
+			        System.out.println(Bukkit.getWorldContainer().getAbsolutePath());
+			        if (!mapaFolder.exists()) {
+			        	Bukkit.getConsoleSender().sendMessage("El mapa no existe");
+			            return false;
+			        }
+			        if (backupFolder.exists()) {
+			        	Bukkit.getConsoleSender().sendMessage("Ya existe un backup para este mapa");
+			            return false;
+			        } 
+			        try {
+			            FileUtils.copyDirectory(mapaFolder, backupFolder);
+			            Bukkit.getConsoleSender().sendMessage("Backup realizado con éxito");
+			        } catch (IOException e) {
+			        	Bukkit.getConsoleSender().sendMessage("Error al realizar el backup");
+			        }
+			        return true;
+			        
+			    }else if(args[0].equalsIgnoreCase("restore")) {
+			        if (args.length == 0) {
+			        	Bukkit.getConsoleSender().sendMessage("Uso: /mg restore <mapa>");
+			            return false;
+			        }
+			        String mapa = args[1];
+			        WorldRestore worldUtils = new WorldRestore(plugin);
+			        worldUtils.rollback(mapa);
+			        Bukkit.getConsoleSender().sendMessage("Restauración realizada con éxito");
+			        return true;
+			        
+			    }else if(args[0].equalsIgnoreCase("reportlogs")) {
 					 //mg reportlogs nao 1
 					
 					if(args.length == 2) {
@@ -658,10 +698,10 @@ public class Comandsmg implements CommandExecutor{
 		    	}else if (args[0].equalsIgnoreCase("reportlog")) {
 					//mg reportlog NAO2706 1
 					GameReportsManager grm = new GameReportsManager(plugin); 
-					String value = args[1];
+				
 					
 					if(args.length == 2) {
-						
+						String value = args[1];
 						//ES UN NUMERO?
 						if(value.matches("\\d+")){
 							int pag = Integer.valueOf(value);
@@ -673,6 +713,7 @@ public class Comandsmg implements CommandExecutor{
 						
 						
 					}else if(args.length == 3) {
+						String value = args[1];
 						String pag = args[2];
 						//SI ES UN NUMERO
 						if(pag.matches("\\d+")){
@@ -2379,7 +2420,44 @@ public class Comandsmg implements CommandExecutor{
 							
 					return true;
 					//mg check NAO
-				}else if(args[0].equalsIgnoreCase("check-points")) {
+				}else if(args[0].equalsIgnoreCase("backup")) {
+			        if (args.length == 0) {
+			        	player.sendMessage("Uso: /mg backup <mapa>");
+			            return false;
+			        }
+			        String mapa = args[1];
+			        File mapaFolder = new File(Bukkit.getWorldContainer(), mapa);
+			        //File mapaFolder = new File("/home/container/" + mapa);
+			        File backupFolder = new File(plugin.getDataFolder(), "MapsBackUps/" + mapa);			        
+			        System.out.println(Bukkit.getWorldContainer().getAbsolutePath());
+			        if (!mapaFolder.exists()) {
+			        	player.sendMessage("El mapa no existe");
+			            return false;
+			        }
+			        if (backupFolder.exists()) {
+			        	player.sendMessage("Ya existe un backup para este mapa");
+			            return false;
+			        } 
+			        try {
+			            FileUtils.copyDirectory(mapaFolder, backupFolder);
+			            player.sendMessage("Backup realizado con éxito");
+			        } catch (IOException e) {
+			        	player.sendMessage("Error al realizar el backup");
+			        }
+			        return true;
+			        
+			    }else if(args[0].equalsIgnoreCase("restore")) {
+			        if (args.length == 0) {
+			        	player.sendMessage("Uso: /mg restore <mapa>");
+			            return false;
+			        }
+			        String mapa = args[1];
+			        WorldRestore worldUtils = new WorldRestore(plugin);
+			        worldUtils.rollback(mapa);
+			        player.sendMessage("Restauración realizada con éxito");
+			        return true;
+			        
+			    }else if(args[0].equalsIgnoreCase("check-points")) {
 					
 					if(args.length == 2) {
 						String name = args[1];
@@ -3063,38 +3141,39 @@ public class Comandsmg implements CommandExecutor{
 					
 					
 					return true;
-				}else if (args[0].equalsIgnoreCase("reportlog")) {
+				}else if (args[0].equalsIgnoreCase("reportlogs")) {
 					//mg reportlog NAO2706 1
 					GameReportsManager grm = new GameReportsManager(plugin); 
-					String value = args[1];
+				
 					
 					if(args.length == 2) {
-						
+						String value = args[1];
 						//ES UN NUMERO?
 						if(value.matches("\\d+")){
 							int pag = Integer.valueOf(value);
 							grm.checkReportsDay(player, pag);
 							
 						}else {
-							grm.checkReportOfPlayerDay(player, value, 0);
+							grm.checkReportOfPlayerDay(player, value, 1);
 						}
 						
 						
 					}else if(args.length == 3) {
+						String value = args[1];
 						String pag = args[2];
 						//SI ES UN NUMERO
 						if(pag.matches("\\d+")){
 							
-							player.sendMessage("Usa /reportlog <pag o jugador> <pag number>");
+							player.sendMessage("Usa /reportlogs <pag o jugador> <pag number>");
 							
 						}else {
 							int val = Integer.valueOf(pag);
 							grm.checkReportOfPlayerDay(player, value, val);
 						}
 						
-						
+						 
 					}else {
-						grm.checkReportsDay(player, 0);
+						grm.checkReportsDay(player, 1);
 					}
 					return true;
 				}else if (args[0].equalsIgnoreCase("report")) {
@@ -3686,31 +3765,6 @@ public class Comandsmg implements CommandExecutor{
 					
 					return true;
 					
-				}else if(args[0].equalsIgnoreCase("reportlogs")) {
-					 //mg reportlogs nao 1
-					if(!player.isOp()) {
-						
-						player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
-						return true;
-					}
-					
-					if(args.length == 2) {
-							String name = args[1];
-							ModerationManager cool = new ModerationManager(plugin);
-							cool.sendModerationLogs(player, name, 1);
-							
-					}else if(args.length == 3){
-						String name = args[1];
-						int pag = Integer.valueOf(args[2]);
-						ModerationManager cool = new ModerationManager(plugin);
-						cool.sendModerationLogs(player, name, pag);
-						
-					}else {
-						player.sendMessage("Usa /mg reportlogs <player>");
-						player.sendMessage("Usa /mg reportlogs <player> <pag>");
-					}
-					
-					return true;
 				}else if(args[0].equalsIgnoreCase("isban")) {
 					if(!player.isOp()) {
 						

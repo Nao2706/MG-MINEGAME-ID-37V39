@@ -128,7 +128,7 @@ public class TabCompletemg implements TabCompleter{
 			arguments.add("check-kit-db");
 			arguments.add("delete-kit-db");
 			arguments.add("report");
-			arguments.add("reportlog");
+			arguments.add("reportlogs");
 			
 			
 		}
