@@ -105,7 +105,7 @@ public class GameConditions {
 				//Salva al Jugador checa si debe setearle un inv
 				setAndSavePlayer(player,PlayerGameStatus.ALIVE, map);
 				addPlayerToGame(player,map);
-				tptoPreLobbyMap(player, map);
+				tptoPreLobbyMap(player, map); 
 				canStartTheGame(player,map);
 				return;
 		}
@@ -542,9 +542,42 @@ public class GameConditions {
 				
 				World w = Bukkit.getWorld(world);
 				
-				if(w == null) {
+				if(w == null) { 
 					
-					sendMessageToUserAndConsole(player, ChatColor.RED+"Error: No existe el Mundo: "+world);
+					sendMessageToUserAndConsole(player, ChatColor.RED+"Error: No existe el Mundo: "+world+" si ves esto Reportalo a un Admin.");
+					PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+					GameInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
+					MgTeams mt = new MgTeams(plugin);
+					
+					setDefaultHeartsInGame(player);
+					BossBar boss = ms.getBossbar();
+					boss.removePlayer(player);
+					 if(ms instanceof GameAdventure) {
+								//SE SECCIONA POR QUE HAY QUE VER SI SE SALVO O NO SU INVENTARIO
+								if(ms.isAllowedJoinWithOwnInventory()) {
+									player.teleport(pl.getLocationMG());
+									pl.restoreGamemodePlayerMg();
+									
+									if(ms.getGameStatus() == GameStatus.TERMINANDO) {
+										playerWinnerReward(player);
+										playerLoserReward(player);
+									}
+									mt.RemoveAllPlayer(player);
+									removeAllPlayerToGame(player, pl.getMapName());
+								
+								}else {
+									player.teleport(pl.getLocationMG());
+									pl.restoreAllPlayerMg();
+									
+									if(ms.getGameStatus() == GameStatus.TERMINANDO) {
+										playerWinnerReward(player);
+										playerLoserReward(player);
+									}
+									mt.RemoveAllPlayer(player);
+									removeAllPlayerToGame(player, pl.getMapName());
+								}
+					 }
+
 					return;
 				}
 				
@@ -3255,7 +3288,7 @@ public class GameConditions {
 				setDefaultHeartsInGame(player);
 				BossBar boss = ms.getBossbar();
 				boss.removePlayer(player);
-		
+		 
 				
 					//SE SECCIONA POR QUE HAY QUE VER SI SE SALVO O NO SU INVENTARIO
 					if(ms.isAllowedJoinWithOwnInventory()) {

@@ -258,40 +258,7 @@ public class Comandsmg implements CommandExecutor{
 			        Bukkit.getConsoleSender().sendMessage("Restauración realizada con éxito");
 			        return true;
 			        
-			    }else if(args[0].equalsIgnoreCase("reportslogs")) {
-					 //mg reportlogs nao 1
-					
-					if(args.length == 2) {
-							String name = args[1];
-							ModerationManager cool = new ModerationManager(plugin);
-							cool.sendModerationLogs(null, name, 1);
-							
-					}else if(args.length == 3){
-						String name = args[1];
-						int pag = Integer.valueOf(args[2]);
-						ModerationManager cool = new ModerationManager(plugin);
-						cool.sendModerationLogs(null, name, pag);
-						
-					}else {
-						Bukkit.getConsoleSender().sendMessage("Usa /mg reportslogs <player>");
-						Bukkit.getConsoleSender().sendMessage("Usa /mg reportslogs <player> <pag>");
-					}
-					
-					return true;
-				}else if (args[0].equalsIgnoreCase("info")) {
-					if(args.length == 1) {
-						
-						infomg(null,1);
-					
-					}else if(args.length == 2){
-						
-						int pag = Integer.valueOf(args[1]);
-						infomg(null,pag);
-					}
-
-					return true;
-					
-				}else if(args[0].equalsIgnoreCase("tp")){
+			    }else if(args[0].equalsIgnoreCase("tp")){
 				  	
 					if(args.length == 9) {
 						String target = args[1];
@@ -603,6 +570,27 @@ public class Comandsmg implements CommandExecutor{
 					gc.loadObjetivesOfGameDebug("Tutorial");
 					
 					return true;
+				}else if (args[0].equalsIgnoreCase("info") || args[0].equalsIgnoreCase("help")) {
+					if(args.length == 1) {
+						
+						infomg(null,1);
+					
+					}else if(args.length == 2){
+						
+						int pag = Integer.valueOf(args[1]);
+						infomg(null,pag);
+					}
+//					if(player.isOp()) {
+//						player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa los Comandos \n");
+//						player.sendMessage(plugin.nombre+ChatColor.RED+" /mg join");
+//						player.sendMessage(plugin.nombre+ChatColor.RED+" /mg leave");
+//
+//					}else {
+//						player.sendMessage(plugin.nombre+ChatColor.RED+" Preguntale al NAO el hizo esta cosa.");
+//
+//					}
+					return true;
+					
 				}else if(args[0].equalsIgnoreCase("god")) {
 					if (args.length == 2) {
 						// /c add n p
@@ -695,7 +683,27 @@ public class Comandsmg implements CommandExecutor{
 					}
 					
 					return true;
-		    	}else if (args[0].equalsIgnoreCase("reportlog")) {
+		    	}else if (args[0].equalsIgnoreCase("modlogs")) {
+					ModerationManager mm = new ModerationManager(plugin);
+					String target = args[1];
+					if(args.length == 2) {
+						//mg modlogs NAO
+						mm.sendModerationLogs(null, target, 1);
+						
+					}else if(args.length == 3) {
+						//mg modlogs NAO 1
+						int pag = Integer.valueOf(args[2]);
+						mm.sendModerationLogs(null, target, 1);
+						
+						
+					}else {
+						
+						Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa /modlogs <target>");
+					}
+					
+					
+					return true;
+				}else if (args[0].equalsIgnoreCase("reportlogs")) {
 					//mg reportlog NAO2706 1
 					GameReportsManager grm = new GameReportsManager(plugin); 
 				
@@ -704,30 +712,59 @@ public class Comandsmg implements CommandExecutor{
 						String value = args[1];
 						//ES UN NUMERO?
 						if(value.matches("\\d+")){
+							
+							//mg reportlog 2 con pag
 							int pag = Integer.valueOf(value);
 							grm.checkReportsDay(null, pag);
 							
 						}else {
-							grm.checkReportOfPlayerDay(null, value, 0);
+							//mg reportlog nao
+							grm.checkReportOfPlayerDay(null, value, 1);
 						}
 						
 						
 					}else if(args.length == 3) {
 						String value = args[1];
-						String pag = args[2];
+						String data = args[2];
 						//SI ES UN NUMERO
-						if(pag.matches("\\d+")){
+						if(data.matches("\\d+")){
+							Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa /reportlogs");
+							Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa /reportlogs <pag>");
+							Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa /reportlogs <jugador> <pag number>");
+							Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa /reportlogs details <jugador> <pag number>");
 							
-							Bukkit.getConsoleSender().sendMessage("Usa /reportlog <pag o jugador> <pag number>");
+						}else if(value.equals("details")) {
+							//mg reportlog details NAO2706 == 3
+							grm.sendReportLogs(null, data, 1);
 							
 						}else {
-							int val = Integer.valueOf(pag);
+							//mg reportlog nao 2
+							int val = Integer.valueOf(data);
 							grm.checkReportOfPlayerDay(null, value, val);
 						}
 						
+						 
+					}else if(args.length == 4) {
+						
+						String value = args[1];
+						
+						if(value.equals("details")) {
+							//mg reportlog details NAO2706 1 == 4
+							String target = args[2];
+							int  pag = Integer.valueOf(args[3]);
+							grm.sendReportLogs(null, target, pag);
+							
+						}else {
+							Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa /reportlogs");
+							Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa /reportlogs <pag>");
+							Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa /reportlogs <jugador> <pag number>");
+							Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa /reportlogs details <jugador> <pag number>");
+						}
+
 						
 					}else {
-						grm.checkReportsDay(null, 0);
+						//mg reportlog
+						grm.checkReportsDay(null, 1);
 					}
 					return true;
 				}else if(args[0].equalsIgnoreCase("spawnzombi")) {
@@ -1613,7 +1650,7 @@ public class Comandsmg implements CommandExecutor{
 			
 					}else {
 						Bukkit.getConsoleSender()
-						.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg getInv <kit> <player>");
+						.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg getkit <kit> <player>");
 					 }
 			
         			return true;
@@ -1634,7 +1671,7 @@ public class Comandsmg implements CommandExecutor{
 					 }else {
 					
 						Bukkit.getConsoleSender()
-						.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg getInv <kit> <player>");
+						.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg getitem <item> <player>");
 					 }
 					
 			 
@@ -2928,7 +2965,7 @@ public class Comandsmg implements CommandExecutor{
 				    
 				    return true;
 				    
-				}else if (args[0].equalsIgnoreCase("info")) {
+				}else if (args[0].equalsIgnoreCase("info") || args[0].equalsIgnoreCase("help")) {
 					if(args.length == 1) {
 						
 						infomg(player,1);
@@ -3141,7 +3178,27 @@ public class Comandsmg implements CommandExecutor{
 					
 					
 					return true;
-				}else if (args[0].equalsIgnoreCase("reportslogs")) {
+				}else if (args[0].equalsIgnoreCase("modlogs")) {
+					ModerationManager mm = new ModerationManager(plugin);
+					String target = args[1];
+					if(args.length == 2) {
+						//mg modlogs NAO
+						mm.sendModerationLogs(player, target, 1);
+						
+					}else if(args.length == 3) {
+						//mg modlogs NAO 1
+						int pag = Integer.valueOf(args[2]);
+						mm.sendModerationLogs(player, target, 1);
+						
+						
+					}else {
+						
+						player.sendMessage(ChatColor.GREEN+"Usa /modlogs <target>");
+					}
+					
+					
+					return true;
+				}else if (args[0].equalsIgnoreCase("reportlogs")) {
 					//mg reportlog details NAO2706 1 == 4
 					//mg reportlog details NAO2706 == 3
 					//mg reportlog
@@ -3171,10 +3228,10 @@ public class Comandsmg implements CommandExecutor{
 						String data = args[2];
 						//SI ES UN NUMERO
 						if(data.matches("\\d+")){
-							player.sendMessage(ChatColor.GREEN+"Usa /reportslogs");
-							player.sendMessage(ChatColor.GREEN+"Usa /reportslogs <pag>");
-							player.sendMessage(ChatColor.GREEN+"Usa /reportslogs <jugador> <pag number>");
-							player.sendMessage(ChatColor.GREEN+"Usa /reportslogs details <jugador> <pag number>");
+							player.sendMessage(ChatColor.GREEN+"Usa /reportlogs");
+							player.sendMessage(ChatColor.GREEN+"Usa /reportlogs <pag>");
+							player.sendMessage(ChatColor.GREEN+"Usa /reportlogs <jugador> <pag number>");
+							player.sendMessage(ChatColor.GREEN+"Usa /reportlogs details <jugador> <pag number>");
 							
 						}else if(value.equals("details")) {
 							//mg reportlog details NAO2706 == 3
@@ -3198,10 +3255,10 @@ public class Comandsmg implements CommandExecutor{
 							grm.sendReportLogs(player, target, pag);
 							
 						}else {
-							player.sendMessage(ChatColor.GREEN+"Usa /reportslogs");
-							player.sendMessage(ChatColor.GREEN+"Usa /reportslogs <pag>");
-							player.sendMessage(ChatColor.GREEN+"Usa /reportslogs <jugador> <pag number>");
-							player.sendMessage(ChatColor.GREEN+"Usa /reportslogs details <jugador> <pag number>");
+							player.sendMessage(ChatColor.GREEN+"Usa /reportlogs");
+							player.sendMessage(ChatColor.GREEN+"Usa /reportlogs <pag>");
+							player.sendMessage(ChatColor.GREEN+"Usa /reportlogs <jugador> <pag number>");
+							player.sendMessage(ChatColor.GREEN+"Usa /reportlogs details <jugador> <pag number>");
 						}
 
 						
@@ -4462,6 +4519,13 @@ public class Comandsmg implements CommandExecutor{
 
 								return true;
 							}
+							
+							if(Bukkit.getPluginManager().getPlugin("NBTAPI") == null) {
+								player.sendMessage(ChatColor.RED+" NBTAPI no encontrado para MG no puedes usar este Comando");
+								
+								return true;
+							}
+							
 				    		if(args.length == 3) { 
 				    			//mg item candestroy stone
 				    			  String messagep = ChatColor.RED+" /mg item <canplaceon|canbreak> <stone,dirt,sand>";
@@ -4544,7 +4608,39 @@ public class Comandsmg implements CommandExecutor{
 				
 					
 					return true;
-				}else if(args[0].equalsIgnoreCase("zombi")) {
+				}else if(args[0].equalsIgnoreCase("gset")) {
+                    Material m = Material.matchMaterial(args[1]);
+                    if(m == null) {
+                               player.sendMessage(args[1]+ChatColor.RED+" Ese item no es un material");
+                                 return false;
+                      }
+                                
+                    if(isFloat(args[2])) {
+                        
+                         Block b = player.getTargetBlock((Set<Material>) null, 3);
+                         if(!b.getType().isSolid()) {
+                                player.sendMessage(ChatColor.RED+"Debes mirar un material Solido [Un Bloque]");
+                                 return false;
+                            }
+                              player.playSound(player.getLocation(),Sound.BLOCK_NOTE_BLOCK_PLING ,20.0F , 1F  );
+                              player.sendMessage(ChatColor.GREEN+"Se a seteado un Generador");
+	                             plugin.getGeneratorManager().addGenerator(b,new ItemStack(m),Float.parseFloat(args[2]));
+	                                  
+	                                 return true;
+                      }
+                            
+                }else if(args[0].equalsIgnoreCase("gremove")) {
+                    Block b = player.getTargetBlock((Set<Material>)null, 3);
+                    if(!b.getType().isSolid()) {
+                        player.sendMessage(ChatColor.RED+"Debes mirar un material Solido [Un Bloque]");
+                        return false;
+                    }
+                    plugin.getGeneratorManager().removeGenerador(b.getLocation());
+                    player.sendMessage(ChatColor.RED+"Se a Eliminado un generador");
+                    player.playSound(player.getLocation(),Sound.BLOCK_NOTE_BLOCK_PLING ,20.0F , 1F  );
+                   
+                                return true;
+                }else if(args[0].equalsIgnoreCase("zombi")) {
 					if(!player.isOp()) {
 						
 						player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
@@ -5676,9 +5772,8 @@ public class Comandsmg implements CommandExecutor{
 						
 							
 						 }else {
-							player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg saveInv <kit> ");
-							Bukkit.getConsoleSender()
-							.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg saveInv <kit> ");
+							player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg saveKit <kit> ");
+							
 						 }
 						
 	
@@ -5706,9 +5801,8 @@ public class Comandsmg implements CommandExecutor{
 							getItemMg(name, t);
 			
 					 }else {
-						player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg getInv <kit> <player>(opcional)");
-						Bukkit.getConsoleSender()
-						.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg getInv <kit> <player>(opcional)");
+						player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg getItem <kit> <player>(opcional)");
+					
 					 }
 					
 			 
@@ -5729,8 +5823,7 @@ public class Comandsmg implements CommandExecutor{
 						
 					 }else {
 						player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg saveInv <kit> ");
-						Bukkit.getConsoleSender()
-						.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg saveInv <kit> ");
+						
 					 }
 					
 	
@@ -6118,6 +6211,7 @@ public class Comandsmg implements CommandExecutor{
 	 		l.add(ChatColor.GREEN+"/mg time"+ChatColor.AQUA+" Muestra el Tiempo del Server (Util para ciertas Misiones).");
 	 		l.add(ChatColor.GREEN+"/mg version"+ChatColor.AQUA+" Muestra la Version del Plugin.");
 	 		l.add(ChatColor.GREEN+"/mg objetives"+ChatColor.AQUA+" Muestra los Objetivos de un Mapa.");
+	 		l.add(ChatColor.GREEN+"/mg report"+ChatColor.AQUA+" Reporta a un Jugador (Solo funciona cuando estas en un MiniJuego)");
  		if(player != null && player.isOp() || player == null) {
  			l.add(ChatColor.GOLD+"/mg reload"+ChatColor.AQUA+" Recarga las Configuraciones.");
  			l.add(ChatColor.GOLD+"/mg reload <map>"+ChatColor.AQUA+" Recarga las Configuraciones de un Mapa especifico.");
@@ -6130,7 +6224,8 @@ public class Comandsmg implements CommandExecutor{
  	 		l.add(ChatColor.GOLD+"/mg timegame <map>"+ChatColor.AQUA+" Establece el Tiempo de Duracion de un Mapa.");
  	 		l.add(ChatColor.GOLD+"/mg xp <user>"+ChatColor.AQUA+" Establece la Experiencia de un Jugador.");
  	 		l.add(ChatColor.GOLD+"/mg show-maps"+ChatColor.AQUA+" Muestra los Mapas Creados.");
- 			l.add(ChatColor.GOLD+"/mg reporlogs "+ChatColor.AQUA+" Revisa los reportes que hayan o de Jugadores del Dia de hoy o los que ya tengna Historial.");
+ 			l.add(ChatColor.GOLD+"/mg reportlogs "+ChatColor.AQUA+" Revisa los reportes que hayan o de Jugadores del Dia de hoy o los que ya tengna Historial.");
+ 			l.add(ChatColor.GOLD+"/mg modlogs "+ChatColor.AQUA+" Revisa el Historial de Moderacion de un Jugador.");
  	 		l.add(ChatColor.GOLD+"/mg warn,kick,tempan,ban,pardon"+ChatColor.AQUA+" Advierte , Kickea , da Tembans , Banea o Perdona a un Jugador.");
  	 		l.add(ChatColor.GOLD+"/mg isban"+ChatColor.AQUA+" Comprueba si un Jugador esta Baneado de los Juegos.");
  	 		l.add(ChatColor.GOLD+"/mg create <map>"+ChatColor.AQUA+" Crea un Mapa nuevo.");
@@ -6374,7 +6469,17 @@ public class Comandsmg implements CommandExecutor{
 			
 	}
 	
-	
+	private boolean isFloat(String text) {
+		
+		try {
+			Float.parseFloat(text);
+			return true;
+		}
+		catch(Exception e) {
+			
+			return false;
+		}
+	}
 	
 	
 	

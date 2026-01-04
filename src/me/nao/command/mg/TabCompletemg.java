@@ -35,6 +35,7 @@ public class TabCompletemg implements TabCompleter{
 		
 		if(arguments.isEmpty()) {
 			arguments.add("info");
+			arguments.add("help");
 			arguments.add("tntrain");
 			arguments.add("entityrain");
 			arguments.add("arrowrain");
@@ -95,7 +96,6 @@ public class TabCompletemg implements TabCompleter{
 			arguments.add("pause");
 			arguments.add("get-scale");
 			arguments.add("set-scale");
-			arguments.add("reportlogs");
 			arguments.add("invite");
 			arguments.add("addtag");
 			arguments.add("removetag");
@@ -129,7 +129,7 @@ public class TabCompletemg implements TabCompleter{
 			arguments.add("delete-kit-db");
 			arguments.add("report");
 			arguments.add("reportslogs");
-			
+			arguments.add("modlogs");
 			
 		}
 		

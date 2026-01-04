@@ -3,12 +3,14 @@ package me.nao.generalinfo.mg;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -51,6 +53,11 @@ public class GameReportsManager {
 			} 
 		
 		user.sendMessage(ChatColor.RED+"Reportaste"+ChatColor.GRAY+" a "+ChatColor.GOLD+target+ChatColor.GRAY+" por "+ChatColor.GOLD+motive+ChatColor.GOLD+" Comentarios:"+ChatColor.DARK_PURPLE+comment);
+		user.sendMessage("");
+		user.sendMessage(ChatColor.YELLOW+"Notificacion: "+ChatColor.GRAY+"Reportar sin razon Justificada o siendo falso es Sancionable.");
+		user.playSound(user,Sound.BLOCK_NOTE_BLOCK_PLING, 10, 1);
+	
+		
 		setPlayerTempCooldowns(user);
 //		GameConditions gc = new GameConditions(plugin);
 //		Player t = gc.ConvertStringToPlayerAlone(target);
@@ -94,6 +101,7 @@ public class GameReportsManager {
 			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Game-Reports: "+ChatColor.YELLOW+"Ese Jugador no tiene Ningun Reporte el dia de Hoy.");
 			
 			hasMoreReports(player,target);
+			hasModLogs(player,target);
 			//sendReportLogs(player,target,pag);
 			return;
 		}
@@ -158,9 +166,23 @@ public class GameReportsManager {
 		if(report.contains("Reports."+target)) {
 			
 			if(player != null) {
-				player.sendMessage(ChatColor.GOLD+"Pero si tiene Registros Anteriores, Usa para ver: "+ChatColor.GREEN+"/mg reportslogs details <target>");
+				player.sendMessage(ChatColor.GOLD+"Pero si tiene Registros Anteriores, Usa para ver: "+ChatColor.GREEN+"/mg reportlogs details <target>");
 			}
-			Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+"Pero si tiene Registros Anteriores, Usa para ver: "+ChatColor.GREEN+"/mg reportslogs details <target>");
+			Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+"Pero si tiene Registros Anteriores, Usa para ver: "+ChatColor.GREEN+"/mg reportlogs details <target>");
+			
+			return;
+		}
+	}
+	
+	
+	public void hasModLogs(Player player, String target) {
+		FileConfiguration mod = plugin.getPlayersHistoryYaml();
+		if(mod.contains("Players."+target)) {
+			
+			if(player != null) {
+				player.sendMessage(ChatColor.GOLD+"Tambien tiene Registros de Moderacion, Usa para ver: "+ChatColor.AQUA+"/mg modlogs <target>");
+			}
+			Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+"Tambien tiene Registros de Moderacion, Usa para ver: "+ChatColor.AQUA+"/mg modlogs <target>");
 			
 			return;
 		}
@@ -238,7 +260,9 @@ public class GameReportsManager {
 	    }
 	 
 	 
-	 public void sendPagesToPlayerMap(Player player, Map<String, GameReport> reportMap, int page, int itemsPerPage) {
+	 public void sendPagesToPlayerMap(Player player, LinkedHashMap<String, GameReport> reportMap, int page, int itemsPerPage) {
+		 
+		 	
 		    if (!reportMap.isEmpty()) {
 		        int startIndex = (page - 1) * itemsPerPage;
 		        int endIndex = startIndex + itemsPerPage;

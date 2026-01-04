@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,9 +32,11 @@ import me.nao.generalinfo.mg.GameInfo;
 import me.nao.generalinfo.mg.GameReport;
 import me.nao.generalinfo.mg.ItemMenu;
 import me.nao.generalinfo.mg.PlayerInfo;
+import me.nao.manager.mg.GeneratorManager;
 import me.nao.revive.mg.RevivePlayer;
 import me.nao.shop.mg.MinigameShop1;
 import me.nao.topusers.mg.PHMiniGame;
+import me.nao.utils.mg.Utils;
 import me.nao.yamlfile.mg.YamlFile;
 
 
@@ -75,13 +78,13 @@ public class Minegame extends JavaPlugin{
     private Map<Player, RevivePlayer> playerrevive;
     private Map<Entity,String> guardiancredit;
     private Map<String,LocalDateTime> cooldownmap;
-    private Map<String,GameReport> gamereports;
+    private LinkedHashMap<String,GameReport> gamereports;
     //ITEMS ACTION
     private Map<String,List<Entity>> entitys;
     private Map<Player,Long> tempcooldown;
     private Map<Player,Long> tempcooldownreport;
 
-    
+    private GeneratorManager generatorManager;
     
    //==================================== 
 	private Map<String,YamlFile>getAllYmls ; // YML Manager
@@ -250,7 +253,9 @@ public class Minegame extends JavaPlugin{
 	public void onEnable() {
 		//getServer().getPluginManager().registerEvents(new Codigo(this),this);
 		
-		
+		if(Bukkit.getPluginManager().getPlugin("NBTAPI") == null) {
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+" NBTAPI no encontrado para MG");
+		}
 		if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
 			new PHMiniGame(this).register();
 		}else {
@@ -273,10 +278,10 @@ public class Minegame extends JavaPlugin{
 
 		
 		
-		Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-		Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+nombre+ChatColor.GRAY+"\nHa sido Activado "+ChatColor.RED+"\n[Version:"+ChatColor.DARK_GREEN+version+ChatColor.RED+"]");
-		Bukkit.getConsoleSender().sendMessage(ChatColor.BLUE+" Hora de Crear Aventuras. ");
-		Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"));
+		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor("        "+nombre+"\n&7Ha sido Activado \n&c[&aVersion&c:&b"+version+"&c]"));
+		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor("  &9Hora de Crear Aventuras. "));
+		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"));
 		
 		
 		 
@@ -288,7 +293,7 @@ public class Minegame extends JavaPlugin{
 		 DataBase();
 		 GameConditions c = new GameConditions(this);
 		 c.loadItemMenu();
-	
+		 generatorManager = new GeneratorManager(this);
 	}
 	
    public void onDisable() {
@@ -303,10 +308,11 @@ public class Minegame extends JavaPlugin{
 	    }
 	   
 	   
-	    Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-		Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+nombre+ChatColor.GRAY+"\nHa sido Desactivado "+ChatColor.RED+"\n[Version:"+ChatColor.DARK_GREEN+version+ChatColor.RED+"]");
-		Bukkit.getConsoleSender().sendMessage(ChatColor.BLUE+" Hora de Descansar. ");
-		Bukkit.getConsoleSender().sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"));
+		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor("        "+nombre+"\n&7Ha sido Activado \n&c[&aVersion&c:&b"+version+"&c]"));
+		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor("  &9Hora de Descansar "));
+		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"));
+		
 	}	
  
    public void registrarcomando() {
@@ -335,7 +341,7 @@ public class Minegame extends JavaPlugin{
 	    guardiancredit = new HashMap<>();
 	    playerrevive = new HashMap<>();
 	    cooldownmap = new HashMap<>();
-	    gamereports = new HashMap<>();
+	    gamereports = new LinkedHashMap<>();
 	    tempcooldownreport = new HashMap<>();
 	    
 	    itemmenu = new HashMap<>();
@@ -427,7 +433,7 @@ public class Minegame extends JavaPlugin{
 	   return delete;
    }
    
-   public Map<String,GameReport> getGameReports(){
+   public LinkedHashMap<String,GameReport> getGameReports(){
 	   return gamereports;
    }
    
@@ -559,6 +565,10 @@ public class Minegame extends JavaPlugin{
 //	   return playerlookingmgmenu;
 //   }
 //   
+   
+	public GeneratorManager getGeneratorManager() {
+		return generatorManager;
+	}
   
    public HashMap <String,String> getPlayerCronomets(){
 	   return cronomet;
