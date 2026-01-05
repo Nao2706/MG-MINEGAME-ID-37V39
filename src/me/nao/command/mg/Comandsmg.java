@@ -1678,6 +1678,40 @@ public class Comandsmg implements CommandExecutor{
 			
 					return true;
 			
+				}else if(args[0].equalsIgnoreCase("bossbar")) {
+					
+					
+					if(args.length == 2) {
+						String map = args[1];
+						
+						if(!gc.existMap(map)) {
+							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Ese Mapa no existe.");
+							return true;
+						}
+						
+						if(gc.isMapinGame(map)) {
+							GameInfo gi = plugin.getGameInfoPoo().get(map);
+							
+							if(gi.getBossbar().isVisible()) {
+								gi.getBossbar().setVisible(false);
+								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Se Oculto la Bossbar.");
+							}else {
+								gi.getBossbar().setVisible(true);
+								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Se Muestra la Bossbar.");
+							}
+							
+							
+						}else {
+							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Ese Mapa no esta en Juego.");
+						}
+					}else {
+						Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa /mg bossbar <map> para Ocultar o Mostrar la Bossbar");
+					}
+
+					
+					
+					
+					return true;
 				}else if(args[0].equalsIgnoreCase("top") ){
 					
 					if(points1.contains("Players")) {
@@ -4608,11 +4642,18 @@ public class Comandsmg implements CommandExecutor{
 				
 					
 					return true;
-				}else if(args[0].equalsIgnoreCase("gset")) {
+				}else if(args[0].equalsIgnoreCase("set-custom-generator")) {
+					
+					if(!player.isOp()) {
+						
+						player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
+						return true;
+					}
+					
                     Material m = Material.matchMaterial(args[1]);
                     if(m == null) {
-                               player.sendMessage(args[1]+ChatColor.RED+" Ese item no es un material");
-                                 return false;
+                         player.sendMessage(args[1]+ChatColor.RED+" Ese item no es un material");
+                          return false;
                       }
                                 
                     if(isFloat(args[2])) {
@@ -4624,12 +4665,21 @@ public class Comandsmg implements CommandExecutor{
                             }
                               player.playSound(player.getLocation(),Sound.BLOCK_NOTE_BLOCK_PLING ,20.0F , 1F  );
                               player.sendMessage(ChatColor.GREEN+"Se a seteado un Generador");
-	                             plugin.getGeneratorManager().addGenerator(b,new ItemStack(m),Float.parseFloat(args[2]));
+	                          plugin.getGeneratorManager().addGenerator(b,new ItemStack(m),Float.parseFloat(args[2]));
 	                                  
-	                                 return true;
-                      }
-                            
-                }else if(args[0].equalsIgnoreCase("gremove")) {
+	                        
+                      }else {
+                    	  
+                    	  player.sendMessage("Usa /mg set-custom-generator diamond 1 (float puede usar decimales como: 0.5 1 1.5)");
+                     }
+                    return true;     
+                }else if(args[0].equalsIgnoreCase("remove-custom-generator")) {
+                	if(!player.isOp()) {
+						
+						player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
+						return true;
+					}
+                	
                     Block b = player.getTargetBlock((Set<Material>)null, 3);
                     if(!b.getType().isSolid()) {
                         player.sendMessage(ChatColor.RED+"Debes mirar un material Solido [Un Bloque]");
@@ -4639,7 +4689,7 @@ public class Comandsmg implements CommandExecutor{
                     player.sendMessage(ChatColor.RED+"Se a Eliminado un generador");
                     player.playSound(player.getLocation(),Sound.BLOCK_NOTE_BLOCK_PLING ,20.0F , 1F  );
                    
-                                return true;
+                         return true;
                 }else if(args[0].equalsIgnoreCase("zombi")) {
 					if(!player.isOp()) {
 						
@@ -4913,6 +4963,43 @@ public class Comandsmg implements CommandExecutor{
 					
 					return true;
 					
+				}else if(args[0].equalsIgnoreCase("bossbar")) {
+					
+					if(args.length == 2) {
+						String map = args[1];
+						
+						if(!gc.existMap(map)) {
+							player.sendMessage(ChatColor.RED+"Ese Mapa no existe.");
+							return true;
+						}
+						
+						
+						if(gc.isMapinGame(map)) {
+							GameInfo gi = plugin.getGameInfoPoo().get(map);
+							
+							if(gi.getBossbar().isVisible()) {
+								gi.getBossbar().setVisible(false);
+								player.sendMessage(ChatColor.RED+"Se Oculto la Bossbar.");
+							}else {
+								gi.getBossbar().setVisible(true);
+								player.sendMessage(ChatColor.RED+"Se Muestra la Bossbar.");
+							}
+							
+							
+						}else {
+							player.sendMessage(ChatColor.RED+"Ese Mapa no esta en Juego.");
+						}
+					}else {
+						
+						player.sendMessage(ChatColor.GREEN+"Usa /mg bossbar <map> para Ocultar o Mostrar la Bossbar");
+					
+					}
+					
+
+					
+					
+					
+					return true;
 				}else if(args[0].equalsIgnoreCase("sudoall")) {
 					
 					if(!player.isOp()) {
@@ -6261,6 +6348,7 @@ public class Comandsmg implements CommandExecutor{
  			l.add(ChatColor.GOLD+"/mg tntrain "+ChatColor.AQUA+" Lanza una Lluvia de TNT.");
  			l.add(ChatColor.GOLD+"/mg arrowrain "+ChatColor.AQUA+" Lanza una Lluvia de Flechas.");
  			l.add(ChatColor.GOLD+"/mg entityrain "+ChatColor.AQUA+" Lanza una Lluvia de Flechas.");
+ 			l.add(ChatColor.GOLD+"/mg bossbar "+ChatColor.AQUA+" Muestra o Oculta la Bossbar de un Juego.");
  			l.add(ChatColor.GOLD+"/mg delete-all-tempcooldown "+ChatColor.AQUA+" Borra el Cooldown Temporal de Todos los Jugadores.");
  			l.add(ChatColor.GOLD+"/mg delete-tempcooldown "+ChatColor.AQUA+" Borra el Cooldown Temporal de un Jugador Especifico.");
 	

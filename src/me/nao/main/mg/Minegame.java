@@ -279,7 +279,7 @@ public class Minegame extends JavaPlugin{
 		
 		
 		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"));
-		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor("        "+nombre+"\n&7Ha sido Activado \n&c[&aVersion&c:&b"+version+"&c]"));
+		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor("        "+nombre+"\n       &7Ha sido Activado \n       &c[&aVersion&c:&b"+version+"&c]"));
 		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor("  &9Hora de Crear Aventuras. "));
 		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"));
 		
@@ -309,7 +309,7 @@ public class Minegame extends JavaPlugin{
 	   
 	   
 		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"));
-		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor("        "+nombre+"\n&7Ha sido Activado \n&c[&aVersion&c:&b"+version+"&c]"));
+		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor("        "+nombre+"\n       &7Ha sido Activado \n       &c[&aVersion&c:&b"+version+"&c]"));
 		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor("  &9Hora de Descansar "));
 		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"));
 		

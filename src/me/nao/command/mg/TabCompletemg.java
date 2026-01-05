@@ -128,8 +128,12 @@ public class TabCompletemg implements TabCompleter{
 			arguments.add("check-kit-db");
 			arguments.add("delete-kit-db");
 			arguments.add("report");
-			arguments.add("reportslogs");
+			arguments.add("reportlogs");
 			arguments.add("modlogs");
+			arguments.add("set-custom-generator");
+			arguments.add("remove-custom-generator");
+			arguments.add("bossbar");
+			
 			
 		}
 		
@@ -198,7 +202,29 @@ public class TabCompletemg implements TabCompleter{
 						}
 						
 						if(result.isEmpty()) {
-							result.add("Ningun Kit");	
+							result.add("No hay Ningun Kit");	
+						}
+						
+		
+						return result;
+					} 
+					
+					if(args[0].equalsIgnoreCase("getItem")) {
+						FileConfiguration items = plugin.getItemsYaml();
+						List<String> result = new ArrayList<String>();
+					
+						
+						if(items.contains("Items")) {
+							for (String key : items.getConfigurationSection("Items").getKeys(false)) {
+								if(args.length == 2) {
+									if(key.toLowerCase().startsWith(args[1].toLowerCase())) 
+										result.add(key);
+								}
+							}
+						}
+						
+						if(result.isEmpty()) {
+							result.add("No hay Ningun Item");	
 						}
 						
 		
