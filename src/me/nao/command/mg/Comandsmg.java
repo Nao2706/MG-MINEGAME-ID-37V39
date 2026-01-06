@@ -1998,29 +1998,22 @@ public class Comandsmg implements CommandExecutor{
 			
 			return true;
 			
-		}else if(args[0].equalsIgnoreCase("disabled")) {
+			}else if(args[0].equalsIgnoreCase("enabled")) {
+				if (args.length == 2) {
+					String name = args[1];
+			
+					gc.unblockMap(null, name);
+			
+				}else {
+					Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" escribe /mg enabled <mapa>");
+				}
+		
+				return true;
+			}else if(args[0].equalsIgnoreCase("disabled")) {
 					if (args.length == 2) {
 						String name = args[1];
-						FileConfiguration config = plugin.getConfig();
 						
-						
-				 		if(gc.existMap(name)) {
-							 List<String> al = config.getStringList("Maps-Blocked.List");
-							 if(!al.contains(name)) {
-								 config.set("Maps-Blocked.List",al);
-								 al.add(name);
-								 plugin.getConfig().save();
-								 plugin.getConfig().reload();
-								 gc.loadItemMenu();
-								 Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" El mapa "+ChatColor.GOLD+name+ChatColor.GREEN+" a sido Deshabilitada");
-							 }else {
-								 Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" El mapa "+ChatColor.GOLD+name+ChatColor.RED+" ya esta Deshabilitada.");
-							 }
-							
-							
-						}else {
-							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" El mapa "+ChatColor.GOLD+name+ChatColor.RED+" no existe o esta mal escrita.");
-						}
+						gc.blockMap(null, name);
 				
 					}else {
 						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" escribe /mg disabled <mapa>");
@@ -2052,37 +2045,6 @@ public class Comandsmg implements CommandExecutor{
 				
 				return true;
 				
-			}else if(args[0].equalsIgnoreCase("enabled")) {
-					if (args.length == 2) {
-						String name = args[1];
-						FileConfiguration config = plugin.getConfig();
-					
-				 		if(gc.existMap(name)) {
-						
-							 List<String> al = config.getStringList("Maps-Blocked.List");
-							 if(al.contains(name)) {
-								 config.set("Maps-Blocked.List",al);
-								 al.remove(name);
-								 plugin.getConfig().save();
-								 plugin.getConfig().reload();
-								 gc.loadItemMenu();
-								 Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" El mapa "+ChatColor.GOLD+name+ChatColor.GREEN+" a sido Habilitada.");
-							 }else {
-								 Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" El mapa "+ChatColor.GOLD+name+ChatColor.RED+" no esta Deshabilitada.");
-							 }
-							
-							
-						}else {
-							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" El mapa "+ChatColor.GOLD+name+ChatColor.RED+" no existe o esta mal escrita.");
-						}
-						
-					
-				
-					}else {
-						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" escribe /mg enabled <mapa>");
-					}
-				
-					return true;
 				}else if (args[0].equalsIgnoreCase("delete") ) {
 					
 					if (args.length == 2) {
@@ -4070,7 +4032,12 @@ public class Comandsmg implements CommandExecutor{
 				 			
 					
 							return true;
-					
+
+				 	  }else if(args[0].equalsIgnoreCase("partitest")) {
+							player.getWorld().spawnParticle(Particle.PORTAL, player.getLocation().add(0, 1, 0),// POR ALGUN RAZON DICE QUE ESE METODO DA ERROR POR PASARLE UN PARAMETRO MAL PIDE
+									/* NUMERO DE PARTICULAS */150, 2, 5, 2, /* velocidad */0, null, true); // UN FLOAT PERO NO HAY  
+				 		  
+				 		  return true;
 				 	  }else if(args[0].equalsIgnoreCase("spawnzombi")) {
 				 		//H Z BZ EZ
 							if(!player.isOp()) {
@@ -4474,26 +4441,10 @@ public class Comandsmg implements CommandExecutor{
 					}
 					if (args.length >= 2) {
 					
-						FileConfiguration config = plugin.getConfig();
-						String mapname = args[1];
-				 		if(gc.existMap(mapname)) {
-							 List<String> al = config.getStringList("Maps-Blocked.List");
-							 if(al.contains(mapname)) {
-								 config.set("Maps-Blocked.List",al);
-								 al.remove(mapname);
-								 plugin.getConfig().save();
-								 plugin.getConfig().reload();
-								 gc.loadItemMenu();
-									player.sendMessage(plugin.nombre+ChatColor.GREEN+" El Mapa "+ChatColor.GOLD+mapname+ChatColor.GREEN+" a sido Habilitada");
-							 }else {
-								 player.sendMessage(plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+mapname+ChatColor.RED+" no esta Deshabilitada.");
-							 }
-							
-							
-						}else {
-							player.sendMessage(plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+mapname+ChatColor.RED+" no existe o esta mal escrita.");
-						}
 						
+						String mapname = args[1];
+
+						gc.unblockMap(player, mapname);
 					
 				
 					}else {
@@ -4512,25 +4463,7 @@ public class Comandsmg implements CommandExecutor{
 					
 					if (args.length == 2) {
 						String mapname = args[1];
-						FileConfiguration config = plugin.getConfig();
-						
-						if(gc.existMap(mapname)) {
-							 List<String> al = config.getStringList("Maps-Blocked.List");
-							 if(!al.contains(mapname)) {
-								 config.set("Maps-Blocked.List",al);
-								 al.add(mapname);
-								 plugin.getConfig().save();
-								 plugin.getConfig().reload();
-								 gc.loadItemMenu();
-								player.sendMessage(plugin.nombre+ChatColor.GREEN+" El Mapa "+ChatColor.GOLD+mapname+ChatColor.GREEN+" a sido Deshabilitada");
-							 }else {
-								 player.sendMessage(plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+mapname+ChatColor.RED+" ya esta Deshabilitada.");
-							 }
-							
-							
-						}else {
-							player.sendMessage(plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+mapname+ChatColor.RED+" no existe o esta mal escrita.");
-						}
+						gc.blockMap(player, mapname);
 				
 					}else {
 						player.sendMessage(plugin.nombre+ChatColor.GREEN+" escribe /mg disabled <mapa>");

@@ -105,7 +105,7 @@ public class GameConditions {
 				//Salva al Jugador checa si debe setearle un inv
 				setAndSavePlayer(player,PlayerGameStatus.ALIVE, map);
 				addPlayerToGame(player,map);
-				tptoPreLobbyMap(player, map); 
+				if(tptoPreLobbyMap(player, map)); //SI HAY UN ERROR EN EL MAPA DARA FALSE Y NO ABANZARA
 				canStartTheGame(player,map);
 				return;
 		}
@@ -341,6 +341,53 @@ public class GameConditions {
 	}
 	
 	
+	
+	public void blockMap(Player player, String mapname) {
+		FileConfiguration config = plugin.getConfig();
+		
+		if(existMap(mapname)) {
+			 List<String> al = config.getStringList("Maps-Blocked.List");
+			 if(!al.contains(mapname)) {
+				 config.set("Maps-Blocked.List",al);
+				 al.add(mapname);
+				 plugin.getConfig().save();
+				 plugin.getConfig().reload();
+				 loadItemMenu();
+				 switchsendMessageForUserAndConsole(player,plugin.nombre+ChatColor.GREEN+" El Mapa "+ChatColor.GOLD+mapname+ChatColor.GREEN+" a sido Deshabilitado");
+			 }else {
+				 switchsendMessageForUserAndConsole(player,plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+mapname+ChatColor.RED+" ya esta Deshabilitado.");
+			 }
+			
+			
+		}else {
+			switchsendMessageForUserAndConsole(player,plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+mapname+ChatColor.RED+" no existe o esta mal escrita.");
+		}
+	}
+	
+	public void unblockMap(Player player ,String mapname) {
+		
+		FileConfiguration config = plugin.getConfig();
+ 		if(existMap(mapname)) {
+			 List<String> al = config.getStringList("Maps-Blocked.List");
+			 if(al.contains(mapname)) {
+				 config.set("Maps-Blocked.List",al);
+				 al.remove(mapname);
+				 plugin.getConfig().save();
+				 plugin.getConfig().reload();
+				 loadItemMenu();
+				 
+				 switchsendMessageForUserAndConsole(player, plugin.nombre+ChatColor.GREEN+" El Mapa "+ChatColor.GOLD+mapname+ChatColor.GREEN+" a sido Habilitado.");
+			
+			 }else {
+				 switchsendMessageForUserAndConsole(player,plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+mapname+ChatColor.RED+" no esta Deshabilitado.");
+			 }
+			
+			
+		}else {
+			switchsendMessageForUserAndConsole(player,plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+mapname+ChatColor.RED+" no existe o esta mal escrita.");
+		}
+	}
+	
 	public void setTimeOfRecordinMap(String map,List<String> participants) {
 			FileConfiguration rt = plugin.getRecordTime();
 	
@@ -525,12 +572,11 @@ public class GameConditions {
 	}
 	
 	 //TODO TP AL PRELOBBY DEL MAPA
-	   public void tptoPreLobbyMap(Player player ,String map){
+	   public boolean tptoPreLobbyMap(Player player ,String map){
 		   
 		   FileConfiguration ym = getGameConfig(map);
-		   if(ym.contains("Pre-Lobby")) {
-			   player.getWorld().spawnParticle(Particle.DRAGON_BREATH, player.getLocation().add(0, 1, 0),
-						/* NUMERO DE PARTICULAS */100, 1, 2, 1, /* velocidad */0, null, true);
+		   if(ym.contains("Pre-Lobby")) { 
+			  
 			    String[] coords = ym.getString("Pre-Lobby").split("/");
 			    String world = coords[0];
 			    double x = Double.valueOf(coords[1]);
@@ -578,15 +624,19 @@ public class GameConditions {
 								}
 					 }
 
-					return;
-				}
-				
+					 blockMap(player, map);
+					return false;
+				}  
+				//LA PARTICULA DRAGON BREATH ESTA CON PROBLEMAS VER 1.21-1.21.11 
+				player.getWorld().spawnParticle(Particle.PORTAL, player.getLocation().add(0, 1, 0),
+							/* NUMERO DE PARTICULAS */150, 1, 2, 1, /* velocidad */0, null, true);
 				player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 20.0F, 1F);
-				Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch).add(0.5,0,0.5);
+				Location l = new Location(w, x, y, z, yaw, pitch).add(0.5,0,0.5);
 				player.setInvulnerable(true);
 				player.teleport(l);
-				return;
+				return true;
 			} 
+		   return false;
 	   }
 	   
 	   //TODO TpEndSpawn
@@ -3038,6 +3088,15 @@ public class GameConditions {
 		return;
 	}
 	
+	public void switchsendMessageForUserAndConsole(Player player ,String text) {
+		if(player != null) {
+			player.sendMessage(ChatColor.translateAlternateColorCodes('&',text.replace("%player%", player.getName())));
+			return;
+		}
+		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&',text));
+	
+	}
+	
 	public void sendMessageToConsole(String text) {
 		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&',text));
 		return;
@@ -3312,9 +3371,11 @@ public class GameConditions {
 						}
 						mt.RemoveAllPlayer(player);
 						removeAllPlayerToGame(player, pl.getMapName());
-					}
-			player.getWorld().spawnParticle(Particle.DRAGON_BREATH, player.getLocation().add(0, 1, 0),
-							/* NUMERO DE PARTICULAS */50, 2, 5, 2, /* velocidad */0, null, true);
+					}  
+					 
+				
+			player.getWorld().spawnParticle(Particle.PORTAL, player.getLocation().add(0, 1, 0),// POR ALGUN RAZON DICE QUE ESE METODO DA ERROR POR PASARLE UN PARAMETRO MAL PIDE
+							/* NUMERO DE PARTICULAS */150, 2, 5, 2, /* velocidad */0, null, true); // UN FLOAT PERO NO HAY
 		 }
 //		 }else if(ms instanceof GameNexo) {
 //			// GameNexo gn = (GameNexo) ms;
