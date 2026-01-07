@@ -1,6 +1,5 @@
 package me.nao.yamlfile.mg;
 
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -100,7 +99,7 @@ public class YamlFile extends YamlConfiguration {
               			//	Bukkit.getConsoleSender().sendMessage(file.getName()+"gg9");
               				if(this.fileName.equals(file3.getName())) {
               					save(file3.getAbsoluteFile());
-              				Bukkit.getConsoleSender().sendMessage("gg1");
+              				//Bukkit.getConsoleSender().sendMessage("gg1");
               				}
               			}
               		

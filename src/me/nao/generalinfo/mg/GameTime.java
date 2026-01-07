@@ -416,7 +416,12 @@ public class GameTime {
     	   		  boss.setColor(BarColor.RED);
     	   	    }
     		
-    	        boss.setTitle(getGameTimer(gi.getGameStatus()));
+    	     
+    	          boss.setTitle(getGameTimer(gi.getGameStatus()));
+    	        
+    	
+    	        
+    	
     	  
       }else {
     	  
@@ -595,12 +600,29 @@ public class GameTime {
 		
 		 //DE MOMENTO EL TIMER CUSTOM NO SE PUEDE FREZEAR
 		if(isExcutableTimerMg()) {
-			   text = Utils.colorTextChatColor(getCustomTitle().replaceAll("%timer%",getGameTimerForPlayer())
-					  			.replaceAll("%timersecond%",String.valueOf(getTimersecond())
-							    .replaceAll("%timerminute%",String.valueOf(getTimerminute())
-							    .replaceAll("%timerhour%",String.valueOf(getTimerhour())
-							    		
-							    		))));
+			
+			 if(getTimerStatus() == TimerStatus.CANCELED) {
+				   text = Utils.colorTextChatColor("&c&lCancelado "+getCustomTitle().replaceAll("%timer%",getGameTimerForPlayer())
+				  			.replaceAll("%timersecond%",String.valueOf(getTimersecond())
+						    .replaceAll("%timerminute%",String.valueOf(getTimerminute())
+						    .replaceAll("%timerhour%",String.valueOf(getTimerhour())
+						    		
+						    		)))); 
+				 
+				 
+   	    		getCustomTimerBossBar().setVisible(false);
+       			setExecutableTimerByCommand(false);
+       			
+   	        }else{
+ 			   text = Utils.colorTextChatColor(getCustomTitle().replaceAll("%timer%",getGameTimerForPlayer())
+			  			.replaceAll("%timersecond%",String.valueOf(getTimersecond())
+					    .replaceAll("%timerminute%",String.valueOf(getTimerminute())
+					    .replaceAll("%timerhour%",String.valueOf(getTimerhour())
+					    		
+					    		))));
+   	        }
+			
+
 			   
 			   return text;
 		}

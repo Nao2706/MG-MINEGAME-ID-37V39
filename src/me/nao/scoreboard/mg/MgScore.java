@@ -101,6 +101,7 @@ public class MgScore {
 				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Crees Ganar???");
 				 show.add(""+ChatColor.RED+ChatColor.BOLD+"No uses Hacks o Bugs");
 				 show.add(""+ChatColor.RED+ChatColor.BOLD+"Reportalos si los ves.");
+				 show.add(""+ChatColor.RED+ChatColor.BOLD+"/mg report <player> <motivo>");
 				 show.add(ChatColor.RED+"  ");
 				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"------------- ");
 			 }if(val == 1) {
@@ -112,6 +113,7 @@ public class MgScore {
 				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"no ?? F");
 				 show.add(""+ChatColor.RED+ChatColor.BOLD+"No uses Hacks o Bugs");
 				 show.add(""+ChatColor.RED+ChatColor.BOLD+"Reportalos si los ves.");
+				 show.add(""+ChatColor.RED+ChatColor.BOLD+"/mg report <player> <motivo>");
 				 show.add(ChatColor.RED+"  ");
 				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"------------- ");
 			 }if(val == 2) {
@@ -123,6 +125,7 @@ public class MgScore {
 				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Y trata de no jugar solo");
 				 show.add(""+ChatColor.RED+ChatColor.BOLD+"No uses Hacks o Bugs");
 				 show.add(""+ChatColor.RED+ChatColor.BOLD+"Reportalos si los ves.");
+				 show.add(""+ChatColor.RED+ChatColor.BOLD+"/mg report <player> <motivo>");
 				 show.add(ChatColor.RED+"  ");
 				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"------------- ");
 			 }if(val == 3) {
@@ -134,6 +137,7 @@ public class MgScore {
 				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"o eran los hacks??");
 				 show.add(""+ChatColor.RED+ChatColor.BOLD+"No uses Hacks o Bugs");
 				 show.add(""+ChatColor.RED+ChatColor.BOLD+"Reportalos si los ves.");
+				 show.add(""+ChatColor.RED+ChatColor.BOLD+"/mg report <player> <motivo>");
 				 show.add(ChatColor.RED+"  ");
 				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"------------- ");
 			 }
@@ -401,6 +405,11 @@ public class MgScore {
 			con.add(ChatColor.GREEN+"Mejor espectea desde el mas alla");
 			con.add(ChatColor.GREEN+"Reporta los Bugs");
 			con.add(ChatColor.GREEN+"No uses Hacks");
+			con.add(ChatColor.GREEN+"Deberias Analizar el Mapa");
+			con.add(ChatColor.GREEN+"Puede que nosea por Alli.");
+			con.add(ChatColor.GREEN+"Eres Tryhard o Noob???");
+			con.add(ChatColor.GREEN+"Viste todos los items de la tienda??");
+			con.add(ChatColor.GREEN+"Explora con cuidado.");
 			
 			
 			Random r = new Random();

@@ -118,7 +118,7 @@ public class GameConditions {
 	public void mgLeaveOfTheGame(Player player) {
 		  
 		if(!isPlayerinGame(player)) {
-			player.sendMessage(ChatColor.RED+"No estas en Ningun Juego.");
+			player.sendMessage(Utils.colorTextChatColor("&cNo estas en Ningun Juego."));
 			return;
 		}
 		
@@ -145,27 +145,26 @@ public class GameConditions {
 					 min1 = min1 - join.size();
 					  
 					 if(min1 == 1) {
-						 sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugador para empezar.");
+						 sendMessageToUsersOfSameMapLessPlayer(player,"&6- &eFaltan minimo &c"+min1+" &eJugador para empezar&c.");
 					 }else {
-						 sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugadores para empezar.");
+						 sendMessageToUsersOfSameMapLessPlayer(player,"&6- &eFaltan minimo &c"+min1+" &eJugadores para empezar&c.");
 
-						
+						 
 			 }}}
 			 
 			
 			if(spectador.contains(player.getName())) {
-				sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.WHITE+"El jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" salio del Modo Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size() - 1)+ChatColor.RED+"]");
+				sendMessageToUsersOfSameMapLessPlayer(player, "&fEl jugador &a"+player.getName()+" &fsalio del Modo Espectador.\n&c[&bTotal de Espectadores&e: &5"+(spectador.size() - 1)+"&c]");
 				ga.getBossbar().removePlayer(player);
 				showBossBarsTimers(player, ms);
 			}else {
 				//" "+Utils.pingLevel(player.getPing())+
 				if(player.getPing() >= 150) {
 					sendMessageToUsersOfSameMapLessPlayer(player,Utils.pingLevel(player.getPing()));
-					sendMessageToUsersOfSameMapLessPlayer(player,
-							ChatColor.YELLOW+"A Salido "+ChatColor.GREEN+player.getName()+ChatColor.RED+" ("+ChatColor.GOLD+(ga.getParticipants().size()-1)+ChatColor.YELLOW+"/"+ChatColor.GOLD+getMaxPlayerMap(pl.getMapName())+ChatColor.RED+")");
+					sendMessageToUsersOfSameMapLessPlayer(player,"&eA Salido &a"+player.getName()+"&c(&6"+(ga.getParticipants().size()-1)+"&e/&6"+getMaxPlayerMap(pl.getMapName())+"&c)");
 				}else {
-					sendMessageToUsersOfSameMapLessPlayer(player,
-							ChatColor.YELLOW+"A Salido "+ChatColor.GREEN+player.getName()+ChatColor.RED+" ("+ChatColor.GOLD+(ga.getParticipants().size()-1)+ChatColor.YELLOW+"/"+ChatColor.GOLD+getMaxPlayerMap(pl.getMapName())+ChatColor.RED+")");			
+					sendMessageToUsersOfSameMapLessPlayer(player,"&eA Salido &a"+player.getName()+"&c(&6"+(ga.getParticipants().size()-1)+"&e/&6"+getMaxPlayerMap(pl.getMapName())+"&c)");
+
 				}
 				
 			}
@@ -174,7 +173,7 @@ public class GameConditions {
 			
 			
 			 String mt = mision.getString("Start.Tittle-of-Mision"); 
-			 player.sendMessage(ChatColor.GREEN+"Has salido del Mapa "+ChatColor.translateAlternateColorCodes('&',mt.replaceAll("%player%",player.getName())));
+			 player.sendMessage(Utils.colorTextChatColor("&aHas Salido del Mapa: "+mt.replaceAll("%player%",player.getName())));
 			 restorePlayer(player);
 			
 		}
@@ -241,10 +240,10 @@ public class GameConditions {
 				if(b.getType() != Material.STRUCTURE_BLOCK) {
     				 player.playSound(player.getLocation(), Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 20.0F, 1F);
     				 player.sendMessage("");
-					 player.sendMessage(""+ChatColor.YELLOW+ChatColor.BOLD+" !!! ADVERTENCIA !!!");
-					 player.sendMessage(ChatColor.YELLOW+"- Debes estar dentro de una Zona Segura para Salirte.");
-					 player.sendMessage(ChatColor.YELLOW+"- Oh debes haber muerto.");
-					 player.sendMessage(ChatColor.RED+"⚠ Si te Desconectas fuera de una Zona segura tu Inventario se Dropeara ⚠");
+					 player.sendMessage(Utils.colorTextChatColor("&c&l!!! &e&lADVERTENCIA &c&l!!!"));
+					 player.sendMessage(Utils.colorTextChatColor("&c- &eDebes estar dentro de una Zona Segura para Salirte&c."));
+					 player.sendMessage(Utils.colorTextChatColor("&c- &eOh debes haber muerto&c."));
+					 player.sendMessage(Utils.colorTextChatColor("&e⚠ &6Si te &c&lDesconectas &6fuera de una &a&lZona segura &6tu Inventario se &c&lDropeara &e⚠"));
 					 player.sendMessage("");
 				}else {
 					mgLeaveOfTheGame(player);
@@ -355,14 +354,14 @@ public class GameConditions {
 				 plugin.getConfig().save();
 				 plugin.getConfig().reload();
 				 loadItemMenu();
-				 switchsendMessageForUserAndConsole(player,plugin.nombre+ChatColor.GREEN+" El Mapa "+ChatColor.GOLD+mapname+ChatColor.GREEN+" a sido Deshabilitado");
+				 switchsendMessageForUserAndConsole(player,plugin.nombre+" &aEl Mapa &6"+mapname+" &aa sido Deshabilitado");
 			 }else {
-				 switchsendMessageForUserAndConsole(player,plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+mapname+ChatColor.RED+" ya esta Deshabilitado.");
+				 switchsendMessageForUserAndConsole(player,plugin.nombre+" &cEl Mapa &6"+mapname+" &cya esta Deshabilitado.");
 			 }
 			
 			
 		}else {
-			switchsendMessageForUserAndConsole(player,plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+mapname+ChatColor.RED+" no existe o esta mal escrita.");
+			switchsendMessageForUserAndConsole(player,plugin.nombre+" &cEl Mapa &6"+mapname+" &cno existe o esta mal escrita.");
 		}
 	}
 	
@@ -378,15 +377,15 @@ public class GameConditions {
 				 plugin.getConfig().reload();
 				 loadItemMenu();
 				 
-				 switchsendMessageForUserAndConsole(player, plugin.nombre+ChatColor.GREEN+" El Mapa "+ChatColor.GOLD+mapname+ChatColor.GREEN+" a sido Habilitado.");
+				 switchsendMessageForUserAndConsole(player, plugin.nombre+" &aEl Mapa &6"+mapname+" &aa sido Habilitado.");
 			
 			 }else {
-				 switchsendMessageForUserAndConsole(player,plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+mapname+ChatColor.RED+" no esta Deshabilitado.");
+				 switchsendMessageForUserAndConsole(player,plugin.nombre+" &cEl Mapa &6"+mapname+" &cno esta Deshabilitado.");
 			 }
 			
 			
 		}else {
-			switchsendMessageForUserAndConsole(player,plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+mapname+ChatColor.RED+" no existe o esta mal escrita.");
+			switchsendMessageForUserAndConsole(player,plugin.nombre+" &cEl Mapa &6"+mapname+" &cno existe o esta mal escrita.");
 		}
 	}
 	
@@ -404,7 +403,7 @@ public class GameConditions {
 				for(Player users : ConvertStringToPlayer(participants)) {
 					PlayerInfo pl = plugin.getPlayerInfoPoo().get(users);
 					data.add(pl.getPlayerCronomet());
-					users.sendMessage(ChatColor.RED+pl.getPlayerCronomet().getCronometPlayerName() + ChatColor.DARK_GRAY+" Tu tiempo fue de: "+ChatColor.GREEN+ pl.getPlayerCronomet().getCronometTime());
+					users.sendMessage(Utils.colorTextChatColor("&c"+pl.getPlayerCronomet().getCronometPlayerName() +" &8Tu tiempo fue de: &a"+pl.getPlayerCronomet().getCronometTime()));
 				}
 				 //Collections.sort(data, Comparator.comparingLong(MapRecords::getCronometTotalSeconds));
 				 //ORDENA PRIMERO LOS TIEMPOS DE MENOR A MAYOR Y DESPUES LAS KILLS DE MAYOR A MENOR A CAUSA DEL REVERSED
@@ -420,7 +419,7 @@ public class GameConditions {
 						  Player player = ConvertStringToPlayerAlone(users.getCronometPlayerName());
 						  
 						  if (users.getCronometTotalSeconds() > lastoftop.getCronometTotalSeconds()) {
-							  player.sendMessage(ChatColor.RED+users.getCronometPlayerName() + ChatColor.DARK_GRAY+" Tu tiempo de: "+ChatColor.RED+ users.getCronometTotalSeconds() +  ChatColor.DARK_GRAY+" es demasiado largo para entrar al top. El 10mo mejor Tiempo es de: "+ChatColor.GREEN+lastoftop.getCronometPlayerName()+ ChatColor.DARK_GRAY+" con : " +ChatColor.AQUA+ lastoftop.getCronometTotalSeconds());
+							  player.sendMessage(Utils.colorTextChatColor("&c"+users.getCronometPlayerName() + "&8 Tu tiempo de: &c"+ users.getCronometTotalSeconds() + " &8es demasiado largo para entrar al top. El &a10mo &8mejor Tiempo es de&e: &a"+lastoftop.getCronometPlayerName()+" &8con &e: &b" + lastoftop.getCronometTotalSeconds()));
 				                //System.out.println("El tiempo de " + users.getCronometPlayerName() + " (" + users.getCronometTotalSeconds() + ") es demasiado largo para entrar al top. El 10mo mejor tiempo es de: "+lastoftop.getCronometPlayerName()+" : " + lastoftop.getCronometTotalSeconds());
 				            }
 						  
@@ -454,7 +453,7 @@ public class GameConditions {
 			for(Player users : ConvertStringToPlayer(participants)) {
 				PlayerInfo pl = plugin.getPlayerInfoPoo().get(users);
 				data.add(pl.getPlayerCronomet());
-				users.sendMessage(ChatColor.RED+pl.getPlayerCronomet().getCronometPlayerName() + ChatColor.DARK_GRAY+" Tu tiempo fue de: "+ChatColor.GREEN+ pl.getPlayerCronomet().getCronometTime());
+				users.sendMessage(Utils.colorTextChatColor("&c"+pl.getPlayerCronomet().getCronometPlayerName() +"&8 Tu tiempo fue de&e: &a"+pl.getPlayerCronomet().getCronometTime()));
 
 			}
 			
@@ -471,16 +470,16 @@ public class GameConditions {
 	                    if (nuevoParticipante.getCronometTotalSeconds() <= regis.getCronometTotalSeconds() && nuevoParticipante.getKills() > regis.getKills()) {
 	                    	
 	                  
-	                    	player.sendMessage(ChatColor.AQUA+nuevoParticipante.getCronometPlayerName() + ChatColor.GREEN+" has roto tu récord! Nuevo tiempo: " +ChatColor.AQUA+ nuevoParticipante.getCronometTime()+ChatColor.GREEN+" Kills: "+ChatColor.AQUA+nuevoParticipante.getKills()+
-	                    			ChatColor.RED+"\nAnterior: "+ChatColor.GOLD+regis.getCronometTime()+ChatColor.RED+" Kills: "+ChatColor.GOLD+regis.getKills());
+	                    	player.sendMessage(Utils.colorTextChatColor("&b"+nuevoParticipante.getCronometPlayerName() + "&a has roto tu récord! &c&lNuevo Tiempo&e: &b" + nuevoParticipante.getCronometTime()+" &aKills&e: &b"+nuevoParticipante.getKills()+
+	                    			"\n&cAnterior&e: &6"+regis.getCronometTime()+" &cKills&e: &6"+regis.getKills()));
 	                        //registro.segundos = nuevoParticipante.getSegundos(); // SETEAR DATOS EN LISTA
 	                        //regis.setNewRecord(nuevoParticipante.getCronometPlayerName() ,nuevoParticipante.getCronometTotalSeconds());
 	                         //System.out.println(nuevoParticipante.getCronometPlayerName()+" "+nuevoParticipante.getCronometTime());
 	                       
 	                    }else{
 	                    	 
-	                    	player.sendMessage(ChatColor.RED+nuevoParticipante.getCronometPlayerName() +ChatColor.DARK_GRAY+" no alcanzaste a Romper tu récord. "+ChatColor.GOLD+"Mejor tiempo: " + ChatColor.GREEN+regis.getCronometTime()+ChatColor.GOLD+" Kills:"+ChatColor.GREEN+regis.getKills()+
-	                    			ChatColor.RED+"\nTiempo Actual: "+ChatColor.GOLD+ nuevoParticipante.getCronometTime()+ChatColor.RED+" Kills: "+ChatColor.GOLD+nuevoParticipante.getKills());
+	                    	player.sendMessage(Utils.colorTextChatColor("&c"+nuevoParticipante.getCronometPlayerName() +" &8no alcanzaste a Romper tu Récord. &6Mejor Tiempo&e: &a" + regis.getCronometTime()+"6Kills&e:&a"+regis.getKills()+
+	                    			ChatColor.RED+"\nTiempo Actual: "+ChatColor.GOLD+ nuevoParticipante.getCronometTime()+ChatColor.RED+" Kills: "+ChatColor.GOLD+nuevoParticipante.getKills()));
 	                    	nuevoParticipante.setNewRecord(regis.getCronometPlayerName() ,regis.getCronometTotalSeconds(),regis.getKills());
 	                    }
 	                    break;
@@ -516,8 +515,8 @@ public class GameConditions {
 					  Player player = ConvertStringToPlayerAlone(users.getCronometPlayerName());
 					  
 					  if (users.getCronometTotalSeconds() > lastoftop.getCronometTotalSeconds() && users.getKills() < lastoftop.getKills()) {
-						  player.sendMessage(ChatColor.RED+users.getCronometPlayerName() + ChatColor.DARK_GRAY+" Tu tiempo de: "+ChatColor.RED+ users.getCronometTotalSeconds() +  ChatColor.DARK_GRAY+" es demasiado largo y tus Kills: "+ChatColor.RED+users.getKills()+" no son suficientes para entrar al Top."+ChatColor.AQUA+" El 10mo mejor Tiempo es de: "+
-					  ChatColor.GREEN+lastoftop.getCronometPlayerName()+ ChatColor.DARK_GRAY+" con : " +ChatColor.AQUA+ lastoftop.getCronometTotalSeconds()+ChatColor.DARK_GRAY+" Kills:"+ChatColor.GOLD+lastoftop.getKills());
+						  player.sendMessage(Utils.colorTextChatColor("&c"+users.getCronometPlayerName() + "&8 Tu tiempo de&e: &c"+ users.getCronometTotalSeconds() + " &8es demasiado largo y tus &6Kills&e: &c"+ChatColor.RED+users.getKills()+" &8no son suficientes para entrar al &6&lTop&c.&bEl &a10mo &bmejor Tiempo es de&e: &a"+
+					 lastoftop.getCronometPlayerName()+" &8con &e: &b" +lastoftop.getCronometTotalSeconds()+" &8Kills&e:&6"+lastoftop.getKills()));
 			                //System.out.println("El tiempo de " + users.getCronometPlayerName() + " (" + users.getCronometTotalSeconds() + ") es demasiado largo para entrar al top. El 10mo mejor tiempo es de: "+lastoftop.getCronometPlayerName()+" : " + lastoftop.getCronometTotalSeconds());
 			            }
 					  
@@ -541,19 +540,19 @@ public class GameConditions {
 	public void showRecordTimeofMap(String map, Player player) {
 		FileConfiguration rt = plugin.getRecordTime();
 		if(!rt.contains(map+".Players-Record-Time")) {
-			sendMessageToUserAndConsole(player,ChatColor.RED+"No hay Registros de Tiempos para el Mapa: "+ ChatColor.GOLD+map);
+			sendMessageToUserAndConsole(player,"&cNo hay Registros de Tiempos para el Mapa&e: &6"+ ChatColor.GOLD+map);
 			
 			return;
 		}
 		
 		List<String> times = rt.getStringList(map+".Players-Record-Time");
-		sendMessageToUserAndConsole(player,ChatColor.GREEN+"Top Registro de Tiempos y Kills de el Mapa: "+ ChatColor.AQUA+map);
+		sendMessageToUserAndConsole(player,"&aTop Registro de &bTiempos &ay &cKills &ade el &6Mapa&e: &b&l"+map);
 	
 		for(int i = 0 ; i  < times.size();i++) {
 			
 			String[] split = times.get(i).split(" ");
 			String kills = split.length > 2 ? split[2] : "0" ;
-			sendMessageToUserAndConsole(player,ChatColor.GREEN+String.valueOf(i+1)+"). "+ ChatColor.GOLD+split[0]+" "+ChatColor.GREEN+"T:"+ChatColor.AQUA+split[1]+" "+ChatColor.RED+"K:"+ChatColor.GOLD+kills);
+			sendMessageToUserAndConsole(player,"&a"+String.valueOf(i+1)+"&c). &6"+split[0]+" &a"+"T&e:&b"+split[1]+" &cK&e:&6"+kills);
 		}
 		
 		return;
@@ -592,7 +591,7 @@ public class GameConditions {
 				
 				if(w == null) { 
 					
-					sendMessageToUserAndConsole(player, ChatColor.RED+"Error: No existe el Mundo: "+world+" si ves esto Reportalo a un Admin.");
+					sendMessageToUserAndConsole(player,"&c&lError&e: &eNo existe el &bMundo&a: &6"+world+" &csi ves esto Reportalo a un Admin.");
 					PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 					GameInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
 					MgTeams mt = new MgTeams(plugin);
@@ -663,8 +662,11 @@ public class GameConditions {
 				List<String> point1 = new ArrayList<>();
 				point1.add(ChatColor.GREEN+"Por poco y no la cuentas menos mal saliste en una Pieza.");
 				point1.add(ChatColor.GREEN+"Sobreviviste felicidades por tu Victoria");
-				point1.add(ChatColor.GREEN+"Sobreviviste un dia mas para Luchar Felicidades");
+				point1.add(ChatColor.GREEN+"Sobreviviste un dia mas para Luchar ,Felicidades");
 				point1.add(ChatColor.GREEN+"Puede que seas de los pocos con Vida sigue asi.");
+				point1.add(ChatColor.GREEN+"Que Suertudo , Felicidades por ganar.");
+				
+				
 				
 				player.sendMessage(point1.get(r.nextInt(point1.size())));
 				player.teleport(l);
@@ -3868,16 +3870,41 @@ public class GameConditions {
 		
 		if(!data.containsKey(timername)) {
 			
-			switchsendMessageForUserAndConsole(player, ChatColor.RED+"No existe ese Timer con el Nombre: "+ChatColor.GOLD+timername);
+			switchsendMessageForUserAndConsole(player,"&cNo existe ese Timer con el Nombre: &6"+timername);
 			
 			return;
 		}
 		
 		GameTime gt = data.get(timername);
 		gt.startCustomTimer();
-		switchsendMessageForUserAndConsole(player, ChatColor.GREEN+"Se a Iniciado el Timer: "+ChatColor.GOLD+timername);
+		switchsendMessageForUserAndConsole(player,"&aSe a Iniciado el Timer: &6"+timername);
 		
    }
+   
+   public void cancelExecutableTimer(Player player, String map,String timername) {
+ 		GameInfo gi = plugin.getGameInfoPoo().get(map);
+ 		Map<String,GameTime> data = gi.getTimersEvents();
+ 		
+ 		if(!data.containsKey(timername)) {
+ 			
+ 			switchsendMessageForUserAndConsole(player,"&cNo existe ese Timer con el Nombre: &6"+timername);
+ 			
+ 			return;
+ 		}
+ 		
+ 		GameTime gt = data.get(timername);
+ 	
+ 		if(gt.getTimerStatus() == TimerStatus.CANCELED) {
+ 			
+ 			switchsendMessageForUserAndConsole(player,"&aEl Timer ya esta Cancelado.");
+ 			
+ 			return;
+ 		}
+ 		
+ 		gt.setTimerStatus(TimerStatus.CANCELED);
+ 		switchsendMessageForUserAndConsole(player,"&aSe a &cCancelado &ael Timer: &6"+timername);
+ 		
+    }
    
    public int loadCountdownMap(String map) {
 	    FileConfiguration game = getGameConfig(map);
@@ -5515,6 +5542,37 @@ public class GameConditions {
 	        world.spawnParticle(part, x, y, z, 1, 0, 0, 0, 0.1);
 	    }
 	}
+	
+	public void deleteYmlMg(Player player, String name) {
+		if(!plugin.getDeleteMaps().containsKey(name)) {
+			plugin.getDeleteMaps().put(name, true);
+		
+			switchsendMessageForUserAndConsole(player," &eDeseas Borrar el Mapa &c"+name+"&e??? &c"+"(Escribe el mismo Comando para Confirmar)");
+			Bukkit.getScheduler().runTaskLater(plugin, () -> {
+				if(plugin.getDeleteMaps().containsKey(name)) {
+					plugin.getDeleteMaps().remove(name);
+					switchsendMessageForUserAndConsole(player," &cLa confirmacion del Borrado de Mapa &6"+name+" &cExpiro.");
+				}
+				
+			}, 200L);// 10 SEGS
+		}else {
+			if(plugin.getDeleteMaps().containsKey(name)) {
+				plugin.getDeleteMaps().remove(name);
+				
+				FileConfiguration menu = plugin.getMenuItems();
+				if(menu.contains(name)) {
+					
+					   menu.set(name,null);
+					   plugin.getMenuItems().save();
+					   plugin.getMenuItems().reload();
+					   
+				}
+				YamlFilePlus y = new YamlFilePlus(plugin);
+				y.deleteSpecificConsole(name);
+			}
+		}
+	}
+	
 	
 	public void showStatsMap(Player player , String map) {
 		

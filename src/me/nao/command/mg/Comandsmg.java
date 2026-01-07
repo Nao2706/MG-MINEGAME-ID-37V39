@@ -80,7 +80,6 @@ import me.nao.shop.mg.MinigameShop1;
 import me.nao.timers.mg.Countdown2;
 import me.nao.topusers.mg.PointsManager;
 import me.nao.utils.mg.Utils;
-import me.nao.yamlfile.mg.YamlFilePlus;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -972,6 +971,35 @@ public class Comandsmg implements CommandExecutor{
 							
 						}else {
 							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Usa /mg execute-timer <map> <timer>");
+						}
+						
+					
+					
+					
+					return true;
+				}else if(args[0].equalsIgnoreCase("cancel-timer")) {
+					
+						// /mg execute-timer Map Name
+						if(args.length == 3) {
+							String map = args[1];
+							String timername = args[2];
+							
+							if(!gc.existMap(map)) {
+								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Ese Mapa no existe o esta Mal escrito.");
+								return true;
+							}
+							if(!gc.isMapinGame(map)) {
+								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Ese Mapa no esta en Juego.");
+								return true;
+							}
+							
+							
+							
+							gc.cancelExecutableTimer(null, map, timername);
+							
+							
+						}else {
+							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Usa /mg cancel-timer <map> <timer>");
 						}
 						
 					
@@ -2081,32 +2109,7 @@ public class Comandsmg implements CommandExecutor{
 					if (args.length == 2) {
 						String name = args[1];
 						
-						if(!plugin.getDeleteMaps().containsKey(name)) {
-							plugin.getDeleteMaps().put(name, true);
-							Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+" Deseas Borrar el Mapa "+ChatColor.RED+name+ChatColor.YELLOW+"??? "+ChatColor.RED+"(Escribe el mismo Comando para Confirmar)");
-							Bukkit.getScheduler().runTaskLater(plugin, () -> {
-								if(plugin.getDeleteMaps().containsKey(name)) {
-									plugin.getDeleteMaps().remove(name);
-									Bukkit.getConsoleSender().sendMessage(ChatColor.RED+" La confirmacion del Borrado de Mapa "+ChatColor.GOLD+name+ChatColor.RED+" Expiro.");
-								}
-								
-							}, 200L);// 10 SEGS
-						}else {
-							if(plugin.getDeleteMaps().containsKey(name)) {
-								plugin.getDeleteMaps().remove(name);
-								
-								FileConfiguration menu = plugin.getMenuItems();
-								if(menu.contains(name)) {
-									   
-									   
-									   menu.set(name,null);
-									   plugin.getMenuItems().save();
-									   plugin.getMenuItems().reload();
-								}
-								YamlFilePlus y = new YamlFilePlus(plugin);
-								y.deleteSpecificConsole(name);
-							}
-						}
+						gc.deleteYmlMg(null, name);
 						
 					}else {
 						Bukkit.getConsoleSender()
@@ -3720,35 +3723,9 @@ public class Comandsmg implements CommandExecutor{
 						if (args.length == 2) {
 							String name = args[1];
 							
-							
-							
+						
 							//CAMBIAR
-							if(!plugin.getDeleteMaps().containsKey(name)) {
-								plugin.getDeleteMaps().put(name, true);
-								Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+" Deseas Borrar el Mapa "+ChatColor.RED+name+ChatColor.YELLOW+"??? "+ChatColor.RED+"(Escribe el mismo Comando para Confirmar)");
-								Bukkit.getScheduler().runTaskLater(plugin, () -> {
-									if(plugin.getDeleteMaps().containsKey(name)) {
-										plugin.getDeleteMaps().remove(name);
-										Bukkit.getConsoleSender().sendMessage(ChatColor.RED+" La confirmacion del Borrado de Mapa "+ChatColor.GOLD+name+ChatColor.RED+" Expiro.");
-									}
-									
-								}, 200L);// 10 SEGS
-							}else {
-								if(plugin.getDeleteMaps().containsKey(name)) {
-									plugin.getDeleteMaps().remove(name);
-									
-									FileConfiguration menu = plugin.getMenuItems();
-									if(menu.contains(name)) {
-										   
-										   
-										   menu.set(name,null);
-										   plugin.getMenuItems().save();
-										   plugin.getMenuItems().reload();
-									}
-									YamlFilePlus y = new YamlFilePlus(plugin);
-									y.deleteSpecificPlayer(player, name);
-								}
-							}
+							gc.deleteYmlMg(player, name);
 							//plugin.yml = new YamlFile(plugin,name, new File(plugin.getDataFolder().getAbsolutePath()+carpeta));;
 						
 						
@@ -4622,6 +4599,42 @@ public class Comandsmg implements CommandExecutor{
 							
 						}else {
 							player.sendMessage(ChatColor.RED+"Usa /mg execute-timer <map> <timer>");
+						}
+						
+					}
+					
+					
+					return true;
+				}else if(args[0].equalsIgnoreCase("cancel-timer")) {
+					
+					if(!player.isOp()) {
+						
+						player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
+						return true;
+					}
+					
+					if(gc.isPlayerinGame(player)) {
+						// /mg execute-timer Map Name
+						if(args.length == 3) {
+							String map = args[1];
+							String timername = args[2];
+							
+							if(!gc.existMap(map)) {
+								player.sendMessage(ChatColor.RED+"Ese Mapa no existe o esta Mal escrito.");
+								return true;
+							}
+							if(!gc.isMapinGame(map)) {
+								player.sendMessage(ChatColor.RED+"Ese Mapa no esta en Juego.");
+								return true;
+							}
+							
+							
+							
+							gc.cancelExecutableTimer(player, map, timername);
+							
+							
+						}else {
+							player.sendMessage(ChatColor.RED+"Usa /mg cancel-timer <map> <timer>");
 						}
 						
 					}

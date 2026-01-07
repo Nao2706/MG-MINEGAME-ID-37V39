@@ -155,23 +155,23 @@ public class Minegame extends JavaPlugin{
 		List<String> ac = config.getStringList("Maps-Created.List");
 	
 		if(!ac.contains(name)) {
-			this.general = new YamlFile(this,name, new File(this.getDataFolder().getAbsolutePath()+carpeta));
-			this.config.set("Maps-Created.List",ac);
-			ac.add(name);
-			this.config.save();
+				this.general = new YamlFile(this,name, new File(this.getDataFolder().getAbsolutePath()+carpeta));
+				this.config.set("Maps-Created.List",ac);
+				ac.add(name);
+				this.config.save();
 			
 			
 			   getAllYmls.put(name,this.general);
 			   //statusArena.put(name,EstadoPartida.ESPERANDO);
 			if(player != null) {
-				player.sendMessage(nombre+ChatColor.GREEN+" El Mapa "+name+" a sido creada");
+				player.sendMessage(nombre+ChatColor.GREEN+" El Mapa "+name+" a sido Creado.");
 			}
 		
-			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Nuevo yml creado: "+name);
+			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+" El Mapa "+name+" a sido Creado.");
 		}else {
 	    	Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El Mapa "+name+" ya existe.");
 	    	if(player != null) {
-	    	player.sendMessage(nombre+ChatColor.GREEN+" El Mapa "+name+" ya existe");
+	    	player.sendMessage(nombre+ChatColor.GREEN+" El Mapa "+name+" ya existe.");
 	    	}
 	       }
 		

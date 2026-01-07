@@ -134,6 +134,7 @@ public class TabCompletemg implements TabCompleter{
 			arguments.add("remove-custom-generator");
 			arguments.add("bossbar");
 			arguments.add("execute-timer");
+			arguments.add("cancel-timer");
 			
 		}
 		

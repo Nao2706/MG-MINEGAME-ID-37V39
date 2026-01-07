@@ -180,7 +180,7 @@ public class YamlFilePlus extends YamlConfiguration {
 				              			if(file3.exists()) {
 				              				if(name.equals(file3.getName())) {
 				              					load(file3.getAbsoluteFile());
-				              					Bukkit.getConsoleSender().sendMessage("gg2 reload");
+				              					//Bukkit.getConsoleSender().sendMessage("gg2 reload");
 				              				}
 				              			}
 				              		
