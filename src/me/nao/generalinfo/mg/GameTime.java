@@ -2,13 +2,22 @@ package me.nao.generalinfo.mg;
 
 
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
 
 import me.nao.enums.mg.GameStatus;
 import me.nao.enums.mg.GameType;
+import me.nao.enums.mg.TimerStatus;
 import me.nao.main.mg.Minegame;
+import me.nao.utils.mg.Utils;
 
 @SuppressWarnings("deprecation")
 public class GameTime {
@@ -35,7 +44,12 @@ public class GameTime {
 	private double bossbartotal;
 	private double bossbartime;
 	
-	
+	private BossBar timerbosbar;
+	private String title;
+	private BarColor color;
+	private boolean isExcutabletimer;
+	private List<String> actions;
+	private TimerStatus ts;
 	
 	private Minegame plugin;
 	
@@ -45,9 +59,11 @@ public class GameTime {
 		this.gamehourmg = gamehour;
 		this.gameminutemg = gameminute;
 		this.gamesecondmg = gamesecond;
+		
 		this.timerhourmg = gamehour;
 		this.timerminutemg = gameminute;
 		this.timersecondmg = gamesecond;
+		
 		this.cronomethourmg = 0;
 		this.cronometminutemg = 0;
 		this.cronometsecondmg = 0;
@@ -72,64 +88,121 @@ public class GameTime {
 		this.bossbartotal = this.bossbarhora + this.bossbarminute + this.bossbarsecond;
 		this.bossbarpro = 1.0;
 		this.bossbartime = 1.0 / this.bossbartotal;
+		
+		this.title = "";
+		this.color = null;
+		this.timerbosbar = Bukkit.createBossBar("",BarColor.GREEN, BarStyle.SOLID,  null ,null);
+		this.actions = new ArrayList<>();
+		this.isExcutabletimer = false;
+		ts = TimerStatus.READY;
 	}
 	
 	public void timerRunMg() {
 		GameInfo gi = plugin.getGameInfoPoo().get(this.map);
 		
-		if(gi.getGameStatus() == GameStatus.TERMINANDO)return;
-		if(this.cronometsecondmg != 60 ){
-		   this.cronometsecondmg++;
+		
+		
+		if(isExcutableTimerMg()) {
 			
-		}if(this.cronometminutemg != 60 && this.cronometsecondmg == 60) {
-			 
-			 this.cronometminutemg++;
-			 this.cronometsecondmg = 0;
-			
-		}if(this.cronomethourmg != 60 && this.cronometminutemg == 60) {
-			
-			 this.cronomethourmg++;
-			 this.cronometminutemg = 0;
-		 }
-		
-		
-		updateBossBarTittle();
-		if(gi.getGameStatus() == GameStatus.PAUSE)return;
-		
-		
-		if(gi.getGameStatus() == GameStatus.FREEZE) { 
-			  if(this.freezesecond <= 0 && this.freezeminute <= 0 &&  this.freezehour <= 0) {
-				  gi.setGameStatus(GameStatus.JUGANDO);
+			  updateBossBarTittle();
+			  
+			  if(this.timersecondmg == 0 && this.timerminutemg == 0 && this.timerhourmg == 0) {
+				  ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+				  
+				  if(!getTimerActions().isEmpty());
+				  for(String t : getTimerActions()) {
+					  
+						if(t.contains("%player%")) {
+							if(gi instanceof GameAdventure) {
+								GameAdventure ga = (GameAdventure) gi;
+								for(String player : ga.getAlivePlayers()){
+									Bukkit.dispatchCommand(console, ChatColor.translateAlternateColorCodes('&', t.replaceAll("%player%",player)));
+								}
+							}
+							
+						}else{
+							Bukkit.dispatchCommand(console, ChatColor.translateAlternateColorCodes('&', t));
+						}
+					  
+					  
+				  }
+				  getCustomTimerBossBar().setVisible(false);
+				  setExecutableTimerByCommand(false);
+				  setTimerStatus(TimerStatus.FINISH);
 			  }
-			
-			  if(this.freezesecond != 0){
-				    this.freezesecond--; 
+			  
+			  
+			  if(this.timersecondmg != 0){
+				    this.timersecondmg--; 
 				
-			   }if(this.freezeminute != 0 && this.freezesecond == 0) {
-				    this.freezeminute--;
-				    this.freezesecond = 60;
+			   }if(this.timerminutemg != 0 && this.timersecondmg == 0) {
+				    this.timerminutemg--;
+				    this.timersecondmg = 60;
 					
-			   }if(this.freezehour != 0 && this.freezeminute == 0) {
-				    this.freezehour--;
-				    this.freezeminute = 60;
+			   }if(this.timerhourmg != 0 && this.timerminutemg == 0) {
+				    this.timerhourmg--;
+				    this.timerminutemg = 60;
 					
 			   }
-			return;
-		}
-
-		
-		  if(this.timersecondmg != 0){
-			    this.timersecondmg--; 
 			
-		   }if(this.timerminutemg != 0 && this.timersecondmg == 0) {
-			    this.timerminutemg--;
-			    this.timersecondmg = 60;
+		}else {
+			if(gi.getGameStatus() == GameStatus.TERMINANDO)return;
+			if(this.cronometsecondmg != 60 ){
+			   this.cronometsecondmg++;
 				
-		   }if(this.timerhourmg != 0 && this.timerminutemg == 0) {
-			    this.timerhourmg--;
-			    this.timerminutemg = 60;
+			}if(this.cronometminutemg != 60 && this.cronometsecondmg == 60) {
+				 
+				 this.cronometminutemg++;
+				 this.cronometsecondmg = 0;
 				
-		   }
+			}if(this.cronomethourmg != 60 && this.cronometminutemg == 60) {
+				
+				 this.cronomethourmg++;
+				 this.cronometminutemg = 0;
+			 }
+			
+			
+			
+			updateBossBarTittle();
+			if(gi.getGameStatus() == GameStatus.PAUSE)return;
+			
+			
+			if(gi.getGameStatus() == GameStatus.FREEZE) { 
+				  if(this.freezesecond <= 0 && this.freezeminute <= 0 &&  this.freezehour <= 0) {
+					  gi.setGameStatus(GameStatus.JUGANDO);
+				  }
+				
+				  if(this.freezesecond != 0){
+					    this.freezesecond--; 
+					
+				   }if(this.freezeminute != 0 && this.freezesecond == 0) {
+					    this.freezeminute--;
+					    this.freezesecond = 60;
+						
+				   }if(this.freezehour != 0 && this.freezeminute == 0) {
+					    this.freezehour--;
+					    this.freezeminute = 60;
+						
+				   }
+				return;
+			}
+
+			
+			  if(this.timersecondmg != 0){
+				    this.timersecondmg--; 
+				
+			   }if(this.timerminutemg != 0 && this.timersecondmg == 0) {
+				    this.timerminutemg--;
+				    this.timersecondmg = 60;
+					
+			   }if(this.timerhourmg != 0 && this.timerminutemg == 0) {
+				    this.timerhourmg--;
+				    this.timerminutemg = 60;
+					
+			   }
+		}
+		
+
 		 
 		 
 		  
@@ -305,7 +378,7 @@ public class GameTime {
 	public void updateBossBarTittle() {
 		
 		GameInfo gi = plugin.getGameInfoPoo().get(this.map);
-		BossBar boss = gi.getBossbar();
+		
 		
 //		  //Transformar minutos - hora a segundos
 //	 	double hora3 = this.timerhour * 3600;
@@ -318,33 +391,62 @@ public class GameTime {
 //	    double pro = 1.0;
 //	 	//calculo para hacer uba reduccion
 //	 	double time = 1.0 / total;
-		
-		boss.setVisible(true);
-		
-		if(this.bossbarpro > 0) {
-			 boss.setProgress(this.bossbarpro);
-		}else {
-			 boss.setProgress(0.0);
-		}
-		
-       
-  	   
-	  if(this.timerhourmg <= 0 && this.timerminutemg >= 10) {
-		  boss.setColor(BarColor.GREEN);
-	  }
+ 			
+      
+     
+      if(isExcutableTimerMg()) {
+    	  
+	    		BossBar boss = getCustomTimerBossBar();
+	    		if(this.bossbarpro > 0) {
+	     			 boss.setProgress(this.bossbarpro);
+	     		}else {
+	     			 boss.setProgress(0.0);
+	     		}
+    	  
+    		
+    	  	    if(this.timerhourmg <= 0 && this.timerminutemg >= 10) {
+    	   		  boss.setColor(color);
+    	   	    }
 
-	  if(this.timerhourmg <= 0 && this.timerminutemg <= 9) {
-		  boss.setColor(BarColor.YELLOW);						  
-	  }
+    	   	    if(this.timerhourmg <= 0 && this.timerminutemg <= 9) {
+    	   		  boss.setColor(BarColor.YELLOW);						  
+    	   	    }
+    	   	  
+    	        if(this.timerhourmg <= 0 && this.timerminutemg <= 1 ) {
+    	   		  boss.setColor(BarColor.RED);
+    	   	    }
+    		
+    	        boss.setTitle(getGameTimer(gi.getGameStatus()));
+    	  
+      }else {
+    	  
+		  		BossBar boss = gi.getBossbar();
+		  		
+		  		
+		  		if(this.bossbarpro > 0) {
+		  			 boss.setProgress(this.bossbarpro);
+		  		}else {
+		  			 boss.setProgress(0.0);
+		  		}
+		  		
+		         
+		    	   
+		  	   if(this.timerhourmg <= 0 && this.timerminutemg >= 10) {
+		  		  boss.setColor(BarColor.GREEN);
+		  	    }
+		
+		  	    if(this.timerhourmg <= 0 && this.timerminutemg <= 9) {
+		  		  boss.setColor(BarColor.YELLOW);						  
+		  	    }
+		  	  
+		        if(this.timerhourmg <= 0 && this.timerminutemg <= 1 ) {
+		  		  boss.setColor(BarColor.RED);
+		  	     }
+		    	  
+		    	  boss.setTitle(getGameTimer(gi.getGameStatus()));
+      }
+     
 	  
-      if(this.timerhourmg <= 0 && this.timerminutemg <= 1 ) {
-		  boss.setColor(BarColor.RED);
-	  } 			
-      
-     
-      
-     
-	  boss.setTitle(getGameTimer(gi.getGameStatus()));
 	  
 	  if(gi.getGameStatus() == GameStatus.JUGANDO) { 
     	  this.bossbarpro = this.bossbarpro - this.bossbartime;
@@ -387,6 +489,30 @@ public class GameTime {
 
 	public int getCronometsecond() {
 		return this.cronometsecondmg;
+	}
+	
+	public List<String> getTimerActions(){
+		return actions;
+	}
+	
+	public boolean isExcutableTimerMg() {
+		return isExcutabletimer;
+	}
+	
+	public BossBar getCustomTimerBossBar() {
+		return timerbosbar;
+	}
+	
+	public String getCustomTitle() {
+		return title;
+	}
+	
+	public TimerStatus getTimerStatus() {
+		return ts;
+	}
+	
+	public BarColor getBossBarColor() {
+		return color;
 	}
 	
 	public void setGamehour(int gamehourmg) {
@@ -436,6 +562,30 @@ public class GameTime {
 	public void setAddedsecond(int addedsecond) {
 		this.addedsecond = addedsecond;
 	}
+	
+	public void setExcutableTimerActions(List<String> actions) {
+		this.actions = actions;
+	}
+	
+	public void setExecutableTimerByCommand(boolean isExcutabletimer) {
+		this.isExcutabletimer = isExcutabletimer;
+	}
+	
+	public void setCustomTitle(String title) {
+		this.title = title;
+	}
+	
+	public void setBossBarTimer (BossBar bosstimer) {
+		this.timerbosbar = bosstimer;
+	}
+	
+	public void setTimerStatus(TimerStatus t) {
+		this.ts = t;
+	}
+	
+	public void setBossBarColor(BarColor bc) {
+		this.color = bc;
+	}
 
 	public String getGameTimer(GameStatus status) {
 		
@@ -443,12 +593,23 @@ public class GameTime {
 	     GameInfo gi = plugin.getGameInfoPoo().get(this.map);
 		 String text = "";
 		
-		
+		 //DE MOMENTO EL TIMER CUSTOM NO SE PUEDE FREZEAR
+		if(isExcutableTimerMg()) {
+			   text = Utils.colorTextChatColor(getCustomTitle().replaceAll("%timer%",getGameTimerForPlayer())
+					  			.replaceAll("%timersecond%",String.valueOf(getTimersecond())
+							    .replaceAll("%timerminute%",String.valueOf(getTimerminute())
+							    .replaceAll("%timerhour%",String.valueOf(getTimerhour())
+							    		
+							    		))));
+			   
+			   return text;
+		}
 		
 		if(this.showaddedtime != 0) {
 			this.showaddedtime -- ;
 			
-			if(gi.getGameType() == GameType.ADVENTURE) {
+			
+			 if(gi.getGameType() == GameType.ADVENTURE) {
 				
 				if(status == GameStatus.PAUSE) { 
 					text = ""+ChatColor.GOLD+ChatColor.BOLD+"Tiempo Remanente Pausado:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s "+ChatColor.GREEN+"+"+showTimerFormat(this.addedhour)+":"+showTimerFormat(this.addedminute)+":"+showTimerFormat(this.addedsecond);
@@ -543,6 +704,13 @@ public class GameTime {
 		return hor+":"+min+":"+seg;
 	}
 	
+	public String getGameTimerForPlayer() {
+		 String seg = String.format("%02d", getTimersecond());
+		 String min = String.format("%02d", getTimerminute());
+		 String hor = String.format("%02d", getTimerhour());
+		return hor+":"+min+":"+seg;
+	}
+	
 	public long getTotalSecondsofCronomet() {
 		
 		long total = 0;
@@ -567,7 +735,35 @@ public class GameTime {
 	}
 	
 
+	public void startCustomTimer() {
+		
+			
+		if(getTimerStatus() == TimerStatus.IN_PROGRESS) return;
+			
+		  if(this.timersecondmg == 0 && this.timerminutemg == 0 && this.timerhourmg == 0) {
+			    getCustomTimerBossBar().setProgress(1.0);
+			    setTimeToTimer(this.map,getGamehour(),getGameminute(),getGamesecond());
+		   }
+			
+
+		  setExecutableTimerByCommand(true);
+		  setTimerStatus(TimerStatus.IN_PROGRESS);
+		  getCustomTimerBossBar().setVisible(true);
+		  
+		  if(getCustomTimerBossBar().getPlayers().isEmpty()) {
+			  GameConditions gc = new GameConditions(plugin);
+			  
+			  GameInfo gi = plugin.getGameInfoPoo().get(this.map);
+			  
+			  List<String> l = gi.getParticipants();
+			  for(Player player : gc.ConvertStringToPlayer(l)) {
+				  gc.showBossBarsTimers(player, gi);
+			  }
+		  }
+
 	
+		
+	}
 	
 	
 }

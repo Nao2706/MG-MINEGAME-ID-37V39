@@ -2,6 +2,7 @@ package me.nao.generalinfo.mg;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +35,9 @@ public class GameInfo {
 	private boolean pvp,barriers,allowinventory,ranked,deleinventorybytimeout,hascooldown,cleanmapfromentitys;
 	private GameTime gt;
 	private FileConfiguration data;
-	private List<Map.Entry<String, Integer>> top ;
+	private List<Map.Entry<String, Integer>> top;
+	private Map<String,GameTime> timers;
+	
 	// @param GameInfo Sirve para modo aventura y resistencia
 	/**
 	 * Constructor Base para futuros tipos de Juegos 
@@ -81,6 +84,7 @@ public class GameInfo {
 		this.cleanmapfromentitys = true;
 		this.minlvltoplay = 0;
 		this.minprestigetoplay = 0;
+		this.timers = new HashMap<>();
 		
 	}
 
@@ -171,6 +175,10 @@ public class GameInfo {
 	
 	public List<Location> getMobsGenerators(){
 		return mobsgenerators;
+	}
+	
+	public Map<String,GameTime> getTimersEvents(){
+		return timers;
 	}
 	
 	public boolean isPvpinMap() {
@@ -411,6 +419,10 @@ public class GameInfo {
 	
 	public void setPlayersTop(List<Map.Entry<String, Integer>> top) {
 		this.top = top;
+	}
+	
+	public void setTimersEvents(Map<String,GameTime> timers) {
+		this.timers = timers;
 	}
 
 	public String ShowGame() {

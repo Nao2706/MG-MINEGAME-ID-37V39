@@ -154,11 +154,12 @@ public class MapSettings {
 			ym.set("End-Console.Commands",end);
 			end.add("minecraft:weather clear");
 			
-			List<String> time = ym.getStringList("Time-Actions.0_1_0.List");
+			List<String> time = ym.getStringList("Time-Actions.Time-1-0-1.List");
 			ym.set("Time-Actions.Time-1-0-1.List",time);
-			time.add("say hola");
-			
-			
+			time.add("say Example , here put a command o other stuff");
+			time.add("say When the timer is equals to the numeber");
+			time.add("say replace Time-X-x-x for other numbers ");	
+			time.add("say example Time-10-5-1 is h-m-s");	
 		
 			SetObjetiveInfoDefault(ym,"Objetivo");
 			SetInfoItemOfMision(name);
@@ -166,9 +167,20 @@ public class MapSettings {
 			
 			List<String> zones = ym.getStringList("Cuboid-Zones.List");
 			ym.set("Cuboid-Zones.List",zones);
-			zones.add("world/123/34/56;world/124/34/58;CANPLACE");
-			zones.add("world/123/34/56;world/124/34/58;CANBREAK");
-			zones.add("world/123/34/56;world/124/34/58;CANMODIFY");
+			zones.add("example/123/34/56;example/124/34/58;CANPLACE");
+			zones.add("example/123/34/56;example/124/34/58;CANBREAK");
+			zones.add("example/123/34/56;example/124/34/58;CANMODIFY");
+			
+			
+			
+			ym.set("Timer-Events.Example.Time","0,1,0");
+			ym.set("Timer-Events.Example.Display-Text","You must run:%timer% %timerhour% %timerminute% %timersecond% ");
+			ym.set("Timer-Events.Example.BossBar-Color","WHITE");
+			List<String> timer = ym.getStringList("Timer-Events.Example.Actions-List");
+			ym.set("Timer-Events.Example.Actions-List", timer);
+			timer.add("say this timer is separate from the main one");
+			timer.add("say and is execute by command");
+			timer.add("say /mg execute-timer Example");
 			
 			plugin.getCacheSpecificYML(name).save();
 			plugin.getCacheSpecificYML(name).reload();

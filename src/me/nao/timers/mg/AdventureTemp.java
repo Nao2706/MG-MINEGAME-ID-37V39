@@ -5,6 +5,7 @@ package me.nao.timers.mg;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -24,6 +25,7 @@ import org.bukkit.scheduler.BukkitScheduler;
 
 import me.nao.enums.mg.GameStatus;
 import me.nao.enums.mg.StopMotive;
+import me.nao.enums.mg.TimerStatus;
 import me.nao.generalinfo.mg.GameAdventure;
 import me.nao.generalinfo.mg.GameConditions;
 import me.nao.generalinfo.mg.GameInfo;
@@ -261,6 +263,15 @@ public class AdventureTemp {
 						}
 					}
 					
+						 if(!ms.getTimersEvents().isEmpty()) {
+							for(Map.Entry<String,GameTime> entry : ms.getTimersEvents().entrySet()) {
+								GameTime timers = entry.getValue();
+								if(timers.isExcutableTimerMg() && timers.getTimerStatus() == TimerStatus.IN_PROGRESS) {
+									timers.timerRunMg();
+								}
+							} 
+						 }
+						 
 						 gc.HasTimePath("Time-"+gt.getTimerhour()+"-"+gt.getTimerminute()+"-"+gt.getTimersecond(), name);
 					     gt.timerRunMg();
 						 //plugin.getArenaCronometer().put(name,gt.getCronomethour()+":"+gt.getCronometminute()+":"+gt.getCronometsecond());

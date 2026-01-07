@@ -947,7 +947,38 @@ public class Comandsmg implements CommandExecutor{
         			
         			return true;
         			
-        		}else if(args[0].equalsIgnoreCase("prestiges")) {
+        		}else if(args[0].equalsIgnoreCase("execute-timer")) {
+					
+					
+				
+						// /mg execute-timer Map Name
+						if(args.length == 3) {
+							String map = args[1];
+							String timername = args[2];
+							
+							if(!gc.existMap(map)) {
+								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Ese Mapa no existe o esta mal escrito.");
+								return true;
+							}
+							
+							if(!gc.isMapinGame(map)) {
+								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Ese Mapa no esta en Juego");
+								return true;
+							}
+							
+							gc.loadExecutableTimer(null, map, timername);
+							
+							
+							
+						}else {
+							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Usa /mg execute-timer <map> <timer>");
+						}
+						
+					
+					
+					
+					return true;
+				}else if(args[0].equalsIgnoreCase("prestiges")) {
         			RankPlayer rk= new RankPlayer(plugin);
         			
         			rk.showPrestiges(null);
@@ -2052,7 +2083,7 @@ public class Comandsmg implements CommandExecutor{
 						
 						if(!plugin.getDeleteMaps().containsKey(name)) {
 							plugin.getDeleteMaps().put(name, true);
-							Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+" Deseas Borrar el Mapa "+ChatColor.RED+name+ChatColor.YELLOW+"???");
+							Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+" Deseas Borrar el Mapa "+ChatColor.RED+name+ChatColor.YELLOW+"??? "+ChatColor.RED+"(Escribe el mismo Comando para Confirmar)");
 							Bukkit.getScheduler().runTaskLater(plugin, () -> {
 								if(plugin.getDeleteMaps().containsKey(name)) {
 									plugin.getDeleteMaps().remove(name);
@@ -3691,10 +3722,10 @@ public class Comandsmg implements CommandExecutor{
 							
 							
 							
-							
+							//CAMBIAR
 							if(!plugin.getDeleteMaps().containsKey(name)) {
 								plugin.getDeleteMaps().put(name, true);
-								Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+" Deseas Borrar el Mapa "+ChatColor.RED+name+ChatColor.YELLOW+"???");
+								Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW+" Deseas Borrar el Mapa "+ChatColor.RED+name+ChatColor.YELLOW+"??? "+ChatColor.RED+"(Escribe el mismo Comando para Confirmar)");
 								Bukkit.getScheduler().runTaskLater(plugin, () -> {
 									if(plugin.getDeleteMaps().containsKey(name)) {
 										plugin.getDeleteMaps().remove(name);
@@ -4561,6 +4592,42 @@ public class Comandsmg implements CommandExecutor{
 					//TODO MANTENIMIENTO
 					
 					
+				}else if(args[0].equalsIgnoreCase("execute-timer")) {
+					
+					if(!player.isOp()) {
+						
+						player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
+						return true;
+					}
+					
+					if(gc.isPlayerinGame(player)) {
+						// /mg execute-timer Map Name
+						if(args.length == 3) {
+							String map = args[1];
+							String timername = args[2];
+							
+							if(!gc.existMap(map)) {
+								player.sendMessage(ChatColor.RED+"Ese Mapa no existe o esta Mal escrito.");
+								return true;
+							}
+							if(!gc.isMapinGame(map)) {
+								player.sendMessage(ChatColor.RED+"Ese Mapa no esta en Juego.");
+								return true;
+							}
+							
+							
+							
+							gc.loadExecutableTimer(player, map, timername);
+							
+							
+						}else {
+							player.sendMessage(ChatColor.RED+"Usa /mg execute-timer <map> <timer>");
+						}
+						
+					}
+					
+					
+					return true;
 				}else if(args[0].equalsIgnoreCase("look")) {
 					
 					List<Entity> l = getNearbyEntites(player.getLocation(), 100);

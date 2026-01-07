@@ -62,6 +62,7 @@ import me.nao.enums.mg.MapStatus;
 import me.nao.enums.mg.ObjetiveStatusType;
 import me.nao.enums.mg.PlayerGameStatus;
 import me.nao.enums.mg.StopMotive;
+import me.nao.enums.mg.TimerStatus;
 import me.nao.main.mg.Minegame;
 import me.nao.manager.mg.GameIntoMap;
 import me.nao.scoreboard.mg.MgScore;
@@ -155,6 +156,7 @@ public class GameConditions {
 			if(spectador.contains(player.getName())) {
 				sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.WHITE+"El jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" salio del Modo Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size() - 1)+ChatColor.RED+"]");
 				ga.getBossbar().removePlayer(player);
+				showBossBarsTimers(player, ms);
 			}else {
 				//" "+Utils.pingLevel(player.getPing())+
 				if(player.getPing() >= 150) {
@@ -1422,7 +1424,9 @@ public class GameConditions {
 			    	ga.setCountDownStart(loadCountdownMap(map));
 			    	ga.setGameTime(loadMapGameTime(map, time)); 
 			    	ga.setBarriersinMap(hasBarriersMap(map));
-			    	ga.setAllowedJoinWithOwnInventory(canJoinWithYourInventory(map)); 
+			    	ga.setAllowedJoinWithOwnInventory(canJoinWithYourInventory(map));
+			    	ga.setTimersEvents(loadDataExecutableTimer(map));
+			    	
 			    	 
 			    	ga.setSpawnItemRange(getSpawnItemRange(map));
 			    	ga.setSpawnMobRange(getSpawnMobRange(map));
@@ -1567,7 +1571,9 @@ public class GameConditions {
     	gi.setCountDownStart(loadCountdownMap(map));
     	gi.setBarriersinMap(hasBarriersMap(map));
     	gi.setPvpinMap(isPvPAllowed(map));
-    	gi.setAllowedJoinWithOwnInventory(canJoinWithYourInventory(map)); 
+    	gi.setAllowedJoinWithOwnInventory(canJoinWithYourInventory(map));
+    	gi.setTimersEvents(loadDataExecutableTimer(map));
+    	
     	
     	gi.setSpawnItemRange(getSpawnItemRange(map));
     	gi.setSpawnMobRange(getSpawnMobRange(map));
@@ -1921,7 +1927,7 @@ public class GameConditions {
   		  return pr;
 		
 	}
-	  
+	   
 	public void joinSpectator(Player player ,String map) {
 		 //MODO ESPECTADOR no te uniras como jugador
 		 setAndSavePlayer(player,PlayerGameStatus.SPECTATOR, map);
@@ -1935,9 +1941,35 @@ public class GameConditions {
 				 ga.getBossbar().addPlayer(player);
 				 sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.WHITE+"El Jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" se Unio como Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size())+ChatColor.RED+"]");
 				 TptoSpawnSpectator(player, map);
+				 showBossBarsTimers(player, ms);
 		 }
 	}
 
+	
+	public void showBossBarsTimers(Player player , GameInfo gi) {
+		
+		 if(!gi.getTimersEvents().isEmpty()) {
+			for(Map.Entry<String,GameTime> entry : gi.getTimersEvents().entrySet()) {
+				GameTime timers = entry.getValue();
+				if(timers.isExcutableTimerMg() && timers.getTimerStatus() == TimerStatus.IN_PROGRESS) {
+					timers.getCustomTimerBossBar().addPlayer(player);
+				}
+			} 
+		 }
+	}
+	
+	public void removeBossBarsTimers(Player player , GameInfo gi) {
+		
+		 if(!gi.getTimersEvents().isEmpty()) {
+			for(Map.Entry<String,GameTime> entry : gi.getTimersEvents().entrySet()) {
+				GameTime timers = entry.getValue();
+				if(timers.isExcutableTimerMg() && timers.getTimerStatus() == TimerStatus.IN_PROGRESS) {
+					timers.getCustomTimerBossBar().removePlayer(player);
+				}
+			} 
+		 }
+	}
+	
 	
 	public boolean canJoinToTheMap(Player player ,String map) {
 		 if(isPlayerinGame(player)) {
@@ -2149,12 +2181,10 @@ public class GameConditions {
 					
 				 }
 		 		 
-		 		 
-		 		
-		 		
+		 		  
 			 		boss.addPlayer(player);
 			 		return true;
-				
+				  
 		 }
 		 
 		
@@ -3347,6 +3377,7 @@ public class GameConditions {
 				setDefaultHeartsInGame(player);
 				BossBar boss = ms.getBossbar();
 				boss.removePlayer(player);
+				removeBossBarsTimers(player, ms);
 		 
 				
 					//SE SECCIONA POR QUE HAY QUE VER SI SE SALVO O NO SU INVENTARIO
@@ -3796,8 +3827,57 @@ public class GameConditions {
 		int segundo = Integer.valueOf(timer[2]);
 	
 		return new GameTime(plugin,map,hora,minuto,segundo);
-   }	 
+   }
    
+
+   
+   public  Map<String,GameTime> loadDataExecutableTimer(String map) {
+	    FileConfiguration game = getGameConfig(map);
+	    Map<String,GameTime> timer = new HashMap<>();
+	    if(game.contains("Timer-Events")) {
+			for (String key : game.getConfigurationSection("Timer-Events").getKeys(false)) {
+				
+				String time = game.getString("Timer-Events."+key+".Time");
+				String text = game.getString("Timer-Events."+key+".Display-Text");
+				String color = game.getString("Timer-Events."+key+".BossBar-Color");
+				List<String> list = game.getStringList("Timer-Events.Example.Actions-List");
+				
+			    String timer1[] = time.split(",");
+				int hora = Integer.valueOf(timer1[0]);
+				int minuto = Integer.valueOf(timer1[1]);
+				int segundo = Integer.valueOf(timer1[2]);
+				
+				GameTime gt = new GameTime(plugin,map,hora,minuto,segundo);
+				BarColor bc = BarColor.valueOf(color.toUpperCase()) == null ? BarColor.PURPLE : BarColor.valueOf(color.toUpperCase());
+	
+				gt.setBossBarColor(bc);
+				gt.setCustomTitle(text);
+				gt.setExcutableTimerActions(list);
+				timer.put(key, gt);
+			}
+	    }
+	   
+	   
+	   return timer;
+   }
+   
+   
+   public void loadExecutableTimer(Player player, String map,String timername) {
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
+		Map<String,GameTime> data = gi.getTimersEvents();
+		
+		if(!data.containsKey(timername)) {
+			
+			switchsendMessageForUserAndConsole(player, ChatColor.RED+"No existe ese Timer con el Nombre: "+ChatColor.GOLD+timername);
+			
+			return;
+		}
+		
+		GameTime gt = data.get(timername);
+		gt.startCustomTimer();
+		switchsendMessageForUserAndConsole(player, ChatColor.GREEN+"Se a Iniciado el Timer: "+ChatColor.GOLD+timername);
+		
+   }
    
    public int loadCountdownMap(String map) {
 	    FileConfiguration game = getGameConfig(map);
@@ -3837,6 +3917,21 @@ public class GameConditions {
 	}      
 	     
 	public List<GameTimeActions> loadGameTimeActions(String map) {
+		FileConfiguration game = getGameConfig(map);
+		List<GameTimeActions> list = new ArrayList<>();
+			if(game.contains("Time-Actions")) {
+				for (String key : game.getConfigurationSection("Time-Actions").getKeys(false)) {
+					List<String> actions = game.getStringList("Time-Actions."+key+".List");
+					list.add(new GameTimeActions(key,actions));
+				}
+			    
+			}
+		
+		return list;
+	}   
+	
+	
+	public List<GameTimeActions> errorXD(String map) {
 		FileConfiguration game = getGameConfig(map);
 		List<GameTimeActions> list = new ArrayList<>();
 			if(game.contains("Time-Actions")) {
