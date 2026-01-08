@@ -4,6 +4,7 @@ public enum TimerStatus {
 
 	READY,
 	IN_PROGRESS,
+	STOPPING,	
 	CANCELED,
 	FINISH
 	

@@ -1965,7 +1965,7 @@ public class GameConditions {
 		 if(!gi.getTimersEvents().isEmpty()) {
 			for(Map.Entry<String,GameTime> entry : gi.getTimersEvents().entrySet()) {
 				GameTime timers = entry.getValue();
-				if(timers.isExcutableTimerMg() && timers.getTimerStatus() == TimerStatus.IN_PROGRESS) {
+				if(timers.isExcutableTimerMg()) {
 					timers.getCustomTimerBossBar().removePlayer(player);
 				}
 			} 
@@ -3901,7 +3901,7 @@ public class GameConditions {
  			return;
  		}
  		
- 		gt.setTimerStatus(TimerStatus.CANCELED);
+ 		gt.setTimerStatus(TimerStatus.STOPPING);
  		switchsendMessageForUserAndConsole(player,"&aSe a &cCancelado &ael Timer: &6"+timername);
  		
     }

@@ -1886,9 +1886,9 @@ public class Comandsmg implements CommandExecutor{
 					}
 					
 					return true;
-				}
+				
 				//===================================================================
-				else if (args[0].equalsIgnoreCase("create") ) {
+	      		}else if (args[0].equalsIgnoreCase("create") ) {
 					if (args.length == 2) {
 						String name = args[1];
 						
@@ -6362,6 +6362,8 @@ public class Comandsmg implements CommandExecutor{
  			l.add(ChatColor.GOLD+"/mg arrowrain "+ChatColor.AQUA+" Lanza una Lluvia de Flechas.");
  			l.add(ChatColor.GOLD+"/mg entityrain "+ChatColor.AQUA+" Lanza una Lluvia de Flechas.");
  			l.add(ChatColor.GOLD+"/mg bossbar "+ChatColor.AQUA+" Muestra o Oculta la Bossbar de un Juego.");
+ 			l.add(ChatColor.GOLD+"/mg execute-timer "+ChatColor.AQUA+" Ejecuta un Timer en el Mapa (Ejecuta una Lista al terminar el Tiempo).");
+ 			l.add(ChatColor.GOLD+"/mg cancel-timer "+ChatColor.AQUA+" Detiene un Timer Activo en un Mapa.");
  			l.add(ChatColor.GOLD+"/mg delete-all-tempcooldown "+ChatColor.AQUA+" Borra el Cooldown Temporal de Todos los Jugadores.");
  			l.add(ChatColor.GOLD+"/mg delete-tempcooldown "+ChatColor.AQUA+" Borra el Cooldown Temporal de un Jugador Especifico.");
 	

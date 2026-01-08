@@ -416,11 +416,17 @@ public class GameTime {
     	   		  boss.setColor(BarColor.RED);
     	   	    }
     		
-    	     
-    	          boss.setTitle(getGameTimer(gi.getGameStatus()));
+    	        if(getTimerStatus() == TimerStatus.STOPPING) {
+       	    		getCustomTimerBossBar().setVisible(false);
+           			setExecutableTimerByCommand(false);
+           			setTimerStatus(TimerStatus.CANCELED);
+           		
+    	        }
+    	        
+    	        boss.setTitle(getGameTimer(gi.getGameStatus()));
     	        
     	
-    	        
+
     	
     	  
       }else {
@@ -601,7 +607,7 @@ public class GameTime {
 		 //DE MOMENTO EL TIMER CUSTOM NO SE PUEDE FREZEAR
 		if(isExcutableTimerMg()) {
 			
-			 if(getTimerStatus() == TimerStatus.CANCELED) {
+			 if(getTimerStatus() == TimerStatus.STOPPING) {
 				   text = Utils.colorTextChatColor("&c&lCancelado "+getCustomTitle().replaceAll("%timer%",getGameTimerForPlayer())
 				  			.replaceAll("%timersecond%",String.valueOf(getTimersecond())
 						    .replaceAll("%timerminute%",String.valueOf(getTimerminute())
@@ -609,9 +615,7 @@ public class GameTime {
 						    		
 						    		)))); 
 				 
-				 
-   	    		getCustomTimerBossBar().setVisible(false);
-       			setExecutableTimerByCommand(false);
+					setTimerStatus(TimerStatus.CANCELED);
        			
    	        }else{
  			   text = Utils.colorTextChatColor(getCustomTitle().replaceAll("%timer%",getGameTimerForPlayer())
@@ -680,23 +684,23 @@ public class GameTime {
 		}
 		
 		if(status == GameStatus.FREEZE) { 
-			text = ""+ChatColor.AQUA+ChatColor.BOLD+"FREEZE: "+ChatColor.BLUE+ChatColor.BOLD+ChatColor.STRIKETHROUGH+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s" +ChatColor.AQUA+" "+showTimerFormat(this.freezehour)+":"+showTimerFormat(this.freezeminute)+":"+showTimerFormat(this.freezesecond);
+			return text = ""+ChatColor.AQUA+ChatColor.BOLD+"FREEZE: "+ChatColor.BLUE+ChatColor.BOLD+ChatColor.STRIKETHROUGH+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s" +ChatColor.AQUA+" "+showTimerFormat(this.freezehour)+":"+showTimerFormat(this.freezeminute)+":"+showTimerFormat(this.freezesecond);
 		}
 		
 		if(status == GameStatus.PAUSE) { 
 			
 			if(gi.getGameType() == GameType.ADVENTURE) {
-				text =  ""+ChatColor.GOLD+ChatColor.BOLD+"Tiempo Remanente Pausado:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " ;
+				return text =  ""+ChatColor.GOLD+ChatColor.BOLD+"Tiempo Remanente Pausado:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " ;
 			}else if(gi.getGameType() == GameType.RESISTENCE){
-				text = ""+ChatColor.GOLD+ChatColor.BOLD+"Resistencia Pausado:"+ChatColor.AQUA+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " ;
+				return text = ""+ChatColor.GOLD+ChatColor.BOLD+"Resistencia Pausado:"+ChatColor.AQUA+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " ;
 			}
 		}
 		
 		//return ""+ChatColor.DARK_RED+ChatColor.BOLD+"Tiempo Remanente:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " ;
 		if(gi.getGameType() == GameType.ADVENTURE) {
-			text = ""+ChatColor.DARK_RED+ChatColor.BOLD+"Tiempo Remanente:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " ;
+			return text = ""+ChatColor.DARK_RED+ChatColor.BOLD+"Tiempo Remanente:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " ;
 		}else if(gi.getGameType() == GameType.RESISTENCE){
-			text = ""+ChatColor.DARK_RED+ChatColor.BOLD+"Resiste:"+ChatColor.AQUA+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " ;
+			return text = ""+ChatColor.DARK_RED+ChatColor.BOLD+"Resiste:"+ChatColor.AQUA+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " ;
 		}
 		return text;
 	}
@@ -761,16 +765,30 @@ public class GameTime {
 		
 			
 		if(getTimerStatus() == TimerStatus.IN_PROGRESS) return;
-			
+		  getCustomTimerBossBar().setTitle(Utils.colorTextChatColor(getCustomTitle().replaceAll("%timer%",getGameTimerForPlayer())
+		  			.replaceAll("%timersecond%",String.valueOf(getTimersecond())
+				    .replaceAll("%timerminute%",String.valueOf(getTimerminute())
+				    .replaceAll("%timerhour%",String.valueOf(getTimerhour())
+				    		)))));
 		  if(this.timersecondmg == 0 && this.timerminutemg == 0 && this.timerhourmg == 0) {
+			  
 			    getCustomTimerBossBar().setProgress(1.0);
 			    setTimeToTimer(this.map,getGamehour(),getGameminute(),getGamesecond());
+		
 		   }
 			
+		  if(getTimerStatus() == TimerStatus.CANCELED) {
+			    getCustomTimerBossBar().setProgress(1.0);
+			    setTimeToTimer(this.map,getGamehour(),getGameminute(),getGamesecond());
+		  }
+		  
 
+		  getCustomTimerBossBar().setColor(color);
 		  setExecutableTimerByCommand(true);
 		  setTimerStatus(TimerStatus.IN_PROGRESS);
 		  getCustomTimerBossBar().setVisible(true);
+		  
+		  
 		  
 		  if(getCustomTimerBossBar().getPlayers().isEmpty()) {
 			  GameConditions gc = new GameConditions(plugin);

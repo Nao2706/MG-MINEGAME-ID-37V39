@@ -240,7 +240,7 @@ public class ResistenceTemp {
 					 if(!ms.getTimersEvents().isEmpty()) {
 							for(Map.Entry<String,GameTime> entry : ms.getTimersEvents().entrySet()) {
 								GameTime timers = entry.getValue();
-								if(timers.isExcutableTimerMg() && timers.getTimerStatus() == TimerStatus.IN_PROGRESS) {
+								if(timers.isExcutableTimerMg() && timers.getTimerStatus() == TimerStatus.IN_PROGRESS || timers.getTimerStatus() == TimerStatus.STOPPING) {
 									timers.timerRunMg();
 								}
 							} 
