@@ -4306,7 +4306,56 @@ public class Comandsmg implements CommandExecutor{
 				
 				return true;
 				
-			}else if(args[0].equalsIgnoreCase("addtag")) {
+			}else if(args[0].equalsIgnoreCase("checkpremiun")) {
+				
+				
+					
+						player.sendMessage(plugin.nombre+ChatColor.GREEN+"Cliente: "+player.getClientBrandName());
+						
+						
+						
+				      if(gc.isValidSession(player.getName(),player.getUniqueId().toString(),player.getAddress().toString())) {
+				        	player.sendMessage(plugin.nombre+ChatColor.GREEN+"Cliente: Premiun");
+				       }else {
+				          	player.sendMessage(plugin.nombre+ChatColor.GREEN+"Cliente: No Premiun");
+				       }
+				
+					
+				
+			
+			return true;
+			
+		 }else if(args[0].equalsIgnoreCase("demoxd")) {
+				
+				
+				player.showDemoScreen();
+		
+				return true;
+		
+		 }else if(args[0].equalsIgnoreCase("paste")) {
+				
+			
+					if (args.length == 2) {
+						String name = args[1];
+					
+						gc.paste(name,player.getLocation(),0);
+					
+				
+					}else if (args.length == 3) {
+						String name = args[1];
+						double rotate = Double.valueOf(args[2]);
+						
+						gc.paste(name,player.getLocation(),rotate);
+					
+				
+					}else {
+						player.sendMessage(plugin.nombre+ChatColor.GREEN+"escribe /mg setnexo-red <mapa>");
+					}
+				
+			
+			return true;
+			
+		 }else if(args[0].equalsIgnoreCase("addtag")) {
 				
 				if(!player.isOp()) {
 					

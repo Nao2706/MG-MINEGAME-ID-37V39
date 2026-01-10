@@ -496,9 +496,9 @@ public class RevivePlayer{
 			GameAdventure ga = (GameAdventure) gi;
 			int alive = ga.getAlivePlayers().size();
 			int knocked = ga.getKnockedPlayers().size();
-			int arrive = ga.getArrivePlayers().size();
+			int winners = ga.getWinnersPlayers().size();
 			// System.out.println("true "+(alive - arrive)+" == "+knocked);
-			 if((alive - arrive) == knocked) {
+			 if((alive - winners) == knocked) {
 				
 				return true; 
 			 }

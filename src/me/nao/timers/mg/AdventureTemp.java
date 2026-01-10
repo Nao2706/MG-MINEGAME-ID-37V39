@@ -105,7 +105,7 @@ public class AdventureTemp {
 		public void run() {
 			
 			List<String> joins = ms.getParticipants();
-			List<String> arrive = ga.getArrivePlayers();
+			List<String> arrive = ga.getWinnersPlayers();
 			List<String> alive = ga.getAlivePlayers();
 			List<String> dead = ga.getDeadPlayers();
 			List<String> spect = ga.getSpectators();

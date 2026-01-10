@@ -41,7 +41,7 @@ public class PointsManager {
 	}
 	
 	
-		//AGREGAR PUNTOS SI EL JUGADOR LLEGA A LA META 
+		//AGREGAR PUNTOS SOLO SI EL JUGADOR GANA
 		public void setGamePoints(Player player) {
 	
 			FileConfiguration points = plugin.getPoints();
@@ -180,7 +180,7 @@ public class PointsManager {
 			boolean playerlose = false;
 			if(gi instanceof GameAdventure) {
 				GameAdventure ga = (GameAdventure) gi;
-				if(!ga.getArrivePlayers().contains(player.getName())) {
+				if(!ga.getWinnersPlayers().contains(player.getName())) {
 					playerlose = true;
 				}
 			}

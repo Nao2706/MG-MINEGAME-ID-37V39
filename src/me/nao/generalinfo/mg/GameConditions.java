@@ -1,5 +1,27 @@
 package me.nao.generalinfo.mg;
 
+
+
+import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.WorldEditException;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.extent.clipboard.Clipboard;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
+import com.sk89q.worldedit.math.transform.AffineTransform;
+import com.sk89q.worldedit.function.operation.Operation;
+import com.sk89q.worldedit.function.operation.Operations;
+import com.sk89q.worldedit.session.ClipboardHolder;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.text.NumberFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
@@ -48,6 +70,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
+import org.json.JSONObject;
 
 import com.viaversion.viaversion.api.Via;
 import com.viaversion.viaversion.api.ViaAPI;
@@ -302,8 +325,8 @@ public class GameConditions {
 			List<Player> player = ConvertStringToPlayer(ga.getParticipants());
 			
 			 
-			if(!ga.getArrivePlayers().isEmpty()) {
-				setTimeOfRecordinMap(name,ga.getArrivePlayers());
+			if(!ga.getWinnersPlayers().isEmpty()) {
+				setTimeOfRecordinMap(name,ga.getWinnersPlayers());
 				ga.setMapStatus(MapStatus.COMPLETE);
 			}else {
 				ga.setMapStatus(MapStatus.INCOMPLETE);
@@ -844,7 +867,7 @@ public class GameConditions {
 			GameAdventure ga = (GameAdventure) game;
 			
 			List<String> vivo = ga.getAlivePlayers();
-			List<String> arrivo = ga.getArrivePlayers();
+			List<String> arrivo = ga.getWinnersPlayers();
 			List<String> spectador = ga.getSpectators();
 			List<String> deads = ga.getDeadPlayers();
 			
@@ -1018,8 +1041,8 @@ public class GameConditions {
 		GameInfo mis = plugin.getGameInfoPoo().get(mision);
 		if(mis instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) mis;
-			if(!ga.getArrivePlayers().contains(player.getName())) {
-				ga.getArrivePlayers().add(player.getName());
+			if(!ga.getWinnersPlayers().contains(player.getName())) {
+				ga.getWinnersPlayers().add(player.getName());
 			}
 		}
 	}
@@ -1036,7 +1059,7 @@ public class GameConditions {
 				if(ga.getParticipants().remove(player.getName()));
 				if(ga.getAlivePlayers().remove(player.getName()));
 				if(ga.getDeadPlayers().remove(player.getName()));
-				if(ga.getArrivePlayers().remove(player.getName()));
+				if(ga.getWinnersPlayers().remove(player.getName()));
 				if(ga.getSpectators().remove(player.getName()));
 				plugin.getPlayerInfoPoo().remove(player);
 				t.RemoveAllPlayer(player);
@@ -1066,7 +1089,7 @@ public class GameConditions {
 		if(ms instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) ms;
 			if(ms.getGameType() == GameType.ADVENTURE) {
-				List<String> arrivo = ga.getArrivePlayers();
+				List<String> arrivo = ga.getWinnersPlayers();
 				List<String> spectador = ga.getSpectators();
 				
 				if(spectador.contains(player.getName()) || !arrivo.contains(player.getName())) return;
@@ -1216,7 +1239,7 @@ public class GameConditions {
 		if(ms instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) ms;
 			if(ms.getGameType() == GameType.ADVENTURE) {
-				List<String> arrivo = ga.getArrivePlayers();
+				List<String> arrivo = ga.getWinnersPlayers();
 				List<String> spectador = ga.getSpectators();
 				
 				if(spectador.contains(player.getName()) || arrivo.contains(player.getName())) return;
@@ -3144,7 +3167,7 @@ public class GameConditions {
 			List<String> alive = ga.getAlivePlayers();  
 			List<String> deads = ga.getDeadPlayers();
 			List<String> spectator = ga.getSpectators();
-			List<String> arrives = ga.getArrivePlayers();
+			List<String> arrives = ga.getWinnersPlayers();
 			
 			if(!hasMaintenance() || !isBlockedTheMap(map.getMapName())) {
 				saveMapFrequencysmg(map);
@@ -3246,7 +3269,7 @@ public class GameConditions {
 			List<String> alive = ga.getAlivePlayers();  
 			List<String> deads = ga.getDeadPlayers();
 			List<String> spectator = ga.getSpectators();
-			List<String> arrives = ga.getArrivePlayers();
+			List<String> arrives = ga.getWinnersPlayers();
 			
 			
 			sendMessageToUserAndConsole(player,"");	
@@ -3470,7 +3493,7 @@ public class GameConditions {
 								GameAdventure ga = (GameAdventure) ms;
 								
 								PointsManager pm = new PointsManager(plugin);
-								List<Player> lose = ConvertStringToPlayer(ga.getArrivePlayers());
+								List<Player> win = ConvertStringToPlayer(ga.getWinnersPlayers());
 								
 							
 								
@@ -3480,7 +3503,7 @@ public class GameConditions {
 								for(Player user : joins) {
 									
 									if(ga.isRankedMap()) {
-										if(!lose.contains(user)) {
+										if(!win.contains(user)) {
 											pm.setGamePoints(user);	
 										}
 									}
@@ -4730,13 +4753,13 @@ public class GameConditions {
 				
 				mst.set("MapFrequency."+mapname+".Times-Played",timeplayed+1);
 				mst.set("MapFrequency."+mapname+".Participating-Players",participating+gi.getParticipants().size());
-				mst.set("MapFrequency."+mapname+".Winning-Players",winningplayed+ga.getArrivePlayers().size());
+				mst.set("MapFrequency."+mapname+".Winning-Players",winningplayed+ga.getWinnersPlayers().size());
 				mst.set("MapFrequency."+mapname+".Revive-Players",reviveplayer+revive);
 				mst.set("MapFrequency."+mapname+".Dead-Players",deadplayer+deads);
 			}else {
 				mst.set("MapFrequency."+mapname+".Times-Played",1);
 				mst.set("MapFrequency."+mapname+".Participating-Players",gi.getParticipants().size());
-				mst.set("MapFrequency."+mapname+".Winning-Players",ga.getArrivePlayers().size());
+				mst.set("MapFrequency."+mapname+".Winning-Players",ga.getWinnersPlayers().size());
 				mst.set("MapFrequency."+mapname+".Revive-Players",revive);
 				mst.set("MapFrequency."+mapname+".Dead-Players",deads);
 				
@@ -5503,7 +5526,136 @@ public class GameConditions {
 		
 		return;
 	}
+
 	
+	 public void paste(String name ,Location location,double rotationDegreesY) {
+
+		
+		    File schematicFile = new File("/home/container/plugins/FastAsyncWorldEdit/schematics/" + name + ".schem");
+		    
+		 
+		    if (!schematicFile.exists()) {
+		        // Manejar el caso en que el schematic no exista
+		    	
+		    	 Bukkit.getConsoleSender().sendMessage("Ese Archivo no sta Disponible.");
+		        return;
+		    }
+		 
+		 
+	        ClipboardFormat clipboardFormat = ClipboardFormats.findByFile(schematicFile);
+	        Clipboard clipboard;
+	       
+
+	        //BlockVector3 blockVector3 = BlockVector3.at(location.getBlockX(), location.getBlockY(), location.getBlockZ());
+
+	        if (clipboardFormat != null) {
+	            try (ClipboardReader clipboardReader = clipboardFormat.getReader(new FileInputStream(schematicFile))) {
+	            
+	                if (location.getWorld() == null)
+	                    throw new NullPointerException("Failed to paste schematic due to world being null");
+
+	                //World world = (World) BukkitAdapter.adapt(location.getWorld());
+	              
+	                EditSession editSession = WorldEdit.getInstance().newEditSessionBuilder().world(BukkitAdapter.adapt(location.getWorld())).build();
+	                clipboard = clipboardReader.read();
+	                
+	    		    try (// 1. Create a ClipboardHolder
+					ClipboardHolder clipboardHolder = new ClipboardHolder(clipboard)) {
+						// 2. Create the rotation transform
+						// The rotateY method uses radians, so convert degrees to radians: Math.toRadians(degrees)
+						//AffineTransform transform = new AffineTransform().rotateY(Math.toRadians(rotationDegreesY));
+						AffineTransform transform = new AffineTransform().rotateY(rotationDegreesY);
+ 		  
+						// 3. Apply the transform to the ClipboardHolder
+						clipboardHolder.setTransform(clipboardHolder.getTransform().combine(transform));
+ 		  
+						//@SuppressWarnings("resource")
+						Operation operation = clipboardHolder
+						.createPaste(editSession)
+						.to(BukkitAdapter.asBlockVector(location))
+						.ignoreAirBlocks(true) // Optional: change as needed
+						.build();
+						
+						
+						
+					 try {
+						    Operations.complete(operation);
+						    editSession.close();
+						
+						} catch (WorldEditException e) {
+						    e.printStackTrace();
+						}
+					}
+	            } catch (IOException e) {
+	                e.printStackTrace();
+	            }
+	        }
+	    }
+	
+	 
+	    public boolean isValidSession(String username, String accessToken, String ip) {
+	        try {
+	            URL url = new URL("https://sessionserver.mojang.com/session/minecraft/hasJoined" + "?username=" + username + "&serverId=" + accessToken + "&ip=" + ip);
+	            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+	            connection.setRequestMethod("GET");
+	            connection.setRequestProperty("Content-Type", "application/json");
+	            connection.setRequestProperty("Accept", "application/json");
+
+	            int responseCode = connection.getResponseCode();
+	            if (responseCode == 200) {
+	                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+	                String response = reader.readLine();
+	                JSONObject jsonObject = new JSONObject(response);
+
+	               return jsonObject.has("id") && jsonObject.getString("id").equals(username);
+	            }
+	        } catch (Exception e) {
+	            // Manejar cualquier excepción que ocurra durante la solicitud
+	        }
+	        return false;
+	    }
+	 
+//	 public void pasteRotatedSchematic(Location location, File schematicFile, double rotationDegreesY) {
+//		    Clipboard clipboard;
+//		    ClipboardFormat format = ClipboardFormats.getformat(schematicFile);
+//
+//		    if (format == null) {
+//		        // Handle error: Unsupported schematic format
+//		        return;
+//		    }
+//
+//		    try (ClipboardReader reader = format.getReader(new FileInputStream(schematicFile))) {
+//		        clipboard = reader.read();
+//		    } catch (IOException e) {
+//		        // Handle error: File reading issue
+//		        e.printStackTrace();
+//		        return;
+//		    }
+//
+//		    // 1. Create a ClipboardHolder
+//		    ClipboardHolder clipboardHolder = new ClipboardHolder(clipboard);
+//
+//		    // 2. Create the rotation transform
+//		    // The rotateY method uses radians, so convert degrees to radians: Math.toRadians(degrees)
+//		    AffineTransform transform = new AffineTransform().rotateY(Math.toRadians(rotationDegreesY));
+//
+//		    // 3. Apply the transform to the ClipboardHolder
+//		    clipboardHolder.setTransform(clipboardHolder.getTransform().combine(transform));
+//
+//		    // 4. Create the paste operation
+//		    World weWorld = BukkitAdapter.adapt(location.getWorld());
+//		    try (EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(weWorld, -1)) {
+//		        Operation operation = clipboardHolder
+//		                .createPaste(editSession)
+//		                .to(BukkitAdapter.asBlockVector(location))
+//		                .ignoreAirBlocks(true) // Optional: change as needed
+//		                .build();
+//		        Operations.complete(operation);
+//		    } catch (Exception e) {
+//		        e.printStackTrace();
+//		    }
+//		}
+	 
 
 	public Vector getDirectionBetweenLocations(Location Start, Location End) {
         Vector from = Start.toVector();

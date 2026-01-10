@@ -198,7 +198,7 @@ public class GameIntoMap {
 		
 		if(gm instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) gm;
-			List<String> arrive = ga.getArrivePlayers();
+			List<String> arrive = ga.getWinnersPlayers();
 			List<String> vivo = ga.getAlivePlayers();
 			List<String> deaths = ga.getDeadPlayers();
 			List<String> knocked = ga.getKnockedPlayers();
@@ -450,7 +450,7 @@ public class GameIntoMap {
 			StopMotive motivo = gm.getStopMotive();
 			List<String> spect = ga.getSpectators();
 			List<String> dead = ga.getDeadPlayers();
-			List<String> arrivo = ga.getArrivePlayers();
+			List<String> arrivo = ga.getWinnersPlayers();
 			
 			//FINALES POR COMANDO STOP PARA MODOS ADVENTURE Y RESISTENCE
 			if(motivo == StopMotive.WIN && gm.getGameType() == GameType.ADVENTURE) {
