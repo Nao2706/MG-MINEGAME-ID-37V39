@@ -11,7 +11,6 @@ public class GameAdventure extends GameInfo{
 	
 	private List<String> alives;
 	private List<String> deads;
-	private List<String> winners;
 	private List<String> knockeds;
 	
 	
@@ -19,7 +18,6 @@ public class GameAdventure extends GameInfo{
 	public GameAdventure() {
 		this.alives = new ArrayList<>();
 		this.deads = new ArrayList<>();
-		this.winners = new ArrayList<>();
 		this.knockeds = new ArrayList<>();
 	}
 
@@ -29,10 +27,6 @@ public class GameAdventure extends GameInfo{
 	
 	public List<String> getDeadPlayers() {
 		return deads;
-	}
-	
-	public List<String> getWinnersPlayers() {
-		return winners;
 	}
 	
 	public List<String> getKnockedPlayers() {

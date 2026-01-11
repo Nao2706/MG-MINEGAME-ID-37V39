@@ -4338,14 +4338,14 @@ public class Comandsmg implements CommandExecutor{
 					if (args.length == 2) {
 						String name = args[1];
 					
-						gc.paste(name,player.getLocation(),0);
+						gc.pasteFawe(name,player.getLocation(),0);
 					
 				
 					}else if (args.length == 3) {
 						String name = args[1];
 						double rotate = Double.valueOf(args[2]);
 						
-						gc.paste(name,player.getLocation(),rotate);
+						gc.pasteFawe(name,player.getLocation(),rotate);
 					
 				
 					}else {

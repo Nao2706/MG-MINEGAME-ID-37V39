@@ -5528,7 +5528,7 @@ public class GameConditions {
 	}
 
 	
-	 public void paste(String name ,Location location,double rotationDegreesY) {
+	 public void pasteFawe(String name ,Location location,double rotationDegreesY) {
 
 		
 		    File schematicFile = new File("/home/container/plugins/FastAsyncWorldEdit/schematics/" + name + ".schem");
@@ -5559,8 +5559,10 @@ public class GameConditions {
 	                EditSession editSession = WorldEdit.getInstance().newEditSessionBuilder().world(BukkitAdapter.adapt(location.getWorld())).build();
 	                clipboard = clipboardReader.read();
 	                
-	    		    try (// 1. Create a ClipboardHolder
-					ClipboardHolder clipboardHolder = new ClipboardHolder(clipboard)) {
+	                @SuppressWarnings("resource")
+	            	ClipboardHolder clipboardHolder = new ClipboardHolder(clipboard);
+	    		   // try { // 1. Create a ClipboardHolder
+				 
 						// 2. Create the rotation transform
 						// The rotateY method uses radians, so convert degrees to radians: Math.toRadians(degrees)
 						//AffineTransform transform = new AffineTransform().rotateY(Math.toRadians(rotationDegreesY));
@@ -5585,7 +5587,9 @@ public class GameConditions {
 						} catch (WorldEditException e) {
 						    e.printStackTrace();
 						}
-					}
+//					}finally {
+//						clipboardHolder.close();
+//					}
 	            } catch (IOException e) {
 	                e.printStackTrace();
 	            }

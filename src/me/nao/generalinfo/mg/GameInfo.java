@@ -22,7 +22,7 @@ public class GameInfo {
 	private String name , time , stopreason ,cooldown;
 	private int minprestigetoplay , minlvltoplay, maxplayers,minplayers, loottablemax , itemspawnrange , spawnmobrange , countdownstart, toxiczonerange, dispenserrange;
 	private int pointsperkills, pointsperdeads , pointsperrevive ,pointsperhelprevive , pointsbonus , pointsloseporcent;
-	private List<String> participants,spectators;
+	private List<String> participants,winners,spectators;
 	private GameType type;
 	private GameStatus estpart;
 	private StopMotive motivo;
@@ -58,6 +58,7 @@ public class GameInfo {
 		this.time = "0";
 		this.objetives = null;
 		this.participants = new ArrayList<>();
+		this.winners = new ArrayList<>();
 		this.spectators = new ArrayList<>();
 		this.gametimeactions = new ArrayList<>();
 		this.cuboidzones = new ArrayList<>();
@@ -159,6 +160,10 @@ public class GameInfo {
 	
 	public List<String> getParticipants(){
 		return participants;
+	}
+	
+	public List<String> getWinnersPlayers(){
+		return winners;
 	}
 	
 	public List<String> getSpectators(){
