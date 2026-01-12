@@ -1420,9 +1420,16 @@ public class GameConditions {
 					boss = Bukkit.createBossBar(""+ChatColor.GREEN+ChatColor.BOLD+"Bienvenido al Mapa "+ChatColor.GOLD+ChatColor.BOLD+map+ChatColor.RED+ChatColor.BOLD+" Modo: "+ChatColor.GREEN+ChatColor.BOLD+"Aventura",BarColor.GREEN, BarStyle.SOLID,  null ,null);
 				}else if(type == GameType.RESISTENCE) {
 					boss = Bukkit.createBossBar(""+ChatColor.GREEN+ChatColor.BOLD+"Bienvenido al Mapa "+ChatColor.GOLD+ChatColor.BOLD+map+ChatColor.RED+ChatColor.BOLD+" Modo: "+ChatColor.DARK_RED+ChatColor.BOLD+"Resistencia",BarColor.GREEN, BarStyle.SOLID,  null ,null);
+				}else if(type == GameType.RESISTENCE) {
+					boss = Bukkit.createBossBar(""+ChatColor.GREEN+ChatColor.BOLD+"Bienvenido al Mapa "+ChatColor.GOLD+ChatColor.BOLD+map+ChatColor.RED+ChatColor.BOLD+" Modo: "+ChatColor.RED+ChatColor.BOLD+"Todos Contra Todos",BarColor.GREEN, BarStyle.SOLID,  null ,null);
 				}
 			    boss.setVisible(true);
 			   
+			   
+			    
+			    
+			    
+			    
 			    
 			    if(type == GameType.ADVENTURE || type == GameType.RESISTENCE) {
 			    	  //pasar solo una lista para los 4 espacios ojo
@@ -1432,6 +1439,59 @@ public class GameConditions {
 					      
 					     
 			    	GameAdventure ga = new GameAdventure();
+			    	ga.setMapName(map);
+			    	ga.setTimeMg(time);
+			    	ga.setGameType(type);
+			    	ga.setMaxPlayersinMap(maxplayers);
+			    	ga.setMinPlayersinMap(minplayers);
+			    	ga.setBossbar(boss);	    	
+			    	ga.setObjetivesMg(loadObjetivesOfGames(map));
+			      
+			    	ga.setGameTimeActions(loadGameTimeActions(map));
+			    	ga.setCuboidZones(loadCuboidZones(map));
+			    	ga.setLootTableLimit(getLootTableLimit());
+			    	ga.setGenerators(loadMapGenerators(map));
+			    	ga.setMobsGenerators(loadMapMobsGenerators(map));
+			    	ga.setPvpinMap(isPvPAllowed(map));
+			    	ga.setCountDownStart(loadCountdownMap(map));
+			    	ga.setGameTime(loadMapGameTime(map, time)); 
+			    	ga.setBarriersinMap(hasBarriersMap(map));
+			    	ga.setAllowedJoinWithOwnInventory(canJoinWithYourInventory(map));
+			    	ga.setTimersEvents(loadDataExecutableTimer(map));
+			    	
+			    	 
+			    	ga.setSpawnItemRange(getSpawnItemRange(map));
+			    	ga.setSpawnMobRange(getSpawnMobRange(map));
+			    	ga.setToxicZoneRange(getToxicZoneRange(map));
+			    	  
+			    	ga.setPointsPerKills(getPointsPerKills(map));
+			    	ga.setPointsPerDeads(getPointsPerDeads(map));
+			    	ga.setPointsPerRevive(getPointsPerRevive(map));
+			    	ga.setPointsPerHelpRevive(getPointsPerHelpRevive(map));
+			    	ga.setPointsBonus(getPointsBonus(map));
+			    	ga.setDispenserRange(getDispenserRange(map));
+			    	ga.setRankedMap(isMapRanked(map));
+			    	ga.setPointsLosePorcent(getPointsLosePorcent(map));
+			    	ga.setMapData(game);			    	
+			    	ga.setLvltoPlay(getLvlToPlay(map));
+			    	ga.setPrestigelvltoPlay(getprestigeLvlToPlay(map));
+			    	
+			    	ga.setDeleteInventoryByTimeOut(hasDeleteInventoryByTimeOut(map));
+			    	ga.setMapCooldown(getMapCooldownData(map));
+			    	ga.setMapTimeCooldown(getMapTimeCooldownData(map));
+			    	ga.setCleanMapFromEntitys(hasMapCleanedData(map));
+			    	
+			    						
+					plugin.getEntitiesFromFlare().put(map,entities);
+					plugin.getGameInfoPoo().put(map, ga);
+			    }   if(type == GameType.FREEFORALL) {
+			    	  //pasar solo una lista para los 4 espacios ojo
+					  
+					 
+				    List<Entity> entities = new ArrayList<>();
+					      
+					     
+			    	GameFreeForAll ga = new GameFreeForAll(plugin);
 			    	ga.setMapName(map);
 			    	ga.setTimeMg(time);
 			    	ga.setGameType(type);
@@ -1569,6 +1629,10 @@ public class GameConditions {
 					t.Inicio(ms.getMapName());
 				}else if(ms.getGameType() == GameType.RESISTENCE) {
 					ResistenceTemp t = new ResistenceTemp(plugin);
+					t.Inicio(ms.getMapName());
+				}else if(ms.getGameType() == GameType.FREEFORALL) {
+					
+					InfectedTemp t = new InfectedTemp(plugin);
 					t.Inicio(ms.getMapName());
 				}else if(ms.getGameType() == GameType.INFECTED) {
 					InfectedTemp t = new InfectedTemp(plugin);
@@ -2040,31 +2104,160 @@ public class GameConditions {
 		}
 		
 		   
-		GameInfo minfo = plugin.getGameInfoPoo().get(map);
-		FileConfiguration data = minfo.getMapData();
+		 GameInfo mapinfo = plugin.getGameInfoPoo().get(map);
+		 BossBar boss = mapinfo.getBossbar();
+		 GameType misiontype = mapinfo.getGameType();
+		 int maxplayers = mapinfo.getMaxPlayers();
+		 ModerationManager cooldown = new ModerationManager(plugin) ;
+		 
+		
+		FileConfiguration data = mapinfo.getMapData();
 		FileConfiguration playerdata = plugin.getPoints();
 		int playerlvl = playerdata.getInt("Players."+player.getName()+".Level",0);
-		  
-		 if(minfo instanceof GameAdventure) {
-				 GameAdventure ga = (GameAdventure) minfo;
-				 BossBar boss = minfo.getBossbar();
-				 GameType misiontype = minfo.getGameType();
-				 int maxplayers = minfo.getMaxPlayers();
-				 ModerationManager cooldown = new ModerationManager(plugin) ;
-				 
-				 if(cooldown.HasSancionPlayer(player)) {
-						 
-					 return false;
-				 }
-				if(!data.contains("Pre-Lobby")) {
-					 if(player.isOp()) {
-						 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el PreLobby");
-					 }
-					 else {
-						 player.sendMessage(ChatColor.RED+"Error en el Mapa: "+map);
-					 }
-					 return false;
-				 }
+	
+		
+		
+		
+		
+		if(!data.contains("Pre-Lobby")) {
+			 if(player.isOp()) {
+				 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el PreLobby");
+			 }
+			 else {
+				 player.sendMessage(ChatColor.RED+"Error en el Mapa: "+map);
+			 }
+			 return false;
+		 }if(!data.contains("Spawn-Spectator")) {
+			 if(player.isOp()) {
+				 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el Spawn-Spectator");
+			 }
+			 else {
+				 player.sendMessage(ChatColor.RED+"Error en el Mapa: "+map);
+			 }
+			 return false;
+			 
+		 }else if(cooldown.HasSancionPlayer(player)) {
+			 
+			 return false;
+		 }else if(mapinfo.getGameStatus() == GameStatus.TERMINANDO) {
+			 player.sendMessage(ChatColor.RED+"La Partida esta terminando. ");
+			 return false;
+			 
+		 }else if(mapinfo.getParticipants().size() == maxplayers && mapinfo.getGameStatus() == GameStatus.COMENZANDO) {
+			 player.sendMessage(ChatColor.RED+"La Partida esta llena espera un rato para entrar como Espectador."); 
+			 return false;
+		 }else if(mapinfo.getGameStatus() == GameStatus.JUGANDO || mapinfo.getGameStatus() == GameStatus.PAUSE || mapinfo.getGameStatus() == GameStatus.FREEZE) {
+			 if(!isPlayerinGame(player));
+			 
+			 if(cooldown.HasSancionPlayer(player)) {
+				 //MODO ESPECTADOR no te uniras como jugador
+				 player.sendMessage(ChatColor.YELLOW+"Estas Baneado o tienes un TempBan pero puedes Observar.");
+			 }
+				 //MODO ESPECTADOR no te uniras como jugador
+			 joinSpectator(player,map);
+			  
+			 return false;
+		 }else if(data.getBoolean("Requires-Permission")) {
+				String perm = data.getString("Permission-To-Play");
+				if(!player.hasPermission(perm)) {
+					List<String> perml = data.getStringList("How-Get-Permission.Message");
+					if(!perml.isEmpty()) {
+						
+						player.sendMessage("");
+						for(int i =0;i< perml.size();i++) {
+							player.sendMessage(ChatColor.translateAlternateColorCodes('&', perml.get(i)).replace("%player%", player.getName()));
+						}
+						player.sendMessage("");			
+						
+						
+					}else {
+						player.sendMessage(ChatColor.RED+"Mapa Bloqueado: Necesitas un Permiso para Acceder.");
+					}
+					
+					return false;
+				}
+				
+		 }else if(playerlvl < mapinfo.getPrestigelvltoPlay()) {
+			 if(!player.isOp()) {
+				 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 20.0F, 1F);
+				 player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"NIVEL INSUFICIENTE DETECTADO");
+				 player.sendMessage(ChatColor.GRAY+"Tu Nivel es Demasiado Bajo para Jugar en este Mapa.");
+				 player.sendMessage(ChatColor.GOLD+"Nivel del Mapa: "+ChatColor.RED+mapinfo.getPrestigelvltoPlay()+ChatColor.GRAY+" Tu Nivel: "+ChatColor.GREEN+playerlvl);
+				 player.sendMessage(ChatColor.GRAY+"Sube tu Nivel de Prestigio. ");
+				 return false;
+			 }else {
+				 player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"NIVEL INSUFICIENTE DETECTADO OP BYPASS");
+				 player.sendMessage(ChatColor.GRAY+"Puedes Acceder pero revisa si el Nivel para Jugar del Mapa es el Correcto.");
+				 player.sendMessage(ChatColor.GOLD+"Nivel del Mapa: "+ChatColor.RED+mapinfo.getPrestigelvltoPlay()+ChatColor.GRAY+" Tu Nivel: "+ChatColor.GREEN+playerlvl);
+				 player.sendMessage(ChatColor.GRAY+"Sube tu Nivel de Prestigio. ");
+			 }
+			
+		 }else if(playerlvl < mapinfo.getLvltoPlay()) {
+			 if(!player.isOp()) {
+				 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 20.0F, 1F);
+				 player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"NIVEL INSUFICIENTE DETECTADO");
+				 player.sendMessage(ChatColor.GRAY+"Tu Nivel es Demasiado Bajo para Jugar en este Mapa.");
+				 player.sendMessage(ChatColor.GOLD+"Nivel del Mapa: "+ChatColor.RED+mapinfo.getLvltoPlay()+ChatColor.GRAY+" Tu Nivel: "+ChatColor.GREEN+playerlvl);
+				 player.sendMessage(ChatColor.GRAY+"Sube tu Nivel. ");
+				 return false;
+			 }else {
+				 player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"NIVEL INSUFICIENTE DETECTADO OP BYPASS");
+				 player.sendMessage(ChatColor.GRAY+"Puedes Acceder pero revisa si el Nivel para Jugar del Mapa es el Correcto.");
+				 player.sendMessage(ChatColor.GOLD+"Nivel del Mapa: "+ChatColor.RED+mapinfo.getLvltoPlay()+ChatColor.GRAY+" Tu Nivel: "+ChatColor.GREEN+playerlvl);
+				 player.sendMessage(ChatColor.GRAY+"Sube tu Nivel. ");
+			 }
+			
+		 }				 if(data.getBoolean("Play-Time.Has-Time")) {
+			 	String time = data.getString("Play-Time.Usage-Time");
+		    	if(time == null || time.isEmpty()){
+		    		if(player.isOp()) {
+
+ 						player.sendMessage(ChatColor.RED+"Error de Tiempo: En el Path Usage-Time esta vacio.");
+
+		    		}else {
+ 						player.sendMessage(ChatColor.RED+"Error de Tiempo: Contacta a un Administrador");
+ 					}
+		    		return false;
+		    	}
+ 			 	
+		        if(!elapsedTime(player,time)) return false;
+		 }else if(mapinfo.hasMapCooldown()) { 
+			if(plugin.getCooldownMap().containsKey(map)){
+				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss a",Locale.ENGLISH);
+				LocalDateTime cooldownmap = plugin.getCooldownMap().get(map);
+				LocalDateTime lt = LocalDateTime.now();
+				
+				
+				if(lt.isBefore(cooldownmap)) {
+					//antes de llegar a la fecha
+					player.sendMessage(ChatColor.GREEN+"================================================");
+					player.sendMessage("");
+					player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"                     [MAPA CON COOLDOWN] ");
+					player.sendMessage(ChatColor.AQUA+"Me temo que hay un Cooldown y aun no es el Tiempo para Ingresar ");
+					player.sendMessage(""+ChatColor.DARK_RED+ChatColor.BOLD+"                [El Mapa Regresa en] ");
+					player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"["+ChatColor.GREEN+TimeDiferenceMg(lt, cooldownmap)+ChatColor.GOLD+ChatColor.BOLD+"]");
+					player.sendMessage(ChatColor.AQUA+"Que tal un Descanso???");
+					player.sendMessage(ChatColor.GOLD+"Fecha Actual: "+ChatColor.GREEN+lt.format(formatter));
+					player.sendMessage(ChatColor.GREEN+"Fecha de Apertura: "+ChatColor.AQUA+cooldownmap.format(formatter));
+					player.sendMessage("");
+					player.sendMessage(ChatColor.GREEN+"================================================");
+					//isJoinRunning(player);
+					return false;
+				}
+				
+				
+			}
+			
+		 }
+		 
+		 if(mapinfo instanceof GameFreeForAll) {
+			 
+			  
+			 
+		 		boss.addPlayer(player);
+		 		return true;
+		 }else if(mapinfo instanceof GameAdventure) {
+		
 				 if(!data.contains("Spawn")) {
 					 if(player.isOp()) {
 						 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el Spawn");
@@ -2074,16 +2267,7 @@ public class GameConditions {
 					 }
 					 return false;
 				 }
-				 if(!data.contains("Spawn-Spectator")) {
-					 if(player.isOp()) {
-						 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el Spawn-Spectator");
-					 }
-					 else {
-						 player.sendMessage(ChatColor.RED+"Error en el Mapa: "+map);
-					 }
-					 return false;
-					 
-				 }if(misiontype == GameType.RESISTENCE && !data.contains("Spawn-End")) {
+				if(misiontype == GameType.RESISTENCE && !data.contains("Spawn-End")) {
 					 if(player.isOp()) {
 						 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el Spawn-End");
 					 }
@@ -2092,120 +2276,6 @@ public class GameConditions {
 					 }
 					 return false;
 				 }
-				 if(minfo.getGameStatus() == GameStatus.TERMINANDO) {
-					 player.sendMessage(ChatColor.RED+"La Partida esta terminando. ");
-					 return false;
-				 }
-				  
-				 if(playerlvl < minfo.getPrestigelvltoPlay()) {
-					 if(!player.isOp()) {
-						 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 20.0F, 1F);
-						 player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"NIVEL INSUFICIENTE DETECTADO");
-						 player.sendMessage(ChatColor.GRAY+"Tu Nivel es Demasiado Bajo para Jugar en este Mapa.");
-						 player.sendMessage(ChatColor.GOLD+"Nivel del Mapa: "+ChatColor.RED+minfo.getPrestigelvltoPlay()+ChatColor.GRAY+" Tu Nivel: "+ChatColor.GREEN+playerlvl);
-						 player.sendMessage(ChatColor.GRAY+"Sube tu Nivel de Prestigio. ");
-						 return false;
-					 }else {
-						 player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"NIVEL INSUFICIENTE DETECTADO OP BYPASS");
-						 player.sendMessage(ChatColor.GRAY+"Puedes Acceder pero revisa si el Nivel para Jugar del Mapa es el Correcto.");
-						 player.sendMessage(ChatColor.GOLD+"Nivel del Mapa: "+ChatColor.RED+minfo.getPrestigelvltoPlay()+ChatColor.GRAY+" Tu Nivel: "+ChatColor.GREEN+playerlvl);
-						 player.sendMessage(ChatColor.GRAY+"Sube tu Nivel de Prestigio. ");
-					 }
-					
-				 }
-				 
-				 
-				 if(playerlvl < minfo.getLvltoPlay()) {
-					 if(!player.isOp()) {
-						 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 20.0F, 1F);
-						 player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"NIVEL INSUFICIENTE DETECTADO");
-						 player.sendMessage(ChatColor.GRAY+"Tu Nivel es Demasiado Bajo para Jugar en este Mapa.");
-						 player.sendMessage(ChatColor.GOLD+"Nivel del Mapa: "+ChatColor.RED+minfo.getLvltoPlay()+ChatColor.GRAY+" Tu Nivel: "+ChatColor.GREEN+playerlvl);
-						 player.sendMessage(ChatColor.GRAY+"Sube tu Nivel. ");
-						 return false;
-					 }else {
-						 player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"NIVEL INSUFICIENTE DETECTADO OP BYPASS");
-						 player.sendMessage(ChatColor.GRAY+"Puedes Acceder pero revisa si el Nivel para Jugar del Mapa es el Correcto.");
-						 player.sendMessage(ChatColor.GOLD+"Nivel del Mapa: "+ChatColor.RED+minfo.getLvltoPlay()+ChatColor.GRAY+" Tu Nivel: "+ChatColor.GREEN+playerlvl);
-						 player.sendMessage(ChatColor.GRAY+"Sube tu Nivel. ");
-					 }
-					
-				 }
-				 
-				 if(ga.getParticipants().size() == maxplayers && minfo.getGameStatus() == GameStatus.COMENZANDO) {
-					 player.sendMessage(ChatColor.RED+"La Partida esta llena espera un rato para entrar como Espectador."); 
-					 return false;
-				 }if(minfo.getGameStatus() == GameStatus.JUGANDO && !isPlayerinGame(player)) {
-					 if(cooldown.HasSancionPlayer(player)) {
-						 //MODO ESPECTADOR no te uniras como jugador
-						 player.sendMessage(ChatColor.YELLOW+"Estas Baneado o tienes un TempBan pero puedes Observar.");
-					 }
-						 //MODO ESPECTADOR no te uniras como jugador
-					 joinSpectator(player,map);
-					  
-					 return false;
-				 }if(data.getBoolean("Requires-Permission")) {
-		 				String perm = data.getString("Permission-To-Play");
-		 				if(!player.hasPermission(perm)) {
-		 					List<String> perml = data.getStringList("How-Get-Permission.Message");
-		 					if(!perml.isEmpty()) {
-		 						
-		 						player.sendMessage("");
-		 						for(int i =0;i< perml.size();i++) {
-		 							player.sendMessage(ChatColor.translateAlternateColorCodes('&', perml.get(i)).replace("%player%", player.getName()));
-		 						}
-		 						player.sendMessage("");			
-		 						
-		 						
-		 					}else {
-		 						player.sendMessage(ChatColor.RED+"Mapa Bloqueado: Necesitas un Permiso para Acceder.");
-		 					}
-		 					
-		 					return false;
-		 				}
-		 		 }if(data.getBoolean("Play-Time.Has-Time")) {
-		 			 	String time = data.getString("Play-Time.Usage-Time");
-				    	if(time == null || time.isEmpty()){
-				    		if(player.isOp()) {
- 
-		 						player.sendMessage(ChatColor.RED+"Error de Tiempo: En el Path Usage-Time esta vacio.");
-
-				    		}else {
-		 						player.sendMessage(ChatColor.RED+"Error de Tiempo: Contacta a un Administrador");
-		 					}
-				    		return false;
-				    	}
-		 			 	
-				        if(!elapsedTime(player,time)) return false;
-				 }if(ga.hasMapCooldown()) { 
-					if(plugin.getCooldownMap().containsKey(map)){
-						DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss a",Locale.ENGLISH);
-						LocalDateTime cooldownmap = plugin.getCooldownMap().get(map);
-						LocalDateTime lt = LocalDateTime.now();
-						
-						
-						if(lt.isBefore(cooldownmap)) {
-							//antes de llegar a la fecha
-							player.sendMessage(ChatColor.GREEN+"================================================");
-							player.sendMessage("");
-							player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"                     [MAPA CON COOLDOWN] ");
-							player.sendMessage(ChatColor.AQUA+"Me temo que hay un Cooldown y aun no es el Tiempo para Ingresar ");
-							player.sendMessage(""+ChatColor.DARK_RED+ChatColor.BOLD+"                [El Mapa Regresa en] ");
-							player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"["+ChatColor.GREEN+TimeDiferenceMg(lt, cooldownmap)+ChatColor.GOLD+ChatColor.BOLD+"]");
-							player.sendMessage(ChatColor.AQUA+"Que tal un Descanso???");
-							player.sendMessage(ChatColor.GOLD+"Fecha Actual: "+ChatColor.GREEN+lt.format(formatter));
-							player.sendMessage(ChatColor.GREEN+"Fecha de Apertura: "+ChatColor.AQUA+cooldownmap.format(formatter));
-							player.sendMessage("");
-							player.sendMessage(ChatColor.GREEN+"================================================");
-							//isJoinRunning(player);
-							return false;
-						}
-						
-						
-					}
-					
-				 }
-		 		 
 		 		  
 			 		boss.addPlayer(player);
 			 		return true;
@@ -3386,6 +3456,86 @@ public class GameConditions {
 			sendMessageToUserAndConsole(player,ChatColor.GRAY+"=============================");	
 			sendMessageToUserAndConsole(player,"");	
 			
+			
+		}else if(map instanceof GameFreeForAll) {
+			
+			GameFreeForAll ffa = (GameFreeForAll) map;
+			
+			if(ffa.getGameStatus() == GameStatus.TERMINANDO) {
+				sendMessageToUserAndConsole(player,ChatColor.RED+"La Partida esta Terminando.");	
+				return;
+			}
+			
+			List<String> participants = ffa.getParticipants(); 
+			List<String> spectator = ffa.getSpectators();
+			
+			
+			
+			sendMessageToUserAndConsole(player,"");	
+			sendMessageToUserAndConsole(player,""+ChatColor.RED+ChatColor.BOLD+"INFORME DEL PROGRESO DEL JUEGO");
+			sendMessageToUserAndConsole(player,ChatColor.GRAY+"=============================");
+			sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"MAPA: "+ChatColor.WHITE+ffa.getMapName());
+			sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"DEFAULT TIMER: "+ChatColor.GREEN+ffa.getGameTime().getGameTimerDefaultForResult());
+			sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"DURACION: "+ChatColor.WHITE+ffa.getGameTime().getGameCronometForResult());
+			sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"TIMER: "+ChatColor.WHITE+ffa.getGameTime().getGameTimerForResult());
+			
+			
+			if(participants.isEmpty()) {
+				sendMessageToUserAndConsole(player,""+ChatColor.GRAY+ChatColor.BOLD+"PARTICIPANTES: "+ChatColor.WHITE+"SIN PARTICIPANTES");
+			}else {
+				String comments =  ""+ChatColor.GREEN+ChatColor.BOLD+"PARTICIPANTES: ";
+				for(int i = 0 ; i < participants.size();i++) {
+					comments = comments+ChatColor.GREEN+participants.get(i)+ChatColor.GOLD+",";
+				}
+				comments = comments+ChatColor.GRAY+ChatColor.BOLD+" PARTICIPAN: "+ChatColor.GREEN+participants.size();
+				sendMessageToUserAndConsole(player,comments);
+			}
+			
+			if(spectator.isEmpty()) {
+				sendMessageToUserAndConsole(player,""+ChatColor.AQUA+ChatColor.BOLD+"ESPECTADORES: "+ChatColor.WHITE+"SIN ESPECTADORES");
+			}else {
+				String comments = ""+ChatColor.AQUA+ChatColor.BOLD+"ESPECTADORES: ";
+				for(int i = 0 ; i < spectator.size();i++) {
+					comments = comments+ChatColor.WHITE+spectator.get(i)+ChatColor.GOLD+",";
+				}
+				comments = comments+ChatColor.AQUA+ChatColor.BOLD+" ESPECTADORES: "+ChatColor.WHITE+spectator.size();
+				sendMessageToUserAndConsole(player,comments);
+
+			}
+			
+		 	HashMap<String, Integer> scores = new HashMap<>();
+			
+			
+			List<Player> joins = ConvertStringToPlayer(ffa.getParticipants());
+			
+			for(Player user : joins) {
+				PlayerInfo pl = plugin.getPlayerInfoPoo().get(user);
+				scores.put(user.getName(), pl.getGamePoints().getKills());	
+			}
+			
+			List<Map.Entry<String, Integer>> list = new ArrayList<>(scores.entrySet());
+
+			
+			Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+				public int compare(Map.Entry<String, Integer> e1, Map.Entry<String, Integer> e2) {
+					return e2.getValue() - e1.getValue();
+				}
+			});
+			
+			if(!list.isEmpty()) {
+				sendMessageToUserAndConsole(player,ChatColor.GRAY+"TOP:");	
+				int i = 0;
+				for(Map.Entry<String, Integer> e : list) {
+					i++;
+					sendMessageToUserAndConsole(player,""+ChatColor.GREEN+i+")."+ChatColor.GOLD+e.getKey()+": "+ChatColor.GOLD+e.getValue());	
+					
+					
+				}
+			}
+			
+			
+			sendMessageToUserAndConsole(player,ChatColor.GRAY+"=============================");	
+			sendMessageToUserAndConsole(player,"");	
 			
 		}
 		

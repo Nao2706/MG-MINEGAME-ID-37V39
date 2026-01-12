@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 
 import me.nao.enums.mg.GameModerationActionType;
 import me.nao.main.mg.Minegame;
+import me.nao.utils.mg.Utils;
 
 
 
@@ -39,126 +40,179 @@ public class ModerationManager {
 	
 	
 	
-	public String getCooldown(long cooldown ,String player) {
-		
-		FileConfiguration data = plugin.getPlayersHistoryYaml();
+//	public String getCooldown(long cooldown ,String player) {
+//		
+//		FileConfiguration data = plugin.getPlayersHistoryYaml();
+//
+//		//String pathtime = "Players."+player.getUniqueId()+".Cooldown-Recompensa";  
+//		String pathtime = "Players."+player+".Server-Time";  
+//		
+//		
+//		if(data.contains(pathtime)){
+//		    String timecooldownString = data.getString(pathtime);
+//		    long timecooldown = Long.valueOf(timecooldownString);
+//		    long millis = System.currentTimeMillis();
+//		      //long cooldown = 100; //En Segundos es el tiempo de espera debes realizar un calculo no olvides   
+//		        long cooldownmil = cooldown*1000;
+//		        
+//		        long espera = millis - timecooldown;
+//		        long esperaDiv = espera/1000;
+//		        long esperatotalseg = cooldown - esperaDiv;
+//		        long esperatotalmin = esperatotalseg/60;
+//		        long esperatotalhour = esperatotalmin/60;
+//		        long esperatotaldays = esperatotalhour/24;
+//		        
+//		        if(((timecooldown + cooldownmil) > millis) && (timecooldown != 0)){                 
+//		           if(esperatotalseg > 59){
+//		               esperatotalseg = esperatotalseg - 60*esperatotalmin;
+//		           }
+//		           String time = "";
+//		           if(esperatotalseg != 0){
+//		              time = esperatotalseg+"s";
+//		           }
+//		           if(esperatotalmin > 59){
+//		               esperatotalmin = esperatotalmin - 60*esperatotalhour;
+//		           }    
+//		           if(esperatotalmin > 0){
+//		               time = esperatotalmin+"min"+" "+time;
+//		           }
+//		           
+//		           if(esperatotalhour > 24){
+//		        	   esperatotalhour = esperatotalhour - 24*esperatotaldays;
+//		           }
+//		           
+//		           if(esperatotalhour > 0){
+//		               time = esperatotalhour+ "h"+" " + time;
+//		               
+//		           } 
+//		           
+//		           if(esperatotaldays > 0){
+//		               time = esperatotaldays+ "day/s"+" " + time;
+//		           }
+//		           
+//		           return time;
+//		           //Aun no se termina el cooldown
+//		           //player.sendMessage("Puedes reclamar otra recompensa diaria dentro de "+time);
+//		        }else{
+//		         return "-1";
+//		        }
+//		}else{
+//		    //Usa el comando por primera vez, ya que no existe el path en la config
+//			
+//		  return "-1";
+//		}
+//		
+//		
+//	}
+//	
+//	
+//	public  String ShowInMomentCooldown(long cooldown ,String milis) {
+//		//Mostrara en el momento el tiempo que sera sancionado 
+//		   String timecooldownString = milis;
+//		    long timecooldown = Long.valueOf(timecooldownString);
+//		    long millis = System.currentTimeMillis();
+//		      //long cooldown = 100; //En Segundos es el tiempo de espera debes realizar un calculo no olvides   
+//		        long cooldownmil = cooldown*1000;
+//		        
+//		        long espera = millis - timecooldown;
+//		        long esperaDiv = espera/1000;
+//		        long esperatotalseg = cooldown - esperaDiv;
+//		        long esperatotalmin = esperatotalseg/60;
+//		        long esperatotalhour = esperatotalmin/60;
+//		        long esperatotaldays = esperatotalhour/24;
+//		        
+//		        if(((timecooldown + cooldownmil) > millis) && (timecooldown != 0)){                 
+//		           if(esperatotalseg > 59){
+//		               esperatotalseg = esperatotalseg - 60*esperatotalmin  ;
+//		           }
+//		           String time = "";
+//		           //antes tenia el !=
+//		           
+//		           // denttro de los condicionales el formato es 1d 2h 3m 3s pero algunos pueden desaparecer cuando esten en 0 si se desea cambiar solamente hay que colocar el ==
+//		           if(esperatotalseg != 0){
+//		              time = esperatotalseg+"s";
+//		           }
+//		           if(esperatotalmin > 59){
+//		               esperatotalmin = esperatotalmin - 60*esperatotalhour;
+//		           }    
+//		           if(esperatotalmin > 0){
+//		               time = esperatotalmin+"min"+" "+time;
+//		           } 
+//		           
+//		           if(esperatotalhour > 24){
+//		        	   esperatotalhour = esperatotalhour - 24*esperatotaldays;
+//		           }
+//		           
+//		           if(esperatotalhour > 0){
+//		               time = esperatotalhour+ "h"+" " + time;
+//		               
+//		           } 
+//		           
+//		           if(esperatotaldays > 0){
+//		               time = esperatotaldays+ "day/s"+" " + time;
+//		           }
+//		           
+//		           return time;
+//		           //Aun no se termina el cooldown
+//		           //player.sendMessage("Puedes reclamar otra recompensa diaria dentro de "+time);
+//		        }else{
+//		         return "-1";
+//		        }
+//	}
+	
+	
+	
+	public String getCooldown(long cooldown, String player) {
+	    FileConfiguration data = plugin.getPlayersHistoryYaml();
+	    String pathtime = "Players." + player + ".Server-Time";
+	    if (data.contains(pathtime)) {
+	        long timecooldown = data.getLong(pathtime);
+	        long millis = System.currentTimeMillis();
+	        long cooldownmil = cooldown * 1000;
+	        if (timecooldown + cooldownmil > millis) {
+	            long restante = (timecooldown + cooldownmil - millis) / 1000;
+	            long dias = restante / (60 * 60 * 24);
+	            long horas = (restante % (60 * 60 * 24)) / (60 * 60);
+	            long minutos = (restante % (60 * 60)) / 60;
+	            long segundos = restante % 60;
+	            StringBuilder time = new StringBuilder();
+	            if (dias > 0) time.append(dias).append("d ");
+	            if (horas > 0) time.append(horas).append("h ");
+	            if (minutos > 0) time.append(minutos).append("m ");
+	            if (segundos >= 0) time.append(segundos).append("s");
+	            return time.toString();
+	        } else {
+	            return "-1";
+	        }
+	    } else {
+	        return "-1";
+	    }
+	}
+	
+	
+	public String ShowInMomentCooldown(long cooldown, String milis) {
+	    long timecooldown = Long.parseLong(milis);
+	    long millis = System.currentTimeMillis();
+	    long cooldownmil = cooldown * 1000;
 
-		//String pathtime = "Players."+player.getUniqueId()+".Cooldown-Recompensa";  
-		String pathtime = "Players."+player+".Server-Time";  
-		
-		
-		if(data.contains(pathtime)){
-		    String timecooldownString = data.getString(pathtime);
-		    long timecooldown = Long.valueOf(timecooldownString);
-		    long millis = System.currentTimeMillis();
-		      //long cooldown = 100; //En Segundos es el tiempo de espera debes realizar un calculo no olvides   
-		        long cooldownmil = cooldown*1000;
-		        
-		        long espera = millis - timecooldown;
-		        long esperaDiv = espera/1000;
-		        long esperatotalseg = cooldown - esperaDiv;
-		        long esperatotalmin = esperatotalseg/60;
-		        long esperatotalhour = esperatotalmin/60;
-		        long esperatotaldays = esperatotalhour/24;
-		        
-		        if(((timecooldown + cooldownmil) > millis) && (timecooldown != 0)){                 
-		           if(esperatotalseg > 59){
-		               esperatotalseg = esperatotalseg - 60*esperatotalmin;
-		           }
-		           String time = "";
-		           if(esperatotalseg != 0){
-		              time = esperatotalseg+"s";
-		           }
-		           if(esperatotalmin > 59){
-		               esperatotalmin = esperatotalmin - 60*esperatotalhour;
-		           }    
-		           if(esperatotalmin > 0){
-		               time = esperatotalmin+"min"+" "+time;
-		           }
-		           
-		           if(esperatotalhour > 24){
-		        	   esperatotalhour = esperatotalhour - 24*esperatotaldays;
-		           }
-		           
-		           if(esperatotalhour > 0){
-		               time = esperatotalhour+ "h"+" " + time;
-		               
-		           } 
-		           
-		           if(esperatotaldays > 0){
-		               time = esperatotaldays+ "day/s"+" " + time;
-		           }
-		           
-		           return time;
-		           //Aun no se termina el cooldown
-		           //player.sendMessage("Puedes reclamar otra recompensa diaria dentro de "+time);
-		        }else{
-		         return "-1";
-		        }
-		}else{
-		    //Usa el comando por primera vez, ya que no existe el path en la config
-			
-		  return "-1";
-		}
-		
-		
+	    if (timecooldown + cooldownmil > millis && timecooldown != 0) {
+	        long restante = (timecooldown + cooldownmil - millis) / 1000;
+	        long dias = restante / (60 * 60 * 24);
+	        long horas = (restante % (60 * 60 * 24)) / (60 * 60);
+	        long minutos = (restante % (60 * 60)) / 60;
+	        long segundos = restante % 60;
+
+	        StringBuilder time = new StringBuilder();
+	        if (dias > 0) time.append(dias).append("d ");
+	        if (horas > 0) time.append(horas).append("h ");
+	        if (minutos > 0) time.append(minutos).append("m ");
+	        if (segundos > 0) time.append(segundos).append("s");
+
+	        return time.toString().trim();
+	    } else {
+	        return "-1";
+	    }
 	}
-	
-	
-	public  String ShowInMomentCooldown(long cooldown ,String milis) {
-		//Mostrara en el momento el tiempo que sera sancionado 
-		   String timecooldownString = milis;
-		    long timecooldown = Long.valueOf(timecooldownString);
-		    long millis = System.currentTimeMillis();
-		      //long cooldown = 100; //En Segundos es el tiempo de espera debes realizar un calculo no olvides   
-		        long cooldownmil = cooldown*1000;
-		        
-		        long espera = millis - timecooldown;
-		        long esperaDiv = espera/1000;
-		        long esperatotalseg = cooldown - esperaDiv;
-		        long esperatotalmin = esperatotalseg/60;
-		        long esperatotalhour = esperatotalmin/60;
-		        long esperatotaldays = esperatotalhour/24;
-		        
-		        if(((timecooldown + cooldownmil) > millis) && (timecooldown != 0)){                 
-		           if(esperatotalseg > 59){
-		               esperatotalseg = esperatotalseg - 60*esperatotalmin  ;
-		           }
-		           String time = "";
-		           //antes tenia el !=
-		           
-		           // denttro de los condicionales el formato es 1d 2h 3m 3s pero algunos pueden desaparecer cuando esten en 0 si se desea cambiar solamente hay que colocar el ==
-		           if(esperatotalseg != 0){
-		              time = esperatotalseg+"s";
-		           }
-		           if(esperatotalmin > 59){
-		               esperatotalmin = esperatotalmin - 60*esperatotalhour;
-		           }    
-		           if(esperatotalmin > 0){
-		               time = esperatotalmin+"min"+" "+time;
-		           } 
-		           
-		           if(esperatotalhour > 24){
-		        	   esperatotalhour = esperatotalhour - 24*esperatotaldays;
-		           }
-		           
-		           if(esperatotalhour > 0){
-		               time = esperatotalhour+ "h"+" " + time;
-		               
-		           } 
-		           
-		           if(esperatotaldays > 0){
-		               time = esperatotaldays+ "day/s"+" " + time;
-		           }
-		           
-		           return time;
-		           //Aun no se termina el cooldown
-		           //player.sendMessage("Puedes reclamar otra recompensa diaria dentro de "+time);
-		        }else{
-		         return "-1";
-		        }
-	}
-	
 	
 	
 	public boolean HasSancionPlayer(Player player) {
@@ -250,12 +304,18 @@ public class ModerationManager {
 					sendPlaySoundToTarget(target, Sound.BLOCK_NOTE_BLOCK_PLING);
 					sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue Baneo Permanentemente de los MiniJuegos.");
 					sendToTarget(target,"");
-					sendToTarget(target,""+ChatColor.DARK_RED+ChatColor.BOLD+"Recibiste un Baneo Permanente en los MiniJuegos.");
-					sendToTarget(target,"Razon: "+ChatColor.GREEN+r.getCausa());
-					sendToTarget(target,ChatColor.GREEN+"Moderador: "+ChatColor.AQUA+r.getModerador());
+					sendToTarget(target,"&7Recibiste un &4&lBaneo Permanente &7en los MiniJuegos.");
+					sendToTarget(target,"&6Razon: &a"+r.getCausa());
+					sendToTarget(target,"&aModerador: &b"+r.getModerador());
 					sendToTarget(target,"");
 					SetTimeCooldownMg(seconds,r.getReportype(),r.getTarget(),r.DataReport());
-
+					
+					
+					Player banp = Bukkit.getPlayerExact(target);
+					if(banp != null) {
+						banp.kickPlayer(Utils.colorTextChatColor("&8&l[&4&lBANEADO&8&l]\n&7Recibiste un &4&lBaneo Permanente &7en los MiniJuegos.\n&6Razon: &a"+r.getCausa()+"\n&aModerador: &b"+r.getModerador()));
+					}
+					
 				}
 				
 				return;
@@ -277,12 +337,17 @@ public class ModerationManager {
 					sendPlaySoundToTarget(target, Sound.BLOCK_NOTE_BLOCK_PLING);
 					sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue sancionado por "+ChatColor.GREEN+r.getTimeReport());
 					sendToTarget(target,"");
-					sendToTarget(target,""+ChatColor.RED+ChatColor.BOLD+"Recibiste un Baneo Temporal en los Juegos.");
-					sendToTarget(target,""+ChatColor.GREEN+ChatColor.BOLD+"Tiempo : "+ChatColor.RED+ChatColor.BOLD+ShowInMomentCooldown(seconds, String.valueOf(System.currentTimeMillis())));
-					sendToTarget(target,"Razon: "+ChatColor.GREEN+r.getCausa());
-					sendToTarget(target,ChatColor.GREEN+"Moderador: "+ChatColor.AQUA+r.getModerador());
+					sendToTarget(target,"&7Recibiste un &c&lBaneo Temporal &7en los Juegos.");
+					sendToTarget(target,"&a&lTiempo : &c&l"+ShowInMomentCooldown(seconds, String.valueOf(System.currentTimeMillis())));
+					sendToTarget(target,"&7Razon: &a"+r.getCausa());
+					sendToTarget(target,"&aModerador: &b"+r.getModerador());
 					sendToTarget(target,"");
 					SetTimeCooldownMg(seconds,r.getReportype(),r.getTarget(),r.DataReport());
+					
+					Player banp = Bukkit.getPlayerExact(target);
+					if(banp != null) {
+						banp.kickPlayer(Utils.colorTextChatColor("&8&l[&c&lTEMPBAN&8&l]\n&7Recibiste un &4&lBaneo Temporal &7en los MiniJuegos.\n&a&lTiempo : &c&l"+ShowInMomentCooldown(seconds, String.valueOf(System.currentTimeMillis()))+"\n&6Razon: &a"+r.getCausa()+"\n&aModerador: &b"+r.getModerador()));
+					}
 				}
 				return;
 			}else if(gr == GameModerationActionType.PARDON) {
@@ -341,24 +406,35 @@ public class ModerationManager {
 
 			}else if(gr == GameModerationActionType.BAN) {
 				sendPlaySoundToTarget(target, Sound.BLOCK_NOTE_BLOCK_PLING);
-				sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue Baneo Permanentemente de los MiniJuegos.");
+				sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue Baneo Permanentemente del Servidor.");
 				sendToTarget(target,"");
-				sendToTarget(target,""+ChatColor.DARK_RED+ChatColor.BOLD+"Recibiste un Baneo Permanente en los Juegos.");
-				sendToTarget(target,"Razon: "+ChatColor.GREEN+r.getCausa());
-				sendToTarget(target,ChatColor.GREEN+"Moderador: "+ChatColor.AQUA+r.getModerador());
+				sendToTarget(target,"&7Recibiste un &4&lBaneo Permanente &7del Servidor.");
+				sendToTarget(target,"&7Razon: &a"+r.getCausa());
+				sendToTarget(target,"&aModerador: &b"+r.getModerador());
 				sendToTarget(target,"");
 				SetTimeCooldownMg(seconds,r.getReportype(),r.getTarget(),r.DataReport());
+				
+				Player banp = Bukkit.getPlayerExact(target);
+				if(banp != null) {
+					banp.kickPlayer(Utils.colorTextChatColor("&8&l[&4&lBANEADO&8&l]\n&7Recibiste un &4&lBaneo Permanente &7del Servidor.\n&6Razon: &a"+r.getCausa()+"\n&aModerador: &b"+r.getModerador()));
+				}
+				
 
 			}else if(gr == GameModerationActionType.TEMPBAN) {
 				sendPlaySoundToTarget(target, Sound.BLOCK_NOTE_BLOCK_PLING);
 				sendMessageGeneral(player,ChatColor.YELLOW+"El Jugador "+ChatColor.GREEN+target+ChatColor.YELLOW+" fue sancionado por "+ChatColor.GREEN+r.getTimeReport());
 				sendToTarget(target,"");
-				sendToTarget(target,""+ChatColor.RED+ChatColor.BOLD+"Recibiste un Baneo Temporal en los MiniJuegos.");
-				sendToTarget(target,""+ChatColor.GREEN+ChatColor.BOLD+"Tiempo : "+ChatColor.RED+ChatColor.BOLD+ShowInMomentCooldown(seconds, String.valueOf(System.currentTimeMillis())));
-				sendToTarget(target,"Razon: "+ChatColor.GREEN+r.getCausa());
-				sendToTarget(target,ChatColor.GREEN+"Moderador: "+ChatColor.AQUA+r.getModerador());
+				sendToTarget(target,"&7Recibiste un &c&lBaneo Temporal &7del Servidor.");
+				sendToTarget(target,"&a&lTiempo : &c&l"+ShowInMomentCooldown(seconds, String.valueOf(System.currentTimeMillis())));
+				sendToTarget(target,"&7Razon: &a"+r.getCausa());
+				sendToTarget(target,"&aModerador: &b"+r.getModerador());
 				sendToTarget(target,"");
 				SetTimeCooldownMg(seconds,r.getReportype(),r.getTarget(),r.DataReport());
+				
+				Player banp = Bukkit.getPlayerExact(target);
+				if(banp != null) {
+					banp.kickPlayer(Utils.colorTextChatColor("&8&l[&c&lTEMPBAN&8&l]\n&7Recibiste un &4&lBaneo Temporal &7del Servidor.\n&a&lTiempo : &c&l"+ShowInMomentCooldown(seconds, String.valueOf(System.currentTimeMillis()))+"\n&6Razon: &a"+r.getCausa()+"\n&aModerador: &b"+r.getModerador()));
+				}
 
 			}else if(gr == GameModerationActionType.PARDON) {
 				
@@ -419,9 +495,10 @@ public class ModerationManager {
 	public void sendMessageGeneral(Player player, String text) {
 		
 		if(player != null) {
-			player.sendMessage(text);
+			player.sendMessage(Utils.colorTextChatColor(text));
 		}
-		Bukkit.getConsoleSender().sendMessage(text);
+		Bukkit.broadcastMessage(Utils.colorTextChatColor(text));
+		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor(text));
 	}
 	
 	
@@ -430,9 +507,9 @@ public class ModerationManager {
 		
 			if(target != null) {
 				
-				target.sendMessage(text);
+				target.sendMessage(Utils.colorTextChatColor(text));
 			}
-		Bukkit.getConsoleSender().sendMessage(text);
+		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor(text));
 	}
 	
 	//Sound.BLOCK_NOTE_BLOCK_PLING
@@ -625,7 +702,7 @@ public class ModerationManager {
 								}
 								
 								Player target1 = Bukkit.getServer().getPlayerExact(target);
-								if(!type.startsWith("warn")) {
+								if(type.startsWith("kick")) {
 									if(target1 != null && gc.isPlayerinGame(target1)) {
 										gc.mgLeaveOfTheGame(target1);
 

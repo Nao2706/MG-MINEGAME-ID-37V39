@@ -5,7 +5,7 @@ public enum GameType {
 	
 	
 	ADVENTURE("Aventura"),
-	PREADVENTURE("Preaventura"),
+	FREEFORALL("Todos Contra Todos"),
 	RESISTENCE("Resistencia"),
 	PVP("PVP"),
 	NEXO("Nexo"),

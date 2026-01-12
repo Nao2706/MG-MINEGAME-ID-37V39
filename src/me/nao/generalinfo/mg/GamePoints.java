@@ -71,4 +71,25 @@ public class GamePoints {
 		this.time = time;
 	}	
 	
+	public void addKills(int val) {
+		this.kills += val;
+	}
+	
+	public void addDeads(int val) {
+		this.deads += val;
+	}
+	
+	public void addRevive(int val) {
+		this.revive += val;
+	}
+	
+	public void addDamage(long val) {
+		this.damage += val;
+	}
+	
+	public void addHelpRevive(int val) {
+		this.helprevive += val;
+	}
+	
+
 }

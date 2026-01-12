@@ -127,7 +127,7 @@ public class GameIntoMap {
 					MgTeams t = new MgTeams(plugin);
 					t.JoinTeamLifeMG(target);
 					cm.revivePlayerToGame(target, mapa);
-					pl.getGamePoints().setHelpRevive(pl.getGamePoints().getHelpRevive()+1);
+					pl.getGamePoints().addHelpRevive(1); 
 					target.setGameMode(GameMode.ADVENTURE);
 					healPlayer(target);
 					pl.setPlayerGameStatus(PlayerGameStatus.ALIVE);
@@ -149,7 +149,7 @@ public class GameIntoMap {
 					
 					
 					PlayerInfo targetrevive = plugin.getPlayerInfoPoo().get(target);
-					targetrevive.getGamePoints().setRevive(targetrevive.getGamePoints().getRevive()+1);
+					targetrevive.getGamePoints().addRevive(1); 
 					
 					
 					if(!deaths.isEmpty()) {
@@ -309,7 +309,7 @@ public class GameIntoMap {
 			f.spawnFireballRedLarge();
 			
 			if(pl.getRespawn() != null) {
-				pl.getGamePoints().setDeads(pl.getGamePoints().getDeads()+1);
+				pl.getGamePoints().addDeads(1); 
 				revivePlayerRespawn(player);
 				return;
 			}
@@ -317,14 +317,14 @@ public class GameIntoMap {
 			if(pl.getRespawnLife() != null) {
 				RespawnLife rl = pl.getRespawnLife();
 				if(rl.getLifes() != 0) {
-					pl.getGamePoints().setDeads(pl.getGamePoints().getDeads()+1);
+					pl.getGamePoints().addDeads(1);  
 					revivePlayerRespawnLife(player);
 					return;
 				} 
 			}
 			
 			pl.setPlayerGameStatus(PlayerGameStatus.DEAD);
-			pl.getGamePoints().setDeads(pl.getGamePoints().getDeads()+1);
+			pl.getGamePoints().addDeads(1);  
 		 	MgTeams t = new MgTeams(plugin);;
 			t.JoinTeamDeadMG(player);
 			gmc.deadPlayerToGame(player, mapa); 
@@ -404,7 +404,7 @@ public class GameIntoMap {
 						}
 							 
 							if(pl.getRespawn() != null) {
-								pl.getGamePoints().setDeads(pl.getGamePoints().getDeads()+1);
+								pl.getGamePoints().addDeads(1);  
 								revivePlayerRespawn(player);
 								return;
 							}
@@ -412,7 +412,7 @@ public class GameIntoMap {
 							if(pl.getRespawnLife() != null) {
 								RespawnLife rl = pl.getRespawnLife();
 								if(rl.getLifes() != 0) {
-									pl.getGamePoints().setDeads(pl.getGamePoints().getDeads()+1);
+									pl.getGamePoints().addDeads(1);   
 									revivePlayerRespawnLife(player);
 									return;
 								} 
@@ -421,7 +421,7 @@ public class GameIntoMap {
 							player.sendMessage(ChatColor.RED+"\nUsa la hotbar para ver a otros jugadores. "+ChatColor.YELLOW+"\n!!!Solo podras ver a los que estan en tu partida");
 							player.sendMessage(ChatColor.GREEN+"Puedes ser revivido por tus compañeros.\n(Siempre que hayan cofres de Revivir)");
 							
-							pl.getGamePoints().setDeads(pl.getGamePoints().getDeads()+1);
+							pl.getGamePoints().addDeads(1);   
 							pl.setPlayerGameStatus(PlayerGameStatus.DEAD);
 							
 						 	MgTeams t = new MgTeams(plugin);;

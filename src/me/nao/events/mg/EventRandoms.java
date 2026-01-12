@@ -78,6 +78,8 @@ import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerFishEvent;
@@ -112,6 +114,7 @@ import com.google.common.base.Strings;
 
 import me.nao.cosmetics.mg.RankPlayer;
 import me.nao.enums.mg.GameInteractions;
+import me.nao.enums.mg.GameModerationActionType;
 import me.nao.enums.mg.GameStatus;
 import me.nao.enums.mg.Items;
 import me.nao.enums.mg.PlayerGameStatus;
@@ -121,6 +124,7 @@ import me.nao.generalinfo.mg.CuboidZone;
 import me.nao.generalinfo.mg.GameAdventure;
 import me.nao.generalinfo.mg.GameConditions;
 import me.nao.generalinfo.mg.GameInfo;
+import me.nao.generalinfo.mg.ModerationManager;
 import me.nao.generalinfo.mg.PlayerInfo;
 import me.nao.generalinfo.mg.RespawnLife;
 import me.nao.main.mg.Minegame;
@@ -151,6 +155,55 @@ public class EventRandoms implements Listener{
 //	   }
 //	
 
+	@EventHandler(priority = EventPriority.LOWEST)
+	public void preMg(AsyncPlayerPreLoginEvent e) {
+		
+		String player = e.getName();
+		
+		FileConfiguration moderation = plugin.getPlayersHistoryYaml();
+		GameConditions gc = new GameConditions(plugin);
+		
+		if(!moderation.contains("Players."+player)) return;
+		
+		
+		ModerationManager mm = new ModerationManager(plugin);
+		List<String> list = moderation.getStringList("Players."+player+".History");
+		
+		
+		GameModerationActionType statusconfig = GameModerationActionType.valueOf(moderation.getString("Players."+player+".Status").toUpperCase());
+		if(statusconfig == GameModerationActionType.BAN) {
+			//player.sendMessage(ChatColor.RED+"Estas Baneado Permanentemente de los MiniJuegos");
+			gc.sendMessageToConsole(ChatColor.GOLD+player+ChatColor.RED+" Esta Baneado Permanentemente del Servidor.");
+			e.setLoginResult(Result.KICK_OTHER);
+			e.setKickMessage(Utils.colorTextChatColor("&8&l[&4&lBANEADO&8&l]\n&7Estas &4&lBaneado Permanentemente &7del Servidor."+list.get(list.size()-1).replaceAll("-"," ")
+					.replaceAll("Sancion:",ChatColor.GOLD+"\nSancion:"+ChatColor.GREEN)
+					.replaceAll("Fecha:",ChatColor.GOLD+"\nFecha:"+ChatColor.GREEN).replaceAll("Tiempo:",ChatColor.GOLD+"\nTiempo:"+ChatColor.GREEN)
+					.replaceAll("Mod:",ChatColor.GOLD+"\nMod:"+ChatColor.GREEN).replaceAll("Razon:",ChatColor.GOLD+"\nRazon:"+ChatColor.GREEN)));
+			
+			return;
+		}else if(statusconfig == GameModerationActionType.TEMPBAN) {
+			int time = moderation.getInt("Players."+player+".TempBanTime");
+			
+			String cooldown = mm.getCooldown(time,player);
+			if(cooldown.equals("-1")) {
+				moderation.set("Players."+player+".Status",GameModerationActionType.NINGUNO.toString());
+				plugin.getPlayersHistoryYaml().save();
+				plugin.getPlayersHistoryYaml().reload();
+				//sendMessageGeneral(player,ChatColor.GREEN+player.getName()+" Tu sancion se Completo ya puedes Jugar.");
+				return ;
+			}else {
+				e.setLoginResult(Result.KICK_OTHER);
+				e.setKickMessage(Utils.colorTextChatColor("&8&l[&c&lTEMPBAN&8&l]\n&7Estas &c&lBaneado Temporalmente &7del Servidor."+list.get(list.size()-1).replaceAll("-"," ")
+						.replaceAll("Sancion:",ChatColor.GOLD+"\nSancion:"+ChatColor.GREEN)
+						.replaceAll("Fecha:",ChatColor.GOLD+"\nFecha:"+ChatColor.GREEN).replaceAll("Tiempo:",ChatColor.GOLD+"\nTiempo:"+ChatColor.GREEN)
+						.replaceAll("Mod:",ChatColor.GOLD+"\nMod:"+ChatColor.GREEN).replaceAll("Razon:",ChatColor.GOLD+"\nRazon:"+ChatColor.GREEN))+"\n&eTiempo Remanente: &c"+cooldown);
+//				player.sendMessage(ChatColor.RED+"Estas Baneado Temporalmente de los MiniJuegos");
+//				player.sendMessage(ChatColor.YELLOW+"Tiempo Remanente: "+ChatColor.RED+cooldown);
+				return ;
+		}}
+		
+	}
+	
 	
 	//@EventHandler(priority = EventPriority.LOWEST)
 	public void runev(PlayerToggleSprintEvent e) {
@@ -1465,7 +1518,7 @@ public class EventRandoms implements Listener{
 					PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 					 if(entidadAtacada instanceof LivingEntity) {
 						    LivingEntity mob = (LivingEntity) entidadAtacada;
-						  	pl.getGamePoints().setDamage(pl.getGamePoints().getDamage()+ConvertDoubleToInt(mob.getHealth()-mob.getAttribute(Attribute.MAX_HEALTH).getBaseValue()));
+						  	pl.getGamePoints().addDamage(ConvertDoubleToInt(mob.getHealth()-mob.getAttribute(Attribute.MAX_HEALTH).getBaseValue()));
 						  	if(player.getScoreboardTags().contains("Instakillmob")) {
 						  		mob.setHealth(0);
 						  	}
@@ -2639,7 +2692,7 @@ public class EventRandoms implements Listener{
 					  	if(entidadhit instanceof LivingEntity) {
 							    LivingEntity mob = (LivingEntity) entidadhit;
 							 	 
-							  	pl.getGamePoints().setDamage(pl.getGamePoints().getDamage()+ConvertDoubleToInt(mob.getHealth()-mob.getAttribute(Attribute.MAX_HEALTH).getBaseValue()));
+							  	pl.getGamePoints().addDamage(ConvertDoubleToInt(mob.getHealth()-mob.getAttribute(Attribute.MAX_HEALTH).getBaseValue()));
 								//isaHeadShot(player, mob, projectile);
 								if(gc.isGuardian(mob)) return;
 							  	headShoot(player, mob, projectile);

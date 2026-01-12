@@ -168,7 +168,12 @@ public class TabCompletemg implements TabCompleter{
 					if(args[0].equalsIgnoreCase("report")){
 						//Player player = (Player) sender;
 						if(args.length == 3) {
-							   List<String> result = Arrays.stream(GameCheats.values()).map(Object:: toString).collect(Collectors.toList());
+							
+								//TOMA ENUMS Y LOS DA COMO LISTA
+							   //List<String> result = Arrays.stream(GameCheats.values()).map(Object:: toString).collect(Collectors.toList());
+							   List<String> result = Arrays.stream(GameCheats.values()).map(GameCheats::getValue).collect(Collectors.toList());
+
+							
 							
 						       return result;
 						}

@@ -2,7 +2,11 @@ package me.nao.scoreboard.mg;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -27,6 +31,7 @@ import com.google.common.base.Strings;
 import me.nao.enums.mg.ObjetiveStatusType;
 import me.nao.generalinfo.mg.GameAdventure;
 import me.nao.generalinfo.mg.GameConditions;
+import me.nao.generalinfo.mg.GameFreeForAll;
 import me.nao.generalinfo.mg.GameInfo;
 import me.nao.generalinfo.mg.GameObjetivesMG;
 import me.nao.generalinfo.mg.GamePoints;
@@ -34,6 +39,7 @@ import me.nao.generalinfo.mg.ObjetivesMG;
 import me.nao.generalinfo.mg.PlayerInfo;
 import me.nao.main.mg.Minegame;
 import me.nao.revive.mg.RevivePlayer;
+import me.nao.utils.mg.Utils;
 
 
 @SuppressWarnings("deprecation")
@@ -101,7 +107,7 @@ public class MgScore {
 				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Crees Ganar???");
 				 show.add(""+ChatColor.RED+ChatColor.BOLD+"No uses Hacks o Bugs");
 				 show.add(""+ChatColor.RED+ChatColor.BOLD+"Reportalos si los ves.");
-				 show.add(""+ChatColor.RED+ChatColor.BOLD+"/mg report <player> <motivo>");
+				 show.add(""+ChatColor.RED+ChatColor.BOLD+"/mg report <player>");
 				 show.add(ChatColor.RED+"  ");
 				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"------------- ");
 			 }if(val == 1) {
@@ -113,7 +119,7 @@ public class MgScore {
 				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"no ?? F");
 				 show.add(""+ChatColor.RED+ChatColor.BOLD+"No uses Hacks o Bugs");
 				 show.add(""+ChatColor.RED+ChatColor.BOLD+"Reportalos si los ves.");
-				 show.add(""+ChatColor.RED+ChatColor.BOLD+"/mg report <player> <motivo>");
+				 show.add(""+ChatColor.RED+ChatColor.BOLD+"/mg report <player>");
 				 show.add(ChatColor.RED+"  ");
 				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"------------- ");
 			 }if(val == 2) {
@@ -125,7 +131,7 @@ public class MgScore {
 				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Y trata de no jugar solo");
 				 show.add(""+ChatColor.RED+ChatColor.BOLD+"No uses Hacks o Bugs");
 				 show.add(""+ChatColor.RED+ChatColor.BOLD+"Reportalos si los ves.");
-				 show.add(""+ChatColor.RED+ChatColor.BOLD+"/mg report <player> <motivo>");
+				 show.add(""+ChatColor.RED+ChatColor.BOLD+"/mg report <player>");
 				 show.add(ChatColor.RED+"  ");
 				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"------------- ");
 			 }if(val == 3) {
@@ -137,7 +143,7 @@ public class MgScore {
 				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"o eran los hacks??");
 				 show.add(""+ChatColor.RED+ChatColor.BOLD+"No uses Hacks o Bugs");
 				 show.add(""+ChatColor.RED+ChatColor.BOLD+"Reportalos si los ves.");
-				 show.add(""+ChatColor.RED+ChatColor.BOLD+"/mg report <player> <motivo>");
+				 show.add(""+ChatColor.RED+ChatColor.BOLD+"/mg report <player>");
 				 show.add(ChatColor.RED+"  ");
 				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"------------- ");
 			 }
@@ -151,6 +157,112 @@ public class MgScore {
 			score.setScore((show.size()-i));
 		}
 		player.setScoreboard(scoreboard);
+		
+	}
+	
+	
+	public void showTopPlayersFFA(Player player) {
+		GameConditions gc = new GameConditions(plugin);
+		if(!gc.isPlayerinGame(player)) return;
+		ScoreboardManager manager = Bukkit.getScoreboardManager();
+		Scoreboard scoreboard = manager.getNewScoreboard();
+	
+		Team green = scoreboard.registerNewTeam("green");
+		Team aqua = scoreboard.registerNewTeam("aqua");
+		Team yellow = scoreboard.registerNewTeam("yellow");
+		Team red = scoreboard.registerNewTeam("red");
+		green.setColor(ChatColor.GREEN);
+		yellow.setColor(ChatColor.YELLOW);
+		red.setColor(ChatColor.RED);
+		aqua.setColor(ChatColor.AQUA);
+	 
+		PlayerInfo p = plugin.getPlayerInfoPoo().get(player);
+		GameInfo gi = plugin.getGameInfoPoo().get(p.getMapName());
+		GameFreeForAll ffa = (GameFreeForAll) gi;
+		
+		
+		if(!plugin.getEntitiesFromFlare().isEmpty()) {
+			
+			
+			List<Entity> entlist = plugin.getEntitiesFromFlare().get(p.getMapName());
+		
+				for(Entity ent : entlist) {
+					if(ent instanceof LivingEntity) {
+						if(ent.isDead() || ent == null) continue;
+						if(ent instanceof Player) {
+							
+							Player pla = (Player) ent;
+							if(pla.getGameMode() == GameMode.ADVENTURE) {
+								green.addEntry(pla.getName());
+							}
+						
+							
+						}else if(ent instanceof Monster) {
+						  if(ent.getType() == EntityType.CREEPER) {
+								aqua.addEntry(ent.getUniqueId().toString());
+								
+							}else if(ent.getType() == EntityType.PILLAGER || ent.getType() == EntityType.VINDICATOR || ent.getType() == EntityType.EVOKER) {
+								yellow.addEntry(ent.getUniqueId().toString());
+								
+							}else{
+								red.addEntry(ent.getUniqueId().toString());
+								
+							}
+						}
+					}
+				}
+			
+		}
+		
+		Objective ob = scoreboard.registerNewObjective("Anuncio",Criteria.DUMMY,"");
+		
+		ob.setDisplaySlot(DisplaySlot.SIDEBAR);
+		List<String> show = new ArrayList<>();
+		 ob.setDisplayName(Utils.colorTextChatColor("&a&lCONSIGUE &c&l"+ffa.getLimitpoints()+" &a&lPUNTOS PARA GANAR"));
+		 show.add(""+ChatColor.RED+ChatColor.BOLD+"-------------");
+		 show.add(ChatColor.RED+" ");
+		 	HashMap<String, Integer> scores = new HashMap<>();
+			
+			
+			List<Player> joins = gc.ConvertStringToPlayer(gi.getParticipants());
+			
+			for(Player user : joins) {
+				PlayerInfo pl = plugin.getPlayerInfoPoo().get(user);
+				scores.put(user.getName(), pl.getGamePoints().getKills());	
+			}
+			
+			List<Map.Entry<String, Integer>> list = new ArrayList<>(scores.entrySet());
+
+			
+			Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+				public int compare(Map.Entry<String, Integer> e1, Map.Entry<String, Integer> e2) {
+					return e2.getValue() - e1.getValue();
+				}
+			});
+			
+			if(!list.isEmpty()) {
+				
+				for(Map.Entry<String, Integer> e : list) {
+				
+					if(e.getKey().equals(player.getName())) {
+						 show.add(Utils.colorTextChatColor("&a"+e.getKey()+"&e: &6"+e.getValue()));
+					}else {
+						 show.add(Utils.colorTextChatColor("&6"+e.getKey()+"&e: &c"+e.getValue()));
+					}
+					
+					
+				}
+			}
+		 show.add(ChatColor.RED+"  ");
+		 show.add(""+ChatColor.RED+ChatColor.BOLD+"------------- ");
+		 
+			for(int i = 0; i< show.size();i++) {
+				
+				Score score = ob.getScore(show.get(i));
+				score.setScore((show.size()-i));
+			}
+			player.setScoreboard(scoreboard);
+			return;
 		
 	}
 	
@@ -192,7 +304,7 @@ public class MgScore {
 							
 							Player pla = (Player) ent;
 							if(pla.getGameMode() == GameMode.ADVENTURE) {
-								green.addEntry(pla.getUniqueId().toString());
+								green.addEntry(pla.getName());
 							}
 						
 							
