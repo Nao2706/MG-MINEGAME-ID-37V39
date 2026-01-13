@@ -280,6 +280,7 @@ public class YamlFilePlus extends YamlConfiguration {
 
     }
     
+    //CAMBIAR
     public void deleteSpecificConsole(String name) {
     	FileConfiguration config = plugin.getConfig();
 		List<String> ac = config.getStringList("Maps-Created.List");

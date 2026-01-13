@@ -60,7 +60,7 @@ public class ResistenceTemp {
 	 }
 	
 	
-	public void Inicio(String name) {
+	public void startMg(String name) {
 		  
 		GameConditions gc = new GameConditions(plugin);
 		BukkitScheduler sh = Bukkit.getServer().getScheduler();
@@ -87,7 +87,7 @@ public class ResistenceTemp {
 			int anuncios = 0;																						//APARENTEMENTE ESTOS DOS SON BarFlag. unas flags
 		
 			GameTime gt = ms.getGameTime();
-		   
+		  
 //		    //Transformar minutos - hora a segundos
 //		 	double minuto3 = minuto * 60;
 //		 	double hora3 = hora * 3600;
@@ -178,7 +178,7 @@ public class ResistenceTemp {
 					  	 
 					     GameIntoMap cig = new GameIntoMap(plugin);
 						 for(Player players : alive) {
-							 players.sendMessage(ChatColor.GREEN+"Todos los jugadores con vida han llegado a la Meta. "+ChatColor.GOLD+"\nSobrevivieron: "+ChatColor.GREEN+ga.getAlivePlayers().toString().replace("[","").replace("]","")+".\n");
+							 players.sendMessage(ChatColor.GREEN+"Felicidades Sobreviviste. "+ChatColor.GOLD+"\nSobrevivieron: "+ChatColor.GREEN+ga.getAlivePlayers().toString().replace("[","").replace("]","")+".\n");
 							 cig.ObjetivesInGame(players, name);
 
 						 }

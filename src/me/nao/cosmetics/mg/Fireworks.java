@@ -22,6 +22,9 @@ public class Fireworks {
 		this.player = player;
 	}
 	
+	public Fireworks() {
+	}
+	
 	public void spawnFireballGreenLarge() {
 		Location l = player.getLocation();
 		
@@ -87,6 +90,26 @@ public class Fireworks {
 	
 	
 	public void spawnMetodoAyi() {
+		Location l = player.getLocation();
+		Random r = new Random();
+		List<Color> lc = getColor();
+		
+		
+		Firework f = (Firework) l.getWorld().spawn(l,Firework.class);
+		FireworkMeta fm = f.getFireworkMeta();
+		fm.addEffect(FireworkEffect.builder()
+				.flicker(false)
+				.trail(true)
+				.with(Type.BALL_LARGE)
+				.withColor(lc.get(r.nextInt(lc.size())))
+				.withFade(lc.get(r.nextInt(lc.size())))
+				.build());
+				
+				fm.setPower(3);
+				f.setFireworkMeta(fm);
+	}
+	
+	public void spawnMetodoAyi(Player player) {
 		Location l = player.getLocation();
 		Random r = new Random();
 		List<Color> lc = getColor();

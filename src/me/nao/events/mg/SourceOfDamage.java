@@ -13,6 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.EnchantingTable;
@@ -76,6 +77,7 @@ import me.nao.main.mg.Minegame;
 import me.nao.manager.mg.GameIntoMap;
 import me.nao.mobs.mg.MobsActions;
 import me.nao.revive.mg.RevivePlayer;
+import me.nao.utils.mg.Utils;
 
 
 @SuppressWarnings("deprecation")
@@ -724,7 +726,15 @@ public class SourceOfDamage implements Listener{
 																		  float pitch = Float.valueOf(nn[4]);
 																		  float yaw = Float.valueOf(nn[5]);
 																		  
-																		  Location l = new Location(Bukkit.getWorld(world),x,y,z,pitch,yaw);
+																		  World w = Bukkit.getWorld(world);
+																		  
+																		  if(w == null) {
+																			  player.sendTitle(Utils.colorTextChatColor("&cError en TP"), "&eEl Mundo no existe", 20, 20, 20);
+																			  return;
+																		  }
+																		  
+																		  
+																		  Location l = new Location(w,x,y,z,pitch,yaw);
 																		  player.teleport(l);	
 																		  player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_TELEPORT, 20.0F, 1F);
 										              }

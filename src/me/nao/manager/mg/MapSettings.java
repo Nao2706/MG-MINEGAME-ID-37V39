@@ -161,15 +161,15 @@ public class MapSettings {
 			time.add("say replace Time-X-x-x for other numbers ");	
 			time.add("say example Time-10-5-1 is h-m-s");	
 		
-			SetObjetiveInfoDefault(ym,"Objetivo");
-			SetInfoItemOfMision(name);
+			setObjetiveInfoDefault(ym,"Objetivo");
+			setInfoItemOfMision(name);
 			
 			
 			List<String> zones = ym.getStringList("Cuboid-Zones.List");
 			ym.set("Cuboid-Zones.List",zones);
-			zones.add("example/123/34/56;example/124/34/58;CANPLACE");
-			zones.add("example/123/34/56;example/124/34/58;CANBREAK");
-			zones.add("example/123/34/56;example/124/34/58;CANMODIFY");
+			zones.add("world/123/34/56;world/124/34/58;CANPLACE");
+			zones.add("world/123/34/56;world/124/34/58;CANBREAK");
+			zones.add("world/123/34/56;world/124/34/58;CANMODIFY");
 			
 			
 			
@@ -203,7 +203,7 @@ public class MapSettings {
 	
    
    
-   public void SetInfoItemOfMision(String name) {
+   public void setInfoItemOfMision(String name) {
 	   
 	   FileConfiguration itemm = plugin.getMenuItems();
 	   
@@ -219,8 +219,13 @@ public class MapSettings {
 	   plugin.getMenuItems().reload();
 	   
    }
+    
+   public void setFreeForAllInfoDefault(FileConfiguration ym, String objetive) {
+	  
+   }
    
-   public void SetObjetiveInfoDefault(FileConfiguration ym, String objetive) {
+   
+   public void setObjetiveInfoDefault(FileConfiguration ym, String objetive) {
 	   
 	   
 	   for(int i = 0 ;i < 5;i++) {
@@ -364,6 +369,43 @@ public class MapSettings {
 		}
      
 	}
+   
+   
+   public void setMapSpawnsFreeforAll(String name, Player player) {
+	   GameConditions gc = new GameConditions(plugin);
+		if(gc.existMap(name)) {
+			plugin.ChargedYml(name, player);
+			FileConfiguration ym = plugin.getCacheSpecificYML(name);	
+			
+			if(!ym.contains("Free-For-All.Limit-Point")) {
+				 ym.set("Free-For-All.Limit-Point",20);
+			}
+			 List<String> spawns = ym.getStringList("Free-For-All.Spawns");
+			 ym.set("Free-For-All.Spawns",spawns);
+
+			NumberFormat nf = NumberFormat.getInstance();
+			nf.setGroupingUsed(false);
+			nf.setMaximumFractionDigits(0);
+				
+			if(spawns.contains(player.getLocation().getWorld().getName()+"/"+nf.format(player.getLocation().blockX())+"/"+nf.format(player.getLocation().blockY())+"/"+nf.format(player.getLocation().blockZ())+"/"+nf.format(player.getLocation().getYaw())+"/"+nf.format(player.getLocation().getPitch()))) {
+				player.sendMessage(ChatColor.RED+"Ya estan Guardadas esas Coodenadas.");
+				return;
+			}
+			
+				spawns.add(player.getLocation().getWorld().getName()+"/"+nf.format(player.getLocation().blockX())+"/"+nf.format(player.getLocation().blockY())+"/"+nf.format(player.getLocation().blockZ())+"/"+nf.format(player.getLocation().getYaw())+"/"+nf.format(player.getLocation().getPitch()));
+				
+			
+				player.sendMessage(ChatColor.GREEN+"Se a seteado un Spawn de FreeForAll Correctamente en el Mapa: "+ChatColor.GOLD+name);
+				plugin.getCacheSpecificYML(name).save();
+				plugin.getCacheSpecificYML(name).reload();
+				
+				
+		}else {
+			player.sendMessage(ChatColor.YELLOW+"El Mapa "+ChatColor.GREEN+name+ChatColor.YELLOW+" no existe");
+		}
+     
+	}
+   
    
    public void setMapSpawnSimpleGenerators(String name, Player player) {
 	   

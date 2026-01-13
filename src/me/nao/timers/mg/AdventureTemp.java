@@ -52,7 +52,7 @@ public class AdventureTemp {
 	 }
 	
 	
-	public void Inicio(String name) {
+	public void startMg(String name) {
 		
 		
 		GameConditions gc = new GameConditions(plugin);
@@ -60,14 +60,15 @@ public class AdventureTemp {
 		MobsActions ma = new MobsActions(plugin);
 		
 		BukkitScheduler sh = Bukkit.getServer().getScheduler();
-       
+		GameInfo ms = plugin.getGameInfoPoo().get(name);
+		GameAdventure ga = (GameAdventure) ms;
+	    MgScore sco = new MgScore(plugin);
+		
+		
 		taskID = sh.scheduleSyncRepeatingTask(plugin,new Runnable(){
-			
-			
-			GameInfo ms = plugin.getGameInfoPoo().get(name);
-			GameAdventure ga = (GameAdventure) ms;
-		    MgScore sco = new MgScore(plugin);
-		    
+			//NO SE PUEDE OBTENER SUGERENCIAS EN ESTE BLOQUE EXCEPTUANDO EL RUN
+
+		  
 			//int startm = config.getInt("CountDownPreLobby");
 		    int startm = ms.getCountDownStart();
 			int end = 10;
@@ -78,7 +79,7 @@ public class AdventureTemp {
 			//int segundo = Integer.valueOf(timer[2]);
 		
 			GameTime gt = ms.getGameTime();
-			
+		
 			
 //		    int  segundo2 = 0;
 //			int  minuto2 = 0 ;
@@ -99,7 +100,6 @@ public class AdventureTemp {
 //		 	double time = 1.0 / total;
 		 	
 		    BossBar boss = ms.getBossbar();
-		    
 		
 		@Override
 		public void run() {
@@ -112,6 +112,7 @@ public class AdventureTemp {
 			GameStatus part = ms.getGameStatus();
 			StopMotive motivo = ms.getStopMotive();
 
+			
 			//SI TODOS SE SALEN MIENTRAS COMIENZA
 			if(joins.isEmpty() && part != GameStatus.TERMINANDO) {
 					boss.setProgress(1.0);
@@ -119,6 +120,7 @@ public class AdventureTemp {
 			  		boss.setVisible(false);
 			  		ms.setGameStatus(GameStatus.TERMINANDO);
 	   			    Bukkit.getConsoleSender().sendMessage("No hay jugadores terminando en "+end+"s");
+	   			
 	   		
    		     }
 			//TODO EMPEZANDO

@@ -653,6 +653,14 @@ public class GameTime {
 					text = ""+ChatColor.DARK_RED+ChatColor.BOLD+"Resiste:"+ChatColor.AQUA+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " +ChatColor.GREEN+"+"+showTimerFormat(this.addedhour)+":"+showTimerFormat(this.addedminute)+":"+showTimerFormat(this.addedsecond);
 
 				}
+			}else if(gi.getGameType() == GameType.FREEFORALL){
+				if(status == GameStatus.PAUSE) { 
+					text = ""+ChatColor.AQUA+ChatColor.BOLD+"Todos Contra Todos Pausado:"+ChatColor.AQUA+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s "+ChatColor.GREEN+"+"+showTimerFormat(this.addedhour)+":"+showTimerFormat(this.addedminute)+":"+showTimerFormat(this.addedsecond);
+
+				}else {
+					text = ""+ChatColor.AQUA+ChatColor.BOLD+"Todos Contra Todos:"+ChatColor.AQUA+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " +ChatColor.GREEN+"+"+showTimerFormat(this.addedhour)+":"+showTimerFormat(this.addedminute)+":"+showTimerFormat(this.addedsecond);
+
+				}
 			}
 			
 			
@@ -677,6 +685,14 @@ public class GameTime {
 					text = ""+ChatColor.DARK_RED+ChatColor.BOLD+"Resiste:"+ChatColor.AQUA+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " +ChatColor.RED+"-"+showTimerFormat(this.removehour)+":"+showTimerFormat(this.removeminute)+":"+showTimerFormat(this.removesecond);
 
 				}
+			}else if(gi.getGameType() == GameType.FREEFORALL){
+				if(status == GameStatus.PAUSE) { 
+					text = ""+ChatColor.AQUA+ChatColor.BOLD+"Todos Contra Todos Pausado:"+ChatColor.DARK_PURPLE+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s "+ChatColor.RED+"-"+showTimerFormat(this.removehour)+":"+showTimerFormat(this.removeminute)+":"+showTimerFormat(this.removesecond);
+
+				}else {
+					text = ""+ChatColor.AQUA+ChatColor.BOLD+"Todos Contra Todos:"+ChatColor.DARK_PURPLE+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " +ChatColor.RED+"-"+showTimerFormat(this.removehour)+":"+showTimerFormat(this.removeminute)+":"+showTimerFormat(this.removesecond);
+
+				}
 			}
 			
 			
@@ -691,16 +707,25 @@ public class GameTime {
 			
 			if(gi.getGameType() == GameType.ADVENTURE) {
 				return text =  ""+ChatColor.GOLD+ChatColor.BOLD+"Tiempo Remanente Pausado:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " ;
+				
 			}else if(gi.getGameType() == GameType.RESISTENCE){
 				return text = ""+ChatColor.GOLD+ChatColor.BOLD+"Resistencia Pausado:"+ChatColor.AQUA+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " ;
+				
+			}else if(gi.getGameType() == GameType.FREEFORALL){
+				return text = ""+ChatColor.AQUA+ChatColor.BOLD+"Todos Contra Todos Pausado:"+ChatColor.DARK_PURPLE+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " ;
 			}
 		}
 		
 		//return ""+ChatColor.DARK_RED+ChatColor.BOLD+"Tiempo Remanente:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " ;
 		if(gi.getGameType() == GameType.ADVENTURE) {
 			return text = ""+ChatColor.DARK_RED+ChatColor.BOLD+"Tiempo Remanente:"+ChatColor.DARK_GREEN+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " ;
+			
 		}else if(gi.getGameType() == GameType.RESISTENCE){
 			return text = ""+ChatColor.DARK_RED+ChatColor.BOLD+"Resiste:"+ChatColor.AQUA+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " ;
+			
+		}else if(gi.getGameType() == GameType.FREEFORALL){
+			return text = ""+ChatColor.AQUA+ChatColor.BOLD+"Todos Contra Todos:"+ChatColor.DARK_PURPLE+ChatColor.BOLD+" "+getTimerhour()+"h "+getTimerminute()+"m "+getTimersecond()+"s " ;
+			
 		}
 		return text;
 	}

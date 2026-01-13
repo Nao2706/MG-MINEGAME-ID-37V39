@@ -19,7 +19,7 @@ import me.nao.utils.mg.Utils;
 public class GameInfo {
 	
 	
-	private String name , time , stopreason ,cooldown;
+	private String name , time , stopreason ,cooldownsforreplay;
 	private int minprestigetoplay , minlvltoplay, maxplayers,minplayers, loottablemax , itemspawnrange , spawnmobrange , countdownstart, toxiczonerange, dispenserrange;
 	private int pointsperkills, pointsperdeads , pointsperrevive ,pointsperhelprevive , pointsbonus , pointsloseporcent;
 	private List<String> participants,winners,spectators;
@@ -81,7 +81,7 @@ public class GameInfo {
 		this.pointsloseporcent = 0;
 		this.deleinventorybytimeout = true;
 		this.hascooldown = false;
-		this.cooldown = "0,0,0";
+		this.cooldownsforreplay = "0,0,0";
 		this.cleanmapfromentitys = true;
 		this.minlvltoplay = 0;
 		this.minprestigetoplay = 0;
@@ -94,8 +94,8 @@ public class GameInfo {
 		return name;
 	}
 	
-	public String getCooldown() {
-		return cooldown;
+	public String getCooldownForReplay() {
+		return cooldownsforreplay;
 	}
 	
 	public int getSpawnMobRange() {
@@ -190,7 +190,7 @@ public class GameInfo {
 		return pvp;
 	}
 	
-	public boolean hasMapCooldown() {
+	public boolean hasMapCooldownForReplay() {
 		return hascooldown;
 	}
 	
@@ -414,12 +414,12 @@ public class GameInfo {
 		this.minlvltoplay = minlvltoplay;
 	}
 
-	public void setMapCooldown(boolean hascooldown) {
+	public void sethasMapCooldownForReplay(boolean hascooldown) {
 		this.hascooldown = hascooldown;
 	}
 	
-	public void setMapTimeCooldown(String cooldown) {
-		this.cooldown = cooldown;
+	public void setMapTimeCooldownForReplay(String cooldownsforreplay) {
+		this.cooldownsforreplay = cooldownsforreplay;
 	}
 	
 	public void setPlayersTop(List<Map.Entry<String, Integer>> top) {
@@ -430,6 +430,55 @@ public class GameInfo {
 		this.timers = timers;
 	}
 
+	public void copyData(GameInfo gi) {
+		
+	
+		
+		setMapName(gi.getMapName());
+		setTimeMg(gi.getTimeMg());
+		setGameType(gi.getGameType());
+		setMaxPlayersinMap(gi.getMaxPlayers());
+		setMinPlayersinMap(gi.getMinPlayers());
+		setBossbar(gi.getBossbar());
+		setObjetivesMg(gi.getGameObjetivesMg());
+		
+		setGameTimeActions(gi.getGameTimeActionsMg());
+		setCuboidZones(gi.getCuboidZones());
+		setLootTableLimit(gi.getLootTableLimit());
+		setGenerators(gi.getGenerators());
+		setMobsGenerators(gi.getMobsGenerators());
+		setPvpinMap(gi.isPvpinMap());
+		setCountDownStart(gi.getCountDownStart());
+		setGameTime(gi.getGameTime());
+		setBarriersinMap(gi.hasBarriersinMap());
+		setAllowedJoinWithOwnInventory(gi.isAllowedJoinWithOwnInventory());
+		setTimersEvents(gi.getTimersEvents());
+		
+		setSpawnItemRange(gi.getSpawnItemRange());
+		setSpawnMobRange(gi.getSpawnMobRange());
+		setToxicZoneRange(gi.getToxicZoneRange());
+		
+		setPointsPerKills(gi.getPointsPerKills());
+		setPointsPerDeads(gi.getPointsPerDeads());
+		setPointsPerRevive(gi.getPointsPerRevive());
+		setPointsPerHelpRevive(gi.getPointsPerHelpRevive());
+		setPointsBonus(gi.getPointsBonus());
+		setDispenserRange(gi.getDispenserRange());
+		setRankedMap(gi.isRankedMap());
+		setPointsLosePorcent(gi.getPointsLosePorcent());
+		setMapData(gi.getMapData());
+		setLvltoPlay(gi.getLvltoPlay());
+		setPrestigelvltoPlay(gi.getPrestigelvltoPlay());
+		
+		setDeleteInventoryByTimeOut(gi.hasDeleteInventoryByTimeOut());
+		sethasMapCooldownForReplay(gi.hasMapCooldownForReplay());
+	    setMapTimeCooldownForReplay(gi.getCooldownForReplay());
+		setCleanMapFromEntitys(gi.hasMapCleanedFromEntitys());
+		
+	
+	}
+	
+	
 	public String ShowGame() {
 		return getMapName()+" "+getMaxPlayers()+" "+getMinPlayers()+" "+getGameType().toString()+" "+getGameStatus().toString()+" "+
 	getStopMotive().toString()+" "+getBossbar().getTitle()+" "+getTimeMg();

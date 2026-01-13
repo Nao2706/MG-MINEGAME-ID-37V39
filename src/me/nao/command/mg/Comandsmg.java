@@ -4152,7 +4152,28 @@ public class Comandsmg implements CommandExecutor{
 						
 						return true;
 						
-					}else if(args[0].equalsIgnoreCase("setspawn-infected")) {
+					}else if(args[0].equalsIgnoreCase("setspawnffa")) {
+						
+						if(!player.isOp()) {
+							
+							player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
+							return true;
+						}
+						
+						if(args.length >= 2) {
+						
+							String mapname = args[1];
+					   
+						c.setMapSpawnsFreeforAll(mapname, player);
+					
+						}else {
+							player.sendMessage(plugin.nombre+ChatColor.GREEN+"escribe /mg setspawnffa <mapa>");
+						}
+					
+				
+				return true;
+				
+			}else if(args[0].equalsIgnoreCase("setspawn-infected")) {
 							
 							if(player.isOp()) {
 								if(args.length == 2) {

@@ -43,6 +43,7 @@ import me.nao.enums.mg.ReviveStatus;
 import me.nao.enums.mg.StopMotive;
 import me.nao.generalinfo.mg.GameAdventure;
 import me.nao.generalinfo.mg.GameConditions;
+import me.nao.generalinfo.mg.GameFreeForAll;
 import me.nao.generalinfo.mg.GameInfo;
 import me.nao.generalinfo.mg.GameObjetivesMG;
 import me.nao.generalinfo.mg.PlayerInfo;
@@ -337,7 +338,16 @@ public class GameIntoMap {
 			}
 		
 			
-		}//else if(gi instanceof GameNexo) {
+		}else if(gi instanceof GameFreeForAll) {
+			
+			GameFreeForAll ffa = (GameFreeForAll) gi;
+			
+			reviveFreeForAll(player,ffa);
+			
+		}
+		
+		
+		//else if(gi instanceof GameNexo) {
 //			GameNexo gn = (GameNexo) gi;
 //			DestroyNexo dn = new DestroyNexo(plugin);
 //			if(gn.getBlueTeamMg().contains(player.getName())) {
@@ -365,12 +375,14 @@ public class GameIntoMap {
 				if(b.getType() == Material.BARRIER || b.getType() == Material.BARRIER && d == DamageCause.FALL || block.getType() == Material.AIR && d == DamageCause.VOID) {
 					PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 					String mapa = pl.getMapName();
-					GameInfo gi = plugin.getGameInfoPoo().get(mapa);
+					//GameInfo gi = plugin.getGameInfoPoo().get(mapa);
 					GameConditions gmc = new GameConditions(plugin);
 					
 					if(gmc.hasPlayerACheckPoint(player)) {
 						return;
-					}else if(gmc.hasAntiVoid(player) && gi.getGameType() != GameType.NEXO){
+					}else if(gmc.hasAntiVoid(player)){
+						//else if(gmc.hasAntiVoid(player) && gi.getGameType() != GameType.NEXO){
+						
 						
 						gmc.TptoSpawnMapSimple(player);
 						player.sendTitle(ChatColor.GREEN+"Anti Void Activado",ChatColor.GREEN+"No te Caigas",20,60,20);
@@ -485,7 +497,7 @@ public class GameIntoMap {
 				return;
 				
 				//VICTORIAS SIN USAR COMANDOS
-			}else {
+		  }else {
 				
 				if(gm.getGameType() == GameType.ADVENTURE) {
 					
@@ -566,7 +578,22 @@ public class GameIntoMap {
 					
 				}
 			}
+		}if(gm instanceof GameFreeForAll) {
+			
+			//GameFreeForAll ffa = (GameFreeForAll) gm;
+			
+				if(gm.getGameStatus() == GameStatus.JUGANDO || gm.getGameStatus() == GameStatus.PAUSE || gm.getGameStatus() == GameStatus.FREEZE) {
+					pl.setPlayerCronomet(new MapRecords(player.getName(),gm.getGameTime().getGameCronometForPlayer(),pl.getGamePoints().getKills()));
+
+
+					gmc.EndTptoSpawn(player, mapa);
+					//isTheRankedGames(player,gm.isRankedMap());
+				}
+		
+			
+			
 		}
+		
 	}
 	
 	 
@@ -579,7 +606,7 @@ public class GameIntoMap {
 		RespawnLife rl = pl.getRespawnLife();
 		if(rl.getLifes() == 0 ) return;
 		
-		pl.getGamePoints().setRevive(pl.getGamePoints().getRevive()+1);
+		pl.getGamePoints().addRevive(1);
 	
 		cm.setHeartsInGame(player, pl.getMapName());
 		cm.setKitMg(player);
@@ -604,7 +631,7 @@ public class GameIntoMap {
 		//GameConditions gc = new GameConditions(plugin);
 		GameConditions cm = new GameConditions(plugin);
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
-		pl.getGamePoints().setRevive(pl.getGamePoints().getRevive()+1);
+		pl.getGamePoints().addRevive(1);
 		cm.setHeartsInGame(player, pl.getMapName());
 		cm.setKitMg(player);
 		healPlayer(player);
@@ -617,131 +644,160 @@ public class GameIntoMap {
 	}
 
 
+	public void reviveFreeForAll(Player player,	GameFreeForAll ffa) {
+		GameConditions cm = new GameConditions(plugin);
+		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+		cm.setHeartsInGame(player, pl.getMapName());
+		cm.setKitMg(player);
+		healPlayer(player);
+		
+		Random r = new Random();
+		
+		Location loc = ffa.getSpawns().get(r.nextInt(ffa.getSpawns().size()));
+		player.teleport(loc);
+		player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+">>> "+ChatColor.AQUA+ChatColor.BOLD+"RESPAWNEASTE"+ChatColor.GREEN+ChatColor.BOLD+"  <<<",ChatColor.GREEN+"Lucha y Gana", 20, 40, 20);
+		player.setGameMode(GameMode.ADVENTURE);
+		player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,new Location(pl.getRespawn().getWorld(),pl.getRespawn().getX(), pl.getRespawn().getY(), pl.getRespawn().getZ()).add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
+		player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
+		
+		return;
+	}
+	
 	
 	public void ObjetivesInGame(Player player,String mapa) {
 		GameConditions gmc = new GameConditions(plugin);
 		GameInfo gm = plugin.getGameInfoPoo().get(mapa);
-		GameObjetivesMG gomg = gm.getGameObjetivesMg();
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
-		if(gomg.isNecessaryObjetivePrimary() && !gomg.isNecessaryObjetiveSedondary()) {
-			if(gmc.isAllPrimaryObjetivesComplete(player, mapa)) {
-				
-				if(gm.getGameType() == GameType.ADVENTURE) {
-					gmc.playerArriveToTheWin(player, mapa);
-					player.sendMessage(ChatColor.GREEN+"Has llegado a la Meta.");
-					player.setGameMode(GameMode.SPECTATOR);
-					Fireworks f = new Fireworks(player);
-					f.spawnFireballGreenLarge();
-					
-
-					gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.GREEN+" llego a la Meta.");
-					
-				}if(gm.getGameType() == GameType.RESISTENCE) {
-					
-					gmc.playerArriveToTheWin(player, mapa);
-					gmc.EndTptoSpawn(player, mapa);
-				}
-			
-
-				isTheRankedGames(player,gm.isRankedMap());
-				pl.setPlayerCronomet(new MapRecords(player.getName(),gm.getGameTime().getGameCronometForPlayer(),pl.getGamePoints().getKills()));
-			}else {
-				if(gm.getGameType() == GameType.ADVENTURE) {
-				
-					gmc.TptoSpawnMapSimple(player);
-					player.sendMessage(ChatColor.RED+"Ups me temo que sino Completas los Objetivos Primarios no podras Ganar.");
-				}if(gm.getGameType() == GameType.RESISTENCE) {
-					GamePlayerLost(player);
-					player.sendMessage(ChatColor.RED+"Ups me temo que no Completaste los Objetivos Primarios para poder Ganar.");
-				}
-				
-			}
-			
-			return;
-		}else if(!gomg.isNecessaryObjetivePrimary() && gomg.isNecessaryObjetiveSedondary()) {
-			if(gmc.isAllSecondaryObjetivesComplete(player, mapa)) {
-				
-				if(gm.getGameType() == GameType.ADVENTURE) {
-					gmc.playerArriveToTheWin(player, mapa);
-					player.sendMessage(ChatColor.GREEN+"Has llegado a la Meta.");
-					player.setGameMode(GameMode.SPECTATOR);
-					Fireworks f = new Fireworks(player);
-					f.spawnFireballGreenLarge();
-					gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.GREEN+" llego a la Meta.");
-					
-				}if(gm.getGameType() == GameType.RESISTENCE) {
-					gmc.playerArriveToTheWin(player, mapa);
-					gmc.EndTptoSpawn(player, mapa);
-				}
-			
-
-				isTheRankedGames(player,gm.isRankedMap());
-				pl.setPlayerCronomet(new MapRecords(player.getName(),gm.getGameTime().getGameCronometForPlayer(),pl.getGamePoints().getKills()));
-			}else{
-				
-				if(gm.getGameType() == GameType.ADVENTURE) {
-					gmc.TptoSpawnMapSimple(player);
-					player.sendMessage(ChatColor.RED+"Ups me temo que sino Completas los Objetivos Secundarios no podras Ganar.");
-				}if(gm.getGameType() == GameType.RESISTENCE) {
-					GamePlayerLost(player);
-					player.sendMessage(ChatColor.RED+"Ups me temo que no Completaste los Objetivos Secundarios para poder Ganar.");
-				}
-				
-				
-			}
-			
-			return;
-		}else if(gomg.isNecessaryObjetivePrimary() && gomg.isNecessaryObjetiveSedondary()) {
-			
-			if(gmc.isAllPrimaryObjetivesComplete(player, mapa) && gmc.isAllSecondaryObjetivesComplete(player, mapa)) {
-				if(gm.getGameType() == GameType.ADVENTURE) {
-					gmc.playerArriveToTheWin(player, mapa);
-					player.sendMessage(ChatColor.GREEN+"Has llegado a la Meta.");
-					player.setGameMode(GameMode.SPECTATOR);
-					Fireworks f = new Fireworks(player);
-					f.spawnFireballGreenLarge();
-					gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.GREEN+" llego a la Meta.");
-					
-				}if(gm.getGameType() == GameType.RESISTENCE) {
-					gmc.playerArriveToTheWin(player, mapa);
-					gmc.EndTptoSpawn(player, mapa);
-				}
-				
-
-				isTheRankedGames(player,gm.isRankedMap());
-				pl.setPlayerCronomet(new MapRecords(player.getName(),gm.getGameTime().getGameCronometForPlayer(),pl.getGamePoints().getKills()));
-			}else {
-				if(gm.getGameType() == GameType.ADVENTURE) {
-					gmc.TptoSpawnMapSimple(player);
-					player.sendMessage(ChatColor.RED+"Ups me temo que sino Completas los Objetivos Primarios y Secundarios no podras Ganar.");
-				}if(gm.getGameType() == GameType.RESISTENCE) {
-					GamePlayerLost(player);
-					player.sendMessage(ChatColor.RED+"Ups me temo que no Completaste los Objetivos Primarios y Secundarios para poder Ganar.");
-				}
-				
-			}
-			
-			return;
-		}else {
-			if(gm.getGameType() == GameType.ADVENTURE) {
-				gmc.playerArriveToTheWin(player, mapa);
-				player.sendMessage(ChatColor.GREEN+"Has llegado a la Meta.");
-				player.setGameMode(GameMode.SPECTATOR);
-				Fireworks f = new Fireworks(player);
-				f.spawnFireballGreenLarge();
-				gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.GREEN+" llego a la Meta.");
-				
-			}if(gm.getGameType() == GameType.RESISTENCE) {
-				
-				gmc.playerArriveToTheWin(player, mapa);
-				gmc.EndTptoSpawn(player, mapa);
-			}
 		
+		
+		if(gm instanceof GameAdventure) {
+			GameObjetivesMG gomg = gm.getGameObjetivesMg();
+			
+			if(gomg.isNecessaryObjetivePrimary() && !gomg.isNecessaryObjetiveSedondary()) {
+				if(gmc.isAllPrimaryObjetivesComplete(player, mapa)) {
+					
+					if(gm.getGameType() == GameType.ADVENTURE) {
+						gmc.playerArriveToTheWin(player, mapa);
+						player.sendMessage(ChatColor.GREEN+"Has llegado a la Meta.");
+						player.setGameMode(GameMode.SPECTATOR);
+						Fireworks f = new Fireworks(player);
+						f.spawnFireballGreenLarge();
+						
 
-			isTheRankedGames(player,gm.isRankedMap());
-			pl.setPlayerCronomet(new MapRecords(player.getName(),gm.getGameTime().getGameCronometForPlayer(),pl.getGamePoints().getKills()));
-			return;
+						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.GREEN+" llego a la Meta.");
+						
+					}if(gm.getGameType() == GameType.RESISTENCE) {
+						
+						gmc.playerArriveToTheWin(player, mapa);
+						gmc.EndTptoSpawn(player, mapa);
+					}
+				
+
+					isTheRankedGames(player,gm.isRankedMap());
+					pl.setPlayerCronomet(new MapRecords(player.getName(),gm.getGameTime().getGameCronometForPlayer(),pl.getGamePoints().getKills()));
+				}else {
+					if(gm.getGameType() == GameType.ADVENTURE) {
+					
+						gmc.TptoSpawnMapSimple(player);
+						player.sendMessage(ChatColor.RED+"Ups me temo que sino Completas los Objetivos Primarios no podras Ganar.");
+					}if(gm.getGameType() == GameType.RESISTENCE) {
+						GamePlayerLost(player);
+						player.sendMessage(ChatColor.RED+"Ups me temo que no Completaste los Objetivos Primarios para poder Ganar.");
+					}
+					
+				}
+				
+				return;
+			}else if(!gomg.isNecessaryObjetivePrimary() && gomg.isNecessaryObjetiveSedondary()) {
+				if(gmc.isAllSecondaryObjetivesComplete(player, mapa)) {
+					
+					if(gm.getGameType() == GameType.ADVENTURE) {
+						gmc.playerArriveToTheWin(player, mapa);
+						player.sendMessage(ChatColor.GREEN+"Has llegado a la Meta.");
+						player.setGameMode(GameMode.SPECTATOR);
+						Fireworks f = new Fireworks(player);
+						f.spawnFireballGreenLarge();
+						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.GREEN+" llego a la Meta.");
+						
+					}if(gm.getGameType() == GameType.RESISTENCE) {
+						gmc.playerArriveToTheWin(player, mapa);
+						gmc.EndTptoSpawn(player, mapa);
+					}
+				
+
+					isTheRankedGames(player,gm.isRankedMap());
+					pl.setPlayerCronomet(new MapRecords(player.getName(),gm.getGameTime().getGameCronometForPlayer(),pl.getGamePoints().getKills()));
+				}else{
+					
+					if(gm.getGameType() == GameType.ADVENTURE) {
+						gmc.TptoSpawnMapSimple(player);
+						player.sendMessage(ChatColor.RED+"Ups me temo que sino Completas los Objetivos Secundarios no podras Ganar.");
+					}if(gm.getGameType() == GameType.RESISTENCE) {
+						GamePlayerLost(player);
+						player.sendMessage(ChatColor.RED+"Ups me temo que no Completaste los Objetivos Secundarios para poder Ganar.");
+					}
+					
+					
+				}
+				
+				return;
+			}else if(gomg.isNecessaryObjetivePrimary() && gomg.isNecessaryObjetiveSedondary()) {
+				
+				if(gmc.isAllPrimaryObjetivesComplete(player, mapa) && gmc.isAllSecondaryObjetivesComplete(player, mapa)) {
+					if(gm.getGameType() == GameType.ADVENTURE) {
+						gmc.playerArriveToTheWin(player, mapa);
+						player.sendMessage(ChatColor.GREEN+"Has llegado a la Meta.");
+						player.setGameMode(GameMode.SPECTATOR);
+						Fireworks f = new Fireworks(player);
+						f.spawnFireballGreenLarge();
+						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.GREEN+" llego a la Meta.");
+						
+					}if(gm.getGameType() == GameType.RESISTENCE) {
+						gmc.playerArriveToTheWin(player, mapa);
+						gmc.EndTptoSpawn(player, mapa);
+					}
+					
+
+					isTheRankedGames(player,gm.isRankedMap());
+					pl.setPlayerCronomet(new MapRecords(player.getName(),gm.getGameTime().getGameCronometForPlayer(),pl.getGamePoints().getKills()));
+				}else {
+					if(gm.getGameType() == GameType.ADVENTURE) {
+						gmc.TptoSpawnMapSimple(player);
+						player.sendMessage(ChatColor.RED+"Ups me temo que sino Completas los Objetivos Primarios y Secundarios no podras Ganar.");
+					}if(gm.getGameType() == GameType.RESISTENCE) {
+						GamePlayerLost(player);
+						player.sendMessage(ChatColor.RED+"Ups me temo que no Completaste los Objetivos Primarios y Secundarios para poder Ganar.");
+					}
+					
+				}
+				
+				return;
+			}else {
+				if(gm.getGameType() == GameType.ADVENTURE) {
+					gmc.playerArriveToTheWin(player, mapa);
+					player.sendMessage(ChatColor.GREEN+"Has llegado a la Meta.");
+					player.setGameMode(GameMode.SPECTATOR);
+					Fireworks f = new Fireworks(player);
+					f.spawnFireballGreenLarge();
+					gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.GREEN+" llego a la Meta.");
+					
+				}if(gm.getGameType() == GameType.RESISTENCE) {
+					
+					gmc.playerArriveToTheWin(player, mapa);
+					gmc.EndTptoSpawn(player, mapa);
+				}
+			
+
+				isTheRankedGames(player,gm.isRankedMap());
+				pl.setPlayerCronomet(new MapRecords(player.getName(),gm.getGameTime().getGameCronometForPlayer(),pl.getGamePoints().getKills()));
+				return;
+			}
+		}if(gm instanceof GameFreeForAll) {
+			gmc.playerArriveToTheWin(player, mapa);
+			gmc.EndTptoSpawn(player, mapa);
 		}
+		
+	
 	}
 	
 	
@@ -791,9 +847,9 @@ public class GameIntoMap {
 		
 			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		
+		
+			pl.getGamePoints().addKills(1);
 			int puntos = pl.getGamePoints().getKills();
-			puntos = puntos +1;
-			pl.getGamePoints().setKills(puntos);
 			player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.GREEN+ChatColor.BOLD+"KILLS: "+ChatColor.RED+puntos));
 
 		
@@ -1055,6 +1111,11 @@ public class GameIntoMap {
 						player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+p.getName());
 						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+p.getName());
 					}
+					
+					if(gmc.isPlayerinGame(p)) {
+						gamePlayerAddPoints(p);
+					}
+					
 				}
 				
 			//SI TE MATA UN PROYECTIL	
@@ -1072,6 +1133,7 @@ public class GameIntoMap {
 					if(damager instanceof Player) {
 						Player killer = (Player) damager;
 					
+						//SI SE SUICIDA
 						if(killer.getName().equals(player.getName())) {
 							
 							if(hasEntityCustomItemStack(killer)) {
@@ -1103,7 +1165,9 @@ public class GameIntoMap {
 								player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+killer.getName());
 								gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio Disparado por "+ChatColor.YELLOW+killer.getName());
 							}
-							
+							if(gmc.isPlayerinGame(killer)) {
+								gamePlayerAddPoints(killer);
+							} 
 //							player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+killer.getName(), 40, 80, 40);
 //							player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+killer.getName());
 //							gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+killer.getName());
@@ -1250,9 +1314,86 @@ public class GameIntoMap {
 				List<DamageCause> l = new ArrayList<>();
 				
 				player.sendMessage("");
+				
 				if(pl.getCreditKillMob() != null) {
 					Entity mob = pl.getCreditKillMob();
-					if(!mob.isDead()) {
+					
+					if(mob instanceof Player) {
+						Player p = (Player) mob;
+						if(c == EntityDamageEvent.DamageCause.FALL) {
+							player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"CAIDA", 40, 80, 40);
+						
+							player.sendMessage(ChatColor.RED+"Moriste por una "+ChatColor.YELLOW+"Caida mientras Tratabas de Escapar de "+p.getName());
+								gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por una "+ChatColor.YELLOW+"CAIDA mientras Tratabas de Escapar de "+p.getName());
+
+						}
+						
+						if(c == EntityDamageEvent.DamageCause.FIRE) {
+							player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"FUEGO", 40, 80, 40);
+							
+					
+							player.sendMessage(ChatColor.RED+"Moriste "+ChatColor.YELLOW+"Quemado mientras Tratabas de Escapar de "+p.getName());
+							gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"FUEGO mientras Tratabas de Escapar de "+p.getName());
+							
+							
+							
+							
+						}
+						
+						if(c == EntityDamageEvent.DamageCause.LAVA) {
+							player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"LAVA", 40, 80, 40);
+							
+						
+							 player.sendMessage(ChatColor.RED+"Moriste por la "+ChatColor.YELLOW+"Lava mientras Tratabas de Escapar de "+p.getName());
+							 gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"Herobrine mientras Trataba de Escapar de "+p.getName());
+									     	
+							
+							
+							
+						}
+						
+						if(c == EntityDamageEvent.DamageCause.SUICIDE) {
+							player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"SUICIDIO", 40, 80, 40);
+						
+							player.sendMessage(ChatColor.RED+"Moriste por "+ChatColor.YELLOW+"Suicidio mientras Tratabas de Escapar de "+p.getName());
+							gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"Suicidarse mientras Trataba de Escapar de "+p.getName());
+									     	
+							
+							   
+						}
+						
+						if(c == EntityDamageEvent.DamageCause.CUSTOM) {
+							player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"Herobrine", 40, 80, 40);
+							
+					
+							player.sendMessage(ChatColor.RED+"Moriste por "+ChatColor.YELLOW+"Herobrine mientras Tratabas de Escapar de "+p.getName());
+							gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"Herobrine mientras Trataba de Escapar de "+p.getName());
+									     	
+							
+							
+							
+						}if(c == EntityDamageEvent.DamageCause.FIRE_TICK) {
+							player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"Arder en LLamas.", 40, 80, 40);
+						
+							  player.sendMessage(ChatColor.RED+"Moriste por "+ChatColor.YELLOW+"estar en Llamas mientras Tratabas de Escapar de "+p.getName());
+							  gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"estar en Llamas mientras Trataba de Escapar de "+p.getName());
+									     	
+							
+						}if(c == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION || c == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
+							player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"Explosion.", 40, 80, 40);
+							
+							     player.sendMessage(ChatColor.RED+"Moriste por "+ChatColor.YELLOW+"una Explosion mientras Tratabas de Escapar de "+p.getName());
+								 gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"una Explosion mientras Trataba de Escapar de "+p.getName());
+									     	
+						
+						}else {
+							System.out.println("CREDIT KILL + :"+c.toString());
+						}
+						
+						if(gmc.isPlayerinGame(p)) {
+							gamePlayerAddPoints(p);
+						}
+					}else if(!mob.isDead()) {
 						if(c == EntityDamageEvent.DamageCause.FALL) {
 							player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"CAIDA", 40, 80, 40);
 							if(EntityHasName(mob)) {

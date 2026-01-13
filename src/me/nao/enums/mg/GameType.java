@@ -6,10 +6,10 @@ public enum GameType {
 	
 	ADVENTURE("Aventura"),
 	FREEFORALL("Todos Contra Todos"),
-	RESISTENCE("Resistencia"),
-	PVP("PVP"),
-	NEXO("Nexo"),
-	INFECTED("Infectado");
+	RESISTENCE("Resistencia");
+//	PVP("PVP"),
+//	NEXO("Nexo"),
+//	INFECTED("Infectado");
 
 	
 	 private String description;
@@ -22,5 +22,14 @@ public enum GameType {
 		return this.description ;
 	}
 	
-	
+	public static GameType matchMode(String texto) {
+		
+		for(GameType val : values()) {
+			if(val.name().equals(texto.toUpperCase())) {
+				return val;
+			}
+		}
+		
+		return null;
+	}
 }

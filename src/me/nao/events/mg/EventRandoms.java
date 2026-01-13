@@ -158,6 +158,7 @@ public class EventRandoms implements Listener{
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void preMg(AsyncPlayerPreLoginEvent e) {
 		
+		if(e.getLoginResult() != Result.ALLOWED);
 		String player = e.getName();
 		
 		FileConfiguration moderation = plugin.getPlayersHistoryYaml();
@@ -165,7 +166,7 @@ public class EventRandoms implements Listener{
 		
 		if(!moderation.contains("Players."+player)) return;
 		
-		
+	
 		ModerationManager mm = new ModerationManager(plugin);
 		List<String> list = moderation.getStringList("Players."+player+".History");
 		
@@ -196,7 +197,7 @@ public class EventRandoms implements Listener{
 				e.setKickMessage(Utils.colorTextChatColor("&8&l[&c&lTEMPBAN&8&l]\n&7Estas &c&lBaneado Temporalmente &7del Servidor."+list.get(list.size()-1).replaceAll("-"," ")
 						.replaceAll("Sancion:",ChatColor.GOLD+"\nSancion:"+ChatColor.GREEN)
 						.replaceAll("Fecha:",ChatColor.GOLD+"\nFecha:"+ChatColor.GREEN).replaceAll("Tiempo:",ChatColor.GOLD+"\nTiempo:"+ChatColor.GREEN)
-						.replaceAll("Mod:",ChatColor.GOLD+"\nMod:"+ChatColor.GREEN).replaceAll("Razon:",ChatColor.GOLD+"\nRazon:"+ChatColor.GREEN))+"\n&eTiempo Remanente: &c"+cooldown);
+						.replaceAll("Mod:",ChatColor.GOLD+"\nMod:"+ChatColor.GREEN).replaceAll("Razon:",ChatColor.GOLD+"\nRazon:"+ChatColor.GREEN))+Utils.colorTextChatColor("\n&eTiempo Remanente: &c"+cooldown));
 //				player.sendMessage(ChatColor.RED+"Estas Baneado Temporalmente de los MiniJuegos");
 //				player.sendMessage(ChatColor.YELLOW+"Tiempo Remanente: "+ChatColor.RED+cooldown);
 				return ;

@@ -227,8 +227,8 @@ public class ModerationManager {
 		
 		GameModerationActionType statusconfig = GameModerationActionType.valueOf(report.getString("Players."+player.getName()+".Status").toUpperCase());
 		if(statusconfig == GameModerationActionType.BAN) {
-			player.sendMessage(ChatColor.RED+"Estas Baneado Permanentemente de los MiniJuegos");
-			gc.sendMessageToConsole(ChatColor.GOLD+player.getName()+ChatColor.RED+" Esta Baneado Permanentemente de los MiniJuegos.");
+			player.sendMessage(ChatColor.RED+"Estas Baneado Permanentemente del Server");
+			gc.sendMessageToConsole(ChatColor.GOLD+player.getName()+ChatColor.RED+" Esta Baneado Permanentemente del Server.");
 			return true;
 		}else if(statusconfig == GameModerationActionType.TEMPBAN) {
 			int time = report.getInt("Players."+player.getName()+".TempBanTime");
@@ -241,7 +241,7 @@ public class ModerationManager {
 				sendMessageGeneral(player,ChatColor.GREEN+player.getName()+" Tu sancion se Completo ya puedes Jugar.");
 				return false;
 			}else {
-				player.sendMessage(ChatColor.RED+"Estas Baneado Temporalmente de los MiniJuegos");
+				player.sendMessage(ChatColor.RED+"Estas Baneado Temporalmente del Server");
 				player.sendMessage(ChatColor.YELLOW+"Tiempo Remanente: "+ChatColor.RED+cooldown);
 				return true;
 		}}
@@ -261,7 +261,7 @@ public class ModerationManager {
 		
 		GameModerationActionType statusconfig = GameModerationActionType.valueOf(report.getString("Players."+target+".Status").toUpperCase());
 		if(statusconfig == GameModerationActionType.BAN) {
-			sendMessageGeneral(player,ChatColor.GOLD+target+ChatColor.RED+" Esta Baneado Permanentemente de los MiniJuegos");
+			sendMessageGeneral(player,ChatColor.GOLD+target+ChatColor.RED+" Esta Baneado Permanentemente del Server");
 			return ;
 		}else if(statusconfig == GameModerationActionType.TEMPBAN) {
 			int time = report.getInt("Players."+target+".TempBanTime");
@@ -274,7 +274,7 @@ public class ModerationManager {
 				sendMessageGeneral(player,ChatColor.GREEN+target+" No tiene ninguna sancion Activa.");
 				return ;
 			}else {
-				sendMessageGeneral(player,ChatColor.GOLD+target+ChatColor.RED+" Esta Baneado Temporalmente de los Juegos");
+				sendMessageGeneral(player,ChatColor.GOLD+target+ChatColor.RED+" Esta Baneado Temporalmente del Server");
 				sendMessageGeneral(player,ChatColor.YELLOW+"Tiempo Remanente: "+ChatColor.RED+cooldown);
 				return ;
 		    }
@@ -497,7 +497,7 @@ public class ModerationManager {
 		if(player != null) {
 			player.sendMessage(Utils.colorTextChatColor(text));
 		}
-		Bukkit.broadcastMessage(Utils.colorTextChatColor(text));
+		//Bukkit.broadcastMessage(Utils.colorTextChatColor(text));
 		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor(text));
 	}
 	
