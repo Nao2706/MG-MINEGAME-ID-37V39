@@ -1304,11 +1304,10 @@ public class SourceOfDamage implements Listener{
 								}
 								return;
 					}
-			}
-			
-			if(e.getCause() == DamageCause.FALL && player.getScoreboardTags().contains("Instadeadbyfall")) {
+			}else if(e.getCause() == DamageCause.FALL && player.getScoreboardTags().contains("Instadeadbyfall")) {
 				if(player.getInventory().getItemInMainHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING)) || player.getInventory().getItemInOffHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING)))return;
 				e.setCancelled(true);
+				
 				if(gc.isEnabledReviveSystem(pi.getMapName())) {
 					ArmorStand armor = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
 					RevivePlayer pr = new RevivePlayer(player,0,60,ReviveStatus.BLEEDING,null,e.getCause(),armor ,plugin);
@@ -1318,13 +1317,12 @@ public class SourceOfDamage implements Listener{
 				}else {
 					ci.GameDamageCauses(player, e.getCause());
 				}
-			}
-			
-			// CUANDO CAE ENCIMA DEL BARRIER RECIBE DAÑO PERO ESTE NO MUERE PERO SE PUEDE MOVER UNOS SEGS
-			if(player.getHealth() > e.getFinalDamage() && e.getCause() == DamageCause.FALL) {
+				
+				// CUANDO CAE ENCIMA DEL BARRIER RECIBE DAÑO PERO ESTE NO MUERE PERO SE PUEDE MOVER UNOS SEGS
+			}else if(player.getHealth() > e.getFinalDamage() && e.getCause() == DamageCause.FALL) {
 				ci.GamePlayerFallMap(player,DamageCause.FALL);
 				
-			}if(e.getCause() == DamageCause.VOID) {
+			}else if(e.getCause() == DamageCause.VOID) {
 				e.setCancelled(true);
 				ci.GamePlayerFallMap(player,DamageCause.VOID);
 			}else if(e.getFinalDamage() >= player.getHealth()) {

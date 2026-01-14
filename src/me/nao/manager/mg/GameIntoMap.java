@@ -372,25 +372,30 @@ public class GameIntoMap {
 		
 		
 			if(player.getGameMode() == GameMode.ADVENTURE) {
+				
+				System.out.println("12345");
+				
 				if(b.getType() == Material.BARRIER || b.getType() == Material.BARRIER && d == DamageCause.FALL || block.getType() == Material.AIR && d == DamageCause.VOID) {
-					PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
-					String mapa = pl.getMapName();
-					//GameInfo gi = plugin.getGameInfoPoo().get(mapa);
+					System.out.println("12");
+				    PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 					GameConditions gmc = new GameConditions(plugin);
+					String mapa = pl.getMapName();
+					GameInfo gi = plugin.getGameInfoPoo().get(mapa);
 					
 					if(gmc.hasPlayerACheckPoint(player)) {
+						System.out.println("123");
 						return;
 					}else if(gmc.hasAntiVoid(player)){
 						//else if(gmc.hasAntiVoid(player) && gi.getGameType() != GameType.NEXO){
 						
-						
+						System.out.println("1234");
 						gmc.TptoSpawnMapSimple(player);
 						player.sendTitle(ChatColor.GREEN+"Anti Void Activado",ChatColor.GREEN+"No te Caigas",20,60,20);
 						player.sendMessage(ChatColor.GREEN+"- Que suerte el Mapa tiene Anti Void pero Siempre Regresaras al Inicio del Mapa Ojo con el Tiempo.");
 						player.sendMessage(ChatColor.GREEN+"- Mmmm no estoy seguro si el Daño por Caida esta Anulado asi que ten Cuidado.");
 						return;
 						
-					}else {
+					}
 						
 						player.getInventory().clear(); 
 						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"TE CAISTE DEL MAPA", 40, 80, 40);
@@ -430,6 +435,9 @@ public class GameIntoMap {
 								} 
 							}
 							
+					if(gi instanceof GameAdventure) {
+	
+					
 							player.sendMessage(ChatColor.RED+"\nUsa la hotbar para ver a otros jugadores. "+ChatColor.YELLOW+"\n!!!Solo podras ver a los que estan en tu partida");
 							player.sendMessage(ChatColor.GREEN+"Puedes ser revivido por tus compañeros.\n(Siempre que hayan cofres de Revivir)");
 							
@@ -441,10 +449,16 @@ public class GameIntoMap {
 							gmc.deadPlayerToGame(player, mapa);
 							gmc.DeathTptoSpawn(player, mapa);//COMO MUERE FUERA DEL MAPA SE LO TEPEA
 							player.setGameMode(GameMode.SPECTATOR);
-							
-							
+						
+					}else if(gi instanceof GameFreeForAll) {
+						
+						GameFreeForAll ffa = (GameFreeForAll) gi;
+						System.out.println("1");
+						ffa.respawnGame(player);
 						
 					}
+					
+					return;
 				}
 			}
 		
@@ -657,7 +671,7 @@ public class GameIntoMap {
 		player.teleport(loc);
 		player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+">>> "+ChatColor.AQUA+ChatColor.BOLD+"RESPAWNEASTE"+ChatColor.GREEN+ChatColor.BOLD+"  <<<",ChatColor.GREEN+"Lucha y Gana", 20, 40, 20);
 		player.setGameMode(GameMode.ADVENTURE);
-		player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,new Location(pl.getRespawn().getWorld(),pl.getRespawn().getX(), pl.getRespawn().getY(), pl.getRespawn().getZ()).add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
+		player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,loc.add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
 		player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 		
 		return;
@@ -810,7 +824,7 @@ public class GameIntoMap {
 		
 		gmc.deadPlayerToGame(player, mapa);
 		pl.setPlayerGameStatus(PlayerGameStatus.DEAD);
-		pl.getGamePoints().setDeads(pl.getGamePoints().getDeads()+1);
+		pl.getGamePoints().addDeads(1);
 		
 		MgTeams t = new MgTeams(plugin);
 		
@@ -851,7 +865,14 @@ public class GameIntoMap {
 			pl.getGamePoints().addKills(1);
 			int puntos = pl.getGamePoints().getKills();
 			player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.GREEN+ChatColor.BOLD+"KILLS: "+ChatColor.RED+puntos));
-
+			GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
+			
+			if(gi instanceof GameFreeForAll) {
+				GameFreeForAll ga = (GameFreeForAll) gi;
+				ga.reachLimitPoint();
+			}
+					
+			
 		
 	}
 	
@@ -862,23 +883,17 @@ public class GameIntoMap {
 // PRIMERA PARTE
 			HashMap<String, Integer> scores = new HashMap<>();
 
-			GameInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
+			GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
 			List<Player> joins = new ArrayList<>();
-			List<Player> spectador = new ArrayList<>();
-			
-			 if(ms instanceof GameAdventure) {
-					GameAdventure ga = (GameAdventure) ms;
+	
 				
-					 joins = gc.ConvertStringToPlayer(ga.getParticipants());
-					 spectador = gc.ConvertStringToPlayer(ga.getSpectators());
+					 joins = gc.ConvertStringToPlayer(gi.getParticipants());
+
 					for(Player user : joins) {
-						
 						PlayerInfo pl1 = plugin.getPlayerInfoPoo().get(user);
-						
-						if(spectador.contains(user)) continue;
 						 scores.put(user.getName(), pl1.getGamePoints().getKills());	
 					}
-			 }
+			 
 		
 		// SEGUNDA PARTE CALCULO MUESTRA DE MAYOR A MENOR PUNTAJE
 		List<Map.Entry<String, Integer>> list = new ArrayList<>(scores.entrySet());
@@ -1043,7 +1058,7 @@ public class GameIntoMap {
 			}
 			return;
 		}
-		
+		  
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		
 		if(player.getInventory().containsAtLeast(Items.SOULP.getValue(), 1)) {

@@ -218,7 +218,7 @@ public class MgScore {
 		
 		ob.setDisplaySlot(DisplaySlot.SIDEBAR);
 		List<String> show = new ArrayList<>();
-		 ob.setDisplayName(Utils.colorTextChatColor("&a&lCONSIGUE &c&l"+ffa.getLimitpoints()+" &a&lPUNTOS PARA GANAR"));
+		 ob.setDisplayName(Utils.colorTextChatColor("&b&lTOP PUNTAJE"));
 		 show.add(""+ChatColor.RED+ChatColor.BOLD+"-------------");
 		 show.add(ChatColor.RED+" ");
 		 	HashMap<String, Integer> scores = new HashMap<>();
@@ -253,6 +253,7 @@ public class MgScore {
 					
 				}
 			}
+		 show.add(Utils.colorTextChatColor("&c&l"+ffa.getLimitpoints()+"&b&lPTOS. &a&lPARA GANAR"));
 		 show.add(ChatColor.RED+"  ");
 		 show.add(""+ChatColor.RED+ChatColor.BOLD+"------------- ");
 		 
