@@ -33,7 +33,6 @@ import me.nao.generalinfo.mg.GameReport;
 import me.nao.generalinfo.mg.ItemMenu;
 import me.nao.generalinfo.mg.PlayerInfo;
 import me.nao.manager.mg.GeneratorManager;
-import me.nao.revive.mg.RevivePlayer;
 import me.nao.shop.mg.MinigameShop1;
 import me.nao.topusers.mg.PHMiniGame;
 import me.nao.utils.mg.Utils;
@@ -75,7 +74,6 @@ public class Minegame extends JavaPlugin{
     private Map<String, Boolean> delete;
     private Map<Player, PlayerInfo> playerinfopoo;
     private Map<String, GameInfo> misioninfopoo;
-    private Map<Player, RevivePlayer> playerrevive;
     private Map<Entity,String> guardiancredit;
     private Map<String,LocalDateTime> cooldownmap;
     private LinkedHashMap<String,GameReport> gamereports;
@@ -279,8 +277,8 @@ public class Minegame extends JavaPlugin{
 		
 		
 		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"));
-		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor("        "+nombre+"\n       &7Ha sido Activado \n       &c[&aVersion&c:&b"+version+"&c]"));
-		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor("  &9Hora de Crear Aventuras. "));
+		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor("          "+nombre+"\n       &7Ha sido Activado \n       &c[&aVersion&c:&b"+version+"&c]"));
+		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor("     &9Hora de Crear Aventuras. "));
 		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"));
 		
 		
@@ -309,8 +307,8 @@ public class Minegame extends JavaPlugin{
 	   
 	   
 		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"));
-		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor("        "+nombre+"\n       &7Ha sido Activado \n       &c[&aVersion&c:&b"+version+"&c]"));
-		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor("  &9Hora de Descansar "));
+		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor("          "+nombre+"\n       &7Ha sido Activado \n       &c[&aVersion&c:&b"+version+"&c]"));
+		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor("     &9Hora de Descansar "));
 		Bukkit.getConsoleSender().sendMessage(Utils.colorTextChatColor(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"));
 		
 	}	
@@ -339,7 +337,6 @@ public class Minegame extends JavaPlugin{
 	    playerinfopoo = new HashMap<>();
 	    misioninfopoo = new HashMap<>();
 	    guardiancredit = new HashMap<>();
-	    playerrevive = new HashMap<>();
 	    cooldownmap = new HashMap<>();
 	    gamereports = new LinkedHashMap<>();
 	    tempcooldownreport = new HashMap<>();
@@ -421,9 +418,9 @@ public class Minegame extends JavaPlugin{
 	   return misioninfopoo;
    }
    
-   public Map<Player,RevivePlayer> getKnockedPlayer(){
-	   return playerrevive;
-   }
+//   public Map<Player,RevivePlayer> getKnockedPlayers(){
+//	   return playerrevive;
+//   }
    
    public Map<String,LocalDateTime> getCooldownMap(){
 	   return cooldownmap;

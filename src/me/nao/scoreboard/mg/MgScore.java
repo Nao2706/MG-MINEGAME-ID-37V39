@@ -218,8 +218,8 @@ public class MgScore {
 		
 		ob.setDisplaySlot(DisplaySlot.SIDEBAR);
 		List<String> show = new ArrayList<>();
-		 ob.setDisplayName(Utils.colorTextChatColor("&b&lTOP PUNTAJE"));
-		 show.add(""+ChatColor.RED+ChatColor.BOLD+"-------------");
+		 ob.setDisplayName(Utils.colorTextChatColor("&a&l<<< &b&lTOP PUNTAJE &a&l>>>"));
+		 //show.add(""+ChatColor.RED+ChatColor.BOLD+"-------------");
 		 show.add(ChatColor.RED+" ");
 		 	HashMap<String, Integer> scores = new HashMap<>();
 			
@@ -253,9 +253,10 @@ public class MgScore {
 					
 				}
 			}
-		 show.add(Utils.colorTextChatColor("&c&l"+ffa.getLimitpoints()+"&b&lPTOS. &a&lPARA GANAR"));
 		 show.add(ChatColor.RED+"  ");
-		 show.add(""+ChatColor.RED+ChatColor.BOLD+"------------- ");
+		 show.add(Utils.colorTextChatColor("&c&l"+ffa.getLimitpoints()+" &b&lPTOS. &a&lPARA GANAR"));
+//		 show.add(ChatColor.RED+"  ");
+//		 show.add(""+ChatColor.RED+ChatColor.BOLD+"------------- ");
 		 
 			for(int i = 0; i< show.size();i++) {
 				
@@ -329,14 +330,14 @@ public class MgScore {
 		
 		if(!ga.getKnockedPlayers().isEmpty()) {
 			//System.out.println("NO ESTA VACIO");
-			for(Player target : gc.ConvertStringToPlayer(ga.getKnockedPlayers())) {
+			for(Player target : ga.getKnockedPlayers().keySet()) {
 				  
 				//COLOCADO PARA QUE AL ITERAR SOBRE EL MAP DE JUGADORES NOQUEADOS NO ESTE SETANDO EL SCOREBOARD A OTRO JUGADOR DE OTRO MAPA (TESTEAR Y CAMBIAR SI ES NECESARIO)
 				if(!gc.isPlayerinGame(target)) continue;
 				PlayerInfo pl = plugin.getPlayerInfoPoo().get(target);
 				if(pl.getMapName().equals(p.getMapName())) {
 				
-					RevivePlayer rp = plugin.getKnockedPlayer().get(target);
+					RevivePlayer rp = ga.getKnockedPlayers().get(target);
 					int timelife = rp.getRemainingTimeLife();
 				
 					if(timelife >= 51 && timelife <= 60) {

@@ -69,6 +69,7 @@ import me.nao.enums.mg.GameStatus;
 import me.nao.enums.mg.Items;
 import me.nao.enums.mg.Posion;
 import me.nao.enums.mg.ReviveStatus;
+import me.nao.generalinfo.mg.GameAdventure;
 import me.nao.generalinfo.mg.GameConditions;
 import me.nao.generalinfo.mg.GameInfo;
 import me.nao.generalinfo.mg.PlayerInfo;
@@ -218,7 +219,7 @@ public class SourceOfDamage implements Listener{
 	
 	
 	
-	@EventHandler(priority = EventPriority.LOWEST)  //METODO
+	@EventHandler(priority = EventPriority.HIGHEST)  //METODO
     public void mgworld(PlayerChangedWorldEvent e){
 		Player player = e.getPlayer();
 
@@ -1284,7 +1285,10 @@ public class SourceOfDamage implements Listener{
 									ArmorStand armor = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
 									RevivePlayer pr = new RevivePlayer(player,0,60,ReviveStatus.BLEEDING,damager,null,armor ,plugin);
 									pr.Knocked();
-									plugin.getKnockedPlayer().put(player, pr);
+									
+									modeKnockedPlayer(gi,player,pr);
+									
+									//plugin.getKnockedPlayer().put(player, pr);
 									
 								}else {
 									ci.GameMobDamagerCauses(player, damager);
@@ -1297,7 +1301,7 @@ public class SourceOfDamage implements Listener{
 									ArmorStand armor = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
 									RevivePlayer pr = new RevivePlayer(player,0,60,ReviveStatus.BLEEDING,null,e.getCause(),armor ,plugin);
 									pr.Knocked();
-									plugin.getKnockedPlayer().put(player, pr);
+									modeKnockedPlayer(gi,player,pr);
 									
 								}else {
 									ci.GameDamageCauses(player, e.getCause());
@@ -1312,7 +1316,7 @@ public class SourceOfDamage implements Listener{
 					ArmorStand armor = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
 					RevivePlayer pr = new RevivePlayer(player,0,60,ReviveStatus.BLEEDING,null,e.getCause(),armor ,plugin);
 					pr.Knocked();
-					plugin.getKnockedPlayer().put(player, pr);
+					modeKnockedPlayer(gi,player,pr);
 					
 				}else {
 					ci.GameDamageCauses(player, e.getCause());
@@ -1339,7 +1343,7 @@ public class SourceOfDamage implements Listener{
 								ArmorStand armor = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
 								RevivePlayer pr = new RevivePlayer(player,0,60,ReviveStatus.BLEEDING,damager,null,armor ,plugin);
 								pr.Knocked();
-								plugin.getKnockedPlayer().put(player, pr);
+								modeKnockedPlayer(gi,player,pr);
 								
 							}else {
 								ci.GameMobDamagerCauses(player, damager);
@@ -1352,7 +1356,7 @@ public class SourceOfDamage implements Listener{
 								ArmorStand armor = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
 								RevivePlayer pr = new RevivePlayer(player,0,60,ReviveStatus.BLEEDING,null,e.getCause(),armor ,plugin);
 								pr.Knocked();
-								plugin.getKnockedPlayer().put(player, pr);
+								modeKnockedPlayer(gi,player,pr);
 								
 							}else {
 								ci.GameDamageCauses(player, e.getCause());
@@ -1369,6 +1373,13 @@ public class SourceOfDamage implements Listener{
 		
 	}
 	 
+	
+	public void modeKnockedPlayer(GameInfo gi , Player player , RevivePlayer rp) {
+		if(gi instanceof GameAdventure) {
+			GameAdventure ga = (GameAdventure)  gi;
+			ga.addKnockedPlayer(player, rp);
+		}
+	}
 	
 	public boolean isAntiGasMask(Player player,ItemStack it) {
 		if(it != null) {

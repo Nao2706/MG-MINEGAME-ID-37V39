@@ -23,7 +23,7 @@ public class PlayerInfo {
 	private PlayerGameStatus pgs;
 	private Player player;
 	private Collection<PotionEffect> potions;
-	private ItemStack[] inv;
+	private ItemStack[] inv,kit;
 	private GameMode gamemode;
 	private boolean fly;
 	private double vida;
@@ -34,7 +34,7 @@ public class PlayerInfo {
 	private Location l;
 	private String map;
 	private GamePoints gp;
-	private String teamname;
+	private String teamname, kitname;
 	private Set<String> tags;
 	private SystemOfLevels sl;
 	private Location checkpoint,itemcheckpoint,respawn;
@@ -66,6 +66,8 @@ public class PlayerInfo {
 			this.teamname = "NINGUNO";
 			this.mglvl = 0;
 			this.tags = player.getScoreboardTags();
+			this.kit = null;
+			this.kitname = "NINGUNO";
 		
 		}else{
 			this.pgs = pgs;
@@ -89,6 +91,8 @@ public class PlayerInfo {
 			this.mglvl = 0;
 			this.mgprestige = 0;
 			this.tags = player.getScoreboardTags();
+			this.kit = null;
+			this.kitname = "NINGUNO";
 	
 		}
 		
@@ -188,12 +192,19 @@ public class PlayerInfo {
 	}
 	
 	public RespawnLife getRespawnLife() {
-		
 		return respawnlife;
 	}
 	
 	public String getMapName() {
 		return map;
+	}
+	
+	public String getKitName() {
+		return kitname;
+	}
+	
+	public ItemStack[] getPlayerKit() {
+		return kit;
 	}
 	
 	public GamePoints getGamePoints() {
@@ -232,7 +243,7 @@ public class PlayerInfo {
 		this.player = player;
 	}
 
-	public void setInvMG(ItemStack[] inv) {
+	public void setInventoryMG(ItemStack[] inv) {
 		this.inv = inv;
 	}
 
@@ -292,8 +303,16 @@ public class PlayerInfo {
 		this.respawnlife = respawnlife;
 	}
 	
-	public void setMisionName(String map) {
+	public void setMapName(String map) {
 		this.map = map;
+	}
+	
+	public void setKitName(String kitname) {
+		this.kitname = kitname;
+	}
+	
+	public void setPlayerKit(ItemStack[] kit) {
+		this.kit = kit;
 	}
 	
 	public void setTeamName(String teamname) {

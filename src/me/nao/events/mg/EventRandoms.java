@@ -246,12 +246,23 @@ public class EventRandoms implements Listener{
 		
 	}
 
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void mgGameMode(PlayerGameModeChangeEvent e) {
 		Player player = (Player) e.getPlayer();
 		GameConditions gc = new GameConditions(plugin);
 		
 		if(gc.isPlayerinGame(player)) {
+			
+			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+			GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
+			
+			if(gi.getGameStatus() == GameStatus.ESPERANDO && !player.isOp()) {
+				if(e.getNewGameMode() != GameMode.ADVENTURE) {
+					player.setGameMode(GameMode.ADVENTURE);
+				}
+			}
+			
+			
 			if(e.getNewGameMode() == GameMode.SPECTATOR) {
 				player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
 				if(!player.getPassengers().isEmpty()) {
@@ -278,16 +289,73 @@ public class EventRandoms implements Listener{
 			PlayerInfo pi = plugin.getPlayerInfoPoo().get(player);
 			GameInfo gi = plugin.getGameInfoPoo().get(pi.getMapName());
 			if(gi.getGameStatus() == GameStatus.JUGANDO || gi.getGameStatus() == GameStatus.PAUSE || gi.getGameStatus() == GameStatus.FREEZE) {
+			   Entity ent = e.getRightClicked();
+			 
+			   
+				if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
 
-				if(gi instanceof GameAdventure) {
+			
+					
+					if(!player.getPassengers().isEmpty()) {
+						
+							 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.RED+ChatColor.BOLD+"YA TIENES ENCIMA A UNA ENTIDAD"));
+							
+						return;
+					}else if(ent.getType() == EntityType.PLAYER) {
+						Player target = (Player) ent;
+						//if(ga.isPlayerKnocked(player)) return;
+						 
+						if(player.getGameMode() == GameMode.SPECTATOR && pi.getPlayerGameStatus() == PlayerGameStatus.SPECTATOR ||  pi.getPlayerGameStatus() == PlayerGameStatus.DEAD) {
+							e.setCancelled(true);
+							
+							  player.sendMessage(ChatColor.RED+"No puedes interactuar con Entidades estando en Modo Espectador...");
+							
+							return;
+						}
+						
+						if(target.getGameMode() == GameMode.SPECTATOR) {
+							e.setCancelled(true);
+							
+								player.sendMessage(ChatColor.RED+"No puedes interactuar estando en Espectador");
+							
+							
+							return;
+						}
+	
+						
+					}else if(ent.getType() == EntityType.CHEST_MINECART) {
+						
+						StorageMinecart mc = (StorageMinecart) ent;
+						if(mc.getCustomName() != null && ChatColor.stripColor(mc.getCustomName()).equals("PAQUETE DE AYUDA")) {
+							return;
+						}else {
+							player.addPassenger(ent);	
+						}
+						
+					}else {
+						if(player.getGameMode() == GameMode.ADVENTURE){
+							 if(player.isSneaking() && ent.getPassengers().isEmpty()) {
+									ent.addPassenger(player);
+								}else {
+									 player.addPassenger(ent); 
+								}
+						}
+					}
+				}
+			   
+		
+			
+			    if(!(gi instanceof GameAdventure)) return;
+			
 					GameAdventure ga = (GameAdventure) gi;
-					if(ga.getDeadPlayers().contains(player.getName()) || ga.getSpectators().contains(player.getName())) {
+					
+					if(ga.getDeadPlayers().contains(player.getName())) {
+				
 						e.setCancelled(true);
 						return;
 					}
-				}
 				
-				Entity ent = e.getRightClicked();
+				
 				
 				if(ent instanceof ArmorStand) {
 					
@@ -299,16 +367,17 @@ public class EventRandoms implements Listener{
 							e.setCancelled(true);
 							
 							Player target = Bukkit.getPlayer(name.replace("REVIVIR CON (SHIFT + CLICK DERECHO) A: ","").replace(" ",""));
-							if(gc.isPlayerKnocked(target)) {
+							if(ga.isPlayerKnocked(target)) {
 								
 								if(target.getName().equals(player.getName()) && player.getGameMode() == GameMode.SPECTATOR){
 									
 									if(player.getInventory().containsAtLeast(Items.REVIVEP.getValue(), 1)){
 										
-										RevivePlayer pr = plugin.getKnockedPlayer().get(player);
+										RevivePlayer pr = ga.getKnockedPlayers().get(player);
 										int value = pr.getValue();
 										if(value != 100) {
-											pr.setValue(pr.getValue()+1);
+											//pr.setValue(pr.getValue()+1);
+											pr.addValue(1);
 											player.sendTitle(""+ChatColor.WHITE+ChatColor.BOLD+"REVIVIENDO"+ChatColor.GREEN+ChatColor.BOLD+" + ", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 0, 20, 0);
 											pr.setReviveStatus(ReviveStatus.HEALING);
 											pr.getArmorStand().getWorld().spawnParticle(Particle.HAPPY_VILLAGER, pr.getArmorStand().getLocation().add(0.5, 1, 0.5),	/* N DE PARTICULAS */5, 1, 1, 1, /* velocidad */0, null, true);
@@ -326,10 +395,10 @@ public class EventRandoms implements Listener{
 									return;
 								}else{
 									if(player.isSneaking()) {
-										RevivePlayer pr = plugin.getKnockedPlayer().get(target);
+										RevivePlayer pr = ga.getKnockedPlayers().get(target);
 										int value = pr.getValue();
 										if(value != 100) {
-											pr.setValue(pr.getValue()+1);
+											pr.addValue(1);
 											target.sendTitle(""+ChatColor.WHITE+ChatColor.BOLD+"REVIVIENDO"+ChatColor.GREEN+ChatColor.BOLD+" + ", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 0, 20, 0);
 											player.sendTitle(""+ChatColor.WHITE+ChatColor.BOLD+"REVIVIENDO"+ChatColor.GREEN+ChatColor.BOLD+" + ", ""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(value,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 0, 20, 0);
 											pr.setReviveStatus(ReviveStatus.HEALING);
@@ -371,77 +440,7 @@ public class EventRandoms implements Listener{
 				
 				
 
-				if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
-					
-					if(gi instanceof GameAdventure) {
-						GameAdventure ga = (GameAdventure) gi;
-						if(ga.getDeadPlayers().contains(player.getName()) || ga.getSpectators().contains(player.getName())) {
-							e.setCancelled(true);
-							return;
-						}
-					}
-					
-					
-					if(!player.getPassengers().isEmpty()) {
-						
-							 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.RED+ChatColor.BOLD+"YA TIENES ENCIMA A UNA ENTIDAD"));
-						
-						return;
-					}else if(ent.getType() == EntityType.PLAYER) {
-						Player target = (Player) ent;
-						if(gc.isPlayerKnocked(player)) return;
-						
-						
-						if(player.getGameMode() == GameMode.SPECTATOR) {
-							e.setCancelled(true);
-							
-							  player.sendMessage(ChatColor.RED+"No puedes interactuar con Entidades siendo Espectador...");
-							
-							return;
-						}
-						
-						if(target.getGameMode() == GameMode.SPECTATOR) {
-							e.setCancelled(true);
-							
-								player.sendMessage(ChatColor.RED+"No puedes interactuar con Espectadores.");
-							
-							
-							return;
-						}
-					
-							if(player.isSneaking() && ent.getPassengers().isEmpty()) {
-								target.addPassenger(player);
-							}else {
-								player.addPassenger(target);
-							}
-							
-							
-						
-					}else if(ent.getType() == EntityType.CHEST_MINECART) {
-						
-						StorageMinecart mc = (StorageMinecart) ent;
-						if(mc.getCustomName() != null && ChatColor.stripColor(mc.getCustomName()).equals("PAQUETE DE AYUDA")) {
-							return;
-						}else {
-							player.addPassenger(ent);	
-						}
-						
-					}else {
-						if(player.getGameMode() == GameMode.SPECTATOR) {
-							e.setCancelled(true);
-							
-								player.sendMessage(ChatColor.RED+"No puedes interactuar con Entidades siendo Espectador.");
 
-							
-							return;
-						}else if(player.isSneaking() && ent.getPassengers().isEmpty()) {
-							ent.addPassenger(player);
-						}else {
-							 player.addPassenger(ent); 
-						}
-						
-					}
-				}
 				
 				return;
 			}
@@ -738,7 +737,7 @@ public class EventRandoms implements Listener{
 						
 					}
 					
-					if(!gc.isPlayerKnocked(player)) {
+					if(player.getGameMode() == GameMode.ADVENTURE) {
 						
 						if(e.getClickedBlock().getType() == Material.OAK_PRESSURE_PLATE) {
 							DetectChestAndJump(player);
@@ -760,16 +759,33 @@ public class EventRandoms implements Listener{
 				//QUEDA PENDIENTE EL DE LOS PUNTOS
 				if (e.getAction() == Action.RIGHT_CLICK_BLOCK ) {
 					
-					
-					
+					 PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+					 
 					
 					 Block b2 = player.getTargetBlock((Set<Material>) null, 5);
-					  if(b2.getType() == Material.OAK_SIGN || b2.getType() == Material.OAK_WALL_SIGN || b2.getType() == Material.BIRCH_WALL_SIGN || b2.getType() == Material.BIRCH_SIGN) {
+					  if(b2.getState() instanceof Sign) {
 						  Sign sign = (Sign) b2.getState();
-						  if(!sign.getLine(0).isEmpty() && ChatColor.stripColor(sign.getLine(0)).equals("Kit-MG")) {
+						  if(!sign.getLine(0).isEmpty() && ChatColor.stripColor(sign.getLine(0)).equals("KIT-MG")) {
 							  if(!sign.getLine(1).isEmpty()) {
 								  String name = ChatColor.stripColor(sign.getLine(1));
 								  gc.getInventorySing(name, player);
+								  
+								  if(pl.getKitName().equals("NINGUNO")) {
+									  player.sendMessage(Utils.colorTextChatColor("&e-&aEscogiste el Kit &b&l"+name+"."));
+									  pl.setKitName(name);
+									  if(gc.getInventorySingContent(name, player) != null) {
+										  pl.setPlayerKit(gc.getInventorySingContent(name, player));
+									  }
+								  }else if(pl.getKitName().endsWith(name)) {
+									  return;
+								  }else {
+									  player.sendMessage(Utils.colorTextChatColor("&e-&aEscogiste el Kit &b&l"+name+".."));
+									  pl.setKitName(name);
+									  if(gc.getInventorySingContent(name, player) != null) {
+										  pl.setPlayerKit(gc.getInventorySingContent(name, player));
+									  }
+								  }
+								  
 							  }
 						  }
 						  
@@ -793,7 +809,7 @@ public class EventRandoms implements Listener{
 					 }
 						
 					 if(e.getHand() == EquipmentSlot.OFF_HAND)return;
-					 PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+					
 					 if(b3.getType() == Material.LIME_BANNER && checkpoint.getType() == Material.STRUCTURE_BLOCK) {
 						
 						 if(!player.getInventory().containsAtLeast(Items.CHECKPOINTFLAG.getValue(),1)) {
@@ -961,11 +977,33 @@ public class EventRandoms implements Listener{
 			
 						
 					
-				}
-				
-				
-				
-				if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
+				}if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
+					
+					PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+					 Block b2 = player.getTargetBlock((Set<Material>) null, 5);
+					  if(b2.getState() instanceof Sign) {
+						  Sign sign = (Sign) b2.getState();
+						  if(!sign.getLine(0).isEmpty() && ChatColor.stripColor(sign.getLine(0)).equals("KIT-MG")) {
+							  if(!sign.getLine(1).isEmpty()) {
+								  String name = ChatColor.stripColor(sign.getLine(1));
+								  gc.getInventorySing(name, player);
+								  
+								  
+								  if(pl.getKitName().equals("NINGUNO")) {
+									 return;
+								  }else if(!(pl.getKitName().equals("NINGUNO"))) {
+									  player.sendMessage(Utils.colorTextChatColor("&e-&aDeseleccionaste el Kit &b&l"+name+"."));
+									  pl.setKitName("NINGUNO");
+									
+									  pl.setPlayerKit(null);
+									  
+								  }
+								  
+							  }
+						  }
+						  
+					  }
+				}if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
 					if (e.getItem() != null) {
 						
 						
@@ -1601,11 +1639,13 @@ public class EventRandoms implements Listener{
 		 if(cm.isPlayerinGame(player)) {
 			 
 			 PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+			 GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
 			 RankPlayer ra = new RankPlayer(plugin);
 
 				 
-						if(plugin.getKnockedPlayer().containsKey(player)) {
-							RevivePlayer rp = plugin.getKnockedPlayer().get(player);
+						if(gi instanceof GameAdventure) {
+							GameAdventure ga = (GameAdventure) gi;
+							RevivePlayer rp = ga.getKnockedPlayers().get(player);
 							int timelife = rp.getRemainingTimeLife();
 							
 							if(timelife >= 41 && timelife <= 60) {
@@ -1628,6 +1668,9 @@ public class EventRandoms implements Listener{
 		
 						}else if(pl.getPlayerGameStatus() == PlayerGameStatus.SPECTATOR) {
 							cm.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&f&lESPECTADOR&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &7"+message);
+							
+						}else if(pl.getPlayerGameStatus() == PlayerGameStatus.UNKNOW) {
+							cm.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l>>&f&l>>&8&l>> "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &7"+message);
 							
 						}
 						

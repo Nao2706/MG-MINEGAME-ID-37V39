@@ -51,6 +51,7 @@ import me.nao.generalinfo.mg.RespawnLife;
 import me.nao.generalinfo.mg.MapRecords;
 import me.nao.main.mg.Minegame;
 import me.nao.revive.mg.RevivePlayer;
+import me.nao.scoreboard.mg.MgScore;
 import me.nao.shop.mg.MinigameShop1;
 import me.nao.teams.mg.MgTeams;
 import me.nao.topusers.mg.PointsManager;
@@ -63,10 +64,13 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class GameIntoMap {
 	
 	private Minegame plugin;
+	private GameConditions gmc ;
 
 	
 	public GameIntoMap(Minegame plugin) {
 		this.plugin = plugin;
+		this.gmc = new GameConditions(plugin);
+				
 	}
 	
 	
@@ -109,7 +113,7 @@ public class GameIntoMap {
 				
 					GameConditions cm = new GameConditions(plugin);
 					cm.setHeartsInGame(target, mapa);
-					
+					 
 				
 					cm.setKitMg(target);
 					if(gomg.hasMapObjetives()) {
@@ -199,14 +203,14 @@ public class GameIntoMap {
 		
 		if(gm instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) gm;
-			List<String> arrive = ga.getWinnersPlayers();
+			List<String> win = ga.getWinnersPlayers();
 			List<String> vivo = ga.getAlivePlayers();
 			List<String> deaths = ga.getDeadPlayers();
-			List<String> knocked = ga.getKnockedPlayers();
+		
 			
-			if(knocked.contains(name)) {
+			if(ga.isPlayerKnocked(target)) {
 				
-				RevivePlayer rp = plugin.getKnockedPlayer().get(target);
+				RevivePlayer rp = ga.getKnockedPlayers().get(target);
 				rp.setReviveStatus(ReviveStatus.REVIVED);
 				
 				if(player != null) {
@@ -231,10 +235,12 @@ public class GameIntoMap {
 			    return;
 			}
 			
+			
+			//HECHO PARA SOLO CONSIDERAR UN TP A JUGADORES QUE ESTAN VIVOS PERO NO HAN GANADO O LLEGADO A LA META
 			 List<String> filterarrive = new ArrayList<>();
 			 
 			 for(String play : vivo) {
-				 if(arrive.contains(play)) continue;	
+				 if(win.contains(play)) continue;	
 				 filterarrive.add(play);
 			 }
 			
@@ -341,8 +347,11 @@ public class GameIntoMap {
 		}else if(gi instanceof GameFreeForAll) {
 			
 			GameFreeForAll ffa = (GameFreeForAll) gi;
-			
+			PlayerDropAllItemsSimple(player);
 			reviveFreeForAll(player,ffa);
+			if(pl.getPlayerKit() != null) {
+				player.getInventory().setContents(pl.getPlayerKit());
+			}
 			
 		}
 		
@@ -373,22 +382,22 @@ public class GameIntoMap {
 		
 			if(player.getGameMode() == GameMode.ADVENTURE) {
 				
-				System.out.println("12345");
+		
 				
-				if(b.getType() == Material.BARRIER || b.getType() == Material.BARRIER && d == DamageCause.FALL || block.getType() == Material.AIR && d == DamageCause.VOID) {
-					System.out.println("12");
+				if(b.getType() == Material.BARRIER || b.getType() == Material.BARRIER && d == DamageCause.FALL || d == DamageCause.VOID) {
+				
 				    PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 					GameConditions gmc = new GameConditions(plugin);
 					String mapa = pl.getMapName();
 					GameInfo gi = plugin.getGameInfoPoo().get(mapa);
 					
 					if(gmc.hasPlayerACheckPoint(player)) {
-						System.out.println("123");
+					
 						return;
 					}else if(gmc.hasAntiVoid(player)){
 						//else if(gmc.hasAntiVoid(player) && gi.getGameType() != GameType.NEXO){
 						
-						System.out.println("1234");
+					
 						gmc.TptoSpawnMapSimple(player);
 						player.sendTitle(ChatColor.GREEN+"Anti Void Activado",ChatColor.GREEN+"No te Caigas",20,60,20);
 						player.sendMessage(ChatColor.GREEN+"- Que suerte el Mapa tiene Anti Void pero Siempre Regresaras al Inicio del Mapa Ojo con el Tiempo.");
@@ -453,7 +462,7 @@ public class GameIntoMap {
 					}else if(gi instanceof GameFreeForAll) {
 						
 						GameFreeForAll ffa = (GameFreeForAll) gi;
-						System.out.println("1");
+						PlayerDropAllItemsSimple(player);
 						ffa.respawnGame(player);
 						
 					}
@@ -465,7 +474,7 @@ public class GameIntoMap {
 	}
 	
 	public void GamePlayerWin(Player player) {
-		GameConditions gmc = new GameConditions(plugin);
+	
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		String mapa = pl.getMapName();
 		GameInfo gm = plugin.getGameInfoPoo().get(mapa);
@@ -503,7 +512,7 @@ public class GameIntoMap {
 				if(gm.getGameStatus() == GameStatus.JUGANDO || gm.getGameStatus() == GameStatus.PAUSE || gm.getGameStatus() == GameStatus.FREEZE) {
 					pl.setPlayerCronomet(new MapRecords(player.getName(),gm.getGameTime().getGameCronometForPlayer(),pl.getGamePoints().getKills()));
 
-
+					
 					gmc.EndTptoSpawn(player, mapa);
 					isTheRankedGames(player,gm.isRankedMap());
 				}
@@ -536,11 +545,11 @@ public class GameIntoMap {
 								 if(pl.getCheckPointMarker() != null) {
 									 if(pl.getCheckPointMarker().equals(block.getLocation())) {
 											
-											GameConditions cm = new GameConditions(plugin);
-											cm.setHeartsInGame(player, mapa);
-											cm.revivePlayerToGame(player, mapa);
 										
-											cm.setKitMg(player);
+											gmc.setHeartsInGame(player, mapa);
+											gmc.revivePlayerToGame(player, mapa);
+										
+											gmc.setKitMg(player);
 											if(gm.getGameObjetivesMg().hasMapObjetives()) {
 												if(player.getInventory().getItemInMainHand() != null) {
 													if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
@@ -570,7 +579,7 @@ public class GameIntoMap {
 										 player.teleport( new Location(pl.getCheckPointMarker().getWorld(),pl.getCheckPointMarker().getX(), pl.getCheckPointMarker().getY(), pl.getCheckPointMarker().getZ(),player.getLocation().getYaw(),player.getLocation().getPitch()).add(0.5, 0, 0.5));
 										 player.sendMessage(ChatColor.GREEN+"Te Reviviste con: "+ChatColor.AQUA+"Bandera de CheckPoint");
 										
-										gmc.sendMessageToUsersOfSameMapLessPlayer(player,""+ChatColor.RED+ChatColor.BOLD+"+ "+ChatColor.AQUA+"Bandera de CheckPoint"+ChatColor.GREEN+" Revivio a "+ChatColor.WHITE+player.getName());
+										 gmc.sendMessageToUsersOfSameMapLessPlayer(player,""+ChatColor.RED+ChatColor.BOLD+"+ "+ChatColor.AQUA+"Bandera de CheckPoint"+ChatColor.GREEN+" Revivio a "+ChatColor.WHITE+player.getName());
 
 										 return;
 									 }else {
@@ -599,7 +608,7 @@ public class GameIntoMap {
 				if(gm.getGameStatus() == GameStatus.JUGANDO || gm.getGameStatus() == GameStatus.PAUSE || gm.getGameStatus() == GameStatus.FREEZE) {
 					pl.setPlayerCronomet(new MapRecords(player.getName(),gm.getGameTime().getGameCronometForPlayer(),pl.getGamePoints().getKills()));
 
-
+					
 					gmc.EndTptoSpawn(player, mapa);
 					//isTheRankedGames(player,gm.isRankedMap());
 				}
@@ -869,7 +878,15 @@ public class GameIntoMap {
 			
 			if(gi instanceof GameFreeForAll) {
 				GameFreeForAll ga = (GameFreeForAll) gi;
+			    MgScore sco = new MgScore(plugin);
+			    sco.showTopPlayersFFA(player);
 				ga.reachLimitPoint();
+				
+				
+				
+//				GameConditions cm = new GameConditions(plugin);
+//				cm.setKitMg(player);
+				 
 			}
 					
 			
@@ -1041,6 +1058,22 @@ public class GameIntoMap {
 	}
 	
 	//TODO DROP
+	
+	public void PlayerDropAllItemsSimple(Player player) {
+		if(player.getInventory().getContents().length >= 1) {
+			for (ItemStack itemStack : player.getInventory().getContents()) {
+				if(itemStack == null) continue;
+				
+					player.getWorld().dropItemNaturally(player.getLocation(), itemStack);
+						
+                    player.getInventory().removeItem(itemStack);
+              }
+				player.getInventory().clear(); 
+		}
+		return;
+	}
+	
+	
 	public void PlayerDropAllItems(Player player) {
 		GameConditions gm = new GameConditions(plugin);
 		
@@ -1060,6 +1093,7 @@ public class GameIntoMap {
 		}
 		  
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+		GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
 		
 		if(player.getInventory().containsAtLeast(Items.SOULP.getValue(), 1)) {
 		
@@ -1071,31 +1105,35 @@ public class GameIntoMap {
 		}
 		
 		Location l = null;
-		
-		if(gm.isPlayerKnocked(player)) {
-			 l = plugin.getKnockedPlayer().get(player).getArmorStand().getLocation();
-		}else {
-			 l = player.getLocation();
+		if(gi instanceof GameAdventure) {
+			GameAdventure ga = (GameAdventure) gi;
+			if(ga.isPlayerKnocked(player)) {
+				 l = ga.getKnockedPlayers().get(player).getArmorStand().getLocation();
+			}else {
+				 l = player.getLocation();
+			}
+			
+			if(player.getInventory().getContents().length >= 1) {
+				for (ItemStack itemStack : player.getInventory().getContents()) {
+					if(itemStack == null) continue;
+					
+						if(gm.isPlayerinGame(player) && pl.isInventoryAllowedForTheMap()) {
+							Item it = (Item) l.getWorld().spawnEntity(l,EntityType.ITEM);
+							it.setItemStack(itemStack);
+							it.setOwner(player.getUniqueId());
+							it.setUnlimitedLifetime(true);
+						
+						}else {
+							l.getWorld().dropItemNaturally(l, itemStack);
+						}	
+						
+	                    player.getInventory().removeItem(itemStack);
+	              }
+					player.getInventory().clear(); 
+			}
 		}
 		
-		if(player.getInventory().getContents().length >= 1) {
-			for (ItemStack itemStack : player.getInventory().getContents()) {
-				if(itemStack == null) continue;
-				
-					if(gm.isPlayerinGame(player) && pl.isInventoryAllowedForTheMap()) {
-						Item it = (Item) l.getWorld().spawnEntity(l,EntityType.ITEM);
-						it.setItemStack(itemStack);
-						it.setOwner(player.getUniqueId());
-						it.setUnlimitedLifetime(true);
-					
-					}else {
-						l.getWorld().dropItemNaturally(l, itemStack);
-					}	
-					
-                    player.getInventory().removeItem(itemStack);
-              }
-				player.getInventory().clear(); 
-		}
+
 
 		return;
 	}

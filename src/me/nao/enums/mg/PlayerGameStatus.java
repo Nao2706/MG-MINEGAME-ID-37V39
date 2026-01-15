@@ -4,7 +4,9 @@ public enum PlayerGameStatus {
 
 	ALIVE,
 	DEAD,
-	SPECTATOR
+	KNOCKED,
+	SPECTATOR,
+	UNKNOW
 	
 	
 }

@@ -36,6 +36,7 @@ import me.nao.generalinfo.mg.GameInfo;
 import me.nao.generalinfo.mg.PlayerInfo;
 import me.nao.main.mg.Minegame;
 import me.nao.manager.mg.GameIntoMap;
+import me.nao.utils.mg.Utils;
 
 @SuppressWarnings("deprecation")
 public class RevivePlayer{
@@ -105,19 +106,31 @@ public class RevivePlayer{
 		this.value = value;
 	}
 	
+	public void addValue(int value) {
+		this.value += value;
+	}
+	
 	public void saveItemsPlayer() {
 		this.contents = player.getInventory().getContents();
 	}
 	
 	public void Dead(Entity e, DamageCause cause) {
 		GameIntoMap mig = new GameIntoMap(plugin);
-		player.getInventory().setContents(restoreItemstoPlayer());
-		if(e != null) {
-			mig.GameMobDamagerCauses(player, e);
-		}else {
-			mig.GameDamageCauses(player,cause);
+		GameConditions gc = new GameConditions(plugin);
+		if(getReviveStatus() == ReviveStatus.SURRENDER) {
+			gc.sendMessageToAllUsersOfSameMap(player,Utils.colorTextChatColor("&c&l- &e"+player.getName()+" &7se Rindio."));
+
 		}
-		removeToRevive();
+			player.getInventory().setContents(restoreItemstoPlayer());
+			if(e != null) {
+				mig.GameMobDamagerCauses(player, e);
+			}else {
+				mig.GameDamageCauses(player,cause);
+			}
+			removeToRevive();
+		
+		
+
 		return;
 	}
 	
@@ -251,11 +264,8 @@ public class RevivePlayer{
 				
 			}
 		}
-
-		
 	
 		player.sendMessage("");
-		addToRevive();
 		Start();
 	}
 	
@@ -333,20 +343,7 @@ public class RevivePlayer{
 		return causes;
 	}
 	
-	public void addToRevive() {
-	
-			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
-			GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
-			
-			if(gi instanceof GameAdventure) {
-				GameAdventure ga = (GameAdventure) gi;
-				if(!ga.getKnockedPlayers().contains(player.getName())) {
-					ga.getKnockedPlayers().add(player.getName());
-				} 
-				
-			}
-		
-	}
+
 	
 	public void removeToRevive() {
 		 
@@ -355,9 +352,8 @@ public class RevivePlayer{
 	
 		if(gi instanceof GameAdventure) {
 			getArmorStand().remove();
-			plugin.getKnockedPlayer().remove(player);
 			GameAdventure ga = (GameAdventure) gi;
-			if(ga.getKnockedPlayers().remove(player.getName()));
+			ga.removeKnockedPlayer(player);
 			
 		}
 	
@@ -379,6 +375,10 @@ public class RevivePlayer{
 	
 	
 	public boolean reviveStoped() {
+		
+		GameConditions gc = new GameConditions(plugin);
+		if(gc.isPlayerinGame(player));
+			
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
 		if(gi instanceof GameAdventure) {
@@ -418,15 +418,22 @@ public class RevivePlayer{
 					
 					StandUp();
 					Bukkit.getScheduler().cancelTask(taskID);	
+				}else if(getReviveStatus() == ReviveStatus.SURRENDER) {
+					Bukkit.getScheduler().cancelTask(taskID);	
+					
 				}else if(getReviveStatus() == ReviveStatus.HEALING) {
 					setReviveStatus(ReviveStatus.BLEEDING);
+					
 				}else if(ms.getGameStatus() == GameStatus.TERMINANDO) {
 					//System.out.println("Error");
 				    Dead(e, cause);
 				    Bukkit.getScheduler().cancelTask(taskID);	
 				   
-				}else if(reviveStoped() || player == null || !player.isOnline()) {
-					Dead(e, cause);
+				}else if(player == null || !player.isOnline() || reviveStoped()) {
+					
+						Dead(e, cause);
+					
+				
 					//System.out.println("No tienen item F");
 					Bukkit.getScheduler().cancelTask(taskID);	
 
@@ -508,5 +515,12 @@ public class RevivePlayer{
 		return false;
 	}
 
+	
+	public void forcedSurrender() {
+		
+		setReviveStatus(ReviveStatus.SURRENDER);
+		Dead(e, cause);
+		
+	}
 	
 }

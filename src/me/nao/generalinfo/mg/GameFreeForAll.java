@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import me.nao.cosmetics.mg.Fireworks;
 import me.nao.enums.mg.GameStatus;
 import me.nao.main.mg.Minegame;
+import me.nao.scoreboard.mg.MgScore;
 import me.nao.utils.mg.Utils;
 
 import java.util.ArrayList;
@@ -165,6 +166,9 @@ public class GameFreeForAll extends GameInfo{
 	public void startGame(Player player) {
 		List<Location> l  = getSpawns();
 		Random r = new Random();
+		MgScore sco = new MgScore(plugin);
+    	sco.showTopPlayersFFA(player);
+		player.setInvulnerable(false);
 		player.teleport(l.get(r.nextInt(l.size())));
 		player.sendTitle(Utils.colorTextChatColor("&a&l!!! A LUCHAR !!!"),Utils.colorTextChatColor("&eConsigue &b&l"+getLimitpoints()+" &ePuntos para Ganar."), 20, 20, 20);
 		
@@ -190,8 +194,9 @@ public class GameFreeForAll extends GameInfo{
 		
 		for(Player p : joins) {
 			if(p.getName().equals(getWinnerTopPlayer())) {
+				p.setAllowFlight(true);
 				p.setFlying(true);
-				p.setInvisible(true);
+				p.setInvulnerable(true);
 				p.getInventory().clear();
 				p.sendTitle(Utils.colorTextChatColor("&a&lFELICIDADES"+getWinnerTopPlayer()+" &b&lGANASTE"),Utils.colorTextChatColor("&eEres muy Bueno/a."), 20, 20, 20);
 
@@ -215,8 +220,9 @@ public class GameFreeForAll extends GameInfo{
 		List<Player> joins = gc.ConvertStringToPlayer(getPlayersSortedOfGame());
 		for(Player p : joins) {
 			if(p.getName().equals(getWinnerTopPlayer())) {
+				p.setAllowFlight(true);
 				p.setFlying(true);
-				p.setInvisible(true);
+				p.setInvulnerable(true);
 				p.getInventory().clear();
 				p.sendTitle(Utils.colorTextChatColor("&a&lFELICIDADES"+getWinnerTopPlayer()+" &b&lGANASTE"),Utils.colorTextChatColor("&eTienes el Puntaje mas Alto."), 20, 20, 20);
 

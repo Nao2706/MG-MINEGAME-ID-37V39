@@ -2392,6 +2392,16 @@ public class Comandsmg implements CommandExecutor{
 			
 			   		return true;
 			
+		   }else if (args[0].equalsIgnoreCase("invi") && player.isOp()) {
+			   if(player.isInvisible()) {
+				   player.setInvisible(false);
+				   player.sendMessage("-Ya no estas Invisible");
+			   }else {
+				   player.setInvisible(true);
+				   player.sendMessage("-Estas Invisible");
+			   }
+			   
+			   return true;
 		   }else if (args[0].equalsIgnoreCase("arrow0") && player.isOp()) {
 			  
 					 for(int i = 0;i<20;i++) {

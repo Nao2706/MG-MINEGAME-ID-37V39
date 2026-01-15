@@ -5,6 +5,7 @@ public enum ReviveStatus {
 	HEALING,
 	REVIVED,
 	SELFREVIVED,
+	SURRENDER,
 	BLEEDING
 	
 	

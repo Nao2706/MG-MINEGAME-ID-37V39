@@ -119,7 +119,7 @@ public class GameConditions {
 		if(!existMap(map)) return;
 		  loadDataMap(map); 
 		
-		
+		 
 		if(canJoinToTheMap(player,map)){
 			
 			if(existProblemBetweenInventorys(map)) {
@@ -130,7 +130,7 @@ public class GameConditions {
 				mt.JoinTeamLifeMG(player);
 				
 				//Salva al Jugador checa si debe setearle un inv
-				setAndSavePlayer(player,PlayerGameStatus.ALIVE, map);
+				setAndSavePlayer(player,PlayerGameStatus.UNKNOW, map);
 				addPlayerToGame(player,map);
 				if(tptoPreLobbyMap(player, map)); //SI HAY UN ERROR EN EL MAPA DARA FALSE Y NO ABANZARA
 				canStartTheGame(player,map);
@@ -655,7 +655,18 @@ public class GameConditions {
 		   
 		   FileConfiguration ym = getGameConfig(map);
 		   if(ym.contains("Pre-Lobby")) { 
-			  
+				PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+				GameInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
+				
+				if(ms.getGameType() == GameType.ADVENTURE || ms.getGameType() == GameType.RESISTENCE) {
+					pl.setPlayerGameStatus(PlayerGameStatus.ALIVE);
+					
+				}else if(ms.getGameType() == GameType.FREEFORALL) {
+					pl.setPlayerGameStatus(PlayerGameStatus.UNKNOW);
+					
+				}
+				
+				
 			    String[] coords = ym.getString("Pre-Lobby").split("/");
 			    String world = coords[0];
 			    double x = Double.valueOf(coords[1]);
@@ -670,8 +681,7 @@ public class GameConditions {
 				if(w == null) { 
 					
 					sendMessageToUserAndConsole(player,"&c&lError&e: &eNo existe el &bMundo&a: &6"+world+" &csi ves esto Reportalo a un Admin.");
-					PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
-					GameInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
+				
 					MgTeams mt = new MgTeams(plugin);
 					
 					setDefaultHeartsInGame(player);
@@ -924,13 +934,15 @@ public class GameConditions {
 	
 	public void forceGameModePlayerRol(Player player) {
 		
-		if(isPlayerKnocked(player)) return;
+		
 		
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		String mapa = pl.getMapName();
 		GameInfo game = plugin.getGameInfoPoo().get(mapa);
 		if(game instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) game;
+			
+			if(ga.isPlayerKnocked(player)) return;
 			
 			List<String> vivo = ga.getAlivePlayers();
 			List<String> win = ga.getWinnersPlayers();
@@ -1127,17 +1139,18 @@ public class GameConditions {
 		if(gi.getWinnersPlayers().remove(player.getName()));
 		if(gi.getSpectators().remove(player.getName()));
 		MgTeams t = new MgTeams(plugin);
-		t.RemoveAllPlayer(player);
+		
 		
 		if(gi instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) gi;
 			
 			if(ga.getAlivePlayers().remove(player.getName()));
-			if(ga.getDeadPlayers().remove(player.getName()));			
-	
-				
+			if(ga.getDeadPlayers().remove(player.getName()));
+			if(ga.isPlayerKnocked(player)) {
+				ga.getKnockedPlayers().get(player).forcedSurrender();
+			}	
 		}
-		
+		t.RemoveAllPlayer(player);
 		plugin.getPlayerInfoPoo().remove(player);
 	}
 	
@@ -1567,7 +1580,7 @@ public class GameConditions {
 				 player.sendMessage(ChatColor.GREEN+"Has Entrado en el Mapa "+ChatColor.translateAlternateColorCodes('&',getNameOfTheMap(map).replace("%player%",player.getName())));
 
 				 player.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.YELLOW+" Te has unido"+ChatColor.RED+" ("+ChatColor.GOLD+ms.getParticipants().size()+ChatColor.YELLOW+"/"+ChatColor.GOLD+ getMaxPlayerMap(map)+ChatColor.RED+")");
-
+ 
 				sendMessageToUsersOfSameMapLessPlayer(player,
 				ChatColor.YELLOW+"Se a unido "+ChatColor.GREEN+player.getName()+ChatColor.RED+" ("+ChatColor.GOLD+ms.getParticipants().size()+ChatColor.YELLOW+"/"+ChatColor.GOLD+getMaxPlayerMap(map)+ChatColor.RED+")");
 				MgScore sc = new MgScore(plugin);
@@ -1659,9 +1672,9 @@ public class GameConditions {
     	
 	}
 	
-	public boolean isPlayerKnocked(Player player) {
-		return plugin.getKnockedPlayer().containsKey(player);
-	}
+//	public boolean isPlayerKnocked(Player player) {
+//		return plugin.getKnockedPlayer().containsKey(player);
+//	}
 	
 	//TODO BOOLEAN
 	public boolean isPlayerinGame(Player player) {
@@ -2076,10 +2089,10 @@ public class GameConditions {
 			}
 		}
 		
-		   
+		
 		 GameInfo mapinfo = plugin.getGameInfoPoo().get(map);
 		 BossBar boss = mapinfo.getBossbar();
-		 GameType misiontype = mapinfo.getGameType();
+		 GameType maptype = mapinfo.getGameType();
 		 int maxplayers = mapinfo.getMaxPlayers();
 		 ModerationManager cooldown = new ModerationManager(plugin) ;
 		 
@@ -2242,7 +2255,7 @@ public class GameConditions {
 					 return false;
 				 }
 			  
-			 
+			
 		 		boss.addPlayer(player);
 		 		return true;
 		 }else if(mapinfo instanceof GameAdventure) {
@@ -2255,7 +2268,7 @@ public class GameConditions {
 						 player.sendMessage(ChatColor.RED+"Error en el Mapa: "+map);
 					 }
 					 return false;
-				 }else if(misiontype == GameType.RESISTENCE && !data.contains("Spawn-End")) {
+				 }else if(maptype == GameType.RESISTENCE && !data.contains("Spawn-End")) {
 					 if(player.isOp()) {
 						 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el Spawn-End");
 					 }
@@ -2264,7 +2277,7 @@ public class GameConditions {
 					 }
 					 return false;
 				 }
-		 		  
+				  
 			 		boss.addPlayer(player);
 			 		return true;
 				  
@@ -2890,15 +2903,15 @@ public class GameConditions {
 		
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		String map = pl.getMapName();
-		GameInfo ms = plugin.getGameInfoPoo().get(map);
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
 	
 		//MisionInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
-		 if(ms instanceof GameAdventure) {
-				GameAdventure ga = (GameAdventure) ms;
+	
+			
 				
 				
-				List<Player> play = ConvertStringToPlayer(ga.getParticipants());
-				List<Player> spect = ConvertStringToPlayer(ga.getSpectators());
+				List<Player> play = ConvertStringToPlayer(gi.getParticipants());
+				List<Player> spect = ConvertStringToPlayer(gi.getSpectators());
 				
 				for(Player target : play) {
 					
@@ -2912,7 +2925,7 @@ public class GameConditions {
 					}
 				}
 				 Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+map.toUpperCase()+": "+Utils.colorTextChatColor(text));
-		 }
+		 
 	}
 	
 	
@@ -3241,6 +3254,7 @@ public class GameConditions {
 			sendMessageToConsole(""+ChatColor.GRAY+"DEFAULT TIMER: "+ChatColor.GREEN+map.getGameTime().getGameTimerDefaultForResult());
 			sendMessageToConsole(""+ChatColor.GRAY+"DURACION: "+ChatColor.WHITE+cronomet);
 			sendMessageToConsole(""+ChatColor.GRAY+"TIMER: "+ChatColor.WHITE+timer);
+			sendMessageToConsole(""+ChatColor.GRAY+"TIPO DE JUEGO: "+ChatColor.WHITE+map.getGameType().toString());
 			sendMessageToConsole(""+ChatColor.GRAY+"TIPO DE PARADA: "+ChatColor.WHITE+map.getStopMotive().toString()+" - "+map.getStopMotive().getValue());
 			sendMessageToConsole(""+ChatColor.GRAY+"MOTIVOS DE PARADA: "+ChatColor.WHITE+map.getStopReason());
 
@@ -3365,6 +3379,7 @@ public class GameConditions {
 			sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"DEFAULT TIMER: "+ChatColor.GREEN+map.getGameTime().getGameTimerDefaultForResult());
 			sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"DURACION: "+ChatColor.WHITE+map.getGameTime().getGameCronometForResult());
 			sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"TIMER: "+ChatColor.WHITE+map.getGameTime().getGameTimerForResult());
+			sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"TIPO DE JUEGO: "+ChatColor.WHITE+map.getGameType().toString());
 			
 			if(participants.isEmpty()) {
 				sendMessageToUserAndConsole(player,""+ChatColor.GRAY+ChatColor.BOLD+"PARTICIPANTES: "+ChatColor.WHITE+"SIN PARTICIPANTES");
@@ -5043,6 +5058,31 @@ public class GameConditions {
 			
 		}
 		player.sendMessage(ChatColor.GREEN+"Obtuviste el Kit "+ChatColor.GOLD+name+ChatColor.GREEN+" para avanzar en tu Aventura.");
+//	player.sendMessage(ChatColor.GREEN+"Obtuviste la clase "+ChatColor.RED+name);
+	}
+	
+	
+	//TODO OBTENER KIT DE CARTEL
+	public ItemStack[] getInventorySingContent(String name , Player player) {
+		FileConfiguration invt = plugin.getKitsYaml();
+		
+		if(!invt.contains("Kits."+name)) {
+			player.sendMessage(ChatColor.RED+"Ese Kit no existe.");
+			return null;
+		} 
+		
+		for (String key : invt.getConfigurationSection("Kits").getKeys(false)) {
+			if(key.equals(name)) {
+				@SuppressWarnings("unchecked")
+				ItemStack[] content = ((List<ItemStack>) invt.get("Kits."+ key)).toArray(new ItemStack[0]);
+				return content;
+				//player.getInventory().setContents(content);
+			}
+			
+		}
+		
+		return null;
+		//player.sendMessage(ChatColor.GREEN+"Obtuviste el Kit "+ChatColor.GOLD+name+ChatColor.GREEN+" para avanzar en tu Aventura.");
 //	player.sendMessage(ChatColor.GREEN+"Obtuviste la clase "+ChatColor.RED+name);
 	}
 	
