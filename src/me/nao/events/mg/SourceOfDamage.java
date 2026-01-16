@@ -85,9 +85,11 @@ import me.nao.utils.mg.Utils;
 public class SourceOfDamage implements Listener{
 
 	private Minegame plugin;
+	private GameConditions gmc;
 	
 	public SourceOfDamage(Minegame plugin) {
 		this.plugin = plugin;
+		this.gmc = new GameConditions(plugin);
 	}
 	
 	
@@ -96,16 +98,16 @@ public class SourceOfDamage implements Listener{
 		Player player = (Player) e.getPlayer();
 		Location l = e.getTo();
 		
-		GameConditions gc = new GameConditions(plugin);
-		if(gc.isPlayerinGame(player)) {
-			gc.forceGameModePlayerRol(player);
+		
+		if(gmc.isPlayerinGame(player)) {
+			gmc.forceGameModePlayerRol(player);
 			
 		}
 		
 		if(player.getGameMode() == GameMode.SPECTATOR) {
 			if(e.getCause() == PlayerTeleportEvent.TeleportCause.SPECTATE) {
 			
-				if(gc.isPlayerinGame(player)) {
+				if(gmc.isPlayerinGame(player)) {
 					
 					if(!player.getLocation().getWorld().getName().equals(l.getWorld().getName())) {
 						player.sendMessage(ChatColor.RED+"- Ese Jugador no esta en tu Juego.");
@@ -118,7 +120,7 @@ public class SourceOfDamage implements Listener{
 							if(et.getType() == EntityType.PLAYER) {
 								Player target = (Player) et;
 								
-								if(!gc.isPlayerinGame(target)) {
+								if(!gmc.isPlayerinGame(target)) {
 									player.sendMessage(ChatColor.RED+"Ese Jugador no esta Jugando....");
 									player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 20.0F, 1F);
 									e.setCancelled(true);
@@ -156,9 +158,8 @@ public class SourceOfDamage implements Listener{
 	public void Command1(PlayerCommandPreprocessEvent e) {
 		Player player = e.getPlayer();
 		String message = e.getMessage();
-		GameConditions gc = new GameConditions(plugin);
 		
-		if(gc.isPlayerinGame(player)) {
+		if(gmc.isPlayerinGame(player)) {
 			if(!player.isOp()) {
 				if(message.contains("mg")) {
 					 
@@ -223,9 +224,8 @@ public class SourceOfDamage implements Listener{
     public void mgworld(PlayerChangedWorldEvent e){
 		Player player = e.getPlayer();
 
-		GameConditions gc = new GameConditions(plugin);
-		if(gc.isPlayerinGame(player)) {
-			gc.forceGameModePlayerRol(player);
+		if(gmc.isPlayerinGame(player)) {
+			gmc.forceGameModePlayerRol(player);
 			
 		}
 	
@@ -285,12 +285,11 @@ public class SourceOfDamage implements Listener{
     public void moving(PlayerMoveEvent e){
 		   
 			Player player = e.getPlayer();
-			 
-			GameConditions gc = new GameConditions(plugin);
-			if(gc.isPlayerinGame(player)) {
-				gc.blockPotion(player);
+			
+			if(gmc.isPlayerinGame(player)) {
+				gmc.blockPotion(player);
 				
-				gc.TryToScapeInSpectatorMode(player);
+				gmc.TryToScapeInSpectatorMode(player);
 				GameIntoMap ci = new GameIntoMap(plugin);
 				ci.GamePlayerFallMap(player , null);
 				ci.GamePlayerWin(player);
@@ -393,16 +392,16 @@ public class SourceOfDamage implements Listener{
 							
 								//&& pl.getRespawn().distance(block.getLocation()) > 2
 						
-					   		     player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+">>> "+ChatColor.RED+ChatColor.BOLD+"RESPAWN GUARDADO"+ChatColor.GREEN+ChatColor.BOLD+"  <<<",ChatColor.GOLD+"Tienes "+ChatColor.GREEN+gc.setLifeByBlock(c3.getLocation())+ChatColor.GOLD+" Vidas.", 20, 40, 20);
+					   		     player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+">>> "+ChatColor.RED+ChatColor.BOLD+"RESPAWN GUARDADO"+ChatColor.GREEN+ChatColor.BOLD+"  <<<",ChatColor.GOLD+"Tienes "+ChatColor.GREEN+gmc.setLifeByBlock(c3.getLocation())+ChatColor.GOLD+" Vidas.", 20, 40, 20);
 					
 								 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, block.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
 								 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 								 player.sendMessage(ChatColor.RED+"La Ubicacion del Respawn Limitado se Guardado. (Ubicacion Sobreescrita).");
-								 pl.setRespawnLifeLocationMg(new RespawnLife(new Location(Bukkit.getWorld(block.getLocation().getWorld().getName()),block.getLocation().getBlockX(),block.getLocation().getBlockY(),block.getLocation().getBlockZ(),player.getLocation().getYaw(),player.getLocation().getPitch()),gc.setLifeByBlock(c3.getLocation())));
+								 pl.setRespawnLifeLocationMg(new RespawnLife(new Location(Bukkit.getWorld(block.getLocation().getWorld().getName()),block.getLocation().getBlockX(),block.getLocation().getBlockY(),block.getLocation().getBlockZ(),player.getLocation().getYaw(),player.getLocation().getPitch()),gmc.setLifeByBlock(c3.getLocation())));
 						
 							 
 						 }else {
-				   		     player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+">>> "+ChatColor.RED+ChatColor.BOLD+"RESPAWN GUARDADO"+ChatColor.GREEN+ChatColor.BOLD+"  <<<",ChatColor.GOLD+"Tienes "+ChatColor.GREEN+gc.setLifeByBlock(c3.getLocation())+ChatColor.GOLD+" Vidas.", 20, 40, 20);
+				   		     player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+">>> "+ChatColor.RED+ChatColor.BOLD+"RESPAWN GUARDADO"+ChatColor.GREEN+ChatColor.BOLD+"  <<<",ChatColor.GOLD+"Tienes "+ChatColor.GREEN+gmc.setLifeByBlock(c3.getLocation())+ChatColor.GOLD+" Vidas.", 20, 40, 20);
 					
 					
 							 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, block.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
@@ -410,7 +409,7 @@ public class SourceOfDamage implements Listener{
 							 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 							 player.sendMessage(ChatColor.RED+"La Ubicacion del Respawn Limitado se Guardado");
 							
-							 pl.setRespawnLifeLocationMg(new RespawnLife(new Location(Bukkit.getWorld(block.getLocation().getWorld().getName()),block.getLocation().getBlockX(),block.getLocation().getBlockY(),block.getLocation().getBlockZ(),player.getLocation().getYaw(),player.getLocation().getPitch()),gc.setLifeByBlock(c3.getLocation())));
+							 pl.setRespawnLifeLocationMg(new RespawnLife(new Location(Bukkit.getWorld(block.getLocation().getWorld().getName()),block.getLocation().getBlockX(),block.getLocation().getBlockY(),block.getLocation().getBlockZ(),player.getLocation().getYaw(),player.getLocation().getPitch()),gmc.setLifeByBlock(c3.getLocation())));
 						 }
 						 
 					}
@@ -699,7 +698,7 @@ public class SourceOfDamage implements Listener{
 						  }
 						  
 					  }
-							  if(gc.isPlayerinGame(player)) {
+							  if(gmc.isPlayerinGame(player)) {
 								  
 								  if(player.getGameMode() == GameMode.ADVENTURE) {
 									   if(chest.getCustomName().equals("TELEPORT")) {
@@ -716,12 +715,12 @@ public class SourceOfDamage implements Listener{
 																	if(!bm.hasDisplayName()) {
 																		return;
 																	}
-																	   String n = bm.getDisplayName();
+																	   String n = ChatColor.stripColor(bm.getDisplayName());
 																	   String[] nn = n.split(" ");
 																	    //world 345 67 89 0 1
 																		 
 																		  String world = nn[0];
-																		  double x = Double.valueOf( nn[1]);
+																		  double x = Double.valueOf(nn[1]);
 																		  double y = Double.valueOf(nn[2]);
 																		  double z = Double.valueOf(nn[3]);
 																		  float pitch = Float.valueOf(nn[4]);
@@ -730,7 +729,7 @@ public class SourceOfDamage implements Listener{
 																		  World w = Bukkit.getWorld(world);
 																		  
 																		  if(w == null) {
-																			  player.sendTitle(Utils.colorTextChatColor("&cError en TP"), "&eEl Mundo no existe", 20, 20, 20);
+																			  player.sendTitle(Utils.colorTextChatColor("&cError en TP"),Utils.colorTextChatColor("&eEl Mundo no existe"), 20, 20, 20);
 																			  return;
 																		  }
 																		  
@@ -753,7 +752,7 @@ public class SourceOfDamage implements Listener{
 //			
 			
 			
-			if(gc.isPlayerinGame(player)) {
+			if(gmc.isPlayerinGame(player)) {
 				
 				getNearbyBlocksParticle(player);
 				
@@ -778,9 +777,6 @@ public class SourceOfDamage implements Listener{
 	@EventHandler  //METODO
     public void killmobs(EntityDeathEvent e){
 		 
-	
-		GameConditions gc = new GameConditions(plugin);
-		
 		
 		Entity ent = e.getEntity().getKiller();
 		EntityType mob = e.getEntityType();
@@ -789,10 +785,10 @@ public class SourceOfDamage implements Listener{
 		if(ent instanceof Player) {
 			Player player = (Player) ent;
 			
-			if(gc.isPlayerinGame(player)) {
+			if(gmc.isPlayerinGame(player)) {
 				
 				
-				if(gc.isGuardian(e.getEntity())) return;
+				if(gmc.isGuardian(e.getEntity())) return;
 				 GameIntoMap c = new GameIntoMap(plugin);
 				 PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 				 GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
@@ -841,8 +837,8 @@ public class SourceOfDamage implements Listener{
 			if(!plugin.getGuardianCredit().containsKey(e.getEntity())) return;
 				
 				GameIntoMap c = new GameIntoMap(plugin);
-				 Player target = gc.ConvertStringToPlayerAlone(plugin.getGuardianCredit().get(e.getEntity()));
-				 if(!gc.isPlayerinGame(target)) return;
+				 Player target = gmc.ConvertStringToPlayerAlone(plugin.getGuardianCredit().get(e.getEntity()));
+				 if(!gmc.isPlayerinGame(target)) return;
 				 c.gamePlayerAddPoints(target);
 				 target.playSound(target.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 					
@@ -933,7 +929,7 @@ public class SourceOfDamage implements Listener{
 		
 		
 		if(e.getSender() instanceof BlockCommandSender) {
-			GameConditions gc = new GameConditions(plugin);
+	
 			String comando = e.getCommand();
 			
 			
@@ -944,7 +940,7 @@ public class SourceOfDamage implements Listener{
 					Player target = Bukkit.getServer().getPlayerExact(name);
 				
 					
-					if(target != null && gc.isPlayerinGame(target)){
+					if(target != null && gmc.isPlayerinGame(target)){
 						//PlayerInfo pi = plugin.getPlayerInfoPoo().get(target);
 						e.setCancelled(true);
 						 GameIntoMap cs = new GameIntoMap(plugin);
@@ -953,7 +949,7 @@ public class SourceOfDamage implements Listener{
 						 target.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"INSTAKILL DE AREA", 40, 80, 40);
 						 target.sendMessage(ChatColor.RED+"Moriste por "+ChatColor.YELLOW+"Instakill de Area.");
 											 
-					    gc.sendMessageToUsersOfSameMapLessPlayer(target,ChatColor.GOLD+target.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"InstaKill de Area");
+						 gmc.sendMessageToUsersOfSameMapLessPlayer(target,ChatColor.GOLD+target.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"InstaKill de Area");
 						 
 						 
 						 /*
@@ -981,7 +977,6 @@ public class SourceOfDamage implements Listener{
 			//Player target = Bukkit.getServer().getPlayerExact(args[0]);
 		}
 		if(e.getSender() instanceof CommandSender) {
-			GameConditions gc = new GameConditions(plugin);
 			//Player target = Bukkit.getServer().getPlayerExact(args[0]);
 			String comando = e.getCommand();
 			//Bukkit.getConsoleSender().sendMessage("consolesay: "+comando);
@@ -990,7 +985,7 @@ public class SourceOfDamage implements Listener{
 				String name = a[1];
 				if(name != null) {
 					Player target = Bukkit.getServer().getPlayerExact(name);
-					if(target != null && gc.isPlayerinGame(target)){
+					if(target != null && gmc.isPlayerinGame(target)){
 						//PlayerInfo pi = plugin.getPlayerInfoPoo().get(target);
 						e.setCancelled(true);
 						 GameIntoMap cs = new GameIntoMap(plugin);
@@ -999,7 +994,7 @@ public class SourceOfDamage implements Listener{
 						 target.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"INSTAKILL POR COMANDO", 40, 80, 40);
 						 target.sendMessage(ChatColor.RED+"Moriste por "+ChatColor.YELLOW+"Instakill por Comando.");
 						 
-					  gc.sendMessageToUsersOfSameMapLessPlayer(target,ChatColor.GOLD+target.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"InstaKill por Comando.");
+						 gmc.sendMessageToUsersOfSameMapLessPlayer(target,ChatColor.GOLD+target.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"InstaKill por Comando.");
 								     	
 								     		 //esto lo veran los que estan en arena
 								 
@@ -1228,9 +1223,8 @@ public class SourceOfDamage implements Listener{
 		if(e.getEntity() instanceof Player) {
 			Player player = (Player) e.getEntity();
 			GameIntoMap ci = new GameIntoMap(plugin);
-			GameConditions gc = new GameConditions(plugin);
 		
-			if(!gc.isPlayerinGame(player)) return;
+			if(!gmc.isPlayerinGame(player)) return;
 			PlayerInfo pi = plugin.getPlayerInfoPoo().get(player);
 			
 			GameInfo gi = plugin.getGameInfoPoo().get(pi.getMapName());
@@ -1281,7 +1275,7 @@ public class SourceOfDamage implements Listener{
 								
 								Entity damager = ((EntityDamageByEntityEvent)e).getDamager();
 						
-								if(gc.isEnabledReviveSystem(pi.getMapName())) {
+								if(gmc.isEnabledReviveSystem(pi.getMapName())) {
 									ArmorStand armor = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
 									RevivePlayer pr = new RevivePlayer(player,0,60,ReviveStatus.BLEEDING,damager,null,armor ,plugin);
 									pr.Knocked();
@@ -1297,7 +1291,7 @@ public class SourceOfDamage implements Listener{
 						
 					}else{
 						//bloque de daño por causas externas
-								if(gc.isEnabledReviveSystem(pi.getMapName())) {
+								if(gmc.isEnabledReviveSystem(pi.getMapName())) {
 									ArmorStand armor = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
 									RevivePlayer pr = new RevivePlayer(player,0,60,ReviveStatus.BLEEDING,null,e.getCause(),armor ,plugin);
 									pr.Knocked();
@@ -1312,7 +1306,7 @@ public class SourceOfDamage implements Listener{
 				if(player.getInventory().getItemInMainHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING)) || player.getInventory().getItemInOffHand().isSimilar(new ItemStack(Material.TOTEM_OF_UNDYING)))return;
 				e.setCancelled(true);
 				
-				if(gc.isEnabledReviveSystem(pi.getMapName())) {
+				if(gmc.isEnabledReviveSystem(pi.getMapName())) {
 					ArmorStand armor = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
 					RevivePlayer pr = new RevivePlayer(player,0,60,ReviveStatus.BLEEDING,null,e.getCause(),armor ,plugin);
 					pr.Knocked();
@@ -1339,7 +1333,7 @@ public class SourceOfDamage implements Listener{
 						
 							Entity damager = ((EntityDamageByEntityEvent)e).getDamager();
 					
-							if(gc.isEnabledReviveSystem(pi.getMapName())) {
+							if(gmc.isEnabledReviveSystem(pi.getMapName())) {
 								ArmorStand armor = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
 								RevivePlayer pr = new RevivePlayer(player,0,60,ReviveStatus.BLEEDING,damager,null,armor ,plugin);
 								pr.Knocked();
@@ -1352,7 +1346,7 @@ public class SourceOfDamage implements Listener{
 					
 				}else{
 					//bloque de daño por causas externas
-							if(gc.isEnabledReviveSystem(pi.getMapName())) {
+							if(gmc.isEnabledReviveSystem(pi.getMapName())) {
 								ArmorStand armor = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
 								RevivePlayer pr = new RevivePlayer(player,0,60,ReviveStatus.BLEEDING,null,e.getCause(),armor ,plugin);
 								pr.Knocked();

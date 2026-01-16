@@ -57,10 +57,12 @@ public class MinigameShop1 implements Listener{
 	private Minegame plugin;
 	private int TaskID;
 	private int TaskID2;
+	private GameConditions gmc;
 	
 
 	public MinigameShop1(Minegame plugin) {
 		this.plugin = plugin;
+		this.gmc = new GameConditions(plugin);
 	}
 	
 	
@@ -914,11 +916,11 @@ public class MinigameShop1 implements Listener{
 	public void updateInventory(Player player) {
 		BukkitScheduler sh = Bukkit.getServer().getScheduler();
 	 
-		GameConditions gc = new GameConditions(plugin);
+	
 		TaskID = sh.scheduleSyncRepeatingTask(plugin, new Runnable() {
 			public void run() {
 			
-				if(player.getOpenInventory() == null || !isUpdateable(player,gc.isPlayerinGame(player))) {
+				if(player.getOpenInventory() == null || !isUpdateable(player,gmc.isPlayerinGame(player))) {
 					Bukkit.getScheduler().cancelTask(TaskID);
 					return;
 				}
@@ -1158,8 +1160,8 @@ public class MinigameShop1 implements Listener{
 		//CONDICIONAL PARA CHEQUEAR QUE COLOQUEN 
 		// une al jugador al clickear en el menu de misiones
 		
-		GameConditions gc = new GameConditions(plugin);
-			if(!gc.isPlayerinGame(player) && player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("MENU DE MAPAS")) {
+
+			if(!gmc.isPlayerinGame(player) && player.getOpenInventory() != null && ChatColor.stripColor(player.getOpenInventory().getTitle()).equals("MENU DE MAPAS")) {
 				
 				if(item.isSimilar(Items.ADELANTE.getValue())) {
 					plugin.getPags().replace(player, plugin.getPags().get(player)+1);
@@ -1177,9 +1179,9 @@ public class MinigameShop1 implements Listener{
 					List<String> list = item.getItemMeta().getLore();
 					String name = ChatColor.stripColor(list.get(list.size()-1).replace("Codigo: ",""));
 					//System.out.println("("+name+")");
-					if(gc.existMap(name)) {
+					if(gmc.existMap(name)) {
 						player.closeInventory();
-						gc.mgJoinToTheGames(player, name);
+						gmc.mgJoinToTheGames(player, name);
 						
 					}else {
 						player.sendMessage(ChatColor.RED+"Ese Mapa no existe.");
@@ -2119,7 +2121,7 @@ public class MinigameShop1 implements Listener{
 		
 		MenuDecoration(inv,Material.PURPLE_STAINED_GLASS_PANE);
 		PlayerInfo pi = plugin.getPlayerInfoPoo().get(player);
-		GameConditions gc = new GameConditions(plugin);
+	
 		
 		
 		inv.setItem(10, Items.PALO.getValue());
@@ -2139,7 +2141,7 @@ public class MinigameShop1 implements Listener{
 		inv.setItem(24, Items.BENGALAROJA.getValue());
 		inv.setItem(25, Items.BENGALAVERDE.getValue());
 		inv.setItem(28, Items.RAINARROW.getValue());
-		if(gc.isEnabledReviveSystem(pi.getMapName())) {
+		if(gmc.isEnabledReviveSystem(pi.getMapName())) {
 			inv.setItem(29, Items.REVIVE.getValue());
 		}
 		inv.setItem(30, Items.BENGALAMARCADORA.getValue());
@@ -2228,11 +2230,11 @@ public class MinigameShop1 implements Listener{
  
 			 }
 			
-				GameConditions gc = new GameConditions(plugin);
+				
 				l2.add("");
 			    l2.add(""+ChatColor.GREEN+ChatColor.BOLD+"Clickeame Para ver mas Detalles.");
-			    l2.add(""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(gc.getAmountOfObjetivesComplete(l), l.size(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]");
-			    l2.add(ChatColor.GOLD+"Hay un Progreso del "+ChatColor.GREEN+Porcentage(gc.getAmountOfObjetivesComplete(l), l.size()));
+			    l2.add(""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(gmc.getAmountOfObjetivesComplete(l), l.size(), 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]");
+			    l2.add(ChatColor.GOLD+"Hay un Progreso del "+ChatColor.GREEN+Porcentage(gmc.getAmountOfObjetivesComplete(l), l.size()));
 			  
 			
 			

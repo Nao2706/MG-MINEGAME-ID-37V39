@@ -46,8 +46,11 @@ import me.nao.utils.mg.Utils;
 public class MgScore {
 
 	private Minegame plugin;
+	private GameConditions gmc;
+	
 	public MgScore(Minegame plugin) {
 		this.plugin = plugin;
+		this.gmc = new GameConditions(plugin);
 	}
 	
 	//main scoreboard usa la scoreboard del juego (se guarda informcion)
@@ -81,9 +84,9 @@ public class MgScore {
 	//new scoreboard no guarda nada por lo menos no encontre registros de la nueva scoreboard
 	public void LoadScore(Player player){
 		
-		GameConditions gc = new GameConditions(plugin);
+	
 		
-		if(!gc.isPlayerinGame(player)) return;
+		if(!gmc.isPlayerinGame(player)) return;
 	
 		ScoreboardManager manager = Bukkit.getScoreboardManager();
 		Scoreboard scoreboard = manager.getNewScoreboard();
@@ -162,8 +165,8 @@ public class MgScore {
 	
 	
 	public void showTopPlayersFFA(Player player) {
-		GameConditions gc = new GameConditions(plugin);
-		if(!gc.isPlayerinGame(player)) return;
+	
+		if(!gmc.isPlayerinGame(player)) return;
 		ScoreboardManager manager = Bukkit.getScoreboardManager();
 		Scoreboard scoreboard = manager.getNewScoreboard();
 	
@@ -218,13 +221,13 @@ public class MgScore {
 		
 		ob.setDisplaySlot(DisplaySlot.SIDEBAR);
 		List<String> show = new ArrayList<>();
-		 ob.setDisplayName(Utils.colorTextChatColor("&a&l<<< &b&lTOP PUNTAJE &a&l>>>"));
+		 ob.setDisplayName(Utils.colorTextChatColor("&a&l<<<&b&lTOP PUNTAJE&a&l>>>"));
 		 //show.add(""+ChatColor.RED+ChatColor.BOLD+"-------------");
 		 show.add(ChatColor.RED+" ");
 		 	HashMap<String, Integer> scores = new HashMap<>();
 			
 			
-			List<Player> joins = gc.ConvertStringToPlayer(gi.getParticipants());
+			List<Player> joins = gmc.ConvertStringToPlayer(gi.getParticipants());
 			
 			for(Player user : joins) {
 				PlayerInfo pl = plugin.getPlayerInfoPoo().get(user);

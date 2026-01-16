@@ -67,9 +67,11 @@ import me.nao.manager.mg.GameIntoMap;
 public class MobsActions {
 
 	private Minegame plugin;
+	private GameConditions gmc;
 	
 	public MobsActions(Minegame plugin) {
 		this.plugin = plugin;
+		this.gmc = new GameConditions(plugin);
 	}
 	
 	//LANZA UNA FLECHA EN DIRECCION AL JUGADOR UNA VEZ SPAWNEE EN CUALQUIER SITIO
@@ -2037,7 +2039,7 @@ public class MobsActions {
 		    
 		    
 			  public void mobLocation(Player player) {
-				  	GameConditions gc = new GameConditions(plugin);
+				  
 			    	List<Entity> entities = getNearbyEntities(player.getLocation(), 50);
 			    	for(int i = 0;i< entities.size();i++) {
 			    		if(!(entities.get(i) instanceof LivingEntity))continue;
@@ -2047,8 +2049,8 @@ public class MobsActions {
 			    		Block r = block.getRelative(0, 0, 0);
 			    		
 			    		if(lve.getType() == EntityType.PLAYER) continue;
-			    		gc.turret(lve);
-			    		gc.blockPotion(lve);
+			    		gmc.turret(lve);
+			    		gmc.blockPotion(lve);
 			    		if(r.getType() == Material.OAK_PRESSURE_PLATE) {
 			    			lve.setVelocity(lve.getLocation().getDirection().multiply(3).setY(2));
 			    		}

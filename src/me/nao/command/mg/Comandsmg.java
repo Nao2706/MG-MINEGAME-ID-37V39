@@ -97,9 +97,12 @@ public class Comandsmg implements CommandExecutor{
 	
 	
 	private Minegame plugin;
+	private GameConditions gc;
 	
 	public Comandsmg(Minegame plugin) {
 		this.plugin = plugin;
+		this.gc = new GameConditions(plugin);
+
 	}
 	
 	
@@ -116,7 +119,7 @@ public class Comandsmg implements CommandExecutor{
 		
 		if(!(sender instanceof Player)){
 			
-			GameConditions gc = new GameConditions(plugin);
+			
 			
 			if(args.length > 0) {
 				
@@ -1704,7 +1707,7 @@ public class Comandsmg implements CommandExecutor{
 								Bukkit.getConsoleSender().sendMessage(ChatColor.RED+" No existe ese Jugador o no esta en linea.");
 								return true;
 							}
-							Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+" Le diste el Item "+name+" a "+target);
+							Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+" Le diste el Kit "+name+" a "+target);
 							getKitMg(name, t);
 			
 					}else {
@@ -1737,6 +1740,26 @@ public class Comandsmg implements CommandExecutor{
 			
 					return true;
 			
+				}else if(args[0].equalsIgnoreCase("deletekit")) {
+					if(args.length == 2) {
+						String kit = args[1];
+						deleteKit(kit, null);
+						
+					}else {
+					
+						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg deletekit <item>");
+					 }
+					return true;
+				}else if(args[0].equalsIgnoreCase("deleteitem")) {
+					if(args.length == 2) {
+						String item = args[1];
+						deleteItem(item, null);
+						
+					}else {
+					
+						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg deleteitem <item>");
+					 }
+					return true;
 				}else if(args[0].equalsIgnoreCase("bossbar")) {
 					
 					
@@ -2125,7 +2148,7 @@ public class Comandsmg implements CommandExecutor{
 		}else{
 			
 			//TODO PLAYER
-			GameConditions gc = new GameConditions(plugin);
+	
 			MapSettings c = new MapSettings(plugin);
 			Player player = (Player) sender ;
 			
@@ -6007,8 +6030,28 @@ public class Comandsmg implements CommandExecutor{
 					 }
 					
 	
-			return true;
-		}else if(args[0].equalsIgnoreCase("start-timer")) {
+					return true;
+				}else if(args[0].equalsIgnoreCase("deletekit")) {
+					if(args.length == 2) {
+						String kit = args[1];
+						deleteKit(kit, player);
+						
+					}else {
+					
+						player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg deletekit <item>");
+					 }
+					return true;
+				}else if(args[0].equalsIgnoreCase("deleteitem")) {
+					if(args.length == 2) {
+						String item = args[1];
+						deleteItem(item, player);
+						
+					}else {
+					
+						player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg deleteitem <item>");
+					 }
+					return true;
+				}else if(args[0].equalsIgnoreCase("start-timer")) {
 					
 			
 					player.sendMessage(plugin.nombre+ChatColor.GREEN+" A iniciado el Temporizador ");
@@ -6150,6 +6193,34 @@ public class Comandsmg implements CommandExecutor{
 		player.sendMessage(ChatColor.GREEN+"Obtuviste el Item "+ChatColor.RED+name);
 	}
  
+	
+	public void deleteKit(String name,Player player) {
+		FileConfiguration invt = plugin.getItemsYaml();
+		if(!invt.contains("Kits."+name)) {
+		gc.switchsendMessageForUserAndConsole(player,"&cEse Kit no existe o fue Borrado.");
+			return;
+		}
+		
+		invt.set("Kits."+name,null);
+		gc.switchsendMessageForUserAndConsole(player,"&aEl Kit "+name+" fue Borrado.");
+		plugin.getKitsYaml().save();
+		plugin.getKitsYaml().reload();
+		
+	}
+	
+	public void deleteItem(String name,Player player) {
+		FileConfiguration invt = plugin.getItemsYaml();
+		if(!invt.contains("Items."+name)) {
+			gc.switchsendMessageForUserAndConsole(player,"&cEse Item no existe o fue Borrado.");
+			return;
+		}
+		
+		invt.set("Items."+name,null);
+		gc.switchsendMessageForUserAndConsole(player,"&aEl Item "+name+" fue Borrado.");
+		plugin.getItemsYaml().save();
+		plugin.getItemsYaml().reload();
+		
+	}
  	
  	public ObjetiveStatusType convertStringToObjetiveStatusType(Player player,String text) {
  		ObjetiveStatusType type = null;

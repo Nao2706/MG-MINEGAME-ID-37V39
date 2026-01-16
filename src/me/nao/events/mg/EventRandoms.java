@@ -140,9 +140,12 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class EventRandoms implements Listener{
 	
 	private Minegame plugin;
+	private GameConditions gmc;
 	
 	public EventRandoms(Minegame plugin) {
 		this.plugin = plugin;
+		this.gmc = new GameConditions(plugin);
+		
 	}
 	
 	
@@ -162,7 +165,7 @@ public class EventRandoms implements Listener{
 		String player = e.getName();
 		
 		FileConfiguration moderation = plugin.getPlayersHistoryYaml();
-		GameConditions gc = new GameConditions(plugin);
+		
 		
 		if(!moderation.contains("Players."+player)) return;
 		
@@ -174,7 +177,7 @@ public class EventRandoms implements Listener{
 		GameModerationActionType statusconfig = GameModerationActionType.valueOf(moderation.getString("Players."+player+".Status").toUpperCase());
 		if(statusconfig == GameModerationActionType.BAN) {
 			//player.sendMessage(ChatColor.RED+"Estas Baneado Permanentemente de los MiniJuegos");
-			gc.sendMessageToConsole(ChatColor.GOLD+player+ChatColor.RED+" Esta Baneado Permanentemente del Servidor.");
+			gmc.sendMessageToConsole(ChatColor.GOLD+player+ChatColor.RED+" Esta Baneado Permanentemente del Servidor.");
 			e.setLoginResult(Result.KICK_OTHER);
 			e.setKickMessage(Utils.colorTextChatColor("&8&l[&4&lBANEADO&8&l]\n&7Estas &4&lBaneado Permanentemente &7del Servidor."+list.get(list.size()-1).replaceAll("-"," ")
 					.replaceAll("Sancion:",ChatColor.GOLD+"\nSancion:"+ChatColor.GREEN)
@@ -223,9 +226,8 @@ public class EventRandoms implements Listener{
 	public void sleepmg(PlayerBedEnterEvent e) {
 		
 		Player player = (Player) e.getPlayer();
-		GameConditions gc = new GameConditions(plugin);
 		
-		if(gc.isPlayerinGame(player)) {
+		if(gmc.isPlayerinGame(player)) {
 			e.setCancelled(true);
 		}
 	}
@@ -249,9 +251,9 @@ public class EventRandoms implements Listener{
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void mgGameMode(PlayerGameModeChangeEvent e) {
 		Player player = (Player) e.getPlayer();
-		GameConditions gc = new GameConditions(plugin);
+	
 		
-		if(gc.isPlayerinGame(player)) {
+		if(gmc.isPlayerinGame(player)) {
 			
 			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 			GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
@@ -281,9 +283,8 @@ public class EventRandoms implements Listener{
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void ClickEntity(PlayerInteractAtEntityEvent e) {
 		Player player = (Player) e.getPlayer();
-		GameConditions gc = new GameConditions(plugin);
 		
-		if(gc.isPlayerinGame(player)) {
+		if(gmc.isPlayerinGame(player)) {
 			if(e.getHand() == EquipmentSlot.OFF_HAND)return;
 			
 			PlayerInfo pi = plugin.getPlayerInfoPoo().get(player);
@@ -387,7 +388,7 @@ public class EventRandoms implements Listener{
 											pr.setReviveStatus(ReviveStatus.SELFREVIVED);
 											player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+"REVIVIDO" ,""+ChatColor.WHITE+ChatColor.BOLD+"["+getProgressBar(100,100, 20, '|', ChatColor.GREEN, ChatColor.RED)+ChatColor.WHITE+ChatColor.BOLD+"]", 20, 20, 20);
 											player.sendMessage(ChatColor.GOLD+"Te has autorevivido ");
-											gc.sendMessageToUsersOfSameMapLessPlayer(player,""+ChatColor.GREEN+ChatColor.BOLD+player.getName()+" consiguio Autorevivirse.");
+											gmc.sendMessageToUsersOfSameMapLessPlayer(player,""+ChatColor.GREEN+ChatColor.BOLD+player.getName()+" consiguio Autorevivirse.");
 											//removeItemstackCustom(player,Items.REVIVEP.getValue());
 										}
 									}
@@ -412,7 +413,7 @@ public class EventRandoms implements Listener{
 											
 												player.sendMessage(ChatColor.GOLD+"Ayudaste a levantar a "+ChatColor.GREEN+target.getName());
 												target.sendMessage(ChatColor.GREEN+player.getName()+ChatColor.GOLD+" te ayudo a levantarte.");
-												gc.sendMessageToUsersOfSameMapLessTwoPlayers(player, target,""+ChatColor.GREEN+ChatColor.BOLD+"+ "+ChatColor.GOLD+player.getName()+ChatColor.AQUA+" ayudo a "+ChatColor.GREEN+target.getName()+ChatColor.AQUA+" a Levantarse.");
+												gmc.sendMessageToUsersOfSameMapLessTwoPlayers(player, target,""+ChatColor.GREEN+ChatColor.BOLD+"+ "+ChatColor.GOLD+player.getName()+ChatColor.AQUA+" ayudo a "+ChatColor.GREEN+target.getName()+ChatColor.AQUA+" a Levantarse.");
 												PlayerInfo targetrevive = plugin.getPlayerInfoPoo().get(player);
 												targetrevive.getGamePoints().setHelpRevive(targetrevive.getGamePoints().getHelpRevive()+1);
 												
@@ -454,8 +455,8 @@ public class EventRandoms implements Listener{
 	public void Playerheld(PlayerItemHeldEvent e) {
 		Player player = (Player) e.getPlayer();
 		
-		GameConditions gc = new GameConditions(plugin);
-		if(gc.isPlayerinGame(player)) {
+		
+		if(gmc.isPlayerinGame(player)) {
 			
 			if(e.getNewSlot() >= 0 || e.getNewSlot() <= 8) {
 				if(!player.getPassengers().isEmpty() && player.isSneaking()) {
@@ -1330,8 +1331,8 @@ public class EventRandoms implements Listener{
 		public void PlayerBreakMG(BlockBreakEvent e) {
 	 		
 	 		Player player = e.getPlayer();
-	 		GameConditions gc = new GameConditions(plugin);
-	 		if(!gc.isPlayerinGame(player)) return;
+	 	
+	 		if(!gmc.isPlayerinGame(player)) return;
 	 		
 	 		if(player.getGameMode() == GameMode.ADVENTURE) {
 	 			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
@@ -1421,8 +1422,8 @@ public class EventRandoms implements Listener{
 	 public void PlayerPlace(BlockPlaceEvent e) {
 		 
 			Player player = e.getPlayer();
-	 		GameConditions gc = new GameConditions(plugin);
-	 		if(!gc.isPlayerinGame(player)) return;
+	 		
+	 		if(!gmc.isPlayerinGame(player)) return;
 	 		
 	 		if(player.getGameMode() == GameMode.ADVENTURE) {
 	 			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
@@ -1546,11 +1547,11 @@ public class EventRandoms implements Listener{
 		
 		  if(atacante instanceof Player) {
 				Player player = (Player) atacante;
-				 GameConditions gc = new GameConditions(plugin);
+				
 				
 				
 				 
-				if(!gc.isPlayerinGame(player)) {
+				if(!gmc.isPlayerinGame(player)) {
 					return;
 				}
 				
@@ -1566,7 +1567,7 @@ public class EventRandoms implements Listener{
 					 
 					  if(entidadAtacada instanceof Player || entidadAtacada instanceof Villager) {
 						  String map = pl.getMapName();
-				 			if(!gc.isPvPAllowed(map)) {
+				 			if(!gmc.isPvPAllowed(map)) {
 				 				e.setCancelled(true);
 				 				player.sendTitle("",ChatColor.RED+"El PVP en el Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no esta Habilitado",20,40,20);
 				 			}
@@ -1579,8 +1580,8 @@ public class EventRandoms implements Listener{
 			  
 			  if(entidadAtacada instanceof Player) {
 				    Player player = (Player) entidadAtacada;
-					GameConditions gc = new GameConditions(plugin);
-					if(gc.isPlayerinGame(player)) {
+					
+					if(gmc.isPlayerinGame(player)) {
 						PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 						pl.setCreditKillMob(atacante);
 					}
@@ -1590,10 +1591,7 @@ public class EventRandoms implements Listener{
 				LivingEntity le = (LivingEntity) atacante; 
 				LivingEntity victim = (LivingEntity) entidadAtacada; 
 
-				
-				 GameConditions gc = new GameConditions(plugin);
 				// GameIntoMap c = new GameIntoMap(plugin);
-			
 		
 				if(le.getType() == EntityType.IRON_GOLEM) {
 					 
@@ -1605,7 +1603,7 @@ public class EventRandoms implements Listener{
 						
 							Player target = Bukkit.getPlayer(name.replaceAll("GUARDIA DE: ","").replaceAll(" ",""));
 						
-							if(!gc.isPlayerinGame(target)) return;
+							if(!gmc.isPlayerinGame(target)) return;
 							plugin.getGuardianCredit().put(victim, target.getName());
 							//c.gamePlayerAddPoints(target);
 							//target.playSound(target.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
@@ -1631,12 +1629,11 @@ public class EventRandoms implements Listener{
 		 Player player = e.getPlayer();
 		 String message = e.getMessage();
 	
-		 
-		 GameConditions cm = new GameConditions(plugin);
+		
 		 //ELIMINAR AL JUGADOR PARA QUE NO VEA MENSAJE DE OTROS JUGADORES
 		 Set<Player> c1 = e.getRecipients();
 		 c1.removeIf(t -> plugin.getPlayerInfoPoo().containsKey(t));
-		 if(cm.isPlayerinGame(player)) {
+		 if(gmc.isPlayerinGame(player)) {
 			 
 			 PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 			 GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
@@ -1649,28 +1646,28 @@ public class EventRandoms implements Listener{
 							int timelife = rp.getRemainingTimeLife();
 							
 							if(timelife >= 41 && timelife <= 60) {
-								cm.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&a&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" \n&6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
+								gmc.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&a&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" \n&6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
 
 							}else if(timelife >= 21 && timelife <= 40) {
-								cm.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&e&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" \n&6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
+								gmc.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&e&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" \n&6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
 
 							}else if(timelife >= 1 && timelife <= 20) {
-								cm.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&c&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" \n&6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
+								gmc.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&c&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" \n&6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
 
 							}
 							
  
 						}else if(pl.getPlayerGameStatus() == PlayerGameStatus.ALIVE) {
-							cm.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&a&lVIVO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &a"+message);
+							gmc.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&a&lVIVO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &a"+message);
 							
 						}else if(pl.getPlayerGameStatus() == PlayerGameStatus.DEAD) {
-							cm.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&c&lMUERTO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &e"+message);
+							gmc.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&c&lMUERTO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &e"+message);
 		
 						}else if(pl.getPlayerGameStatus() == PlayerGameStatus.SPECTATOR) {
-							cm.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&f&lESPECTADOR&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &7"+message);
+							gmc.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&f&lESPECTADOR&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &7"+message);
 							
 						}else if(pl.getPlayerGameStatus() == PlayerGameStatus.UNKNOW) {
-							cm.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l>>&f&l>>&8&l>> "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &7"+message);
+							gmc.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l>>&f&l>>&8&l>> "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &7"+message);
 							
 						}
 						
@@ -2277,8 +2274,7 @@ public class EventRandoms implements Listener{
 		public void Grapping(PlayerFishEvent e) {
 			Player player =  e.getPlayer();
 			
-			GameConditions gc = new GameConditions(plugin);
-			if(gc.isPlayerinGame(player)) {
+			if(gmc.isPlayerinGame(player)) {
 				ItemStack item = player.getInventory().getItemInMainHand();
 				ItemMeta meta = item.getItemMeta();
 				String name = ChatColor.stripColor(meta.getDisplayName());
@@ -2329,9 +2325,8 @@ public class EventRandoms implements Listener{
 			
 				
 				Random ra = new Random();
-				GameConditions gc = new GameConditions(plugin);
 				
-				if(gc.hasPlayerTempCooldown(player, 30)) return;
+				if(gmc.hasPlayerTempCooldown(player, 30)) return;
 		
 				 Attribute attribute = Attribute.FOLLOW_RANGE; 
 				 Attribute attributer = Attribute.SPAWN_REINFORCEMENTS; 
@@ -2352,7 +2347,7 @@ public class EventRandoms implements Listener{
 				List<Entity> list = getNearbyEntitesItems(l1, 5);
 				//System.out.println("Lista 2 "+list.size());
 				if(list.size() >= gi.getLootTableLimit()) {
-					gc.sendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+Utils.colorTextChatColor("\n&cTu ambicion sera tu Perdicion.\n&5Anti-Looter-2 &cy &5Suicida Invocados \n&e(&8Dejo tirados muchos Items Cerca de la Mesa&e)"));
+					gmc.sendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+Utils.colorTextChatColor("\n&cTu ambicion sera tu Perdicion.\n&5Anti-Looter-2 &cy &5Suicida Invocados \n&e(&8Dejo tirados muchos Items Cerca de la Mesa&e)"));
 					l1.getWorld().spawnParticle(Particle.FLAME, l1,	/* N DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
 					player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 20.0F, 0F);
 					
@@ -2384,10 +2379,10 @@ public class EventRandoms implements Listener{
 					c.setCustomName(""+ChatColor.AQUA+ChatColor.BOLD+"SUICIDA");
 					c.setTarget(player);
 					zombi.addPassenger(c);
-					gc.setPlayerTempCooldown(player);
+					gmc.setPlayerTempCooldown(player);
 				}else if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND), 100)) {
 					
-					gc.sendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+Utils.colorTextChatColor(" \n&crecibio un Castigo por tener muchos &bDiamantes. \n&e(&8Tiene mas de 100 de &bDiamantes&e)\n&5Anti-Looter &cy &5Guardia del Loot Invocados"));
+					gmc.sendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+Utils.colorTextChatColor(" \n&crecibio un Castigo por tener muchos &bDiamantes. \n&e(&8Tiene mas de 100 de &bDiamantes&e)\n&5Anti-Looter &cy &5Guardia del Loot Invocados"));
 					l1.getWorld().spawnParticle(Particle.FLAME, l1,	/* N DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
 					player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 20.0F, 0F);
 					
@@ -2415,10 +2410,10 @@ public class EventRandoms implements Listener{
 					c1.getAttribute(attribute).setBaseValue(150);
 					c1.setCustomName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"GUARDIA DEL LOOT");
 					c1.setTarget(player);
-					gc.setPlayerTempCooldown(player);
+					gmc.setPlayerTempCooldown(player);
 				}else if(player.getInventory().containsAtLeast(new ItemStack(Material.GOLD_INGOT), 100)) {
 					
-					gc.sendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+Utils.colorTextChatColor(" \n&crecibio un Castigo por tener mucho &6Oro. \n&e(&8Tiene mas de 100 de Oro&e)\n&5Guardias del Loot Invocados"));
+					gmc.sendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+Utils.colorTextChatColor(" \n&crecibio un Castigo por tener mucho &6Oro. \n&e(&8Tiene mas de 100 de Oro&e)\n&5Guardias del Loot Invocados"));
 
 					l1.getWorld().spawnParticle(Particle.FLAME, l1.add(0.5, 1, 0.5),	/* N DE PARTICULAS */5, 0.5, 1, 0.5, /* velocidad */0, null, true);
 
@@ -2438,7 +2433,7 @@ public class EventRandoms implements Listener{
 					c1.getAttribute(attribute).setBaseValue(150);
 					c1.setCustomName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"GUARDIA DEL LOOT");		
 					c1.setTarget(player);
-					gc.setPlayerTempCooldown(player);
+					gmc.setPlayerTempCooldown(player);
 				}else {
 					
 					l1.getWorld().spawnParticle(Particle.FIREWORK, l1,	/* N DE PARTICULAS */1, 0.5, 1, 0.5, /* velocidad */0, null, true);
@@ -2472,8 +2467,6 @@ public class EventRandoms implements Listener{
 			 
 		  
 			  Projectile projectile = e.getEntity();
-			  GameConditions gc = new GameConditions(plugin);
-			  
 			   
 			  if(e.getHitEntity() != null) {
 				  if(projectile instanceof AbstractArrow) {
@@ -2727,7 +2720,7 @@ public class EventRandoms implements Listener{
 					  		}
 					  	
 					  
-					    if(!gc.isPlayerinGame(player)) return;  
+					    if(!gmc.isPlayerinGame(player)) return;  
 					    
 					     MobsActions ma = new MobsActions(plugin);
 						 ma.getAttackedZombie(player, entidadhit);
@@ -2738,7 +2731,7 @@ public class EventRandoms implements Listener{
 							 	 
 							  	pl.getGamePoints().addDamage(ConvertDoubleToInt(mob.getHealth()-mob.getAttribute(Attribute.MAX_HEALTH).getBaseValue()));
 								//isaHeadShot(player, mob, projectile);
-								if(gc.isGuardian(mob)) return;
+								if(gmc.isGuardian(mob)) return;
 							  	headShoot(player, mob, projectile);
 						 }
 					  	
@@ -2748,7 +2741,7 @@ public class EventRandoms implements Listener{
 				
 								if(entidadhit == player)return;
 								 
-					 			if(!gc.isPvPAllowed(map)) {
+					 			if(!gmc.isPvPAllowed(map)) {
 					 				e.setCancelled(true);
 					 				player.sendTitle("",ChatColor.RED+"El PVP en el Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no esta Habilitado",20,40,20);
 					 	}}
@@ -2774,7 +2767,7 @@ public class EventRandoms implements Listener{
 					  } 
 						 // Player player = (Player) projectile.getShooter();
 						  if(b.getType() == Material.TARGET) {
-							   if(!gc.isPlayerinGame(player)) return;
+							   if(!gmc.isPlayerinGame(player)) return;
 							  detectDispenser(player,b.getLocation(),plugin.getGameInfoPoo().get(plugin.getPlayerInfoPoo().get(player).getMapName()));
 							  DetectChestAndCommand(b.getLocation());
 						  }if(b.getType() == Material.STRUCTURE_BLOCK) {
@@ -2803,7 +2796,7 @@ public class EventRandoms implements Listener{
 				  
 				  if(entidadhit instanceof Player) {
 					  Player player = (Player) entidadhit;
-						if(gc.isPlayerinGame(player)) {
+						if(gmc.isPlayerinGame(player)) {
 							PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 							pl.setCreditKillMob(damager);
 						}
@@ -2829,7 +2822,7 @@ public class EventRandoms implements Listener{
 							
 
 								Player target = Bukkit.getPlayer(name.replaceAll("GUARDIA DE: ","").replaceAll(" ",""));
-								if(!gc.isPlayerinGame(target)) return;
+								if(!gmc.isPlayerinGame(target)) return;
 								plugin.getGuardianCredit().put(victim, target.getName());
 							}
 						}
@@ -3952,16 +3945,15 @@ public class EventRandoms implements Listener{
 		public void YouNeedYourFriends(Player player,Block b) {
 			PlayerInfo name = plugin.getPlayerInfoPoo().get(player);
 			GameAdventure ga = (GameAdventure) plugin.getGameInfoPoo().get(name.getMapName());
-			GameConditions gc = new GameConditions(plugin);
-			
+	
 			List<Entity> e = getNearbyEntitesPlayers(b.getLocation(), 10);
 			List<Entity> e3 = new ArrayList<Entity>();
-			List<Player> alive1 = gc.ConvertStringToPlayer(ga.getAlivePlayers());
+			List<Player> alive1 = gmc.ConvertStringToPlayer(ga.getAlivePlayers());
 			
 			for(Entity e2 : e) {
 				if(e2.getType() == EntityType.PLAYER) {
 					Player player1 = (Player) e2;
-					if(gc.isPlayerinGame(player1) && player1.getGameMode() == GameMode.ADVENTURE) {
+					if(gmc.isPlayerinGame(player1) && player1.getGameMode() == GameMode.ADVENTURE) {
 						e3.add(e2);
 					}
 					
@@ -3998,7 +3990,7 @@ public class EventRandoms implements Listener{
 														player.sendMessage(ChatColor.YELLOW+"Necesitas que todos los jugadores vivos esten cerca para avanzar.");
 														
 														
-														gc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GREEN+player.getName()+ChatColor.RED+" Solicita una Reunion para poder activar un Evento.");
+														gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GREEN+player.getName()+ChatColor.RED+" Solicita una Reunion para poder activar un Evento.");
 														return;
 												   }else if(!chest.getInventory().isEmpty()) {
 														for (ItemStack itemStack : chest.getInventory().getContents()) {

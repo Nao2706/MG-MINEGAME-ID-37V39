@@ -64,7 +64,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class GameIntoMap {
 	
 	private Minegame plugin;
-	private GameConditions gmc ;
+	private GameConditions gmc;
 
 	
 	public GameIntoMap(Minegame plugin) {
@@ -111,11 +111,11 @@ public class GameIntoMap {
 				   Player target = Bukkit.getServer().getPlayerExact(name);
 				
 				
-					GameConditions cm = new GameConditions(plugin);
-					cm.setHeartsInGame(target, mapa);
+				
+					gmc.setHeartsInGame(target, mapa);
 					 
 				
-					cm.setKitMg(target);
+					gmc.setKitMg(target);
 					if(gomg.hasMapObjetives()) {
 						if(target.getInventory().getItemInMainHand() != null) {
 							if(target.getInventory().getItemInMainHand().getType() == Material.AIR) {
@@ -131,7 +131,7 @@ public class GameIntoMap {
 					}
 					MgTeams t = new MgTeams(plugin);
 					t.JoinTeamLifeMG(target);
-					cm.revivePlayerToGame(target, mapa);
+					gmc.revivePlayerToGame(target, mapa);
 					pl.getGamePoints().addHelpRevive(1); 
 					target.setGameMode(GameMode.ADVENTURE);
 					healPlayer(target);
@@ -143,7 +143,7 @@ public class GameIntoMap {
 					target.sendMessage(ChatColor.WHITE+"Fuiste Revivido por: "+ChatColor.GREEN+player.getName());
 					player.sendMessage(ChatColor.GREEN+"Reviviste a: "+ChatColor.GOLD+target.getName());
 		
-					cm.sendMessageToUsersOfSameMapLessTwoPlayers(player, target,""+ChatColor.RED+ChatColor.BOLD+"+ "+ChatColor.GOLD+player.getName()+ChatColor.GREEN+" Revivio a "+ChatColor.WHITE+target.getName());
+					gmc.sendMessageToUsersOfSameMapLessTwoPlayers(player, target,""+ChatColor.RED+ChatColor.BOLD+"+ "+ChatColor.GOLD+player.getName()+ChatColor.GREEN+" Revivio a "+ChatColor.WHITE+target.getName());
 
 						
 						 //BORRAR ICONO DE MUERTE
@@ -177,15 +177,14 @@ public class GameIntoMap {
 		
 		Player target = Bukkit.getServer().getPlayerExact(name);
 	
-		GameConditions cm = new GameConditions(plugin);
 		
 		if(target == null) {
-			cm.sendMessageToUserAndConsole(player, ChatColor.RED+"Ese Jugador esta desconectado.");
+			gmc.sendMessageToUserAndConsole(player, ChatColor.RED+"Ese Jugador esta desconectado.");
 			return;
 		}
 		
 		if(!plugin.getPlayerInfoPoo().containsKey(target)) {
-			cm.sendMessageToUserAndConsole(player, ChatColor.RED+"Ese Jugador no esta en Partida.");
+			gmc.sendMessageToUserAndConsole(player, ChatColor.RED+"Ese Jugador no esta en Partida.");
 			return;
 		}
 		
@@ -197,7 +196,7 @@ public class GameIntoMap {
 		
 		
 		if(partida == GameStatus.COMENZANDO || partida == GameStatus.TERMINANDO) {
-			cm.sendMessageToUserAndConsole(player,ChatColor.RED+"Solo puedes usar el Comando de Revivir en una Partida en Progreso");
+			gmc.sendMessageToUserAndConsole(player,ChatColor.RED+"Solo puedes usar el Comando de Revivir en una Partida en Progreso");
 			return;
 		}
 		
@@ -216,13 +215,13 @@ public class GameIntoMap {
 				if(player != null) {
 					target.sendTitle(ChatColor.GREEN+"Fuiste Revivido",ChatColor.GREEN+"por: "+ChatColor.YELLOW+player.getName(),20,60,20);
 					target.sendMessage(ChatColor.WHITE+"Fuiste Revivido por: "+ChatColor.GREEN+player.getName());
-					cm.sendMessageToUserAndConsole(player,ChatColor.GREEN+"Reviviste a: "+ChatColor.GOLD+target.getName());
-					cm.sendMessageToUsersOfSameMapLessTwoPlayers(player,target,""+ChatColor.RED+ChatColor.BOLD+"+ "+ChatColor.GOLD+player.getName()+ChatColor.GREEN+" Revivio a "+ChatColor.WHITE+target.getName());
+					gmc.sendMessageToUserAndConsole(player,ChatColor.GREEN+"Reviviste a: "+ChatColor.GOLD+target.getName());
+					gmc.sendMessageToUsersOfSameMapLessTwoPlayers(player,target,""+ChatColor.RED+ChatColor.BOLD+"+ "+ChatColor.GOLD+player.getName()+ChatColor.GREEN+" Revivio a "+ChatColor.WHITE+target.getName());
 				}else {
 					target.sendTitle(ChatColor.GREEN+"Fuiste Revivido",ChatColor.GREEN+"por: "+ChatColor.YELLOW+"Consola",20,60,20);
 					target.sendMessage(ChatColor.WHITE+"Fuiste Revivido por: "+ChatColor.GREEN+"Consola");
-					cm.sendMessageToUserAndConsole(null,ChatColor.GREEN+"Reviviste a: "+ChatColor.GOLD+target.getName());
-					cm.sendMessageToUsersOfSameMapLessTwoPlayers(null,target,""+ChatColor.RED+ChatColor.BOLD+"+ "+ChatColor.GOLD+"Consola"+ChatColor.GREEN+" Revivio a "+ChatColor.WHITE+target.getName());
+					gmc.sendMessageToUserAndConsole(null,ChatColor.GREEN+"Reviviste a: "+ChatColor.GOLD+target.getName());
+					gmc.sendMessageToUsersOfSameMapLessTwoPlayers(null,target,""+ChatColor.RED+ChatColor.BOLD+"+ "+ChatColor.GOLD+"Consola"+ChatColor.GREEN+" Revivio a "+ChatColor.WHITE+target.getName());
 
 				}
 				
@@ -231,7 +230,7 @@ public class GameIntoMap {
 			
 			
 			if(!deaths.contains(name)) {
-				cm.sendMessageToUserAndConsole(player,ChatColor.RED+"Ese Jugador salio de la partida o ya fue Revivido.");
+				gmc.sendMessageToUserAndConsole(player,ChatColor.RED+"Ese Jugador salio de la partida o ya fue Revivido.");
 			    return;
 			}
 			
@@ -258,11 +257,11 @@ public class GameIntoMap {
 			
 					
 					
-					cm.setKitMg(target);
+			 		gmc.setKitMg(target);
 					
 					MgTeams te = new MgTeams(plugin);
 					te.JoinTeamLifeMG(target);
-					cm.revivePlayerToGame(target, mapa);
+					gmc.revivePlayerToGame(target, mapa);
 					pl.setPlayerGameStatus(PlayerGameStatus.ALIVE);
 					healPlayer(target);
 					
@@ -273,13 +272,13 @@ public class GameIntoMap {
 					if(player != null) {
 						target.sendTitle(ChatColor.GREEN+"Fuiste Revivido",ChatColor.GREEN+"por: "+ChatColor.YELLOW+player.getName(),20,60,20);
 						target.sendMessage(ChatColor.WHITE+"Fuiste Revivido por: "+ChatColor.GREEN+player.getName());
-						cm.sendMessageToUserAndConsole(player,ChatColor.GREEN+"Reviviste a: "+ChatColor.GOLD+target.getName());
-						cm.sendMessageToUsersOfSameMapLessTwoPlayers(player,target,ChatColor.GOLD+player.getName()+ChatColor.GREEN+" Revivio a "+ChatColor.WHITE+target.getName());
+						gmc.sendMessageToUserAndConsole(player,ChatColor.GREEN+"Reviviste a: "+ChatColor.GOLD+target.getName());
+						gmc.sendMessageToUsersOfSameMapLessTwoPlayers(player,target,ChatColor.GOLD+player.getName()+ChatColor.GREEN+" Revivio a "+ChatColor.WHITE+target.getName());
 					}else {
 						target.sendTitle(ChatColor.GREEN+"Fuiste Revivido",ChatColor.GREEN+"por: "+ChatColor.YELLOW+"Consola",20,60,20);
 						target.sendMessage(ChatColor.WHITE+"Fuiste Revivido por: "+ChatColor.GREEN+"Consola");
-						cm.sendMessageToUserAndConsole(null,ChatColor.GREEN+"Reviviste a: "+ChatColor.GOLD+target.getName());
-						cm.sendMessageToUsersOfSameMapLessTwoPlayers(null,target,ChatColor.GOLD+"Consola"+ChatColor.GREEN+" Revivio a "+ChatColor.WHITE+target.getName());
+						gmc.sendMessageToUserAndConsole(null,ChatColor.GREEN+"Reviviste a: "+ChatColor.GOLD+target.getName());
+						gmc.sendMessageToUsersOfSameMapLessTwoPlayers(null,target,ChatColor.GOLD+"Consola"+ChatColor.GREEN+" Revivio a "+ChatColor.WHITE+target.getName());
 
 					}
 					
@@ -298,7 +297,7 @@ public class GameIntoMap {
 	
 	//TODO CLEAR
 	public void GamePlayerDeadInMap(Player player) {
-		GameConditions gmc = new GameConditions(plugin);
+		
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		String mapa = pl.getMapName();
 		GameInfo gi = plugin.getGameInfoPoo().get(mapa);
@@ -387,7 +386,6 @@ public class GameIntoMap {
 				if(b.getType() == Material.BARRIER || b.getType() == Material.BARRIER && d == DamageCause.FALL || d == DamageCause.VOID) {
 				
 				    PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
-					GameConditions gmc = new GameConditions(plugin);
 					String mapa = pl.getMapName();
 					GameInfo gi = plugin.getGameInfoPoo().get(mapa);
 					
@@ -622,7 +620,7 @@ public class GameIntoMap {
 	 
 	public void revivePlayerRespawnLife(Player player){
 		//GameConditions gc = new GameConditions(plugin);
-		GameConditions cm = new GameConditions(plugin);
+	
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		
 		
@@ -631,8 +629,8 @@ public class GameIntoMap {
 		
 		pl.getGamePoints().addRevive(1);
 	
-		cm.setHeartsInGame(player, pl.getMapName());
-		cm.setKitMg(player);
+		gmc.setHeartsInGame(player, pl.getMapName());
+		gmc.setKitMg(player);
 		healPlayer(player);
 		rl.setLifes(rl.getLifes()-1);
 		Location copy = rl.getLocRespawnLife().clone();
@@ -652,11 +650,11 @@ public class GameIntoMap {
 	 
 	public void revivePlayerRespawn(Player player){
 		//GameConditions gc = new GameConditions(plugin);
-		GameConditions cm = new GameConditions(plugin);
+	
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		pl.getGamePoints().addRevive(1);
-		cm.setHeartsInGame(player, pl.getMapName());
-		cm.setKitMg(player);
+		gmc.setHeartsInGame(player, pl.getMapName());
+		gmc.setKitMg(player);
 		healPlayer(player);
 		Location copy = pl.getRespawn().clone();
 		player.teleport(copy.add(0.5, 0, 0.5));
@@ -668,10 +666,10 @@ public class GameIntoMap {
 
 
 	public void reviveFreeForAll(Player player,	GameFreeForAll ffa) {
-		GameConditions cm = new GameConditions(plugin);
+	
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
-		cm.setHeartsInGame(player, pl.getMapName());
-		cm.setKitMg(player);
+		gmc.setHeartsInGame(player, pl.getMapName());
+		gmc.setKitMg(player);
 		healPlayer(player);
 		
 		Random r = new Random();
@@ -688,7 +686,7 @@ public class GameIntoMap {
 	
 	
 	public void ObjetivesInGame(Player player,String mapa) {
-		GameConditions gmc = new GameConditions(plugin);
+	
 		GameInfo gm = plugin.getGameInfoPoo().get(mapa);
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		
@@ -825,7 +823,7 @@ public class GameIntoMap {
 	
 	
 	public void GamePlayerLost(Player player) {
-		GameConditions gmc = new GameConditions(plugin);
+	
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		String mapa = pl.getMapName();
 		GameInfo gm = plugin.getGameInfoPoo().get(mapa);
@@ -895,7 +893,7 @@ public class GameIntoMap {
 	
 	public void getShowPointsOfPlayersGame(Player player) {
 			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
-			GameConditions gc = new GameConditions(plugin);
+			
 			FileConfiguration message = plugin.getMessage();
 // PRIMERA PARTE
 			HashMap<String, Integer> scores = new HashMap<>();
@@ -904,7 +902,7 @@ public class GameIntoMap {
 			List<Player> joins = new ArrayList<>();
 	
 				
-					 joins = gc.ConvertStringToPlayer(gi.getParticipants());
+					 joins = gmc.ConvertStringToPlayer(gi.getParticipants());
 
 					for(Player user : joins) {
 						PlayerInfo pl1 = plugin.getPlayerInfoPoo().get(user);
@@ -954,11 +952,11 @@ public class GameIntoMap {
 													 .replace("%player%", e.getKey())
 													 .replace("%place%", Integer.toString(i))
 													 .replace("%kills%", Integer.toString(e.getValue()))
-													 .replace("%reward%", Long.toString(gc.RewardPointsForItems(e.getValue())))
-													 .replace("%revive%", Integer.toString(gc.getReviveInfo(e.getKey())))
-													 .replace("%helprevive%", Integer.toString(gc.getReviveAsistenceInfo(e.getKey())))
-													 .replace("%deads%", Integer.toString(gc.getDeadsInfo(e.getKey())))
-													 .replace("%damage%", Long.toString(gc.getDamageInfo(e.getKey())))
+													 .replace("%reward%", Long.toString(gmc.RewardPointsForItems(e.getValue())))
+													 .replace("%revive%", Integer.toString(gmc.getReviveInfo(e.getKey())))
+													 .replace("%helprevive%", Integer.toString(gmc.getReviveAsistenceInfo(e.getKey())))
+													 .replace("%deads%", Integer.toString(gmc.getDeadsInfo(e.getKey())))
+													 .replace("%damage%", Long.toString(gmc.getDamageInfo(e.getKey())))
 													 //.replace("%cronomet%", time)
 													
 													 ));
@@ -968,11 +966,11 @@ public class GameIntoMap {
 													 .replace("%player%", e.getKey())
 													 .replace("%place%", Integer.toString(i))
 													 .replace("%kills%", Integer.toString(e.getValue()))
-													 .replace("%reward%", Long.toString(gc.RewardPointsForItems(e.getValue())))
-													 .replace("%revive%", Integer.toString(gc.getReviveInfo(e.getKey())))
-													 .replace("%helprevive%", Integer.toString(gc.getReviveAsistenceInfo(e.getKey())))
-													 .replace("%deads%", Integer.toString(gc.getDeadsInfo(e.getKey())))
-													 .replace("%damage%", Long.toString(gc.getDamageInfo(e.getKey())))
+													 .replace("%reward%", Long.toString(gmc.RewardPointsForItems(e.getValue())))
+													 .replace("%revive%", Integer.toString(gmc.getReviveInfo(e.getKey())))
+													 .replace("%helprevive%", Integer.toString(gmc.getReviveAsistenceInfo(e.getKey())))
+													 .replace("%deads%", Integer.toString(gmc.getDeadsInfo(e.getKey())))
+													 .replace("%damage%", Long.toString(gmc.getDamageInfo(e.getKey())))
 													 //.replace("%cronomet%", time)
 													
 													 ));
@@ -992,11 +990,11 @@ public class GameIntoMap {
 														 .replace("%player%", e.getKey())
 														 .replace("%place%", Integer.toString(i))
 														 .replace("%kills%", Integer.toString(e.getValue()))
-														 .replace("%reward%", Long.toString(gc.RewardPointsForItems(e.getValue())))
-														 .replace("%revive%", Integer.toString(gc.getReviveInfo(e.getKey())))
-														 .replace("%helprevive%", Integer.toString(gc.getReviveAsistenceInfo(e.getKey())))
-														 .replace("%deads%", Integer.toString(gc.getDeadsInfo(e.getKey())))
-														 .replace("%damage%", Long.toString(gc.getDamageInfo(e.getKey()))+ChatColor.RED+"Fuera del Top.")
+														 .replace("%reward%", Long.toString(gmc.RewardPointsForItems(e.getValue())))
+														 .replace("%revive%", Integer.toString(gmc.getReviveInfo(e.getKey())))
+														 .replace("%helprevive%", Integer.toString(gmc.getReviveAsistenceInfo(e.getKey())))
+														 .replace("%deads%", Integer.toString(gmc.getDeadsInfo(e.getKey())))
+														 .replace("%damage%", Long.toString(gmc.getDamageInfo(e.getKey()))+ChatColor.RED+"Fuera del Top.")
 														 //.replace("%cronomet%", time)
 														
 														 ));
@@ -1075,10 +1073,10 @@ public class GameIntoMap {
 	
 	
 	public void PlayerDropAllItems(Player player) {
-		GameConditions gm = new GameConditions(plugin);
 		
 		
-		if(!gm.isPlayerinGame(player)) {
+		
+		if(!gmc.isPlayerinGame(player)) {
 			if(player.getInventory().getContents().length >= 1) {
 				for (ItemStack itemStack : player.getInventory().getContents()) {
 					if(itemStack == null) continue;
@@ -1117,7 +1115,7 @@ public class GameIntoMap {
 				for (ItemStack itemStack : player.getInventory().getContents()) {
 					if(itemStack == null) continue;
 					
-						if(gm.isPlayerinGame(player) && pl.isInventoryAllowedForTheMap()) {
+						if(gmc.isPlayerinGame(player) && pl.isInventoryAllowedForTheMap()) {
 							Item it = (Item) l.getWorld().spawnEntity(l,EntityType.ITEM);
 							it.setItemStack(itemStack);
 							it.setOwner(player.getUniqueId());
@@ -1140,9 +1138,6 @@ public class GameIntoMap {
 	
 	
 	public void GameMobDamagerCauses(Player player ,Entity e) {
-			System.out.println("DEBUG TEST: "+e.getType());
-			GameConditions gmc = new GameConditions(plugin);
-			
 			
 			if(gmc.hasPlayerACheckPoint(player)) return;
 			
@@ -1361,7 +1356,7 @@ public class GameIntoMap {
 	
 	public void GameDamageCauses(Player player, EntityDamageEvent.DamageCause c) {
 		  //System.out.println("DEBUG TEST2: "+c.toString());
-			GameConditions gmc = new GameConditions(plugin);
+			
 			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 			if(gmc.hasPlayerACheckPoint(player)) return;
 				List<DamageCause> l = new ArrayList<>();

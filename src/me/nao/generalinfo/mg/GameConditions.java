@@ -653,7 +653,9 @@ public class GameConditions {
 	 //TODO TP AL PRELOBBY DEL MAPA
 	   public boolean tptoPreLobbyMap(Player player ,String map){
 		   
-		   FileConfiguration ym = getGameConfig(map);
+		   GameInfo gi = plugin.getGameInfoPoo().get(map);
+		   
+		   FileConfiguration ym = gi.getMapData();
 		   if(ym.contains("Pre-Lobby")) { 
 				PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 				GameInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
@@ -731,8 +733,9 @@ public class GameConditions {
 	   //TODO TpEndSpawn
 	   public void EndTptoSpawn(Player player ,String map){
 		   
-		   GameConditions gc = new GameConditions(plugin);
-		   FileConfiguration ym = gc.getGameConfig(map);
+		   GameInfo gi = plugin.getGameInfoPoo().get(map);
+		   
+		   FileConfiguration ym = gi.getMapData();
 		   if(ym.contains("Spawn-End")) {
 			    String[] coords = ym.getString("Spawn-End").split("/");
 			    String world = coords[0];
@@ -768,8 +771,9 @@ public class GameConditions {
 	   //TODO TpDeathSpawn
 	   public void DeathTptoSpawn(Player player ,String map){
 		   
-		   GameConditions gc = new GameConditions(plugin);
-		   FileConfiguration ym = gc.getGameConfig(map);
+		   GameInfo gi = plugin.getGameInfoPoo().get(map);
+		   
+		   FileConfiguration ym = gi.getMapData();
 		   if(ym.contains("Spawn-Spectator")) {
 			    String[] coords = ym.getString("Spawn-Spectator").split("/");
 			    String world = coords[0];
@@ -791,9 +795,11 @@ public class GameConditions {
 	   
 	    
 	   public void TptoSpawnMapSimple(Player player){
-		   GameConditions gc = new GameConditions(plugin);
+		  
 		   PlayerInfo pi = plugin.getPlayerInfoPoo().get(player);
-		   FileConfiguration ym = gc.getGameConfig(pi.getMapName());
+		   GameInfo gi = plugin.getGameInfoPoo().get(pi.getMapName());
+		   
+		   FileConfiguration ym = gi.getMapData();
 		   if(ym.contains("Spawn")) {
 			   
 
@@ -813,7 +819,9 @@ public class GameConditions {
 	   //TODO TP AL SPAWN DEL MAPA
 	   public void TptoSpawnMap(Player player ,String map){
 		  
-		   FileConfiguration ym = getGameConfig(map);
+		   GameInfo gi = plugin.getGameInfoPoo().get(map);
+		   
+		   FileConfiguration ym = gi.getMapData();
 		   if(ym.contains("Spawn")) {
 			   
 			   
@@ -910,8 +918,9 @@ public class GameConditions {
 
 	   //TP SPAWN SPECTATOR
 	   public void TptoSpawnSpectator(Player player ,String map){
-		   GameConditions gc = new GameConditions(plugin);
-		   FileConfiguration ym = gc.getGameConfig(map);
+		   GameInfo gi = plugin.getGameInfoPoo().get(map);
+		   
+		   FileConfiguration ym = gi.getMapData();
 		   if(ym.contains("Spawn-Spectator")) {
 			    String[] coords = ym.getString("Spawn-Spectator").split("/");
 			    String world = coords[0];
@@ -2293,8 +2302,7 @@ public class GameConditions {
 	
 	public boolean hasPlayerACheckPoint(Player player) {
 		
-		GameConditions gc = new GameConditions(plugin);
-		if(gc.isPlayerinGame(player));
+		if(isPlayerinGame(player));
 		
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		
@@ -3874,8 +3882,8 @@ public class GameConditions {
 	   //TODO STOP
 	   public void StopGames(Player player , String name,StopMotive motive,String reason) {
 		    
-		   GameConditions gc = new GameConditions(plugin);
-			if(gc.existMap(name)) {
+		  
+			if(existMap(name)) {
 				GameInfo gi = plugin.getGameInfoPoo().get(name);
 				
 					GameStatus estadoPartida = gi.getGameStatus();
@@ -3891,16 +3899,16 @@ public class GameConditions {
 						}
 						
 						
-						List<Player> participants = gc.ConvertStringToPlayer(gi.getParticipants());
+						List<Player> participants = ConvertStringToPlayer(gi.getParticipants());
 						
-						List<Player> spectator = gc.ConvertStringToPlayer(gi.getSpectators());
+						List<Player> spectator = ConvertStringToPlayer(gi.getSpectators());
 						//Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Motivo de Parada: "+ChatColor.WHITE+motive.getValue());
 						//Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+ms.getGameType().toString()+ChatColor.GREEN+ms.getStopReason());
 						
 						if(gi instanceof GameAdventure) {
 							GameAdventure ga = (GameAdventure) gi;
 							
-							List<Player> alives = gc.ConvertStringToPlayer(ga.getAlivePlayers());
+							List<Player> alives = ConvertStringToPlayer(ga.getAlivePlayers());
 							for(Player target : participants) {
 								if(motive == StopMotive.WIN) {
 									target.sendMessage(ChatColor.GREEN+gi.getStopReason());
@@ -4533,7 +4541,6 @@ public class GameConditions {
 		
 		GameInfo gi = plugin.getGameInfoPoo().get(map);
 		List<ObjetivesMG> l = gi.getGameObjetivesMg().getObjetives();
-		GameConditions gc = new GameConditions(plugin);
 		
 		if(!l.stream().filter(o -> o.getObjetiveName().equals(name)).findFirst().isPresent()) {
 			sendMessageToUserAndConsole(null,ChatColor.RED+"El Objetivo  "+name+" no Existe");
@@ -4581,7 +4588,7 @@ public class GameConditions {
 						//SI ES NULL CAMBIA A NORMAL EL OBJETIVO SINO ES NULL LO CONVIERTE A PLAYER Y SE CHECA QUE ESTE EN JUEGO SI ES NULL O NO ESTA SIGUE SIENDO UN CAMBIO NORMAL
 						if(player != null) {
 							Player target = Bukkit.getPlayerExact(player);
-							if(target != null && gc.isPlayerinGame(target)) {
+							if(target != null && isPlayerinGame(target)) {
 								//SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Completado gracias a "+target.getName()+" "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
 								sendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getObjetiveName()+ChatColor.GREEN+" Completado por "+target.getName()+" "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
 
@@ -4615,7 +4622,7 @@ public class GameConditions {
 					
 						if(player != null) {
 							Player target = Bukkit.getPlayerExact(player);
-							if(target != null && gc.isPlayerinGame(target)) {
+							if(target != null && isPlayerinGame(target)) {
 								//SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado gracias a "+target.getName()+" "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
 								sendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getObjetiveName()+ChatColor.GREEN+" Cambio por "+target.getName()+" "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
 
@@ -4647,7 +4654,7 @@ public class GameConditions {
 						ObjetiveGeneralActionsComplete(map,obj,gi);
 						if(player != null) {
 							Player target = Bukkit.getPlayerExact(player);
-							if(target != null && gc.isPlayerinGame(target)) {
+							if(target != null && isPlayerinGame(target)) {
 								//SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Completado gracias a "+target.getName()+" "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
 								sendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getObjetiveName()+ChatColor.GREEN+" Completado por "+target.getName()+" "+ChatColor.DARK_PURPLE+"["+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.DARK_PURPLE+"]");
 
@@ -4679,7 +4686,7 @@ public class GameConditions {
 						obj.setCurrentValue(val);
 						if(player != null) {
 							Player target = Bukkit.getPlayerExact(player);
-							if(target != null && gc.isPlayerinGame(target)) {
+							if(target != null && isPlayerinGame(target)) {
 								//SendMessageToAllPlayersInMap(map, ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getNombre()+ChatColor.GREEN+" a Cambiado gracias a "+target.getName()+" "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
 								sendTittleToAllPlayersInMap(map, "", ChatColor.GREEN+"Objetivo "+ChatColor.GOLD+obj.getObjetiveName()+ChatColor.GREEN+" Cambio por "+target.getName()+" "+ChatColor.AQUA+"("+ChatColor.GREEN+val+ChatColor.GOLD+"/"+ChatColor.GREEN+obj.getCompleteValue()+ChatColor.AQUA+")");
 								
@@ -4784,7 +4791,6 @@ public class GameConditions {
 			return;
 		}else{
 			ObjetivesMG mo = (ObjetivesMG) l.stream().filter(o -> o.getObjetiveName().equals(name)).findFirst().get();
-			GameConditions gc = new GameConditions(plugin);
 			switch(ob) {
 			case WAITING:
 				mo.setObjetiveStatusType(ObjetiveStatusType.WAITING);
@@ -4792,7 +4798,7 @@ public class GameConditions {
 				
 				if(player != null) {
 					Player target = Bukkit.getPlayerExact(player);
-					if(target != null && gc.isPlayerinGame(target)) {
+					if(target != null && isPlayerinGame(target)) {
 						sendMessageToAllPlayersOpInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getObjetiveName()+ChatColor.GREEN+" cambio a Esperando gracias a "+target.getName());
 
 					}
@@ -4809,7 +4815,7 @@ public class GameConditions {
 			
 				if(player != null) {
 					Player target = Bukkit.getPlayerExact(player);
-					if(target != null && gc.isPlayerinGame(target)) {
+					if(target != null && isPlayerinGame(target)) {
 						sendMessageToAllPlayersInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getObjetiveName()+ChatColor.GREEN+" fue Completado gracias a "+target.getName()+" "+ChatColor.GOLD+mo.getCompleteValue()+"/"+mo.getCompleteValue());
 
 						mo.getPlayerInteractions().put(target,mo.getPlayerInteractions().get(target)+1);
@@ -4826,7 +4832,7 @@ public class GameConditions {
 				
 				if(player != null) {
 					Player target = Bukkit.getPlayerExact(player);
-					if(target != null && gc.isPlayerinGame(target)) {
+					if(target != null && isPlayerinGame(target)) {
 						sendMessageToAllPlayersInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getObjetiveName()+ChatColor.GREEN+" cambio a Incompleto gracias a "+target.getName());
 
 						mo.getPlayerInteractions().put(target,mo.getIncompleteValue());
@@ -4845,7 +4851,7 @@ public class GameConditions {
 				
 				if(player != null) {
 					Player target = Bukkit.getPlayerExact(player);
-					if(target != null && gc.isPlayerinGame(target)) {
+					if(target != null && isPlayerinGame(target)) {
 						sendMessageToAllPlayersOpInMap(map, ChatColor.GREEN+"El progreso del Ojetivo "+ChatColor.GOLD+mo.getObjetiveName()+ChatColor.GREEN+" cambio a Desconocido gracias a "+target.getName());
 
 					}
