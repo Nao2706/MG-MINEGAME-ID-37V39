@@ -4,7 +4,7 @@ public class GamePoints {
 
 	
 	
-	private int kills , deads , revive, helprevive;
+	private int kills , deads , revive, helprevive,points;
 	private long damage, time;
 	
 	/**
@@ -20,6 +20,7 @@ public class GamePoints {
 		this.helprevive = 0;
 		this.damage = 0;
 		this.time = 0;
+		this.points = 0;
 	}
 
 
@@ -42,6 +43,10 @@ public class GamePoints {
 	public int getHelpRevive() {
 		return helprevive;
 	}
+	
+	public int getPoints() {
+		return points;
+	}
 
 	public long getCronometSeconds() {
 		return time;
@@ -61,6 +66,10 @@ public class GamePoints {
 	
 	public void setHelpRevive(int helprevive) {
 		this.helprevive = helprevive;
+	}
+	
+	public void setPointse(int points) {
+		this.points = points;
 	}
 	
 	public void setDamage(long damage) {
@@ -89,6 +98,17 @@ public class GamePoints {
 	
 	public void addHelpRevive(int val) {
 		this.helprevive += val;
+	}
+	
+	public void addPoints(int val) {
+		this.points += val;
+		if(this.points < 0) {
+			this.points = 0;
+		}
+	}
+	
+	public void subtractPoints(int val) {
+		this.points = (this.points - val < 0) ? 0 : this.points - val;
 	}
 	
 

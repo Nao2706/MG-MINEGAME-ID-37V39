@@ -31,7 +31,7 @@ import com.google.common.base.Strings;
 import me.nao.enums.mg.ObjetiveStatusType;
 import me.nao.generalinfo.mg.GameAdventure;
 import me.nao.generalinfo.mg.GameConditions;
-import me.nao.generalinfo.mg.GameFreeForAll;
+import me.nao.generalinfo.mg.GamePointHunt;
 import me.nao.generalinfo.mg.GameInfo;
 import me.nao.generalinfo.mg.GameObjetivesMG;
 import me.nao.generalinfo.mg.GamePoints;
@@ -164,7 +164,7 @@ public class MgScore {
 	}
 	
 	
-	public void showTopPlayersFFA(Player player) {
+	public void showTopPlayersPh(Player player) {
 	
 		if(!gmc.isPlayerinGame(player)) return;
 		ScoreboardManager manager = Bukkit.getScoreboardManager();
@@ -181,7 +181,7 @@ public class MgScore {
 	 
 		PlayerInfo p = plugin.getPlayerInfoPoo().get(player);
 		GameInfo gi = plugin.getGameInfoPoo().get(p.getMapName());
-		GameFreeForAll ffa = (GameFreeForAll) gi;
+		GamePointHunt ph = (GamePointHunt) gi;
 		
 		
 		if(!plugin.getEntitiesFromFlare().isEmpty()) {
@@ -228,10 +228,11 @@ public class MgScore {
 			
 			
 			List<Player> joins = gmc.ConvertStringToPlayer(gi.getParticipants());
+			List<Player> spect = gmc.ConvertStringToPlayer(gi.getSpectators());
 			
 			for(Player user : joins) {
 				PlayerInfo pl = plugin.getPlayerInfoPoo().get(user);
-				scores.put(user.getName(), pl.getGamePoints().getKills());	
+				scores.put(user.getName(), pl.getGamePoints().getPoints());	
 			}
 			
 			List<Map.Entry<String, Integer>> list = new ArrayList<>(scores.entrySet());
@@ -244,20 +245,41 @@ public class MgScore {
 			});
 			
 			if(!list.isEmpty()) {
-				
+				int i = 0;
 				for(Map.Entry<String, Integer> e : list) {
-				
-					if(e.getKey().equals(player.getName())) {
-						 show.add(Utils.colorTextChatColor("&a"+e.getKey()+"&e: &6"+e.getValue()));
+					i++;
+					
+					if(i == 1) {
+						if(e.getKey().equals(player.getName())) {
+							if(e.getValue() != 0) {
+								 show.add(Utils.colorTextChatColor("&a"+i+") &b&lMVP &a"+e.getKey()+"&e: &6"+e.getValue()));
+							}else {
+								 show.add(Utils.colorTextChatColor("&a"+i+") &a"+e.getKey()+"&e: &6"+e.getValue()));
+							}
+							
+							
+						}else {
+							if(e.getValue() != 0) {
+								show.add(Utils.colorTextChatColor("&a"+i+") &b&lMVP &6"+e.getKey()+"&e: &c"+e.getValue()));
+							}else {
+								show.add(Utils.colorTextChatColor("&a"+i+") &6"+e.getKey()+"&e: &c"+e.getValue()));
+							}
+						}
 					}else {
-						 show.add(Utils.colorTextChatColor("&6"+e.getKey()+"&e: &c"+e.getValue()));
+						if(e.getKey().equals(player.getName())) {
+							 show.add(Utils.colorTextChatColor("&a"+i+") &a"+e.getKey()+"&e: &6"+e.getValue()));
+						}else {
+							 show.add(Utils.colorTextChatColor("&a"+i+") &6"+e.getKey()+"&e: &c"+e.getValue()));
+						}
 					}
+					
+	
 					
 					
 				}
 			}
 		 show.add(ChatColor.RED+"  ");
-		 show.add(Utils.colorTextChatColor("&c&l"+ffa.getLimitpoints()+" &b&lPTOS. &a&lPARA GANAR"));
+		 show.add(Utils.colorTextChatColor("&a&lOBTEN &c&l"+ph.getLimitpoints()+" &b&lPTOs"));
 //		 show.add(ChatColor.RED+"  ");
 //		 show.add(""+ChatColor.RED+ChatColor.BOLD+"------------- ");
 		 
@@ -266,7 +288,16 @@ public class MgScore {
 				Score score = ob.getScore(show.get(i));
 				score.setScore((show.size()-i));
 			}
-			player.setScoreboard(scoreboard);
+			
+			for(Player players : joins) {
+				players.setScoreboard(scoreboard);
+			}
+			
+			for(Player players : spect) {
+				players.setScoreboard(scoreboard);
+			}
+			
+			
 			return;
 		
 	}

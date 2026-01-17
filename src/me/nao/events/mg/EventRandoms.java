@@ -141,10 +141,12 @@ public class EventRandoms implements Listener{
 	
 	private Minegame plugin;
 	private GameConditions gmc;
+	private MobsActions ma;
 	
 	public EventRandoms(Minegame plugin) {
 		this.plugin = plugin;
 		this.gmc = new GameConditions(plugin);
+		this.ma = new MobsActions(plugin);
 		
 	}
 	
@@ -1540,7 +1542,7 @@ public class EventRandoms implements Listener{
 		 Entity atacante = e.getDamager();
 		 Entity entidadAtacada = e.getEntity();
 		 
-		 MobsActions ma = new MobsActions(plugin);
+	
 		 ma.getAttackedZombie(atacante, entidadAtacada);
 		 ma.getZombiettack(atacante, entidadAtacada);
 		 
@@ -2722,7 +2724,7 @@ public class EventRandoms implements Listener{
 					  
 					    if(!gmc.isPlayerinGame(player)) return;  
 					    
-					     MobsActions ma = new MobsActions(plugin);
+					
 						 ma.getAttackedZombie(player, entidadhit);
 					    //AUMENTO DE PUNTO POR ELIMINAR MOBS VIVOS , 
 					  	PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
@@ -2793,6 +2795,7 @@ public class EventRandoms implements Listener{
 				  Entity damager =  (Entity) projectile.getShooter();
 				  Entity entidadhit = e.getHitEntity();
 				  
+				 
 				  
 				  if(entidadhit instanceof Player) {
 					  Player player = (Player) entidadhit;
@@ -4059,7 +4062,7 @@ public class EventRandoms implements Listener{
 						 
 						
 						 
-			 			 GameIntoMap c = new GameIntoMap(plugin);
+			 			
 				         double projectileY = projectil.getLocation().getY();
 				         double damagedY = damage.getLocation().getY();
 				         int headshoot = 50;
@@ -4105,8 +4108,8 @@ public class EventRandoms implements Listener{
 		         			            	damage.setHealth(0);
 		         			            	projectil.remove();
 		         			            	player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
-		         			            	
-		         							 c.gamePlayerAddPoints(player);
+		         			            	 GameIntoMap c = new GameIntoMap(plugin);
+		         							 c.gamePlayerAddPoints(player,damage);
 		         			            	 
 		                				 }
 		                				 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.RED+ChatColor.BOLD+"CRITICAL HEADSHOT"));

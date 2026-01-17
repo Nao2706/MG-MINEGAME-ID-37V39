@@ -78,7 +78,8 @@ public class MapSettings {
 			ym.set("CleanMapFromEntitys",true);
 			ym.set("DeleteInventoryByTimeOut",true); 			
 			ym.set("Map-hasBarriers",true); 
-			ym.set("Anti-Void",false); 
+			ym.set("Anti-Void",false);
+			ym.set("Keep-Inventory",false);
 			ym.set("Allow-Inventory",false);
 			ym.set("Allow-PVP",false);
 			ym.set("Has-Kit",false);
@@ -377,11 +378,20 @@ public class MapSettings {
 			plugin.ChargedYml(name, player);
 			FileConfiguration ym = plugin.getCacheSpecificYML(name);	
 			
-			if(!ym.contains("Free-For-All.Limit-Point")) {
-				 ym.set("Free-For-All.Limit-Point",20);
+			if(!ym.contains("Point-Hunt.Limit-Point")) {
+				 ym.set("Point-Hunt.Limit-Point",20);
+				 ym.set("Point-Hunt.Has-CustomPoints",false);
+				 List<String> custom = ym.getStringList("Point-Hunt.CustomPoints");
+				 ym.set("Point-Hunt.CustomPoints",custom);
+				 custom.add("zombie;10");
+				 custom.add("creeper;15");
+				 custom.add("villager;-10");
+				 custom.add("zombie;Special Zombie;30");
+				 
+				 
 			}
-			 List<String> spawns = ym.getStringList("Free-For-All.Spawns");
-			 ym.set("Free-For-All.Spawns",spawns);
+			 List<String> spawns = ym.getStringList("Point-Hunt.Spawns");
+			 ym.set("Point-Hunt.Spawns",spawns);
 
 			NumberFormat nf = NumberFormat.getInstance();
 			nf.setGroupingUsed(false);
@@ -395,7 +405,7 @@ public class MapSettings {
 				spawns.add(player.getLocation().getWorld().getName()+"/"+nf.format(player.getLocation().blockX())+"/"+nf.format(player.getLocation().blockY())+"/"+nf.format(player.getLocation().blockZ())+"/"+nf.format(player.getLocation().getYaw())+"/"+nf.format(player.getLocation().getPitch()));
 				
 			
-				player.sendMessage(ChatColor.GREEN+"Se a seteado un Spawn de FreeForAll Correctamente en el Mapa: "+ChatColor.GOLD+name);
+				player.sendMessage(ChatColor.GREEN+"Se a seteado un Spawn de Point-Hunt Correctamente en el Mapa: "+ChatColor.GOLD+name);
 				plugin.getCacheSpecificYML(name).save();
 				plugin.getCacheSpecificYML(name).reload();
 				

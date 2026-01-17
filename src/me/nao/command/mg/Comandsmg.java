@@ -686,27 +686,33 @@ public class Comandsmg implements CommandExecutor{
 					
 					return true;
 		    	}else if (args[0].equalsIgnoreCase("modlogs")) {
-					ModerationManager mm = new ModerationManager(plugin);
-					String target = args[1];
-					if(args.length == 2) {
-						//mg modlogs NAO
-						mm.sendModerationLogs(null, target, 1);
+		    		try {
+							ModerationManager mm = new ModerationManager(plugin);
+							String target = args[1];
+							if(args.length == 2) {
+								//mg modlogs NAO
+								mm.sendModerationLogs(null, target, 1);
+								
+							}else if(args.length == 3) {
+								//mg modlogs NAO 1
+								int pag = Integer.valueOf(args[2]);
+								mm.sendModerationLogs(null, target, 1);
+								
+								
+							}else {
+								
+								Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa /modlogs <target>");
+							}
+							
+		    		}catch(NumberFormatException ex) {
+						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" Ingresa un numero en el 2 Argumento");
 						
-					}else if(args.length == 3) {
-						//mg modlogs NAO 1
-						int pag = Integer.valueOf(args[2]);
-						mm.sendModerationLogs(null, target, 1);
-						
-						
-					}else {
-						
-						Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa /modlogs <target>");
 					}
-					
-					
 					return true;
 				}else if (args[0].equalsIgnoreCase("reportlogs")) {
 					//mg reportlog NAO2706 1
+					
+					try {
 					GameReportsManager grm = new GameReportsManager(plugin); 
 				
 					
@@ -768,6 +774,18 @@ public class Comandsmg implements CommandExecutor{
 						//mg reportlog
 						grm.checkReportsDay(null, 1);
 					}
+					
+					
+					
+					}catch(NumberFormatException ex) {
+						Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa /reportlogs");
+						Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa /reportlogs <pag>");
+						Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa /reportlogs <jugador> <pag number>");
+						Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa /reportlogs details <jugador> <pag number>");
+						
+					}
+					
+					
 					return true;
 				}else if(args[0].equalsIgnoreCase("spawnzombi")) {
 			 		//H Z BZ EZ
@@ -3242,31 +3260,31 @@ public class Comandsmg implements CommandExecutor{
 					
 					return true;
 				}else if (args[0].equalsIgnoreCase("modlogs")) {
-					ModerationManager mm = new ModerationManager(plugin);
-					String target = args[1];
-					if(args.length == 2) {
-						//mg modlogs NAO
-						mm.sendModerationLogs(player, target, 1);
+					try {
+						ModerationManager mm = new ModerationManager(plugin);
+						String target = args[1];
+						if(args.length == 2) {
+							//mg modlogs NAO
+							mm.sendModerationLogs(player, target, 1);
+							
+						}else if(args.length == 3) {
+							//mg modlogs NAO 1
+							int pag = Integer.valueOf(args[2]);
+							mm.sendModerationLogs(player, target, pag);
+							
+							
+						}else {
+							
+							player.sendMessage(ChatColor.GREEN+"Usa /modlogs <target> <pag>");
+						}
 						
-					}else if(args.length == 3) {
-						//mg modlogs NAO 1
-						int pag = Integer.valueOf(args[2]);
-						mm.sendModerationLogs(player, target, 1);
-						
-						
-					}else {
-						
-						player.sendMessage(ChatColor.GREEN+"Usa /modlogs <target>");
-					}
+				}catch(NumberFormatException ex) {
+					player.sendMessage(ChatColor.GREEN+"Usa /modlogs <target> <pag>");
 					
-					
+				}
 					return true;
 				}else if (args[0].equalsIgnoreCase("reportlogs")) {
-					//mg reportlog details NAO2706 1 == 4
-					//mg reportlog details NAO2706 == 3
-					//mg reportlog
-					//mg reportlog nao
-					//mg reportlog nao 1
+				  try {
 					
 					GameReportsManager grm = new GameReportsManager(plugin); 
 				
@@ -3329,6 +3347,16 @@ public class Comandsmg implements CommandExecutor{
 						//mg reportlog
 						grm.checkReportsDay(player, 1);
 					}
+					
+					
+				}catch(NumberFormatException ex) {
+					player.sendMessage(ChatColor.GREEN+"Usa /reportlogs");
+					player.sendMessage(ChatColor.GREEN+"Usa /reportlogs <pag>");
+					player.sendMessage(ChatColor.GREEN+"Usa /reportlogs <jugador> <pag number>");
+					player.sendMessage(ChatColor.GREEN+"Usa /reportlogs details <jugador> <pag number>");
+					
+				}
+					
 					return true;
 				}else if (args[0].equalsIgnoreCase("report")) {
 				
@@ -6195,7 +6223,7 @@ public class Comandsmg implements CommandExecutor{
  
 	
 	public void deleteKit(String name,Player player) {
-		FileConfiguration invt = plugin.getItemsYaml();
+		FileConfiguration invt = plugin.getKitsYaml();
 		if(!invt.contains("Kits."+name)) {
 		gc.switchsendMessageForUserAndConsole(player,"&cEse Kit no existe o fue Borrado.");
 			return;

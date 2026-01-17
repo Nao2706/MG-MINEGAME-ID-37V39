@@ -40,6 +40,7 @@ import me.nao.generalinfo.mg.GameAdventure;
 import me.nao.generalinfo.mg.GameConditions;
 import me.nao.generalinfo.mg.GameInfo;
 import me.nao.generalinfo.mg.GameObjetivesMG;
+import me.nao.generalinfo.mg.GamePointHunt;
 import me.nao.generalinfo.mg.ItemMenu;
 import me.nao.generalinfo.mg.ObjetivesMG;
 import me.nao.generalinfo.mg.PlayerInfo;
@@ -352,15 +353,30 @@ public class MinigameShop1 implements Listener{
 	
 	public void ShowObjetives(Player player) {
 		
-		plugin.getPags().put(player, 1);
+		
 		PlayerInfo p = plugin.getPlayerInfoPoo().get(player);
 		GameInfo gi = plugin.getGameInfoPoo().get(p.getMapName());
+		
+		
+		
+		
+		if(gi instanceof GamePointHunt) {
+			GamePointHunt ph = (GamePointHunt) gi;
+			ph.showPointsMobs(player);
+			
+			
+			return;
+		}
+		
+		
 		GameObjetivesMG gomg = gi.getGameObjetivesMg();
+		
+		
 		if(!gomg.hasMapObjetives()) {
 			player.sendMessage(ChatColor.RED+"El Mapa no tiene Habilitado los Objetivos.");
 			return;
 		}
-		
+	
 		
 		List<ObjetivesMG> l1 = gi.getGameObjetivesMg().getObjetives();
 		
@@ -369,7 +385,7 @@ public class MinigameShop1 implements Listener{
 			return;
 		}
 		
-		
+		plugin.getPags().put(player, 1);
 		Inventory inv = Bukkit.createInventory(null,54,""+ChatColor.RED+ChatColor.BOLD+"OBJETIVOS");
 		MenuDecoration(inv,Material.BLACK_STAINED_GLASS_PANE);
 		

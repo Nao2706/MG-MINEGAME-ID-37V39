@@ -6,7 +6,9 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -41,9 +43,10 @@ import me.nao.enums.mg.Items;
 import me.nao.enums.mg.PlayerGameStatus;
 import me.nao.enums.mg.ReviveStatus;
 import me.nao.enums.mg.StopMotive;
+import me.nao.generalinfo.mg.EntityPoints;
 import me.nao.generalinfo.mg.GameAdventure;
 import me.nao.generalinfo.mg.GameConditions;
-import me.nao.generalinfo.mg.GameFreeForAll;
+import me.nao.generalinfo.mg.GamePointHunt;
 import me.nao.generalinfo.mg.GameInfo;
 import me.nao.generalinfo.mg.GameObjetivesMG;
 import me.nao.generalinfo.mg.PlayerInfo;
@@ -343,9 +346,9 @@ public class GameIntoMap {
 			}
 		
 			
-		}else if(gi instanceof GameFreeForAll) {
+		}else if(gi instanceof GamePointHunt) {
 			
-			GameFreeForAll ffa = (GameFreeForAll) gi;
+			GamePointHunt ffa = (GamePointHunt) gi;
 			PlayerDropAllItemsSimple(player);
 			reviveFreeForAll(player,ffa);
 			if(pl.getPlayerKit() != null) {
@@ -457,9 +460,9 @@ public class GameIntoMap {
 							gmc.DeathTptoSpawn(player, mapa);//COMO MUERE FUERA DEL MAPA SE LO TEPEA
 							player.setGameMode(GameMode.SPECTATOR);
 						
-					}else if(gi instanceof GameFreeForAll) {
+					}else if(gi instanceof GamePointHunt) {
 						
-						GameFreeForAll ffa = (GameFreeForAll) gi;
+						GamePointHunt ffa = (GamePointHunt) gi;
 						PlayerDropAllItemsSimple(player);
 						ffa.respawnGame(player);
 						
@@ -599,7 +602,7 @@ public class GameIntoMap {
 					
 				}
 			}
-		}if(gm instanceof GameFreeForAll) {
+		}if(gm instanceof GamePointHunt) {
 			
 			//GameFreeForAll ffa = (GameFreeForAll) gm;
 			
@@ -665,7 +668,7 @@ public class GameIntoMap {
 	}
 
 
-	public void reviveFreeForAll(Player player,	GameFreeForAll ffa) {
+	public void reviveFreeForAll(Player player,	GamePointHunt ffa) {
 	
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		gmc.setHeartsInGame(player, pl.getMapName());
@@ -813,7 +816,7 @@ public class GameIntoMap {
 				pl.setPlayerCronomet(new MapRecords(player.getName(),gm.getGameTime().getGameCronometForPlayer(),pl.getGamePoints().getKills()));
 				return;
 			}
-		}if(gm instanceof GameFreeForAll) {
+		}if(gm instanceof GamePointHunt) {
 			gmc.playerArriveToTheWin(player, mapa);
 			gmc.EndTptoSpawn(player, mapa);
 		}
@@ -864,32 +867,114 @@ public class GameIntoMap {
 	
 	
 	//TODO BORDE DE BIEN
-	public void gamePlayerAddPoints(Player player) {
+	public void gamePlayerAddPoints(Player player,Entity e) {
 		
 			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
-		
-		
-			pl.getGamePoints().addKills(1);
-			int puntos = pl.getGamePoints().getKills();
-			player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.GREEN+ChatColor.BOLD+"KILLS: "+ChatColor.RED+puntos));
 			GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
+		
 			
-			if(gi instanceof GameFreeForAll) {
-				GameFreeForAll ga = (GameFreeForAll) gi;
+			//setear aqui que puntos devuelve el mob
+			
+			if(gi instanceof GameAdventure) {
+				pl.getGamePoints().addKills(1);
+				int puntos = pl.getGamePoints().getKills();
+				player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.GREEN+ChatColor.BOLD+"KILLS: "+ChatColor.RED+puntos));
+				
+				
+			}
+			
+
+			if(gi instanceof GamePointHunt) {
+				GamePointHunt ga = (GamePointHunt) gi;
 			    MgScore sco = new MgScore(plugin);
-			    sco.showTopPlayersFFA(player);
+			    sco.showTopPlayersPh(player);
 				ga.reachLimitPoint();
+
 				
-				
-				
-//				GameConditions cm = new GameConditions(plugin);
-//				cm.setKitMg(player);
-				 
+				if(!ga.getEntityPoints().isEmpty()) {
+					
+					for(EntityPoints ent : ga.getEntityPoints()) {
+						
+						if(e instanceof Player) {
+							Player target = (Player) e;
+							
+							if(ent.getName() != null && ent.getName().equals(target.getName())) {
+								pl.getGamePoints().addPoints(ent.getPoint());
+								int puntos = pl.getGamePoints().getPoints();
+								
+								if(ent.getPoint() < 0) {
+									player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lMENOS: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
+								}else {
+									player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lMAS: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
+
+								}
+								
+							
+								break;
+							}
+							
+						}else {
+							if(e.getCustomName() != null) {
+								if(e.getType() == ent.getType() && ent.getName() != null && ent.getName().equals(ChatColor.stripColor(e.getCustomName()))) {
+									pl.getGamePoints().addPoints(ent.getPoint());
+									int puntos = pl.getGamePoints().getPoints();
+									if(ent.getPoint() < 0) {
+										player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lMENOS: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
+									}else {
+										player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lMAS: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
+
+									}									
+									break;
+								}
+								
+							}else {
+								if(e.getType() == ent.getType()) {
+									pl.getGamePoints().addPoints(ent.getPoint());
+									int puntos = pl.getGamePoints().getPoints();
+									
+									
+									if(ent.getPoint() < 0) {
+										player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lMENOS: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
+									}else {
+										player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lMAS: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
+
+									}
+									break;
+								}
+							}
+						}
+						
+						
+						
+						
+					}
+					
+					
+				}
+				pl.getGamePoints().addPoints(1);
+				int puntos = pl.getGamePoints().getPoints();
+				player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.GREEN+ChatColor.BOLD+"POINTS: "+ChatColor.RED+puntos));
 			}
 					
 			
 		
 	}
+	
+	
+	public List<Map.Entry<String, Integer>> sortedPlayerPoints(Set<Entry<String,Integer>> l){
+		List<Map.Entry<String, Integer>> list = new ArrayList<>(l);
+		
+		
+		Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+			public int compare(Map.Entry<String, Integer> e1, Map.Entry<String, Integer> e2) {
+				return e2.getValue() - e1.getValue();
+			}
+		});
+		
+		return list;
+	}
+	
+	
 	
 	public void getShowPointsOfPlayersGame(Player player) {
 			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
@@ -902,23 +987,24 @@ public class GameIntoMap {
 			List<Player> joins = new ArrayList<>();
 	
 				
-					 joins = gmc.ConvertStringToPlayer(gi.getParticipants());
+			 joins = gmc.ConvertStringToPlayer(gi.getParticipants());
 
-					for(Player user : joins) {
-						PlayerInfo pl1 = plugin.getPlayerInfoPoo().get(user);
-						 scores.put(user.getName(), pl1.getGamePoints().getKills());	
-					}
-			 
+			for(Player user : joins) {
+				PlayerInfo pl1 = plugin.getPlayerInfoPoo().get(user);
+				if(gi instanceof GameAdventure) {
+					 scores.put(user.getName(), pl1.getGamePoints().getKills());	
+				}else if(gi instanceof GamePointHunt) {
+					 scores.put(user.getName(), pl1.getGamePoints().getPoints());	
+				}
+				
+			}
+	 
 		
 		// SEGUNDA PARTE CALCULO MUESTRA DE MAYOR A MENOR PUNTAJE
-		List<Map.Entry<String, Integer>> list = new ArrayList<>(scores.entrySet());
+		List<Map.Entry<String, Integer>> list = sortedPlayerPoints(scores.entrySet());
 
 		 
-		Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
-			public int compare(Map.Entry<String, Integer> e1, Map.Entry<String, Integer> e2) {
-				return e2.getValue() - e1.getValue();
-			}
-		});
+
 
 		// TERCERA PARTE IMPRIMIR DATOS DE MAYOR A MENOR
 	
@@ -933,6 +1019,7 @@ public class GameIntoMap {
 						player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"===============================");
 						for (Map.Entry<String, Integer> e : list) {
 							i++;
+							PlayerInfo pl1 = plugin.getPlayerInfoPoo().get(gmc.ConvertStringToPlayerAlone(e.getKey()));
 							if (i <= message.getInt("Top-Amount")) {
 								
 								// player.sendMessage(i+" Nombre:"+e.getKey()+" Puntos:"+e.getValue());
@@ -941,65 +1028,94 @@ public class GameIntoMap {
 									List<String> messagep = message.getStringList("Message.message-top-texto");
 									for (int j = 0; j < messagep.size(); j++) {
 										String texto = messagep.get(j);
+										
+										
+										
 										if(e.getKey().equals(player.getName())){
 											isintop = true;
 										}
 									 		
-											// String time = plugin.getPlayerCronomet().get(e.getKey());
-										if(i == 1) {
-											player.sendMessage(ChatColor.translateAlternateColorCodes('&',texto
-													 .replace("%mvp%",""+ChatColor.GREEN+ChatColor.BOLD+"MVP")
-													 .replace("%player%", e.getKey())
-													 .replace("%place%", Integer.toString(i))
-													 .replace("%kills%", Integer.toString(e.getValue()))
-													 .replace("%reward%", Long.toString(gmc.RewardPointsForItems(e.getValue())))
-													 .replace("%revive%", Integer.toString(gmc.getReviveInfo(e.getKey())))
-													 .replace("%helprevive%", Integer.toString(gmc.getReviveAsistenceInfo(e.getKey())))
-													 .replace("%deads%", Integer.toString(gmc.getDeadsInfo(e.getKey())))
-													 .replace("%damage%", Long.toString(gmc.getDamageInfo(e.getKey())))
-													 //.replace("%cronomet%", time)
-													
-													 ));
-										}else {
-											player.sendMessage(ChatColor.translateAlternateColorCodes('&',texto
-													 .replace("%mvp%","")
-													 .replace("%player%", e.getKey())
-													 .replace("%place%", Integer.toString(i))
-													 .replace("%kills%", Integer.toString(e.getValue()))
-													 .replace("%reward%", Long.toString(gmc.RewardPointsForItems(e.getValue())))
-													 .replace("%revive%", Integer.toString(gmc.getReviveInfo(e.getKey())))
-													 .replace("%helprevive%", Integer.toString(gmc.getReviveAsistenceInfo(e.getKey())))
-													 .replace("%deads%", Integer.toString(gmc.getDeadsInfo(e.getKey())))
-													 .replace("%damage%", Long.toString(gmc.getDamageInfo(e.getKey())))
-													 //.replace("%cronomet%", time)
-													
-													 ));
-										}
-											
-							}}}
-							if(!isintop) {
-								if(e.getKey().equals(player.getName())){
-									player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"===============================");
-									if (message.getBoolean("Message.message-top")) {
-										List<String> messagep = message.getStringList("Message.message-top-texto");
-										for (int j = 0; j < messagep.size(); j++) {
-											String texto = messagep.get(j);
-					
+										
+										if(gi instanceof GameAdventure) {
+											if(i == 1) {
+												
+												
+												player.sendMessage(ChatColor.translateAlternateColorCodes('&',texto
+														 .replace("%mvp%",""+ChatColor.GREEN+ChatColor.BOLD+"MVP")
+														 .replace("%player%", e.getKey())
+														 .replace("%place%", Integer.toString(i))
+														 .replace("%kills%", Integer.toString(e.getValue()))
+														 .replace("%reward%", Long.toString(gmc.RewardPointsForItems(e.getValue())))
+														 .replace("%revive%", Integer.toString(pl1.getGamePoints().getRevive()))
+														 .replace("%helprevive%", Integer.toString(pl1.getGamePoints().getHelpRevive()))
+														 .replace("%deads%", Integer.toString(pl1.getGamePoints().getDeads()))
+														 .replace("%damage%", Long.toString(pl1.getGamePoints().getDamage()))
+														 //.replace("%cronomet%", time)
+														
+														 ));
+												
+												
+											}else {
+												
+												
 												player.sendMessage(ChatColor.translateAlternateColorCodes('&',texto
 														 .replace("%mvp%","")
 														 .replace("%player%", e.getKey())
 														 .replace("%place%", Integer.toString(i))
 														 .replace("%kills%", Integer.toString(e.getValue()))
 														 .replace("%reward%", Long.toString(gmc.RewardPointsForItems(e.getValue())))
-														 .replace("%revive%", Integer.toString(gmc.getReviveInfo(e.getKey())))
-														 .replace("%helprevive%", Integer.toString(gmc.getReviveAsistenceInfo(e.getKey())))
-														 .replace("%deads%", Integer.toString(gmc.getDeadsInfo(e.getKey())))
-														 .replace("%damage%", Long.toString(gmc.getDamageInfo(e.getKey()))+ChatColor.RED+"Fuera del Top.")
+														 .replace("%revive%", Integer.toString(pl1.getGamePoints().getRevive()))
+														 .replace("%helprevive%", Integer.toString(pl1.getGamePoints().getHelpRevive()))
+														 .replace("%deads%", Integer.toString(pl1.getGamePoints().getDeads()))
+														 .replace("%damage%", Long.toString(pl1.getGamePoints().getDamage()))
 														 //.replace("%cronomet%", time)
 														
 														 ));
+											}
+										}else if(gi instanceof GamePointHunt) {
+											if(i == 1) {
+												player.sendMessage(Utils.colorTextChatColor("&a&lMVP &a%player% &6: &c%points%").replaceAll("%player%", player.getName()).replaceAll("%points%",String.valueOf(pl.getGamePoints().getPoints())));
+
+											}else {
+												player.sendMessage(Utils.colorTextChatColor(" &a%player% &6: &c%points%").replaceAll("%player%", player.getName()).replaceAll("%points%",String.valueOf(pl.getGamePoints().getPoints())));
+
+											}
+
 											
+										}
+											// String time = plugin.getPlayerCronomet().get(e.getKey());
+	
+										
+										
+											
+							}}}
+							if(!isintop) {//SI ESTA FUERA DEL TOP EJMPL PASADO DE 10 LE DIRA SOLO SU INFO
+								if(e.getKey().equals(player.getName())){
+									player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"===============================");
+									if (message.getBoolean("Message.message-top")) {
+										List<String> messagep = message.getStringList("Message.message-top-texto");
+										for (int j = 0; j < messagep.size(); j++) {
+											String texto = messagep.get(j);
+											
+											if(gi instanceof GameAdventure) {
+												player.sendMessage(ChatColor.translateAlternateColorCodes('&',texto
+														 .replace("%mvp%","")
+														 .replace("%player%", e.getKey())
+														 .replace("%place%", Integer.toString(i))
+														 .replace("%kills%", Integer.toString(e.getValue()))
+														 .replace("%reward%", Long.toString(gmc.RewardPointsForItems(e.getValue())))
+														 .replace("%revive%", Integer.toString(pl1.getGamePoints().getRevive()))
+														 .replace("%helprevive%", Integer.toString(pl1.getGamePoints().getHelpRevive()))
+														 .replace("%deads%", Integer.toString(pl1.getGamePoints().getDeads()))
+														 .replace("%damage%", Long.toString(pl1.getGamePoints().getDamage()))+ChatColor.RED+"Fuera del Top.")
+														 //.replace("%cronomet%", time)
+														
+														 );
+											
+											}else if(gi instanceof GamePointHunt) {
 												
+												player.sendMessage(Utils.colorTextChatColor(" &a%player% &6: &c%points%").replaceAll("%player%", player.getName()).replaceAll("%points%",String.valueOf(pl.getGamePoints().getPoints())));
+											}
 										}}
 								}
 
@@ -1010,19 +1126,7 @@ public class GameIntoMap {
 						player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"===============================");
 						player.sendMessage(""+ChatColor.GREEN+ChatColor.BOLD+"");
 		
-//		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
-//		GamePoints gp = pl.getGamePoints();
-//		int puntos = gp.getKills();
-//		int puntos2 = gp.getDeads();
-//		int puntos3 = gp.getRevive();
-//		int puntos4 = gp.getHelpRevive();
-//		long puntos5 = gp.getDamage();
-//		player.sendMessage(""+ChatColor.YELLOW+"   [PUNTOS DE LA PARTIDA]");
-//		player.sendMessage(""+ChatColor.GREEN+" Eliminaciones : "+ChatColor.YELLOW+puntos);
-//		player.sendMessage(""+ChatColor.GREEN+" Muertes : "+ChatColor.YELLOW+puntos2);
-//		player.sendMessage(""+ChatColor.GREEN+" Revivido : "+ChatColor.YELLOW+puntos3);
-//		player.sendMessage(""+ChatColor.GREEN+" Ayudas a Revivir : "+ChatColor.YELLOW+puntos4);
-//		player.sendMessage(""+ChatColor.GREEN+" Daño : "+ChatColor.YELLOW+puntos5);
+
 		
 	}
 	
@@ -1058,6 +1162,12 @@ public class GameIntoMap {
 	//TODO DROP
 	
 	public void PlayerDropAllItemsSimple(Player player) {
+		
+		PlayerInfo pi = plugin.getPlayerInfoPoo().get(player);
+		GameInfo gi = plugin.getGameInfoPoo().get(pi.getMapName());
+		
+		if(gi.keepInventory()) return;
+		
 		if(player.getInventory().getContents().length >= 1) {
 			for (ItemStack itemStack : player.getInventory().getContents()) {
 				if(itemStack == null) continue;
@@ -1092,6 +1202,8 @@ public class GameIntoMap {
 		  
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
+		
+		if(gi.keepInventory()) return;
 		
 		if(player.getInventory().containsAtLeast(Items.SOULP.getValue(), 1)) {
 		
@@ -1161,7 +1273,7 @@ public class GameIntoMap {
 					}
 					
 					if(gmc.isPlayerinGame(p)) {
-						gamePlayerAddPoints(p);
+						gamePlayerAddPoints(p,e);
 					}
 					
 				}
@@ -1214,7 +1326,7 @@ public class GameIntoMap {
 								gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio Disparado por "+ChatColor.YELLOW+killer.getName());
 							}
 							if(gmc.isPlayerinGame(killer)) {
-								gamePlayerAddPoints(killer);
+								gamePlayerAddPoints(killer,e);
 							} 
 //							player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+killer.getName(), 40, 80, 40);
 //							player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+killer.getName());
@@ -1439,7 +1551,7 @@ public class GameIntoMap {
 						}
 						
 						if(gmc.isPlayerinGame(p)) {
-							gamePlayerAddPoints(p);
+							gamePlayerAddPoints(p,mob);
 						}
 					}else if(!mob.isDead()) {
 						if(c == EntityDamageEvent.DamageCause.FALL) {

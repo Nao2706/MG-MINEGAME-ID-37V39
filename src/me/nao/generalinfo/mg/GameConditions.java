@@ -94,7 +94,7 @@ import me.nao.scoreboard.mg.MgScore;
 import me.nao.teams.mg.MgTeams;
 import me.nao.timers.mg.AdventureTemp;
 import me.nao.timers.mg.DialogRun;
-import me.nao.timers.mg.FreeForAllTemp;
+import me.nao.timers.mg.PointHuntTemp;
 import me.nao.timers.mg.ResistenceTemp;
 import me.nao.topusers.mg.PointsManager;
 import me.nao.utils.mg.Utils;
@@ -375,8 +375,8 @@ public class GameConditions {
 				plugin.getEntitiesFromFlare().remove(name);
 				plugin.getGameInfoPoo().remove(name);
 
-		}else if(gi instanceof GameFreeForAll) {
-			GameFreeForAll ga = (GameFreeForAll) gi;
+		}else if(gi instanceof GamePointHunt) {
+			GamePointHunt ga = (GamePointHunt) gi;
 			List<Player> player = ConvertStringToPlayer(ga.getParticipants());
 			
 			 
@@ -663,7 +663,7 @@ public class GameConditions {
 				if(ms.getGameType() == GameType.ADVENTURE || ms.getGameType() == GameType.RESISTENCE) {
 					pl.setPlayerGameStatus(PlayerGameStatus.ALIVE);
 					
-				}else if(ms.getGameType() == GameType.FREEFORALL) {
+				}else if(ms.getGameType() == GameType.POINTHUNT) {
 					pl.setPlayerGameStatus(PlayerGameStatus.UNKNOW);
 					
 				}
@@ -864,9 +864,9 @@ public class GameConditions {
 				    
 					Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch).add(0.5,0,0.5);
 					player.teleport(l);
-			    }else if(gm instanceof GameFreeForAll) {
+			    }else if(gm instanceof GamePointHunt) {
 			    	
-			    	GameFreeForAll ffa = (GameFreeForAll) gm;
+			    	GamePointHunt ffa = (GamePointHunt) gm;
 			    	Random r = new Random();
 			    	Location loc = ffa.getSpawns().get(r.nextInt(ffa.getSpawns().size()));
 			    	player.teleport(loc);
@@ -1006,9 +1006,9 @@ public class GameConditions {
 				}else if(gi.getGameType() == GameType.RESISTENCE) {
 					ResistenceTemp t = new ResistenceTemp(plugin);
 					t.startMg(gi.getMapName());
-				}else if(gi.getGameType() == GameType.FREEFORALL) {
+				}else if(gi.getGameType() == GameType.POINTHUNT) {
 					
-					FreeForAllTemp t = new FreeForAllTemp(plugin);
+					PointHuntTemp t = new PointHuntTemp(plugin);
 					t.startMg(gi.getMapName());
 				}
 			 
@@ -1216,7 +1216,7 @@ public class GameConditions {
 		   
 	     player.sendTitle(ChatColor.translateAlternateColorCodes('&',mision.getString("Win.Tittle-of-Win").replaceAll("%player%", player.getName())), ChatColor.translateAlternateColorCodes('&',mision.getString("Win.SubTittle-of-Win").replaceAll("%player%", player.getName())), aw, aw2, aw3);
 
-		  if(mision.getBoolean("Win.Reward-Position-Top") || ms instanceof GameFreeForAll) {
+		  if(mision.getBoolean("Win.Reward-Position-Top") || ms instanceof GamePointHunt) {
 			  
 						HashMap<String, Integer> scores = new HashMap<>();
 	
@@ -1303,7 +1303,7 @@ public class GameConditions {
 		GameInfo ms = plugin.getGameInfoPoo().get(name);
 		
 		//NO HAY PERDIDA EN ESTE MODO
-		if(ms instanceof GameFreeForAll) return;
+		if(ms instanceof GamePointHunt) return;
 		
 		List<String> winnerp = ms.getWinnersPlayers();
 		List<String> spectador = ms.getSpectators();
@@ -1486,15 +1486,19 @@ public class GameConditions {
 				}else if(type == GameType.RESISTENCE) {
 					
 					boss = Bukkit.createBossBar(""+ChatColor.GREEN+ChatColor.BOLD+"Bienvenido al Mapa "+ChatColor.GOLD+ChatColor.BOLD+map+ChatColor.RED+ChatColor.BOLD+" Modo: "+ChatColor.DARK_RED+ChatColor.BOLD+"Resistencia",BarColor.GREEN, BarStyle.SOLID,  null ,null);
-				}else if(type == GameType.FREEFORALL) {
+				}else if(type == GameType.POINTHUNT) {
 					
-					boss = Bukkit.createBossBar(""+ChatColor.GREEN+ChatColor.BOLD+"Bienvenido al Mapa "+ChatColor.GOLD+ChatColor.BOLD+map+ChatColor.RED+ChatColor.BOLD+" Modo: "+ChatColor.AQUA+ChatColor.BOLD+"Todos Contra Todos",BarColor.GREEN, BarStyle.SOLID,  null ,null);
+					boss = Bukkit.createBossBar(""+ChatColor.GREEN+ChatColor.BOLD+"Bienvenido al Mapa "+ChatColor.GOLD+ChatColor.BOLD+map+ChatColor.RED+ChatColor.BOLD+" Modo: "+ChatColor.AQUA+ChatColor.BOLD+"Caceria de Puntos",BarColor.GREEN, BarStyle.SOLID,  null ,null);
 				}
 			    boss.setVisible(true);
 			   
 			    
 			    GameInfo gi = new GameInfo();
-			    
+				gi.setMapData(game);
+				//PRECARGO LOS DATOS PARA NO LLAMAR INDISCRIMINADAMENTE AL YML
+				plugin.getGameInfoPoo().put(map, gi);
+				
+				
 		    	gi.setMapName(map);
 		    	gi.setTimeMg(time);
 		    	gi.setGameType(type);
@@ -1514,6 +1518,8 @@ public class GameConditions {
 		    	gi.setBarriersinMap(hasBarriersMap(map));
 		    	gi.setAllowedJoinWithOwnInventory(canJoinWithYourInventory(map));
 		    	gi.setTimersEvents(loadDataExecutableTimer(map));
+		    	gi.setkeepInventory(loadKeepInventory(map));
+		    	
 		    	 
 		    	gi.setSpawnItemRange(getSpawnItemRange(map));
 		    	gi.setSpawnMobRange(getSpawnMobRange(map));
@@ -1527,7 +1533,7 @@ public class GameConditions {
 		    	gi.setDispenserRange(getDispenserRange(map));
 		    	gi.setRankedMap(isMapRanked(map));
 		    	gi.setPointsLosePorcent(getPointsLosePorcent(map));
-		    	gi.setMapData(game);			    	
+		    		    	
 		    	gi.setLvltoPlay(getLvlToPlay(map));
 		    	gi.setPrestigelvltoPlay(getprestigeLvlToPlay(map));
 
@@ -1547,19 +1553,21 @@ public class GameConditions {
 			    						
 			    	
 					plugin.getEntitiesFromFlare().put(map,entities);
-					plugin.getGameInfoPoo().put(map, ga);
+					plugin.getGameInfoPoo().replace(map, ga);
 					
-			    }else if(type == GameType.FREEFORALL) {
+			    }else if(type == GameType.POINTHUNT) {
 			    	  //pasar solo una lista para los 4 espacios ojo
 			    
-			    	GameFreeForAll ffa = new GameFreeForAll(plugin);
+			    	GamePointHunt ffa = new GamePointHunt(plugin);
 			    	ffa.copyData(gi);
 			    	ffa.setLimitpoints(loadLimitPointFfa(map));
 			    	ffa.setSpawns(loadMapSpawnsFfa(map));
+			    	ffa.sethasCustomPoints(loadhasCustomPoints(map));
+			    	ffa.setEntityPoints(loadEntityPoints(map));
 			    	
 			    						 
 					plugin.getEntitiesFromFlare().put(map,entities);
-					plugin.getGameInfoPoo().put(map, ffa);
+					plugin.getGameInfoPoo().replace(map, ffa);
 					
 			    }
 		
@@ -1627,8 +1635,8 @@ public class GameConditions {
 					ResistenceTemp t = new ResistenceTemp(plugin);
 					t.startMg(ms.getMapName());
 					
-				}else if(ms.getGameType() == GameType.FREEFORALL) {
-					FreeForAllTemp t = new FreeForAllTemp(plugin);
+				}else if(ms.getGameType() == GameType.POINTHUNT) {
+					PointHuntTemp t = new PointHuntTemp(plugin);
 					t.startMg(ms.getMapName());
 				}
 			}
@@ -1650,7 +1658,7 @@ public class GameConditions {
     	gi.setPvpinMap(isPvPAllowed(map));
     	gi.setAllowedJoinWithOwnInventory(canJoinWithYourInventory(map));
     	gi.setTimersEvents(loadDataExecutableTimer(map));
-    	
+       	gi.setkeepInventory(loadKeepInventory(map));
     	
     	gi.setSpawnItemRange(getSpawnItemRange(map));
     	gi.setSpawnMobRange(getSpawnMobRange(map));
@@ -1672,10 +1680,12 @@ public class GameConditions {
     	gi.setLvltoPlay(getLvlToPlay(map));
     	gi.setPrestigelvltoPlay(getprestigeLvlToPlay(map));
     	
-    	if(gi instanceof GameFreeForAll) {
-    		GameFreeForAll ffa = (GameFreeForAll) gi;
+    	if(gi instanceof GamePointHunt) {
+    		GamePointHunt ffa = (GamePointHunt) gi;
 	    	ffa.setLimitpoints(loadLimitPointFfa(map));
 	    	ffa.setSpawns(loadMapSpawnsFfa(map));
+	      	ffa.sethasCustomPoints(loadhasCustomPoints(map));
+	    	ffa.setEntityPoints(loadEntityPoints(map));
     	}
     	
     	
@@ -1706,24 +1716,28 @@ public class GameConditions {
 	}
 	
 	public boolean hasBarriersMap(String map) {
-		FileConfiguration game = getGameConfig(map);
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 		return game.getBoolean("Map-hasBarriers");
 	}
 	
 	public void setHeartsInGame(Player player , String map) {
-		FileConfiguration game = getGameConfig(map);
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 		int vida = game.getInt("Set-Hearts");
 		player.getAttribute(Attribute.MAX_HEALTH).setBaseValue(vida);
 		return;
 	}
 	
 	public int getprestigeLvlToPlay(String map) {
-		FileConfiguration game = getGameConfig(map); 
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 		return game.getInt("Prestige-To-Play");
 	}
 	
 	public int getLvlToPlay(String map) {
-		FileConfiguration game = getGameConfig(map); 
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 		return game.getInt("Level-To-Play");
 	}
 	
@@ -1733,27 +1747,32 @@ public class GameConditions {
 	}
 	  
 	public boolean canJoinWithYourInventory(String map) {
-		 FileConfiguration game = getGameConfig(map);
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 		 return game.getBoolean("Allow-Inventory");
 	}
 	
 	public boolean isPvPAllowed(String map) {
-		 FileConfiguration game = getGameConfig(map);
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 		 return game.getBoolean("Allow-PVP");
 	}
 	
 	public boolean hasMapObjetives(String map) {
-		 FileConfiguration game = getGameConfig(map);
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 		 return game.getBoolean("Has-Objetives");
 	}
 	
 	public boolean canUseKit(String map) {
-		 FileConfiguration game = getGameConfig(map);
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 		 return game.getBoolean("Has-Kit");
 	}
 	
 	public boolean existKit(String map) {
-		 FileConfiguration game = getGameConfig(map);
+		 GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		 FileConfiguration game = gi.getMapData();
 		 FileConfiguration kits = plugin.getKitsYaml();
 		
 		 String kit = game.getString("Start-Kit");
@@ -1799,28 +1818,33 @@ public class GameConditions {
 	}
 	
 	public boolean hasObjetives(String map) {
-		FileConfiguration game = getGameConfig(map);
+ 		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 	    return game.getBoolean("Has-Objetives");
 	}
 	
 	public boolean isNecessaryObjetivePrimary(String map) {
-		FileConfiguration game = getGameConfig(map);
+ 		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 	    return game.getBoolean("Primary-Objetive-Mandatory");
 	}
 	
 	public boolean isNecessaryObjetiveSedondary(String map) {
-		FileConfiguration game = getGameConfig(map);
+ 		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 	    return game.getBoolean("Secondary-Objetive-Mandatory");
 	}
 	
 	public String getNameOfTheMap(String map) {
-		FileConfiguration mision = getGameConfig(map);
-		return mision.getString("Start.Tittle-of-Mision");
+ 		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
+		return game.getString("Start.Tittle-of-Mision");
 	}
 	
 	public int getMaxPlayerMap(String map) {
-		FileConfiguration mision = getGameConfig(map);
-		return mision.getInt("Max-Player");
+ 		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
+		return game.getInt("Max-Player");
 	}
 	
 	/**
@@ -1828,32 +1852,38 @@ public class GameConditions {
 	 * @param String , el Mapa
 	 */
 	public int getMinPlayerMap(String map) {
-		FileConfiguration mision = getGameConfig(map);
-		return mision.getInt("Min-Player");
+ 		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
+		return game.getInt("Min-Player");
 	}
 	
 	public int getDispenserRange(String map) {
-		FileConfiguration game = getGameConfig(map);
+ 		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 		return game.getInt("Dispenser-Range",30);
 	}
 	
 	public int getSpawnItemRange(String map) {
-		FileConfiguration game = getGameConfig(map);
+ 		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 		return game.getInt("Spawners-Detection.Ore-Spawner");
 	}
 	
 	public int getSpawnMobRange(String map) {
-		FileConfiguration game = getGameConfig(map);
+ 		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 		return game.getInt("Spawners-Detection.Mob-Spawner");
 	}
 	
 	public int getToxicZoneRange(String map) {
-		FileConfiguration game = getGameConfig(map);
+ 		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 		return game.getInt("Spawners-Detection.Toxic-Zone");
 	}
 	
 	public int getPointsPerKills(String map) {
-		FileConfiguration game = getGameConfig(map);
+ 		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 		return game.getInt("Points-System.Points-Per-Kills");
 	}
 	
@@ -1863,53 +1893,69 @@ public class GameConditions {
 	}
 	
 	public int getPointsPerRevive(String map) {
-		FileConfiguration game = getGameConfig(map);
+ 		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 		return game.getInt("Points-System.Points-Per-Revive");
 	}
 	
 	public int getPointsPerHelpRevive(String map) {
-		FileConfiguration game = getGameConfig(map);
+ 		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 		return game.getInt("Points-System.Points-Per-HelpRevive");
 	}
 
 	public int getPointsBonus(String map) {
-		FileConfiguration game = getGameConfig(map);
+ 		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 		return game.getInt("Points-System.Points-Bonus");
 	}	
 	
 	public int getPointsLosePorcent(String map) {
-		FileConfiguration game = getGameConfig(map);
+ 		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 		return game.getInt("Points-System.Points-LosePorcent");
 	}	
 	
 	public boolean isEnabledReviveSystem(String map) {
-		FileConfiguration game = getGameConfig(map);
+ 		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 		return game.getBoolean("Revive-System");
 	}
 	
 	public boolean hasDeleteInventoryByTimeOut(String map) {
-		FileConfiguration game = getGameConfig(map);
+ 		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 		return game.getBoolean("DeleteInventoryByTimeOut");
 	}
 	
 	public boolean hasCuboidZones(String map) {
-		FileConfiguration game = getGameConfig(map);
+ 		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 	    return game.contains("Cuboid-Zones.List");
 	}
 	
 	public boolean hasMapCooldownForReplayData(String map) {
-		FileConfiguration game = getGameConfig(map);
+ 		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 	    return game.getBoolean("Cooldown-For-Replay.Has-Cooldown");
 	}
 	
 	public boolean hasMapCleanedData(String map) {
-		FileConfiguration game = getGameConfig(map);
+ 		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 	    return game.getBoolean("CleanMapFromEntitys");
 	}	
 	
 	public String getMapTimeCooldownForReplayData(String map) {
-		FileConfiguration game = getGameConfig(map);
+ 		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 	    return game.getString("Cooldown-For-Replay.Cooldown-Time");
+	}
+	
+	public boolean loadKeepInventory(String map) {
+ 		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
+	    return game.getBoolean("Keep-Inventory");
 	}
 	
 	public boolean isGuardian(Entity e){
@@ -2097,7 +2143,7 @@ public class GameConditions {
 				player.sendMessage(ChatColor.RED+"El Mapa "+map+" esta Deshabilitado, Accediendo como Op.");
 			}
 		}
-		
+		 
 		
 		 GameInfo mapinfo = plugin.getGameInfoPoo().get(map);
 		 BossBar boss = mapinfo.getBossbar();
@@ -2245,8 +2291,9 @@ public class GameConditions {
 			
 		 }
 		 
-		 if(mapinfo instanceof GameFreeForAll) {
-				 if(!data.contains("Free-For-All.Limit-Point")) {
+		 if(mapinfo instanceof GamePointHunt) {
+			
+				 if(!data.contains("Point-Hunt.Limit-Point")) {
 					 if(player.isOp()) {
 						 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado el Limite de Puntos");
 					 }
@@ -2254,7 +2301,7 @@ public class GameConditions {
 						 player.sendMessage(ChatColor.RED+"Error en el Mapa: "+map);
 					 }
 					 return false;
-				 }else  if(!data.contains("Free-For-All.Spawns")) {
+				 }else  if(!data.contains("Point-Hunt.Spawns")) {
 					 if(player.isOp()) {
 						 player.sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no tiene seteado los Spawns");
 					 }
@@ -3330,8 +3377,8 @@ public class GameConditions {
 
 				}
 			}
-			if(map instanceof GameFreeForAll) {
-				GameFreeForAll ffa = (GameFreeForAll) map;
+			if(map instanceof GamePointHunt) {
+				GamePointHunt ffa = (GamePointHunt) map;
 				
 			 	HashMap<String, Integer> scores = new HashMap<>();
 				List<Player> joins = ConvertStringToPlayer(ffa.getParticipants());
@@ -3500,8 +3547,8 @@ public class GameConditions {
 					sendMessageToUserAndConsole(player,""+ChatColor.GOLD+"- "+part.getName()+ChatColor.RED+" K:"+ChatColor.GREEN+pi.getGamePoints().getKills()+ChatColor.RED+" D:"+ChatColor.GREEN+pi.getGamePoints().getDeads()+ChatColor.RED+" R:"+ChatColor.GREEN+pi.getGamePoints().getRevive()+ChatColor.RED+" HR:"+ChatColor.GREEN+pi.getGamePoints().getHelpRevive());
 				}
 				
-			}else if(map instanceof GameFreeForAll) {
-				GameFreeForAll ffa = (GameFreeForAll) map;
+			}else if(map instanceof GamePointHunt) {
+				GamePointHunt ffa = (GamePointHunt) map;
 				
 			 	HashMap<String, Integer> scores = new HashMap<>();
 				List<Player> joins = ConvertStringToPlayer(ffa.getParticipants());
@@ -3667,7 +3714,7 @@ public class GameConditions {
 				
 				
 					for(Player player : joins) {
-
+						PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 						if (message.getBoolean("Message.message-top")) {
 							List<String> messagep1 = message.getStringList("Message.message-top-decoracion1");
 							for (int j1 = 0; j1 < messagep1.size(); j1++) {
@@ -3697,10 +3744,10 @@ public class GameConditions {
 													 .replace("%place%", Integer.toString(i))
 													 .replace("%kills%", Integer.toString(e.getValue()))
 													 .replace("%reward%", Long.toString(RewardPointsForItems(e.getValue())))
-													 .replace("%revive%", Integer.toString(getReviveInfo(e.getKey())))
-													 .replace("%helprevive%", Integer.toString(getReviveAsistenceInfo(e.getKey())))
-													 .replace("%deads%", Integer.toString(getDeadsInfo(e.getKey())))
-													 .replace("%damage%", Long.toString(getDamageInfo(e.getKey())))
+													 .replace("%revive%", Integer.toString(pl.getGamePoints().getRevive()))
+													 .replace("%helprevive%", Integer.toString(pl.getGamePoints().getHelpRevive()))
+													 .replace("%deads%", Integer.toString(pl.getGamePoints().getDeads()))
+													 .replace("%damage%", Long.toString(pl.getGamePoints().getDamage())) 
 													 //.replace("%cronomet%", time)
 													
 													 ));
@@ -3711,10 +3758,10 @@ public class GameConditions {
 													 .replace("%place%", Integer.toString(i))
 													 .replace("%kills%", Integer.toString(e.getValue()))
 													 .replace("%reward%", Long.toString(RewardPointsForItems(e.getValue())))
-													 .replace("%revive%", Integer.toString(getReviveInfo(e.getKey())))
-													 .replace("%helprevive%", Integer.toString(getReviveAsistenceInfo(e.getKey())))
-													 .replace("%deads%", Integer.toString(getDeadsInfo(e.getKey())))
-													 .replace("%damage%", Long.toString(getDamageInfo(e.getKey())))
+													 .replace("%revive%", Integer.toString(pl.getGamePoints().getRevive()))
+													 .replace("%helprevive%", Integer.toString(pl.getGamePoints().getHelpRevive()))
+													 .replace("%deads%", Integer.toString(pl.getGamePoints().getDeads()))
+													 .replace("%damage%", Long.toString(pl.getGamePoints().getDamage())) 
 													 //.replace("%cronomet%", time)
 													
 													 ));
@@ -3810,7 +3857,7 @@ public class GameConditions {
 									List<String> messagep = message.getStringList("Message.message-top-texto");
 									for (int j = 0; j < messagep.size(); j++) {
 										String texto = messagep.get(j);
-									
+										PlayerInfo pl = plugin.getPlayerInfoPoo().get(ConvertStringToPlayerAlone(e.getKey()));
 									 		
 											// String time = plugin.getPlayerCronomet().get(e.getKey());
 									
@@ -3821,13 +3868,16 @@ public class GameConditions {
 														 .replace("%place%", Integer.toString(i))
 														 .replace("%kills%", Integer.toString(e.getValue()))
 														 .replace("%reward%", Long.toString(RewardPointsForItems(e.getValue())))
-														 .replace("%revive%", Integer.toString(getReviveInfo(e.getKey())))
-														 .replace("%helprevive%", Integer.toString(getReviveAsistenceInfo(e.getKey())))
-														 .replace("%deads%", Integer.toString(getDeadsInfo(e.getKey())))
-														 .replace("%damage%", Long.toString(getDamageInfo(e.getKey())))
-														 //.replace("%cronomet%", time)
+														 .replace("%revive%", Integer.toString(pl.getGamePoints().getRevive()))
+														 .replace("%helprevive%", Integer.toString(pl.getGamePoints().getHelpRevive()))
+														 .replace("%deads%", Integer.toString(pl.getGamePoints().getDeads()))
+														 .replace("%damage%", Long.toString(pl.getGamePoints().getDamage()))
+														 
 														
-														 );
+														
+														
+														);
+														 //.replace("%cronomet%", time);
 										}else {
 											sendMessageToUserAndConsole(null,texto
 													 .replace("%mvp%","")
@@ -3835,10 +3885,10 @@ public class GameConditions {
 													 .replace("%place%", Integer.toString(i))
 													 .replace("%kills%", Integer.toString(e.getValue()))
 													 .replace("%reward%", Long.toString(RewardPointsForItems(e.getValue())))
-													 .replace("%revive%", Integer.toString(getReviveInfo(e.getKey())))
-													 .replace("%helprevive%", Integer.toString(getReviveAsistenceInfo(e.getKey())))
-													 .replace("%deads%", Integer.toString(getDeadsInfo(e.getKey())))
-													 .replace("%damage%", Long.toString(getDamageInfo(e.getKey())))
+													 .replace("%revive%", Integer.toString(pl.getGamePoints().getRevive()))
+													 .replace("%helprevive%", Integer.toString(pl.getGamePoints().getHelpRevive()))
+													 .replace("%deads%", Integer.toString(pl.getGamePoints().getDeads()))
+													 .replace("%damage%", Long.toString(pl.getGamePoints().getDamage()))
 													 //.replace("%cronomet%", time)
 													
 													 );
@@ -3860,20 +3910,7 @@ public class GameConditions {
    	}
    	 
    	
-   	public int getReviveInfo(String name) {
-   	 return plugin.getPlayerInfoPoo().get(ConvertStringToPlayerAlone(name)).getGamePoints().getRevive();
-   	}
-   	
- 	public int getDeadsInfo(String name) {
- 	   	 return plugin.getPlayerInfoPoo().get(ConvertStringToPlayerAlone(name)).getGamePoints().getDeads();
- 	}
- 	public int getReviveAsistenceInfo(String name) {
- 	   	 return plugin.getPlayerInfoPoo().get(ConvertStringToPlayerAlone(name)).getGamePoints().getHelpRevive();
- 	}
- 	
- 	public long getDamageInfo(String name) {
-	   	 return plugin.getPlayerInfoPoo().get(ConvertStringToPlayerAlone(name)).getGamePoints().getDamage();
-	}
+
  	
 	public int TransformPosOrNeg(int i) {
 		return i =  (~(i -1));
@@ -3932,8 +3969,8 @@ public class GameConditions {
 								}
 							}
 		
-						}else if(gi instanceof GameFreeForAll) {
-							GameFreeForAll ffa = (GameFreeForAll) gi;
+						}else if(gi instanceof GamePointHunt) {
+							GamePointHunt ffa = (GamePointHunt) gi;
 							for(Player target : participants) {
 								if(motive == StopMotive.WIN) {
 									target.sendMessage(ChatColor.GREEN+gi.getStopReason());
@@ -4012,26 +4049,61 @@ public class GameConditions {
    }
    
    
-   public List<Location> loadMapSpawnsFfa(String map) {
-	    FileConfiguration game = getGameConfig(map);
-	    List<Location> l = new ArrayList<>();
-	    
-	    if(game.contains("Free-For-All.Spawns")) {
-	    	 List<String> spawns = game.getStringList("Free-For-All.Spawns");
-	    	for(String s : spawns) {
-	    		l.add(convertEspecificStringLocationToEspecificLocation(s));
-	    	}
-	    }
-	    
-	    
-	
-		return l;
-  }
+	   public List<Location> loadMapSpawnsFfa(String map) {
+		    FileConfiguration game = getGameConfig(map);
+		    List<Location> l = new ArrayList<>();
+		    
+		    if(game.contains("Point-Hunt.Spawns")) {
+		    	 List<String> spawns = game.getStringList("Point-Hunt.Spawns");
+		    	for(String s : spawns) {
+		    		l.add(convertEspecificStringLocationToEspecificLocation(s));
+		    	}
+		    }
+		    
+		     
+		
+			return l;
+	  }
+	   
+	public List<EntityPoints> loadEntityPoints(String map){
+		List<EntityPoints> l = new ArrayList<>();
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
+   		
  
-   public int loadLimitPointFfa(String map) {
-	   FileConfiguration game = getGameConfig(map);
-	   return game.getInt("Free-For-All.Limit-Point",35);
-   }
+   		
+   	   List<String> custom = game.getStringList("Point-Hunt.CustomPoints");
+   	  if(game.contains("Point-Hunt.CustomPoints")) {
+    		 if(!custom.isEmpty()) {
+      		   for(String t : custom) {
+      			   String parts[] = t.split(";");
+      			   
+      			   if(parts.length == 2) {
+      				   
+      				   l.add(new EntityPoints(EntityType.valueOf(parts[0].toUpperCase()),null,Integer.valueOf(parts[1])));
+      				   
+      			   }else if(parts.length == 3) {
+      				   l.add(new EntityPoints(EntityType.valueOf(parts[0].toUpperCase()),parts[1],Integer.valueOf(parts[2])));
+      			   }
+      		   }
+      	   }  
+    	  }
+   	   
+   	   return l;
+
+	}    
+ 
+    public int loadLimitPointFfa(String map) {
+    	GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
+	   return game.getInt("Point-Hunt.Limit-Point",35);
+    }
+   
+	public boolean loadhasCustomPoints(String map) {
+ 		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
+	    return game.getBoolean("Point-Hunt.CustomPoints",false);
+	}
    
    
    public  Map<String,GameTime> loadDataExecutableTimer(String map) {
@@ -4108,13 +4180,15 @@ public class GameConditions {
     }
    
    public int loadCountdownMap(String map) {
-	    FileConfiguration game = getGameConfig(map);
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 		return game.getInt("CountDownPreLobby");
   }	 
    
 	   
    public List<Location> loadMapGenerators(String map) {
-		FileConfiguration game = getGameConfig(map);
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 		List<Location> l = new ArrayList<>();
 		if(game.contains("Generators.List")) {
 			List<String> generators = game.getStringList("Generators.List");
@@ -4130,7 +4204,8 @@ public class GameConditions {
    
    
    public List<Location> loadMapMobsGenerators(String map) {
-		FileConfiguration game = getGameConfig(map);
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 		List<Location> l = new ArrayList<>();
 		if(game.contains("Mobs-Generators.List")) {
 			List<String> generators = game.getStringList("Mobs-Generators.List");
@@ -4145,7 +4220,8 @@ public class GameConditions {
 	}      
 	     
 	public List<GameTimeActions> loadGameTimeActions(String map) {
-		FileConfiguration game = getGameConfig(map);
+ 		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 		List<GameTimeActions> list = new ArrayList<>();
 			if(game.contains("Time-Actions")) {
 				for (String key : game.getConfigurationSection("Time-Actions").getKeys(false)) {
@@ -4157,24 +4233,11 @@ public class GameConditions {
 		
 		return list;
 	}   
-	
-	
-	public List<GameTimeActions> errorXD(String map) {
-		FileConfiguration game = getGameConfig(map);
-		List<GameTimeActions> list = new ArrayList<>();
-			if(game.contains("Time-Actions")) {
-				for (String key : game.getConfigurationSection("Time-Actions").getKeys(false)) {
-					List<String> actions = game.getStringList("Time-Actions."+key+".List");
-					list.add(new GameTimeActions(key,actions));
-				}
-			    
-			}
-		
-		return list;
-	}   
+
 	
 	public List<CuboidZone> loadCuboidZones(String map){
-		FileConfiguration game = getGameConfig(map);
+ 		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
 		List<CuboidZone> zones = new ArrayList<>();
 		if(hasCuboidZones(map)) {
 			List<String> list = game.getStringList("Cuboid-Zones.List");
@@ -4197,7 +4260,9 @@ public class GameConditions {
 	  
    	//TODO OBJETIVOS
  	public GameObjetivesMG loadObjetivesOfGames(String map) {
-   		FileConfiguration game = getGameConfig(map);
+ 		
+ 		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
    		GameObjetivesMG go = new GameObjetivesMG();
    		
    		List<ObjetivesMG> l = new ArrayList<>();   		
@@ -4296,7 +4361,8 @@ public class GameConditions {
  	
  	
 	public void loadObjetivesOfGameDebug(String map) {
-   		FileConfiguration game = getGameConfig(map);
+ 		GameInfo gi = plugin.getGameInfoPoo().get(map);
+   		FileConfiguration game = gi.getMapData();
    		
    		List<ObjetivesMG> l = new ArrayList<>();
    		

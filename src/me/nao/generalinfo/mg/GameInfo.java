@@ -32,7 +32,7 @@ public class GameInfo {
 	private List<GameTimeActions> gametimeactions;
 	private List<CuboidZone> cuboidzones;	
 	private List<Location> generators,mobsgenerators;	
-	private boolean pvp,barriers,allowinventory,ranked,deleinventorybytimeout,hascooldown,cleanmapfromentitys;
+	private boolean pvp,barriers,allowinventory,ranked,deleinventorybytimeout,hascooldown,cleanmapfromentitys,keepinventory;
 	private GameTime gt;
 	private FileConfiguration data;
 	private List<Map.Entry<String, Integer>> top;
@@ -68,6 +68,7 @@ public class GameInfo {
 		this.pvp = false;
 		this.barriers = true;
 		this.allowinventory = false;
+		this.keepinventory = false;
 		this.gt = null;
 		this.countdownstart = 0;
 		this.toxiczonerange = 0;
@@ -212,6 +213,10 @@ public class GameInfo {
 	
 	public boolean hasMapCleanedFromEntitys() {
 		return cleanmapfromentitys;
+	}
+	
+	public boolean keepInventory() {
+		return keepinventory;
 	}
 	
 	public GameTime getGameTime() {
@@ -364,6 +369,10 @@ public class GameInfo {
 	
 	public void setCleanMapFromEntitys(boolean cleanmapfromentitys) {
 		this.cleanmapfromentitys = cleanmapfromentitys;
+	}
+	
+	public void setkeepInventory(boolean keepinventory) {
+		this.keepinventory = keepinventory;
 	}
 	
 	public void setGameTime(GameTime gt) {

@@ -825,7 +825,7 @@ public class SourceOfDamage implements Listener{
 					//SoulsArmor(player);
 					
 					
-					 c.gamePlayerAddPoints(player);
+					 c.gamePlayerAddPoints(player,ent);
 					 
 					 //iba el otor
 				
@@ -839,7 +839,7 @@ public class SourceOfDamage implements Listener{
 				GameIntoMap c = new GameIntoMap(plugin);
 				 Player target = gmc.ConvertStringToPlayerAlone(plugin.getGuardianCredit().get(e.getEntity()));
 				 if(!gmc.isPlayerinGame(target)) return;
-				 c.gamePlayerAddPoints(target);
+				 c.gamePlayerAddPoints(target,e.getEntity());
 				 target.playSound(target.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 					
 			 
