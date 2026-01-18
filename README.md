@@ -21,3 +21,5 @@ Cosas Pendientes
 - Rotacion automatica de mapas de forma aleatoria ??? (Si se crea o desarrolla colocar algo para evitar repetir el mismo mapa 2 veces seguidas)
 - Particulas en Flechas (Sin confirmar)
 - Archivo de configuracion para todos los mensajes fijos (que pereza)
+- Sistema de dialogos internos (como cuando se usan command blockd con un delay)
+- Mejorar el sistema de Xp (es necesario?)
