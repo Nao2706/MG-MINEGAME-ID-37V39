@@ -825,7 +825,7 @@ public class SourceOfDamage implements Listener{
 					//SoulsArmor(player);
 					
 					
-					 c.gamePlayerAddPoints(player,ent);
+					 c.gamePlayerAddPoints(player,m);
 					 
 					 //iba el otor
 				

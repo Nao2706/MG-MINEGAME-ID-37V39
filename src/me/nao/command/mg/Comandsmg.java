@@ -6740,7 +6740,7 @@ public class Comandsmg implements CommandExecutor{
 			plugin.getCooldown().reload();
 			plugin.getReportsYamls().reload();
 			plugin.getPlayersHistoryYaml().reload();
-			GameConditions gc = new GameConditions(plugin);
+		
 			gc.loadItemMenu();
 			if(player != null) {
 				player.sendMessage(plugin.nombre+ChatColor.GREEN+" Se han recargado las Configuraciones Correctamente.");

@@ -89,7 +89,7 @@ public class GamePointHunt extends GameInfo{
 		
 		for(Player user : joins) {
 			PlayerInfo pl = plugin.getPlayerInfoPoo().get(user);
-			scores.put(user.getName(), pl.getGamePoints().getKills());	
+			scores.put(user.getName(), pl.getGamePoints().getPoints());	
 		}
 		
 		List<Map.Entry<String, Integer>> list = new ArrayList<>(scores.entrySet());
@@ -123,7 +123,7 @@ public class GamePointHunt extends GameInfo{
 		
 		for(Player user : joins) {
 			PlayerInfo pl = plugin.getPlayerInfoPoo().get(user);
-			scores.put(user.getName(), pl.getGamePoints().getKills());	
+			scores.put(user.getName(), pl.getGamePoints().getPoints());	
 		}
 		
 		List<Map.Entry<String, Integer>> list = new ArrayList<>(scores.entrySet());
@@ -156,7 +156,7 @@ public class GamePointHunt extends GameInfo{
 		
 		for(Player user : joins) {
 			PlayerInfo pl = plugin.getPlayerInfoPoo().get(user);
-			scores.put(user.getName(), pl.getGamePoints().getKills());	
+			scores.put(user.getName(), pl.getGamePoints().getPoints());	
 		}
 		
 		List<Map.Entry<String, Integer>> list = new ArrayList<>(scores.entrySet());
@@ -201,12 +201,12 @@ public class GamePointHunt extends GameInfo{
 		
 	}
 	
-	@SuppressWarnings("deprecation")
+	//@SuppressWarnings("deprecation")
 	public void respawnGame(Player player) {
 		List<Location> l  = getSpawns();
 	
 		player.teleport(l.get(r.nextInt(l.size())));
-		player.sendTitle(Utils.colorTextChatColor("&a&l!!! TEN CUIDDO !!!"),Utils.colorTextChatColor("&eCaerse del Mapa no es Bueno"), 20, 20, 20);
+		//player.sendTitle(Utils.colorTextChatColor("&a&l!!! TEN CUIDDO !!!"),Utils.colorTextChatColor("&eCaerse del Mapa no es Bueno"), 20, 20, 20);
 		
 		
 	}
@@ -219,7 +219,7 @@ public class GamePointHunt extends GameInfo{
 		BookMeta meta = (BookMeta) book.getItemMeta();
 		
 		boolean hasmobs = getEntityPoints().isEmpty();
-		meta.setTitle(Utils.colorTextChatColor(""));
+		meta.setTitle(Utils.colorTextChatColor("&a&lGUIA DE CAZA"));
 		if(!hasmobs) {
 			//player.sendMessage(Utils.colorTextChatColor("&a&lMobs a Cazar:"));
 			for(EntityPoints ep : getEntityPoints()) {
@@ -228,10 +228,10 @@ public class GamePointHunt extends GameInfo{
 					
 					if(ep.getPoint() < 0) {
 						//player.sendMessage(Utils.colorTextChatColor("&e&lEvitar &6&lTipo: &c"+ep.getType()+" &6&lNombre: &a"+ep.getName()+" &6&lPuntos: &c&l"+ep.getPoint()));
-						meta.addPage(Utils.colorTextChatColor("&e&lEvitar\n&6&lTipo: &c"+ep.getType()+"\n&6&lNombre: &a"+ep.getName()+"\n&6&lPuntos: &c&l"+ep.getPoint()));
+						meta.addPage(Utils.colorTextChatColor("&6&lEvitar\n&6&lTipo: &c"+ep.getType()+"\n&6&lNombre: &a"+ep.getName()+"\n&6&lPuntos: &c&l"+ep.getPoint()));
 					}else {
 						//player.sendMessage(Utils.colorTextChatColor("&c&lEliminar &6&lTipo: &c"+ep.getType()+" &6&lNombre: &a"+ep.getName()+" &6&lPuntos: &b&l+"+ep.getPoint()));
-						meta.addPage(Utils.colorTextChatColor("&c&lEliminar\n&6&lTipo: &c"+ep.getType()+"\n&6&lNombre: &a"+ep.getName()+"\n&6&lPuntos: &c&l"+ep.getPoint()));
+						meta.addPage(Utils.colorTextChatColor("&c&lEliminar\n&6&lTipo: &b"+ep.getType()+"\n&6&lNombre: &a"+ep.getName()+"\n&6&lPuntos: &a&l"+ep.getPoint()));
 
 					}
 					
@@ -239,17 +239,19 @@ public class GamePointHunt extends GameInfo{
 				}else {
 					if(ep.getPoint() < 0) {
 						//player.sendMessage(Utils.colorTextChatColor("&e&lEvitar &6&lTipo: &c"+ep.getType()+" &6&lPuntos: &c&l"+ep.getPoint()));
-						meta.addPage(Utils.colorTextChatColor("&e&lEvitar\n&6&lTipo: &c"+ep.getType()+"\n&6&lPuntos: &c&l"+ep.getPoint()));
+						meta.addPage(Utils.colorTextChatColor("&6&lEvitar\n&6&lTipo: &c"+ep.getType()+"\n&6&lPuntos: &c&l"+ep.getPoint()));
 
 					}else {
 						//player.sendMessage(Utils.colorTextChatColor("&c&lEliminar &6&lTipo: &c"+ep.getType()+" &6&lPuntos: &b&l+"+ep.getPoint()));
-						meta.addPage(Utils.colorTextChatColor("&c&lEliminar\n&6&lTipo: &c"+ep.getType()+"\n&6&lPuntos: &c&l"+ep.getPoint()));
+						meta.addPage(Utils.colorTextChatColor("&c&lEliminar\n&6&lTipo: &b"+ep.getType()+"\n&6&lPuntos: &a&l"+ep.getPoint()));
 
 					}
 				}
 			}
 			
 		}
+		
+		book.setItemMeta(meta);
 		
 		if(!hasmobs) {
 			player.getInventory().addItem(book);

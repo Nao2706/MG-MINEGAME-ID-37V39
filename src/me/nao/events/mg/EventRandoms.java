@@ -1644,22 +1644,29 @@ public class EventRandoms implements Listener{
 				 
 						if(gi instanceof GameAdventure) {
 							GameAdventure ga = (GameAdventure) gi;
-							RevivePlayer rp = ga.getKnockedPlayers().get(player);
-							int timelife = rp.getRemainingTimeLife();
 							
-							if(timelife >= 41 && timelife <= 60) {
-								gmc.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&a&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" \n&6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
+							if(ga.getKnockedPlayers().containsKey(player)){
+								
+								RevivePlayer rp = ga.getKnockedPlayers().get(player);
+								int timelife = rp.getRemainingTimeLife();
+								
+								if(timelife >= 41 && timelife <= 60) {
+									gmc.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&a&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" \n&6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
 
-							}else if(timelife >= 21 && timelife <= 40) {
-								gmc.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&e&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" \n&6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
+								}else if(timelife >= 21 && timelife <= 40) {
+									gmc.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&e&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" \n&6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
 
-							}else if(timelife >= 1 && timelife <= 20) {
-								gmc.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&c&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" \n&6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
+								}else if(timelife >= 1 && timelife <= 20) {
+									gmc.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&c&lDERRIBADO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&7"+player.getName()+": &a"+message+" \n&6(Le queda &c"+rp.getRemainingTimeLife()+"secs &6de vida.)");
 
+								}
+								return;
 							}
 							
- 
-						}else if(pl.getPlayerGameStatus() == PlayerGameStatus.ALIVE) {
+							
+						}
+						
+						if(pl.getPlayerGameStatus() == PlayerGameStatus.ALIVE) {
 							gmc.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&a&lVIVO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &a"+message);
 							
 						}else if(pl.getPlayerGameStatus() == PlayerGameStatus.DEAD) {

@@ -4079,7 +4079,7 @@ public class GameConditions {
       			   String parts[] = t.split(";");
       			   
       			   if(parts.length == 2) {
-      				   
+      				
       				   l.add(new EntityPoints(EntityType.valueOf(parts[0].toUpperCase()),null,Integer.valueOf(parts[1])));
       				   
       			   }else if(parts.length == 3) {

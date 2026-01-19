@@ -228,7 +228,7 @@ public class MgScore {
 			
 			
 			List<Player> joins = gmc.ConvertStringToPlayer(gi.getParticipants());
-			List<Player> spect = gmc.ConvertStringToPlayer(gi.getSpectators());
+
 			
 			for(Player user : joins) {
 				PlayerInfo pl = plugin.getPlayerInfoPoo().get(user);
@@ -252,24 +252,24 @@ public class MgScore {
 					if(i == 1) {
 						if(e.getKey().equals(player.getName())) {
 							if(e.getValue() != 0) {
-								 show.add(Utils.colorTextChatColor("&a"+i+") &b&lMVP &a"+e.getKey()+"&e: &6"+e.getValue()));
+								 show.add(Utils.colorTextChatColor("&c"+i+") &b&lMVP &a"+e.getKey()+"&e: &6"+e.getValue()));
 							}else {
-								 show.add(Utils.colorTextChatColor("&a"+i+") &a"+e.getKey()+"&e: &6"+e.getValue()));
+								 show.add(Utils.colorTextChatColor("&c"+i+") &a"+e.getKey()+"&e: &6"+e.getValue()));
 							}
 							
 							
 						}else {
 							if(e.getValue() != 0) {
-								show.add(Utils.colorTextChatColor("&a"+i+") &b&lMVP &6"+e.getKey()+"&e: &c"+e.getValue()));
+								show.add(Utils.colorTextChatColor("&c"+i+") &b&lMVP &6"+e.getKey()+"&e: &c"+e.getValue()));
 							}else {
-								show.add(Utils.colorTextChatColor("&a"+i+") &6"+e.getKey()+"&e: &c"+e.getValue()));
+								show.add(Utils.colorTextChatColor("&c"+i+") &6"+e.getKey()+"&e: &c"+e.getValue()));
 							}
 						}
 					}else {
 						if(e.getKey().equals(player.getName())) {
-							 show.add(Utils.colorTextChatColor("&a"+i+") &a"+e.getKey()+"&e: &6"+e.getValue()));
+							 show.add(Utils.colorTextChatColor("&c"+i+") &a"+e.getKey()+"&e: &6"+e.getValue()));
 						}else {
-							 show.add(Utils.colorTextChatColor("&a"+i+") &6"+e.getKey()+"&e: &c"+e.getValue()));
+							 show.add(Utils.colorTextChatColor("&c"+i+") &6"+e.getKey()+"&e: &c"+e.getValue()));
 						}
 					}
 					
@@ -289,14 +289,8 @@ public class MgScore {
 				score.setScore((show.size()-i));
 			}
 			
-			for(Player players : joins) {
-				players.setScoreboard(scoreboard);
-			}
-			
-			for(Player players : spect) {
-				players.setScoreboard(scoreboard);
-			}
-			
+
+			player.setScoreboard(scoreboard);
 			
 			return;
 		

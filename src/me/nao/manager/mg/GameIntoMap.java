@@ -68,11 +68,12 @@ public class GameIntoMap {
 	
 	private Minegame plugin;
 	private GameConditions gmc;
-
+	private MgScore sco;
 	
 	public GameIntoMap(Minegame plugin) {
 		this.plugin = plugin;
 		this.gmc = new GameConditions(plugin);
+		this.sco = new MgScore(plugin);
 				
 	}
 	
@@ -406,7 +407,7 @@ public class GameIntoMap {
 						return;
 						
 					}
-						
+						 
 						player.getInventory().clear(); 
 						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"TE CAISTE DEL MAPA", 40, 80, 40);
 						
@@ -461,11 +462,13 @@ public class GameIntoMap {
 							player.setGameMode(GameMode.SPECTATOR);
 						
 					}else if(gi instanceof GamePointHunt) {
-						
+						 
 						GamePointHunt ffa = (GamePointHunt) gi;
 						PlayerDropAllItemsSimple(player);
 						ffa.respawnGame(player);
-						
+						if(pl.getPlayerKit() != null) {
+							player.getInventory().setContents(pl.getPlayerKit());
+						}
 					}
 					
 					return;
@@ -871,7 +874,7 @@ public class GameIntoMap {
 		
 			PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 			GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
-		
+	
 			
 			//setear aqui que puntos devuelve el mob
 			
@@ -881,19 +884,17 @@ public class GameIntoMap {
 				player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.GREEN+ChatColor.BOLD+"KILLS: "+ChatColor.RED+puntos));
 				
 				
-			}
-			
-
-			if(gi instanceof GamePointHunt) {
+			}else if(gi instanceof GamePointHunt) {
 				GamePointHunt ga = (GamePointHunt) gi;
-			    MgScore sco = new MgScore(plugin);
-			    sco.showTopPlayersPh(player);
-				ga.reachLimitPoint();
+				List<Player> play = gmc.ConvertStringToPlayer(gi.getParticipants());
+				List<Player> spect = gmc.ConvertStringToPlayer(gi.getSpectators());
+			 
 
 				
 				if(!ga.getEntityPoints().isEmpty()) {
-					
+	
 					for(EntityPoints ent : ga.getEntityPoints()) {
+					
 						
 						if(e instanceof Player) {
 							Player target = (Player) e;
@@ -903,63 +904,73 @@ public class GameIntoMap {
 								int puntos = pl.getGamePoints().getPoints();
 								
 								if(ent.getPoint() < 0) {
-									player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lMENOS: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
+									player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lPIERDES: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
 								}else {
-									player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lMAS: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
+									player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lGANAS: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
 
 								}
-								
-							
-								break;
+								updateScoreboardHuntPoints(play, spect);
+								ga.reachLimitPoint();
+								return;
 							}
 							
-						}else {
-							if(e.getCustomName() != null) {
-								if(e.getType() == ent.getType() && ent.getName() != null && ent.getName().equals(ChatColor.stripColor(e.getCustomName()))) {
+						}else if(e.getCustomName() != null && ent.getName() != null && e.getType() == ent.getType() && ChatColor.stripColor(e.getCustomName()).contains(ent.getName())) {
 									pl.getGamePoints().addPoints(ent.getPoint());
 									int puntos = pl.getGamePoints().getPoints();
 									if(ent.getPoint() < 0) {
-										player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lMENOS: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
+										player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lPIERDES: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
 									}else {
-										player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lMAS: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
-
-									}									
-									break;
-								}
-								
-							}else {
-								if(e.getType() == ent.getType()) {
-									pl.getGamePoints().addPoints(ent.getPoint());
-									int puntos = pl.getGamePoints().getPoints();
-									
-									
-									if(ent.getPoint() < 0) {
-										player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lMENOS: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
-									}else {
-										player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lMAS: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
+										player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lGANAS: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
 
 									}
-									break;
-								}
-							}
+									updateScoreboardHuntPoints(play, spect);
+									ga.reachLimitPoint();
+						
+									return;
+						}else if(e.getCustomName() == null && e.getType() == ent.getType()) {
+									pl.getGamePoints().addPoints(ent.getPoint());
+									int puntos = pl.getGamePoints().getPoints();
+									
+									
+									if(ent.getPoint() < 0) {
+										player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lPIERDES: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
+									}else {
+										player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lGANAS: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
+
+									}
+									updateScoreboardHuntPoints(play, spect);
+									ga.reachLimitPoint();
+									return;
 						}
-						
-						
-						
 						
 					}
 					
 					
 				}
+				
+				
 				pl.getGamePoints().addPoints(1);
 				int puntos = pl.getGamePoints().getPoints();
 				player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.GREEN+ChatColor.BOLD+"POINTS: "+ChatColor.RED+puntos));
+				updateScoreboardHuntPoints(play, spect);
+				ga.reachLimitPoint();
 			}
 					
 			
 		
 	}
 	
+	
+	public void updateScoreboardHuntPoints(List<Player> part,List<Player> spect) {
+		
+		for(Player player  : part) {
+			sco.showTopPlayersPh(player);
+		}
+		
+		for(Player player  : spect) {
+			sco.showTopPlayersPh(player);
+		}
+	}
 	
 	public List<Map.Entry<String, Integer>> sortedPlayerPoints(Set<Entry<String,Integer>> l){
 		List<Map.Entry<String, Integer>> list = new ArrayList<>(l);
