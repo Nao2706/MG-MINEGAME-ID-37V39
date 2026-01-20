@@ -326,6 +326,14 @@ public class EventRandoms implements Listener{
 						}
 	
 						
+						if(player.getGameMode() == GameMode.ADVENTURE){
+							 if(player.isSneaking() && ent.getPassengers().isEmpty()) {
+									ent.addPassenger(player);
+								}else {
+									 player.addPassenger(ent); 
+								}
+						}
+						
 					}else if(ent.getType() == EntityType.CHEST_MINECART) {
 						
 						StorageMinecart mc = (StorageMinecart) ent;
@@ -335,14 +343,6 @@ public class EventRandoms implements Listener{
 							player.addPassenger(ent);	
 						}
 						
-					}else {
-						if(player.getGameMode() == GameMode.ADVENTURE){
-							 if(player.isSneaking() && ent.getPassengers().isEmpty()) {
-									ent.addPassenger(player);
-								}else {
-									 player.addPassenger(ent); 
-								}
-						}
 					}
 				}
 			   
@@ -1897,327 +1897,329 @@ public class EventRandoms implements Listener{
 			
 				// 
 				Entity ent = e.getEntity();
-				 
-				if(ent.getCustomName() != null){
-					
-					if(ent instanceof TNTPrimed);
-					TNTPrimed tnt1 = (TNTPrimed) ent;
-					String mobname = ChatColor.stripColor(ent.getCustomName());
-					
-					
-					
-					List<String> names = new ArrayList<>();
-					names.add("Mina Explosiva");
-					names.add("Ataque Aereo");
-					names.add("Anti Aereo Explosivo");
-					names.add("Suicida");
-					names.add("Cohete");
-					names.add("Super TNT");
-					names.add("Explosivo Zombi");
-					names.add("LLUVIA DE TNT");	
-					names.add("LLUVIA DE TNT CON PUAS");	
-					names.add("TNT de Flechas");
-					names.add("TNT de Flechas 2");
-					names.add("TNT de Flechas 3");
-					names.add("TNT de Flechas 4");
-					names.add("TNT RACIMO");
-					
-					if(mobname.equals("TNT de Flechas")){
-						 for(int i = 0;i<200;i++) {
-								Location loc = ent.getLocation();
-								Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
-								aw.setVelocity(getRandomVector());
-								aw.setCritical(true);
-								aw.setKnockbackStrength(2);
-								aw.setFireTicks(1200);
-								//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
-								aw.setCustomName(ChatColor.GREEN+"Pua de TNT Especial");
-								aw.setDamage(1000);
-								//aw.setShooter(z); 
-								//((Arrow) h1).setShooter(player);
-							}
-					}if(mobname.equals("TNT de Flechas 2")){
-						 for(int i = 0;i<200;i++) {
-								Location loc = ent.getLocation();
-								Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
-								//ESTE GRADO O DIRECCION VA AL ESTE 
-								aw.setVelocity(getRandomVector2(75));//
-								aw.setCritical(true);
-								aw.setKnockbackStrength(2);
-								aw.setFireTicks(1200);
-								//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
-								aw.setCustomName(ChatColor.YELLOW+"Pua de TNT Especial 2");
-								aw.setDamage(1000);
-								//aw.setShooter(z); 
-								//((Arrow) h1).setShooter(player);
-							}
-					}if(mobname.equals("TNT de Flechas 3")){
-						 for(int i = 0;i<200;i++) {
-								Location loc = ent.getLocation();
-								Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
-								//ESTE GRADO O DIRECCION VA AL ESTE 
-								//aw.setVelocity(getRandomVector3());
-								aw.setVelocity(getRandomVector3());//
-								aw.setCritical(true);
-								aw.setKnockbackStrength(2);
-								aw.setFireTicks(1200);
-								//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
-								aw.setCustomName(ChatColor.RED+"Pua de TNT Especial 3");
-								aw.setDamage(1000);
-								//aw.setShooter(z); 
-								//((Arrow) h1).setShooter(player);
-							}
-					}if(mobname.equals("TNT de Flechas 4")){
-							for(int i = 0;i<200;i++) {
-								Location loc = ent.getLocation();
-								Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
-								aw.setVelocity(getRandomVector());
-								aw.setCritical(true);
-								aw.setKnockbackStrength(2);
-								aw.setFireTicks(1200);
-								//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
-								aw.setCustomName(ChatColor.DARK_PURPLE+"Pua de TNT Especial 4");
-								aw.setDamage(1000);
-								//aw.setShooter(z); 
-								//((Arrow) h1).setShooter(player);
-							}
-						 for(int i = 0;i<200;i++) {
-								Location loc = ent.getLocation();
-								Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
-								//ESTE GRADO O DIRECCION VA AL ESTE 
-								aw.setVelocity(getRandomVector2(75));//
-								aw.setCritical(true);
-								aw.setKnockbackStrength(2);
-								aw.setFireTicks(1200);
-								//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
-								aw.setCustomName(ChatColor.DARK_PURPLE+"Pua de TNT Especial 4");
-								aw.setDamage(1000);
-								//aw.setShooter(z); 
-								//((Arrow) h1).setShooter(player);
-							}
+				if(ent instanceof TNTPrimed) {
+					if(ent.getCustomName() != null){
 						
-						 for(int i = 0;i<200;i++) {
-								Location loc = ent.getLocation();
-								Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
-								//ESTE GRADO O DIRECCION VA AL ESTE 
-								//aw.setVelocity(getRandomVector3());
-								aw.setVelocity(getRandomVector3());//
-								aw.setCritical(true);
-								aw.setKnockbackStrength(2);
-								aw.setFireTicks(1200);
-								//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
-								aw.setCustomName(ChatColor.DARK_PURPLE+"Pua de TNT Especial 4");
-								aw.setDamage(1000);
-								//aw.setShooter(z); 
-								//((Arrow) h1).setShooter(player);
-							}
-					}if(mobname.equals("TNT de Flechas 5")){
 						
-						 for(int i = 0;i<50;i++) {
-								Location loc = ent.getLocation();
-								Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
-								//ESTE GRADO O DIRECCION VA AL ESTE 
-								aw.setVelocity(getRandomVector2(75));//
-								aw.setCritical(true);
-								aw.setKnockbackStrength(2);
-								aw.setFireTicks(1200);
-								//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
-								aw.setCustomName(ChatColor.YELLOW+"Pua de TNT Especial 5");
-								aw.setDamage(1000);
+						TNTPrimed tnt1 = (TNTPrimed) ent;
+						String mobname = ChatColor.stripColor(ent.getCustomName());
+						
+						
+						
+						List<String> names = new ArrayList<>();
+						names.add("Mina Explosiva");
+						names.add("Ataque Aereo");
+						names.add("Anti Aereo Explosivo");
+						names.add("Suicida");
+						names.add("Cohete");
+						names.add("Super TNT");
+						names.add("Explosivo Zombi");
+						names.add("LLUVIA DE TNT");	
+						names.add("LLUVIA DE TNT CON PUAS");	
+						names.add("TNT de Flechas");
+						names.add("TNT de Flechas 2");
+						names.add("TNT de Flechas 3");
+						names.add("TNT de Flechas 4");
+						names.add("TNT RACIMO");
+						
+						if(mobname.equals("TNT de Flechas")){
+							 for(int i = 0;i<200;i++) {
+									Location loc = ent.getLocation();
+									Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
+									aw.setVelocity(getRandomVector());
+									aw.setCritical(true);
+									aw.setKnockbackStrength(2);
+									aw.setFireTicks(1200);
+									//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+									aw.setCustomName(ChatColor.GREEN+"Pua de TNT Especial");
+									aw.setDamage(1000);
+									//aw.setShooter(z); 
+									//((Arrow) h1).setShooter(player);
+								}
+						}if(mobname.equals("TNT de Flechas 2")){
+							 for(int i = 0;i<200;i++) {
+									Location loc = ent.getLocation();
+									Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
+									//ESTE GRADO O DIRECCION VA AL ESTE 
+									aw.setVelocity(getRandomVector2(75));//
+									aw.setCritical(true);
+									aw.setKnockbackStrength(2);
+									aw.setFireTicks(1200);
+									//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+									aw.setCustomName(ChatColor.YELLOW+"Pua de TNT Especial 2");
+									aw.setDamage(1000);
+									//aw.setShooter(z); 
+									//((Arrow) h1).setShooter(player);
+								}
+						}if(mobname.equals("TNT de Flechas 3")){
+							 for(int i = 0;i<200;i++) {
+									Location loc = ent.getLocation();
+									Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
+									//ESTE GRADO O DIRECCION VA AL ESTE 
+									//aw.setVelocity(getRandomVector3());
+									aw.setVelocity(getRandomVector3());//
+									aw.setCritical(true);
+									aw.setKnockbackStrength(2);
+									aw.setFireTicks(1200);
+									//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+									aw.setCustomName(ChatColor.RED+"Pua de TNT Especial 3");
+									aw.setDamage(1000);
+									//aw.setShooter(z); 
+									//((Arrow) h1).setShooter(player);
+								}
+						}if(mobname.equals("TNT de Flechas 4")){
+								for(int i = 0;i<200;i++) {
+									Location loc = ent.getLocation();
+									Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
+									aw.setVelocity(getRandomVector());
+									aw.setCritical(true);
+									aw.setKnockbackStrength(2);
+									aw.setFireTicks(1200);
+									//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+									aw.setCustomName(ChatColor.DARK_PURPLE+"Pua de TNT Especial 4");
+									aw.setDamage(1000);
+									//aw.setShooter(z); 
+									//((Arrow) h1).setShooter(player);
+								}
+							 for(int i = 0;i<200;i++) {
+									Location loc = ent.getLocation();
+									Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
+									//ESTE GRADO O DIRECCION VA AL ESTE 
+									aw.setVelocity(getRandomVector2(75));//
+									aw.setCritical(true);
+									aw.setKnockbackStrength(2);
+									aw.setFireTicks(1200);
+									//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+									aw.setCustomName(ChatColor.DARK_PURPLE+"Pua de TNT Especial 4");
+									aw.setDamage(1000);
+									//aw.setShooter(z); 
+									//((Arrow) h1).setShooter(player);
+								}
+							
+							 for(int i = 0;i<200;i++) {
+									Location loc = ent.getLocation();
+									Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
+									//ESTE GRADO O DIRECCION VA AL ESTE 
+									//aw.setVelocity(getRandomVector3());
+									aw.setVelocity(getRandomVector3());//
+									aw.setCritical(true);
+									aw.setKnockbackStrength(2);
+									aw.setFireTicks(1200);
+									//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+									aw.setCustomName(ChatColor.DARK_PURPLE+"Pua de TNT Especial 4");
+									aw.setDamage(1000);
+									//aw.setShooter(z); 
+									//((Arrow) h1).setShooter(player);
+								}
+						}if(mobname.equals("TNT de Flechas 5")){
+							
+							 for(int i = 0;i<50;i++) {
+									Location loc = ent.getLocation();
+									Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
+									//ESTE GRADO O DIRECCION VA AL ESTE 
+									aw.setVelocity(getRandomVector2(75));//
+									aw.setCritical(true);
+									aw.setKnockbackStrength(2);
+									aw.setFireTicks(1200);
+									//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+									aw.setCustomName(ChatColor.YELLOW+"Pua de TNT Especial 5");
+									aw.setDamage(1000);
+									
+									
+									Location loc1 = ent.getLocation();
+									Arrow aw1 = (Arrow) loc1.getWorld().spawnEntity(loc1.add(0, 1, 0), EntityType.ARROW);
+									//ESTE GRADO O DIRECCION VA AL ESTE 
+									aw1.setVelocity(getRandomVector2(75));//
+									aw1.setCritical(true);
+									aw1.setKnockbackStrength(2);
+									aw1.setFireTicks(1200);
+									aw1.setCustomName(ChatColor.YELLOW+"Pua de TNT Especial 5");
+									aw1.setDamage(1000);
+							
+									Location loc2 = ent.getLocation();
+									Arrow aw2 = (Arrow) loc2.getWorld().spawnEntity(loc2.add(0, 2, 0), EntityType.ARROW);
+									//ESTE GRADO O DIRECCION VA AL ESTE 
+									aw2.setVelocity(getRandomVector2(75));//
+									aw2.setCritical(true);
+									aw2.setKnockbackStrength(2);
+									aw2.setFireTicks(1200);
+									aw2.setCustomName(ChatColor.YELLOW+"Pua de TNT Especial 5");
+									aw2.setDamage(1000);
+								}
+							
+						}if(mobname.equals("TNT de Flechas 6")){
+							 for(int i = 0;i<100;i++) {
+									Location loc = ent.getLocation();
+									Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
+									//ESTE GRADO O DIRECCION VA AL ESTE 
+									//aw.setVelocity(getRandomVector3());
+									aw.setVelocity(getRandomVector3());//
+									aw.setCritical(true);
+									aw.setKnockbackStrength(2);
+									aw.setFireTicks(1200);
+									//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+									aw.setCustomName(ChatColor.RED+"Pua de TNT Especial 6");
+									aw.setDamage(1000);
+									 
+									
+									Location loc1 = ent.getLocation();
+									Arrow aw1 = (Arrow) loc1.getWorld().spawnEntity(loc1.add(0, 1, 0), EntityType.ARROW);
+									//ESTE GRADO O DIRECCION VA AL ESTE 
+									//aw.setVelocity(getRandomVector3());
+									aw1.setVelocity(getRandomVector3());//
+									aw1.setCritical(true);
+									aw1.setKnockbackStrength(2);
+									aw1.setFireTicks(1200);
+									//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+									aw1.setCustomName(ChatColor.RED+"Pua de TNT Especial 6");
+									aw1.setDamage(1000);
 								
+									
+									Location loc2 = ent.getLocation();
+									Arrow aw2 = (Arrow) loc2.getWorld().spawnEntity(loc2.add(0, 2, 0), EntityType.ARROW);
+									//ESTE GRADO O DIRECCION VA AL ESTE 
+									//aw.setVelocity(getRandomVector3());
+									aw2.setVelocity(getRandomVector3());//
+									aw2.setCritical(true);
+									aw2.setKnockbackStrength(2);
+									aw2.setFireTicks(1200);
+									//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+									aw2.setCustomName(ChatColor.RED+"Pua de TNT Especial 6");
+									aw2.setDamage(1000);
+									
+								}
+						}if(mobname.equals("LLUVIA DE TNT RACIMO")){
+							 for(int i = 0;i<5;i++) {
+									Location loc = ent.getLocation();
+									TNTPrimed tnt = (TNTPrimed) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.TNT);
+									//ESTE GRADO O DIRECCION VA AL ESTE 
+									tnt.setVelocity(getRandomVector());//
+//									aw.setCritical(true);
+//									aw.setKnockbackStrength(2);
+//									aw.setFireTicks(1200);
+									//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+									tnt.setCustomName(ChatColor.YELLOW+"TNT RACIMO");
+									tnt.setYield(10);
+									//aw.setDamage(1000);
+									//aw.setShooter(z); 
+									//((Arrow) h1).setShooter(player);
+								}
+						}
+						//names.stream().filter(o -> o.contains(ChatColor.stripColor(ent.getCustomName()))).findFirst().isPresent() || 
+						
+						if(mobname.equals("LLUVIA DE TNT CON PUAS")){
+							 for(int i = 0;i<20;i++) {
+						
+									Location loc = ent.getLocation();
+									Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
+									aw.setVelocity(getRandomVector());
+									aw.setCritical(true);
+									aw.setKnockbackStrength(2);
+									aw.setFireTicks(1200);
+									//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+									aw.setCustomName(ChatColor.RED+"Pua de TNT");
+									aw.setDamage(1000);
+									//aw.setShooter(z);
+								}
+						}if(mobname.equals("TNT LOOKER")){
+							
+								if(tnt1.getSource() != null && tnt1.getSource() instanceof Player) {
+									
+									 Player player = (Player) tnt1.getSource();	
+									 testcode3(player , tnt1.getLocation(),1);
+									 //getRandomVectorLooker(player , tnt1.getLocation(), 25);
+								}
 								
-								Location loc1 = ent.getLocation();
-								Arrow aw1 = (Arrow) loc1.getWorld().spawnEntity(loc1.add(0, 1, 0), EntityType.ARROW);
-								//ESTE GRADO O DIRECCION VA AL ESTE 
-								aw1.setVelocity(getRandomVector2(75));//
-								aw1.setCritical(true);
-								aw1.setKnockbackStrength(2);
-								aw1.setFireTicks(1200);
-								aw1.setCustomName(ChatColor.YELLOW+"Pua de TNT Especial 5");
-								aw1.setDamage(1000);
-						
-								Location loc2 = ent.getLocation();
-								Arrow aw2 = (Arrow) loc2.getWorld().spawnEntity(loc2.add(0, 2, 0), EntityType.ARROW);
-								//ESTE GRADO O DIRECCION VA AL ESTE 
-								aw2.setVelocity(getRandomVector2(75));//
-								aw2.setCritical(true);
-								aw2.setKnockbackStrength(2);
-								aw2.setFireTicks(1200);
-								aw2.setCustomName(ChatColor.YELLOW+"Pua de TNT Especial 5");
-								aw2.setDamage(1000);
-							}
-						
-					}if(mobname.equals("TNT de Flechas 6")){
-						 for(int i = 0;i<100;i++) {
-								Location loc = ent.getLocation();
-								Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
-								//ESTE GRADO O DIRECCION VA AL ESTE 
-								//aw.setVelocity(getRandomVector3());
-								aw.setVelocity(getRandomVector3());//
-								aw.setCritical(true);
-								aw.setKnockbackStrength(2);
-								aw.setFireTicks(1200);
-								//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
-								aw.setCustomName(ChatColor.RED+"Pua de TNT Especial 6");
-								aw.setDamage(1000);
 								 
 								
-								Location loc1 = ent.getLocation();
-								Arrow aw1 = (Arrow) loc1.getWorld().spawnEntity(loc1.add(0, 1, 0), EntityType.ARROW);
-								//ESTE GRADO O DIRECCION VA AL ESTE 
-								//aw.setVelocity(getRandomVector3());
-								aw1.setVelocity(getRandomVector3());//
-								aw1.setCritical(true);
-								aw1.setKnockbackStrength(2);
-								aw1.setFireTicks(1200);
-								//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
-								aw1.setCustomName(ChatColor.RED+"Pua de TNT Especial 6");
-								aw1.setDamage(1000);
 							
-								
-								Location loc2 = ent.getLocation();
-								Arrow aw2 = (Arrow) loc2.getWorld().spawnEntity(loc2.add(0, 2, 0), EntityType.ARROW);
-								//ESTE GRADO O DIRECCION VA AL ESTE 
-								//aw.setVelocity(getRandomVector3());
-								aw2.setVelocity(getRandomVector3());//
-								aw2.setCritical(true);
-								aw2.setKnockbackStrength(2);
-								aw2.setFireTicks(1200);
-								//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
-								aw2.setCustomName(ChatColor.RED+"Pua de TNT Especial 6");
-								aw2.setDamage(1000);
-								
-							}
-					}if(mobname.equals("LLUVIA DE TNT RACIMO")){
-						 for(int i = 0;i<5;i++) {
-								Location loc = ent.getLocation();
-								TNTPrimed tnt = (TNTPrimed) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.TNT);
-								//ESTE GRADO O DIRECCION VA AL ESTE 
-								tnt.setVelocity(getRandomVector());//
-//								aw.setCritical(true);
-//								aw.setKnockbackStrength(2);
-//								aw.setFireTicks(1200);
-								//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
-								tnt.setCustomName(ChatColor.YELLOW+"TNT RACIMO");
-								tnt.setYield(10);
-								//aw.setDamage(1000);
-								//aw.setShooter(z); 
-								//((Arrow) h1).setShooter(player);
-							}
-					}
-					//names.stream().filter(o -> o.contains(ChatColor.stripColor(ent.getCustomName()))).findFirst().isPresent() || 
-					
-					if(mobname.equals("LLUVIA DE TNT CON PUAS")){
-						 for(int i = 0;i<20;i++) {
-					
-								Location loc = ent.getLocation();
-								Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
-								aw.setVelocity(getRandomVector());
-								aw.setCritical(true);
-								aw.setKnockbackStrength(2);
-								aw.setFireTicks(1200);
-								//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
-								aw.setCustomName(ChatColor.RED+"Pua de TNT");
-								aw.setDamage(1000);
-								//aw.setShooter(z);
-							}
-					}if(mobname.equals("TNT LOOKER")){
-						
+						}if(mobname.equals("TNT DIRECTION")){
 							if(tnt1.getSource() != null && tnt1.getSource() instanceof Player) {
 								
-								 Player player = (Player) tnt1.getSource();	
-								 testcode3(player , tnt1.getLocation(),1);
-								 //getRandomVectorLooker(player , tnt1.getLocation(), 25);
+								 Player player = (Player) tnt1.getSource();
+								 testcode2(player , tnt1.getLocation(),1);
+								
 							}
 							
-							 
+						}if(mobname.equals("TNT LAVA")){
+							 for(int i = 0;i<200;i++) {
+									Location loc = ent.getLocation();
+									Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
+									aw.setVelocity(getRandomVector());
+									aw.setCritical(true);
+									aw.setKnockbackStrength(2);
+									aw.setFireTicks(1200);
+									//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+									aw.setCustomName(ChatColor.RED+"Pua de TNT LAVA");
+									aw.setDamage(1000);
+									//aw.setShooter(z); 
+									//((Arrow) h1).setShooter(player);
+								}
 							
-						
-					}if(mobname.equals("TNT DIRECTION")){
-						if(tnt1.getSource() != null && tnt1.getSource() instanceof Player) {
+						}if(mobname.equals("TNT AGUA")){
+							 for(int i = 0;i<200;i++) {
+									Location loc = ent.getLocation();
+									Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
+									aw.setVelocity(getRandomVector());
+									aw.setCritical(true);
+									aw.setKnockbackStrength(2);
+									aw.setFireTicks(1200);
+									aw.setCustomName(ChatColor.BLUE+"Pua de TNT AGUA");
+									aw.setDamage(1000);
+								}
 							
-							 Player player = (Player) tnt1.getSource();
-							 testcode2(player , tnt1.getLocation(),1);
+						}if(mobname.equals("TNT PORTAL")){
+							 for(int i = 0;i<200;i++) {
+									Location loc = ent.getLocation();
+									Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
+									aw.setVelocity(getRandomVector());
+									aw.setCritical(true);
+									aw.setKnockbackStrength(2);
+									aw.setFireTicks(1200);
+									aw.setCustomName(ChatColor.WHITE+"Pua de TNT PORTAL");
+									aw.setDamage(1000);
+								}
+							
+						}if(mobname.equals("TNT BLOCK BREAKER")){
+							 for(int i = 0;i<200;i++) {
+									Location loc = ent.getLocation();
+									Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
+									aw.setVelocity(getRandomVector());
+									aw.setCritical(true);
+									aw.setKnockbackStrength(2);
+									aw.setFireTicks(1200);
+									//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
+									aw.setCustomName(ChatColor.GOLD+"Pua de TNT Rompedora");
+									aw.setDamage(1000);
+									//aw.setShooter(z); 
+									//((Arrow) h1).setShooter(player);
+								}
 							
 						}
-						
-					}if(mobname.equals("TNT LAVA")){
-						 for(int i = 0;i<200;i++) {
-								Location loc = ent.getLocation();
-								Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
-								aw.setVelocity(getRandomVector());
-								aw.setCritical(true);
-								aw.setKnockbackStrength(2);
-								aw.setFireTicks(1200);
-								//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
-								aw.setCustomName(ChatColor.RED+"Pua de TNT LAVA");
-								aw.setDamage(1000);
-								//aw.setShooter(z); 
-								//((Arrow) h1).setShooter(player);
-							}
-						
-					}if(mobname.equals("TNT AGUA")){
-						 for(int i = 0;i<200;i++) {
-								Location loc = ent.getLocation();
-								Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
-								aw.setVelocity(getRandomVector());
-								aw.setCritical(true);
-								aw.setKnockbackStrength(2);
-								aw.setFireTicks(1200);
-								aw.setCustomName(ChatColor.BLUE+"Pua de TNT AGUA");
-								aw.setDamage(1000);
-							}
-						
-					}if(mobname.equals("TNT PORTAL")){
-						 for(int i = 0;i<200;i++) {
-								Location loc = ent.getLocation();
-								Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
-								aw.setVelocity(getRandomVector());
-								aw.setCritical(true);
-								aw.setKnockbackStrength(2);
-								aw.setFireTicks(1200);
-								aw.setCustomName(ChatColor.WHITE+"Pua de TNT PORTAL");
-								aw.setDamage(1000);
-							}
-						
-					}if(mobname.equals("TNT BLOCK BREAKER")){
-						 for(int i = 0;i<200;i++) {
-								Location loc = ent.getLocation();
-								Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 0, 0), EntityType.ARROW);
-								aw.setVelocity(getRandomVector());
-								aw.setCritical(true);
-								aw.setKnockbackStrength(2);
-								aw.setFireTicks(1200);
-								//aw.addCustomEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE,1*20,10, false ,false, true), true);
-								aw.setCustomName(ChatColor.GOLD+"Pua de TNT Rompedora");
-								aw.setDamage(1000);
-								//aw.setShooter(z); 
-								//((Arrow) h1).setShooter(player);
-							}
-						
-					}
-						
+							
 
-					
-					
-					if(names.stream().filter(o -> o.startsWith(mobname)).findFirst().isPresent()) {
 						
-						List<Material> mat = new ArrayList<>();
-						mat.add(Material.INFESTED_CHISELED_STONE_BRICKS);mat.add(Material.INFESTED_COBBLESTONE);mat.add(Material.INFESTED_CRACKED_STONE_BRICKS);
-						mat.add(Material.INFESTED_DEEPSLATE);mat.add(Material.INFESTED_MOSSY_STONE_BRICKS);mat.add(Material.INFESTED_STONE);
-						mat.add(Material.INFESTED_STONE_BRICKS);
-						for(Block b : e.blockList()) {
-							if(mat.contains(b.getType())) {
-								//System.out.println("SI");
-								b.getWorld().playEffect(b.getLocation().add(0.5,0,0.5), Effect.STEP_SOUND,b.getType()); 
-								b.setType(Material.AIR);
+						
+						if(names.stream().filter(o -> o.startsWith(mobname)).findFirst().isPresent()) {
+							
+							List<Material> mat = new ArrayList<>();
+							mat.add(Material.INFESTED_CHISELED_STONE_BRICKS);mat.add(Material.INFESTED_COBBLESTONE);mat.add(Material.INFESTED_CRACKED_STONE_BRICKS);
+							mat.add(Material.INFESTED_DEEPSLATE);mat.add(Material.INFESTED_MOSSY_STONE_BRICKS);mat.add(Material.INFESTED_STONE);
+							mat.add(Material.INFESTED_STONE_BRICKS);
+							for(Block b : e.blockList()) {
+								if(mat.contains(b.getType())) {
+									//System.out.println("SI");
+									b.getWorld().playEffect(b.getLocation().add(0.5,0,0.5), Effect.STEP_SOUND,b.getType()); 
+									b.setType(Material.AIR);
+								}
 							}
+							
+						   e.blockList().clear();
+						  return;
 						}
-						
-					   e.blockList().clear();
-					  return;
 					}
 				}
+			
 				
 				 
 			

@@ -2961,10 +2961,6 @@ public class GameConditions {
 		GameInfo gi = plugin.getGameInfoPoo().get(map);
 	
 		//MisionInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
-	
-			
-				
-				
 				List<Player> play = ConvertStringToPlayer(gi.getParticipants());
 				List<Player> spect = ConvertStringToPlayer(gi.getSpectators());
 				
@@ -2989,15 +2985,14 @@ public class GameConditions {
 		 
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		String map = pl.getMapName();
-		GameInfo ms = plugin.getGameInfoPoo().get(map);
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
 		//RankPlayer rp = new RankPlayer(plugin);
 		//MisionInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
-		 if(ms instanceof GameAdventure) {
-				GameAdventure ga = (GameAdventure) ms;
+	
 				
 				
-				List<Player> play = ConvertStringToPlayer(ga.getParticipants());
-				List<Player> spect = ConvertStringToPlayer(ga.getSpectators());
+				List<Player> play = ConvertStringToPlayer(gi.getParticipants());
+				List<Player> spect = ConvertStringToPlayer(gi.getSpectators());
 				String text1 = it.getItemMeta() == null ? it.getType().toString() : it.getItemMeta().getDisplayName();
 
 				for(Player target : play) {
@@ -3015,7 +3010,7 @@ public class GameConditions {
 					}
 				}
 				 Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+map.toUpperCase()+": "+text+" "+text1);
-		 }
+		 
 	}
 	
 	//TODO CHAT
@@ -3030,7 +3025,7 @@ public class GameConditions {
 			 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no esta en Juego.");
 			return;
 		}
-		GameInfo ms = plugin.getGameInfoPoo().get(map);
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
 		//MisionInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
 		
 //		if(player != null) {
@@ -3038,12 +3033,9 @@ public class GameConditions {
 //		}
 		 Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE+"Mensaje en Mapa: "+ChatColor.GOLD+map+" "+ChatColor.translateAlternateColorCodes('&', text));
 		
-		 if(ms instanceof GameAdventure) {
-				GameAdventure ga = (GameAdventure) ms;
 				
-				
-				List<Player> play = ConvertStringToPlayer(ga.getParticipants());
-				List<Player> spect = ConvertStringToPlayer(ga.getSpectators());
+				List<Player> play = ConvertStringToPlayer(gi.getParticipants());
+				List<Player> spect = ConvertStringToPlayer(gi.getSpectators());
 				
 				for(Player target : play) {
 					
@@ -3056,7 +3048,7 @@ public class GameConditions {
 						target.sendMessage(ChatColor.translateAlternateColorCodes('&', text));
 					}
 				}
-		 }
+		 
 	}
 	
 	//mg message Tutorial hola que hacen ???
@@ -3072,7 +3064,7 @@ public class GameConditions {
 			 Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"El Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no esta en Juego.");
 			return;
 		}
-		GameInfo ms = plugin.getGameInfoPoo().get(map);
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
 		//MisionInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
 		
 		if(player != null) {
@@ -3080,9 +3072,7 @@ public class GameConditions {
 		}
 		 Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE+"Titulo en Mapa: "+ChatColor.GOLD+map+" "+ChatColor.translateAlternateColorCodes('&', text));
 		
-		 if(ms instanceof GameAdventure) {
-				GameAdventure ga = (GameAdventure) ms;
-				
+		 
 				String message1 = "";
 				String message2 = "";
 				
@@ -3095,8 +3085,8 @@ public class GameConditions {
 					message2 = ""; 
 				}
 				
-				List<Player> play = ConvertStringToPlayer(ga.getParticipants());
-				List<Player> spect = ConvertStringToPlayer(ga.getSpectators());
+				List<Player> play = ConvertStringToPlayer(gi.getParticipants());
+				List<Player> spect = ConvertStringToPlayer(gi.getSpectators());
 				
 				
 				for(Player target : play) {
@@ -3110,7 +3100,7 @@ public class GameConditions {
 						target.sendTitle(ChatColor.translateAlternateColorCodes('&', message1), ChatColor.translateAlternateColorCodes('&', message2), 20, 40, 20);
 					}
 				}
-		 }
+		 
 	}
 	
 	//TODO MESSAGE
@@ -3125,11 +3115,10 @@ public class GameConditions {
 		
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		String mapname = pl.getMapName();
-		GameInfo ms = plugin.getGameInfoPoo().get(mapname);
+		GameInfo gi = plugin.getGameInfoPoo().get(mapname);
 		//MisionInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
-		 if(ms instanceof GameAdventure) {
-					GameAdventure ga = (GameAdventure) ms;
-					List<Player> play = ConvertStringToPlayer(ga.getParticipants());
+		
+					List<Player> play = ConvertStringToPlayer(gi.getParticipants());
 					
 					sendMessageToConsole(text);
 					
@@ -3138,14 +3127,14 @@ public class GameConditions {
 						   target.sendMessage(ChatColor.translateAlternateColorCodes('&', text));
 					}
 					
-					List<Player> spect = ConvertStringToPlayer(ga.getSpectators());
+					List<Player> spect = ConvertStringToPlayer(gi.getSpectators());
 					if(!spect.isEmpty()) {
 						for(Player target : spect) {
 							
 							target.sendMessage(ChatColor.translateAlternateColorCodes('&',text));
 						
 					}}
-		 } 
+		  
 	}
 	
 	/**
@@ -3157,11 +3146,11 @@ public class GameConditions {
 		
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player2);
 		String mapname = pl.getMapName();
-		GameInfo ms = plugin.getGameInfoPoo().get(mapname);
+		GameInfo gi = plugin.getGameInfoPoo().get(mapname);
 		//MisionInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
-		 if(ms instanceof GameAdventure) {
-					GameAdventure ga = (GameAdventure) ms;
-					List<Player> play = ConvertStringToPlayer(ga.getParticipants());
+		
+					
+					List<Player> play = ConvertStringToPlayer(gi.getParticipants());
 				
 					sendMessageToConsole(text);
 					if(player1 != null) {
@@ -3177,12 +3166,12 @@ public class GameConditions {
 					}
 					
 					
-					List<Player> spect = ConvertStringToPlayer(ga.getSpectators());
+					List<Player> spect = ConvertStringToPlayer(gi.getSpectators());
 					if(!spect.isEmpty()) {
 						for(Player target : spect) {
 							target.sendMessage(ChatColor.translateAlternateColorCodes('&',text));
 					}}
-		 } 
+		 
 	}
 	
 	
@@ -3195,11 +3184,11 @@ public class GameConditions {
 	public void sendMessageToAllPlayersInMap(String map,String text) {
 		
 		
-		GameInfo ms = plugin.getGameInfoPoo().get(map);
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
 		//MisionInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
-		 if(ms instanceof GameAdventure) {
-				GameAdventure ga = (GameAdventure) ms;
-				List<String> play = ga.getParticipants();
+		
+			
+				List<String> play = gi.getParticipants();
 				
 				if(!play.isEmpty()) {
 					for(String target : play) {
@@ -3208,7 +3197,7 @@ public class GameConditions {
 						user.sendMessage(ChatColor.translateAlternateColorCodes('&', text));
 					
 				}}	
-		 }
+		 
 	}
 	
 	
@@ -3219,11 +3208,11 @@ public class GameConditions {
 	
 	public void sendMessageToAllPlayersOpInMap(String map,String text) {
 		
-		GameInfo ms = plugin.getGameInfoPoo().get(map);
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
 		//MisionInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
-		 if(ms instanceof GameAdventure) {
-				GameAdventure ga = (GameAdventure) ms;
-				List<String> play = ga.getParticipants();
+		
+			
+				List<String> play = gi.getParticipants();
 				
 				if(!play.isEmpty()) {
 					for(String target : play) {
@@ -3232,7 +3221,7 @@ public class GameConditions {
 						user.sendMessage(ChatColor.translateAlternateColorCodes('&', text));
 					
 				}}	
-		 }
+		 
 	}
 	
 	/**
@@ -3242,11 +3231,9 @@ public class GameConditions {
 	
 	public void sendTittleToAllPlayersInMap(String map,String text,String text2) {
 		
-		GameInfo ms = plugin.getGameInfoPoo().get(map);
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
 		//MisionInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
-		 if(ms instanceof GameAdventure) {
-				GameAdventure ga = (GameAdventure) ms;
-				List<String> play = ga.getParticipants();
+				List<String> play = gi.getParticipants();
 				
 				if(!play.isEmpty()) {
 					for(String target : play) {
@@ -3255,7 +3242,7 @@ public class GameConditions {
 						user.sendTitle(ChatColor.translateAlternateColorCodes('&', text), ChatColor.translateAlternateColorCodes('&', text2), 20, 20, 20);
 					
 				}}	
-		 }
+		 
 	}
 	
 	
@@ -4115,7 +4102,7 @@ public class GameConditions {
 				String time = game.getString("Timer-Events."+key+".Time");
 				String text = game.getString("Timer-Events."+key+".Display-Text");
 				String color = game.getString("Timer-Events."+key+".BossBar-Color");
-				List<String> list = game.getStringList("Timer-Events.Example.Actions-List");
+				List<String> list = game.getStringList("Timer-Events."+key+".Actions-List");
 				
 			    String timer1[] = time.split(",");
 				int hora = Integer.valueOf(timer1[0]);

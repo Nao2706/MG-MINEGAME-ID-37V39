@@ -219,8 +219,9 @@ public class GamePointHunt extends GameInfo{
 		BookMeta meta = (BookMeta) book.getItemMeta();
 		
 		boolean hasmobs = getEntityPoints().isEmpty();
-		meta.setTitle(Utils.colorTextChatColor("&a&lGUIA DE CAZA"));
+		
 		if(!hasmobs) {
+			meta.setTitle(Utils.colorTextChatColor("&b&lGUIA DE CAZA"));
 			//player.sendMessage(Utils.colorTextChatColor("&a&lMobs a Cazar:"));
 			for(EntityPoints ep : getEntityPoints()) {
 				
@@ -273,6 +274,7 @@ public class GamePointHunt extends GameInfo{
 				p.setAllowFlight(true);
 				p.setFlying(true);
 				p.setInvulnerable(true);
+				p.setHealth(20);
 				p.getInventory().clear();
 				p.sendTitle(Utils.colorTextChatColor("&a&lFELICIDADES"+getWinnerTopPlayer()+" &b&lGANASTE"),Utils.colorTextChatColor("&eEres muy Bueno/a."), 20, 20, 20);
 
@@ -301,6 +303,7 @@ public class GamePointHunt extends GameInfo{
 				p.setAllowFlight(true);
 				p.setFlying(true);
 				p.setInvulnerable(true);
+				p.setHealth(20);
 				p.getInventory().clear();
 				//p.sendTitle(Utils.colorTextChatColor("&a&lFELICIDADES"+getWinnerTopPlayer()+" &b&lGANASTE"),Utils.colorTextChatColor("&eTienes el Puntaje mas Alto."), 20, 20, 20);
 

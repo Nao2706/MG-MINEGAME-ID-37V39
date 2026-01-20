@@ -684,7 +684,7 @@ public class GameIntoMap {
 		player.teleport(loc);
 		player.sendTitle(""+ChatColor.GREEN+ChatColor.BOLD+">>> "+ChatColor.AQUA+ChatColor.BOLD+"RESPAWNEASTE"+ChatColor.GREEN+ChatColor.BOLD+"  <<<",ChatColor.GREEN+"Lucha y Gana", 20, 40, 20);
 		player.setGameMode(GameMode.ADVENTURE);
-		player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,loc.add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
+		player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING,player.getLocation(),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
 		player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 		
 		return;
@@ -889,64 +889,66 @@ public class GameIntoMap {
 				List<Player> play = gmc.ConvertStringToPlayer(gi.getParticipants());
 				List<Player> spect = gmc.ConvertStringToPlayer(gi.getSpectators());
 			 
-
-				
-				if(!ga.getEntityPoints().isEmpty()) {
-	
-					for(EntityPoints ent : ga.getEntityPoints()) {
-					
+				if(ga.hasCustomPoints()) {
+					if(!ga.getEntityPoints().isEmpty()) {
 						
-						if(e instanceof Player) {
-							Player target = (Player) e;
+						for(EntityPoints ent : ga.getEntityPoints()) {
+						
 							
-							if(ent.getName() != null && ent.getName().equals(target.getName())) {
-								pl.getGamePoints().addPoints(ent.getPoint());
-								int puntos = pl.getGamePoints().getPoints();
+							if(e instanceof Player) {
+								Player target = (Player) e;
 								
-								if(ent.getPoint() < 0) {
-									player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lPIERDES: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
-								}else {
-									player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lGANAS: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
+								if(ent.getName() != null && ent.getName().equals(target.getName())) {
+									pl.getGamePoints().addPoints(ent.getPoint());
+									int puntos = pl.getGamePoints().getPoints();
+									
+									if(ent.getPoint() < 0) {
+										player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lPIERDES: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
+									}else {
+										player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lGANAS: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
 
+									}
+									updateScoreboardHuntPoints(play, spect);
+									ga.reachLimitPoint();
+									return;
 								}
-								updateScoreboardHuntPoints(play, spect);
-								ga.reachLimitPoint();
-								return;
+								
+							}else if(e.getCustomName() != null && ent.getName() != null && e.getType() == ent.getType() && ChatColor.stripColor(e.getCustomName()).contains(ent.getName())) {
+										pl.getGamePoints().addPoints(ent.getPoint());
+										int puntos = pl.getGamePoints().getPoints();
+										if(ent.getPoint() < 0) {
+											player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lPIERDES: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
+										}else {
+											player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lGANAS: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
+
+										}
+										updateScoreboardHuntPoints(play, spect);
+										ga.reachLimitPoint();
+							
+										return;
+							}else if(e.getCustomName() == null && e.getType() == ent.getType()) {
+										pl.getGamePoints().addPoints(ent.getPoint());
+										int puntos = pl.getGamePoints().getPoints();
+										
+										
+										if(ent.getPoint() < 0) {
+											player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lPIERDES: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
+										}else {
+											player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lGANAS: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
+
+										}
+										updateScoreboardHuntPoints(play, spect);
+										ga.reachLimitPoint();
+										return;
 							}
 							
-						}else if(e.getCustomName() != null && ent.getName() != null && e.getType() == ent.getType() && ChatColor.stripColor(e.getCustomName()).contains(ent.getName())) {
-									pl.getGamePoints().addPoints(ent.getPoint());
-									int puntos = pl.getGamePoints().getPoints();
-									if(ent.getPoint() < 0) {
-										player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lPIERDES: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
-									}else {
-										player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lGANAS: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
-
-									}
-									updateScoreboardHuntPoints(play, spect);
-									ga.reachLimitPoint();
-						
-									return;
-						}else if(e.getCustomName() == null && e.getType() == ent.getType()) {
-									pl.getGamePoints().addPoints(ent.getPoint());
-									int puntos = pl.getGamePoints().getPoints();
-									
-									
-									if(ent.getPoint() < 0) {
-										player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lPIERDES: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
-									}else {
-										player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(Utils.colorTextChatColor("&6&lGANAS: &c"+ent.getPoint()+" &a&lPOINTS: &c"+puntos)));
-
-									}
-									updateScoreboardHuntPoints(play, spect);
-									ga.reachLimitPoint();
-									return;
 						}
 						
+						
 					}
-					
-					
 				}
+				
+		
 				
 				
 				pl.getGamePoints().addPoints(1);
