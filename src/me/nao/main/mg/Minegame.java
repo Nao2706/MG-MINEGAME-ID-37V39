@@ -12,6 +12,7 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -95,6 +96,8 @@ public class Minegame extends JavaPlugin{
 
 	private List<String> air;
 	private List<String> timeract;
+	private List<Location> signsloc;
+	
 	private HashMap<String,ItemMenu>itemmenu;
     
     //Esto fue un test
@@ -355,6 +358,7 @@ public class Minegame extends JavaPlugin{
 	
 		air = new ArrayList<String>();
 		timeract = new ArrayList<String>();
+		signsloc =  new ArrayList<Location>();
 		//playerlookingmgmenu = new ArrayList<String>();
 	
 		delete = new HashMap<>();
@@ -556,6 +560,10 @@ public class Minegame extends JavaPlugin{
    
    public List<String> getTimerAction(){
 	   return timeract;
+   }
+   
+   public List<Location> getSignsLocation(){
+	   return signsloc;
    }
    
 //   public List<String> getPlayersLookingMgMenus(){

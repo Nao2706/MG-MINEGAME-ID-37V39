@@ -6079,6 +6079,16 @@ public class Comandsmg implements CommandExecutor{
 						player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg deleteitem <item>");
 					 }
 					return true;
+				}else if(args[0].equalsIgnoreCase("setsign")) {
+					
+						gc.setSignJoin(player);
+						
+					return true;
+				}else if(args[0].equalsIgnoreCase("deletesign")) {
+						
+						gc.deleteSign(player);
+						
+					return true;
 				}else if(args[0].equalsIgnoreCase("start-timer")) {
 					
 			

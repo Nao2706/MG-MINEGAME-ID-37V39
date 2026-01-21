@@ -136,6 +136,8 @@ public class TabCompletemg implements TabCompleter{
 			arguments.add("bossbar");
 			arguments.add("execute-timer");
 			arguments.add("cancel-timer");
+			arguments.add("setsign");
+			arguments.add("deletesign");
 			
 		}
 		

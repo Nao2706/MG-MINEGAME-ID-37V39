@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -55,6 +56,7 @@ import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
+import org.bukkit.block.Sign;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
@@ -134,6 +136,8 @@ public class GameConditions {
 				addPlayerToGame(player,map);
 				if(tptoPreLobbyMap(player, map)); //SI HAY UN ERROR EN EL MAPA DARA FALSE Y NO ABANZARA
 				canStartTheGame(player,map);
+				
+				reloadSignData();
 				return;
 		}
 		
@@ -200,7 +204,7 @@ public class GameConditions {
 			 String mt = mision.getString("Start.Tittle-of-Mision"); 
 			 player.sendMessage(Utils.colorTextChatColor("&aHas Salido del Mapa: "+mt.replaceAll("%player%",player.getName())));
 			 restorePlayer(player);
-			
+			 reloadSignData();
 		
 		
 //		else if(ms instanceof GameNexo) {
@@ -374,6 +378,9 @@ public class GameConditions {
 				
 				plugin.getEntitiesFromFlare().remove(name);
 				plugin.getGameInfoPoo().remove(name);
+				
+				reloadSignData();
+				
 
 		}else if(gi instanceof GamePointHunt) {
 			GamePointHunt ga = (GamePointHunt) gi;
@@ -6138,6 +6145,11 @@ public class GameConditions {
 	}
 	
 	
+	//MODO                 AVENTURA
+	//NOMBRE                TEST
+	//PARTICIPANTES         0/10
+	//ESTADO               ESPERANDO
+	
 	public void loadItemMenu() {
 		
 		 FileConfiguration config = plugin.getConfig();
@@ -6180,6 +6192,126 @@ public class GameConditions {
 		
 	}
 	
+	
+	public void setSignJoin(Player player) {
+		
+		   FileConfiguration config = plugin.getConfig();
+		   Block b = player.getTargetBlock((Set<Material>) null, 3);
+		   if(!b.getType().isSolid()) {
+               player.sendMessage(ChatColor.RED+"Debes mirar un material Solido [Un Bloque]");
+                return;
+           }
+		   
+		   if(b.getState() instanceof Sign) {
+			   //Sign sign = (Sign) b.getState();
+			 
+				List<String> coords = config.getStringList("Sign-Join-Coords");
+				config.set("Sign-Join-Coords",coords);
+				
+				if(coords.contains(b.getWorld().getName()+";"+b.getX()+";"+b.getY()+";"+b.getZ())) {
+					player.sendMessage(ChatColor.RED+"Esa Coordenada ya esta Guardada.");
+					return;
+				}
+				
+				
+				coords.add(b.getWorld().getName()+";"+b.getX()+";"+b.getY()+";"+b.getZ());
+				plugin.getConfig().save();
+				plugin.getConfig().reload();
+				player.sendMessage(ChatColor.GREEN+"Esa Coordenada ya esta Guardada.");
+				
+				loadSignLocations();
+				reloadSignData();
+		   }
+		   
+		   
+	}
+	
+	
+	public void deleteSign(Player player) {
+		   FileConfiguration config = plugin.getConfig();
+		   Block b = player.getTargetBlock((Set<Material>) null, 3);
+		   if(!b.getType().isSolid()) {
+            player.sendMessage(ChatColor.RED+"Debes mirar un material Solido [Un Bloque]");
+             return;
+        }
+		   
+		   if(b.getState() instanceof Sign) {
+			   //Sign sign = (Sign) b.getState();
+			 
+				List<String> coords = config.getStringList("Sign-Join-Coords");
+				config.set("Sign-Join-Coords",coords);
+				
+				if(!coords.contains(b.getWorld().getName()+";"+b.getX()+";"+b.getY()+";"+b.getZ())) {
+					player.sendMessage(ChatColor.RED+"Esa Coordenada ya esta Eliminada.");
+					return;
+				}
+				
+				
+				coords.remove(b.getWorld().getName()+";"+b.getX()+";"+b.getY()+";"+b.getZ());
+				plugin.getConfig().save();
+				plugin.getConfig().reload();
+				player.sendMessage(ChatColor.GREEN+"Esa Coordenada fue Eliminada.");
+				loadSignLocations();
+				reloadSignData();
+		   }else {
+				player.sendMessage(ChatColor.RED+"Debes buscar un Cartel");
+		   }
+	}
+	
+	
+	public void loadSignLocations() {
+		
+		 FileConfiguration config = plugin.getConfig();
+	     List<String> coords = config.getStringList("Sign-Join-Coords");
+	     for(String t : coords) {
+	    	 
+	    	 String[] spl = t.split(";");
+	    	 String w = spl[0];
+	    	 double x = Double.valueOf(spl[1]);
+	    	 double y = Double.valueOf(spl[2]);
+	    	 double z = Double.valueOf(spl[3]);
+	    	 
+	    	 if(!plugin.getSignsLocation().contains(new Location(Bukkit.getWorld(w),x,y,z))) {
+	    		 plugin.getSignsLocation().add(new Location(Bukkit.getWorld(w),x,y,z));
+	    	 }
+	    	
+	     }
+	}
+	
+	
+	public void reloadSignData() {
+		for(Location l : plugin.getSignsLocation()) {
+			if(l.getBlock().getState() instanceof Sign) {
+				Sign sign = (Sign) l.getBlock().getState();
+				if(!sign.getLine(1).isEmpty()) {
+					  String name = ChatColor.stripColor(sign.getLine(1));
+					  if(existMap(name)) {
+						  if(plugin.getGameInfoPoo().containsKey(name)) {
+							  
+							  sign.setLine(0,   Utils.colorTextChatColor(plugin.getGameInfoPoo().get(name).getGameType().toString()));
+							  sign.setLine(1,   Utils.colorTextChatColor(name));
+							  sign.setLine(2,   Utils.colorTextChatColor(plugin.getGameInfoPoo().get(name).getParticipants().size()+"/"+plugin.getGameInfoPoo().get(name).getMaxPlayers()));
+							  sign.setLine(3,   Utils.colorTextChatColor(plugin.getGameInfoPoo().get(name).getGameStatus().toString()));
+						  }else {
+							  FileConfiguration game = getGameConfig(name);
+							  String enumtype = game.getString("Type-Map").toUpperCase();
+							  sign.setLine(0,   Utils.colorTextChatColor(enumtype));
+							  sign.setLine(1,   Utils.colorTextChatColor(name));
+							  sign.setLine(2,   Utils.colorTextChatColor("0/"+game.getInt("Max-Player")));
+							  sign.setLine(3,   Utils.colorTextChatColor(GameStatus.ESPERANDO.toString()));
+							  
+							
+							  
+						  }
+					  }
+					  
+				}
+				
+				
+			}
+			
+		}
+	}
 	
 	public void checkPlayerInfo(Player player, String target) {
 		
