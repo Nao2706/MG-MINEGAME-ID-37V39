@@ -297,13 +297,18 @@ public class EventRandoms implements Listener{
 			   
 				if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
 
-			
-					
 					if(!player.getPassengers().isEmpty()) {
 						
-							 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.RED+ChatColor.BOLD+"YA TIENES ENCIMA A UNA ENTIDAD"));
-							
-						return;
+						 player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(""+ChatColor.RED+ChatColor.BOLD+"YA TIENES ENCIMA A UNA ENTIDAD"));
+						
+					return;
+					}else if(player.getGameMode() == GameMode.ADVENTURE){
+						 if(player.isSneaking() && ent.getPassengers().isEmpty()) {
+								ent.addPassenger(player);
+							}else {
+								 player.addPassenger(ent); 
+							}
+						 
 					}else if(ent.getType() == EntityType.PLAYER) {
 						Player target = (Player) ent;
 						//if(ga.isPlayerKnocked(player)) return;
@@ -323,15 +328,6 @@ public class EventRandoms implements Listener{
 							
 							
 							return;
-						}
-	
-						
-						if(player.getGameMode() == GameMode.ADVENTURE){
-							 if(player.isSneaking() && ent.getPassengers().isEmpty()) {
-									ent.addPassenger(player);
-								}else {
-									 player.addPassenger(ent); 
-								}
 						}
 						
 					}else if(ent.getType() == EntityType.CHEST_MINECART) {

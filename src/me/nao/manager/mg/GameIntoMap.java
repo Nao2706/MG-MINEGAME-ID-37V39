@@ -113,7 +113,8 @@ public class GameIntoMap {
 			
 		
 				   Player target = Bukkit.getServer().getPlayerExact(name);
-				
+					PlayerInfo pt = plugin.getPlayerInfoPoo().get(target);
+
 				
 				
 					gmc.setHeartsInGame(target, mapa);
@@ -139,8 +140,8 @@ public class GameIntoMap {
 					pl.getGamePoints().addHelpRevive(1); 
 					target.setGameMode(GameMode.ADVENTURE);
 					healPlayer(target);
-					pl.setPlayerGameStatus(PlayerGameStatus.ALIVE);
-					
+					pt.setPlayerGameStatus(PlayerGameStatus.ALIVE);
+					pt.getGamePoints().addRevive(1); 
 			
 					target.teleport(l);
 					target.sendTitle(ChatColor.GREEN+"Fuiste Revivido",ChatColor.GREEN+"por: "+ChatColor.YELLOW+player.getName(),20,60,20);
@@ -157,8 +158,8 @@ public class GameIntoMap {
 				
 					
 					
-					PlayerInfo targetrevive = plugin.getPlayerInfoPoo().get(target);
-					targetrevive.getGamePoints().addRevive(1); 
+					
+					
 					
 					
 					if(!deaths.isEmpty()) {
@@ -465,7 +466,8 @@ public class GameIntoMap {
 						 
 						GamePointHunt ffa = (GamePointHunt) gi;
 						PlayerDropAllItemsSimple(player);
-						ffa.respawnGame(player);
+						player.setNoDamageTicks(20*2);//COLOCADO POR QUE SI TE TIRAS AL VACIO POR EL CODIGO ESTE TE TEPEARA PERO POR LA CAIDA ACUMULADA ESTE TE
+						ffa.respawnGame(player);	  //ELIMINARA DE NUEVO SIN KIT (NO DEBERIA MANDARLO SIN KIT)
 						if(pl.getPlayerKit() != null) {
 							player.getInventory().setContents(pl.getPlayerKit());
 						}

@@ -802,7 +802,7 @@ public class GameConditions {
 	   
 	    
 	   public void TptoSpawnMapSimple(Player player){
-		  
+		   
 		   PlayerInfo pi = plugin.getPlayerInfoPoo().get(player);
 		   GameInfo gi = plugin.getGameInfoPoo().get(pi.getMapName());
 		   
@@ -818,6 +818,7 @@ public class GameConditions {
 			    Float yaw = Float.valueOf(coords[4]);
 			    Float pitch = Float.valueOf(coords[5]);
 				Location l = new Location(Bukkit.getWorld(world), x, y, z, yaw, pitch).add(0.5,0,0.5);
+				player.setNoDamageTicks(20*2);
 				player.teleport(l);
 				return;
 		   }
@@ -1100,7 +1101,7 @@ public class GameConditions {
 			}
 	}
 	
-	//TODO SIN USO
+	//TODO SIN USO CAMBIAR A LA CLASE DE AVENTURA PARA ESTAS COSAS
 	public void revivePlayerToGame(Player player ,String mision) {
 		
 		GameInfo mis = plugin.getGameInfoPoo().get(mision);
@@ -1182,7 +1183,7 @@ public class GameConditions {
 		List<String> spectador = ms.getSpectators();
 		
 		
-		if(!winnerp.contains(player.getName()) || spectador.contains(player.getName()));	
+		if(!winnerp.contains(player.getName()) || spectador.contains(player.getName())) return;	
 		
 		
 		if(ms.isRankedMap() && ms.getGameType() == GameType.ADVENTURE) {
@@ -1316,7 +1317,7 @@ public class GameConditions {
 		List<String> spectador = ms.getSpectators();
 		
 		
-		if(!winnerp.contains(player.getName()) || spectador.contains(player.getName()));	
+		if(!winnerp.contains(player.getName()) || spectador.contains(player.getName())) return;	
 		
 		
 	
@@ -6197,12 +6198,10 @@ public class GameConditions {
 		
 		   FileConfiguration config = plugin.getConfig();
 		   Block b = player.getTargetBlock((Set<Material>) null, 3);
-		   if(!b.getType().isSolid()) {
-               player.sendMessage(ChatColor.RED+"Debes mirar un material Solido [Un Bloque]");
-                return;
-           }
-		   
-		   if(b.getState() instanceof Sign) {
+//		   if(!b.getType().isSolid()) {
+//               player.sendMessage(ChatColor.RED+"Debes mirar un material Solido [Un Bloque]");
+//                return;
+//           }
 			   //Sign sign = (Sign) b.getState();
 			 
 				List<String> coords = config.getStringList("Sign-Join-Coords");
@@ -6221,7 +6220,7 @@ public class GameConditions {
 				
 				loadSignLocations();
 				reloadSignData();
-		   }
+		   
 		   
 		   
 	}
@@ -6230,12 +6229,12 @@ public class GameConditions {
 	public void deleteSign(Player player) {
 		   FileConfiguration config = plugin.getConfig();
 		   Block b = player.getTargetBlock((Set<Material>) null, 3);
-		   if(!b.getType().isSolid()) {
-            player.sendMessage(ChatColor.RED+"Debes mirar un material Solido [Un Bloque]");
-             return;
-        }
+//		   if(!b.getType().isSolid()) {
+//            player.sendMessage(ChatColor.RED+"Debes mirar un material Solido [Un Bloque]");
+//             return;
+//        }
 		   
-		   if(b.getState() instanceof Sign) {
+		  
 			   //Sign sign = (Sign) b.getState();
 			 
 				List<String> coords = config.getStringList("Sign-Join-Coords");
@@ -6253,9 +6252,7 @@ public class GameConditions {
 				player.sendMessage(ChatColor.GREEN+"Esa Coordenada fue Eliminada.");
 				loadSignLocations();
 				reloadSignData();
-		   }else {
-				player.sendMessage(ChatColor.RED+"Debes buscar un Cartel");
-		   }
+		   
 	}
 	
 	
