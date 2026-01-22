@@ -386,7 +386,7 @@ public class SourceOfDamage implements Listener{
 					}if(c1.getType() == Material.RED_BANNER && c2.getType() == Material.STRUCTURE_BLOCK) {
 						
 						
-						 if(pl.getRespawnLife().getLocRespawnLifePosition() != null) {
+						 if(pl.getRespawnLife() != null) {
 							 RespawnLife rl = pl.getRespawnLife();
 							 if(rl.getLocRespawnLifePosition().equals(block.getLocation()))return;
 							

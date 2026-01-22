@@ -303,11 +303,15 @@ public class EventRandoms implements Listener{
 						
 					return;
 					}else if(player.getGameMode() == GameMode.ADVENTURE){
-						 if(player.isSneaking() && ent.getPassengers().isEmpty()) {
+						
+						
+						 if(player.isSneaking() && ent.getPassengers().isEmpty() && ent.getType() != EntityType.ARMOR_STAND) {
+							 
 								ent.addPassenger(player);
-							}else {
-								 player.addPassenger(ent); 
+							}else if(!player.isSneaking() && player.getPassengers().isEmpty()) {
+							   player.addPassenger(ent); 
 							}
+							
 						 
 					}else if(ent.getType() == EntityType.PLAYER) {
 						Player target = (Player) ent;
@@ -423,13 +427,12 @@ public class EventRandoms implements Listener{
 										}
 										
 										return;
-									}else {
-										if(player.getPassengers().isEmpty()) {
+									}if(player.getPassengers().isEmpty()) {
 											player.addPassenger(as);
-										}
+									}
 										
 										return;
-									}
+									
 								}
 							}
 						}

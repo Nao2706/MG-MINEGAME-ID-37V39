@@ -1655,6 +1655,18 @@ public class GameIntoMap {
 								 gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"estar en Llamas mientras Trataba de Escapar de "+mob.getType());
 									     	
 							}
+						}if(c == EntityDamageEvent.DamageCause.DROWNING) {
+							player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"Ahogarte.", 40, 80, 40);
+							
+							if(EntityHasName(mob)) {
+								  player.sendMessage(ChatColor.RED+"Moriste por "+ChatColor.YELLOW+"Ahogarte mientras Tratabas de Escapar de "+mob.getCustomName());
+								  gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"Ahogarse mientras Trataba de Escapar de "+mob.getCustomName());
+										   
+							}else {
+							     player.sendMessage(ChatColor.RED+"Moriste por "+ChatColor.YELLOW+"estar en Llamas mientras Tratabas de Escapar de "+mob.getType());
+								 gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"estar en Llamas mientras Trataba de Escapar de "+mob.getType());
+									     	
+							}
 						}if(c == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION || c == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
 							player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"motivo: "+ChatColor.YELLOW+"Explosion.", 40, 80, 40);
 							

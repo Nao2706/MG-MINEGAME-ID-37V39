@@ -6022,7 +6022,7 @@ public class GameConditions {
 		String enumtype = ym.getString("Type-Map").toUpperCase();
 		GameType type = GameType.matchMode(enumtype);
 		
-		if(type != GameType.ADVENTURE || type != GameType.RESISTENCE) {
+		if(type == GameType.POINTHUNT) {
 			switchsendMessageForUserAndConsole(player,Utils.colorTextChatColor("&c&lSin Datos: &6Solo de los Mapas en Modo &a&lAventura &6y &b&lResistencia &6se Puede obtener Datos."));
 
 			return;
@@ -6216,7 +6216,7 @@ public class GameConditions {
 				coords.add(b.getWorld().getName()+";"+b.getX()+";"+b.getY()+";"+b.getZ());
 				plugin.getConfig().save();
 				plugin.getConfig().reload();
-				player.sendMessage(ChatColor.GREEN+"Esa Coordenada ya esta Guardada.");
+				player.sendMessage(ChatColor.GREEN+"Coordenada Guardada.");
 				
 				loadSignLocations();
 				reloadSignData();
@@ -6249,7 +6249,7 @@ public class GameConditions {
 				coords.remove(b.getWorld().getName()+";"+b.getX()+";"+b.getY()+";"+b.getZ());
 				plugin.getConfig().save();
 				plugin.getConfig().reload();
-				player.sendMessage(ChatColor.GREEN+"Esa Coordenada fue Eliminada.");
+				player.sendMessage(ChatColor.GREEN+"Coordenada fue Eliminada.");
 				loadSignLocations();
 				reloadSignData();
 		   
@@ -6285,18 +6285,19 @@ public class GameConditions {
 					  if(existMap(name)) {
 						  if(plugin.getGameInfoPoo().containsKey(name)) {
 							  
-							  sign.setLine(0,   Utils.colorTextChatColor(plugin.getGameInfoPoo().get(name).getGameType().toString()));
-							  sign.setLine(1,   Utils.colorTextChatColor(name));
-							  sign.setLine(2,   Utils.colorTextChatColor(plugin.getGameInfoPoo().get(name).getParticipants().size()+"/"+plugin.getGameInfoPoo().get(name).getMaxPlayers()));
-							  sign.setLine(3,   Utils.colorTextChatColor(plugin.getGameInfoPoo().get(name).getGameStatus().toString()));
+							  sign.setLine(0,   Utils.colorTextChatColor("&b&l"+plugin.getGameInfoPoo().get(name).getGameType().toString()));
+							  sign.setLine(1,   Utils.colorTextChatColor("&a&l"+name));
+							  sign.setLine(2,   Utils.colorTextChatColor("&c"+plugin.getGameInfoPoo().get(name).getParticipants().size()+"&6/&c"+plugin.getGameInfoPoo().get(name).getMaxPlayers()));
+							  sign.setLine(3,   Utils.colorTextChatColor(plugin.getGameInfoPoo().get(name).getGameStatus().getValue().toString()));
+							  sign.update();
 						  }else {
 							  FileConfiguration game = getGameConfig(name);
 							  String enumtype = game.getString("Type-Map").toUpperCase();
-							  sign.setLine(0,   Utils.colorTextChatColor(enumtype));
-							  sign.setLine(1,   Utils.colorTextChatColor(name));
-							  sign.setLine(2,   Utils.colorTextChatColor("0/"+game.getInt("Max-Player")));
-							  sign.setLine(3,   Utils.colorTextChatColor(GameStatus.ESPERANDO.toString()));
-							  
+							  sign.setLine(0,   Utils.colorTextChatColor("&b&l"+enumtype));
+							  sign.setLine(1,   Utils.colorTextChatColor("&a&l"+name));
+							  sign.setLine(2,   Utils.colorTextChatColor("&c0&6/&c"+game.getInt("Max-Player")));
+							  sign.setLine(3,   Utils.colorTextChatColor(GameStatus.ESPERANDO.getValue().toString()));
+							  sign.update();
 							
 							  
 						  }
