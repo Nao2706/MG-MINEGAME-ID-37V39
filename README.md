@@ -23,3 +23,4 @@ Cosas Pendientes
 - Archivo de configuracion para todos los mensajes fijos (que pereza)
 - Sistema de dialogos internos (como cuando se usan command blockd con un delay)
 - Mejorar el sistema de Xp (es necesario?)
+- Carteles para unirse
