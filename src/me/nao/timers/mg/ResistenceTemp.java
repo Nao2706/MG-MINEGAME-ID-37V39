@@ -71,7 +71,7 @@ public class ResistenceTemp {
 			
 			GameInfo ms = plugin.getGameInfoPoo().get(name);
 			GameAdventure ga = (GameAdventure) ms;
-			 MgScore sco = new MgScore(plugin);
+			MgScore sco = new MgScore(plugin);
 			
 			 int startm = ms.getCountDownStart();
 			 int end = 10;
@@ -120,7 +120,7 @@ public class ResistenceTemp {
 		  		boss.setVisible(false);
 		  		ms.setGameStatus(GameStatus.TERMINANDO);
    			    Bukkit.getConsoleSender().sendMessage("No hay jugadores terminando en "+end+"s");
-   		
+   			    gc.reloadSignData(); 
 		     }
 			//TODO EMPEZANDO
 			
@@ -130,7 +130,9 @@ public class ResistenceTemp {
 				
 				//GameModeConditions gm = new GameModeConditions(plugin);
 				if(startm == 0) {
+					ms.setGameStatus(GameStatus.JUGANDO);
 					gc.startGameActions(name);
+					gc.reloadSignData();
 				}
 				for(Player players : joins) {
 					//String mision = plugin.getPlayerInfoPoo().get(target).getMisionName();
@@ -157,8 +159,8 @@ public class ResistenceTemp {
 				    		
 				    		  if(part == GameStatus.COMENZANDO) {
 				    		  
-				    			ms.setGameStatus(GameStatus.JUGANDO);
-				    			
+				    		
+				    		
 							    gc.TptoSpawnMap(players, name);
 				    		
 				    		  	}
@@ -186,13 +188,13 @@ public class ResistenceTemp {
 						 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN...");
 				  		 ms.setGameStatus(GameStatus.TERMINANDO);
-				  		
+				  		 gc.reloadSignData();
 					}else if(motivo == StopMotive.WIN || motivo == StopMotive.LOSE || motivo == StopMotive.ERROR || motivo == StopMotive.FORCE) {
 
 						 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN..");
 				  		 ms.setGameStatus(GameStatus.TERMINANDO);
-				  		
+				  		 gc.reloadSignData();
 				  		
 					}else if(alive.isEmpty()) {
 						 for(Player players : joins) {
@@ -203,7 +205,7 @@ public class ResistenceTemp {
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"( FIN. )");
 						// Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Todos perdieron Resistencia "+ChatColor.GREEN+ConvertPlayerToString(joins)+ChatColor.RED+" mapa: "+ChatColor.GREEN+name+"\n");
 						 ms.setGameStatus(GameStatus.TERMINANDO);
-						
+						 gc.reloadSignData();
 						 // Bukkit.getScheduler().cancelTask(taskID);
 					}
 					

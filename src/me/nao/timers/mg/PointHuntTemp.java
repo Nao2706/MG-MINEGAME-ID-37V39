@@ -118,7 +118,7 @@ public class PointHuntTemp {
 			  		boss.setVisible(false);
 			  		ms.setGameStatus(GameStatus.TERMINANDO);
 	   			    Bukkit.getConsoleSender().sendMessage("No hay jugadores terminando en "+end+"s");
-	   		
+	   			    gc.reloadSignData();
    		     }
 			//TODO EMPEZANDO
 			
@@ -128,7 +128,9 @@ public class PointHuntTemp {
 	
 				
 				if(startm == 0) {
+					ms.setGameStatus(GameStatus.JUGANDO);
 					gc.startGameActions(name);
+					gc.reloadSignData();
 				}
 			
 			
@@ -154,9 +156,9 @@ public class PointHuntTemp {
 						if(startm == 0) {
 				   
 				    		  if(part == GameStatus.COMENZANDO) {
-				    		   
-				    			ms.setGameStatus(GameStatus.JUGANDO);
+				    			
 				    			ffa.startGame(players);
+				    			
 							    //gc.TptoSpawnMap(players, name);
 				    			
 				    		  }

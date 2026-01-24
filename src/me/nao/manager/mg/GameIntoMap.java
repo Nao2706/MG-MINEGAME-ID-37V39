@@ -426,7 +426,8 @@ public class GameIntoMap {
 								}
 							}
 							
-						}else {
+							pl.setCreditKillMob(null);
+					  }else {
 							player.sendMessage(ChatColor.RED+"Moriste por que "+ChatColor.YELLOW+"Te caiste fuera del Mapa");
 							gmc.sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"Caerse Fuera del Mapa.");
 
@@ -1315,7 +1316,7 @@ public class GameIntoMap {
 								
 								String text = killer.getInventory().getItemInMainHand().getItemMeta() == null ? killer.getInventory().getItemInMainHand().getType().toString() : killer.getInventory().getItemInMainHand().getItemMeta().getDisplayName();
 								player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto ",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+"Autodispararse (Suicidio)", 40, 80, 40);
-								player.sendMessage(Component.text(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto Disparado "+ChatColor.YELLOW+"por: "+ChatColor.YELLOW+"Autodispararse (Suicidio)"+ChatColor.RED+" usando ").append(Component.text(text)).hoverEvent(killer.getInventory().getItemInMainHand()));
+								player.sendMessage(Component.text(""+ChatColor.RED+"Has Muerto Disparado "+ChatColor.YELLOW+"por: "+ChatColor.YELLOW+"Autodispararse (Suicidio)"+ChatColor.RED+" usando ").append(Component.text(text)).hoverEvent(killer.getInventory().getItemInMainHand()));
 								
 								gmc.sendMessageTextComponentToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+"Autodispararse (Suicidio)"+ChatColor.RED+" usando ",killer.getInventory().getItemInMainHand());
 							}else {
@@ -1332,7 +1333,7 @@ public class GameIntoMap {
 								String text = killer.getInventory().getItemInMainHand().getItemMeta() == null ? killer.getInventory().getItemInMainHand().getType().toString() : killer.getInventory().getItemInMainHand().getItemMeta().getDisplayName();
 
 								player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto Disparado ",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+killer.getName(), 40, 80, 40);
-								player.sendMessage(Component.text(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto Disparado "+ChatColor.YELLOW+"por: "+killer.getName()+ChatColor.RED+" usando ").append(Component.text(text)).hoverEvent(killer.getInventory().getItemInMainHand()));
+								player.sendMessage(Component.text(""+ChatColor.RED+"Has Muerto Disparado "+ChatColor.YELLOW+"por: "+killer.getName()+ChatColor.RED+" usando ").append(Component.text(text)).hoverEvent(killer.getInventory().getItemInMainHand()));
 								
 								gmc.sendMessageTextComponentToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio Disparado por "+ChatColor.YELLOW+killer.getName()+ChatColor.RED+" usando ",killer.getInventory().getItemInMainHand());
 							}else {
@@ -1401,12 +1402,18 @@ public class GameIntoMap {
 						player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+tnt.getCustomName()+" de "+target.getName());
 						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por. "+ChatColor.YELLOW+tnt.getCustomName()+" de "+target.getName());
 
+						if(gmc.isPlayerinGame(target)) {
+							gamePlayerAddPoints(target,e);
+						} 
+						
 					}else if(EntityHasName(entnt) && EntityHasName(tnt)){
 						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+tnt.getCustomName()+" de "+entnt.getCustomName(), 40, 80, 40);
 						player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+tnt.getCustomName()+" de "+entnt.getCustomName());
 						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por. "+ChatColor.YELLOW+tnt.getCustomName()+" de "+entnt.getCustomName());
 
 					}
+					
+				
 				}else {
 					if(EntityHasName(tnt)) {
 						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+tnt.getCustomName(), 40, 80, 40);
@@ -1686,6 +1693,7 @@ public class GameIntoMap {
 					
 					//PARA EVITAR DOBLE MENSAJE DUPLICADO POR LA MISMA CAUSA 
 					player.sendMessage("");
+					pl.setCreditKillMob(null);
 					healPlayer(player);
 					GamePlayerDeadInMap(player);	
 					return;

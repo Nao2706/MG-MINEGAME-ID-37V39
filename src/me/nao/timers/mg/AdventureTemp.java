@@ -120,7 +120,7 @@ public class AdventureTemp {
 			  		boss.setVisible(false);
 			  		ms.setGameStatus(GameStatus.TERMINANDO);
 	   			    Bukkit.getConsoleSender().sendMessage("No hay jugadores terminando en "+end+"s");
-	   			
+	   			    gc.reloadSignData();
 	   		
    		     }
 			//TODO EMPEZANDO
@@ -131,7 +131,9 @@ public class AdventureTemp {
 	
 				
 				if(startm == 0) {
+					ms.setGameStatus(GameStatus.JUGANDO);
 					gc.startGameActions(name);
+					gc.reloadSignData();
 				}
 			
 			
@@ -158,9 +160,9 @@ public class AdventureTemp {
 				   
 				    		  if(part == GameStatus.COMENZANDO) {
 				    		  
-				    			ms.setGameStatus(GameStatus.JUGANDO);
+				    		
 							    gc.TptoSpawnMap(players, name);
-				    			
+							    ;
 				    		  }
 						  
 					     }
@@ -188,6 +190,7 @@ public class AdventureTemp {
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"FIN...");
 						
 						 ms.setGameStatus(GameStatus.TERMINANDO);
+						 gc.reloadSignData();
 				  		 //STOP
 					}else if(motivo == StopMotive.WIN || motivo == StopMotive.LOSE || motivo == StopMotive.ERROR || motivo == StopMotive.FORCE) {
 						
@@ -208,7 +211,7 @@ public class AdventureTemp {
 						 boss.setProgress(1.0);
 				  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"( FIN. )");
 						 ms.setGameStatus(GameStatus.TERMINANDO);						
-						 
+						 gc.reloadSignData();
 						 //WIN
 					}else if(alive.size() == arrive.size()) {
 					
@@ -229,7 +232,7 @@ public class AdventureTemp {
 				  
 						
 						 ms.setGameStatus(GameStatus.TERMINANDO);
-						
+						 gc.reloadSignData();
 				  		
 					}
 					

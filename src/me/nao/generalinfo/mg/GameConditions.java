@@ -37,7 +37,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -134,7 +133,7 @@ public class GameConditions {
 				//Salva al Jugador checa si debe setearle un inv
 				setAndSavePlayer(player,PlayerGameStatus.UNKNOW, map);
 				addPlayerToGame(player,map);
-				if(tptoPreLobbyMap(player, map)); //SI HAY UN ERROR EN EL MAPA DARA FALSE Y NO ABANZARA
+				if(tptoPreLobbyMap(player, map)); //SI HAY UN ERROR EN EL MAPA DARA FALSE Y NO AVANZARA
 				canStartTheGame(player,map);
 				
 				reloadSignData();
@@ -1506,7 +1505,7 @@ public class GameConditions {
 				//PRECARGO LOS DATOS PARA NO LLAMAR INDISCRIMINADAMENTE AL YML
 				plugin.getGameInfoPoo().put(map, gi);
 				
-				
+				 
 		    	gi.setMapName(map);
 		    	gi.setTimeMg(time);
 		    	gi.setGameType(type);
@@ -1625,9 +1624,12 @@ public class GameConditions {
 
 					 } 
 			   }
+				
+				 reloadSignData();
 				 
 			if(getMinPlayerMap(map) == ms.getParticipants().size()){
 				ms.setGameStatus(GameStatus.COMENZANDO);
+				reloadSignData();
 				if(ms.getGameStatus() == GameStatus.COMENZANDO) {
 				     int  segundo = ms.getCountDownStart();
 				
@@ -6194,15 +6196,10 @@ public class GameConditions {
 	}
 	
 	
-	public void setSignJoin(Player player) {
+	public void setSignJoin(Player player,Block b) {
 		
-		   FileConfiguration config = plugin.getConfig();
-		   Block b = player.getTargetBlock((Set<Material>) null, 3);
-//		   if(!b.getType().isSolid()) {
-//               player.sendMessage(ChatColor.RED+"Debes mirar un material Solido [Un Bloque]");
-//                return;
-//           }
-			   //Sign sign = (Sign) b.getState();
+				FileConfiguration config = plugin.getConfig();
+
 			 
 				List<String> coords = config.getStringList("Sign-Join-Coords");
 				config.set("Sign-Join-Coords",coords);
@@ -6226,16 +6223,10 @@ public class GameConditions {
 	}
 	
 	
-	public void deleteSign(Player player) {
-		   FileConfiguration config = plugin.getConfig();
-		   Block b = player.getTargetBlock((Set<Material>) null, 3);
-//		   if(!b.getType().isSolid()) {
-//            player.sendMessage(ChatColor.RED+"Debes mirar un material Solido [Un Bloque]");
-//             return;
-//        }
-		   
-		  
-			   //Sign sign = (Sign) b.getState();
+	public void deleteSign(Player player,Block b) {
+			FileConfiguration config = plugin.getConfig();
+
+
 			 
 				List<String> coords = config.getStringList("Sign-Join-Coords");
 				config.set("Sign-Join-Coords",coords);
@@ -6260,6 +6251,8 @@ public class GameConditions {
 		
 		 FileConfiguration config = plugin.getConfig();
 	     List<String> coords = config.getStringList("Sign-Join-Coords");
+	     
+		 //plugin.getSignsLocation().clear();
 	     for(String t : coords) {
 	    	 
 	    	 String[] spl = t.split(";");
@@ -6275,12 +6268,15 @@ public class GameConditions {
 	     }
 	}
 	
-	
+	 
 	public void reloadSignData() {
+		
 		for(Location l : plugin.getSignsLocation()) {
 			if(l.getBlock().getState() instanceof Sign) {
+				
 				Sign sign = (Sign) l.getBlock().getState();
 				if(!sign.getLine(1).isEmpty()) {
+					
 					  String name = ChatColor.stripColor(sign.getLine(1));
 					  if(existMap(name)) {
 						  if(plugin.getGameInfoPoo().containsKey(name)) {
@@ -6289,15 +6285,17 @@ public class GameConditions {
 							  sign.setLine(1,   Utils.colorTextChatColor("&a&l"+name));
 							  sign.setLine(2,   Utils.colorTextChatColor("&c"+plugin.getGameInfoPoo().get(name).getParticipants().size()+"&6/&c"+plugin.getGameInfoPoo().get(name).getMaxPlayers()));
 							  sign.setLine(3,   Utils.colorTextChatColor(plugin.getGameInfoPoo().get(name).getGameStatus().getValue().toString()));
-							  sign.update();
+							  sign.update(true);
+							  
 						  }else {
+
 							  FileConfiguration game = getGameConfig(name);
 							  String enumtype = game.getString("Type-Map").toUpperCase();
 							  sign.setLine(0,   Utils.colorTextChatColor("&b&l"+enumtype));
 							  sign.setLine(1,   Utils.colorTextChatColor("&a&l"+name));
 							  sign.setLine(2,   Utils.colorTextChatColor("&c0&6/&c"+game.getInt("Max-Player")));
 							  sign.setLine(3,   Utils.colorTextChatColor(GameStatus.ESPERANDO.getValue().toString()));
-							  sign.update();
+							  sign.update(true);
 							
 							  
 						  }

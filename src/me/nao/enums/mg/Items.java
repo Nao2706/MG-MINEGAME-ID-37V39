@@ -23,6 +23,7 @@ import org.bukkit.inventory.meta.ItemMeta;
             ESPADAENCAN1(""+ChatColor.GREEN+ChatColor.BOLD+"ESPADA ENCANTADA", Material.IRON_SWORD,"fire_aspect,3/knockback,4", 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"5 Netherite",ChatColor.YELLOW+ "Esta encantada"),
         	ESPADAENCAN1P(""+ChatColor.GREEN+ChatColor.BOLD+"ESPADA ENCANTADA", Material.IRON_SWORD,"fire_aspect,3/knockback,4", 1),
         	
+        	SIGNMARKER(""+ChatColor.GREEN+ChatColor.BOLD+"SIGN MARKER", Material.STICK,"fire_aspect,3/knockback,4", 1, ChatColor.GREEN+"Marca Carteles con Clik Derecho ",ChatColor.YELLOW+ "Desmarca Carteles con Click Izquierdo."),
             
             FLECHA(""+ChatColor.GREEN+ChatColor.BOLD+"FLECHA", Material.ARROW,null, 1,ChatColor.GREEN+"Precio: "+ChatColor.RED+"3 de Oro"),
             FLECHAESPECTRAL(""+ChatColor.GREEN+ChatColor.BOLD+"FLECHA ESPECTRAL", Material.SPECTRAL_ARROW,null, 1, ChatColor.GREEN+"Precio: "+ChatColor.RED+"5 de Oro",ChatColor.YELLOW+ "Marca a tus enemigos para que tus aliados lo vean"),

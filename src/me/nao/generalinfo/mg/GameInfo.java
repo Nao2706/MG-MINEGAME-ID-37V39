@@ -18,7 +18,6 @@ import me.nao.utils.mg.Utils;
 
 public class GameInfo {
 	
-	
 	private String name , time , stopreason ,cooldownsforreplay;
 	private int minprestigetoplay , minlvltoplay, maxplayers,minplayers, loottablemax , itemspawnrange , spawnmobrange , countdownstart, toxiczonerange, dispenserrange;
 	private int pointsperkills, pointsperdeads , pointsperrevive ,pointsperhelprevive , pointsbonus , pointsloseporcent;
@@ -439,9 +438,8 @@ public class GameInfo {
 		this.timers = timers;
 	}
 
-	public void copyData(GameInfo gi) {
-		
 	
+	public void copyData(GameInfo gi) {
 		
 		setMapName(gi.getMapName());
 		setTimeMg(gi.getTimeMg());
@@ -487,6 +485,10 @@ public class GameInfo {
 	
 	}
 	
+	
+	public void updateSingsInGame() {
+		
+	}
 	
 	public String ShowGame() {
 		return getMapName()+" "+getMaxPlayers()+" "+getMinPlayers()+" "+getGameType().toString()+" "+getGameStatus().toString()+" "+

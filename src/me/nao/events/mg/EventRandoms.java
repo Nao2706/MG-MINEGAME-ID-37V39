@@ -116,6 +116,7 @@ import me.nao.cosmetics.mg.RankPlayer;
 import me.nao.enums.mg.GameInteractions;
 import me.nao.enums.mg.GameModerationActionType;
 import me.nao.enums.mg.GameStatus;
+import me.nao.enums.mg.GameType;
 import me.nao.enums.mg.Items;
 import me.nao.enums.mg.PlayerGameStatus;
 import me.nao.enums.mg.ReviveStatus;
@@ -512,7 +513,72 @@ public class EventRandoms implements Listener{
 //			new Flare(player, player.getInventory().getItemInMainHand(),player.getEyeLocation(),plugin);
 //			return;
 //		}
-		GameConditions gc = new GameConditions(plugin);
+	
+		
+		
+
+			if(e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+				 Block c = e.getClickedBlock();
+				 if(e.getItem() != null) {
+			
+					if(e.getItem().isSimilar(Items.SIGNMARKER.getValue())) {
+						 gmc.setSignJoin(player, c);
+						 
+					}
+					
+					 
+				}else if(c.getState() instanceof Sign) {
+					  Sign sign = (Sign) c.getState();
+//						
+					  if(!sign.getLine(1).isEmpty()) {
+						  String name = ChatColor.stripColor(sign.getLine(1));
+						  
+							FileConfiguration config = plugin.getConfig();
+							 List<String> al = config.getStringList("Maps-Locked.List");
+							 if(al.contains(name) && !player.isOp()) {
+								 player.sendMessage(plugin.nombre+ChatColor.RED+" El Mapa "+ChatColor.GOLD+name+ChatColor.RED+" esta Bloqueado.");
+								 return ;
+							 }else if(al.contains(name) && player.isOp()){
+								 player.sendMessage(plugin.nombre+ChatColor.RED+" Has Entrado a "+ChatColor.GOLD+name+ChatColor.RED+" es un Mapa que esta Bloqueado.");
+							
+								 gmc.mgJoinToTheGames(player, name);
+								 gmc.reloadSignData();
+								 return;
+							 }else {
+								 gmc.mgJoinToTheGames(player, name);
+								 gmc.reloadSignData();
+								 return ;
+							 }
+						  
+						  
+					  }
+				}
+			}
+			if(e.getAction() == Action.LEFT_CLICK_BLOCK) {
+				if(e.getItem() != null) {
+					if(e.getItem().isSimilar(Items.SIGNMARKER.getValue())) {
+						 Block c = player.getTargetBlock((Set<Material>) null, 5);
+						 
+						 gmc.deleteSign(player, c);
+						 
+//						  if(c.getState() instanceof Sign) {
+//							  Sign sign = (Sign) c.getState();
+//							
+//								  if(!sign.getLine(1).isEmpty()) {
+//									  String name = ChatColor.stripColor(sign.getLine(1));
+//									  
+//									  
+//								
+//									  
+//								  }
+//							  
+//							  
+//						  }
+					}
+				}
+			}
+		
+		
 		if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
 			if (e.getItem() != null) {
 				
@@ -520,7 +586,7 @@ public class EventRandoms implements Listener{
 				
 				if(e.getItem().isSimilar(Items.INTERCAMB.getValue())) {
 					
-					if(gc.isWorldAllowedForItem(player.getLocation().getWorld().getName())) {
+					if(gmc.isWorldAllowedForItem(player.getLocation().getWorld().getName())) {
 						e.setCancelled(true);
 						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Mundo Bloqueado",ChatColor.GRAY+"No puedes usar ese Item Aqui.", 20, 20,20);
 						return;
@@ -537,7 +603,7 @@ public class EventRandoms implements Listener{
 				
 				if(e.getItem().isSimilar(Items.DROPPER.getValue())) {
 					
-					if(gc.isWorldAllowedForItem(player.getLocation().getWorld().getName())) {
+					if(gmc.isWorldAllowedForItem(player.getLocation().getWorld().getName())) {
 						e.setCancelled(true);
 						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Mundo Bloqueado",ChatColor.GRAY+"No puedes usar ese Item Aqui.", 20, 20,20);
 						return;
@@ -554,7 +620,7 @@ public class EventRandoms implements Listener{
 				
 				if(e.getItem().isSimilar(Items.GLASSHIELD.getValue())) {
 					
-					if(gc.isWorldAllowedForItem(player.getLocation().getWorld().getName())) {
+					if(gmc.isWorldAllowedForItem(player.getLocation().getWorld().getName())) {
 						e.setCancelled(true);
 						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Mundo Bloqueado",ChatColor.GRAY+"No puedes usar ese Item Aqui.", 20, 20,20);
 						return;
@@ -726,8 +792,12 @@ public class EventRandoms implements Listener{
 		
 		
 		
-		if(gc.isPlayerinGame(player)) {
+		if(gmc.isPlayerinGame(player)) {
 			if(e.getHand() == EquipmentSlot.OFF_HAND)return;
+				
+			
+				PlayerInfo pi = plugin.getPlayerInfoPoo().get(player);
+				GameInfo gi = plugin.getGameInfoPoo().get(pi.getMapName());
 				
 				
 				if(e.getAction() == Action.PHYSICAL) {
@@ -770,21 +840,21 @@ public class EventRandoms implements Listener{
 						  if(!sign.getLine(0).isEmpty() && ChatColor.stripColor(sign.getLine(0)).equals("KIT-MG")) {
 							  if(!sign.getLine(1).isEmpty()) {
 								  String name = ChatColor.stripColor(sign.getLine(1));
-								  gc.getInventorySing(name, player);
+								  gmc.getInventorySing(name, player);
 								  
 								  if(pl.getKitName().equals("NINGUNO")) {
 									  player.sendMessage(Utils.colorTextChatColor("&e-&aEscogiste el Kit &b&l"+name+"."));
 									  pl.setKitName(name);
-									  if(gc.getInventorySingContent(name, player) != null) {
-										  pl.setPlayerKit(gc.getInventorySingContent(name, player));
+									  if(gmc.getInventorySingContent(name, player) != null) {
+										  pl.setPlayerKit(gmc.getInventorySingContent(name, player));
 									  }
 								  }else if(pl.getKitName().endsWith(name)) {
 									  return;
 								  }else {
 									  player.sendMessage(Utils.colorTextChatColor("&e-&aEscogiste el Kit &b&l"+name+".."));
 									  pl.setKitName(name);
-									  if(gc.getInventorySingContent(name, player) != null) {
-										  pl.setPlayerKit(gc.getInventorySingContent(name, player));
+									  if(gmc.getInventorySingContent(name, player) != null) {
+										  pl.setPlayerKit(gmc.getInventorySingContent(name, player));
 									  }
 								  }
 								  
@@ -882,7 +952,7 @@ public class EventRandoms implements Listener{
 								 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, b3.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
 								 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 								 player.sendMessage(ChatColor.RED+"La Ubicacion del Respawn se Guardado. (Ubicacion Sobreescrita).");
-								 pl.setRespawnLifeLocationMg(new RespawnLife(new Location(Bukkit.getWorld(b3.getLocation().getWorld().getName()),b3.getLocation().getBlockX(),b3.getLocation().getBlockY(),b3.getLocation().getBlockZ(),player.getLocation().getYaw(),player.getLocation().getPitch()),gc.setLifeByBlock(c4.getLocation())));
+								 pl.setRespawnLifeLocationMg(new RespawnLife(new Location(Bukkit.getWorld(b3.getLocation().getWorld().getName()),b3.getLocation().getBlockX(),b3.getLocation().getBlockY(),b3.getLocation().getBlockZ(),player.getLocation().getYaw(),player.getLocation().getPitch()),gmc.setLifeByBlock(c4.getLocation())));
 						
 							 }
 						 }else {
@@ -893,7 +963,7 @@ public class EventRandoms implements Listener{
 					
 							 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 							 player.sendMessage(ChatColor.RED+"La Ubicacion del Respawn se Guardado");
-							 pl.setRespawnLifeLocationMg(new RespawnLife(new Location(Bukkit.getWorld(b3.getLocation().getWorld().getName()),b3.getLocation().getBlockX(),b3.getLocation().getBlockY(),b3.getLocation().getBlockZ(),player.getLocation().getYaw(),player.getLocation().getPitch()),gc.setLifeByBlock(c4.getLocation())));
+							 pl.setRespawnLifeLocationMg(new RespawnLife(new Location(Bukkit.getWorld(b3.getLocation().getWorld().getName()),b3.getLocation().getBlockX(),b3.getLocation().getBlockY(),b3.getLocation().getBlockZ(),player.getLocation().getYaw(),player.getLocation().getPitch()),gmc.setLifeByBlock(c4.getLocation())));
 						 }
 						 
 					}
@@ -988,7 +1058,7 @@ public class EventRandoms implements Listener{
 						  if(!sign.getLine(0).isEmpty() && ChatColor.stripColor(sign.getLine(0)).equals("KIT-MG")) {
 							  if(!sign.getLine(1).isEmpty()) {
 								  String name = ChatColor.stripColor(sign.getLine(1));
-								  gc.getInventorySing(name, player);
+								  gmc.getInventorySing(name, player);
 								  
 								  
 								  if(pl.getKitName().equals("NINGUNO")) {
@@ -1020,7 +1090,7 @@ public class EventRandoms implements Listener{
 //				       }
 						
 						if(!e.getItem().isSimilar(new ItemStack(Material.AIR))) {
-							 gc.turret(player);
+							gmc.turret(player);
 						}
 					 
 						if(e.getItem().isSimilar( Items.JEDIP.getValue())) {
@@ -1035,7 +1105,7 @@ public class EventRandoms implements Listener{
 						}
 						 
 						if(e.getItem().isSimilar(Items.CHECKPOINTP.getValue())) {
-							if(gc.isPlayerinGame(player));
+							if(gmc.isPlayerinGame(player));
 							PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 							pl.setCheckpointItemLocationMg(player.getLocation());
 							player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
@@ -1080,25 +1150,33 @@ public class EventRandoms implements Listener{
 			
 							
 							if(e.getItem().isSimilar(new ItemStack(Material.FIREWORK_ROCKET))) {
-								if(!player.getScoreboardTags().contains("Rockets")) {
-									if(player.hasCooldown(e.getItem())) return;
-									player.setCooldown(e.getItem(),25*20);
-								}else {
-									player.sendMessage(ChatColor.RED+"No puedes usar los Fireworks Rocket");
-									e.setCancelled(true);								}
+								
+								if(gi.getGameType() == GameType.ADVENTURE || gi.getGameType() == GameType.RESISTENCE) {
+									if(!player.getScoreboardTags().contains("Rockets")) {
+										if(!player.hasCooldown(e.getItem())) {
+											player.setCooldown(e.getItem(),25*20);
+										} 
+										
+									}else {
+										player.sendMessage(ChatColor.RED+"No puedes usar los Fireworks Rocket");
+										e.setCancelled(true);							
+									}
+								}
+								
+		
 							}
 						
 						
 							if(e.getItem().isSimilar(new ItemStack(Material.ENDER_PEARL))) {
 								if(!player.getScoreboardTags().contains("Enderpearls")) {
-									if(player.hasCooldown(e.getItem())) return;
-										e.setCancelled(false);
+									if(player.hasCooldown(e.getItem()))return;
 										player.setCooldown(e.getItem(),30*20);
-									
-										return;
+									 
+										
 								}else {
 									player.sendMessage(ChatColor.RED+"No puedes usar las Enderpearls");
-									e.setCancelled(true);				
+									e.setCancelled(true);
+									return;
 								}
 							}
 								
@@ -1162,9 +1240,9 @@ public class EventRandoms implements Listener{
 						}
 					if (e.getItem().isSimilar(Items.BAZUKAP.getValue())) {
 						if(player.getInventory().containsAtLeast( Items.COHETEP.getValue(),1)) {
-							Location loc = player.getLocation();
+							Location loc = player.getEyeLocation();
 							player.playSound(player.getLocation(), Sound.ENTITY_BLAZE_SHOOT, 20.0F, 1F);
-							Fireball f = (Fireball) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.FIREBALL);
+							Fireball f = (Fireball) loc.getWorld().spawnEntity(loc, EntityType.FIREBALL);
 							f.setCustomName(ChatColor.GOLD+"Cohete");
 							f.setYield(10);
 							f.setVelocity(loc.getDirection().multiply(3));
@@ -1178,14 +1256,14 @@ public class EventRandoms implements Listener{
 					}
 					if (e.getItem().isSimilar(Items.ARROWLP.getValue())) {
 							if(player.getInventory().containsAtLeast( new ItemStack(Material.ARROW),2)) {
-									Location loc = player.getLocation();
-									Location loc2 = player.getLocation();
+									Location loc = player.getEyeLocation();
+									Location loc2 = player.getEyeLocation();
 									player.playSound(player.getLocation(), Sound.ENTITY_ARROW_SHOOT, 20.0F, 1F);
 			
 								
 								
-									Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc.add(0, 1.6, 0), EntityType.ARROW);
-									Arrow aw2 = (Arrow) loc2.getWorld().spawnEntity(loc2.add(0, 1.6, 0), EntityType.ARROW);
+									Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc, EntityType.ARROW);
+									Arrow aw2 = (Arrow) loc2.getWorld().spawnEntity(loc2, EntityType.ARROW);
 									aw.setCritical(true);
 									aw.setKnockbackStrength(1);
 									aw.setFireTicks(1200);
@@ -1230,7 +1308,7 @@ public class EventRandoms implements Listener{
 							v.setTicksLived(1200);
 							removeItemstackCustom(player,e.getItem());
 							
-							gc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.AQUA+"El Jugador "+ChatColor.GREEN+player.getName()+ChatColor.AQUA+" a un Medico");
+							gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.AQUA+"El Jugador "+ChatColor.GREEN+player.getName()+ChatColor.AQUA+" a un Medico");
 							
 							
 							
@@ -1547,20 +1625,20 @@ public class EventRandoms implements Listener{
 		 
 		
 		  if(atacante instanceof Player) {
-				Player player = (Player) atacante;
+				Player attacker = (Player) atacante;
 				
 				
 				
 				 
-				if(!gmc.isPlayerinGame(player)) {
+				if(!gmc.isPlayerinGame(attacker)) {
 					return;
 				}
 				
-					PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+					PlayerInfo pl = plugin.getPlayerInfoPoo().get(attacker);
 					 if(entidadAtacada instanceof LivingEntity) {
 						    LivingEntity mob = (LivingEntity) entidadAtacada;
 						  	pl.getGamePoints().addDamage(ConvertDoubleToInt(mob.getHealth()-mob.getAttribute(Attribute.MAX_HEALTH).getBaseValue()));
-						  	if(player.getScoreboardTags().contains("Instakillmob")) {
+						  	if(attacker.getScoreboardTags().contains("Instakillmob")) {
 						  		mob.setHealth(0);
 						  	}
 						  	
@@ -1570,8 +1648,17 @@ public class EventRandoms implements Listener{
 						  String map = pl.getMapName();
 				 			if(!gmc.isPvPAllowed(map)) {
 				 				e.setCancelled(true);
-				 				player.sendTitle("",ChatColor.RED+"El PVP en el Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no esta Habilitado",20,40,20);
+				 				attacker.sendTitle("",ChatColor.RED+"El PVP en el Mapa "+ChatColor.GOLD+map+ChatColor.RED+" no esta Habilitado",20,40,20);
+				 			}else {
+				 			    Player victim = (Player) entidadAtacada;
+								
+								if(gmc.isPlayerinGame(victim)) {
+									PlayerInfo pl1 = plugin.getPlayerInfoPoo().get(victim);
+									pl1.setCreditKillMob(atacante);
+								}
 				 			}
+				 			
+				 			
 							return;
 					 }
 			

@@ -6079,17 +6079,25 @@ public class Comandsmg implements CommandExecutor{
 						player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg deleteitem <item>");
 					 }
 					return true;
-				}else if(args[0].equalsIgnoreCase("setsign")) {
-					
-						gc.setSignJoin(player);
+				}else if(args[0].equalsIgnoreCase("signmarker")) {
+					if(!player.isOp()) {
 						
+						player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
+						return true;
+					}
+						player.getInventory().addItem(Items.SIGNMARKER.getValue());
+						player.sendMessage(Utils.colorTextChatColor("&aMarcador Obtenidp"));
 					return true;
-				}else if(args[0].equalsIgnoreCase("deletesign")) {
+				}else if(args[0].equalsIgnoreCase("signreload")) {
+					if(!player.isOp()) {
 						
-						gc.deleteSign(player);
-						
-					return true;
-				}else if(args[0].equalsIgnoreCase("start-timer")) {
+						player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
+						return true;
+					}
+					gc.reloadSignData();
+					player.sendMessage(Utils.colorTextChatColor("&aCarteles recargados."));
+				   return true;
+			    }else if(args[0].equalsIgnoreCase("start-timer")) {
 					
 			
 					player.sendMessage(plugin.nombre+ChatColor.GREEN+" A iniciado el Temporizador ");

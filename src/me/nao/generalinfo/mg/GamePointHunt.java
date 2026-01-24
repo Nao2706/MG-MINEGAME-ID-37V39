@@ -185,6 +185,7 @@ public class GamePointHunt extends GameInfo{
 			endGamesByReachLimitPoints();
 			getWinnersPlayers().addAll(getPlayersSortedOfGame());
 			setGameStatus(GameStatus.TERMINANDO);
+			gc.reloadSignData();
 		}
 	}
 	
@@ -218,9 +219,9 @@ public class GamePointHunt extends GameInfo{
 		ItemStack book =  new ItemStack(Material.WRITTEN_BOOK);
 		BookMeta meta = (BookMeta) book.getItemMeta();
 		
-		boolean hasmobs = getEntityPoints().isEmpty();
+	
 		
-		if(!hasmobs) {
+		if(hasCustomPoints()) {
 			meta.setTitle(Utils.colorTextChatColor("&b&lGUIA DE CAZA"));
 			//player.sendMessage(Utils.colorTextChatColor("&a&lMobs a Cazar:"));
 			for(EntityPoints ep : getEntityPoints()) {
@@ -249,15 +250,10 @@ public class GamePointHunt extends GameInfo{
 					}
 				}
 			}
-			
-		}
-		
-		book.setItemMeta(meta);
-		
-		if(!hasmobs) {
+			book.setItemMeta(meta);
 			player.getInventory().addItem(book);
 		}
-		
+	
 		
 		return;
 	}
