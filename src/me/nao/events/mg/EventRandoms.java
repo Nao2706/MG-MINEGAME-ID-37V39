@@ -1751,18 +1751,30 @@ public class EventRandoms implements Listener{
 							
 							
 						}
-						
+						//say 👁 ❤️ 💀
 						if(pl.getPlayerGameStatus() == PlayerGameStatus.ALIVE) {
-							gmc.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&a&lVIVO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &a"+message);
+							//gmc.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&a&lVIVO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &a"+message);
+							gmc.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&c&l❤️&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &a"+message);
+
+							
 							
 						}else if(pl.getPlayerGameStatus() == PlayerGameStatus.DEAD) {
-							gmc.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&c&lMUERTO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &e"+message);
-		
+							//gmc.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&c&lMUERTO&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &e"+message);
+							gmc.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&f&l💀&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &e"+message);
+
+							
+							
 						}else if(pl.getPlayerGameStatus() == PlayerGameStatus.SPECTATOR) {
-							gmc.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&f&lESPECTADOR&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &7"+message);
+							//gmc.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&f&lESPECTADOR&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &7"+message);
+							gmc.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l[&f&l👁&8&l] "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &7"+message);
+
+							
 							
 						}else if(pl.getPlayerGameStatus() == PlayerGameStatus.UNKNOW) {
-							gmc.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l>>&f&l>>&8&l>> "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &7"+message);
+							//gmc.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l>>&f&l>>&8&l>> "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &7"+message);
+							gmc.sendMessageToAllUsersOfSameMap(player,ra.getRankPrestigeColor(pl.getMgPlayerPrestige())+"&8&l<<&f&l⚔️&8&l>> "+ra.getRankLevelColor(pl.getMgPlayerLvl())+"&f"+player.getName()+": &7"+message);
+							
+							
 							
 						}
 						

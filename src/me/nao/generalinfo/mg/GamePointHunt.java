@@ -272,12 +272,14 @@ public class GamePointHunt extends GameInfo{
 				p.setInvulnerable(true);
 				p.setHealth(20);
 				p.getInventory().clear();
-				p.sendTitle(Utils.colorTextChatColor("&a&lFELICIDADES"+getWinnerTopPlayer()+" &b&lGANASTE"),Utils.colorTextChatColor("&eEres muy Bueno/a."), 20, 20, 20);
-
+				p.sendTitle(Utils.colorTextChatColor("&a&lFELICIDADES"+getWinnerTopPlayer()+" &b&lGANASTE"),Utils.colorTextChatColor("&eEres muy Bueno/a."), 20, 40, 20);
+				p.getActivePotionEffects().forEach(effect -> p.removePotionEffect(effect.getType()));
+				p.setArrowsInBody(0);
 	
 			}else {
-				p.sendTitle(Utils.colorTextChatColor("&a&l"+getWinnerTopPlayer()+" &b&lGANO"),Utils.colorTextChatColor("&epor Alcanzar el Limite de Puntos."), 20, 20, 20);
+				p.sendTitle(Utils.colorTextChatColor("&a&l"+getWinnerTopPlayer()+" &b&lGANO"),Utils.colorTextChatColor("&epor Alcanzar el Limite de Puntos."), 20, 40, 20);
 				p.setGameMode(GameMode.SPECTATOR);
+				p.setArrowsInBody(0);
 			}
 		
 			
@@ -301,12 +303,14 @@ public class GamePointHunt extends GameInfo{
 				p.setInvulnerable(true);
 				p.setHealth(20);
 				p.getInventory().clear();
-				//p.sendTitle(Utils.colorTextChatColor("&a&lFELICIDADES"+getWinnerTopPlayer()+" &b&lGANASTE"),Utils.colorTextChatColor("&eTienes el Puntaje mas Alto."), 20, 20, 20);
-
+				p.sendTitle(Utils.colorTextChatColor("&a&lFELICIDADES"+getWinnerTopPlayer()+" &b&lGANASTE"),Utils.colorTextChatColor("&ePor tener mayor puntaje."), 20, 40, 20);
+				p.getActivePotionEffects().forEach(effect -> p.removePotionEffect(effect.getType()));
+				p.setArrowsInBody(0);
 			
 			}else {
-				 p.sendTitle(Utils.colorTextChatColor("&a&l"+getWinnerTopPlayer()),Utils.colorTextChatColor("&eGana por ser el Top &c#&61"), 20, 20, 20);
+				 p.sendTitle(Utils.colorTextChatColor("&a&l"+getWinnerTopPlayer()),Utils.colorTextChatColor("&eGana por ser el Top &c#&61"), 20, 40, 20);
 				 p.setGameMode(GameMode.SPECTATOR);
+				 p.setArrowsInBody(0);
 			}
 
 			
