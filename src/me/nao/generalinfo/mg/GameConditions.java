@@ -2,6 +2,7 @@ package me.nao.generalinfo.mg;
 
 
 
+//import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.sk89q.worldedit.EditSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.WorldEditException;
@@ -1316,7 +1317,7 @@ public class GameConditions {
 		List<String> spectador = ms.getSpectators();
 		
 		
-		if(!winnerp.contains(player.getName()) || spectador.contains(player.getName())) return;	
+		if(winnerp.contains(player.getName()) || spectador.contains(player.getName())) return;	
 		
 		
 	
@@ -5062,19 +5063,25 @@ public class GameConditions {
 	 
 	public void ExecuteMultipleCommandsInConsole(Player player,List<String> l) {
 		
-		if(!l.isEmpty()) {
-			ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-			for(int i = 0 ; i < l.size(); i++) {
-				String texto = l.get(i);
-				if(texto.contains("%player%")) {
-					if(player != null) {
-						Bukkit.dispatchCommand(console, ChatColor.translateAlternateColorCodes('&', texto.replaceAll("%player%",player.getName())));
+		try {
+			if(!l.isEmpty()) {
+				ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+				for(int i = 0 ; i < l.size(); i++) {
+					String texto = l.get(i);
+					if(texto.contains("%player%")) {
+						if(player != null) {
+							Bukkit.dispatchCommand(console, ChatColor.translateAlternateColorCodes('&', texto.replaceAll("%player%",player.getName())));
+						}
+					}else{
+						Bukkit.dispatchCommand(console, ChatColor.translateAlternateColorCodes('&', texto));
 					}
-				}else{
-					Bukkit.dispatchCommand(console, ChatColor.translateAlternateColorCodes('&', texto));
 				}
 			}
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
+		
+	
 	}
 	
 
@@ -6019,9 +6026,9 @@ public class GameConditions {
 			switchsendMessageForUserAndConsole(player,Utils.colorTextChatColor("&cEl Mapa &a"+map+" &cno existe."));
 			return;
 		}
-		FileConfiguration ym = getGameConfig(map);
+		FileConfiguration game = getGameConfig(map);
 		
-		String enumtype = ym.getString("Type-Map").toUpperCase();
+		String enumtype = game.getString("Type-Map").toUpperCase();
 		GameType type = GameType.matchMode(enumtype);
 		
 		if(type == GameType.POINTHUNT) {
@@ -6035,25 +6042,25 @@ public class GameConditions {
 		nf.setMaximumFractionDigits(0);
 		
 		FileConfiguration mf = plugin.getMapFrequency();
-		 
-		String rs = isEnabledReviveSystem(map) ? "Si" : "No";
+		  
+		String rs = game.getBoolean("Revive-System") ? "Si" : "No";
 		String rk = isMapRanked(map) ? "Si" : "No";
-		String ci = canJoinWithYourInventory(map) ? "Si" : "No";
+		String ci = game.getBoolean("Allow-Inventory") ? "Si" : "No";
 		String locked = isBlockedTheMap(map) ? "Deshabilitado" : "Habilitado";
 		
 
-		int pointsperkill = getPointsPerKills(map);
-		int pointsperrevive = getPointsPerRevive(map);
-		int pointsperhelprevive = getPointsPerHelpRevive(map);
-		int pointsperdead = getPointsPerDeads(map);
-		int pointsperbonus = getPointsBonus(map);
+		int pointsperkill = game.getInt("Points-System.Points-Per-Kills");
+		int pointsperrevive = game.getInt("Points-System.Points-Per-Revive");
+		int pointsperhelprevive = game.getInt("Points-System.Points-Per-HelpRevive");
+		int pointsperdead = game.getInt("Points-System.Points-Per-Deads");
+		int pointsperbonus = game.getInt("Points-System.Points-Bonus");
 		int timesplayed = mf.getInt("MapFrequency."+map+".Times-Played");
 		int participants = mf.getInt("MapFrequency."+map+".Participating-Players");
 		int wins = mf.getInt("MapFrequency."+map+".Winning-Players");
 		int revives = mf.getInt("MapFrequency."+map+".Revive-Players");
 		int deads = mf.getInt("MapFrequency."+map+".Dead-Players");
-		int prestigetoplay = getprestigeLvlToPlay(map);
-		int lvltoplay = getLvlToPlay(map); 
+		int prestigetoplay = game.getInt("Prestige-To-Play");
+		int lvltoplay = game.getInt("Level-To-Play"); 
 		
 		
 		MapStatistics ms = new MapStatistics(timesplayed,participants,wins,revives,deads);

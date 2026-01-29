@@ -297,11 +297,10 @@ public class MgScore {
 	}
 	
 	
-	public void ShowObjetives(Player player,int priority) {
+	public void ShowObjetives(String map,int priority) {
 		
 		GameConditions gc = new GameConditions(plugin);
 		
-		if(!gc.isPlayerinGame(player)) return;
 		
 		ScoreboardManager manager = Bukkit.getScoreboardManager();
 		Scoreboard scoreboard = manager.getNewScoreboard();
@@ -315,17 +314,20 @@ public class MgScore {
 		aqua.setColor(ChatColor.AQUA);
 		
 		
-		PlayerInfo p = plugin.getPlayerInfoPoo().get(player);
-		GamePoints gp = (GamePoints) p.getGamePoints();
-		GameInfo gi = plugin.getGameInfoPoo().get(p.getMapName());
+		
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
 		GameObjetivesMG gomg = gi.getGameObjetivesMg();
 		GameAdventure ga = (GameAdventure) gi;
 		
 		
+		List<Player> join = gmc.ConvertStringToPlayer(ga.getParticipants());
+		List<Player> spec = gmc.ConvertStringToPlayer(ga.getSpectators());
+
+		
 		if(!plugin.getEntitiesFromFlare().isEmpty()) {
 			
 		
-			List<Entity> entlist = plugin.getEntitiesFromFlare().get(p.getMapName());
+			List<Entity> entlist = plugin.getEntitiesFromFlare().get(map);
 		
 				for(Entity ent : entlist) {
 					if(ent instanceof LivingEntity) {
@@ -361,9 +363,7 @@ public class MgScore {
 			for(Player target : ga.getKnockedPlayers().keySet()) {
 				  
 				//COLOCADO PARA QUE AL ITERAR SOBRE EL MAP DE JUGADORES NOQUEADOS NO ESTE SETANDO EL SCOREBOARD A OTRO JUGADOR DE OTRO MAPA (TESTEAR Y CAMBIAR SI ES NECESARIO)
-				if(!gc.isPlayerinGame(target)) continue;
-				PlayerInfo pl = plugin.getPlayerInfoPoo().get(target);
-				if(pl.getMapName().equals(p.getMapName())) {
+				//if(pl.getMapName().equals(p.getMapName())) {}
 				
 					RevivePlayer rp = ga.getKnockedPlayers().get(target);
 					int timelife = rp.getRemainingTimeLife();
@@ -378,7 +378,7 @@ public class MgScore {
 						
 						red.addEntry(rp.getArmorStand().getUniqueId().toString());
 					}
-				}
+				
 				
 			}
 		}
@@ -493,19 +493,25 @@ public class MgScore {
 				 show.add(ChatColor.GREEN+"Revisa el Libro !!!");
 				 
 			}else if(priority == 3) {
-				 ob.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"Stats "+player.getName()+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
-			
-				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"=========");
-				 show.add(ChatColor.RED+" ");
+				for(Player play : join) {
+					PlayerInfo p = plugin.getPlayerInfoPoo().get(play);
+					GamePoints gp = (GamePoints) p.getGamePoints();
+					 ob.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"Stats "+play.getName()+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
+						
+					 show.add(""+ChatColor.GREEN+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"=========");
+					 show.add(ChatColor.RED+" ");
+					
+					 show.add(" "+ChatColor.GREEN+ChatColor.BOLD+"Kills: "+ChatColor.RED+ChatColor.BOLD+gp.getKills());  
+					 show.add(" "+ChatColor.GREEN+ChatColor.BOLD+"Damage: "+ChatColor.RED+ChatColor.BOLD+gp.getDamage()); 
+					 show.add(" "+ChatColor.GREEN+ChatColor.BOLD+"Deads: "+ChatColor.RED+ChatColor.BOLD+gp.getDeads()); 
+					 show.add(" "+ChatColor.GREEN+ChatColor.BOLD+"Revive: "+ChatColor.RED+ChatColor.BOLD+gp.getRevive()); 
+					 show.add(" "+ChatColor.GREEN+ChatColor.BOLD+"Help-Revive: "+ChatColor.RED+ChatColor.BOLD+gp.getHelpRevive()); 
+					 
+					 show.add(ChatColor.RED+"  ");
+					 show.add(""+ChatColor.GREEN+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"========="+ChatColor.WHITE);
+				}
 				
-				 show.add(" "+ChatColor.GREEN+ChatColor.BOLD+"Kills: "+ChatColor.RED+ChatColor.BOLD+gp.getKills());  
-				 show.add(" "+ChatColor.GREEN+ChatColor.BOLD+"Damage: "+ChatColor.RED+ChatColor.BOLD+gp.getDamage()); 
-				 show.add(" "+ChatColor.GREEN+ChatColor.BOLD+"Deads: "+ChatColor.RED+ChatColor.BOLD+gp.getDeads()); 
-				 show.add(" "+ChatColor.GREEN+ChatColor.BOLD+"Revive: "+ChatColor.RED+ChatColor.BOLD+gp.getRevive()); 
-				 show.add(" "+ChatColor.GREEN+ChatColor.BOLD+"Help-Revive: "+ChatColor.RED+ChatColor.BOLD+gp.getHelpRevive()); 
-				 
-				 show.add(ChatColor.RED+"  ");
-				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"========="+ChatColor.WHITE);
+
 				
 				 
 			}
@@ -516,7 +522,15 @@ public class MgScore {
 				Score score = ob.getScore(show.get(i));
 				score.setScore((show.size()-i));
 			}
-			player.setScoreboard(scoreboard);
+			
+			for(Player play : join) {
+				play.setScoreboard(scoreboard);
+			}
+			//en priority 3 no veran nada
+			for(Player play : spec) {
+				play.setScoreboard(scoreboard);
+			}
+			
 			return;
 		}else{
 			
@@ -544,13 +558,13 @@ public class MgScore {
 			con.add(ChatColor.GREEN+"Saludos de NAO2706");
 			con.add(ChatColor.GREEN+"Y que intento es este?");
 			con.add(ChatColor.GREEN+"Eres Pro o te crees Pro");
-			con.add(ChatColor.GREEN+"Mejor espectea desde el mas alla");
+			con.add(ChatColor.GREEN+"Mejor Espectea");
 			con.add(ChatColor.GREEN+"Reporta los Bugs");
 			con.add(ChatColor.GREEN+"No uses Hacks");
 			con.add(ChatColor.GREEN+"Deberias Analizar el Mapa");
 			con.add(ChatColor.GREEN+"Puede que nosea por Alli.");
 			con.add(ChatColor.GREEN+"Eres Tryhard o Noob???");
-			con.add(ChatColor.GREEN+"Viste todos los items de la tienda??");
+			con.add(ChatColor.GREEN+"Viste toda la Tienda de Items?");
 			con.add(ChatColor.GREEN+"Explora con cuidado.");
 			
 			
@@ -571,7 +585,14 @@ public class MgScore {
 				}
 			 
 		}
-		player.setScoreboard(scoreboard);
+		for(Player play : join) {
+			play.setScoreboard(scoreboard);
+		}
+		//en priority 3 no veran nada
+		for(Player play : spec) {
+			play.setScoreboard(scoreboard);
+		}
+		
 	}
 	
 	

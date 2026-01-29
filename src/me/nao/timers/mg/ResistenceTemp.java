@@ -60,7 +60,7 @@ public class ResistenceTemp {
 	 }
 	
 	
-	public void startMg(String name) {
+	public void startMg(String map) {
 		  
 		GameConditions gc = new GameConditions(plugin);
 		BukkitScheduler sh = Bukkit.getServer().getScheduler();
@@ -69,7 +69,7 @@ public class ResistenceTemp {
 		taskID = sh.scheduleSyncRepeatingTask(plugin,new Runnable(){
 			
 			
-			GameInfo ms = plugin.getGameInfoPoo().get(name);
+			GameInfo ms = plugin.getGameInfoPoo().get(map);
 			GameAdventure ga = (GameAdventure) ms;
 			MgScore sco = new MgScore(plugin);
 			
@@ -131,7 +131,7 @@ public class ResistenceTemp {
 				//GameModeConditions gm = new GameModeConditions(plugin);
 				if(startm == 0) {
 					ms.setGameStatus(GameStatus.JUGANDO);
-					gc.startGameActions(name);
+					gc.startGameActions(map);
 					gc.reloadSignData();
 				}
 				for(Player players : joins) {
@@ -161,7 +161,7 @@ public class ResistenceTemp {
 				    		  
 				    		
 				    		
-							    gc.TptoSpawnMap(players, name);
+							    gc.TptoSpawnMap(players, map);
 				    		
 				    		  	}
 						  
@@ -181,7 +181,7 @@ public class ResistenceTemp {
 					     GameIntoMap cig = new GameIntoMap(plugin);
 						 for(Player players : alive) {
 							 players.sendMessage(ChatColor.GREEN+"Felicidades Sobreviviste. "+ChatColor.GOLD+"\nSobrevivieron: "+ChatColor.GREEN+ga.getAlivePlayers().toString().replace("[","").replace("]","")+".\n");
-							 cig.ObjetivesInGame(players, name);
+							 cig.ObjetivesInGame(players, map);
 
 						 }
 						
@@ -209,6 +209,20 @@ public class ResistenceTemp {
 						 // Bukkit.getScheduler().cancelTask(taskID);
 					}
 					
+				
+				
+				  if(anuncios >= 0 && anuncios <= 5) {
+					  sco.ShowObjetives(map,1);
+				  }else if(anuncios >= 6 && anuncios <= 11) {
+					  sco.ShowObjetives(map,2);
+				  }else if(anuncios >= 12 && anuncios <= 17) {
+					  sco.ShowObjetives(map,0);
+				  }else if(anuncios >= 18 && anuncios <= 23) {
+					  sco.ShowObjetives(map,3);
+				  }
+					
+				
+				
 				  for(Player players : joins) {
 					  if(players != null){
 					
@@ -221,15 +235,7 @@ public class ResistenceTemp {
 						  ma.spawnOres(players);
 						  ma.moblandmine(players);
 						  
-						  if(anuncios >= 0 && anuncios <= 5) {
-							  sco.ShowObjetives(players,1);
-						  }else if(anuncios >= 6 && anuncios <= 11) {
-							  sco.ShowObjetives(players,2);
-						  }else if(anuncios >= 12 && anuncios <= 17) {
-							  sco.ShowObjetives(players,0);
-						  }else if(anuncios >= 18 && anuncios <= 23) {
-							  sco.ShowObjetives(players,3);
-						  }
+				
 						  
 						  String s1 = String.valueOf(gt.getTimersecond());
 						  if(s1.endsWith("0")) {
@@ -249,7 +255,7 @@ public class ResistenceTemp {
 						 }
 						 
 				  
-				    gc.HasTimePath("Time-"+gt.getTimerhour()+"-"+gt.getTimerminute()+"-"+gt.getTimersecond(), name);
+				    gc.HasTimePath("Time-"+gt.getTimerhour()+"-"+gt.getTimerminute()+"-"+gt.getTimersecond(), map);
 					gt.timerRunMg();
 				  
 					  if(anuncios == 25) {
@@ -267,8 +273,8 @@ public class ResistenceTemp {
 						if(end == 10) {
 							 boss.setProgress(1.0);
 					  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"| FIN |");
-							 gc.topConsole(name);
-							 gc.topGame(name);
+							 gc.topConsole(map);
+							 gc.topGame(map);
 							 gc.sendResultsOfGame(ga,gt.getGameCronometForResult(),gt.getGameTimerForResult());
 
 						}
@@ -276,8 +282,8 @@ public class ResistenceTemp {
 					   	if(end == 0) {
 					   			//System.out.println("ANTES MISION MISION RUN : "+ms.ShowGame());
 			    	
-								gc.mgEndTheGame(name);
-								gc.endGameActions(name);
+								gc.mgEndTheGame(map);
+								gc.endGameActions(map);
 				   
 				    		Bukkit.getScheduler().cancelTask(taskID);
 				    		//System.out.println("SE DETUVO ;)");

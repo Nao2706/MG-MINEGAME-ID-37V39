@@ -52,7 +52,7 @@ public class AdventureTemp {
 	 }
 	
 	
-	public void startMg(String name) {
+	public void startMg(String map) {
 		
 		
 		GameConditions gc = new GameConditions(plugin);
@@ -60,7 +60,7 @@ public class AdventureTemp {
 		MobsActions ma = new MobsActions(plugin);
 		
 		BukkitScheduler sh = Bukkit.getServer().getScheduler();
-		GameInfo ms = plugin.getGameInfoPoo().get(name);
+		GameInfo ms = plugin.getGameInfoPoo().get(map);
 		GameAdventure ga = (GameAdventure) ms;
 	    MgScore sco = new MgScore(plugin);
 		
@@ -132,7 +132,7 @@ public class AdventureTemp {
 				
 				if(startm == 0) {
 					ms.setGameStatus(GameStatus.JUGANDO);
-					gc.startGameActions(name);
+					gc.startGameActions(map);
 					gc.reloadSignData();
 				}
 			
@@ -161,7 +161,7 @@ public class AdventureTemp {
 				    		  if(part == GameStatus.COMENZANDO) {
 				    		  
 				    		
-							    gc.TptoSpawnMap(players, name);
+							    gc.TptoSpawnMap(players, map);
 							    ;
 				    		  }
 						  
@@ -236,6 +236,16 @@ public class AdventureTemp {
 				  		
 					}
 					
+					  if(anuncios >= 0 && anuncios <= 5) {
+						  sco.ShowObjetives(map,1);
+					  }else if(anuncios >= 6 && anuncios <= 11) {
+						  sco.ShowObjetives(map,2);
+					  }else if(anuncios >= 12 && anuncios <= 17) {
+						  sco.ShowObjetives(map,0);
+					  }else if(anuncios >= 18 && anuncios <= 23) {
+						  sco.ShowObjetives(map,3);
+					  }
+					
 					for(String target : joins) {
 						Player players = Bukkit.getPlayerExact(target);
 						if(players != null){
@@ -251,15 +261,6 @@ public class AdventureTemp {
 							  ma.spawnOres(players);
 							  ma.moblandmine(players);
 							  
-							  if(anuncios >= 0 && anuncios <= 5) {
-								  sco.ShowObjetives(players,1);
-							  }else if(anuncios >= 6 && anuncios <= 11) {
-								  sco.ShowObjetives(players,2);
-							  }else if(anuncios >= 12 && anuncios <= 17) {
-								  sco.ShowObjetives(players,0);
-							  }else if(anuncios >= 18 && anuncios <= 23) {
-								  sco.ShowObjetives(players,3);
-							  }
 							  String s1 = String.valueOf(gt.getTimersecond());
 							  if(s1.endsWith("0")) {
 								  //getNearbyBlocks(players);
@@ -277,7 +278,7 @@ public class AdventureTemp {
 							} 
 						 }
 						 
-						 gc.HasTimePath("Time-"+gt.getTimerhour()+"-"+gt.getTimerminute()+"-"+gt.getTimersecond(), name);
+						 gc.HasTimePath("Time-"+gt.getTimerhour()+"-"+gt.getTimerminute()+"-"+gt.getTimersecond(), map);
 					     gt.timerRunMg();
 						 //plugin.getArenaCronometer().put(name,gt.getCronomethour()+":"+gt.getCronometminute()+":"+gt.getCronometsecond());
 					
@@ -293,15 +294,15 @@ public class AdventureTemp {
 						if(end == 10) {
 							 boss.setProgress(1.0);
 					  		 boss.setTitle(""+ChatColor.WHITE+ChatColor.BOLD+"| FIN |");
-							 gc.topConsole(name);
-							 gc.topGame(name);
+							 gc.topConsole(map);
+							 gc.topGame(map);
 							 gc.sendResultsOfGame(ga,gt.getGameCronometForResult(),gt.getGameTimerForResult());
 						}
 				 
 					   	if(end == 0) {
 					   			//System.out.println("ANTES ADVENTURE RUN : "+ms.ShowGame());
-								gc.mgEndTheGame(name);
-								gc.endGameActions(name);
+								gc.mgEndTheGame(map);
+								gc.endGameActions(map);
 								Bukkit.getScheduler().cancelTask(taskID);	
 								//System.out.println("SE DETUVO ;)");
 							    //Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"Terminando.");

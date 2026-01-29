@@ -882,6 +882,7 @@ public class EventRandoms implements Listener{
 						
 					 if(e.getHand() == EquipmentSlot.OFF_HAND)return;
 					
+					 if(player.getGameMode() == GameMode.SPECTATOR) return;
 					 if(b3.getType() == Material.LIME_BANNER && checkpoint.getType() == Material.STRUCTURE_BLOCK) {
 						
 						 if(!player.getInventory().containsAtLeast(Items.CHECKPOINTFLAG.getValue(),1)) {
