@@ -177,26 +177,24 @@ public class GameConditions {
 						 sendMessageToUsersOfSameMapLessPlayer(player,"&6- &eFaltan minimo &c"+min1+" &eJugador para empezar&c.");
 					 }else {
 						 sendMessageToUsersOfSameMapLessPlayer(player,"&6- &eFaltan minimo &c"+min1+" &eJugadores para empezar&c.");
-
-						 
-			 }}}
+	 
+					 }
+			  }}
 			 
 			
 			if(spectador.contains(player.getName())) {
 				sendMessageToUsersOfSameMapLessPlayer(player, "&fEl jugador &a"+player.getName()+" &fsalio del Modo Espectador.\n&c[&bTotal de Espectadores&e: &5"+(spectador.size() - 1)+"&c]");
 				ms.getBossbar().removePlayer(player);
 				showBossBarsTimers(player, ms);
-			}else {
-				//" "+Utils.pingLevel(player.getPing())+
-				if(player.getPing() >= 150) {
+			}else if(player.getPing() >= 150) {
 					sendMessageToUsersOfSameMapLessPlayer(player,Utils.pingLevel(player.getPing()));
 					sendMessageToUsersOfSameMapLessPlayer(player,"&eA Salido &a"+player.getName()+"&c(&6"+(ms.getParticipants().size()-1)+"&e/&6"+getMaxPlayerMap(pl.getMapName())+"&c)");
-				}else {
+			}else{
 					sendMessageToUsersOfSameMapLessPlayer(player,"&eA Salido &a"+player.getName()+"&c(&6"+(ms.getParticipants().size()-1)+"&e/&6"+getMaxPlayerMap(pl.getMapName())+"&c)");
 
-				}
-				
 			}
+				
+			
 			
 			
 			
@@ -6073,7 +6071,7 @@ public class GameConditions {
 		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Nivel Para Jugarlo: "+ChatColor.GREEN+lvltoplay);
 		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Ranked: "+ChatColor.GREEN+rk);
 		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Puedes Usar tu Inventario: "+ChatColor.GREEN+ci);
-		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Castigo de Puntos por Perder: "+ChatColor.GREEN+getPointsLosePorcent(map)+"%");
+		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Castigo de Puntos por Perder: "+ChatColor.GREEN+game.getInt("Points-System.Points-LosePorcent")+"%");
 		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Estado: "+ChatColor.GREEN+locked);
 		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Xp por Kill: "+ChatColor.GREEN+pointsperkill);
 		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Xp por Revivir: "+ChatColor.GREEN+pointsperrevive);

@@ -1391,8 +1391,8 @@ public class EventRandoms implements Listener{
 	public void LeavePlayerServer_Arena(PlayerQuitEvent e) {
 		    Player player = (Player) e.getPlayer();
 		
-		    GameConditions gc = new GameConditions(plugin);
-			gc.LeaveMapConexionIlegal(player);
+		
+			gmc.LeaveMapConexionIlegal(player);
 			
 			
 		    //gc.LeaveOfTheGame(player);
