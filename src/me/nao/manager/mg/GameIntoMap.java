@@ -1398,13 +1398,22 @@ public class GameIntoMap {
 					Entity entnt = (Entity) tnt.getSource();
 					if(entnt instanceof Player && EntityHasName(tnt)) {
 						Player target = (Player) entnt;
-						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+tnt.getCustomName()+" de "+target.getName(), 40, 80, 40);
-						player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+tnt.getCustomName()+" de "+target.getName());
-						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por. "+ChatColor.YELLOW+tnt.getCustomName()+" de "+target.getName());
+						
+						if(target.getName().equals(player.getName())) {
+							player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+" AutoExplotarte.", 40, 80, 40);
+							player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+" AutoExplotarte.");
+							gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por. "+ChatColor.YELLOW+" AutoExplotarse.");
 
-						if(gmc.isPlayerinGame(target)) {
-							gamePlayerAddPoints(target,e);
-						} 
+						}else {
+							player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+tnt.getCustomName()+" de "+target.getName(), 40, 80, 40);
+							player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+tnt.getCustomName()+" de "+target.getName());
+							gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por. "+ChatColor.YELLOW+tnt.getCustomName()+" de "+target.getName());
+
+							if(gmc.isPlayerinGame(target)) {
+								gamePlayerAddPoints(target,e);
+							} 
+						}
+						
 						
 					}else if(EntityHasName(entnt) && EntityHasName(tnt)){
 						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+tnt.getCustomName()+" de "+entnt.getCustomName(), 40, 80, 40);
