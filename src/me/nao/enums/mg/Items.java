@@ -260,15 +260,16 @@ import org.bukkit.inventory.meta.ItemMeta;
                          		String[] f = seccion2.split(",");
                          		String encan = f[0];
               			    	int encanlvl = Integer.valueOf(f[1]);
-                         	
-              				meta.addEnchant(Enchantment.getByName(encan.toUpperCase()), encanlvl, true);
+              			    	meta.addEnchant(Enchantment.getByName(encan.toUpperCase()), encanlvl, true);
+              			     	//meta.addEnchant(Registry.ENCHANTMENT.get(NamespacedKey.minecraft(encan.toLowerCase())), encanlvl, true);
                         }
                 	}else {
-                		
+                		;
                 		String[] f = encant.split(",");
                  		String encan = f[0];
       			     	int encanlvl = Integer.valueOf(f[1]);
                 		meta.addEnchant(Enchantment.getByName(encan.toUpperCase()), encanlvl, true);
+      			     	//meta.addEnchant(Registry.ENCHANTMENT.get(NamespacedKey.minecraft(encan.toLowerCase())), encanlvl, true);
                 	}
                 	
                 }

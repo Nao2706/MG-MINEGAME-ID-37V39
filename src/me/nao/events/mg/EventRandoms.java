@@ -15,7 +15,9 @@ import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
+import org.bukkit.Registry;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
@@ -888,6 +890,8 @@ public class EventRandoms implements Listener{
 						 if(!player.getInventory().containsAtLeast(Items.CHECKPOINTFLAG.getValue(),1)) {
 							 player.getInventory().addItem(Items.CHECKPOINTFLAG.getValue());
 						 }
+						 
+						
 						 if(pl.getCheckPointMarker() != null) {
 							 if(pl.getCheckPointMarkerPosition().equals(b3.getLocation())) {
 								 player.sendMessage(ChatColor.RED+"La Ubicacion ya esta Guardada, encuentra otro sitio para Sobreescribir los Datos.");
@@ -897,7 +901,7 @@ public class EventRandoms implements Listener{
 								 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, b3.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
 								 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 								 player.sendMessage(ChatColor.GREEN+"La Ubicacion se Guardado. (Ubicacion Sobreescrita)");
-								 pl.setCheckpointLocationMg(new Location(Bukkit.getWorld(b3.getLocation().getWorld().getName()),b3.getLocation().getBlockX(),b3.getLocation().getBlockY(),b3.getLocation().getBlockZ(),player.getLocation().getYaw(),player.getLocation().getPitch()));
+								 pl.setCheckpointLocationMg(new Location(Bukkit.getWorld(b3.getLocation().getWorld().getName()),b3.getLocation().getBlockX(),b3.getLocation().getBlockY(),b3.getLocation().getBlockZ(),gmc.getBannerYaw(b3),0));
 							 }
 						 }else {
 							 
@@ -907,7 +911,7 @@ public class EventRandoms implements Listener{
 
 							 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 							 player.sendMessage(ChatColor.GREEN+"La Ubicacion se Guardado.");
-							 pl.setCheckpointLocationMg(new Location(Bukkit.getWorld(b3.getLocation().getWorld().getName()),b3.getLocation().getBlockX(),b3.getLocation().getBlockY(),b3.getLocation().getBlockZ(),player.getLocation().getYaw(),player.getLocation().getPitch()));
+							 pl.setCheckpointLocationMg(new Location(Bukkit.getWorld(b3.getLocation().getWorld().getName()),b3.getLocation().getBlockX(),b3.getLocation().getBlockY(),b3.getLocation().getBlockZ(),gmc.getBannerYaw(b3),0));
 						 }
 						 
 					 }else if(b3.getType() == Material.LIGHT_BLUE_BANNER && checkpoint.getType() == Material.STRUCTURE_BLOCK) {
@@ -924,7 +928,7 @@ public class EventRandoms implements Listener{
 								 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, b3.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
 								 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 								 player.sendMessage(ChatColor.AQUA+"La Ubicacion del Respawn se Guardado. (Ubicacion Sobreescrita).");
-								 pl.setRespawnLocationMg(new Location(Bukkit.getWorld(b3.getLocation().getWorld().getName()),b3.getLocation().getBlockX(),b3.getLocation().getBlockY(),b3.getLocation().getBlockZ(),player.getLocation().getYaw(),player.getLocation().getPitch()));
+								 pl.setRespawnLocationMg(new Location(Bukkit.getWorld(b3.getLocation().getWorld().getName()),b3.getLocation().getBlockX(),b3.getLocation().getBlockY(),b3.getLocation().getBlockZ(),gmc.getBannerYaw(b3),0));
 						
 							 }
 						 }else {
@@ -935,7 +939,7 @@ public class EventRandoms implements Listener{
 					
 							 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 							 player.sendMessage(ChatColor.AQUA+"La Ubicacion del Respawn se Guardado");
-							 pl.setRespawnLocationMg(new Location(Bukkit.getWorld(b3.getLocation().getWorld().getName()),b3.getLocation().getBlockX(),b3.getLocation().getBlockY(),b3.getLocation().getBlockZ(),player.getLocation().getYaw(),player.getLocation().getPitch()));
+							 pl.setRespawnLocationMg(new Location(Bukkit.getWorld(b3.getLocation().getWorld().getName()),b3.getLocation().getBlockX(),b3.getLocation().getBlockY(),b3.getLocation().getBlockZ(),gmc.getBannerYaw(b3),0));
 						 }
 						 
 					}else if(b3.getType() == Material.RED_BANNER && checkpoint.getType() == Material.STRUCTURE_BLOCK) {
@@ -953,7 +957,7 @@ public class EventRandoms implements Listener{
 								 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, b3.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */30, 2.5, 1, 2.5, /* velocidad */0, null, true);
 								 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 								 player.sendMessage(ChatColor.RED+"La Ubicacion del Respawn se Guardado. (Ubicacion Sobreescrita).");
-								 pl.setRespawnLifeLocationMg(new RespawnLife(new Location(Bukkit.getWorld(b3.getLocation().getWorld().getName()),b3.getLocation().getBlockX(),b3.getLocation().getBlockY(),b3.getLocation().getBlockZ(),player.getLocation().getYaw(),player.getLocation().getPitch()),gmc.setLifeByBlock(c4.getLocation())));
+								 pl.setRespawnLifeLocationMg(new RespawnLife(new Location(Bukkit.getWorld(b3.getLocation().getWorld().getName()),b3.getLocation().getBlockX(),b3.getLocation().getBlockY(),b3.getLocation().getBlockZ(),gmc.getBannerYaw(b3),0),gmc.setLifeByBlock(c4.getLocation())));
 						
 							 }
 						 }else {
@@ -964,7 +968,7 @@ public class EventRandoms implements Listener{
 					
 							 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 							 player.sendMessage(ChatColor.RED+"La Ubicacion del Respawn se Guardado");
-							 pl.setRespawnLifeLocationMg(new RespawnLife(new Location(Bukkit.getWorld(b3.getLocation().getWorld().getName()),b3.getLocation().getBlockX(),b3.getLocation().getBlockY(),b3.getLocation().getBlockZ(),player.getLocation().getYaw(),player.getLocation().getPitch()),gmc.setLifeByBlock(c4.getLocation())));
+							 pl.setRespawnLifeLocationMg(new RespawnLife(new Location(Bukkit.getWorld(b3.getLocation().getWorld().getName()),b3.getLocation().getBlockX(),b3.getLocation().getBlockY(),b3.getLocation().getBlockZ(),gmc.getBannerYaw(b3),0),gmc.setLifeByBlock(c4.getLocation())));
 						 }
 						 
 					}
@@ -1198,8 +1202,8 @@ public class EventRandoms implements Listener{
 							player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
 					
 							
-							
-							player.teleport(pl.getCheckPointMarker().add(0.5, 0, 0.5));
+							 
+							player.teleport(new Location(pl.getCheckPointMarker().getWorld(),pl.getCheckPointMarker().getX(), pl.getCheckPointMarker().getY(), pl.getCheckPointMarker().getZ(),player.getLocation().getYaw(),player.getLocation().getPitch()).add(0.5, 0, 0.5));
 		        			
 		        			player.sendTitle(""+ChatColor.BLUE+ChatColor.BOLD+">>> "+ChatColor.GREEN+ChatColor.BOLD+"REGRESANDO"+ChatColor.BLUE+ChatColor.BOLD+"  <<<",ChatColor.YELLOW+"REGRESASTE A TU CHECKPOINT", 20, 40, 20);
 		        			
@@ -3616,10 +3620,10 @@ public class EventRandoms implements Listener{
 															
 															if(!bm.hasDisplayName()) continue;
 															
-															
+															 
 															//EFFECT DURA POTENCIA
 															//
-															   String n = bm.getDisplayName();
+															   String n = ChatColor.stripColor(bm.getDisplayName());
 															   String[] nn = n.split(" ");
 															    //5 1
 															
@@ -3628,7 +3632,7 @@ public class EventRandoms implements Listener{
 																  int power = Integer.valueOf(nn[2]);
 															
 														
-															PotionEffect posion = new PotionEffect(PotionEffectType.getByName(type),/*duration*/ dura * 20,/*amplifier:*/power, true ,true,true );
+															PotionEffect posion = new PotionEffect(Registry.POTION_EFFECT_TYPE.get(NamespacedKey.minecraft(type.toLowerCase())),/*duration*/ dura * 20,/*amplifier:*/power, true ,true,true );
 															player.addPotionEffect(posion);
 											              }
 												  }
@@ -4520,6 +4524,9 @@ public class EventRandoms implements Listener{
 						
 			}
 		 
+			
+
+			
 		 
 			public String Porcentage(int current , int max ) {
 				float percent = (float) current/max*100;

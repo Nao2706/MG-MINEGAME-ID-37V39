@@ -55,8 +55,10 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.Rotatable;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
@@ -6596,6 +6598,44 @@ public class GameConditions {
 			 lifes = 1;
 		 }
 		return lifes;
+	}
+	
+	
+	public float getBannerYaw(Block b) {
+		float yaw = 0;
+		if(b.getBlockData() instanceof Rotatable) {
+			Rotatable ro = (Rotatable) b.getBlockData();
+			BlockFace face = ro.getRotation();
+			switch(face) {
+			case NORTH:
+				yaw = 180;
+				break;
+			case SOUTH:
+				yaw = 0;
+				break;
+			case EAST:
+				yaw = 270;
+				break;
+			case WEST:
+				yaw = 90;
+				break;
+			case NORTH_EAST:
+				yaw = 225;
+				break;
+			case NORTH_WEST:
+				yaw = 135;
+				break;
+			case SOUTH_EAST:
+				yaw = 315;
+				break;
+			case SOUTH_WEST:
+				yaw = 45;
+				break;
+			default:
+				break;
+			}
+		}
+		return yaw;
 	}
 	
 	

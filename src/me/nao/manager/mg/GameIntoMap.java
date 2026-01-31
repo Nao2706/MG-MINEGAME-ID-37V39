@@ -579,11 +579,12 @@ public class GameIntoMap {
 											pl.setPlayerGameStatus(PlayerGameStatus.ALIVE);
 										
 										 pl.getGamePoints().setHelpRevive(pl.getGamePoints().getHelpRevive()+1);
+										 player.setNoDamageTicks(2*20);
 										 player.sendTitle(""+ChatColor.BLUE+ChatColor.BOLD+">>> "+ChatColor.GREEN+ChatColor.BOLD+"RESPAWNEANDO EN CHECKPOINT"+ChatColor.BLUE+ChatColor.BOLD+"  <<<",ChatColor.YELLOW+"Reviviendo en Punto de Control", 20, 40, 20);
 										 player.setGameMode(GameMode.ADVENTURE);
 										 player.getWorld().spawnParticle(Particle.TOTEM_OF_UNDYING, block.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */25, 0.5, 1, 0.5, /* velocidad */0, null, true);
 										 player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 1F);
-										 player.teleport( new Location(pl.getCheckPointMarker().getWorld(),pl.getCheckPointMarker().getX(), pl.getCheckPointMarker().getY(), pl.getCheckPointMarker().getZ(),player.getLocation().getYaw(),player.getLocation().getPitch()).add(0.5, 0, 0.5));
+										 player.teleport(new Location(pl.getCheckPointMarker().getWorld(),pl.getCheckPointMarker().getX(), pl.getCheckPointMarker().getY(), pl.getCheckPointMarker().getZ(),player.getLocation().getYaw(),player.getLocation().getPitch()).add(0.5, 0, 0.5));
 										 player.sendMessage(ChatColor.GREEN+"Te Reviviste con: "+ChatColor.AQUA+"Bandera de CheckPoint");
 										
 										 gmc.sendMessageToUsersOfSameMapLessPlayer(player,""+ChatColor.RED+ChatColor.BOLD+"+ "+ChatColor.AQUA+"Bandera de CheckPoint"+ChatColor.GREEN+" Revivio a "+ChatColor.WHITE+player.getName());

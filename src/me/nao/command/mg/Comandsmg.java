@@ -504,7 +504,7 @@ public class Comandsmg implements CommandExecutor{
 							gc.sendTittleToAllUsersOfSameMapCommand(null, name, mensaje);
 							
 						}else {
-							gc.sendMessageToUserAndConsole(null,plugin.nombre+ChatColor.GREEN+" Usa /mg tittle <map> <message1 ; message2>");
+							gc.sendMessageToUserAndConsole(null,plugin.nombre+ChatColor.GREEN+" Usa /mg title <map> <message1 ; message2>");
 						}
 						
 					return true;
@@ -2722,7 +2722,7 @@ public class Comandsmg implements CommandExecutor{
 							 }
 							gc.sendTittleToAllUsersOfSameMapCommand(player, name, mensaje);
 						}else {
-							player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg tittle <map> <message1 ; message2>");
+							player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg title <map> <message1 ; message2>");
 						}
 					}else {
 						player.sendMessage(plugin.nombre+ChatColor.RED+" No tienes permiso para usar ese comando");
