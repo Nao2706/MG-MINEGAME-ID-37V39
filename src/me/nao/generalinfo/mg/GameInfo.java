@@ -9,6 +9,7 @@ import java.util.Map;
 import org.bukkit.Location;
 import org.bukkit.boss.BossBar;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.inventory.ItemStack;
 
 import me.nao.enums.mg.GameStatus;
 import me.nao.enums.mg.GameType;
@@ -36,6 +37,7 @@ public class GameInfo {
 	private FileConfiguration data;
 	private List<Map.Entry<String, Integer>> top;
 	private Map<String,GameTime> timers;
+	private ItemStack[] kit;
 	
 	// @param GameInfo Sirve para modo aventura y resistencia
 	/**
@@ -86,7 +88,7 @@ public class GameInfo {
 		this.minlvltoplay = 0;
 		this.minprestigetoplay = 0;
 		this.timers = new HashMap<>();
-		
+		this.kit = null;		
 	}
 
 	
@@ -270,6 +272,10 @@ public class GameInfo {
 		return top;
 	}
 	
+	public ItemStack[] getMapKit() {
+		return kit;
+	}
+	
 	public void setMapName(String name) {
 		this.name = name;
 	}
@@ -438,6 +444,10 @@ public class GameInfo {
 		this.timers = timers;
 	}
 
+	public void setMapKit(ItemStack[] kit) {
+		this.kit = kit;
+	}
+	
 	
 	public void copyData(GameInfo gi) {
 		
@@ -481,6 +491,7 @@ public class GameInfo {
 		sethasMapCooldownForReplay(gi.hasMapCooldownForReplay());
 	    setMapTimeCooldownForReplay(gi.getCooldownForReplay());
 		setCleanMapFromEntitys(gi.hasMapCleanedFromEntitys());
+		setMapKit(gi.getMapKit());
 		
 	
 	}

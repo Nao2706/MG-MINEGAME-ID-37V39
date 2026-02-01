@@ -108,13 +108,13 @@ public class MapSettings {
 			ym.set("Spawners-Detection.Toxic-Zone",10);
 			
 			
-			ym.set("Start.Tittle-of-Mision", "Mision %player%");
+			ym.set("Start.Tittle-of-Map", "Mision %player%");
 			ym.set("Start.Tittle-Time", "20-40-20");
-			ym.set("Start.SubTittle-of-Mision", "hola %player%");
+			ym.set("Start.SubTittle-of-Map", "hola %player%");
 			List<String> startc = ym.getStringList("Start.Chat-Message");
 			ym.set("Start.Chat-Message", startc);
 			startc.add("Holax2 %player%");
-			ym.set("Start.Sound-of-Mision", "entity_ender_dragon_ambient;20.0;1");
+			ym.set("Start.Sound-of-Map", "entity_ender_dragon_ambient;20.0;1");
 			
 			List<String> start = ym.getStringList("Start.Actions");
 			ym.set("Start.Actions", start);

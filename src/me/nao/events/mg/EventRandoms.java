@@ -1203,7 +1203,7 @@ public class EventRandoms implements Listener{
 					
 							
 							 
-							player.teleport(new Location(pl.getCheckPointMarker().getWorld(),pl.getCheckPointMarker().getX(), pl.getCheckPointMarker().getY(), pl.getCheckPointMarker().getZ(),player.getLocation().getYaw(),player.getLocation().getPitch()).add(0.5, 0, 0.5));
+							player.teleport(new Location(pl.getCheckPointMarker().getWorld(),pl.getCheckPointMarker().getX(), pl.getCheckPointMarker().getY(), pl.getCheckPointMarker().getZ(),pl.getCheckPointMarker().getYaw(),pl.getCheckPointMarker().getPitch()).add(0.5, 0, 0.5));
 		        			
 		        			player.sendTitle(""+ChatColor.BLUE+ChatColor.BOLD+">>> "+ChatColor.GREEN+ChatColor.BOLD+"REGRESANDO"+ChatColor.BLUE+ChatColor.BOLD+"  <<<",ChatColor.YELLOW+"REGRESASTE A TU CHECKPOINT", 20, 40, 20);
 		        			

@@ -155,8 +155,9 @@ public class GameConditions {
 		}
 		
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
-		FileConfiguration mision = getGameConfig(pl.getMapName());
 		GameInfo ms = plugin.getGameInfoPoo().get(pl.getMapName());
+		FileConfiguration map = ms.getMapData();
+		
 		
 		GameStatus part = ms.getGameStatus();
 		MgScore sco = new MgScore(plugin);
@@ -196,12 +197,12 @@ public class GameConditions {
 
 			}
 				
+			 
 			
 			
 			
 			
-			
-			 String mt = mision.getString("Start.Tittle-of-Mision"); 
+			 String mt = map.getString("Start.Tittle-of-Map"); 
 			 player.sendMessage(Utils.colorTextChatColor("&aHas Salido del Mapa: "+mt.replaceAll("%player%",player.getName())));
 			 restorePlayer(player);
 			 reloadSignData();
@@ -732,6 +733,7 @@ public class GameConditions {
 				Location l = new Location(w, x, y, z, yaw, pitch).add(0.5,0,0.5);
 				player.setInvulnerable(true);
 				player.teleport(l);
+				player.setGameMode(GameMode.ADVENTURE);// PUESTO POR TEST)
 				return true;
 			} 
 		   return false;
@@ -823,7 +825,7 @@ public class GameConditions {
 				return;
 		   }
 	   }
-	   
+	    
 	   //TODO TP AL SPAWN DEL MAPA
 	   public void TptoSpawnMap(Player player ,String map){
 		  
@@ -847,7 +849,7 @@ public class GameConditions {
 				//ym.set("Start.Actions", start);
 			  
 			    
-			      String[] sts = ym.getString("Start.Sound-of-Mision").split(";");
+			      String[] sts = ym.getString("Start.Sound-of-Map").split(";");
 			      try {
 			    	  
 			    	   
@@ -890,19 +892,29 @@ public class GameConditions {
 				}
 				
 				
-				player.sendTitle(ChatColor.translateAlternateColorCodes('&',ym.getString("Start.Tittle-of-Mision").replaceAll("%player%", player.getName())), ChatColor.translateAlternateColorCodes('&',DifficultyMap(ym.getString("Start.SubTittle-of-Mision")).replaceAll("%player%", player.getName())), a,b,c);
+				player.sendTitle(ChatColor.translateAlternateColorCodes('&',ym.getString("Start.Tittle-of-Map").replaceAll("%player%", player.getName())), ChatColor.translateAlternateColorCodes('&',DifficultyMap(ym.getString("Start.SubTittle-of-Map")).replaceAll("%player%", player.getName())), a,b,c);
 				
-				ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
-				if(!start.isEmpty()) {
-					for(int i = 0 ; i < start.size(); i++) {
-						String texto = start.get(i);
-						if(!hasPlayerPermissionByLuckPerms(player, texto)) continue;
-						Bukkit.dispatchCommand(console, texto.replaceAll("%player%",player.getName()));
+					try {
+						ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
+						if(!start.isEmpty()) {
+							for(int i = 0 ; i < start.size(); i++) {
+								String texto = start.get(i);
+								if(!hasPlayerPermissionByLuckPerms(player, texto)) continue;
+								Bukkit.dispatchCommand(console, texto.replaceAll("%player%",player.getName()));
+							}
+						}
+					}catch(Exception e) {
+						e.printStackTrace();
 					}
-				}
 				
-			     	 
-					setKitMg(player);
+				
+				
+				
+					if(gi.getMapKit() != null) {
+						player.getInventory().setContents(gi.getMapKit());
+					}
+			     	  
+					
 					if(gomg.hasMapObjetives()) {
 						if(player.getInventory().getItemInMainHand() != null) {
 							if(player.getInventory().getItemInMainHand().getType() == Material.AIR) {
@@ -1528,7 +1540,7 @@ public class GameConditions {
 		    	gi.setTimersEvents(loadDataExecutableTimer(map));
 		    	gi.setkeepInventory(loadKeepInventory(map));
 		    	
-		    	 
+		    	  
 		    	gi.setSpawnItemRange(getSpawnItemRange(map));
 		    	gi.setSpawnMobRange(getSpawnMobRange(map));
 		    	gi.setToxicZoneRange(getToxicZoneRange(map));
@@ -1549,6 +1561,8 @@ public class GameConditions {
 		    	gi.sethasMapCooldownForReplay(hasMapCooldownForReplayData(map));
 		    	gi.setMapTimeCooldownForReplay(getMapTimeCooldownForReplayData(map));
 		    	gi.setCleanMapFromEntitys(hasMapCleanedData(map));
+		    	gi.setMapKit(loadMapKit(map));
+		    	
 			    
 		    	//UNIFICAR UN DIA
 		    	List<Entity> entities = new ArrayList<>();
@@ -1653,7 +1667,7 @@ public class GameConditions {
 			}
 		 
 		return true;
-	}
+	} 
 	
 	public void reloadInfoTheGame(String map) {
 		
@@ -1690,6 +1704,7 @@ public class GameConditions {
     	gi.setCleanMapFromEntitys(hasMapCleanedData(map));
     	gi.setLvltoPlay(getLvlToPlay(map));
     	gi.setPrestigelvltoPlay(getprestigeLvlToPlay(map));
+    	gi.setMapKit(loadMapKit(map));
     	
     	if(gi instanceof GamePointHunt) {
     		GamePointHunt ffa = (GamePointHunt) gi;
@@ -1849,7 +1864,7 @@ public class GameConditions {
 	public String getNameOfTheMap(String map) {
  		GameInfo gi = plugin.getGameInfoPoo().get(map);
    		FileConfiguration game = gi.getMapData();
-		return game.getString("Start.Tittle-of-Mision");
+		return game.getString("Start.Tittle-of-Map");
 	}
 	
 	public int getMaxPlayerMap(String map) {
@@ -1968,6 +1983,29 @@ public class GameConditions {
    		FileConfiguration game = gi.getMapData();
 	    return game.getBoolean("Keep-Inventory");
 	}
+	
+	
+	public ItemStack[] loadMapKit(String map) {
+		
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
+		
+   		FileConfiguration game = gi.getMapData();
+		FileConfiguration invt = plugin.getKitsYaml();
+		
+			if(!game.getBoolean("Has-Kit")) return null;
+			
+			String kit = game.getString("Start-Kit");
+			
+			if(!invt.contains("Kits."+kit)) {
+				sendMessageToConsole(ChatColor.RED+"Ese Kit no existe.");
+				return null;
+			}
+			
+			@SuppressWarnings("unchecked")
+			ItemStack[] content = ((List<ItemStack>) invt.get("Kits."+ kit)).toArray(new ItemStack[0]);
+			return content;
+	}
+	
 	
 	public boolean isGuardian(Entity e){
 		
@@ -3629,7 +3667,7 @@ public class GameConditions {
 	public void setKitMg(Player player) {
 		FileConfiguration invt = plugin.getKitsYaml();
 		String map = plugin.getPlayerInfoPoo().get(player).getMapName();
-		FileConfiguration mision = getGameConfig(map);
+		FileConfiguration map1 = getGameConfig(map);
 		
 			//name =
 		  if(!canUseKit(map)) {
@@ -3638,13 +3676,13 @@ public class GameConditions {
 		  if(!existKit(map)) {
 				 
 			  if(player.isOp()) {
-				    String kit = mision.getString("Start-Kit");
+				    String kit = map1.getString("Start-Kit");
 					player.sendMessage(ChatColor.RED+"Error ese el Kit "+kit+" no existe.");
 				}
 			  return;
 		   }
 
-		      String kit = mision.getString("Start-Kit");
+		      String kit = map1.getString("Start-Kit");
 			for (String key : invt.getConfigurationSection("Kits").getKeys(false)) {
 				if(key.equals(kit)) {
 					@SuppressWarnings("unchecked")
@@ -6627,9 +6665,11 @@ public class GameConditions {
 				break;
 			case SOUTH_EAST:
 				yaw = 315;
+		
 				break;
 			case SOUTH_WEST:
 				yaw = 45;
+			
 				break;
 			default:
 				break;

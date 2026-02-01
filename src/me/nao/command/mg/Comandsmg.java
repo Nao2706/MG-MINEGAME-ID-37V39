@@ -27,7 +27,9 @@ import org.bukkit.Effect;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
+import org.bukkit.Registry;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
@@ -3366,6 +3368,7 @@ public class Comandsmg implements CommandExecutor{
 					}
 					
 					PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+					GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
 					
 					GameReportsManager grm = new GameReportsManager(plugin);
 					//mg report NAO XRAY Ese perro esta usando hacks
@@ -3373,7 +3376,7 @@ public class Comandsmg implements CommandExecutor{
 						String target = args[1];
 						String reason = args[2];
 						
-						grm.setReporttoTarget(player, target, reason,pl.getMapName(),"Ninguno.");
+						grm.setReporttoTarget(player,gi, target, reason,pl.getMapName(),"Ninguno.");
 						
 						
 					}else if(args.length >= 4) {
@@ -3389,7 +3392,7 @@ public class Comandsmg implements CommandExecutor{
 			        	 comments = comments.trim()+".";
 			     	
 						
-						grm.setReporttoTarget(player, target, reason,pl.getMapName(),comments);
+						grm.setReporttoTarget(player,gi, target, reason,pl.getMapName(),comments);
 						
 					}else {
 						player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg report <nombre> <motivo> <comentario opcional>");
@@ -5510,6 +5513,17 @@ public class Comandsmg implements CommandExecutor{
 					player.sendBlockChange(r.getLocation(), Material.STONE.createBlockData());
 							//	MgScore mg = new MgScore(plugin);
 					//mg.ShowProgressObjetive(player);
+					return true;
+				}else if(args[0].equalsIgnoreCase("itemtest")) {
+					
+						ItemStack items = new ItemStack(Material.STICK);
+						ItemMeta meta = (ItemMeta) items.getItemMeta();
+						meta.addEnchant(Registry.ENCHANTMENT.get(NamespacedKey.minecraft("fire_aspect")),5, true);
+						
+						
+						items.setItemMeta(meta);
+						player.getInventory().addItem(items);
+						
 					return true;
 				}else if(args[0].equalsIgnoreCase("ping")) {
 					if (args.length == 2) {

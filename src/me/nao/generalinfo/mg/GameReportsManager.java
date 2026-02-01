@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 
 
 import me.nao.main.mg.Minegame;
+import me.nao.utils.mg.Utils;
 
 @SuppressWarnings("deprecation")
 public class GameReportsManager {
@@ -29,8 +30,15 @@ public class GameReportsManager {
 	
 	
 	
-	public void setReporttoTarget(Player user ,String target,String motive,String map, String comment) {
+	public void setReporttoTarget(Player user,GameInfo gi,String target,String motive,String map,String comment) {
 		
+		if(!gi.getParticipants().contains(target) || !gi.getSpectators().contains(target)) {
+			user.sendMessage(Utils.colorTextChatColor("&6- &cEl Nombre &6"+target+" &cno existe o esta mal Escrito."));
+			user.sendMessage(Utils.colorTextChatColor("&6- &cSolo puedes Reportar a Jugadores dentro de la Partida."));
+			user.playSound(user,Sound.ENTITY_VILLAGER_NO, 10, 1);
+			return;
+		}
+			
 		 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss a",Locale.ENGLISH);
 		 LocalDateTime ld = LocalDateTime.now();
 		
