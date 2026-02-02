@@ -1275,7 +1275,11 @@ public class SourceOfDamage implements Listener{
 								
 								Entity damager = ((EntityDamageByEntityEvent)e).getDamager();
 						
-								if(gmc.isEnabledReviveSystem(pi.getMapName())) {
+								if(gmc.isEnabledReviveSystem(pi.getMapName()) && gi instanceof GameAdventure) {
+									
+									GameAdventure ga = (GameAdventure) gi;
+									if(ga.getKnockedPlayers().containsKey(player)) return;
+									
 									ArmorStand armor = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
 									RevivePlayer pr = new RevivePlayer(player,0,60,ReviveStatus.BLEEDING,damager,null,armor ,plugin);
 									pr.Knocked();
@@ -1291,7 +1295,10 @@ public class SourceOfDamage implements Listener{
 						
 					}else{
 						//bloque de daño por causas externas
-								if(gmc.isEnabledReviveSystem(pi.getMapName())) {
+								if(gmc.isEnabledReviveSystem(pi.getMapName()) && gi instanceof GameAdventure) {
+									
+									GameAdventure ga = (GameAdventure) gi;
+									if(ga.getKnockedPlayers().containsKey(player)) return;
 									ArmorStand armor = (ArmorStand) player.getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
 									RevivePlayer pr = new RevivePlayer(player,0,60,ReviveStatus.BLEEDING,null,e.getCause(),armor ,plugin);
 									pr.Knocked();

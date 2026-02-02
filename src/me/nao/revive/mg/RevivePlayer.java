@@ -145,8 +145,7 @@ public class RevivePlayer{
 		PotionEffect glow = new PotionEffect(PotionEffectType.GLOWING,/*duration*/ 300 * 20,/*amplifier:*/10, true ,true,true );
 
 		ArmorStand as = getArmorStand();
-		
-		as.setCustomName(""+ChatColor.RED+ChatColor.BOLD+"REVIVIR CON (SHIFT + CLICK DERECHO) A: "+ChatColor.GREEN+ChatColor.BOLD+player.getName());
+		as.setCustomName(Utils.colorTextChatColor("&c&lREVIVIR CON &5&l(&b&lSHIFT &6&l+ &b&lCLICK DERECHO&5&l) &c&lA&6&l: &a&l"+player.getName()));
 		as.setCustomNameVisible(true);
 		as.setBasePlate(false);
 		as.setArms(true);

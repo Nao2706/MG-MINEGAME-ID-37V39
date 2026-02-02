@@ -403,6 +403,7 @@ public class PlayerInfo {
 		 player.setLevel(getLvlXpMG());
 		 player.setHealth(getLifeMG());
 		 player.getScoreboardTags().addAll(getBackAllTagsMg());
+		 player.setInvulnerable(false);
 	}
 	
 	public void restoreGamemodePlayerMg() {
@@ -411,7 +412,7 @@ public class PlayerInfo {
 		 player.getAttribute(Attribute.SCALE).setBaseValue(getScaleMG());
 		 player.setFlying(isFlyMG());
 		 player.getScoreboardTags().addAll(getBackAllTagsMg());
-		
+		 player.setInvulnerable(false);
 	}
 	
 

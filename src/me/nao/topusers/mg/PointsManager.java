@@ -111,8 +111,6 @@ public class PointsManager {
 		public long currentXpLvl(int level) {
 	    	//xpstart    increase
 	    	//1000,  (1 + 2 / 100.0),
-	  
-	    	
 	    	return level < 0 ? 0 :(long) Math.round(1000 * Math.pow((1 + 2 / 100.0), level));  
 	    }
 
@@ -185,7 +183,7 @@ public class PointsManager {
 				}
 			}
 		
-			//RECHA
+			//RACHA
 			int calcstreaks = streak * 100;
 			//DISPLAY DE XP : LO QUE CONSIGUIO DE XP EN UNA PARTIDA SE POSITIVO O NEGATIVO
 			long displayxp = (savexp+calcstreaks+val);

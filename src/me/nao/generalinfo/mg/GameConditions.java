@@ -702,22 +702,12 @@ public class GameConditions {
 								if(ms.isAllowedJoinWithOwnInventory()) {
 									player.teleport(pl.getLocationMG());
 									pl.restoreGamemodePlayerMg();
-									
-									if(ms.getGameStatus() == GameStatus.TERMINANDO) {
-										playerWinnerReward(player);
-										playerLoserReward(player);
-									}
 									mt.RemoveAllPlayer(player);
 									removeAllPlayerToGame(player, pl.getMapName());
 								
 								}else {
 									player.teleport(pl.getLocationMG());
 									pl.restoreAllPlayerMg();
-									
-									if(ms.getGameStatus() == GameStatus.TERMINANDO) {
-										playerWinnerReward(player);
-										playerLoserReward(player);
-									}
 									mt.RemoveAllPlayer(player);
 									removeAllPlayerToGame(player, pl.getMapName());
 								}
