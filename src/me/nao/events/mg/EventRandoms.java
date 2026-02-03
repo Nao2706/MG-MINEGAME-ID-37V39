@@ -1050,9 +1050,6 @@ public class EventRandoms implements Listener{
 							
 					  }
 				 }
-					  
-			
-						
 					
 				}if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
 					
@@ -1066,12 +1063,10 @@ public class EventRandoms implements Listener{
 								  gmc.getInventorySing(name, player);
 								  
 								  
-								  if(pl.getKitName().equals("NINGUNO")) {
-									 return;
-								  }else if(!(pl.getKitName().equals("NINGUNO"))) {
+								  if(pl.getKitName().equals("NINGUNO")) return;
+								  if(!(pl.getKitName().equals("NINGUNO"))) {
 									  player.sendMessage(Utils.colorTextChatColor("&e-&aDeseleccionaste el Kit &b&l"+name+"."));
 									  pl.setKitName("NINGUNO");
-									
 									  pl.setPlayerKit(null);
 									  
 								  }
@@ -1374,37 +1369,18 @@ public class EventRandoms implements Listener{
 	//TODO JOIN
 	@EventHandler
 	public void JoinServer(PlayerJoinEvent e) {
-		Player player = e.getPlayer();
+		//Player player = e.getPlayer();
 		
 
 		
 		
-		
-		
-		if(player.isOp()) {
-			
-			//e.setJoinMessage(ChatColor.GRAY+"["+ChatColor.RED+"!"+ChatColor.GRAY+"]"+ChatColor.LIGHT_PURPLE+" Entro al server de Test un Admin "+ChatColor.GOLD+player.getName());
-		}else {
-		//  e.setJoinMessage(ChatColor.GRAY+"["+ChatColor.RED+"!"+ChatColor.GRAY+"]"+ChatColor.AQUA+" Entro al server de Test "+ChatColor.GREEN+player.getName());
-		}
-	
-		
-		
 	}
-	 @EventHandler
-	public void LeavePlayerServer_Arena(PlayerQuitEvent e) {
+	
+	
+	 @EventHandler(priority = EventPriority.LOWEST)
+	public void LeavePlayerServerMap(PlayerQuitEvent e) {
 		    Player player = (Player) e.getPlayer();
-		
-		
 			gmc.LeaveMapConexionIlegal(player);
-			
-			
-		    //gc.LeaveOfTheGame(player);
-		if(player.isOp()) {
-		//	e.setQuitMessage(ChatColor.GRAY+"["+ChatColor.RED+"!"+ChatColor.GRAY+"]"+ChatColor.RED+" El Admin Salio al server de Test "+ChatColor.GOLD+player.getName());
-		}else {
-		//	e.setQuitMessage(ChatColor.GRAY+"["+ChatColor.RED+"!"+ChatColor.GRAY+"]"+ChatColor.RED+" Salio al server de Test "+ChatColor.GREEN+player.getName());
-		}
 	
 		return;	
 		

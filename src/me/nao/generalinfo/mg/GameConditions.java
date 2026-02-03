@@ -148,7 +148,7 @@ public class GameConditions {
 	  
 	//TODO LEAVE
 	public void mgLeaveOfTheGame(Player player) {
-		  
+
 		if(!isPlayerinGame(player)) {
 			player.sendMessage(Utils.colorTextChatColor("&cNo estas en Ningun Juego."));
 			return;
@@ -206,44 +206,8 @@ public class GameConditions {
 			 player.sendMessage(Utils.colorTextChatColor("&aHas Salido del Mapa: "+mt.replaceAll("%player%",player.getName())));
 			 restorePlayer(player);
 			 reloadSignData();
-		
-		
-//		else if(ms instanceof GameNexo) {
-//			//GameNexo gn = (GameNexo) ms;
-//			List<String> spectador = gn.getSpectators();
-//			List<String> join = gn.getParticipants();
-//			if(part == GameStatus.ESPERANDO || part == GameStatus.COMENZANDO) {
-//				if(join.size() < getMinPlayerMap(pl.getMapName())) {
-//					
-//					 
-//					 int min1 =  getMinPlayerMap(pl.getMapName());
-//					 
-//					 min1 = min1 - join.size();
-//					  
-//					 if(min1 == 1) {
-//						 sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugador para empezar.");
-//					 }else {
-//						 sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.YELLOW+"Faltan minimo "+ChatColor.RED+min1+ChatColor.YELLOW+" Jugadores para empezar.");
-//
-//			}}}			
-//			
-//			
-//			
-//			
-//			if(spectador.contains(player.getName())) {
-//				sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.WHITE+"El jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" salio del Modo Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size() - 1)+ChatColor.RED+"]");
-//			
-//			}else {
-//				sendMessageToUsersOfSameMapLessPlayer(player,
-//							ChatColor.YELLOW+"A Salido "+ChatColor.GREEN+player.getName()+ChatColor.RED+" ("+ChatColor.GOLD+(gn.getParticipants().size()-1)+ChatColor.YELLOW+"/"+ChatColor.GOLD+getMaxPlayerMap(pl.getMapName())+ChatColor.RED+")");			
-//			}
-//			 String mt = mision.getString("Start.Tittle-of-Mision"); 
-//			 player.sendMessage(ChatColor.GREEN+"Has salido del Mapa "+ChatColor.translateAlternateColorCodes('&',mt.replaceAll("%player%",player.getName())));
-//			 RestorePlayer(player);
-//		}
-		
-	
-		//player.sendMessage("Saliste.");
+			 return;
+
 		
 	}
 	
@@ -300,7 +264,6 @@ public class GameConditions {
 	public void LeaveMapConexionIlegal(Player player) {
 		
 		if(!isPlayerinGame(player)) return;
-	
 		
 		PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
 		GameInfo gi = plugin.getGameInfoPoo().get(pl.getMapName());
@@ -319,7 +282,6 @@ public class GameConditions {
 						GameIntoMap ci = new GameIntoMap(plugin);
 						ci.PlayerDropAllItems(player);
 						mgLeaveOfTheGame(player);
-					
 						 return;
 					}else{
 						mgLeaveOfTheGame(player);
@@ -692,7 +654,7 @@ public class GameConditions {
 					
 					sendMessageToUserAndConsole(player,"&c&lError&e: &eNo existe el &bMundo&a: &6"+world+" &csi ves esto Reportalo a un Admin.");
 				
-					MgTeams mt = new MgTeams(plugin);
+					
 					
 					setDefaultHeartsInGame(player);
 					BossBar boss = ms.getBossbar();
@@ -702,13 +664,11 @@ public class GameConditions {
 								if(ms.isAllowedJoinWithOwnInventory()) {
 									player.teleport(pl.getLocationMG());
 									pl.restoreGamemodePlayerMg();
-									mt.RemoveAllPlayer(player);
 									removeAllPlayerToGame(player, pl.getMapName());
 								
 								}else {
 									player.teleport(pl.getLocationMG());
 									pl.restoreAllPlayerMg();
-									mt.RemoveAllPlayer(player);
 									removeAllPlayerToGame(player, pl.getMapName());
 								}
 					 }
@@ -1088,9 +1048,9 @@ public class GameConditions {
 	
 	
 	
-	public void addPlayerToGame(Player player ,String mision) {
+	public void addPlayerToGame(Player player ,String map) {
 	
-			GameInfo mis = plugin.getGameInfoPoo().get(mision);
+			GameInfo mis = plugin.getGameInfoPoo().get(map);
 			if(!mis.getParticipants().contains(player.getName())) {
 				mis.getParticipants().add(player.getName());
 			}
@@ -1104,9 +1064,9 @@ public class GameConditions {
 	}
 	
 	//TODO SIN USO CAMBIAR A LA CLASE DE AVENTURA PARA ESTAS COSAS
-	public void revivePlayerToGame(Player player ,String mision) {
+	public void revivePlayerToGame(Player player ,String map) {
 		
-		GameInfo mis = plugin.getGameInfoPoo().get(mision);
+		GameInfo mis = plugin.getGameInfoPoo().get(map);
 		if(mis instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) mis;
 			if(!ga.getAlivePlayers().contains(player.getName())) {
@@ -1117,10 +1077,10 @@ public class GameConditions {
 	}
 	
 	//TODO SIN USO
-	public void deadPlayerToGame(Player player ,String mision) {
+	public void deadPlayerToGame(Player player ,String map) {
 		
 		
-		GameInfo mis = plugin.getGameInfoPoo().get(mision);
+		GameInfo mis = plugin.getGameInfoPoo().get(map);
 		if(mis instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) mis;
 			if(!ga.getDeadPlayers().contains(player.getName())) {
@@ -1130,18 +1090,18 @@ public class GameConditions {
 		}
 	}
 	
-	public void spectatorAddToGame(Player player ,String mision) {
+	public void spectatorAddToGame(Player player ,String map) {
 		
-			GameInfo gi = plugin.getGameInfoPoo().get(mision);
+			GameInfo gi = plugin.getGameInfoPoo().get(map);
 			if(!gi.getSpectators().contains(player.getName())) {
 				gi.getSpectators().add(player.getName());
 			}
 		
 	}
 	
-	public void playerArriveToTheWin(Player player ,String mision) {
+	public void playerArriveToTheWin(Player player ,String map) {
 		
-		GameInfo gi = plugin.getGameInfoPoo().get(mision);
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
 	
 			if(!gi.getWinnersPlayers().contains(player.getName())) {
 				gi.getWinnersPlayers().add(player.getName());
@@ -1150,16 +1110,14 @@ public class GameConditions {
 	}
 	
 	 
-	public void removeAllPlayerToGame(Player player ,String mision) {
+	public void removeAllPlayerToGame(Player player ,String map) {
 		
-		GameInfo gi = plugin.getGameInfoPoo().get(mision);
-		
+		GameInfo gi = plugin.getGameInfoPoo().get(map);
+		MgTeams t = new MgTeams(plugin);
 		if(gi.getParticipants().remove(player.getName()));
 		if(gi.getWinnersPlayers().remove(player.getName()));
 		if(gi.getSpectators().remove(player.getName()));
-		MgTeams t = new MgTeams(plugin);
-		
-		
+	
 		if(gi instanceof GameAdventure) {
 			GameAdventure ga = (GameAdventure) gi;
 			
@@ -3622,10 +3580,11 @@ public class GameConditions {
 				BossBar boss = ms.getBossbar();
 				boss.removePlayer(player);
 				removeBossBarsTimers(player, ms);
-		 
+				
 				
 					//SE SECCIONA POR QUE HAY QUE VER SI SE SALVO O NO SU INVENTARIO
 					if(ms.isAllowedJoinWithOwnInventory()) {
+						System.out.println("R1-234");
 						player.teleport(pl.getLocationMG());
 						pl.restoreGamemodePlayerMg();
 						 
@@ -3637,6 +3596,7 @@ public class GameConditions {
 						removeAllPlayerToGame(player, pl.getMapName());
 					
 					}else {
+						
 						player.teleport(pl.getLocationMG());
 						pl.restoreAllPlayerMg();
 						
@@ -3647,7 +3607,6 @@ public class GameConditions {
 						mt.RemoveAllPlayer(player);
 						removeAllPlayerToGame(player, pl.getMapName());
 					}  
-					 
 				
 			player.getWorld().spawnParticle(Particle.PORTAL, player.getLocation().add(0, 1, 0),// POR ALGUN RAZON DICE QUE ESE METODO DA ERROR POR PASARLE UN PARAMETRO MAL PIDE
 							/* NUMERO DE PARTICULAS */150, 2, 5, 2, /* velocidad */0, null, true); // UN FLOAT PERO NO HAY
