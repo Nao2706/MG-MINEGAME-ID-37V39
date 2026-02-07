@@ -61,7 +61,7 @@ public class MgScore {
 		
 		
 		if(board.getObjective("mgvida") == null) {
-			Objective ob = board.registerNewObjective("mgvida", Criteria.HEALTH,""+ChatColor.RED+ChatColor.BOLD+"❤", RenderType.INTEGER);
+			Objective ob = board.registerNewObjective("mgvida", Criteria.HEALTH,Utils.colorTextChatColor("&c&l❤"), RenderType.INTEGER);
 			ob.setDisplaySlot(DisplaySlot.BELOW_NAME);
 			
 			player.setScoreboard(board);
@@ -99,56 +99,56 @@ public class MgScore {
 		
 		int val = r.nextInt(3+1); 
 		
-			 ob.setDisplayName(""+ChatColor.YELLOW+ChatColor.BOLD+"TIPS");
+			 ob.setDisplayName(Utils.colorTextChatColor("&e&lTIPS"));
 			 
 			 if(val == 0) {
-				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"-------------");
-				 show.add(ChatColor.RED+" ");
-				 show.add(""+ChatColor.YELLOW+ChatColor.BOLD+"Cargando Informacion....");
-				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Puede que haya");
-				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Puede que no");
-				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Crees Ganar???");
-				 show.add(""+ChatColor.RED+ChatColor.BOLD+"No uses Hacks o Bugs");
-				 show.add(""+ChatColor.RED+ChatColor.BOLD+"Reportalos si los ves.");
-				 show.add(""+ChatColor.RED+ChatColor.BOLD+"/mg report <player>");
-				 show.add(ChatColor.RED+"  ");
-				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"------------- ");
+				 show.add(Utils.colorTextChatColor("&b&l-------------"));
+				 show.add(" ");
+				 show.add(Utils.colorTextChatColor("&e&lCargando Informacion...."));
+				 show.add(Utils.colorTextChatColor("&aPuede que haya"));
+				 show.add(Utils.colorTextChatColor("&aPuede que no"));
+				 show.add(Utils.colorTextChatColor("&a&lCrees Ganar???"));
+				 show.add(Utils.colorTextChatColor("&cNo uses Hacks o Bugs"));
+				 show.add(Utils.colorTextChatColor("&cReportalos si los ves."));
+				 show.add(Utils.colorTextChatColor("&6/mg report &c<player>"));
+				 show.add("  ");
+				 show.add(Utils.colorTextChatColor("&b&l------------- "));
 			 }if(val == 1) {
-				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"-------------");
-				 show.add(ChatColor.RED+" ");
-				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Cargando Informacion....");
-				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Te fijaste ");
-				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"en la Dificultad");
-				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"no ?? F");
-				 show.add(""+ChatColor.RED+ChatColor.BOLD+"No uses Hacks o Bugs");
-				 show.add(""+ChatColor.RED+ChatColor.BOLD+"Reportalos si los ves.");
-				 show.add(""+ChatColor.RED+ChatColor.BOLD+"/mg report <player>");
-				 show.add(ChatColor.RED+"  ");
-				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"------------- ");
+				 show.add(Utils.colorTextChatColor("&b&l-------------"));
+				 show.add(" ");
+				 show.add(Utils.colorTextChatColor("&e&lCargando Informacion...."));
+				 show.add(Utils.colorTextChatColor("&aTe fijaste "));
+				 show.add(Utils.colorTextChatColor("&aen la Dificultad"));
+				 show.add(Utils.colorTextChatColor("&ano ?? &f&lF"));
+				 show.add(Utils.colorTextChatColor("&cNo uses Hacks o Bugs"));
+				 show.add(Utils.colorTextChatColor("&c&lReportalos si los ves."));
+				 show.add(Utils.colorTextChatColor("&6/mg report &c<player>"));
+				 show.add("  ");
+				 show.add(Utils.colorTextChatColor("&b&l------------- "));
 			 }if(val == 2) {
-				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"-------------");
-				 show.add(ChatColor.RED+" ");
-				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Cargando Informacion....");
-				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Es facil perderse");
-				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Explora con cuidado");
-				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Y trata de no jugar solo");
-				 show.add(""+ChatColor.RED+ChatColor.BOLD+"No uses Hacks o Bugs");
-				 show.add(""+ChatColor.RED+ChatColor.BOLD+"Reportalos si los ves.");
-				 show.add(""+ChatColor.RED+ChatColor.BOLD+"/mg report <player>");
-				 show.add(ChatColor.RED+"  ");
-				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"------------- ");
+				 show.add(Utils.colorTextChatColor("&b&l-------------"));
+				 show.add(" ");
+				 show.add(Utils.colorTextChatColor("&e&lCargando Informacion...."));
+				 show.add(Utils.colorTextChatColor("&5Es facil perderse"));
+				 show.add(Utils.colorTextChatColor("&6Explora con cuidado"));
+				 show.add(Utils.colorTextChatColor("&aY trata de no jugar solo"));
+				 show.add(Utils.colorTextChatColor("&cNo uses Hacks o Bugs"));
+				 show.add(Utils.colorTextChatColor("&c&lReportalos si los ves."));
+				 show.add(Utils.colorTextChatColor("&6/mg report &c<player>"));
+				 show.add("  ");
+				 show.add(Utils.colorTextChatColor("&b&l------------- "));
 			 }if(val == 3) {
-				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"-------------");
-				 show.add(ChatColor.RED+" ");
-				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"Cargando Informacion....");
-				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"La clave es aprender");
-				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"del mapa y sus trucos");
-				 show.add(""+ChatColor.GREEN+ChatColor.BOLD+"o eran los hacks??");
-				 show.add(""+ChatColor.RED+ChatColor.BOLD+"No uses Hacks o Bugs");
-				 show.add(""+ChatColor.RED+ChatColor.BOLD+"Reportalos si los ves.");
-				 show.add(""+ChatColor.RED+ChatColor.BOLD+"/mg report <player>");
-				 show.add(ChatColor.RED+"  ");
-				 show.add(""+ChatColor.AQUA+ChatColor.BOLD+"------------- ");
+				 show.add(Utils.colorTextChatColor("&b&l-------------"));
+				 show.add(" ");
+				 show.add(Utils.colorTextChatColor("&e&lCargando Informacion...."));
+				 show.add(Utils.colorTextChatColor("&a&lLa clave es aprender"));
+				 show.add(Utils.colorTextChatColor("&a&ldel &6&lmapa &a&ly sus &b&ltrucos"));
+				 show.add(Utils.colorTextChatColor("&a&lo eran los hacks??"));
+				 show.add(Utils.colorTextChatColor("&aEs broma no uses Hacks o Bugs"));
+				 show.add(Utils.colorTextChatColor("&a&lReportalos si los ves."));
+				 show.add(Utils.colorTextChatColor("&6/mg report &c<player>"));
+				 show.add("  ");
+				 show.add(Utils.colorTextChatColor("&b&l------------- "));
 			 }
 			 
 			
@@ -509,11 +509,21 @@ public class MgScore {
 					 
 					 show.add(ChatColor.RED+"  ");
 					 show.add(""+ChatColor.GREEN+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"========="+ChatColor.WHITE);
+					 
+					 
+						for(int i = 0; i< show.size();i++) {
+							
+							Score score = ob.getScore(show.get(i));
+							score.setScore((show.size()-i));
+						}
+						
+						
+					play.setScoreboard(scoreboard);
 				}
 				
 
 				
-				 
+				 return;
 			}
 		
 		

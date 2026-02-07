@@ -2579,7 +2579,9 @@ public class Comandsmg implements CommandExecutor{
 			        
 			    }else if(args[0].equalsIgnoreCase("check-points")) {
 					
-					if(args.length == 2) {
+					if(args.length == 1) {
+						gc.checkPlayerInfo(player,player.getName());
+					}else if(args.length == 2) {
 						String name = args[1];
 						
 						gc.checkPlayerInfo(player,name);

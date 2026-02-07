@@ -1169,10 +1169,11 @@ public class EventRandoms implements Listener{
 						
 							if(e.getItem().isSimilar(new ItemStack(Material.ENDER_PEARL))) {
 								if(!player.getScoreboardTags().contains("Enderpearls")) {
-									if(player.hasCooldown(e.getItem()))return;
-										player.setCooldown(e.getItem(),30*20);
-									 
+										if(player.hasCooldown(e.getItem())) {
+											player.setCooldown(e.getItem(),30*20);
+										}
 										
+									 return;
 								}else {
 									player.sendMessage(ChatColor.RED+"No puedes usar las Enderpearls");
 									e.setCancelled(true);
@@ -1818,8 +1819,7 @@ public class EventRandoms implements Listener{
 				if(enti.getType() == EntityType.PLAYER) {
 					Player player = (Player) enti;
 					
-					GameConditions gc = new GameConditions(plugin);
-					if(gc.isPlayerinGame(player)) {
+					if(gmc.isPlayerinGame(player)) {
 						if(e.getRegainReason() == RegainReason.MAGIC_REGEN || e.getRegainReason() == RegainReason.MAGIC || e.getRegainReason() == RegainReason.CUSTOM ) {
 							 
 							e.setCancelled(false);
@@ -1841,8 +1841,7 @@ public class EventRandoms implements Listener{
 		 Player player = (Player) e.getPlayer();
 		 ItemStack food = e.getItem();
 		 
-			GameConditions gc = new GameConditions(plugin);
-			if(gc.isPlayerinGame(player)) {
+			if(gmc.isPlayerinGame(player)) {
 				 if(food.isSimilar(new ItemStack(Material.APPLE))) {
 					 player.getWorld().spawnParticle(Particle.HEART, player.getLocation().add(0, 1, 0),/* NUMERO DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
 				 }
@@ -1948,7 +1947,7 @@ public class EventRandoms implements Listener{
 		
 		//TODO EXPLOSION
 	
-		@EventHandler
+		//@EventHandler
 		public void EntityChangeBlockMg(EntityChangeBlockEvent e) {
 			FileConfiguration config = plugin.getConfig();
 			
@@ -2437,14 +2436,14 @@ public class EventRandoms implements Listener{
 				List<Entity> list = getNearbyEntitesItems(l1, 5);
 				//System.out.println("Lista 2 "+list.size());
 				if(list.size() >= gi.getLootTableLimit()) {
-					gmc.sendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+Utils.colorTextChatColor("\n&cTu ambicion sera tu Perdicion.\n&5Anti-Looter-2 &cy &5Suicida Invocados \n&e(&8Dejo tirados muchos Items Cerca de la Mesa&e)"));
+					gmc.sendMessageToAllPlayersInMap(map,Utils.colorTextChatColor("&a"+player.getName()+"\n&cTu ambicion sera tu Perdicion.\n&5Anti-Looter-2 &cy &5Suicida Invocados \n&e(&8Dejo tirados muchos Items Cerca de la Mesa&e)"));
 					l1.getWorld().spawnParticle(Particle.FLAME, l1,	/* N DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
 					player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 20.0F, 0F);
 					
-					Zombie zombi = (Zombie) l1.getWorld().spawnEntity(l1, EntityType.ZOMBIE);
+					Zombie zombi = (Zombie) l1.getWorld().spawnEntity(l1.add(0.5,0,0.5), EntityType.ZOMBIE);
 					zombi.getAttribute(attribute).setBaseValue(150);
 					zombi.getAttribute(attributer).setBaseValue(50);
-					zombi.setCustomName(""+ChatColor.GOLD+ChatColor.BOLD+"Anti-Looter-2");
+					zombi.setCustomName(Utils.colorTextChatColor("&6&lAnti-Looter-2"));
 					zombi.getEquipment().setHelmet(new ItemStack(Material.DIAMOND_HELMET));
 					zombi.getEquipment().setChestplate(new ItemStack(Material.NETHERITE_CHESTPLATE));
 					zombi.getEquipment().setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS));
@@ -2462,24 +2461,24 @@ public class EventRandoms implements Listener{
 					zombi.addPotionEffect(salto);
 					
 					
-					Creeper c = (Creeper) l1.getWorld().spawnEntity(l1, EntityType.CREEPER);
+					Creeper c = (Creeper) l1.getWorld().spawnEntity(l1.add(0.5,0,0.5), EntityType.CREEPER);
 					c.setExplosionRadius(15);
 					c.setMaxFuseTicks(1);
 					c.getAttribute(attribute).setBaseValue(150);
-					c.setCustomName(""+ChatColor.AQUA+ChatColor.BOLD+"SUICIDA");
+					c.setCustomName(Utils.colorTextChatColor("&b&lSUICIDA"));
 					c.setTarget(player);
 					zombi.addPassenger(c);
 					gmc.setPlayerTempCooldown(player);
 				}else if(player.getInventory().containsAtLeast(new ItemStack(Material.DIAMOND), 100)) {
 					
-					gmc.sendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+Utils.colorTextChatColor(" \n&crecibio un Castigo por tener muchos &bDiamantes. \n&e(&8Tiene mas de 100 de &bDiamantes&e)\n&5Anti-Looter &cy &5Guardia del Loot Invocados"));
-					l1.getWorld().spawnParticle(Particle.FLAME, l1,	/* N DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
+					gmc.sendMessageToAllPlayersInMap(map,Utils.colorTextChatColor("&a"+player.getName()+" \n&crecibio un Castigo por tener muchos &bDiamantes. \n&e(&8Tiene mas de 100 de &bDiamantes&e)\n&5Anti-Looter &cy &5Guardia del Loot Invocados"));
+					l1.getWorld().spawnParticle(Particle.FLAME, l1.add(0.5,0,0.5),	/* N DE PARTICULAS */10, 0.5, 1, 0.5, /* velocidad */0, null, true);
 					player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 20.0F, 0F);
 					
 					Zombie zombi = (Zombie) l1.getWorld().spawnEntity(l1, EntityType.ZOMBIE);
 					zombi.getAttribute(attribute).setBaseValue(150);
 					zombi.getAttribute(attributer).setBaseValue(50);
-					zombi.setCustomName(""+ChatColor.RED+ChatColor.BOLD+"Anti-Looter");
+					zombi.setCustomName(Utils.colorTextChatColor("&c&lAnti-Looter"));
 					zombi.getEquipment().setHelmet(new ItemStack(Material.IRON_HELMET));
 					zombi.getEquipment().setChestplate(new ItemStack(Material.IRON_CHESTPLATE));
 					zombi.getEquipment().setLeggings(new ItemStack(Material.IRON_LEGGINGS));
@@ -2496,20 +2495,20 @@ public class EventRandoms implements Listener{
 					zombi.addPotionEffect(salto);
 					zombi.setTarget(player);
 					
-					Witch c1 = (Witch) l1.getWorld().spawnEntity(l1, EntityType.WITCH);
+					Witch c1 = (Witch) l1.getWorld().spawnEntity(l1.add(0.5,0,0.5), EntityType.WITCH);
 					c1.getAttribute(attribute).setBaseValue(150);
 					c1.setCustomName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"GUARDIA DEL LOOT");
 					c1.setTarget(player);
 					gmc.setPlayerTempCooldown(player);
 				}else if(player.getInventory().containsAtLeast(new ItemStack(Material.GOLD_INGOT), 100)) {
 					
-					gmc.sendMessageToAllPlayersInMap(map,ChatColor.GREEN+player.getName()+Utils.colorTextChatColor(" \n&crecibio un Castigo por tener mucho &6Oro. \n&e(&8Tiene mas de 100 de Oro&e)\n&5Guardias del Loot Invocados"));
+					gmc.sendMessageToAllPlayersInMap(map,Utils.colorTextChatColor("&a"+player.getName()+" \n&crecibio un Castigo por tener mucho &6Oro. \n&e(&8Tiene mas de 100 de Oro&e)\n&5Guardias del Loot Invocados"));
 
 					l1.getWorld().spawnParticle(Particle.FLAME, l1.add(0.5, 1, 0.5),	/* N DE PARTICULAS */5, 0.5, 1, 0.5, /* velocidad */0, null, true);
 
 					player.playSound(player.getLocation(), Sound.ENTITY_WITCH_CELEBRATE, 20.0F, 0F);
 					
-					Creeper c = (Creeper) l1.getWorld().spawnEntity(l1, EntityType.CREEPER);
+					Creeper c = (Creeper) l1.getWorld().spawnEntity(l1.add(0.5,0,0.5), EntityType.CREEPER);
 					c.setExplosionRadius(5);
 					c.getAttribute(attribute).setBaseValue(150);
 					c.setCustomName(""+ChatColor.GREEN+ChatColor.BOLD+"GUARDIA DEL LOOT");
@@ -2526,24 +2525,24 @@ public class EventRandoms implements Listener{
 					gmc.setPlayerTempCooldown(player);
 				}else {
 					
-					l1.getWorld().spawnParticle(Particle.FIREWORK, l1,	/* N DE PARTICULAS */1, 0.5, 1, 0.5, /* velocidad */0, null, true);
+					l1.getWorld().spawnParticle(Particle.FIREWORK, l1.add(0.5,0,0.5),	/* N DE PARTICULAS */1, 0.5, 1, 0.5, /* velocidad */0, null, true);
 					player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, 20.0F, 1F);
 					if(r == 0) {
-						l1.getWorld().dropItem(l1,new ItemStack(Material.LAPIS_LAZULI,5));
+						l1.getWorld().dropItem(l1.add(0.5,1,0.5),new ItemStack(Material.LAPIS_LAZULI,5));
 					}if(r == 1) {
-						l1.getWorld().dropItem(l1,new ItemStack(Material.EXPERIENCE_BOTTLE,r2));
+						l1.getWorld().dropItem(l1.add(0.5,1,0.5),new ItemStack(Material.EXPERIENCE_BOTTLE,r2));
 					}if(r == 2) {
-						l1.getWorld().dropItem(l1,new ItemStack(Material.DIAMOND,r2));
+						l1.getWorld().dropItem(l1.add(0.5,1,0.5),new ItemStack(Material.DIAMOND,r2));
 					}if(r == 3) {
-						l1.getWorld().dropItem(l1,new ItemStack(Material.IRON_INGOT,r2));
+						l1.getWorld().dropItem(l1.add(0.5,1,0.5),new ItemStack(Material.IRON_INGOT,r2));
 					}if(r == 4) {
-						l1.getWorld().dropItem(l1,new ItemStack(Material.EMERALD,r2));
+						l1.getWorld().dropItem(l1.add(0.5,1,0.5),new ItemStack(Material.EMERALD,r2));
 					}if(r == 5) {
-						l1.getWorld().dropItem(l1,new ItemStack(Material.GOLD_INGOT,r2));
+						l1.getWorld().dropItem(l1.add(0.5,1,0.5),new ItemStack(Material.GOLD_INGOT,r2));
 					}if(r == 6) {
-						l1.getWorld().dropItem(l1,new ItemStack(Material.NETHERITE_INGOT,2));
+						l1.getWorld().dropItem(l1.add(0.5,1,0.5),new ItemStack(Material.NETHERITE_INGOT,2));
 					}if(r == 7) {
-						l1.getWorld().dropItem(l1,new ItemStack(Material.WOODEN_SWORD,1));
+						l1.getWorld().dropItem(l1.add(0.5,1,0.5),new ItemStack(Material.WOODEN_SWORD,1));
 					}
 				}
 			
