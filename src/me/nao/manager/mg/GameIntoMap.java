@@ -1407,7 +1407,7 @@ public class GameIntoMap {
 						}else {
 							player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+tnt.getCustomName()+" de "+target.getName(), 40, 80, 40);
 							player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+tnt.getCustomName()+" de "+target.getName());
-							gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por. "+ChatColor.YELLOW+tnt.getCustomName()+" de "+target.getName());
+							gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por: "+ChatColor.YELLOW+tnt.getCustomName()+" de "+target.getName());
 
 							if(gmc.isPlayerinGame(target)) {
 								gamePlayerAddPoints(target,e);
@@ -1415,10 +1415,15 @@ public class GameIntoMap {
 						}
 						
 						
+					}else if(EntityHasName(tnt)){
+						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+tnt.getCustomName(), 40, 80, 40);
+						player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+tnt.getCustomName());
+						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por: "+ChatColor.YELLOW+tnt.getCustomName());
+
 					}else if(EntityHasName(entnt) && EntityHasName(tnt)){
-						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+tnt.getCustomName()+" de "+entnt.getCustomName(), 40, 80, 40);
-						player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+tnt.getCustomName()+" de "+entnt.getCustomName());
-						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por. "+ChatColor.YELLOW+tnt.getCustomName()+" de "+entnt.getCustomName());
+						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+tnt.getCustomName()+ChatColor.RED+" de "+ChatColor.YELLOW+entnt.getCustomName(), 40, 80, 40);
+						player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+tnt.getCustomName()+ChatColor.RED+" de "+ChatColor.YELLOW+entnt.getCustomName());
+						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por: "+ChatColor.YELLOW+tnt.getCustomName()+ChatColor.RED+" de "+ChatColor.YELLOW+entnt.getCustomName());
 
 					}
 					
