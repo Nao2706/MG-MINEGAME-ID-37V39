@@ -72,8 +72,6 @@ public class TabCompletemg implements TabCompleter{
 			arguments.add("time");
 			arguments.add("formats");
 			arguments.add("difficult");
-			arguments.add("getInv");
-			arguments.add("saveInv");
 			arguments.add("item");
 			arguments.add("ride");
 			arguments.add("force-revive");

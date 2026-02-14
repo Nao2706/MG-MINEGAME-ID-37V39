@@ -6069,7 +6069,7 @@ public class Comandsmg implements CommandExecutor{
 					
 						
 					 }else {
-						player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg saveInv <kit> ");
+						player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg saveItem <kit> ");
 						
 					 }
 					

@@ -831,39 +831,9 @@ public class EventRandoms implements Listener{
 				}
 				
 				//QUEDA PENDIENTE EL DE LOS PUNTOS
-				if (e.getAction() == Action.RIGHT_CLICK_BLOCK ) {
+				if (e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 					
 					 PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
-					 
-					
-					 Block b2 = player.getTargetBlock((Set<Material>) null, 5);
-					  if(b2.getState() instanceof Sign) {
-						  Sign sign = (Sign) b2.getState();
-						  if(!sign.getLine(0).isEmpty() && ChatColor.stripColor(sign.getLine(0)).equals("KIT-MG")) {
-							  if(!sign.getLine(1).isEmpty()) {
-								  String name = ChatColor.stripColor(sign.getLine(1));
-								  gmc.getInventorySing(name, player);
-								  
-								  if(pl.getKitName().equals("NINGUNO")) {
-									  player.sendMessage(Utils.colorTextChatColor("&e-&aEscogiste el Kit &b&l"+name+"."));
-									  pl.setKitName(name);
-									  if(gmc.getInventorySingContent(name, player) != null) {
-										  pl.setPlayerKit(gmc.getInventorySingContent(name, player));
-									  }
-								  }else if(pl.getKitName().endsWith(name)) {
-									  return;
-								  }else {
-									  player.sendMessage(Utils.colorTextChatColor("&e-&aEscogiste el Kit &b&l"+name+".."));
-									  pl.setKitName(name);
-									  if(gmc.getInventorySingContent(name, player) != null) {
-										  pl.setPlayerKit(gmc.getInventorySingContent(name, player));
-									  }
-								  }
-								  
-							  }
-						  }
-						  
-					  }
 					
 					
 						Block b3 = e.getClickedBlock();
@@ -1054,6 +1024,7 @@ public class EventRandoms implements Listener{
 				}if (e.getAction() == Action.LEFT_CLICK_BLOCK) {
 					
 					PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+					
 					 Block b2 = player.getTargetBlock((Set<Material>) null, 5);
 					  if(b2.getState() instanceof Sign) {
 						  Sign sign = (Sign) b2.getState();
@@ -1062,19 +1033,47 @@ public class EventRandoms implements Listener{
 								  String name = ChatColor.stripColor(sign.getLine(1));
 								  gmc.getInventorySing(name, player);
 								  
-								  
-								  if(pl.getKitName().equals("NINGUNO")) return;
-								  if(!(pl.getKitName().equals("NINGUNO"))) {
-									  player.sendMessage(Utils.colorTextChatColor("&e-&aDeseleccionaste el Kit &b&l"+name+"."));
-									  pl.setKitName("NINGUNO");
-									  pl.setPlayerKit(null);
-									  
+								  if(pl.getKitName().equals("NINGUNO")) {
+									  player.sendMessage(Utils.colorTextChatColor("&e-&aEscogiste el Kit &b&l"+name+"."));
+									  pl.setKitName(name);
+									  if(gmc.getInventorySingContent(name, player) != null) {
+										  pl.setPlayerKit(gmc.getInventorySingContent(name, player));
+									  }
+								  }else if(pl.getKitName().endsWith(name)) {
+									  return;
+								  }else {
+									  player.sendMessage(Utils.colorTextChatColor("&e-&aEscogiste el Kit &b&l"+name+".."));
+									  pl.setKitName(name);
+									  if(gmc.getInventorySingContent(name, player) != null) {
+										  pl.setPlayerKit(gmc.getInventorySingContent(name, player));
+									  }
 								  }
 								  
 							  }
 						  }
 						  
 					  }
+					
+//					 Block b2 = player.getTargetBlock((Set<Material>) null, 5);
+//					  if(b2.getState() instanceof Sign) {
+//						  Sign sign = (Sign) b2.getState();
+//						  if(!sign.getLine(0).isEmpty() && ChatColor.stripColor(sign.getLine(0)).equals("KIT-MG")) {
+//							  if(!sign.getLine(1).isEmpty()) {
+//								  String name = ChatColor.stripColor(sign.getLine(1));
+//								  gmc.getInventorySing(name, player);
+//								  
+//								  
+//								  if(pl.getKitName().equals("NINGUNO")) return;
+//									  player.sendMessage(Utils.colorTextChatColor("&e-&aDeseleccionaste el Kit &b&l"+name+"."));
+//									  pl.setKitName("NINGUNO");
+//									  pl.setPlayerKit(null);
+//									  
+//								  
+//								  
+//							  }
+//						  }
+//						  
+//					  }
 				}if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
 					if (e.getItem() != null) {
 						

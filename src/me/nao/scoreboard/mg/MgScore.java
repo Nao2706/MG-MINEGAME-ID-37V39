@@ -496,7 +496,12 @@ public class MgScore {
 				for(Player play : join) {
 					PlayerInfo p = plugin.getPlayerInfoPoo().get(play);
 					GamePoints gp = (GamePoints) p.getGamePoints();
-					 ob.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"Stats "+play.getName()+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
+					ScoreboardManager manager1 = Bukkit.getScoreboardManager();
+					Scoreboard scoreboard1 = manager1.getNewScoreboard();
+					Objective ob1 = scoreboard1.registerNewObjective("Anuncio",Criteria.DUMMY,"");
+					
+					 ob1.setDisplaySlot(DisplaySlot.SIDEBAR);
+					 ob1.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"Stats "+play.getName()+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
 						
 					 show.add(""+ChatColor.GREEN+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"=========");
 					 show.add(ChatColor.RED+" ");
@@ -513,12 +518,12 @@ public class MgScore {
 					 
 						for(int i = 0; i< show.size();i++) {
 							
-							Score score = ob.getScore(show.get(i));
+							Score score = ob1.getScore(show.get(i));
 							score.setScore((show.size()-i));
 						}
 						
 						
-					play.setScoreboard(scoreboard);
+					play.setScoreboard(scoreboard1);
 				}
 				
 

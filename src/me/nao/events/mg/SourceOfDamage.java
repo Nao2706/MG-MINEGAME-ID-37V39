@@ -452,7 +452,7 @@ public class SourceOfDamage implements Listener{
 							//player.addPotionEffect(ciego);
 							player.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA,/*duration*/ 10 * 20,/*amplifier:*/20, false ,false,true));
 							player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
-							player.getWorld().spawnParticle(Particle.DRAGON_BREATH, player.getLocation().add(1, 1, 1),
+							player.getWorld().spawnParticle(Particle.PORTAL, player.getLocation().add(1, 1, 1),
 									/* NUMERO DE PARTICULAS */10, 1, 0, 1, /* velocidad */0, null, true);
 						}else if(b1.getType() == Material.LAVA || b2.getType() == Material.LAVA) {
 							player.sendTitle(ChatColor.RED+"!!!PELIGRO!!!", ChatColor.GREEN+"Estas en"+ChatColor.YELLOW+" Lava Toxica "+ChatColor.GREEN+"corre", 20, 40, 20);
@@ -463,7 +463,7 @@ public class SourceOfDamage implements Listener{
 							//player.addPotionEffect(ciego);
 							player.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA,/*duration*/ 10 * 20,/*amplifier:*/20, false ,false,true));
 							player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
-							player.getWorld().spawnParticle(Particle.DRAGON_BREATH, player.getLocation().add(1, 1, 1),
+							player.getWorld().spawnParticle(Particle.PORTAL, player.getLocation().add(1, 1, 1),
 									/* NUMERO DE PARTICULAS */10, 1, 0, 1, /* velocidad */0, null, true);
 							player.removePotionEffect(PotionEffectType.RESISTANCE);
 							player.removePotionEffect(PotionEffectType.FIRE_RESISTANCE);
@@ -503,7 +503,7 @@ public class SourceOfDamage implements Listener{
 							Block b = a.getRelative(0,-1, 0);
 							
 							if(a.getType() == Material.COMMAND_BLOCK && b.getType() == Material.BEDROCK) {
-								player.getWorld().spawnParticle(Particle.DRAGON_BREATH, player.getLocation().add(1, 0, 1),
+								player.getWorld().spawnParticle(Particle.PORTAL, player.getLocation().add(1, 0, 1),
 										/* NUMERO DE PARTICULAS */10, 1, 0, 1, /* velocidad */0, null, true);
 								 
 								player.sendTitle(ChatColor.RED+"!!!PELIGRO!!!", ChatColor.GREEN+"Estas en una"+ChatColor.RED+" Zona Toxica "+ChatColor.GREEN+"corre", 20, 40, 20);
@@ -513,12 +513,12 @@ public class SourceOfDamage implements Listener{
 								player.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
 								player.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA,/*duration*/ 10 * 20,/*amplifier:*/20, false ,false,true));
 								player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
-								player.getWorld().spawnParticle(Particle.DRAGON_BREATH, player.getLocation().add(1, 1, 1),
+								player.getWorld().spawnParticle(Particle.PORTAL, player.getLocation().add(1, 1, 1),
 										/* NUMERO DE PARTICULAS */10, 1, 0, 1, /* velocidad */0, null, true);
 								break;
 							}else if(a.getType() == Material.REPEATING_COMMAND_BLOCK && b.getType() == Material.BEDROCK) {
 								if(b1.getType() == Material.LAVA || b2.getType() == Material.LAVA) {
-									player.getWorld().spawnParticle(Particle.DRAGON_BREATH, player.getLocation().add(1, 0, 1),
+									player.getWorld().spawnParticle(Particle.PORTAL, player.getLocation().add(1, 0, 1),
 											/* NUMERO DE PARTICULAS */10, 1, 0, 1, /* velocidad */0, null, true);
 									
 									player.sendTitle(ChatColor.RED+"!!!PELIGRO!!!", ChatColor.GREEN+"Estas en"+ChatColor.YELLOW+" Zona de Lava Toxica "+ChatColor.GREEN+"corre", 20, 40, 20);
@@ -529,7 +529,7 @@ public class SourceOfDamage implements Listener{
 									//player.addPotionEffect(ciego);
 									player.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA,/*duration*/ 10 * 20,/*amplifier:*/20, false ,false,true));
 									player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
-									player.getWorld().spawnParticle(Particle.DRAGON_BREATH, player.getLocation().add(1, 1, 1),
+									player.getWorld().spawnParticle(Particle.PORTAL, player.getLocation().add(1, 1, 1),
 											/* NUMERO DE PARTICULAS */10, 1, 0, 1, /* velocidad */0, null, true);
 									player.removePotionEffect(PotionEffectType.RESISTANCE);
 									player.removePotionEffect(PotionEffectType.FIRE_RESISTANCE);
@@ -539,7 +539,7 @@ public class SourceOfDamage implements Listener{
 								break;
 							}else if(a.getType() == Material.CHAIN_COMMAND_BLOCK && b.getType() == Material.BEDROCK) {
 								if(b1.getType() == Material.WATER || b2.getType() == Material.WATER) {
-									player.getWorld().spawnParticle(Particle.DRAGON_BREATH, player.getLocation().add(1, 0, 1),
+									player.getWorld().spawnParticle(Particle.PORTAL, player.getLocation().add(1, 0, 1),
 											/* NUMERO DE PARTICULAS */10, 1, 0, 1, /* velocidad */0, null, true);
 									
 									player.sendTitle(ChatColor.RED+"!!!PELIGRO!!!", ChatColor.GREEN+"Estas en"+ChatColor.BLUE+" Zona Agua Toxica "+ChatColor.GREEN+"corre", 20, 40, 20);
@@ -550,7 +550,7 @@ public class SourceOfDamage implements Listener{
 									//player.addPotionEffect(ciego);
 									player.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA,/*duration*/ 10 * 20,/*amplifier:*/20, false ,false,true));
 									player.addPotionEffect(new PotionEffect(PotionEffectType.HUNGER,/*duration*/ 10 * 20,/*amplifier:*/50, false ,false,true));
-									player.getWorld().spawnParticle(Particle.DRAGON_BREATH, player.getLocation().add(1, 1, 1),
+									player.getWorld().spawnParticle(Particle.PORTAL, player.getLocation().add(1, 1, 1),
 											/* NUMERO DE PARTICULAS */10, 1, 0, 1, /* velocidad */0, null, true);
 								}
 								

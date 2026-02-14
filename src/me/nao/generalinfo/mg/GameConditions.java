@@ -844,7 +844,7 @@ public class GameConditions {
 				
 				player.sendTitle(ChatColor.translateAlternateColorCodes('&',ym.getString("Start.Tittle-of-Map").replaceAll("%player%", player.getName())), ChatColor.translateAlternateColorCodes('&',DifficultyMap(ym.getString("Start.SubTittle-of-Map")).replaceAll("%player%", player.getName())), a,b,c);
 				
-					try {
+				try {
 						ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
 						if(!start.isEmpty()) {
 							for(int i = 0 ; i < start.size(); i++) {
