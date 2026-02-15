@@ -498,7 +498,7 @@ public class MgScore {
 					GamePoints gp = (GamePoints) p.getGamePoints();
 					ScoreboardManager manager1 = Bukkit.getScoreboardManager();
 					Scoreboard scoreboard1 = manager1.getNewScoreboard();
-					Objective ob1 = scoreboard1.registerNewObjective("Anuncio",Criteria.DUMMY,"");
+					Objective ob1 = scoreboard1.registerNewObjective("Anuncio2",Criteria.DUMMY,"");
 					
 					 ob1.setDisplaySlot(DisplaySlot.SIDEBAR);
 					 ob1.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"Stats "+play.getName()+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");

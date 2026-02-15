@@ -471,7 +471,7 @@ public class EventRandoms implements Listener{
 					if(ent2 instanceof Player) {
 						Player target = (Player) ent2;
 						target.setVelocity(loc.getDirection().multiply(3).setY(1));
-						System.out.println("THROW PLAYER");
+						//System.out.println("THROW PLAYER");
 					}else if(ent2 instanceof Mob) {
 						ent2.setVelocity(loc.getDirection().multiply(3).setY(1));
 						
