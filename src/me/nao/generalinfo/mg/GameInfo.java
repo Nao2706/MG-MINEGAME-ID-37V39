@@ -128,6 +128,14 @@ public class GameInfo {
 		return type;
 	}
 
+	/** 
+	 *<b>Obten</b>
+	 *
+	 *el estado de la partida puede ser ESPERANDO COMENZANDO JUGANDO TERMINANDO DESACTIVADO FREEZE PAUSE
+	 *
+	 *<br><li>- Considerar los enums</li>
+	 *
+	 * */
 	public GameStatus getGameStatus() {
 		return estpart;
 	}

@@ -1424,15 +1424,14 @@ public class GameIntoMap {
 						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+tnt.getCustomName()+ChatColor.RED+" de "+ChatColor.YELLOW+entnt.getCustomName(), 40, 80, 40);
 						player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+tnt.getCustomName()+ChatColor.RED+" de "+ChatColor.YELLOW+entnt.getCustomName());
 						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por: "+ChatColor.YELLOW+tnt.getCustomName()+ChatColor.RED+" de "+ChatColor.YELLOW+entnt.getCustomName());
-
 					}
 					
 				
 				}else {
 					if(EntityHasName(tnt)) {
 						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+tnt.getCustomName(), 40, 80, 40);
-						player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+tnt.getCustomName()+" de "+tnt.getCustomName());
-						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por. "+ChatColor.YELLOW+tnt.getCustomName());
+						player.sendMessage(ChatColor.RED+"Moriste por: "+ChatColor.YELLOW+tnt.getCustomName());
+						gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por: "+ChatColor.YELLOW+tnt.getCustomName());
 
 					}else {
 						player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+tnt.getType(), 40, 80, 40);
@@ -1873,6 +1872,8 @@ public class GameIntoMap {
 	}
 	
 	public void healPlayer(Player player) {
+		player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
+		player.setFireTicks(0);
 		PotionEffect vid = new PotionEffect(PotionEffectType.REGENERATION,/*duration*/ 5 * 20,/*amplifier:*/20, true ,true,true );
 		PotionEffect comida = new PotionEffect(PotionEffectType.SATURATION,/*duration*/ 5 * 20,/*amplifier:*/10, true ,true,true );
 		PotionEffect abso = new PotionEffect(PotionEffectType.ABSORPTION,/*duration*/ 5 * 20,/*amplifier:*/10, true ,true,true );

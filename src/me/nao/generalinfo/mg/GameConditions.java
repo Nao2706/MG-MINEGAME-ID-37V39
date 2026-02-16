@@ -638,7 +638,7 @@ public class GameConditions {
 					
 				}
 				
-				
+				//CAMBIAR PASAR A OBJETO LOCATIONS GENERALES
 			    String[] coords = ym.getString("Pre-Lobby").split("/");
 			    String world = coords[0];
 			    double x = Double.valueOf(coords[1]);
@@ -3699,7 +3699,7 @@ public class GameConditions {
 				
 				
 					for(Player player : joins) {
-						PlayerInfo pl = plugin.getPlayerInfoPoo().get(player);
+						
 						if (message.getBoolean("Message.message-top")) {
 							List<String> messagep1 = message.getStringList("Message.message-top-decoracion1");
 							for (int j1 = 0; j1 < messagep1.size(); j1++) {
@@ -3711,6 +3711,7 @@ public class GameConditions {
 						
 						int i = 0;
 						for (Map.Entry<String, Integer> e : list) {
+							PlayerInfo pl = plugin.getPlayerInfoPoo().get(ConvertStringToPlayerAlone(e.getKey()));
 							if (i <= message.getInt("Top-Amount")) {
 								i++;
 								// player.sendMessage(i+" Nombre:"+e.getKey()+" Puntos:"+e.getValue());

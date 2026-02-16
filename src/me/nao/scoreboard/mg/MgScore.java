@@ -107,7 +107,7 @@ public class MgScore {
 				 show.add(Utils.colorTextChatColor("&e&lCargando Informacion...."));
 				 show.add(Utils.colorTextChatColor("&aPuede que haya"));
 				 show.add(Utils.colorTextChatColor("&aPuede que no"));
-				 show.add(Utils.colorTextChatColor("&a&lCrees Ganar???"));
+				 show.add(Utils.colorTextChatColor("&aCrees Ganar???"));
 				 show.add(Utils.colorTextChatColor("&cNo uses Hacks o Bugs"));
 				 show.add(Utils.colorTextChatColor("&cReportalos si los ves."));
 				 show.add(Utils.colorTextChatColor("&6/mg report &c<player>"));
@@ -141,9 +141,9 @@ public class MgScore {
 				 show.add(Utils.colorTextChatColor("&b&l-------------"));
 				 show.add(" ");
 				 show.add(Utils.colorTextChatColor("&e&lCargando Informacion...."));
-				 show.add(Utils.colorTextChatColor("&a&lLa clave es aprender"));
-				 show.add(Utils.colorTextChatColor("&a&ldel &6&lmapa &a&ly sus &b&ltrucos"));
-				 show.add(Utils.colorTextChatColor("&a&lo eran los hacks??"));
+				 show.add(Utils.colorTextChatColor("&aLa clave es aprender"));
+				 show.add(Utils.colorTextChatColor("&adel &6&lmapa &a&ly sus &b&ltrucos"));
+				 show.add(Utils.colorTextChatColor("&ao eran los hacks??"));
 				 show.add(Utils.colorTextChatColor("&aEs broma no uses Hacks o Bugs"));
 				 show.add(Utils.colorTextChatColor("&a&lReportalos si los ves."));
 				 show.add(Utils.colorTextChatColor("&6/mg report &c<player>"));
@@ -493,40 +493,11 @@ public class MgScore {
 				 show.add(ChatColor.GREEN+"Revisa el Libro !!!");
 				 
 			}else if(priority == 3) {
+			
 				for(Player play : join) {
-					PlayerInfo p = plugin.getPlayerInfoPoo().get(play);
-					GamePoints gp = (GamePoints) p.getGamePoints();
-					ScoreboardManager manager1 = Bukkit.getScoreboardManager();
-					Scoreboard scoreboard1 = manager1.getNewScoreboard();
-					Objective ob1 = scoreboard1.registerNewObjective("Anuncio2",Criteria.DUMMY,"");
-					
-					 ob1.setDisplaySlot(DisplaySlot.SIDEBAR);
-					 ob1.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"Stats "+play.getName()+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
-						
-					 show.add(""+ChatColor.GREEN+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"=========");
-					 show.add(ChatColor.RED+" ");
-					
-					 show.add(" "+ChatColor.GREEN+ChatColor.BOLD+"Kills: "+ChatColor.RED+ChatColor.BOLD+gp.getKills());  
-					 show.add(" "+ChatColor.GREEN+ChatColor.BOLD+"Damage: "+ChatColor.RED+ChatColor.BOLD+gp.getDamage()); 
-					 show.add(" "+ChatColor.GREEN+ChatColor.BOLD+"Deads: "+ChatColor.RED+ChatColor.BOLD+gp.getDeads()); 
-					 show.add(" "+ChatColor.GREEN+ChatColor.BOLD+"Revive: "+ChatColor.RED+ChatColor.BOLD+gp.getRevive()); 
-					 show.add(" "+ChatColor.GREEN+ChatColor.BOLD+"Help-Revive: "+ChatColor.RED+ChatColor.BOLD+gp.getHelpRevive()); 
-					 
-					 show.add(ChatColor.RED+"  ");
-					 show.add(""+ChatColor.GREEN+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"========="+ChatColor.WHITE);
-					 
-					 
-						for(int i = 0; i< show.size();i++) {
-							
-							Score score = ob1.getScore(show.get(i));
-							score.setScore((show.size()-i));
-						}
-						
-						
-					play.setScoreboard(scoreboard1);
-				}
-				
+					showPoints(play);
 
+				}
 				
 				 return;
 			}
@@ -610,6 +581,39 @@ public class MgScore {
 		
 	}
 	
+	
+	public void showPoints(Player play) {
+		PlayerInfo p = plugin.getPlayerInfoPoo().get(play);
+		GamePoints gp = (GamePoints) p.getGamePoints();
+		ScoreboardManager manager1 = Bukkit.getScoreboardManager();
+		Scoreboard scoreboard1 = manager1.getNewScoreboard();
+		Objective ob1 = scoreboard1.registerNewObjective("AnuncioX",Criteria.DUMMY,"");
+		List<String> show = new ArrayList<>();
+		 ob1.setDisplaySlot(DisplaySlot.SIDEBAR);
+		 ob1.setDisplayName(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+"["+ChatColor.AQUA+ChatColor.BOLD+"Stats "+play.getName()+ChatColor.DARK_PURPLE+ChatColor.BOLD+"]");
+			
+		 show.add(""+ChatColor.GREEN+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"=========");
+		 show.add(ChatColor.RED+" ");
+		
+		 show.add(" "+ChatColor.GREEN+ChatColor.BOLD+"Kills: "+ChatColor.RED+ChatColor.BOLD+gp.getKills());  
+		 show.add(" "+ChatColor.GREEN+ChatColor.BOLD+"Damage: "+ChatColor.RED+ChatColor.BOLD+gp.getDamage()); 
+		 show.add(" "+ChatColor.GREEN+ChatColor.BOLD+"Deads: "+ChatColor.RED+ChatColor.BOLD+gp.getDeads()); 
+		 show.add(" "+ChatColor.GREEN+ChatColor.BOLD+"Revive: "+ChatColor.RED+ChatColor.BOLD+gp.getRevive()); 
+		 show.add(" "+ChatColor.GREEN+ChatColor.BOLD+"Help-Revive: "+ChatColor.RED+ChatColor.BOLD+gp.getHelpRevive()); 
+		 
+		 show.add(ChatColor.RED+"  ");
+		 show.add(""+ChatColor.GREEN+ChatColor.BOLD+ChatColor.STRIKETHROUGH+"========="+ChatColor.WHITE);
+		 
+		 
+			for(int i = 0; i< show.size();i++) {
+				
+				Score score = ob1.getScore(show.get(i));
+				score.setScore((show.size()-i));
+			}
+			
+			
+		play.setScoreboard(scoreboard1);
+	}
 	
 	public void ClearScore(Player player) {
 		player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
