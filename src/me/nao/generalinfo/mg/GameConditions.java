@@ -1,4 +1,4 @@
-package me.nao.generalinfo.mg;
+	package me.nao.generalinfo.mg;
 
 
 
@@ -2222,14 +2222,14 @@ public class GameConditions {
 				 player.sendMessage(ChatColor.GRAY+"Tu Nivel es Demasiado Bajo para Jugar en este Mapa.");
 				 player.sendMessage(ChatColor.GOLD+"Nivel del Mapa: "+ChatColor.RED+mapinfo.getPrestigelvltoPlay()+ChatColor.GRAY+" Tu Nivel: "+ChatColor.GREEN+playerlvl);
 				 player.sendMessage(ChatColor.GRAY+"Sube tu Nivel de Prestigio. ");
-				 return false;
+				
 			 }else {
 				 player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"NIVEL INSUFICIENTE DETECTADO OP BYPASS");
 				 player.sendMessage(ChatColor.GRAY+"Puedes Acceder pero revisa si el Nivel para Jugar del Mapa es el Correcto.");
 				 player.sendMessage(ChatColor.GOLD+"Nivel del Mapa: "+ChatColor.RED+mapinfo.getPrestigelvltoPlay()+ChatColor.GRAY+" Tu Nivel: "+ChatColor.GREEN+playerlvl);
 				 player.sendMessage(ChatColor.GRAY+"Sube tu Nivel de Prestigio. ");
 			 }
-			
+			 return false;
 		 }else if(playerlvl < mapinfo.getLvltoPlay()) {
 			 if(!player.isOp()) {
 				 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 20.0F, 1F);
@@ -2237,14 +2237,14 @@ public class GameConditions {
 				 player.sendMessage(ChatColor.GRAY+"Tu Nivel es Demasiado Bajo para Jugar en este Mapa.");
 				 player.sendMessage(ChatColor.GOLD+"Nivel del Mapa: "+ChatColor.RED+mapinfo.getLvltoPlay()+ChatColor.GRAY+" Tu Nivel: "+ChatColor.GREEN+playerlvl);
 				 player.sendMessage(ChatColor.GRAY+"Sube tu Nivel. ");
-				 return false;
+				
 			 }else {
 				 player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"NIVEL INSUFICIENTE DETECTADO OP BYPASS");
 				 player.sendMessage(ChatColor.GRAY+"Puedes Acceder pero revisa si el Nivel para Jugar del Mapa es el Correcto.");
 				 player.sendMessage(ChatColor.GOLD+"Nivel del Mapa: "+ChatColor.RED+mapinfo.getLvltoPlay()+ChatColor.GRAY+" Tu Nivel: "+ChatColor.GREEN+playerlvl);
 				 player.sendMessage(ChatColor.GRAY+"Sube tu Nivel. ");
 			 }
-			
+			 return false;
 		 }else if(data.getBoolean("Play-Time.Has-Time")) {
 			 	String time = data.getString("Play-Time.Usage-Time");
 		    	if(time == null || time.isEmpty()){
@@ -6350,14 +6350,15 @@ public class GameConditions {
 				sof.rangeOfLvl(lvl);
 				long currentxp = xp+sof.getTotalPlayerXpLvl();
 				
+				if(player != null) {
+					player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 50.0F, 1F);
+				}
+				
 				if (message.getBoolean("Message-My-Points.message")) {
 					List<String> messagep = message.getStringList("Message-My-Points.message-points-texto");
 					for (int j = 0; j < messagep.size(); j++) {
 						String texto = messagep.get(j);
 						
-						if(player != null) {
-							player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 50.0F, 1F);
-						}
 					
 						sendMessageToUserAndConsole(player,ChatColor.translateAlternateColorCodes('&',texto.replaceAll("%player%", target)
 								 .replace("%kills%",	String.valueOf(pointk))

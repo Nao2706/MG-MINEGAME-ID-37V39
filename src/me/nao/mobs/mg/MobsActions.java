@@ -1015,7 +1015,7 @@ public class MobsActions {
 						
 		  				zombi1.addPotionEffect(rapido);
 		  				zombi1.addPotionEffect(salto);
-					for(int i = 0 ; i< 10;i++) {
+					for(int i = 0 ; i< 20;i++) {
 						Zombie zombi2 = (Zombie)  world.spawnEntity(l2, EntityType.ZOMBIE);
 						
 							zombi2.getAttribute(attribute).setBaseValue(150);

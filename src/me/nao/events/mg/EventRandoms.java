@@ -2309,6 +2309,38 @@ public class EventRandoms implements Listener{
 						  return;
 						}
 					}
+				}else if(ent instanceof Fireball) {
+						if(ent.getCustomName() != null){
+						
+						
+						Fireball f = (Fireball) ent;
+						String mobname = ChatColor.stripColor(f.getCustomName());
+						List<String> names = new ArrayList<>();
+						names.add("Ataque Aereo");
+					
+						
+						
+						if(names.stream().filter(o -> o.startsWith(mobname)).findFirst().isPresent()) {
+							
+							List<Material> mat = new ArrayList<>();
+							mat.add(Material.INFESTED_CHISELED_STONE_BRICKS);mat.add(Material.INFESTED_COBBLESTONE);mat.add(Material.INFESTED_CRACKED_STONE_BRICKS);
+							mat.add(Material.INFESTED_DEEPSLATE);mat.add(Material.INFESTED_MOSSY_STONE_BRICKS);mat.add(Material.INFESTED_STONE);
+							mat.add(Material.INFESTED_STONE_BRICKS);
+							for(Block b : e.blockList()) {
+								if(mat.contains(b.getType())) {
+									//System.out.println("SI");
+									b.getWorld().playEffect(b.getLocation().add(0.5,0,0.5), Effect.STEP_SOUND,b.getType()); 
+									b.setType(Material.AIR);
+								}
+							}
+							
+						   e.blockList().clear();
+						  return;
+						}
+						
+						
+						
+						}
 				}
 			
 				
