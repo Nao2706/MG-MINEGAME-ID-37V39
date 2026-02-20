@@ -3584,7 +3584,7 @@ public class GameConditions {
 				
 					//SE SECCIONA POR QUE HAY QUE VER SI SE SALVO O NO SU INVENTARIO
 					if(ms.isAllowedJoinWithOwnInventory()) {
-						System.out.println("R1-234");
+						
 						player.teleport(pl.getLocationMG());
 						pl.restoreGamemodePlayerMg();
 						 
