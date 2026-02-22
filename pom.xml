@@ -62,6 +62,11 @@
 		    <id>EngineHub</id>
 		    <url>https://maven.enginehub.org/repo/</url>
 		  </repository>
+		  
+		  <repository>
+            <id>codemc-creatorfromhell</id>
+           <url>https://repo.codemc.io/repository/creatorfromhell/</url>
+   		 </repository>
 		
   
   </repositories>
@@ -70,6 +75,13 @@
  
   
   <dependencies>
+  
+	      <dependency>
+	        <groupId>net.milkbowl.vault</groupId>
+	        <artifactId>VaultUnlockedAPI</artifactId>
+	        <version>2.16</version><!-- Validate this is the most recent version from the CI -->
+	        <scope>provided</scope>
+	     </dependency>
   
 		  <dependency>
 		    <groupId>org.json</groupId>

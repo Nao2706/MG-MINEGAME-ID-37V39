@@ -136,6 +136,7 @@ public class TabCompletemg implements TabCompleter{
 			arguments.add("cancel-timer");
 			arguments.add("signmarker");
 			arguments.add("signreload");
+			arguments.add("changename");
 			
 		}
 		

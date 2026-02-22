@@ -17,6 +17,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
@@ -38,6 +39,7 @@ import me.nao.shop.mg.MinigameShop1;
 import me.nao.topusers.mg.PHMiniGame;
 import me.nao.utils.mg.Utils;
 import me.nao.yamlfile.mg.YamlFile;
+import net.milkbowl.vault2.economy.Economy;
 
 
 
@@ -55,6 +57,7 @@ public class Minegame extends JavaPlugin{
     private YamlFile general;
     private YamlFile dialogs;
   
+    private static Economy econ = null;
     ///
     //TODO MINI DB
   
@@ -128,6 +131,18 @@ public class Minegame extends JavaPlugin{
 
 	 //TODO YML
 	 
+	private boolean setupEconomy() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            return false;
+        }
+        econ = rsp.getProvider();
+        return econ != null;
+    }
+	
 	 //REESTRUCTURAR
 	 public void ChargedYml(String name, Player player) {
 		
@@ -262,6 +277,12 @@ public class Minegame extends JavaPlugin{
 		}else {
 			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+" PlaceholderAPI no encontrado para MG");
 		}
+		
+		  if (!setupEconomy()){
+				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+" Vault no encontrado para MG");
+
+		}
+		
 		
 		this.reports = new YamlFile(this, "Reports");
 		this.playershistory = new YamlFile(this, "Players-History");
@@ -603,7 +624,9 @@ public class Minegame extends JavaPlugin{
    
    //AFK
  
-   
+   public static Economy getEconomy() {
+       return econ;
+   }
    
    
 //==============NEXO
