@@ -272,7 +272,7 @@ public class GamePointHunt extends GameInfo{
 				p.setInvulnerable(true);
 				p.setHealth(20);
 				p.getInventory().clear();
-				p.sendTitle(Utils.colorTextChatColor("&a&lFELICIDADES"+getWinnerTopPlayer()+" &b&lGANASTE"),Utils.colorTextChatColor("&eEres muy Bueno/a."), 20, 40, 20);
+				p.sendTitle(Utils.colorTextChatColor("&a&lFELICIDADES &6&l"+getWinnerTopPlayer()+" &b&lGANASTE"),Utils.colorTextChatColor("&eEres muy Bueno/a."), 20, 40, 20);
 				p.getActivePotionEffects().forEach(effect -> p.removePotionEffect(effect.getType()));
 				p.setArrowsInBody(0);
 	
@@ -303,7 +303,7 @@ public class GamePointHunt extends GameInfo{
 				p.setInvulnerable(true);
 				p.setHealth(20);
 				p.getInventory().clear();
-				p.sendTitle(Utils.colorTextChatColor("&a&lFELICIDADES"+getWinnerTopPlayer()+" &b&lGANASTE"),Utils.colorTextChatColor("&ePor tener mayor puntaje."), 20, 40, 20);
+				p.sendTitle(Utils.colorTextChatColor("&a&lFELICIDADES &6&l"+getWinnerTopPlayer()+" &b&lGANASTE"),Utils.colorTextChatColor("&ePor tener mayor puntaje."), 20, 40, 20);
 				p.getActivePotionEffects().forEach(effect -> p.removePotionEffect(effect.getType()));
 				p.setArrowsInBody(0);
 			

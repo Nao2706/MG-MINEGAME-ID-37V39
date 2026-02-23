@@ -133,10 +133,14 @@ public class Minegame extends JavaPlugin{
 	 
 	private boolean setupEconomy() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
+        	
+        	System.out.println("V1");
             return false;
         }
         RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null) {
+        	System.out.println("V2");
+
             return false;
         }
         econ = rsp.getProvider();
@@ -278,9 +282,11 @@ public class Minegame extends JavaPlugin{
 			Bukkit.getConsoleSender().sendMessage(ChatColor.RED+" PlaceholderAPI no encontrado para MG");
 		}
 		
-		  if (!setupEconomy()){
-				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+" Vault no encontrado para MG");
-
+		if(setupEconomy()) {
+			Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+"[VAULT] "+ChatColor.GREEN+"Encontrado :) para MG");
+		}
+		else {
+			Bukkit.getConsoleSender().sendMessage(ChatColor.GOLD+"[VAULT] "+ChatColor.RED+"No Encontrado :( para MG");
 		}
 		
 		
