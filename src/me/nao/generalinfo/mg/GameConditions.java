@@ -186,7 +186,7 @@ public class GameConditions {
 			 
 			
 			if(spectador.contains(player.getName())) {
-				sendMessageToUsersOfSameMapLessPlayer(player, "&fEl jugador &a"+player.getName()+" &fsalio del Modo Espectador.\n&c[&bTotal de Espectadores&e: &5"+(spectador.size() - 1)+"&c]");
+				sendMessageToUsersOfSameMapLessPlayer(player,player.getName()+" &fsalio del Modo Espectador.\n&c[&bTotal de Espectadores&e: &5"+(spectador.size() - 1)+"&c]");
 				ms.getBossbar().removePlayer(player);
 				showBossBarsTimers(player, ms);
 			}else if(player.getPing() >= 150) {
@@ -777,7 +777,8 @@ public class GameConditions {
 	   }
 	    
 	   //TODO TP AL SPAWN DEL MAPA
-	   public void TptoSpawnMap(Player player ,String map){
+	   @SuppressWarnings("removal")
+	public void TptoSpawnMap(Player player ,String map){
 		  
 		   GameInfo gi = plugin.getGameInfoPoo().get(map);
 		   
@@ -1131,6 +1132,7 @@ public class GameConditions {
 		plugin.getPlayerInfoPoo().remove(player);
 	}
 	
+	@SuppressWarnings("removal")
 	public void playerWinnerReward(Player player) {
 		
 		ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
@@ -1263,6 +1265,7 @@ public class GameConditions {
 		
 	}
 	
+	@SuppressWarnings("removal")
 	public void playerLoserReward(Player player) {
 		ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
  
@@ -2036,9 +2039,8 @@ public class GameConditions {
 						for(String target : play) {
 							Player user = Bukkit.getServer().getPlayerExact(target);
 							   user.sendMessage(ChatColor.translateAlternateColorCodes('&', message.replace("%players%",vivos.toString()).replace(keyword,"").replace("%player%",user.getName())));
-						
+						}
 						return true;
-				  }
 			 }
 		}
 		return false;
@@ -2066,7 +2068,7 @@ public class GameConditions {
 				 List<String> spectador = ms.getSpectators();
 				 player.sendMessage(ChatColor.GREEN+"Estas como Espectador en el Mapa: "+ChatColor.GOLD+map);
 				 ms.getBossbar().addPlayer(player);
-				 sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.WHITE+"El Jugador "+ChatColor.GREEN+player.getName()+ChatColor.WHITE+" se Unio como Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size())+ChatColor.RED+"]");
+				 sendMessageToUsersOfSameMapLessPlayer(player,ChatColor.GREEN+player.getName()+ChatColor.WHITE+" se Unio como Espectador."+ChatColor.RED+"\n["+ChatColor.GREEN+"Total de Espectadores"+ChatColor.YELLOW+": "+ChatColor.DARK_PURPLE+(spectador.size())+ChatColor.RED+"]");
 				 TptoSpawnSpectator(player, map);
 				 showBossBarsTimers(player, ms);
 		 
@@ -2152,7 +2154,7 @@ public class GameConditions {
 		FileConfiguration data = mapinfo.getMapData();
 		FileConfiguration playerdata = plugin.getPoints();
 		int playerlvl = playerdata.getInt("Players."+player.getName()+".Level",0);
-	
+		int playeprestigerlvl = playerdata.getInt("Players."+player.getName()+".Prestige",0);
 		
 		
 		
@@ -2215,24 +2217,25 @@ public class GameConditions {
 					return false;
 				}
 				
-		 }else if(playerlvl < mapinfo.getPrestigelvltoPlay()) {
+		 }else if(playeprestigerlvl < mapinfo.getPrestigelvltoPlay()) {
+			 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 20.0F, 1F);
+
 			 if(!player.isOp()) {
-				 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 20.0F, 1F);
-				 player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"NIVEL INSUFICIENTE DETECTADO");
+				 player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"NIVEL DE PRESTIGIO INSUFICIENTE DETECTADO");
 				 player.sendMessage(ChatColor.GRAY+"Tu Nivel es Demasiado Bajo para Jugar en este Mapa.");
-				 player.sendMessage(ChatColor.GOLD+"Nivel del Mapa: "+ChatColor.RED+mapinfo.getPrestigelvltoPlay()+ChatColor.GRAY+" Tu Nivel: "+ChatColor.GREEN+playerlvl);
+				 player.sendMessage(ChatColor.GOLD+"Nivel de Prestigio del Mapa: "+ChatColor.RED+mapinfo.getPrestigelvltoPlay()+ChatColor.GRAY+" Tu Nivel de Prestigio es: "+ChatColor.GREEN+playeprestigerlvl);
 				 player.sendMessage(ChatColor.GRAY+"Sube tu Nivel de Prestigio. ");
 				
 			 }else {
-				 player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"NIVEL INSUFICIENTE DETECTADO OP BYPASS");
+				 player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"NIVEL DE PRESTIGIO INSUFICIENTE DETECTADO OP BYPASS");
 				 player.sendMessage(ChatColor.GRAY+"Puedes Acceder pero revisa si el Nivel para Jugar del Mapa es el Correcto.");
-				 player.sendMessage(ChatColor.GOLD+"Nivel del Mapa: "+ChatColor.RED+mapinfo.getPrestigelvltoPlay()+ChatColor.GRAY+" Tu Nivel: "+ChatColor.GREEN+playerlvl);
+				 player.sendMessage(ChatColor.GOLD+"Nivel de Prestigio del Mapa: "+ChatColor.RED+mapinfo.getPrestigelvltoPlay()+ChatColor.GRAY+" Tu Nivel de Prestigio es: "+ChatColor.GREEN+playeprestigerlvl);
 				 player.sendMessage(ChatColor.GRAY+"Sube tu Nivel de Prestigio. ");
 			 }
 			 return false;
 		 }else if(playerlvl < mapinfo.getLvltoPlay()) {
+			 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 20.0F, 1F);
 			 if(!player.isOp()) {
-				 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 20.0F, 1F);
 				 player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"NIVEL INSUFICIENTE DETECTADO");
 				 player.sendMessage(ChatColor.GRAY+"Tu Nivel es Demasiado Bajo para Jugar en este Mapa.");
 				 player.sendMessage(ChatColor.GOLD+"Nivel del Mapa: "+ChatColor.RED+mapinfo.getLvltoPlay()+ChatColor.GRAY+" Tu Nivel: "+ChatColor.GREEN+playerlvl);

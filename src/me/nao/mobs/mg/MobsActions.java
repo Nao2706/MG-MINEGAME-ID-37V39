@@ -1187,7 +1187,7 @@ public class MobsActions {
 					Zombie zombi1 = (Zombie) world.spawnEntity(l2, EntityType.ZOMBIE);
 					zombi1.setCustomName(ChatColor.RED+"DROPPER");
 					zombi1.getEquipment().setHelmet(new ItemStack(Material.DROPPER));
-					zombi1.getEquipment().setHelmet(new ItemStack(Material.REDSTONE_BLOCK));
+					zombi1.getEquipment().setItemInMainHand(new ItemStack(Material.REDSTONE_BLOCK));
 					zombi1.addPotionEffect(rapido);
 					zombi1.addPotionEffect(salto);
 			

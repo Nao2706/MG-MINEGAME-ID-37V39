@@ -4,7 +4,6 @@ package me.nao.command.mg;
 
 import java.io.File;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -86,7 +85,8 @@ import me.nao.utils.mg.Utils;
 import net.kyori.adventure.text.Component;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.milkbowl.vault2.economy.EconomyResponse;
+import net.milkbowl.vault.economy.EconomyResponse;
+
 
 
 
@@ -113,7 +113,7 @@ public class Comandsmg implements CommandExecutor{
 	//Captador de mensaje 
 
 	
-	@SuppressWarnings({ "removal", "static-access" })
+	@SuppressWarnings({ "removal" })
 	public boolean onCommand(CommandSender sender,  Command comando,  String label, String[] args) {
 		FileConfiguration message = plugin.getMessage();
 		FileConfiguration points1 = plugin.getPoints();		
@@ -1032,7 +1032,7 @@ public class Comandsmg implements CommandExecutor{
 					
 					return true;
 				}else if(args[0].equalsIgnoreCase("prestiges")) {
-        			RankPlayer rk= new RankPlayer(plugin);
+        			RankPlayer rk = new RankPlayer(plugin);
         			
         			rk.showPrestiges(null);
         			return true;
@@ -3365,16 +3365,13 @@ public class Comandsmg implements CommandExecutor{
 					
 					return true;
 				}else if (args[0].equalsIgnoreCase("economy")) {
-					  sender.sendMessage(String.format("You have %s", plugin.getEconomy().format(plugin.getEconomy().getBalance(plugin.nombre,player.getUniqueId()))));
-				
-					  
-				
-						EconomyResponse r = plugin.getEconomy().deposit(plugin.nombre,player.getUniqueId(), new BigDecimal("1.05"));
-						  if(r.transactionSuccess()) {
-				                sender.sendMessage(String.format("You were given %s and now have %s", plugin.getEconomy().format(r.amount), plugin.getEconomy().format(r.balance)));
-				            } else {
-				                sender.sendMessage(String.format("An error occured: %s", r.errorMessage));
-				            }
+		            sender.sendMessage(String.format("You have %s", plugin.getEconomy().format(plugin.getEconomy().getBalance(player.getName()))));
+		            EconomyResponse r = plugin.getEconomy().depositPlayer(player, 1.05);
+		            if(r.transactionSuccess()) {
+		                sender.sendMessage(String.format("You were given %s and now have %s", plugin.getEconomy().format(r.amount), plugin.getEconomy().format(r.balance)));
+		            } else {
+		                sender.sendMessage(String.format("An error occured: %s", r.errorMessage));
+		            }
 					return true;
 				}else if (args[0].equalsIgnoreCase("report")) {
 				
@@ -4411,7 +4408,7 @@ public class Comandsmg implements CommandExecutor{
 				
 				
 					
-						player.sendMessage(plugin.nombre+ChatColor.GREEN+"Cliente: "+player.getClientBrandName());
+						//player.sendMessage(plugin.nombre+ChatColor.GREEN+"Cliente: "+player.getClientBrandName());
 						
 						
 						

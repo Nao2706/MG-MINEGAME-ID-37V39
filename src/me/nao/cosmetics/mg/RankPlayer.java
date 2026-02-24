@@ -200,17 +200,17 @@ public class RankPlayer {
 		
 		List<String> l = new ArrayList<>();
 		l.add("");
-		l.add("&c- &7[&8&lNOVATO&7]");
-		l.add("&c- &7[&f&lCABALLERO&7]");
-		l.add("&c- &7[&e&lGUARDIAN&7]");
-		l.add("&c- &7[&c&lCENTINELA&7]");
-		l.add("&c- &7[&4&lCAMPEON&7]");
-		l.add("&c- &7[&a&lCONQUISTADOR&7]");
-		l.add("&c- &7[&2&lTITAN&7]");
-		l.add("&c- &7[&b&lEMPERADOR&7]");
-		l.add("&c- &7[&5&l&nREY&7]");
-		l.add("&c- &7[&1&l&nMAESTRO&7]");
-		l.add("&c- &7[&6&l&nCELESTIAL&7]");
+		l.add("&c- &7[&8&lNOVATO&7] &a&lPRESTIGE LVL: &60");
+		l.add("&c- &7[&f&lCABALLERO&7] &a&lPRESTIGE LVL: &61");
+		l.add("&c- &7[&e&lGUARDIAN&7] &a&lPRESTIGE LVL: &62");
+		l.add("&c- &7[&c&lCENTINELA&7] &a&lPRESTIGE LVL: &63");
+		l.add("&c- &7[&4&lCAMPEON&7] &a&lPRESTIGE LVL: &64");
+		l.add("&c- &7[&a&lCONQUISTADOR&7] &a&lPRESTIGE LVL: &65");
+		l.add("&c- &7[&2&lTITAN&7] &a&lPRESTIGE LVL: &66");
+		l.add("&c- &7[&b&lEMPERADOR&7] &a&lPRESTIGE LVL: &67");
+		l.add("&c- &7[&5&l&nREY&7] &a&lPRESTIGE LVL: &68");
+		l.add("&c- &7[&1&l&nMAESTRO&7] &a&lPRESTIGE LVL: &69");
+		l.add("&c- &7[&6&l&nCELESTIAL&7] &a&lPRESTIGE LVL: &610");
 
 		
 		if(player != null) {
@@ -219,7 +219,7 @@ public class RankPlayer {
 			for(String text : l) {
 				player.sendMessage(Utils.colorText(text));
 			}
-		
+			return;
 		}
 		Bukkit.getConsoleSender().sendMessage(Utils.colorText("&c&l&nPrestigios Disponibles"));
 		for(String text : l) {

@@ -39,7 +39,7 @@ import me.nao.shop.mg.MinigameShop1;
 import me.nao.topusers.mg.PHMiniGame;
 import me.nao.utils.mg.Utils;
 import me.nao.yamlfile.mg.YamlFile;
-import net.milkbowl.vault2.economy.Economy;
+import net.milkbowl.vault.economy.Economy;
 
 
 
@@ -133,8 +133,7 @@ public class Minegame extends JavaPlugin{
 	 
 	private boolean setupEconomy() {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
-        	
-        	System.out.println("V1");
+
             return false;
         }
         RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
@@ -630,7 +629,7 @@ public class Minegame extends JavaPlugin{
    
    //AFK
  
-   public static Economy getEconomy() {
+   public Economy getEconomy() {
        return econ;
    }
    
