@@ -6034,7 +6034,7 @@ public class GameConditions {
 		
 		FileConfiguration mf = plugin.getMapFrequency();
 		  
-		String timeg = game.getString("Game-Timer-H-M-S").replaceAll("(\\d+)-(\\d+)-(\\d+)", "$1h $2m $3s");
+		String timeg = game.getString("Game-Timer-H-M-S").replaceAll("(\\d+),(\\d+),(\\d+)", "$1h $2m $3s");
 		String rs = game.getBoolean("Revive-System") ? "Si" : "No";
 		String rk = isMapRanked(map) ? "Si" : "No";
 		String ci = game.getBoolean("Allow-Inventory") ? "Si" : "No";
