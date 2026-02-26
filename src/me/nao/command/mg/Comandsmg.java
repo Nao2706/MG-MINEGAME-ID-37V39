@@ -6536,7 +6536,7 @@ public class Comandsmg implements CommandExecutor{
 	 		l.add(ChatColor.GREEN+"/mg spectator <map>"+ChatColor.AQUA+" Entra como Espectador a un Mapa.");
 	 		l.add(ChatColor.GREEN+"/mg leave"+ChatColor.AQUA+" Podras salir del Mapa si estas dentro.");
 	 		l.add(ChatColor.GREEN+"/mg mapinfo <map>"+ChatColor.AQUA+" Podras ver informacion General del Mapa.");
-	 		l.add(ChatColor.GREEN+"/mg check-points <player>"+ChatColor.AQUA+" Podras ver informacion de un Jugador.");
+	 		l.add(ChatColor.GREEN+"/mg check-points (<player> opcional)"+ChatColor.AQUA+" Podras ver informacion de un Jugador.");
 	 		l.add(ChatColor.GREEN+"/mg prestige"+ChatColor.AQUA+" Podras subir de Prestigio.");
 			l.add(ChatColor.GREEN+"/mg querylevel <1>"+ChatColor.AQUA+" Consulta la XP del un Nivel.");
 	 		l.add(ChatColor.GREEN+"/mg prestiges"+ChatColor.AQUA+" Lista de Prestigios.");

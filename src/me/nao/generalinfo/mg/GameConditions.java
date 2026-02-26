@@ -2225,14 +2225,14 @@ public class GameConditions {
 				 player.sendMessage(ChatColor.GRAY+"Tu Nivel es Demasiado Bajo para Jugar en este Mapa.");
 				 player.sendMessage(ChatColor.GOLD+"Nivel de Prestigio del Mapa: "+ChatColor.RED+mapinfo.getPrestigelvltoPlay()+ChatColor.GRAY+" Tu Nivel de Prestigio es: "+ChatColor.GREEN+playeprestigerlvl);
 				 player.sendMessage(ChatColor.GRAY+"Sube tu Nivel de Prestigio. ");
-				
+				 return false;
 			 }else {
 				 player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"NIVEL DE PRESTIGIO INSUFICIENTE DETECTADO OP BYPASS");
 				 player.sendMessage(ChatColor.GRAY+"Puedes Acceder pero revisa si el Nivel para Jugar del Mapa es el Correcto.");
 				 player.sendMessage(ChatColor.GOLD+"Nivel de Prestigio del Mapa: "+ChatColor.RED+mapinfo.getPrestigelvltoPlay()+ChatColor.GRAY+" Tu Nivel de Prestigio es: "+ChatColor.GREEN+playeprestigerlvl);
 				 player.sendMessage(ChatColor.GRAY+"Sube tu Nivel de Prestigio. ");
 			 }
-			 return false;
+			
 		 }else if(playerlvl < mapinfo.getLvltoPlay()) {
 			 player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 20.0F, 1F);
 			 if(!player.isOp()) {
@@ -2240,14 +2240,14 @@ public class GameConditions {
 				 player.sendMessage(ChatColor.GRAY+"Tu Nivel es Demasiado Bajo para Jugar en este Mapa.");
 				 player.sendMessage(ChatColor.GOLD+"Nivel del Mapa: "+ChatColor.RED+mapinfo.getLvltoPlay()+ChatColor.GRAY+" Tu Nivel: "+ChatColor.GREEN+playerlvl);
 				 player.sendMessage(ChatColor.GRAY+"Sube tu Nivel. ");
-				
+				 return false;
 			 }else {
 				 player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"NIVEL INSUFICIENTE DETECTADO OP BYPASS");
 				 player.sendMessage(ChatColor.GRAY+"Puedes Acceder pero revisa si el Nivel para Jugar del Mapa es el Correcto.");
 				 player.sendMessage(ChatColor.GOLD+"Nivel del Mapa: "+ChatColor.RED+mapinfo.getLvltoPlay()+ChatColor.GRAY+" Tu Nivel: "+ChatColor.GREEN+playerlvl);
 				 player.sendMessage(ChatColor.GRAY+"Sube tu Nivel. ");
 			 }
-			 return false;
+			
 		 }else if(data.getBoolean("Play-Time.Has-Time")) {
 			 	String time = data.getString("Play-Time.Usage-Time");
 		    	if(time == null || time.isEmpty()){
@@ -6034,6 +6034,7 @@ public class GameConditions {
 		
 		FileConfiguration mf = plugin.getMapFrequency();
 		  
+		String timeg = game.getString("Game-Timer-H-M-S").replaceAll("(\\d+)-(\\d+)-(\\d+)", "$1h $2m $3s");
 		String rs = game.getBoolean("Revive-System") ? "Si" : "No";
 		String rk = isMapRanked(map) ? "Si" : "No";
 		String ci = game.getBoolean("Allow-Inventory") ? "Si" : "No";
@@ -6055,22 +6056,24 @@ public class GameConditions {
 		
 		
 		MapStatistics ms = new MapStatistics(timesplayed,participants,wins,revives,deads);
-		sendMessageToUserAndConsole(player,"");
-		sendMessageToUserAndConsole(player,"======================================");
-		sendMessageToUserAndConsole(player,""+ChatColor.RED+ChatColor.BOLD+"Informacion del Mapa: "+ChatColor.GREEN+map);
-		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Modo: "+ChatColor.GREEN+type.getValue());
-		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Tiene Sistema de Revivir: "+ChatColor.GREEN+rs);
-		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Nivel de Prestigio Para Jugarlo: "+ChatColor.GREEN+prestigetoplay);
-		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Nivel Para Jugarlo: "+ChatColor.GREEN+lvltoplay);
-		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Ranked: "+ChatColor.GREEN+rk);
-		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Puedes Usar tu Inventario: "+ChatColor.GREEN+ci);
-		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Castigo de Puntos por Perder: "+ChatColor.GREEN+game.getInt("Points-System.Points-LosePorcent")+"%");
-		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Estado: "+ChatColor.GREEN+locked);
-		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Xp por Kill: "+ChatColor.GREEN+pointsperkill);
-		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Xp por Revivir: "+ChatColor.GREEN+pointsperrevive);
-		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Xp por Ayudar a Revivir: "+ChatColor.GREEN+pointsperhelprevive);
-		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Xp menos por Muerte: "+ChatColor.GREEN+pointsperdead);
-		sendMessageToUserAndConsole(player,""+ChatColor.GRAY+"Puntos de Bonus: "+ChatColor.GREEN+pointsperbonus);
+		
+		switchsendMessageForUserAndConsole(player,"");
+		switchsendMessageForUserAndConsole(player,"======================================");
+		switchsendMessageForUserAndConsole(player,""+ChatColor.RED+ChatColor.BOLD+"Informacion del Mapa: "+ChatColor.GREEN+map);
+		switchsendMessageForUserAndConsole(player,""+ChatColor.GRAY+"Duracion: "+ChatColor.GREEN+timeg);
+		switchsendMessageForUserAndConsole(player,""+ChatColor.GRAY+"Modo: "+ChatColor.GREEN+type.getValue());
+		switchsendMessageForUserAndConsole(player,""+ChatColor.GRAY+"Tiene Sistema de Revivir: "+ChatColor.GREEN+rs);
+		switchsendMessageForUserAndConsole(player,""+ChatColor.GRAY+"Nivel de Prestigio Para Jugarlo: "+ChatColor.GREEN+prestigetoplay);
+		switchsendMessageForUserAndConsole(player,""+ChatColor.GRAY+"Nivel Para Jugarlo: "+ChatColor.GREEN+lvltoplay);
+		switchsendMessageForUserAndConsole(player,""+ChatColor.GRAY+"Ranked: "+ChatColor.GREEN+rk);
+		switchsendMessageForUserAndConsole(player,""+ChatColor.GRAY+"Puedes Usar tu Inventario: "+ChatColor.GREEN+ci);
+		switchsendMessageForUserAndConsole(player,""+ChatColor.GRAY+"Castigo de Puntos por Perder: "+ChatColor.GREEN+game.getInt("Points-System.Points-LosePorcent")+"%");
+		switchsendMessageForUserAndConsole(player,""+ChatColor.GRAY+"Estado: "+ChatColor.GREEN+locked);
+		switchsendMessageForUserAndConsole(player,""+ChatColor.GRAY+"Xp por Kill: "+ChatColor.GREEN+pointsperkill);
+		switchsendMessageForUserAndConsole(player,""+ChatColor.GRAY+"Xp por Revivir: "+ChatColor.GREEN+pointsperrevive);
+		switchsendMessageForUserAndConsole(player,""+ChatColor.GRAY+"Xp por Ayudar a Revivir: "+ChatColor.GREEN+pointsperhelprevive);
+		switchsendMessageForUserAndConsole(player,""+ChatColor.GRAY+"Xp menos por Muerte: "+ChatColor.GREEN+pointsperdead);
+		switchsendMessageForUserAndConsole(player,""+ChatColor.GRAY+"Puntos de Bonus: "+ChatColor.GREEN+pointsperbonus);
 		
 		
 		
@@ -6080,13 +6083,13 @@ public class GameConditions {
 		String st4 = ms.getProbablyOfWin().intValue() == 0 ? ChatColor.DARK_PURPLE+"Sin Datos..." : ChatColor.GOLD+nf.format(ms.getProbablyOfWin())+"%" ;
 		String st5 = ms.getProbablyOfLose().intValue() == 0 ? ChatColor.DARK_PURPLE+"Sin Datos..." : ChatColor.GOLD+nf.format(ms.getProbablyOfLose())+"%" ;
 		
-		sendMessageToUserAndConsole(player,ChatColor.GREEN+"Porcentaje de Victorias: "+st1);
-		sendMessageToUserAndConsole(player,ChatColor.YELLOW+"Porcentaje de Revivir: "+st2);
-		sendMessageToUserAndConsole(player,ChatColor.RED+"Porcentaje de Muertes: "+st3);
-		sendMessageToUserAndConsole(player,ChatColor.GREEN+"Probabilidad de Ganar: "+st4);
-		sendMessageToUserAndConsole(player,ChatColor.RED+"Probabilidad de Perder: "+st5);
-		sendMessageToUserAndConsole(player,"======================================");
-		sendMessageToUserAndConsole(player,"");
+		switchsendMessageForUserAndConsole(player,ChatColor.GREEN+"Porcentaje de Victorias: "+st1);
+		switchsendMessageForUserAndConsole(player,ChatColor.YELLOW+"Porcentaje de Revivir: "+st2);
+		switchsendMessageForUserAndConsole(player,ChatColor.RED+"Porcentaje de Muertes: "+st3);
+		switchsendMessageForUserAndConsole(player,ChatColor.GREEN+"Probabilidad de Ganar: "+st4);
+		switchsendMessageForUserAndConsole(player,ChatColor.RED+"Probabilidad de Perder: "+st5);
+		switchsendMessageForUserAndConsole(player,"======================================");
+		switchsendMessageForUserAndConsole(player,"");
 	}
 	
 	public void sudoAllParticipants(Player player , String map,String command) {

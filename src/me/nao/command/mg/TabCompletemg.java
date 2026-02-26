@@ -33,115 +33,134 @@ public class TabCompletemg implements TabCompleter{
 	
 	public List <String> onTabComplete(CommandSender sender, Command cmd,String label,String[]args){
 		
-		if(arguments.isEmpty()) {
-			arguments.add("info");
-			arguments.add("help");
-			arguments.add("tntrain");
-			arguments.add("entityrain");
-			arguments.add("arrowrain");
-			arguments.add("pardon");
-			arguments.add("ban");
-			arguments.add("kick");
-			arguments.add("warn");
-			arguments.add("tempban");
-			arguments.add("version");
-			arguments.add("reload");
-			arguments.add("create");
-			arguments.add("join");
-			arguments.add("leave");
-			arguments.add("delete");
-			arguments.add("show-maps");
-			arguments.add("setlobby");
-			arguments.add("setprelobby");
-			arguments.add("setspawn");
-			arguments.add("setspawnffa");
-			arguments.add("setspawn-spectator");
-			arguments.add("spectator");			
-			arguments.add("enabled");
-			arguments.add("disabled");
-			arguments.add("set-points");
-			arguments.add("set-life");
-			arguments.add("top");
-			arguments.add("check-points");
-			arguments.add("dropplayer");
-			arguments.add("goto-checkpoint");
-			arguments.add("deletecheckpoint");
-			arguments.add("reward");
-			arguments.add("setspawn-end");
-			arguments.add("stop");
-			arguments.add("time");
-			arguments.add("formats");
-			arguments.add("difficult");
-			arguments.add("item");
-			arguments.add("ride");
-			arguments.add("force-revive");
-			arguments.add("force-start");
-			arguments.add("maintenance");
-			arguments.add("objetives");
-			arguments.add("objetive");
-			arguments.add("tp");
-			arguments.add("tpall");
-			arguments.add("tpall-to-player");
-			arguments.add("tp-to-player");
-			arguments.add("misions");
-			arguments.add("message");
-			arguments.add("title");
-			arguments.add("generator");
-			arguments.add("delgenerator");
-			arguments.add("mobgenerator");
-			arguments.add("delmobgenerator");
-			arguments.add("points");
-			arguments.add("timegame");
-			arguments.add("pause");
-			arguments.add("get-scale");
-			arguments.add("set-scale");
-			arguments.add("invite");
-			arguments.add("addtag");
-			arguments.add("removetag");
-			arguments.add("showtags");
-			arguments.add("tagsingame");
-			arguments.add("mytags");
-			arguments.add("prestige");
-			arguments.add("querylevel");
-			arguments.add("mapsingame");
-			arguments.add("ping");
-			arguments.add("gamedetails");
-			arguments.add("mapinfo");
-			arguments.add("sudo");
-			arguments.add("sudoall");
-			arguments.add("prestiges");
-			arguments.add("xp");
-			arguments.add("maprecord");
-			arguments.add("delete-all-tempcooldown");
-			arguments.add("delete-tempcooldown");
-			arguments.add("getKit");
-			arguments.add("saveKit");
-			arguments.add("getItem");
-			arguments.add("saveItem");
-			arguments.add("save-item-db");
-			arguments.add("get-item-db");
-			arguments.add("check-item-db");
-			arguments.add("delete-item-db");
-			arguments.add("save-kit-db");
-			arguments.add("get-kit-db");
-			arguments.add("check-kit-db");
-			arguments.add("delete-kit-db");
-			arguments.add("report");
-			arguments.add("reportlogs");
-			arguments.add("modlogs");
-			arguments.add("set-custom-generator");
-			arguments.add("remove-custom-generator");
-			arguments.add("bossbar");
-			arguments.add("execute-timer");
-			arguments.add("cancel-timer");
-			arguments.add("signmarker");
-			arguments.add("signreload");
-			arguments.add("changename");
-			
-		}
-		
-		
 		if(sender instanceof Player) {
+			
+			Player player = (Player) sender;
+			
+			if(arguments.isEmpty()) {
+				
+				arguments.add("info");
+				arguments.add("help");
+				arguments.add("join");
+				arguments.add("leave");
+				arguments.add("top");
+				arguments.add("spectator");			
+				arguments.add("reward");
+				arguments.add("points");
+				arguments.add("tagsingame");
+				arguments.add("mytags");
+				arguments.add("prestige");
+				arguments.add("querylevel");
+				arguments.add("objetives");
+				arguments.add("misions");
+				arguments.add("ping");
+				arguments.add("prestiges");
+				arguments.add("invite");
+				arguments.add("report");
+				arguments.add("mapinfo");
+				arguments.add("time");
+				arguments.add("version");
+
+				
+				if(player.isOp()) {
+					arguments.add("tntrain");
+					arguments.add("entityrain");
+					arguments.add("arrowrain");
+					arguments.add("pardon");
+					arguments.add("ban");
+					arguments.add("kick");
+					arguments.add("warn");
+					arguments.add("tempban");
+					arguments.add("reload");
+					arguments.add("create");
+					
+					arguments.add("delete");
+					arguments.add("show-maps");
+					arguments.add("setlobby");
+					arguments.add("setprelobby");
+					arguments.add("setspawn");
+					arguments.add("setspawnffa");
+					arguments.add("setspawn-spectator");
+					arguments.add("enabled");
+					arguments.add("disabled");
+					arguments.add("set-points");
+					arguments.add("set-life");
+					
+					arguments.add("check-points");
+					arguments.add("dropplayer");
+					arguments.add("goto-checkpoint");
+					arguments.add("deletecheckpoint");
+				
+					arguments.add("setspawn-end");
+					arguments.add("stop");
+					arguments.add("formats");
+					arguments.add("difficult");
+					arguments.add("item");
+					arguments.add("ride");
+					arguments.add("force-revive");
+					arguments.add("force-start");
+					arguments.add("maintenance");
+		
+					arguments.add("objetive");
+					arguments.add("tp");
+					arguments.add("tpall");
+					arguments.add("tpall-to-player");
+					arguments.add("tp-to-player");
+				
+					arguments.add("message");
+					arguments.add("title");
+					arguments.add("generator");
+					arguments.add("delgenerator");
+					arguments.add("mobgenerator");
+					arguments.add("delmobgenerator");
+					
+					arguments.add("timegame");
+					arguments.add("pause");
+					arguments.add("get-scale");
+					arguments.add("set-scale");
+					arguments.add("addtag");
+					arguments.add("removetag");
+					arguments.add("showtags");
+					
+				
+					arguments.add("mapsingame");
+					arguments.add("gamedetails");
+					arguments.add("sudo");
+					arguments.add("sudoall");
+					arguments.add("xp");
+					arguments.add("maprecord");
+					arguments.add("delete-all-tempcooldown");
+					arguments.add("delete-tempcooldown");
+					arguments.add("getKit");
+					arguments.add("saveKit");
+					arguments.add("getItem");
+					arguments.add("saveItem");
+					arguments.add("save-item-db");
+					arguments.add("get-item-db");
+					arguments.add("check-item-db");
+					arguments.add("delete-item-db");
+					arguments.add("save-kit-db");
+					arguments.add("get-kit-db");
+					arguments.add("check-kit-db");
+					arguments.add("delete-kit-db");
+					arguments.add("reportlogs");
+					arguments.add("modlogs");
+					arguments.add("set-custom-generator");
+					arguments.add("remove-custom-generator");
+					arguments.add("bossbar");
+					arguments.add("execute-timer");
+					arguments.add("cancel-timer");
+					arguments.add("signmarker");
+					arguments.add("signreload");
+					arguments.add("changename");
+				}
+				
+			
+
+				
+			}
+			
+			
 			//mg arg1-tutorial arg2-
 			
 			//Bukkit.getConsoleSender().sendMessage("TAB TEST: c:"+cmd+" label:"+label+" Args:"+String.join(" ", args)+" l:"+args.length);
@@ -157,7 +176,7 @@ public class TabCompletemg implements TabCompleter{
 						List<String> result = new ArrayList<String>();
 						List<String> arguments2 = config.getStringList("Maps-Created.List");
 						if(!arguments2.isEmpty()) {
-							
+							//mg join MAPA
 							for(String a : arguments2) {
 								if(args.length == 2) {
 									if(a.toLowerCase().startsWith(args[1].toLowerCase())) 
@@ -168,9 +187,7 @@ public class TabCompletemg implements TabCompleter{
 						
 						}//mg repor tot xd
 						return result;
-					} 
-					
-					if(args[0].equalsIgnoreCase("report")){
+					}if(args[0].equalsIgnoreCase("report")){
 						//Player player = (Player) sender;
 						if(args.length == 3) {
 							
@@ -183,9 +200,8 @@ public class TabCompletemg implements TabCompleter{
 						       return result;
 						}
 				
-				    }
-					if(args[0].equalsIgnoreCase("coord")){
-							Player player = (Player) sender;
+				    }if(args[0].equalsIgnoreCase("coord")){
+						
 							Block b = player.getTargetBlock((Set<Material>) null, 150);
 							List<String> result = new ArrayList<String>();
 					       if(!b.getType().isSolid()) {
@@ -198,47 +214,66 @@ public class TabCompletemg implements TabCompleter{
 					    	   result.add(player.getWorld().getName()+";"+nf.format(player.getLocation().getX())+";"+nf.format(player.getLocation().getY())+";"+nf.format(player.getLocation().getZ()));
 					       }
 					       return result;
-					}
-					
-					if(args[0].equalsIgnoreCase("getKit")) {
-						FileConfiguration invs = plugin.getKitsYaml();
+					       
+					       //mg getkit Hola
+					}if(args[0].equalsIgnoreCase("getKit")) {
 						List<String> result = new ArrayList<String>();
-						if(invs.contains("Kits")) {
-							for (String key : invs.getConfigurationSection("Kits").getKeys(false)) {
-								if(args.length == 2) {
-									if(key.toLowerCase().startsWith(args[1].toLowerCase())) 
-										result.add(key);
+						if(args.length == 2) {
+							FileConfiguration invs = plugin.getKitsYaml();
+						
+							if(invs.contains("Kits")) {
+								for (String key : invs.getConfigurationSection("Kits").getKeys(false)) {
+								
+										if(key.toLowerCase().startsWith(args[1].toLowerCase())) 
+											result.add(key);
+									
 								}
+							}
+							
+							if(result.isEmpty()) {
+								result.add("No hay Ningun Kit");	
 							}
 						}
 						
-						if(result.isEmpty()) {
-							result.add("No hay Ningun Kit");	
+						return result;
+					}if(args[0].equalsIgnoreCase("getItem")) {
+						List<String> result = new ArrayList<String>();
+						if(args.length == 2) {
+							FileConfiguration items = plugin.getItemsYaml();
+							
+							if(items.contains("Items")) {
+								for (String key : items.getConfigurationSection("Items").getKeys(false)) {
+								
+										if(key.toLowerCase().startsWith(args[1].toLowerCase())) 
+											result.add(key);
+									
+								}
+							}
+							
+							if(result.isEmpty()) {
+								result.add("No hay Ningun Item");	
+							}
+							
 						}
-						
+		
 		
 						return result;
-					} 
-					
-					if(args[0].equalsIgnoreCase("getItem")) {
-						FileConfiguration items = plugin.getItemsYaml();
+						//mg xp NAO prestige,level,points set,add,remove 10
+
+					}if(args[0].equalsIgnoreCase("xp")) {
 						List<String> result = new ArrayList<String>();
-					
-						
-						if(items.contains("Items")) {
-							for (String key : items.getConfigurationSection("Items").getKeys(false)) {
-								if(args.length == 2) {
-									if(key.toLowerCase().startsWith(args[1].toLowerCase())) 
-										result.add(key);
-								}
-							}
+						if(args.length == 3) {
+							result.add("points");
+							result.add("level");
+							result.add("prestige");
 						}
 						
-						if(result.isEmpty()) {
-							result.add("No hay Ningun Item");	
+						if(args.length == 4) {
+							result.add("set");
+							result.add("add");
+							result.add("remove");
 						}
 						
-		
 						return result;
 					} 
 				
@@ -248,7 +283,7 @@ public class TabCompletemg implements TabCompleter{
 			//tab 1 comandos
 			List<String> result = new ArrayList<String>();
 			if(args.length == 1) {
-				for(String a : arguments ) {
+				for(String a : arguments) {
 					//report NAO
 					//inicio de autocompletado args[0,1,2]
 					if(a.toLowerCase().startsWith(args[0].toLowerCase())) 

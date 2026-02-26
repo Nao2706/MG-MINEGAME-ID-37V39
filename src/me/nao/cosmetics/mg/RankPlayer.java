@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import me.nao.main.mg.Minegame;
 import me.nao.utils.mg.Utils;
-import net.md_5.bungee.api.ChatColor;
 
+
+@SuppressWarnings("deprecation")
 public class RankPlayer {
 	
 	private Minegame plugin;
@@ -200,17 +202,17 @@ public class RankPlayer {
 		
 		List<String> l = new ArrayList<>();
 		l.add("");
-		l.add("&c- &7[&8&lNOVATO&7] &a&lPRESTIGE LVL: &60");
-		l.add("&c- &7[&f&lCABALLERO&7] &a&lPRESTIGE LVL: &61");
-		l.add("&c- &7[&e&lGUARDIAN&7] &a&lPRESTIGE LVL: &62");
-		l.add("&c- &7[&c&lCENTINELA&7] &a&lPRESTIGE LVL: &63");
-		l.add("&c- &7[&4&lCAMPEON&7] &a&lPRESTIGE LVL: &64");
-		l.add("&c- &7[&a&lCONQUISTADOR&7] &a&lPRESTIGE LVL: &65");
-		l.add("&c- &7[&2&lTITAN&7] &a&lPRESTIGE LVL: &66");
-		l.add("&c- &7[&b&lEMPERADOR&7] &a&lPRESTIGE LVL: &67");
-		l.add("&c- &7[&5&l&nREY&7] &a&lPRESTIGE LVL: &68");
-		l.add("&c- &7[&1&l&nMAESTRO&7] &a&lPRESTIGE LVL: &69");
-		l.add("&c- &7[&6&l&nCELESTIAL&7] &a&lPRESTIGE LVL: &610");
+		l.add("&c- &7[&8&lNOVATO&7] &aPrestige LVL: &60");
+		l.add("&c- &7[&f&lCABALLERO&7] &aPrestige LVL: &61");
+		l.add("&c- &7[&e&lGUARDIAN&7] &aPrestige LVL: &62");
+		l.add("&c- &7[&c&lCENTINELA&7] &aPrestige LVL: &63");
+		l.add("&c- &7[&4&lCAMPEON&7] &aPrestige LVL: &64");
+		l.add("&c- &7[&a&lCONQUISTADOR&7] &aPrestige LVL: &65");
+		l.add("&c- &7[&2&lTITAN&7] &aPrestige LVL: &66");
+		l.add("&c- &7[&b&lEMPERADOR&7] &aPrestige LVL: &67");
+		l.add("&c- &7[&5&l&nREY&7] &aPrestige LVL: &68");
+		l.add("&c- &7[&1&l&nMAESTRO&7] &aPrestige LVL: &69");
+		l.add("&c- &7[&6&l&nCELESTIAL&7] &aPrestige LVL: &610");
 
 		
 		if(player != null) {

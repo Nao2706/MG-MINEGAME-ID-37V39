@@ -1,4 +1,4 @@
-version: 2.19.9
+version: 2.20.3
 name: MineGame
 main: me.nao.main.mg.Minegame
 api-version: 1.16
@@ -9,9 +9,8 @@ softdepend: [NBTAPI]
 
 commands: 
      minegame:
-        description: Comando de op
+        description: Comando de Ops
         aliases:
         - minigame
-        - nao-game
         - mg
  
