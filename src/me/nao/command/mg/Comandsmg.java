@@ -956,7 +956,7 @@ public class Comandsmg implements CommandExecutor{
           			
           			return true;
           			
-          		}else if(args[0].equalsIgnoreCase("invite")) {
+          		  }else if(args[0].equalsIgnoreCase("invite")) {
           			
           			//mg invite Tutorial
           			
@@ -971,7 +971,7 @@ public class Comandsmg implements CommandExecutor{
         			
         			return true;
         			
-        		}else if(args[0].equalsIgnoreCase("execute-timer")) {
+        		  }else if(args[0].equalsIgnoreCase("execute-timer")) {
 					
 					
 				
@@ -4610,8 +4610,6 @@ public class Comandsmg implements CommandExecutor{
 						return true;
 					}
 					if (args.length >= 2) {
-					
-						
 						String mapname = args[1];
 
 						gc.unblockMap(player, mapname);
@@ -4723,9 +4721,6 @@ public class Comandsmg implements CommandExecutor{
 				    			 player.sendMessage(ChatColor.RED+" /mg item <CanPlaceOn|CanDestroy> <stone,dirt,sand>");
 				    		}
 				    		
-				    		
-				      
-				      
 					return true; 
 					
 					//TODO MANTENIMIENTO
@@ -5170,10 +5165,6 @@ public class Comandsmg implements CommandExecutor{
 					
 					}
 					
-
-					
-					
-					
 					return true;
 				}else if(args[0].equalsIgnoreCase("sudoall")) {
 					
@@ -5252,6 +5243,11 @@ public class Comandsmg implements CommandExecutor{
         		}else if(args[0].equalsIgnoreCase("dialogue")) {
 					DialogueArgs(player,args);
 					
+					return true;
+				}else if(args[0].equalsIgnoreCase("locate")) {
+      				player.sendMessage(player.getLocale());	
+					System.out.println(player.getLocale());
+      				
 					return true;
 				}else if(args[0].equalsIgnoreCase("medio")) {
 					
