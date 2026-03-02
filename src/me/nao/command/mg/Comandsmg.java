@@ -1480,7 +1480,7 @@ public class Comandsmg implements CommandExecutor{
 						
 						if(args.length == 2) {
 							String name = args[1];
-							
+							  
 							gc.checkPlayerInfo(null,name);
 						}else {
 							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" /mg check-points <name>");
@@ -3058,19 +3058,16 @@ public class Comandsmg implements CommandExecutor{
 						infomg(player,1);
 					
 					}else if(args.length == 2){
-						
+						 try {
 						int pag = Integer.valueOf(args[1]);
 						infomg(player,pag);
+						
+						 }catch(NumberFormatException ex) {
+							Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.RED+" Usa /mg help o info : Ejemplo /mg help 2");
+							
+						}
 					}
-//					if(player.isOp()) {
-//						player.sendMessage(plugin.nombre+ChatColor.GREEN+" Usa los Comandos \n");
-//						player.sendMessage(plugin.nombre+ChatColor.RED+" /mg join");
-//						player.sendMessage(plugin.nombre+ChatColor.RED+" /mg leave");
-//
-//					}else {
-//						player.sendMessage(plugin.nombre+ChatColor.RED+" Preguntale al NAO el hizo esta cosa.");
-//
-//					}
+
 					return true;
 					
 				}else if (args[0].equalsIgnoreCase("piston")) {

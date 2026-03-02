@@ -6314,15 +6314,15 @@ public class GameConditions {
 		
 		FileConfiguration message = plugin.getMessage();
 		FileConfiguration points1 = plugin.getPoints();		
-		
+		 
 		
 		if(!points1.contains("Players."+target)) {
 			
-			if(player.getName().equals(target)) {
-				sendMessageToUserAndConsole(player,ChatColor.RED+"No tienes ningun puntaje Guardado.");
+			if(player != null && player.getName().equals(target)) {
+				switchsendMessageForUserAndConsole(player,ChatColor.RED+"No tienes ningun puntaje Guardado.");
 			}else {
-				sendMessageToUserAndConsole(player,ChatColor.RED+"No hay Datos Guardados de "+target);
-			}
+				switchsendMessageForUserAndConsole(player,ChatColor.RED+"No hay Datos Guardados de "+target);
+			} 
 			return;
 		}
 		
@@ -6331,7 +6331,7 @@ public class GameConditions {
 			for (int j = 0; j < messagemp1.size(); j++) {
 				String texto = messagemp1.get(j);
 				
-				sendMessageToUserAndConsole(player, texto);
+				switchsendMessageForUserAndConsole(player, texto);
 			
 				
 			}
@@ -6366,7 +6366,7 @@ public class GameConditions {
 						String texto = messagep.get(j);
 						
 					
-						sendMessageToUserAndConsole(player,ChatColor.translateAlternateColorCodes('&',texto.replaceAll("%player%", target)
+						switchsendMessageForUserAndConsole(player,ChatColor.translateAlternateColorCodes('&',texto.replaceAll("%player%", target)
 								 .replace("%kills%",	String.valueOf(pointk))
 								 .replace("%revive%",String.valueOf(point3))
 								 .replace("%helprevive%", String.valueOf(point4))
@@ -6391,7 +6391,7 @@ public class GameConditions {
 			List<String> messagemp2 = message.getStringList("Message-My-Points.message-points-decoracion2");
 			for (int j = 0; j < messagemp2.size(); j++) {
 				String texto = messagemp2.get(j);
-				sendMessageToUserAndConsole(player,ChatColor.translateAlternateColorCodes('&', texto));
+				switchsendMessageForUserAndConsole(player,ChatColor.translateAlternateColorCodes('&', texto));
 			}
 
 		

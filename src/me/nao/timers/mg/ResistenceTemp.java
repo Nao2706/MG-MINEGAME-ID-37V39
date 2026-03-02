@@ -299,7 +299,7 @@ public class ResistenceTemp {
 								if(end <= 5 && end >= 1) {
 				 	       		  //  RemoveArmorStandsAndItemsInMap(target);
 									players.playSound(players.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 20.0F, 2F);
-									players.sendTitle(""+ChatColor.GOLD+ChatColor.BOLD+String.valueOf(end),""+ChatColor.GOLD+ChatColor.BOLD+"La partida termina en ", 20, 20, 20);
+									players.sendTitle(""+ChatColor.DARK_PURPLE+ChatColor.BOLD+String.valueOf(end),""+ChatColor.GOLD+ChatColor.BOLD+"La partida termina en ", 20, 20, 20);
 							    	//	players.sendMessage(ChatColor.RED+"No hay jugadores suficientes para empezar la partida :(");
 						    		}else {
 						    			//RemoveArmorStandsAndItemsInMap(target);

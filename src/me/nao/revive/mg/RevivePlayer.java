@@ -221,17 +221,6 @@ public class RevivePlayer{
 				
 				
 				
-			}else if(e instanceof LivingEntity) {
-				LivingEntity le = (LivingEntity) e;
-				if(le.getCustomName() != null) {
-					player.sendMessage(ChatColor.YELLOW+"Has sido Derribado/a por: "+ChatColor.GOLD+le.getCustomName());
-					gc.sendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+le.getCustomName());
-					
-				}else {
-					player.sendMessage(ChatColor.YELLOW+"Has sido Derribado/a por: "+ChatColor.GOLD+le.getType());
-					gc.sendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+le.getType());
-					
-				}
 			}else if(e instanceof Player) {
 				
 				Player otherplayer = (Player) e;
@@ -244,6 +233,17 @@ public class RevivePlayer{
 					gc.sendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+otherplayer.getName());
 				}
 				
+			}else if(e instanceof LivingEntity) {
+				LivingEntity le = (LivingEntity) e;
+				if(le.getCustomName() != null) {
+					player.sendMessage(ChatColor.YELLOW+"Has sido Derribado/a por: "+ChatColor.GOLD+le.getCustomName());
+					gc.sendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+le.getCustomName());
+					
+				}else {
+					player.sendMessage(ChatColor.YELLOW+"Has sido Derribado/a por: "+ChatColor.GOLD+le.getType());
+					gc.sendMessageToAllUsersOfSameMap(player,""+ChatColor.RED+ChatColor.BOLD+"RAZON: "+ChatColor.GOLD+le.getType());
+					
+				}
 			}else {
 				if(e.getCustomName() != null) {
 					player.sendMessage(ChatColor.YELLOW+"Has sido Derribado/a por: "+ChatColor.GOLD+e.getCustomName());

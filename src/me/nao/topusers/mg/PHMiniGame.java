@@ -27,9 +27,14 @@ public class PHMiniGame extends PlaceholderExpansion{
 	
 	 // We get an instance of the plugin later.
     private Minegame plugin;
+    private PointsManager p;
+    private GameConditions gc;
+    
  
     public PHMiniGame(Minegame plugin) {
-    	this.plugin = plugin;
+    	 this.plugin = plugin;
+    	 this.p = new PointsManager(plugin);
+    	 this.gc = new GameConditions(plugin);
     }
  
     /**
@@ -116,7 +121,7 @@ public class PHMiniGame extends PlaceholderExpansion{
         }// %mg_top_1%
         else if(identifier.equals("top_1") || identifier.equals("top_2") || identifier.equals("top_3") || identifier.equals("top_4") || identifier.equals("top_5") ||
         identifier.equals("top_6") || identifier.equals("top_7") || identifier.equals("top_8") || identifier.equals("top_9") || identifier.equals("top_10")){
-        	PointsManager p = new PointsManager(plugin);
+        	
         	String[] spl = identifier.split("_");
         	int n = Integer.valueOf(spl[1]);
         	n = n -1;
@@ -125,10 +130,10 @@ public class PHMiniGame extends PlaceholderExpansion{
         }else if(identifier.equals("dific_1") || identifier.equals("dific_2") || identifier.equals("dific_3") || identifier.equals("dific_4") || identifier.equals("dific_5")
         		|| identifier.equals("dific_6")){
         	
-        	GameConditions c = new GameConditions(plugin);
+      
         	int value = Integer.valueOf(identifier.replace("dific_",""));
         	
-        	return c.DifficultyMap("%dific"+value+"%");
+        	return gc.DifficultyMap("%dific"+value+"%");
         	
         }else if(identifier.equals("getmap")){
         	return getMapNamePlaceHolder(player);
@@ -148,13 +153,12 @@ public class PHMiniGame extends PlaceholderExpansion{
         	String[] split2 = split[0].split(",");
         	String[] split3 = split[1].split(",");
         	
-        	GameConditions c = new GameConditions(plugin);
         	
         	Location loc1 = new Location(Bukkit.getWorld(split2[0]),Double.valueOf(split2[1]),Double.valueOf(split2[2]),Double.valueOf(split2[3]));
         	Location loc2 = new Location(Bukkit.getWorld(split3[0]),Double.valueOf(split3[1]),Double.valueOf(split3[2]),Double.valueOf(split3[3]));
 
         	
-        	return 	String.valueOf(c.isInsideOfLocations(player.getLocation(), loc1, loc2));
+        	return 	String.valueOf(gc.isInsideOfLocations(player.getLocation(), loc1, loc2));
  
         }else if(identifier.startsWith("isblockinside_")){
         	
@@ -164,13 +168,11 @@ public class PHMiniGame extends PlaceholderExpansion{
         	String[] split2 = split[0].split(",");
         	String[] split3 = split[1].split(",");
         	
-        	GameConditions c = new GameConditions(plugin);
-        	
         	Location loc1 = new Location(Bukkit.getWorld(split2[0]),Double.valueOf(split2[1]),Double.valueOf(split2[2]),Double.valueOf(split2[3]));
         	Location loc2 = new Location(Bukkit.getWorld(split3[0]),Double.valueOf(split3[1]),Double.valueOf(split3[2]),Double.valueOf(split3[3].replaceAll("\\D",""))); // \\D remplaza todo lo que nosea numero 
 
         	
-        	return 	String.valueOf(c.isBlockInside(Material.valueOf(split1[1].toUpperCase()), loc1, loc2));
+        	return 	String.valueOf(gc.isBlockInside(Material.valueOf(split1[1].toUpperCase()), loc1, loc2));
  
         }else if(identifier.startsWith("isblock_")){
         	
@@ -193,9 +195,8 @@ public class PHMiniGame extends PlaceholderExpansion{
         	String[] split2 = split[0].split(",");
    
         	//mg isblock_world,23,45,67:AIR
-        	GameConditions c = new GameConditions(plugin);
         	Location loc1 = new Location(Bukkit.getWorld(split2[0]),Double.valueOf(split2[1]),Double.valueOf(split2[2]),Double.valueOf(split2[3]));
-        	return String.valueOf(c.getAmountOfEntityAboveBlock(loc1));
+        	return String.valueOf(gc.getAmountOfEntityAboveBlock(loc1));
  
         }else if(identifier.startsWith("entityaboveblock")){
         	
@@ -204,9 +205,8 @@ public class PHMiniGame extends PlaceholderExpansion{
         	String[] split2 = split[0].split(",");
    
         	//mg isblock_world,23,45,67:AIR
-        	GameConditions c = new GameConditions(plugin);
         	Location loc1 = new Location(Bukkit.getWorld(split2[0]),Double.valueOf(split2[1]),Double.valueOf(split2[2]),Double.valueOf(split2[3]));
-        	return 	String.valueOf(c.isEntityAbove(loc1));
+        	return 	String.valueOf(gc.isEntityAbove(loc1));
  
         }else if(identifier.startsWith("amountmobsinzonetype")){
         	
@@ -216,13 +216,12 @@ public class PHMiniGame extends PlaceholderExpansion{
         	String[] split2 = split[0].split(",");
         	String[] split3 = split[1].split(",");
         	
-        	GameConditions c = new GameConditions(plugin);
         	
         	Location loc1 = new Location(Bukkit.getWorld(split2[0]),Double.valueOf(split2[1]),Double.valueOf(split2[2]),Double.valueOf(split2[3]));
         	Location loc2 = new Location(Bukkit.getWorld(split3[0]),Double.valueOf(split3[1]),Double.valueOf(split3[2]),Double.valueOf(split3[3].replaceAll("\\D",""))); // \\D remplaza todo lo que nosea numero 
 
         	
-        	return 	String.valueOf(c.getSpecifictEntitysAmountInZone(EntityType.valueOf(split1[1].toUpperCase()), loc1, loc2));
+        	return 	String.valueOf(gc.getSpecifictEntitysAmountInZone(EntityType.valueOf(split1[1].toUpperCase()), loc1, loc2));
  
         }else if(identifier.startsWith("amountmobsinzone")){
         	
@@ -231,13 +230,11 @@ public class PHMiniGame extends PlaceholderExpansion{
         	String[] split2 = split[0].split(",");
         	String[] split3 = split[1].split(",");
         	
-        	GameConditions c = new GameConditions(plugin);
-        	
         	Location loc1 = new Location(Bukkit.getWorld(split2[0]),Double.valueOf(split2[1]),Double.valueOf(split2[2]),Double.valueOf(split2[3]));
         	Location loc2 = new Location(Bukkit.getWorld(split3[0]),Double.valueOf(split3[1]),Double.valueOf(split3[2]),Double.valueOf(split3[3]));
 
         	
-        	return 	String.valueOf(c.getEntitysAmountInZone(loc1, loc2));
+        	return 	String.valueOf(gc.getEntitysAmountInZone(loc1, loc2));
  
         }else if(identifier.startsWith("objetivecurrentvalue")){
         	//mg_objetive_Tutorial,Puerta1
@@ -280,7 +277,6 @@ public class PHMiniGame extends PlaceholderExpansion{
 	
 	public String getMapNamePlaceHolder(Player player) {
 		String status = "";
-		GameConditions gc = new GameConditions(plugin);
 		if(gc.isPlayerinGame(player)) {
 			PlayerInfo pi = plugin.getPlayerInfoPoo().get(player);
 			status = pi.getMapName();
@@ -291,7 +287,6 @@ public class PHMiniGame extends PlaceholderExpansion{
 	}
 	
 	public String isPlayerinGamePlaceHolder(Player player) {
-		GameConditions gc = new GameConditions(plugin);
 		
 		return String.valueOf(gc.isPlayerinGame(player));
 	}
@@ -299,7 +294,6 @@ public class PHMiniGame extends PlaceholderExpansion{
 	
 	public String getObjetiveCurrentValue(String map,String objetive) {
 		
-		GameConditions gc = new GameConditions(plugin);
 		if(!gc.existMap(map)) {
 			return "El mapa no existe.";
 		}
@@ -319,7 +313,6 @@ public class PHMiniGame extends PlaceholderExpansion{
 	
 	public String getObjetiveCurrentCompleteValue(String map,String objetive) {
 		
-		GameConditions gc = new GameConditions(plugin);
 		if(!gc.existMap(map)) {
 			return "El mapa no existe.";
 		}

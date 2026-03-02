@@ -1203,7 +1203,7 @@ public class SourceOfDamage implements Listener{
 	@EventHandler(priority = EventPriority.LOWEST)  //TODO MUERTES METODO
     public void damageInGame(EntityDamageEvent e){
 		
-		if(e.getEntity().getType() != EntityType.ITEM_FRAME || e.getEntity().getType() != EntityType.GLOW_ITEM_FRAME || e.getEntity().getType() != EntityType.ITEM) {
+		if(e.getEntity() instanceof LivingEntity) {
 			
 			//LINEA DE SANGRE XD
 			

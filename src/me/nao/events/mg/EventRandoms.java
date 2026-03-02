@@ -1168,7 +1168,7 @@ public class EventRandoms implements Listener{
 						
 							if(e.getItem().isSimilar(new ItemStack(Material.ENDER_PEARL))) {
 								if(!player.getScoreboardTags().contains("Enderpearls")) {
-										if(player.hasCooldown(e.getItem())) {
+										if(!player.hasCooldown(e.getItem())) {
 											player.setCooldown(e.getItem(),30*20);
 										}
 										
@@ -1265,11 +1265,13 @@ public class EventRandoms implements Listener{
 									Arrow aw = (Arrow) loc.getWorld().spawnEntity(loc, EntityType.ARROW);
 									Arrow aw2 = (Arrow) loc2.getWorld().spawnEntity(loc2, EntityType.ARROW);
 									aw.setCritical(true);
+									//aw.setCustomName("AL");
 									aw.setKnockbackStrength(1);
 									aw.setFireTicks(1200);
 									aw.setVelocity(loc.getDirection().multiply(6).rotateAroundY(Math.toRadians(1)));
 									
 									aw2.setCritical(true);
+									//aw2.setCustomName("AL");
 									aw2.setKnockbackStrength(1);
 									aw2.setFireTicks(1200);
 									aw2.setVelocity(loc2.getDirection().multiply(6).rotateAroundY(Math.toRadians(-1)));
@@ -2697,6 +2699,12 @@ public class EventRandoms implements Listener{
 				  Block b = e.getHitBlock();
 				  if(projectile instanceof AbstractArrow) {
 					  AbstractArrow arrow = (AbstractArrow) projectile;
+					  
+					  if(arrow.getShooter() != null && arrow.getShooter() instanceof Player) {
+						  arrow.remove();
+						  return;
+					  }
+					  
 					  if(arrow.getCustomName() != null) {
 						  String text = ChatColor.stripColor(arrow.getCustomName());
 						  
@@ -2711,6 +2719,7 @@ public class EventRandoms implements Listener{
 						  names.add("Pua de TNT Especial 5");
 						  names.add("Pua de TNT Especial 6");
 						  names.add("Torreta");
+			
 						   
 						if(names.contains(text)) {
 							arrow.remove();
@@ -2719,29 +2728,28 @@ public class EventRandoms implements Listener{
 							
 							if(b.getType() != Material.BARRIER || b.getType() != Material.BEDROCK || b.getType() != Material.OBSIDIAN) {
 								b.breakNaturally();
-								arrow.remove();
 							}
-							
+							arrow.remove();
 						}else if(text.equals("Pua de TNT LAVA")) {
 							
 							if(b.getType() != Material.BARRIER || b.getType() != Material.BEDROCK || b.getType() != Material.OBSIDIAN) {
 								b.setType(Material.LAVA);
-								arrow.remove();
+								
 							}
-							
+							arrow.remove();
 						}else if(text.equals("Pua de TNT AGUA")) {
 							
 							if(b.getType() != Material.BARRIER || b.getType() != Material.BEDROCK || b.getType() != Material.OBSIDIAN) {
 								b.setType(Material.WATER);
-								arrow.remove();
+								
 							}
-							
+							arrow.remove();
 						}else if(text.equals("Pua de TNT PORTAL")) {
 								if(b.getType() != Material.BARRIER || b.getType() != Material.BEDROCK || b.getType() != Material.OBSIDIAN) {
 									b.setType(Material.END_PORTAL);
-									arrow.remove();
+								
 								}
-							  
+								arrow.remove();
 						  }
 						  
 					  }else{
@@ -4349,6 +4357,7 @@ public class EventRandoms implements Listener{
 				aw.setVelocity(v.multiply(5));
 				aw.setCritical(true);
 				aw.setKnockbackStrength(2);
+				//aw.setCustomName("MA");
 				//aw.setFireTicks(1200);
 				aw.setShooter(player);
 				//((Arrow) h1).setShooter(player);

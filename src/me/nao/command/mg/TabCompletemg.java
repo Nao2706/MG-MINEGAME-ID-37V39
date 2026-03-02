@@ -39,30 +39,30 @@ public class TabCompletemg implements TabCompleter{
 			
 			if(arguments.isEmpty()) {
 				
-				arguments.add("info");
-				arguments.add("help");
-				arguments.add("join");
-				arguments.add("leave");
-				arguments.add("top");
-				arguments.add("spectator");			
-				arguments.add("reward");
-				arguments.add("points");
-				arguments.add("tagsingame");
-				arguments.add("mytags");
-				arguments.add("prestige");
-				arguments.add("querylevel");
-				arguments.add("objetives");
-				arguments.add("misions");
-				arguments.add("ping");
-				arguments.add("prestiges");
-				arguments.add("invite");
-				arguments.add("report");
-				arguments.add("mapinfo");
-				arguments.add("time");
-				arguments.add("version");
+					arguments.add("info");
+					arguments.add("help");
+					arguments.add("join");
+					arguments.add("leave");
+					arguments.add("top");
+					arguments.add("spectator");			
+					arguments.add("reward");
+					arguments.add("points");
+					arguments.add("tagsingame");
+					arguments.add("mytags");
+					arguments.add("prestige");
+					arguments.add("querylevel");
+					arguments.add("objetives");
+					arguments.add("misions");
+					arguments.add("ping");
+					arguments.add("prestiges");
+					arguments.add("invite");
+					arguments.add("report");
+					arguments.add("mapinfo");
+					arguments.add("time");
+					arguments.add("version");
 
 				
-				if(player.isOp()) {
+			
 					arguments.add("tntrain");
 					arguments.add("entityrain");
 					arguments.add("arrowrain");
@@ -153,7 +153,7 @@ public class TabCompletemg implements TabCompleter{
 					arguments.add("signmarker");
 					arguments.add("signreload");
 					arguments.add("changename");
-				}
+				
 				
 			
 
