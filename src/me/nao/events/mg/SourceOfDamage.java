@@ -86,10 +86,12 @@ public class SourceOfDamage implements Listener{
 
 	private Minegame plugin;
 	private GameConditions gmc;
+	private GameIntoMap ci; 
 	
 	public SourceOfDamage(Minegame plugin) {
 		this.plugin = plugin;
 		this.gmc = new GameConditions(plugin);
+		this.ci = new GameIntoMap(plugin);
 	}
 	
 	
@@ -1222,7 +1224,7 @@ public class SourceOfDamage implements Listener{
 		
 		if(e.getEntity() instanceof Player) {
 			Player player = (Player) e.getEntity();
-			GameIntoMap ci = new GameIntoMap(plugin);
+			
 		
 			if(!gmc.isPlayerinGame(player)) return;
 			PlayerInfo pi = plugin.getPlayerInfoPoo().get(player);

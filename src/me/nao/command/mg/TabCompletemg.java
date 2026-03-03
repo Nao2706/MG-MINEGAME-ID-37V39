@@ -170,7 +170,7 @@ public class TabCompletemg implements TabCompleter{
 					if(args[0].equalsIgnoreCase("join") || args[0].equalsIgnoreCase("delete") || args[0].equalsIgnoreCase("enabled") || 
 							args[0].equalsIgnoreCase("disabled")|| args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("invite") 
 							|| args[0].equalsIgnoreCase("setspawnffa") || args[0].equalsIgnoreCase("setspawn") || args[0].equalsIgnoreCase("setprelobby")
-							|| args[0].equalsIgnoreCase("setspawn-spectator") || args[0].equalsIgnoreCase("setspawn-end")) {
+							|| args[0].equalsIgnoreCase("setspawn-spectator") || args[0].equalsIgnoreCase("setspawn-end") || args[0].equalsIgnoreCase("gamedetails")) {
 						
 						FileConfiguration config = plugin.getConfig();
 						List<String> result = new ArrayList<String>();

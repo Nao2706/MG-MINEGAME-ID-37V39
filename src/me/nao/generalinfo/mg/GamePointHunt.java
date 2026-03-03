@@ -46,6 +46,7 @@ public class GamePointHunt extends GameInfo{
 		this.hascustompoint = false;
 	}
 	
+	//COLOCAR UN CONTADOR DE KILLS CONTINUO AL JUGADOR 
 	
 	public List<Location> getSpawns(){
 		return locations;

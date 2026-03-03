@@ -526,7 +526,7 @@ public class GameConditions {
 	                       
 	                    }else{
 	                    	 
-	                    	player.sendMessage(Utils.colorTextChatColor("&c"+nuevoParticipante.getCronometPlayerName() +" &8no alcanzaste a Romper tu Récord. &6Mejor Tiempo&e: &a" + regis.getCronometTime()+"6Kills&e:&a"+regis.getKills()+
+	                    	player.sendMessage(Utils.colorTextChatColor("&c"+nuevoParticipante.getCronometPlayerName() +" &8no alcanzaste a Romper tu Récord. &6Mejor Tiempo&e: &a" + regis.getCronometTime()+" &6Kills&e:&a"+regis.getKills()+
 	                    			ChatColor.RED+"\nTiempo Actual: "+ChatColor.GOLD+ nuevoParticipante.getCronometTime()+ChatColor.RED+" Kills: "+ChatColor.GOLD+nuevoParticipante.getKills()));
 	                    	nuevoParticipante.setNewRecord(regis.getCronometPlayerName() ,regis.getCronometTotalSeconds(),regis.getKills());
 	                    }
@@ -2273,13 +2273,13 @@ public class GameConditions {
 					//antes de llegar a la fecha
 					player.sendMessage(ChatColor.GREEN+"================================================");
 					player.sendMessage("");
-					player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"                     [MAPA CON COOLDOWN] ");
+					player.sendMessage(""+ChatColor.RED+ChatColor.BOLD+"                  [MAPA CON COOLDOWN] ");
 					player.sendMessage(ChatColor.AQUA+"Me temo que hay un Cooldown y aun no es el Tiempo para Ingresar ");
-					player.sendMessage(""+ChatColor.DARK_RED+ChatColor.BOLD+"                [El Mapa Regresa en] ");
+					player.sendMessage(""+ChatColor.DARK_RED+ChatColor.BOLD+"                [El Mapa Regresara en] ");
 					player.sendMessage(""+ChatColor.GOLD+ChatColor.BOLD+"["+ChatColor.GREEN+TimeDiferenceMg(lt, cooldownmap)+ChatColor.GOLD+ChatColor.BOLD+"]");
 					player.sendMessage(ChatColor.AQUA+"Que tal un Descanso???");
 					player.sendMessage(ChatColor.GOLD+"Fecha Actual: "+ChatColor.GREEN+lt.format(formatter));
-					player.sendMessage(ChatColor.GREEN+"Fecha de Apertura: "+ChatColor.AQUA+cooldownmap.format(formatter));
+					player.sendMessage(ChatColor.GREEN+"Fecha de Reabre: "+ChatColor.AQUA+cooldownmap.format(formatter));
 					player.sendMessage("");
 					player.sendMessage(ChatColor.GREEN+"================================================");
 					//isJoinRunning(player);
@@ -3528,7 +3528,7 @@ public class GameConditions {
 					}
 				}
 				
-				sendMessageToUserAndConsole(player,ChatColor.GRAY+"PUNTOS DE LOS PARTICIPANTES");	
+				sendMessageToUserAndConsole(player,ChatColor.GRAY+"Puntos de los Participantes.");	
 				for(Player part : ConvertStringToPlayer(participants)) {
 					PlayerInfo pi = plugin.getPlayerInfoPoo().get(part);
 					sendMessageToUserAndConsole(player,""+ChatColor.GOLD+"- "+part.getName()+ChatColor.RED+" K:"+ChatColor.GREEN+pi.getGamePoints().getKills()+ChatColor.RED+" D:"+ChatColor.GREEN+pi.getGamePoints().getDeads()+ChatColor.RED+" R:"+ChatColor.GREEN+pi.getGamePoints().getRevive()+ChatColor.RED+" HR:"+ChatColor.GREEN+pi.getGamePoints().getHelpRevive());

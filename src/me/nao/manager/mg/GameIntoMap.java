@@ -1298,12 +1298,7 @@ public class GameIntoMap {
 			}else if(e instanceof Projectile) {
 				Projectile shoot = (Projectile) e;
 				
-				if(ProjectileHasName(shoot)) {
-					player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+shoot.getCustomName(), 40, 80, 40);
-					player.sendMessage(ChatColor.RED+"Moriste por :"+ChatColor.YELLOW+shoot.getCustomName());
-					gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+shoot.getCustomName());
-
-				}else if(EntityHasShooter(shoot)) {
+				if(EntityHasShooter(shoot)) {
 					Entity damager = (Entity) shoot.getShooter();
 					//CHEQUEO POR SI ES DE UN JUGADOR
 					if(damager instanceof Player) {
@@ -1389,6 +1384,11 @@ public class GameIntoMap {
 							}
 						}
 					}
+				}else if(ProjectileHasName(shoot)) {
+					player.sendTitle(""+ChatColor.RED+ChatColor.BOLD+"Has Muerto",ChatColor.YELLOW+"por: "+ChatColor.YELLOW+shoot.getCustomName(), 40, 80, 40);
+					player.sendMessage(ChatColor.RED+"Moriste por :"+ChatColor.YELLOW+shoot.getCustomName());
+					gmc.sendMessageToUsersOfSameMapLessPlayer(player, ChatColor.GOLD+player.getName()+ChatColor.RED+" murio por "+ChatColor.YELLOW+shoot.getCustomName());
+
 				}
 				
 				
