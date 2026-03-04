@@ -102,11 +102,13 @@ public class Comandsmg implements CommandExecutor{
 	
 	private Minegame plugin;
 	private GameConditions gc;
+	private MobsActions ma;
 	
 	public Comandsmg(Minegame plugin) {
 		this.plugin = plugin;
 		this.gc = new GameConditions(plugin);
-
+		this.ma = new MobsActions(plugin);
+		
 	}
 	
 	
@@ -814,7 +816,7 @@ public class Comandsmg implements CommandExecutor{
 			 				Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No puedes dejar en 0 el monto.");
 			 				 return true;
 			 			 }
-			 			 MobsActions ma = new MobsActions(plugin);
+			 			
 			 			 
 			 			 for(int i = 0; i < cant; i++) {
 			 				 if(type.equals("H")) {
@@ -829,11 +831,13 @@ public class Comandsmg implements CommandExecutor{
 			 					 ma.spawnManualZombi(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])));
 			 				 }if(type.equals("S")) {
 			 					 ma.zombisSpecials(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])));
+			 				 }if(type.equals("ZN")) {
+			 					 ma.spawnManualNormalZombi(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])));
 			 				 }
 			 			 }
 			 			 
 			 		 }else{
-			 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa mg spawnzombi <world,x,y,z> <amount> <H: Horde of all zombies, ZE:zombie elite, ZB:zombie baby, Z:zombie , S:Especial>");
+			 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Usa mg spawnzombi <world,x,y,z> <amount> <H: Horde of all Zombies, ZE:Zombie Elite, ZB:Zombie baby, Z:Zombie , S:Especial> , ZN:Normal Zombie>");
 			 			Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN+"Ejemplo mg spawnzombi world,12,23,34 50 H");
 			 		 }
 			 		  
@@ -1782,6 +1786,22 @@ public class Comandsmg implements CommandExecutor{
 						Bukkit.getConsoleSender().sendMessage(plugin.nombre+ChatColor.GREEN+" Usa /mg deleteitem <item>");
 					 }
 					return true;
+				}else if(args[0].equalsIgnoreCase("sniper")) {
+					
+					if(args.length == 3) {
+						String name = args[1];
+						int size = Integer.valueOf(args[2]);
+						
+						if(gc.ConvertStringToPlayerAlone(name) != null) {
+							ma.sniperMob(gc.ConvertStringToPlayerAlone(name).getLocation(), size);
+						}else {
+							Bukkit.getConsoleSender().sendMessage(ChatColor.RED+"No existe ese Jugador");
+						}
+						
+						
+					}
+					return true;
+					
 				}else if(args[0].equalsIgnoreCase("bossbar")) {
 					
 					
@@ -3318,7 +3338,7 @@ public class Comandsmg implements CommandExecutor{
 							player.sendMessage(ChatColor.GREEN+"Usa /reportlogs details <jugador> <pag number>");
 							
 						}else if(value.equals("details")) {
-							//mg reportlog details NAO2706 == 3
+							//mg reportlog details NAO2706 == 3 (sin numero)
 							grm.sendReportLogs(player, data, 1);
 							
 						}else {
@@ -3333,7 +3353,7 @@ public class Comandsmg implements CommandExecutor{
 						String value = args[1];
 						
 						if(value.equals("details")) {
-							//mg reportlog details NAO2706 1 == 4
+							//mg reportlog details NAO2706 1 == 4 (con numero)
 							String target = args[2];
 							int  pag = Integer.valueOf(args[3]);
 							grm.sendReportLogs(player, target, pag);
@@ -3934,6 +3954,30 @@ public class Comandsmg implements CommandExecutor{
 					
 					return true;
 					
+				}else if(args[0].equalsIgnoreCase("sniper")) {
+					
+					if(!player.isOp()) {
+						player.sendMessage(ChatColor.RED+"No tienes permiso para usar este comando.");
+						return true;
+					}
+					
+					if(args.length == 2) {
+						int size = Integer.valueOf(args[1]);
+						ma.sniperMob(player.getLocation(), size);
+					}else if(args.length == 3) {
+						String name = args[1];
+						int size = Integer.valueOf(args[2]);
+						
+						if(gc.ConvertStringToPlayerAlone(name) != null) {
+							ma.sniperMob(gc.ConvertStringToPlayerAlone(name).getLocation(), size);
+						}else {
+							player.sendMessage(ChatColor.RED+"No existe ese Jugador");
+						}
+						
+						
+					}
+					return true;
+					
 				}else if(args[0].equalsIgnoreCase("isban")) {
 					if(!player.isOp()) {
 						
@@ -4149,7 +4193,6 @@ public class Comandsmg implements CommandExecutor{
 				 				 player.sendMessage(ChatColor.RED+"No puedes dejar en 0 el monto.");
 				 				 return true;
 				 			 }
-				 			 MobsActions ma = new MobsActions(plugin);
 				 			 
 				 			 for(int i = 0; i < cant; i++) {
 				 				 if(type.equals("H")) {
@@ -4164,11 +4207,13 @@ public class Comandsmg implements CommandExecutor{
 				 					 ma.spawnManualZombi(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])));
 				 				 }if(type.equals("S")) {
 				 					 ma.zombisSpecials(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])));
+				 				 }if(type.equals("ZN")) {
+				 					 ma.spawnManualNormalZombi(new Location(world,Double.valueOf(split[1]),Double.valueOf(split[2]),Double.valueOf(split[3])));
 				 				 }
 				 			 }
 				 			 
 				 		 }else{
-				 			 player.sendMessage(ChatColor.GREEN+"Usa mg spawnzombi <world,x,y,z> <amount> <H: Horde of all zombies, ZE:zombie elite, ZB:zombie baby, Z:zombie, S:Especial>");
+				 			 player.sendMessage(ChatColor.GREEN+"Usa mg spawnzombi <world,x,y,z> <amount> <H: Horde of all Zombies, ZE:Zombie Elite, ZB:Zombie baby, Z:Zombie, S:Especial> , ZN:Normal Zombie>");
 				 			 player.sendMessage(ChatColor.GREEN+"Ejemplo mg spawnzombi world,12,23,34 50 H");
 				 		 }
 				 		  

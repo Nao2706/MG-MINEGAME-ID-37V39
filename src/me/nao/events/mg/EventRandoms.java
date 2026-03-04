@@ -771,19 +771,15 @@ public class EventRandoms implements Listener{
 		if (e.getAction() == Action.RIGHT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_AIR) {
 			if (e.getItem() != null) {
 				if(e.getItem().isSimilar(Items.SPAWNZOMBI.getValue())) {
-					MobsActions ma = new MobsActions(plugin);
 					ma.spawnManualZombi(player.getLocation());
 					return;
 				}if(e.getItem().isSimilar(Items.SPAWNBABYZOMBI.getValue())) {
-					MobsActions ma = new MobsActions(plugin);
 					ma.spawnManualBabyZombi(player.getLocation());
 					return;
 				}if(e.getItem().isSimilar(Items.SPAWNELITEZOMBI.getValue())) {
-					MobsActions ma = new MobsActions(plugin);
 					ma.spawnEliteZombi(player.getLocation());
 					return;
 				}if(e.getItem().isSimilar(Items.SPAWNHORDEZOMBI.getValue())) {
-					MobsActions ma = new MobsActions(plugin);
 					ma.spawnManualZombi(player.getLocation());
 					ma.spawnManualBabyZombi(player.getLocation());
 					ma.spawnManualZombi(player.getLocation());
@@ -2701,7 +2697,11 @@ public class EventRandoms implements Listener{
 					  AbstractArrow arrow = (AbstractArrow) projectile;
 					  
 					  if(arrow.getShooter() != null && arrow.getShooter() instanceof Player) {
-						  arrow.remove();
+						  Player p = (Player) arrow.getShooter();
+						  if(gmc.isPlayerinGame(p)) {
+							  arrow.remove();
+						  }
+						  
 						  return;
 					  }
 					  

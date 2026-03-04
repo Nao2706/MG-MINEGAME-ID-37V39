@@ -15,7 +15,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import me.nao.enums.mg.GameCheats;
+import me.nao.enums.mg.GameInfringements;
 import me.nao.main.mg.Minegame;
 
 
@@ -153,8 +153,8 @@ public class TabCompletemg implements TabCompleter{
 					arguments.add("signmarker");
 					arguments.add("signreload");
 					arguments.add("changename");
-				
-				
+					arguments.add("spawnzombi");
+					arguments.add("sniper");
 			
 
 				
@@ -193,7 +193,7 @@ public class TabCompletemg implements TabCompleter{
 							
 								//TOMA ENUMS Y LOS DA COMO LISTA
 							   //List<String> result = Arrays.stream(GameCheats.values()).map(Object:: toString).collect(Collectors.toList());
-							   List<String> result = Arrays.stream(GameCheats.values()).map(GameCheats::getValue).collect(Collectors.toList());
+							   List<String> result = Arrays.stream(GameInfringements.values()).map(GameInfringements::getValue).collect(Collectors.toList());
 
 							
 							
@@ -275,6 +275,20 @@ public class TabCompletemg implements TabCompleter{
 						}
 						
 						return result;
+						//mg spawnzombi coord 1 H
+					}if(args[0].equalsIgnoreCase("spawnzombi")) {
+						List<String> result = new ArrayList<String>();
+						if(args.length == 4) {
+								
+							result.add("Z");
+							result.add("S");
+							result.add("H");
+							result.add("ZE");	
+							result.add("ZB");
+							result.add("ZN");	
+						}
+						
+						return result;
 					} 
 				
 			
@@ -295,49 +309,8 @@ public class TabCompletemg implements TabCompleter{
 				return result;
 			}
 			
-			//checar todo
-			//tab 2 arenas
-//			List<String> result2 = new ArrayList<String>();
-//			if(args.length == 2) {
-//				for(String a : arguments2 ) {
-//					//report NAO
-//					//inicio de autocompletado args[0,1,2]
-//					if(a.toLowerCase().startsWith(args[1].toLowerCase())) 
-//						result2.add(a);
-//						
-//					
-//					
-//				}
-//				return result2;
-//			}
+
 		}
-		
-		
-
-			
-			
-//		FileConfiguration config = plugin.getConfig();
-//		List<String> arguments2 = config.getStringList("Maps-Created.List");
-//		if(args.length == 1) {
-//			for(String a : arguments ) {
-//				if(a.toLowerCase().startsWith("join") || a.toLowerCase().startsWith("delete") || a.toLowerCase().startsWith("enabled") || a.toLowerCase().startsWith("disabled")) {
-//					
-//				} 
-//			}
-//			if(arguments2.isEmpty()) {
-//				for(int i = 0; i < arguments2.size();i++) {
-//					arguments2.add(arguments2.get(i));
-//				}
-//			}
-//			return arguments2;
-//		}
-			
-			
-		
-
-		
-		
-		
 		
 		return null;
 	}	

@@ -32,47 +32,44 @@ public class GameReportsManager {
 	
 	public void setReporttoTarget(Player user,GameInfo gi,String target,String motive,String map,String comment) {
 		
-		if(!gi.getParticipants().contains(target) || !gi.getSpectators().contains(target)) {
+		if(gi.getParticipants().contains(target) || gi.getSpectators().contains(target)) {
+			 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss a",Locale.ENGLISH);
+			 LocalDateTime ld = LocalDateTime.now();
+			
+			 if(hasPlayerTempCooldownReport(user,60)) return;
+			 
+				if(hasReportsPlayer(target)) {
+					GameReport gr = plugin.getGameReports().get(target);
+					List<String> l = gr.getReports();
+					l.add("Fecha: "+ld.format(formatter).toString()+" Reporta: "+user.getName()+" Motivo: "+motive+" Mapa: "+map+" Comentarios: "+comment);
+					
+					saveData(plugin.getGameReports().get(target));
+					
+				}else {
+					List<String> l = new ArrayList<>();
+					l.add("Fecha: "+ld.format(formatter).toString()+" Reporta: "+user.getName()+" Motivo: "+motive+" Mapa: "+map+" Comentarios: "+comment);
+					
+					plugin.getGameReports().put(target,new GameReport(target,ld,l));
+					
+					saveData(plugin.getGameReports().get(target));
+				} 
+			
+			user.sendMessage(ChatColor.RED+"Reportaste"+ChatColor.GRAY+" a "+ChatColor.GOLD+target+ChatColor.GRAY+" por "+ChatColor.GOLD+motive+ChatColor.GOLD+" Comentarios:"+ChatColor.DARK_PURPLE+comment);
+			user.sendMessage("");
+			user.sendMessage(ChatColor.YELLOW+"Notificacion: "+ChatColor.GRAY+"Reportar sin razon Justificada o siendo falso es Sancionable.");
+			user.playSound(user,Sound.BLOCK_NOTE_BLOCK_PLING, 10, 1);
+		
+			
+			setPlayerTempCooldowns(user);
+
+		}else {
 			user.sendMessage(Utils.colorTextChatColor("&6- &cEl Nombre &6"+target+" &cno existe o esta mal Escrito."));
 			user.sendMessage(Utils.colorTextChatColor("&6- &cSolo puedes Reportar a Jugadores dentro de la Partida."));
 			user.playSound(user,Sound.ENTITY_VILLAGER_NO, 10, 1);
 			return;
 		}
 			
-		 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss a",Locale.ENGLISH);
-		 LocalDateTime ld = LocalDateTime.now();
-		
-		 if(hasPlayerTempCooldownReport(user,60)) return;
-		 
-			if(hasReportsPlayer(target)) {
-				GameReport gr = plugin.getGameReports().get(target);
-				List<String> l = gr.getReports();
-				l.add("Fecha: "+ld.format(formatter).toString()+" Reporta: "+user.getName()+" Motivo: "+motive+" Mapa: "+map+" Comentarios: "+comment);
-				
-				saveData(plugin.getGameReports().get(target));
-				
-			}else {
-				List<String> l = new ArrayList<>();
-				l.add("Fecha: "+ld.format(formatter).toString()+" Reporta: "+user.getName()+" Motivo: "+motive+" Mapa: "+map+" Comentarios: "+comment);
-				
-				plugin.getGameReports().put(target,new GameReport(target,ld,l));
-				
-				saveData(plugin.getGameReports().get(target));
-			} 
-		
-		user.sendMessage(ChatColor.RED+"Reportaste"+ChatColor.GRAY+" a "+ChatColor.GOLD+target+ChatColor.GRAY+" por "+ChatColor.GOLD+motive+ChatColor.GOLD+" Comentarios:"+ChatColor.DARK_PURPLE+comment);
-		user.sendMessage("");
-		user.sendMessage(ChatColor.YELLOW+"Notificacion: "+ChatColor.GRAY+"Reportar sin razon Justificada o siendo falso es Sancionable.");
-		user.playSound(user,Sound.BLOCK_NOTE_BLOCK_PLING, 10, 1);
-	
-		
-		setPlayerTempCooldowns(user);
-//		GameConditions gc = new GameConditions(plugin);
-//		Player t = gc.ConvertStringToPlayerAlone(target);
-//		
-//		if(t != null) {
-//			
-//		}
+
 		
 		return;
 		

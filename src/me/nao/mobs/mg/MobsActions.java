@@ -62,6 +62,7 @@ import me.nao.generalinfo.mg.GameInfo;
 import me.nao.generalinfo.mg.PlayerInfo;
 import me.nao.main.mg.Minegame;
 import me.nao.manager.mg.GameIntoMap;
+import me.nao.utils.mg.Utils;
 
 @SuppressWarnings("deprecation")
 public class MobsActions {
@@ -73,6 +74,20 @@ public class MobsActions {
 		this.plugin = plugin;
 		this.gmc = new GameConditions(plugin);
 	}
+	
+	
+	public void sniperMob(Location l , int size) {
+		List<Entity> m = getNearbyEntities(l, size);
+		
+		for(Entity e : m) {
+			if(e.getType() == EntityType.PILLAGER || e.getType() == EntityType.SKELETON || e.getType() == EntityType.ILLUSIONER || e.getType() == EntityType.STRAY) {
+				ShootAgainstEntityLocation(e, l);
+			}
+		}
+		
+		
+	}
+	
 	
 	//LANZA UNA FLECHA EN DIRECCION AL JUGADOR UNA VEZ SPAWNEE EN CUALQUIER SITIO
 	public void detectBlockAndShoot(Player player,Location l ,int range) {
@@ -674,7 +689,37 @@ public class MobsActions {
 		aw.setPickupStatus(PickupStatus.CREATIVE_ONLY);
 	}
 	
-	
+	public void ShootAgainstEntityLocation(Entity attacker ,Location target) {
+		
+		
+		Location pl = target;
+		Location sl = null;
+		
+		
+		if(attacker.getLocation().getBlockY() >= target.getBlockY()) {
+			sl = new Location(Bukkit.getWorld(pl.getWorld().getName()), pl.getX(), pl.getY()+1, pl.getZ());
+		}else if(attacker.getLocation().getBlockY() < target.getBlockY()){
+			sl = new Location(Bukkit.getWorld(pl.getWorld().getName()), pl.getX(), pl.getY()+2, pl.getZ());
+		}
+		
+		Arrow aw = (Arrow) attacker.getLocation().getWorld().spawnEntity(attacker.getLocation().add(0,1,0), EntityType.ARROW);
+		
+		
+		//LINE BETWEEN TO ENTITYS 
+		Vector v = sl.toVector().subtract(aw.getLocation().toVector());
+		Location en = aw.getLocation();
+		en.setDirection(v);
+		aw.teleport(en);
+		
+		aw.setVelocity(aw.getLocation().getDirection().multiply(6));
+		aw.setCritical(true);
+		aw.setFireTicks(1200);
+		//aw.setKnockbackStrength(10);
+		String t = attacker.getType().toString();
+		t = t.substring(0,1).toUpperCase()+t.substring(1).toLowerCase();
+		aw.setCustomName(Utils.colorTextChatColor("&b&lSniper &6&lde &c&l"+t));
+		aw.setPickupStatus(PickupStatus.CREATIVE_ONLY);
+	}
 	
 	public void spawnManualBabyZombi(Location loc) {
 		
@@ -772,6 +817,57 @@ public class MobsActions {
 			husk.addPotionEffect(salto);
 		
 		
+	
+
+	}
+	
+	
+	public void spawnManualNormalZombi(Location loc) {
+		
+		Location l = loc.add(0.5,1,0.5);
+		
+		
+		PotionEffect salto = new PotionEffect(PotionEffectType.JUMP_BOOST,/*duration*/ 99999,/*amplifier:*/randomBetweenValue(1, 5), false ,false,true );
+		PotionEffect resis = new PotionEffect(PotionEffectType.RESISTANCE,/*duration*/ 99999,/*amplifier:*/randomBetweenValue(1, 5), false ,false,true );
+
+		
+		Attribute attribute = Attribute.FOLLOW_RANGE;
+		
+	
+		ZombieVillager zv1 = (ZombieVillager) l.getWorld().spawnEntity(l, EntityType.ZOMBIE_VILLAGER);
+	
+		
+		zv1.getAttribute(attribute).setBaseValue(150);
+		
+		
+		Zombie zv2 = (Zombie) l.getWorld().spawnEntity(l, EntityType.ZOMBIE);
+		
+		zv2.getAttribute(attribute).setBaseValue(150);
+		
+		
+		Drowned zv3 = (Drowned) l.getWorld().spawnEntity(l, EntityType.DROWNED);
+		
+		zv3.getAttribute(attribute).setBaseValue(150);
+		
+		
+		
+		Husk husk = (Husk) l.getWorld().spawnEntity(l, EntityType.HUSK);	
+		
+		husk.getAttribute(attribute).setBaseValue(150);
+		
+		
+		
+			zv1.addPotionEffect(salto);
+			zv1.addPotionEffect(resis);
+			
+			zv2.addPotionEffect(salto);
+			zv2.addPotionEffect(resis);
+
+			zv3.addPotionEffect(salto);
+			zv3.addPotionEffect(resis);
+
+			husk.addPotionEffect(salto);
+			husk.addPotionEffect(resis);
 	
 
 	}
@@ -913,9 +1009,7 @@ public class MobsActions {
 					
 					
 
-				}
-				
-				if(n == 1) {
+				}else if(n == 1) {
 					Zombie zombi1 = (Zombie)  world.spawnEntity(l2, EntityType.ZOMBIE);
 
 				
@@ -2038,28 +2132,28 @@ public class MobsActions {
 			}
 		    
 		    
-			  public void mobLocation(Player player) {
-				  
-			    	List<Entity> entities = getNearbyEntities(player.getLocation(), 50);
-			    	for(int i = 0;i< entities.size();i++) {
-			    		if(!(entities.get(i) instanceof LivingEntity))continue;
-			    		
-			    		LivingEntity lve = (LivingEntity) entities.get(i);
-			    		Block block = lve.getLocation().getBlock();
-			    		Block r = block.getRelative(0, 0, 0);
-			    		
-			    		if(lve.getType() == EntityType.PLAYER) continue;
-			    		gmc.turret(lve);
-			    		gmc.blockPotion(lve);
-			    		if(r.getType() == Material.OAK_PRESSURE_PLATE) {
-			    			lve.setVelocity(lve.getLocation().getDirection().multiply(3).setY(2));
-			    		}
-			    		if(r.getType() == Material.STONE_PRESSURE_PLATE) {
-			    			lve.setVelocity(lve.getLocation().getDirection().multiply(3).setY(1));
-			    		}
-			    		
-			    	}
-			    }
+		  public void mobLocation(Player player) {
+			  
+		    	List<Entity> entities = getNearbyEntities(player.getLocation(), 50);
+		    	for(int i = 0;i< entities.size();i++) {
+		    		if(!(entities.get(i) instanceof LivingEntity))continue;
+		    		
+		    		LivingEntity lve = (LivingEntity) entities.get(i);
+		    		Block block = lve.getLocation().getBlock();
+		    		Block r = block.getRelative(0, 0, 0);
+		    		
+		    		if(lve.getType() == EntityType.PLAYER) continue;
+		    		gmc.turret(lve);
+		    		gmc.blockPotion(lve);
+		    		if(r.getType() == Material.OAK_PRESSURE_PLATE) {
+		    			lve.setVelocity(lve.getLocation().getDirection().multiply(3).setY(2));
+		    		}
+		    		if(r.getType() == Material.STONE_PRESSURE_PLATE) {
+		    			lve.setVelocity(lve.getLocation().getDirection().multiply(3).setY(1));
+		    		}
+		    		
+		    	}
+		    }
 			  
 		 public void removeTrapEntitys(Player player) {
 			    	List<Entity> entities = getNearbyEntities(player.getLocation(), 50);
