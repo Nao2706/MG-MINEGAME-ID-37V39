@@ -24,3 +24,5 @@ Cosas Pendientes
 - Sistema de dialogos internos (como cuando se usan command blockd con un delay)
 - Mejorar el sistema de Xp (es necesario?)
 - Carteles para unirse
+
+Actualizar Repos Eclipse
